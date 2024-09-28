@@ -66,6 +66,8 @@ export abstract class TaggedError<
   static ofLiteral<C extends object>() {
     return <const S extends string>(tag: S) =>
       class TaggedLiteralError extends TaggedError<S, C> {
+        static readonly tag = tag;
+
         readonly tag = tag;
       };
   }

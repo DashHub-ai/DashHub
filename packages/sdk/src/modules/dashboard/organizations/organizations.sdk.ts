@@ -3,7 +3,10 @@ import {
   getPayload,
   performApiRequest,
   postPayload,
+  putPayload,
   type SdkRecordAlreadyExistsError,
+  type SdkRecordNotFoundError,
+  type SdkTableRowWithIdT,
 } from '~/shared';
 
 import type {
@@ -11,6 +14,8 @@ import type {
   SdkCreateOrganizationOutputT,
   SdKSearchOrganizationsInputT,
   SdKSearchOrganizationsOutputT,
+  SdkUpdateOrganizationInputT,
+  SdkUpdateOrganizationOutputT,
 } from './dto';
 
 export class OrganizationsSdk extends AbstractNestedSdkWithAuth {
@@ -25,7 +30,16 @@ export class OrganizationsSdk extends AbstractNestedSdkWithAuth {
 
   create = (data: SdkCreateOrganizationInputT) =>
     performApiRequest<SdkCreateOrganizationOutputT, SdkRecordAlreadyExistsError>({
-      url: this.endpoint('/create'),
+      url: this.endpoint('/'),
       options: postPayload(data),
+    });
+
+  update = ({ id, ...data }: SdkUpdateOrganizationInputT & SdkTableRowWithIdT) =>
+    performApiRequest<
+      SdkUpdateOrganizationOutputT,
+      SdkRecordAlreadyExistsError | SdkRecordNotFoundError
+    >({
+      url: this.endpoint(`/${id}`),
+      options: putPayload(data),
     });
 };

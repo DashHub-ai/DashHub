@@ -5,12 +5,14 @@ import {
   type OrganizationsSdk,
   SdkCreateOrganizationInputV,
   SdKSearchOrganizationsInputV,
+  SdkUpdateOrganizationInputV,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
 import { OrganizationsService } from '~/modules/organizations';
 
 import {
-  rejectUnsafeCreateSdkErrors,
+  mapDbRecordAlreadyExistsToSdkError,
+  mapDbRecordNotFoundToSdkError,
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
@@ -37,14 +39,29 @@ export class OrganizationsController extends AuthorizedController {
         ),
       )
       .post(
-        '/create',
+        '/',
         sdkSchemaValidator('json', SdkCreateOrganizationInputV),
         async context => pipe(
           context.req.valid('json'),
           organizationsService.asUser(context.var.jwt).create,
-          rejectUnsafeCreateSdkErrors,
+          mapDbRecordAlreadyExistsToSdkError,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<OrganizationsSdk['create']>>(context),
+        ),
+      )
+      .put(
+        '/:id',
+        sdkSchemaValidator('json', SdkUpdateOrganizationInputV),
+        async context => pipe(
+          {
+            id: Number(context.req.param().id),
+            ...context.req.valid('json'),
+          },
+          organizationsService.asUser(context.var.jwt).update,
+          mapDbRecordAlreadyExistsToSdkError,
+          mapDbRecordNotFoundToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<OrganizationsSdk['update']>>(context),
         ),
       );
   }
