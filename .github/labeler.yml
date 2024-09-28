@@ -1,0 +1,27 @@
+'infra':
+- changed-files:
+  - any-glob-to-any-file: ['hetzner/**/*', 'config/**/*', 'infra/**/*', 'aws/**/*']
+
+'app: admin':
+- changed-files:
+  - any-glob-to-any-file: ['apps/admin/**/*']
+
+'app: backend':
+- changed-files:
+  - any-glob-to-any-file: ['apps/backend/**/*']
+
+'app: frontend':
+- changed-files:
+  - any-glob-to-any-file: ['apps/frontend/**/*']
+
+'package: commons':
+- changed-files:
+  - any-glob-to-any-file: ['packages/commons/**/*']
+
+'package: commons-front':
+- changed-files:
+  - any-glob-to-any-file: ['packages/commons-front/**/*']
+
+'package: sdk':
+- changed-files:
+  - any-glob-to-any-file: ['packages/sdk/**/*']
