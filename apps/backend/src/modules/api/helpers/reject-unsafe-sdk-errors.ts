@@ -5,7 +5,6 @@ import type { TaggedError } from '@llm/commons';
 
 import {
   isSdkTaggedError,
-  SdkRecordAlreadyExistsError,
   SdkServerError,
 } from '@llm/sdk';
 import { LoggerService } from '~/modules/logger';
@@ -28,15 +27,9 @@ export function rejectUnsafeSdkErrors<T, E extends TaggedError<string, any>>(tas
         console.error(stack);
       }
 
-      switch (error.tag) {
-        case 'DatabaseRecordAlreadyExists':
-          return new SdkRecordAlreadyExistsError({});
-
-        default:
-          return new SdkServerError({
-            message: 'Internal server error!',
-          });
-      }
+      return new SdkServerError({
+        message: 'Internal server error!',
+      });
     }),
   );
 }

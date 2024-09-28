@@ -156,14 +156,21 @@ export class ElasticsearchRepo {
   indexDocument = <D extends EsBaseDocument = EsBaseDocument>(
     indexName: string,
     { _id, ...doc }: D,
-    { waitForRecordAvailability }: EsIndexWaitAttributes = {},
+    { waitForRecordAvailability = true }: EsIndexWaitAttributes = {},
   ) =>
     pipe(
-      TaggedError.tryUnsafeTask(EsIndexingError, async () => this.client.index({
-        id: _id.toString(),
-        index: indexName,
-        body: doc,
-      })),
+      TaggedError.tryUnsafeTask(EsIndexingError, async () => {
+        this.logger.info('Trying to index document...', { _id, doc, indexName });
+
+        const result = await this.client.index({
+          id: _id.toString(),
+          index: indexName,
+          body: doc,
+        });
+
+        this.logger.info('Document indexed!', { _id, indexName });
+        return result;
+      }),
 
       TE.chainW(() => (
         waitForRecordAvailability
@@ -212,6 +219,8 @@ export class ElasticsearchRepo {
     TE.tryCatch(
       () => waitFor(
         async () => {
+          this.logger.info('Waiting for document availability...', { indexName, id });
+
           const result = await this.client.exists({
             index: indexName,
             id,
@@ -225,6 +234,8 @@ export class ElasticsearchRepo {
               },
             );
           }
+
+          this.logger.info('Looks like document is available!', { indexName, id });
 
           return true;
         },

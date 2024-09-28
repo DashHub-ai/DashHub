@@ -1,5 +1,10 @@
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
-import { getPayload, performApiRequest, postPayload } from '~/shared';
+import {
+  getPayload,
+  performApiRequest,
+  postPayload,
+  type SdkRecordAlreadyExistsError,
+} from '~/shared';
 
 import type {
   SdkCreateOrganizationInputT,
@@ -19,7 +24,7 @@ export class OrganizationsSdk extends AbstractNestedSdkWithAuth {
     });
 
   create = (data: SdkCreateOrganizationInputT) =>
-    performApiRequest<SdkCreateOrganizationOutputT>({
+    performApiRequest<SdkCreateOrganizationOutputT, SdkRecordAlreadyExistsError>({
       url: this.endpoint('/create'),
       options: postPayload(data),
     });

@@ -9,7 +9,12 @@ import {
 import { ConfigService } from '~/modules/config';
 import { OrganizationsService } from '~/modules/organizations';
 
-import { rejectUnsafeSdkErrors, sdkSchemaValidator, serializeSdkResponseTE } from '../helpers';
+import {
+  rejectUnsafeCreateSdkErrors,
+  rejectUnsafeSdkErrors,
+  sdkSchemaValidator,
+  serializeSdkResponseTE,
+} from '../helpers';
 import { AuthorizedController } from './shared/authorized.controller';
 
 @injectable()
@@ -37,6 +42,7 @@ export class OrganizationsController extends AuthorizedController {
         async context => pipe(
           context.req.valid('json'),
           organizationsService.asUser(context.var.jwt).create,
+          rejectUnsafeCreateSdkErrors,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<OrganizationsSdk['create']>>(context),
         ),

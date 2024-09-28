@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { tryOrThrowTE } from '@llm/commons';
 import {
+  createArchivedRecordMappings,
   createAutocompleteFieldAnalyzeSettings,
   createBaseAutocompleteFieldMappings,
   createBaseDatedRecordMappings,
@@ -25,6 +26,7 @@ const OrganizationsAbstractEsIndexRepo = createElasticsearchIndexRepo({
       properties: {
         ...createBaseDatedRecordMappings(),
         ...createBaseAutocompleteFieldMappings(),
+        ...createArchivedRecordMappings(),
         max_number_of_users: { type: 'integer' },
       },
     },
