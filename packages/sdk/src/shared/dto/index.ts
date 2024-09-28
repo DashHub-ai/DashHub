@@ -1,3 +1,4 @@
+export * from './sdk-offset-pagination.dto';
 export * from './sdk-table-row-id.dto';
 export * from './sdk-table-row-with-archive-protection.dto';
 export * from './sdk-table-row-with-archived.dto';
