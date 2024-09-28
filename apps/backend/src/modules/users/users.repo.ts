@@ -31,6 +31,28 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
     super(databaseConnectionRepo);
   }
 
+  createIdsIterator = this.baseRepo.createIdsIterator;
+
+  isPresentOrThrow = this.baseRepo.isPresentOrThrow;
+
+  updateJwtRefreshToken = (
+    {
+      forwardTransaction,
+      id,
+      refreshToken,
+    }: TransactionalAttrs<{ id: TableId; refreshToken: string; }>,
+  ) =>
+    pipe(
+      this.baseRepo.update({
+        forwardTransaction,
+        id,
+        value: {
+          jwtRefreshToken: refreshToken,
+        },
+      }),
+      TE.map(() => refreshToken),
+    );
+
   create = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.db,
