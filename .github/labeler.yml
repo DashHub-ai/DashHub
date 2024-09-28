@@ -2,6 +2,10 @@
 - changed-files:
   - any-glob-to-any-file: ['hetzner/**/*', 'config/**/*', 'infra/**/*', 'aws/**/*']
 
+'ci':
+- changed-files:
+  - any-glob-to-any-file: ['.github/**/*']
+
 'app: admin':
 - changed-files:
   - any-glob-to-any-file: ['apps/admin/**/*']
