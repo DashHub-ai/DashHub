@@ -53,7 +53,7 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
       TE.map(() => refreshToken),
     );
 
-  create = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => {
+  create = ({ forwardTransaction, value }: TransactionalAttrs<{ value: SdkCreateUserInputT; }>) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.db,
       forwardTransaction,
@@ -63,42 +63,52 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
       this.baseRepo.create({
         forwardTransaction: trx,
         value: {
-          email: user.email,
-          active: user.active,
-          role: user.role,
+          email: value.email,
+          active: value.active,
+          role: value.role,
         },
       }),
       TE.tap(({ id }) => pipe(
         this.authRepo.upsertUserAuthMethods({
           forwardTransaction: trx,
           user: { id },
-          email: user.auth.email,
-          password: user.auth.password,
+          email: value.auth.email,
+          password: value.auth.password,
         }),
       )),
     ));
   };
 
-  createIfNotExists = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => pipe(
-    this.baseRepo.findOne({
+  createIfNotExists = ({ forwardTransaction, value }: TransactionalAttrs<{ value: SdkCreateUserInputT; }>) => {
+    const transaction = tryReuseOrCreateTransaction({
+      db: this.db,
       forwardTransaction,
-      select: ['id'],
-      where: [
-        ['email', '=', user.email],
-      ],
-    }),
-    TE.map(result => ({
-      ...result,
-      created: false,
-    })),
-    catchTaskEitherTagError('DatabaseRecordNotExists')(() => pipe(
-      this.create(user),
+    });
+
+    return transaction(trx => pipe(
+      this.baseRepo.findOne({
+        forwardTransaction: trx,
+        select: ['id'],
+        where: [
+          ['email', '=', value.email],
+        ],
+      }),
       TE.map(result => ({
         ...result,
-        created: true,
+        created: false,
       })),
-    )),
-  );
+      catchTaskEitherTagError('DatabaseRecordNotExists')(() => pipe(
+        this.create({
+          value,
+          forwardTransaction: trx,
+        }),
+        TE.map(result => ({
+          ...result,
+          created: true,
+        })),
+      )),
+    ));
+  };
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
