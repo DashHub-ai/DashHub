@@ -67,8 +67,13 @@ export function tryTaskEitherIfUser(token: JWTTokenT) {
           satisfies(() => token.role === type),
         );
 
+  const is = {
+    root: isOfRole('root'),
+    user: isOfRole('user'),
+  } satisfies Record<SdkUserRoleT, Function>;
+
   return {
-    ...check,
+    is,
     authorized: satisfies(() => true),
     satisfies,
     satisfiesTE,
