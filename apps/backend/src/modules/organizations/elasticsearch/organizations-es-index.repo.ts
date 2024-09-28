@@ -23,6 +23,7 @@ const OrganizationsAbstractEsIndexRepo = createElasticsearchIndexRepo({
       properties: {
         ...createBaseDatedRecordMappings(),
         ...createBaseAutocompleteFieldMappings(),
+        maxNumberOfUsers: { type: 'integer' },
       },
     },
     settings: {

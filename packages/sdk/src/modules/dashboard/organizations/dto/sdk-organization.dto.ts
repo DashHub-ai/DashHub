@@ -8,6 +8,7 @@ import {
 
 export const SdkOrganizationV = z.object({
   name: z.string(),
+  maxNumberOfUsers: z.number().int().positive(),
 })
   .merge(SdkTableRowWithIdV)
   .merge(SdkTableRowWithDatesV)
