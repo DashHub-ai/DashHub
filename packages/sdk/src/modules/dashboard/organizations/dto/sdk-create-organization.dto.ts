@@ -1,13 +1,17 @@
 import type { z } from 'zod';
 
-import { ZodOmitArchivedFields, ZodOmitDateFields } from '~/shared';
+import { SdkTableRowWithIdV, ZodOmitArchivedFields, ZodOmitDateFields } from '~/shared';
 
 import { SdkOrganizationV } from './sdk-organization.dto';
 
-export const SdkCreateOrganizationV = SdkOrganizationV.omit({
+export const SdkCreateOrganizationInputV = SdkOrganizationV.omit({
   ...ZodOmitDateFields,
   ...ZodOmitArchivedFields,
   id: true,
 });
 
-export type SdkCreateOrganizationT = z.infer<typeof SdkCreateOrganizationV>;
+export type SdkCreateOrganizationInputT = z.infer<typeof SdkCreateOrganizationInputV>;
+
+export const SdkCreateOrganizationOutputV = SdkTableRowWithIdV;
+
+export type SdkCreateOrganizationOutputT = z.infer<typeof SdkCreateOrganizationOutputV>;

@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { tryOrThrowTE } from '@llm/commons';
 import {
+  createArchivedRecordMappings,
   createAutocompleteFieldAnalyzeSettings,
   createBaseAutocompleteFieldMappings,
   createBaseDatedRecordMappings,
@@ -14,7 +15,9 @@ import {
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import { UsersRepo, type UserTableRowWithRelations } from '../users.repo';
+import type { UserTableRowWithRelations } from '../users.tables';
+
+import { UsersRepo } from '../users.repo';
 
 const UsersAbstractEsIndexRepo = createElasticsearchIndexRepo({
   indexName: 'dashboard-users',
@@ -23,11 +26,11 @@ const UsersAbstractEsIndexRepo = createElasticsearchIndexRepo({
       dynamic: false,
       properties: {
         ...createBaseDatedRecordMappings(),
+        ...createArchivedRecordMappings(),
         ...createBaseAutocompleteFieldMappings('email'),
         role: { type: 'keyword' },
         email: { type: 'text' },
         active: { type: 'boolean' },
-        archived: { type: 'boolean' },
         archive_protection: { type: 'boolean' },
         auth: {
           properties: {

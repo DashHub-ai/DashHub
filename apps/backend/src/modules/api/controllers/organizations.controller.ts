@@ -1,11 +1,22 @@
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { type OrganizationsSdk, SdKSearchOrganizationsInputV } from '@llm/sdk';
+import {
+  type OrganizationsSdk,
+  SdkCreateOrganizationInputV,
+  SdKSearchOrganizationsInputV,
+  SdkUpdateOrganizationInputV,
+} from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
 import { OrganizationsService } from '~/modules/organizations';
 
-import { rejectUnsafeSdkErrors, sdkSchemaValidator, serializeSdkResponseTE } from '../helpers';
+import {
+  mapDbRecordAlreadyExistsToSdkError,
+  mapDbRecordNotFoundToSdkError,
+  rejectUnsafeSdkErrors,
+  sdkSchemaValidator,
+  serializeSdkResponseTE,
+} from '../helpers';
 import { AuthorizedController } from './shared/authorized.controller';
 
 @injectable()
@@ -25,6 +36,32 @@ export class OrganizationsController extends AuthorizedController {
           organizationsService.asUser(context.var.jwt).search,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<OrganizationsSdk['search']>>(context),
+        ),
+      )
+      .post(
+        '/',
+        sdkSchemaValidator('json', SdkCreateOrganizationInputV),
+        async context => pipe(
+          context.req.valid('json'),
+          organizationsService.asUser(context.var.jwt).create,
+          mapDbRecordAlreadyExistsToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<OrganizationsSdk['create']>>(context),
+        ),
+      )
+      .put(
+        '/:id',
+        sdkSchemaValidator('json', SdkUpdateOrganizationInputV),
+        async context => pipe(
+          {
+            id: Number(context.req.param().id),
+            ...context.req.valid('json'),
+          },
+          organizationsService.asUser(context.var.jwt).update,
+          mapDbRecordAlreadyExistsToSdkError,
+          mapDbRecordNotFoundToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<OrganizationsSdk['update']>>(context),
         ),
       );
   }

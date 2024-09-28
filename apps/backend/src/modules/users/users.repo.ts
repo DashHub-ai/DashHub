@@ -3,11 +3,7 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/function';
 import { inject, injectable } from 'tsyringe';
 
-import type {
-  SdkCreateUserT,
-  SdkEnabledUserAuthMethodsT,
-  SdkOrganizationUserRoleT,
-} from '@llm/sdk';
+import type { SdkCreateUserInputT } from '@llm/sdk';
 
 import { catchTaskEitherTagError, isNil } from '@llm/commons';
 import {
@@ -15,16 +11,14 @@ import {
   DatabaseConnectionRepo,
   DatabaseError,
   type KyselyQueryCreator,
-  type NormalizeSelectTableRow,
   type TableId,
-  type TableRowWithIdName,
   type TransactionalAttrs,
   tryGetFirstOrNotExists,
   tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
-import type { UsersTable } from './users.tables';
+import type { UserTableRowWithRelations } from './users.tables';
 
 import { AuthRepo } from '../auth/repo/auth.repo';
 
@@ -37,7 +31,7 @@ export class UsersRepo extends createDatabaseRepo('users') {
     super(databaseConnectionRepo);
   }
 
-  createUser = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserT>) => {
+  createUser = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.db,
       forwardTransaction,
@@ -63,7 +57,7 @@ export class UsersRepo extends createDatabaseRepo('users') {
     ));
   };
 
-  createUserIfNotExists = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserT>) => pipe(
+  createUserIfNotExists = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => pipe(
     this.findOne({
       forwardTransaction,
       select: ['id'],
@@ -171,12 +165,3 @@ export class UsersRepo extends createDatabaseRepo('users') {
     );
   };
 }
-
-export type UserTableRowOrganizationRelation = TableRowWithIdName & {
-  role: SdkOrganizationUserRoleT;
-};
-
-export type UserTableRowWithRelations = NormalizeSelectTableRow<UsersTable> & {
-  organization: UserTableRowOrganizationRelation | null;
-  auth: SdkEnabledUserAuthMethodsT;
-};

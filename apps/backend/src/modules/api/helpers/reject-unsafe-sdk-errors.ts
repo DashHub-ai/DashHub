@@ -3,7 +3,10 @@ import { pipe } from 'fp-ts/function';
 
 import type { TaggedError } from '@llm/commons';
 
-import { isSdkTaggedError, SdkServerError } from '@llm/sdk';
+import {
+  isSdkTaggedError,
+  SdkServerError,
+} from '@llm/sdk';
 import { LoggerService } from '~/modules/logger';
 
 export function rejectUnsafeSdkErrors<T, E extends TaggedError<string, any>>(task: TE.TaskEither<E, T>) {
@@ -12,15 +15,21 @@ export function rejectUnsafeSdkErrors<T, E extends TaggedError<string, any>>(tas
   return pipe(
     task,
     TE.mapLeft((error) => {
-      if (!isSdkTaggedError(error)) {
-        logger.error(`Rejected unsafe SDK error - ${error.tag}!`, error.context);
-
-        return new SdkServerError({
-          message: 'Internal server error!',
-        });
+      if (isSdkTaggedError(error)) {
+        return error;
       }
 
-      return error;
+      const { stack, ...context } = error;
+
+      logger.error(`Rejected unsafe SDK error - ${error.tag}!`, context);
+
+      if (stack) {
+        console.error(stack);
+      }
+
+      return new SdkServerError({
+        message: 'Internal server error!',
+      });
     }),
   );
 }

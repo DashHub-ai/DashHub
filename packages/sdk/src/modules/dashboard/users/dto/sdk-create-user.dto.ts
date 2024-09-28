@@ -6,7 +6,7 @@ import { ZodOmitArchivedFields, ZodOmitDateFields } from '~/shared';
 import { SdkCreateUserAuthMethodsV } from './auth';
 import { SdkUserV } from './sdk-user.dto';
 
-export const SdkCreateUserV = SdkUserV
+export const SdkCreateUserInputV = SdkUserV
   .omit({
     ...ZodOmitDateFields,
     ...ZodOmitArchivedFields,
@@ -22,4 +22,4 @@ export const SdkCreateUserV = SdkUserV
       .optional(),
   });
 
-export type SdkCreateUserT = z.infer<typeof SdkCreateUserV>;
+export type SdkCreateUserInputT = z.infer<typeof SdkCreateUserInputV>;
