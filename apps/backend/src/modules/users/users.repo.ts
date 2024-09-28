@@ -7,7 +7,7 @@ import type { SdkCreateUserInputT } from '@llm/sdk';
 
 import { catchTaskEitherTagError, isNil } from '@llm/commons';
 import {
-  createDatabaseRepo,
+  createProtectedDatabaseRepo,
   DatabaseConnectionRepo,
   DatabaseError,
   type KyselyQueryCreator,
@@ -23,7 +23,7 @@ import type { UserTableRowWithRelations } from './users.tables';
 import { AuthRepo } from '../auth/repo/auth.repo';
 
 @injectable()
-export class UsersRepo extends createDatabaseRepo('users') {
+export class UsersRepo extends createProtectedDatabaseRepo('users') {
   constructor(
     @inject(DatabaseConnectionRepo) databaseConnectionRepo: DatabaseConnectionRepo,
     @inject(AuthRepo) private readonly authRepo: AuthRepo,
@@ -31,14 +31,14 @@ export class UsersRepo extends createDatabaseRepo('users') {
     super(databaseConnectionRepo);
   }
 
-  createUser = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => {
+  create = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.db,
       forwardTransaction,
     });
 
     return transaction(trx => pipe(
-      this.create({
+      this.baseRepo.create({
         forwardTransaction: trx,
         value: {
           email: user.email,
@@ -57,8 +57,8 @@ export class UsersRepo extends createDatabaseRepo('users') {
     ));
   };
 
-  createUserIfNotExists = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => pipe(
-    this.findOne({
+  createIfNotExists = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => pipe(
+    this.baseRepo.findOne({
       forwardTransaction,
       select: ['id'],
       where: [
@@ -70,7 +70,7 @@ export class UsersRepo extends createDatabaseRepo('users') {
       created: false,
     })),
     catchTaskEitherTagError('DatabaseRecordNotExists')(() => pipe(
-      this.createUser(user),
+      this.create(user),
       TE.map(result => ({
         ...result,
         created: true,

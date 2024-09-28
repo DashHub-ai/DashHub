@@ -8,7 +8,7 @@ export class UsersService {
     @inject(UsersRepo) private readonly usersRepo: UsersRepo,
   ) {}
 
-  createUser = this.usersRepo.createUser;
+  create = this.usersRepo.create;
 
-  createUserIfNotExists = this.usersRepo.createUserIfNotExists;
+  createIfNotExists = this.usersRepo.createIfNotExists;
 }
