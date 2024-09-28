@@ -68,6 +68,6 @@ export class OrganizationsEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       archived: source.archived,
-      maxNumberOfUsers: source.max_number_of_users,
+      maxNumberOfUsers: source.max_number_of_users ?? 0,
     });
 }
