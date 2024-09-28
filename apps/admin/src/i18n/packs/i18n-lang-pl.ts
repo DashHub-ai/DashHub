@@ -8,6 +8,7 @@ const I18N_SDK_ERRORS_PL: Record<SdkTranslatedErrors['tag'], string> = {
   SdkRequestError: 'Błąd żądania',
   SdkServerError: 'Błąd serwera',
   SdkUnauthorizedError: 'Nieautoryzowany',
+  SdkInvalidJwtTokenError: 'Niepoprawny format tokenu JWT',
 };
 
 export const I18N_PACK_PL: I18nLangPack = {

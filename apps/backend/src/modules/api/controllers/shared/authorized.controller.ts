@@ -10,6 +10,6 @@ export abstract class AuthorizedController {
   }>;
 
   constructor(configService: ConfigService) {
-    this.router = new Hono().all(jwtMiddleware(configService.config.auth.jwt.secret));
+    this.router = new Hono().use('*', jwtMiddleware(configService.config.auth.jwt.secret));
   }
 }

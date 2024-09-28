@@ -17,7 +17,7 @@ export class OrganizationsController extends AuthorizedController {
     super(configService);
 
     this.router
-      .post(
+      .get(
         '/search',
         sdkSchemaValidator('query', SdKSearchOrganizationsInputV),
         async context => pipe(

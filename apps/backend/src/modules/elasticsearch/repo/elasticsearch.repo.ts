@@ -303,9 +303,12 @@ export class ElasticsearchRepo {
   ) =>
     TaggedError.tryUnsafeTask(EsQueryError, async () => {
       const startTime = Date.now();
+
+      this.logger.info('Performing query:', request);
+
       const result = await this.client.search(request);
 
-      this.logger.debug('Search request took:', Date.now() - startTime, 'ms');
+      this.logger.info(`Search request took: ${Date.now() - startTime} ms`);
 
       return result as EsHitsResponse<D>;
     });
