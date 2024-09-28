@@ -7885,10 +7885,10 @@ pg-connection-string@^2.7.0:
   resolved "https://registry.yarnpkg.com/pg-connection-string/-/pg-connection-string-2.7.0.tgz#f1d3489e427c62ece022dba98d5262efcb168b37"
   integrity sha512-PI2W9mv53rXJQEOb8xNR8lH7Hr+EKa6oJa38zsK0S/ky2er16ios1wLKhZyxzD7jUReiWokc9WK5nxSnC7W1TA==
 
-pg-cursor@^2.11.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/pg-cursor/-/pg-cursor-2.11.0.tgz#43f738d4ed1876d323b78ea6b504d19aab81abad"
-  integrity sha512-TLCOCtu+rqMarzjUi+/Ffc2DV5ZqO/27y5GqnK9Z3w51rWXMwC8FcO96Uf9/ORo5o+qRXEVJxM9Ts3K2K31MLg==
+pg-cursor@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/pg-cursor/-/pg-cursor-2.12.0.tgz#bda35cb0bcea79835279d5cb316c7ff19c2aba3f"
+  integrity sha512-rppw54OnuYZfMUjiJI2zJMwAjjt2V9EtLUb+t7V5tqwSE5Jxod+7vA7Y0FI6Nq976jNLciA0hoVkwvjjB8qzEw==
 
 pg-int8@1.0.1:
   version "1.0.1"
