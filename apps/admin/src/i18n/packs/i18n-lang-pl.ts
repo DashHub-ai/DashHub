@@ -3,7 +3,7 @@ import type { I18nLangPack } from './i18n-packs';
 
 const I18N_SDK_ERRORS_PL: Record<SdkTranslatedErrors['tag'], string> = {
   SdkIncorrectUsernameOrPasswordError: 'Nieprawidłowy adres e-mail lub hasło',
-  DecodeTokenFormatError: 'Nieprawidłowy format tokenu',
+  SdkDecodeTokenFormatError: 'Nieprawidłowy format tokenu',
   SdkPayloadValidationError: 'Błąd walidacji danych',
   SdkRequestError: 'Błąd żądania',
   SdkServerError: 'Błąd serwera',

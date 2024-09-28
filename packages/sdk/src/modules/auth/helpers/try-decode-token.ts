@@ -10,10 +10,11 @@ export function tryDecodeToken(token: string) {
   return pipe(
     E.tryCatch(
       () => jwtDecode(token),
-      (err: any) => new DecodeTokenFormatError(err),
+      (err: any) => new SdkDecodeTokenFormatError(err),
     ),
     E.chainW(tryParseUsingZodSchema(SdkJwtTokenV)),
+    E.mapLeft(err => new SdkDecodeTokenFormatError(err)),
   );
 }
 
-export class DecodeTokenFormatError extends TaggedError.ofLiteral<Error>()('DecodeTokenFormatError') {}
+export class SdkDecodeTokenFormatError extends TaggedError.ofLiteral<Error>()('SdkDecodeTokenFormatError') {}

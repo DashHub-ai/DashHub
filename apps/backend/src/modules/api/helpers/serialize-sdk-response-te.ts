@@ -18,7 +18,7 @@ export function serializeSdkResponseTE<T extends TE.TaskEither<TaggedError<`Sdk$
       const result = await task();
 
       if (E.isLeft(result)) {
-        return respondWithTaggedError(context, result.left);
+        return respondWithTaggedError(context)(result.left);
       }
 
       return context.json({

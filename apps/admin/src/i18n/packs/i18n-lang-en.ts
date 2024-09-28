@@ -1,8 +1,8 @@
 import type {
-  DecodeTokenFormatError,
-  NoTokensInStorageError,
+  SdkDecodeTokenFormatError,
   SdkIncorrectUsernameOrPasswordError,
   SdkInvalidJwtTokenError,
+  SdkNoTokensInStorageError,
   SdkPayloadValidationError,
   SdkRequestError,
   SdkServerError,
@@ -11,8 +11,8 @@ import type {
 
 export type SdkTranslatedErrors =
   | SdkIncorrectUsernameOrPasswordError
-  | DecodeTokenFormatError
-  | NoTokensInStorageError
+  | SdkDecodeTokenFormatError
+  | SdkNoTokensInStorageError
   | SdkPayloadValidationError
   | SdkRequestError
   | SdkServerError
@@ -21,7 +21,7 @@ export type SdkTranslatedErrors =
 
 const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkIncorrectUsernameOrPasswordError: 'Incorrect email or password',
-  DecodeTokenFormatError: 'Token format is incorrect',
+  SdkDecodeTokenFormatError: 'Token format is incorrect',
   SdkPayloadValidationError: 'Payload validation error',
   SdkRequestError: 'Request error',
   SdkServerError: 'Server error',

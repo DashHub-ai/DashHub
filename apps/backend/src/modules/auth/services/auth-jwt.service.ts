@@ -69,16 +69,8 @@ export class AuthJWTService {
   );
 
   private generateUserRefreshToken = (userId: TableId) =>
-    pipe(
-      TE.Do,
-      TE.bind('refreshToken', () => TE.of(generateRefreshToken())),
-      TE.bindW('updatedUser', ({ refreshToken }) =>
-        this.usersRepo.update({
-          id: userId,
-          value: {
-            jwtRefreshToken: refreshToken,
-          },
-        })),
-      TE.map(({ refreshToken }) => refreshToken),
-    );
+    this.usersRepo.updateJwtRefreshToken({
+      id: userId,
+      refreshToken: generateRefreshToken(),
+    });
 }

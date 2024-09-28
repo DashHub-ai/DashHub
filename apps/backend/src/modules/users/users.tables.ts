@@ -27,7 +27,11 @@ export type UserTableRowOrganizationRelation = TableRowWithIdName & {
   role: SdkOrganizationUserRoleT;
 };
 
-export type UserTableRowWithRelations = NormalizeSelectTableRow<UsersTable> & {
-  organization: UserTableRowOrganizationRelation | null;
-  auth: SdkEnabledUserAuthMethodsT;
-};
+export type UserTableRowWithRelations = NormalizeSelectTableRow<UsersTable>
+  & {
+    auth: SdkEnabledUserAuthMethodsT;
+  }
+  & (
+    | { role: 'root'; organization: null; }
+    | { role: 'user'; organization: UserTableRowOrganizationRelation; }
+  );

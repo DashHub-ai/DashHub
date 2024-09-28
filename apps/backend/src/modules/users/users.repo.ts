@@ -5,9 +5,9 @@ import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateUserInputT } from '@llm/sdk';
 
-import { catchTaskEitherTagError, isNil } from '@llm/commons';
+import { catchTaskEitherTagError, isNil, panicError } from '@llm/commons';
 import {
-  createDatabaseRepo,
+  createProtectedDatabaseRepo,
   DatabaseConnectionRepo,
   DatabaseError,
   type KyselyQueryCreator,
@@ -21,62 +21,110 @@ import {
 import type { UserTableRowWithRelations } from './users.tables';
 
 import { AuthRepo } from '../auth/repo/auth.repo';
+import { OrganizationsUsersRepo } from '../organizations/users/organizations-users.repo';
 
 @injectable()
-export class UsersRepo extends createDatabaseRepo('users') {
+export class UsersRepo extends createProtectedDatabaseRepo('users') {
   constructor(
     @inject(DatabaseConnectionRepo) databaseConnectionRepo: DatabaseConnectionRepo,
     @inject(AuthRepo) private readonly authRepo: AuthRepo,
+    @inject(OrganizationsUsersRepo) private readonly organizationsUsersRepo: OrganizationsUsersRepo,
   ) {
     super(databaseConnectionRepo);
   }
 
-  createUser = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => {
+  createIdsIterator = this.baseRepo.createIdsIterator;
+
+  isPresentOrThrow = this.baseRepo.isPresentOrThrow;
+
+  updateJwtRefreshToken = (
+    {
+      forwardTransaction,
+      id,
+      refreshToken,
+    }: TransactionalAttrs<{ id: TableId; refreshToken: string; }>,
+  ) =>
+    pipe(
+      this.baseRepo.update({
+        forwardTransaction,
+        id,
+        value: {
+          jwtRefreshToken: refreshToken,
+        },
+      }),
+      TE.map(() => refreshToken),
+    );
+
+  create = ({ forwardTransaction, value }: TransactionalAttrs<{ value: SdkCreateUserInputT; }>) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.db,
       forwardTransaction,
     });
 
     return transaction(trx => pipe(
-      this.create({
+      this.baseRepo.create({
         forwardTransaction: trx,
         value: {
-          email: user.email,
-          active: user.active,
-          role: user.role,
+          email: value.email,
+          active: value.active,
+          role: value.role,
         },
       }),
       TE.tap(({ id }) => pipe(
         this.authRepo.upsertUserAuthMethods({
           forwardTransaction: trx,
           user: { id },
-          email: user.auth.email,
-          password: user.auth.password,
+          email: value.auth.email,
+          password: value.auth.password,
         }),
       )),
+      TE.tap(({ id }) => {
+        if (value.role === 'user') {
+          return this.organizationsUsersRepo.create({
+            forwardTransaction: trx,
+            value: {
+              userId: id,
+              organizationId: value.organization.id,
+              role: value.organization.role,
+            },
+          });
+        }
+
+        return TE.right(undefined);
+      }),
     ));
   };
 
-  createUserIfNotExists = ({ forwardTransaction, ...user }: TransactionalAttrs<SdkCreateUserInputT>) => pipe(
-    this.findOne({
+  createIfNotExists = ({ forwardTransaction, value }: TransactionalAttrs<{ value: SdkCreateUserInputT; }>) => {
+    const transaction = tryReuseOrCreateTransaction({
+      db: this.db,
       forwardTransaction,
-      select: ['id'],
-      where: [
-        ['email', '=', user.email],
-      ],
-    }),
-    TE.map(result => ({
-      ...result,
-      created: false,
-    })),
-    catchTaskEitherTagError('DatabaseRecordNotExists')(() => pipe(
-      this.createUser(user),
+    });
+
+    return transaction(trx => pipe(
+      this.baseRepo.findOne({
+        forwardTransaction: trx,
+        select: ['id'],
+        where: [
+          ['email', '=', value.email],
+        ],
+      }),
       TE.map(result => ({
         ...result,
-        created: true,
+        created: false,
       })),
-    )),
-  );
+      catchTaskEitherTagError('DatabaseRecordNotExists')(() => pipe(
+        this.create({
+          value,
+          forwardTransaction: trx,
+        }),
+        TE.map(result => ({
+          ...result,
+          created: true,
+        })),
+      )),
+    ));
+  };
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
@@ -112,24 +160,45 @@ export class UsersRepo extends createDatabaseRepo('users') {
           auth_password_id: authPasswordId,
           auth_email_id: authEmailId,
           ...user
-        }): UserTableRowWithRelations => ({
-          ...camelcaseKeys(user),
-          auth: {
-            password: {
-              enabled: !isNil(authPasswordId),
-            },
-            email: {
-              enabled: !isNil(authEmailId),
-            },
-          },
-          organization: isNil(orgId)
-            ? null
-            : {
-                id: orgId,
-                name: orgName!,
-                role: orgRole!,
+        }): UserTableRowWithRelations => {
+          const baseFields = {
+            ...camelcaseKeys(user),
+            auth: {
+              password: {
+                enabled: !isNil(authPasswordId),
               },
-        })),
+              email: {
+                enabled: !isNil(authEmailId),
+              },
+            },
+          };
+
+          switch (baseFields.role) {
+            case 'root':
+              return {
+                ...baseFields,
+                role: 'root',
+                organization: null,
+              };
+
+            case 'user':
+              return {
+                ...baseFields,
+                role: 'user',
+                organization: {
+                  id: orgId!,
+                  name: orgName!,
+                  role: orgRole!,
+                },
+              };
+
+            default: {
+              const unknownUser: never = baseFields.role;
+
+              throw panicError(`Unknown user role: ${unknownUser} (ID: ${baseFields.id})!`)(baseFields);
+            }
+          }
+        }),
       ),
     );
   };

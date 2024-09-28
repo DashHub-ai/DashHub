@@ -25,14 +25,14 @@ export abstract class TokensStorage {
   getSessionTokensTE() {
     return pipe(
       this.getSessionTokens(),
-      TE.fromOption(() => new NoTokensInStorageError({})),
+      TE.fromOption(() => new SdkNoTokensInStorageError({})),
     );
   }
 
   getDecodedToken() {
     return pipe(
       this.getSessionTokens(),
-      E.fromOption(() => new NoTokensInStorageError({})),
+      E.fromOption(() => new SdkNoTokensInStorageError({})),
       E.chain(({ token }) => tryDecodeToken(token)),
     );
   }
@@ -49,4 +49,4 @@ export abstract class TokensStorage {
   }
 }
 
-export class NoTokensInStorageError extends TaggedError.ofLiteral<any>()('DecodeTokenFormatError') {}
+export class SdkNoTokensInStorageError extends TaggedError.ofLiteral<any>()('SdkDecodeTokenFormatError') {}

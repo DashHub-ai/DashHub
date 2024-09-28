@@ -1,3 +1,4 @@
+import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/function';
 import { inject, injectable } from 'tsyringe';
 
@@ -6,8 +7,6 @@ import type {
   SdkJwtTokenT,
   SdkUpdateOrganizationInputT,
 } from '@llm/sdk';
-
-import { tapTaskEitherTE } from '@llm/commons';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableRowWithId } from '../database';
@@ -25,17 +24,17 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     @inject(OrganizationsEsIndexRepo) private readonly esIndexRepo: OrganizationsEsIndexRepo,
   ) {}
 
+  asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this);
+
   search = this.esSearchRepo.search;
 
   create = (value: SdkCreateOrganizationInputT) => pipe(
     this.repo.create({ value }),
-    tapTaskEitherTE(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
   update = ({ id, ...value }: SdkUpdateOrganizationInputT & TableRowWithId) => pipe(
     this.repo.update({ id, value }),
-    tapTaskEitherTE(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
-
-  asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this);
 }

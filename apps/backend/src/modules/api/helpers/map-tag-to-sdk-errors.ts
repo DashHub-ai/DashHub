@@ -13,7 +13,9 @@ export function mapTagToSdkError<const ET extends string, RET extends TaggedErro
 ) {
   const logger = LoggerService.of('mapTagToSdkError');
 
-  return <T, E extends TaggedError<string, any>>(task: TE.TaskEither<E, T>) => pipe(
+  return <T, E extends TaggedError<string, any>>(
+    task: Extract<E, TaggedError<ET>> extends never ? never : TE.TaskEither<E, T>,
+  ) => pipe(
     task,
     TE.mapLeft((error) => {
       if (isSdkTaggedError(error) || error.tag !== catchTag) {
