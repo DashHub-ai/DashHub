@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@llm/sdk": "*",
-    "@remix-run/dev": "^2.11.2",
+    "@remix-run/dev": "^2.12.1",
     "@remix-run/node": "^2.11.2",
     "@remix-run/react": "^2.11.2",
     "@types/react": "^18.2.20",
