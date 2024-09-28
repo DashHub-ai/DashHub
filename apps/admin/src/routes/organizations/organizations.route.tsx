@@ -1,5 +1,6 @@
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { OrganizationsContainer } from '~/modules/organizations';
 
 import { RouteMetaTags } from '../shared';
 
@@ -13,6 +14,8 @@ export function OrganizationsRoute() {
         <LayoutHeader>
           {t.title}
         </LayoutHeader>
+
+        <OrganizationsContainer />
       </PageWithNavigationLayout>
     </>
   );

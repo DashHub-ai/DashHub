@@ -45,6 +45,9 @@ export const I18N_PACK_EN = {
       logout: 'Logout',
     },
   },
+  placeholders: {
+    noItemsFound: 'No items found',
+  },
   routes: {
     shared: {
       meta: {

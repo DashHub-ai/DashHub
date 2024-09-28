@@ -16,7 +16,7 @@ export type SdkOffsetPaginationInputT = z.infer<typeof SdkOffsetPaginationInputV
 export function SdkOffsetPaginationOutputV<T extends z.ZodType<any, any>>(item: T) {
   return z.object({
     items: z.array(item),
-    total: z.number(),
+    total: z.number().int().positive(),
   });
 }
 

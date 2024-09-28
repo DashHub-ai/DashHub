@@ -29,6 +29,9 @@ export const I18N_PACK_PL: I18nLangPack = {
       logout: 'Wyloguj się',
     },
   },
+  placeholders: {
+    noItemsFound: 'Nie znaleziono żadnych elementów',
+  },
   routes: {
     shared: {
       meta: {
