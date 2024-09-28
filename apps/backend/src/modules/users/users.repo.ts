@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateUserInputT } from '@llm/sdk';
 
-import { catchTaskEitherTagError, isNil } from '@llm/commons';
+import { catchTaskEitherTagError, isNil, panicError } from '@llm/commons';
 import {
   createProtectedDatabaseRepo,
   DatabaseConnectionRepo,
@@ -21,12 +21,14 @@ import {
 import type { UserTableRowWithRelations } from './users.tables';
 
 import { AuthRepo } from '../auth/repo/auth.repo';
+import { OrganizationsUsersRepo } from '../organizations/users/organizations-users.repo';
 
 @injectable()
 export class UsersRepo extends createProtectedDatabaseRepo('users') {
   constructor(
     @inject(DatabaseConnectionRepo) databaseConnectionRepo: DatabaseConnectionRepo,
     @inject(AuthRepo) private readonly authRepo: AuthRepo,
+    @inject(OrganizationsUsersRepo) private readonly organizationsUsersRepo: OrganizationsUsersRepo,
   ) {
     super(databaseConnectionRepo);
   }
@@ -76,6 +78,20 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           password: value.auth.password,
         }),
       )),
+      TE.tap(({ id }) => {
+        if (value.role === 'user') {
+          return this.organizationsUsersRepo.create({
+            forwardTransaction: trx,
+            value: {
+              userId: id,
+              organizationId: value.organization.id,
+              role: value.organization.role,
+            },
+          });
+        }
+
+        return TE.right(undefined);
+      }),
     ));
   };
 
@@ -144,24 +160,45 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           auth_password_id: authPasswordId,
           auth_email_id: authEmailId,
           ...user
-        }): UserTableRowWithRelations => ({
-          ...camelcaseKeys(user),
-          auth: {
-            password: {
-              enabled: !isNil(authPasswordId),
-            },
-            email: {
-              enabled: !isNil(authEmailId),
-            },
-          },
-          organization: isNil(orgId)
-            ? null
-            : {
-                id: orgId,
-                name: orgName!,
-                role: orgRole!,
+        }): UserTableRowWithRelations => {
+          const baseFields = {
+            ...camelcaseKeys(user),
+            auth: {
+              password: {
+                enabled: !isNil(authPasswordId),
               },
-        })),
+              email: {
+                enabled: !isNil(authEmailId),
+              },
+            },
+          };
+
+          switch (baseFields.role) {
+            case 'root':
+              return {
+                ...baseFields,
+                role: 'root',
+                organization: null,
+              };
+
+            case 'user':
+              return {
+                ...baseFields,
+                role: 'user',
+                organization: {
+                  id: orgId!,
+                  name: orgName!,
+                  role: orgRole!,
+                },
+              };
+
+            default: {
+              const unknownUser: never = baseFields.role;
+
+              throw panicError(`Unknown user role: ${unknownUser} (ID: ${baseFields.id})!`)(baseFields);
+            }
+          }
+        }),
       ),
     );
   };

@@ -76,6 +76,7 @@ export class UsersEsIndexRepo extends UsersAbstractEsIndexRepo<UsersEsDocument> 
       this.usersRepo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
+          organization: null,
           ...(snakecaseKeys(entity, { deep: true }) as unknown as any),
           _id: entity.id,
           archive_protection: !!entity.archiveProtection,
