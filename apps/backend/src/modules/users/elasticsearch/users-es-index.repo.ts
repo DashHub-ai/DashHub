@@ -14,7 +14,9 @@ import {
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import { UsersRepo, type UserTableRowWithRelations } from '../users.repo';
+import type { UserTableRowWithRelations } from '../users.tables';
+
+import { UsersRepo } from '../users.repo';
 
 const UsersAbstractEsIndexRepo = createElasticsearchIndexRepo({
   indexName: 'dashboard-users',

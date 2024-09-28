@@ -1,7 +1,13 @@
 import type { ColumnType } from 'kysely';
 
-import type { SdkUserRoleT } from '@llm/sdk';
 import type {
+  SdkEnabledUserAuthMethodsT,
+  SdkOrganizationUserRoleT,
+  SdkUserRoleT,
+} from '@llm/sdk';
+import type {
+  NormalizeSelectTableRow,
+  TableRowWithIdName,
   TableWithArchivedAtColumn,
   TableWithArchiveProtectionColumn,
   TableWithDefaultColumns,
@@ -16,3 +22,12 @@ export type UsersTable = TableWithDefaultColumns &
     email: string;
     role: SdkUserRoleT;
   };
+
+export type UserTableRowOrganizationRelation = TableRowWithIdName & {
+  role: SdkOrganizationUserRoleT;
+};
+
+export type UserTableRowWithRelations = NormalizeSelectTableRow<UsersTable> & {
+  organization: UserTableRowOrganizationRelation | null;
+  auth: SdkEnabledUserAuthMethodsT;
+};

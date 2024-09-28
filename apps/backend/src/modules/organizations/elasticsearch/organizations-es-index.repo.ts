@@ -13,7 +13,9 @@ import {
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import { OrganizationsRepo, type OrganizationTableRowWithRelations } from '../organizations.repo';
+import type { OrganizationTableRow } from '../organizations.tables';
+
+import { OrganizationsRepo } from '../organizations.repo';
 
 const OrganizationsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   indexName: 'dashboard-organizations',
@@ -33,7 +35,7 @@ const OrganizationsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type OrganizationsEsDocument = EsDocument<OrganizationTableRowWithRelations>;
+export type OrganizationsEsDocument = EsDocument<OrganizationTableRow>;
 
 @injectable()
 export class OrganizationsEsIndexRepo extends OrganizationsAbstractEsIndexRepo<OrganizationsEsDocument> {
@@ -46,7 +48,7 @@ export class OrganizationsEsIndexRepo extends OrganizationsAbstractEsIndexRepo<O
 
   protected async findEntities(ids: number[]): Promise<OrganizationsEsDocument[]> {
     return pipe(
-      this.organizationsRepo.findWithRelationsByIds({ ids }),
+      this.organizationsRepo.findByIds({ ids }),
       TE.map(
         A.map(entity => ({
           ...(snakecaseKeys(entity, { deep: true }) as unknown as any),

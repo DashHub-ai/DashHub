@@ -13,6 +13,7 @@
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,
+    "noErrorTruncation": true,
     "noImplicitAny": true,
     "declaration": true,
     "declarationMap": true,

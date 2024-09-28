@@ -1,7 +1,11 @@
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { type OrganizationsSdk, SdKSearchOrganizationsInputV } from '@llm/sdk';
+import {
+  type OrganizationsSdk,
+  SdkCreateOrganizationInputV,
+  SdKSearchOrganizationsInputV,
+} from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
 import { OrganizationsService } from '~/modules/organizations';
 
@@ -25,6 +29,16 @@ export class OrganizationsController extends AuthorizedController {
           organizationsService.asUser(context.var.jwt).search,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<OrganizationsSdk['search']>>(context),
+        ),
+      )
+      .post(
+        '/create',
+        sdkSchemaValidator('json', SdkCreateOrganizationInputV),
+        async context => pipe(
+          context.req.valid('json'),
+          organizationsService.asUser(context.var.jwt).create,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<OrganizationsSdk['create']>>(context),
         ),
       );
   }
