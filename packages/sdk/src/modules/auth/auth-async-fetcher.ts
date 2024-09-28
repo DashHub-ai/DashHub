@@ -1,13 +1,12 @@
 import { type either as E, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/function';
 
-import { type TaggedError, tapTaskEither, type ValidationError } from '@llm/commons';
+import { type TaggedError, tapTaskEither } from '@llm/commons';
 import { type APIRequestAttrs, performApiRequest, type SdkApiRequestErrors } from '~/shared';
 
 import type { AuthSdk } from './auth.sdk';
 import type { SdkJwtTokensPairT } from './dto';
-import type { DecodeTokenFormatError } from './helpers';
-import type { NoTokensInStorageError } from './storage';
+import type { SdkNoTokensInStorageError } from './storage';
 
 import { shouldRefreshToken } from './helpers';
 
@@ -40,7 +39,7 @@ export class AuthAsyncFetcher {
       TE.bindW('shouldRefresh', ({ tokens }) =>
         TE.fromEither(shouldRefreshToken(tokens.token))),
       TE.chain(({ tokens, shouldRefresh }): TE.TaskEither<
-        NoTokensInStorageError | DecodeTokenFormatError | ValidationError | SdkApiRequestErrors,
+        SdkNoTokensInStorageError | SdkApiRequestErrors,
         SdkJwtTokensPairT
       > => {
         if (!shouldRefresh) {

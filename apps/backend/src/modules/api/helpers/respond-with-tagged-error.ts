@@ -4,10 +4,9 @@ import type { TaggedError } from '@llm/commons';
 
 export function respondWithTaggedError(
   context: Context,
-  result: TaggedError<string>,
   fallbackCode: number = 500,
 ) {
-  return context.json(
+  return (result: TaggedError<string>) => context.json(
     {
       error: result.serialize(),
     },

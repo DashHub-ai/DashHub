@@ -16,4 +16,6 @@ export abstract class AbstractNestedSdkWithAuth<
   get authAsyncFetcher() {
     return this.config.authAsyncFetcher;
   }
+
+  fetch = this.authAsyncFetcher.fetchWithAuthTokenTE;
 }

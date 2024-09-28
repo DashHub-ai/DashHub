@@ -2,11 +2,13 @@ import type { Env, MiddlewareHandler, ValidationTargets } from 'hono';
 import type { z } from 'zod';
 
 import { either as E } from 'fp-ts';
+import { pipe } from 'fp-ts/function';
 import { validator } from 'hono/validator';
 
-import type { SdkErrorResponseT } from '@llm/sdk';
-
 import { tryParseUsingZodSchema } from '@llm/commons';
+import { SdkInvalidRequestError } from '@llm/sdk';
+
+import { respondWithTaggedError } from './respond-with-tagged-error';
 
 export function sdkSchemaValidator<
   T extends z.ZodFirstPartySchemaTypes,
@@ -24,15 +26,14 @@ export function sdkSchemaValidator<
 >(target: Target, schema: T): MiddlewareHandler<E, P, V> {
   const parser = tryParseUsingZodSchema(schema);
 
-  return validator(target, (value, c) => {
+  return validator(target, (value, context) => {
     const result = parser(value);
 
     if (E.isLeft(result)) {
-      const response: SdkErrorResponseT = {
-        error: result.left.serialize(),
-      };
-
-      return c.json(response, 400);
+      return pipe(
+        new SdkInvalidRequestError(result.left.context),
+        respondWithTaggedError(context),
+      );
     }
 
     return result.right as any;

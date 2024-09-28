@@ -24,6 +24,8 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     @inject(OrganizationsEsIndexRepo) private readonly esIndexRepo: OrganizationsEsIndexRepo,
   ) {}
 
+  asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this);
+
   search = this.esSearchRepo.search;
 
   create = (value: SdkCreateOrganizationInputT) => pipe(
@@ -35,6 +37,4 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     this.repo.update({ id, value }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
-
-  asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this);
 }

@@ -25,3 +25,7 @@ export const SdkCreateUserInputV = z.object({
   );
 
 export type SdkCreateUserInputT = z.infer<typeof SdkCreateUserInputV>;
+
+export const SdkCreateUserOutputV = SdkTableRowWithIdV;
+
+export type SdkCreateUserOutputT = z.infer<typeof SdkCreateUserOutputV>;

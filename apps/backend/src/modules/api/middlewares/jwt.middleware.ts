@@ -17,7 +17,7 @@ export function jwtMiddleware(jwtSecret: string) {
     const decodeResult = tryVerifyAndDecodeToken(jwtSecret, token ?? '');
 
     if (E.isLeft(decodeResult)) {
-      return respondWithTaggedError(context, decodeResult.left, 401);
+      return respondWithTaggedError(context, 401)(decodeResult.left);
     }
 
     context.set('jwt', decodeResult.right);

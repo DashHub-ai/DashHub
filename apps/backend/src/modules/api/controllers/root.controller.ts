@@ -9,6 +9,7 @@ import { AuthController } from './auth.controller';
 import { HealthCheckController } from './health-check.controller';
 import { OrganizationsController } from './organizations.controller';
 import { BaseController } from './shared';
+import { UsersController } from './users.controller';
 
 @injectable()
 export class RootApiController extends BaseController {
@@ -17,6 +18,7 @@ export class RootApiController extends BaseController {
     @inject(HealthCheckController) healthCheck: HealthCheckController,
     @inject(AuthController) auth: AuthController,
     @inject(OrganizationsController) organizations: OrganizationsController,
+    @inject(UsersController) users: UsersController,
   ) {
     super();
 
@@ -24,7 +26,10 @@ export class RootApiController extends BaseController {
     const corsOrigins = (
       isEnv('dev')
         ? '*'
-        : [`https://www.${config.endUserDomain}`, `https://${config.endUserDomain}`]
+        : [
+            `https://www.${config.endUserDomain}`,
+            `https://${config.endUserDomain}`,
+          ]
     );
 
     this.router
@@ -42,6 +47,7 @@ export class RootApiController extends BaseController {
       .route('/health-check', healthCheck.router)
       .route('/auth', auth.router)
       .route('/organizations', organizations.router)
+      .route('/users', users.router)
       .all('*', notFoundMiddleware);
   }
 }

@@ -8,6 +8,7 @@ import {
 } from '@llm/commons';
 
 import {
+  type SdkInvalidRequestError,
   SdkRequestError,
   type SdkServerError,
   type SdkUnauthorizedError,
@@ -22,7 +23,11 @@ export type APIRequestAttrs = {
   blob?: boolean;
 };
 
-export type SdkApiRequestErrors = SdkRequestError | SdkServerError | SdkUnauthorizedError;
+export type SdkApiRequestErrors =
+  | SdkRequestError
+  | SdkServerError
+  | SdkUnauthorizedError
+  | SdkInvalidRequestError;
 
 export type SdkApiRequestTE<A, E extends TaggedError<string, any> = never> = TE.TaskEither<
   E | SdkApiRequestErrors,
