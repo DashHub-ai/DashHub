@@ -5,20 +5,22 @@ import { inject, injectable } from 'tsyringe';
 import { ConfigService } from '~/modules/config';
 
 import { notFoundMiddleware } from '../middlewares';
-import { AuthController } from './auth';
-import { BaseController } from './base.controller';
-import { HealthCheckController } from './health-check';
+import { AuthController } from './auth.controller';
+import { HealthCheckController } from './health-check.controller';
+import { OrganizationsController } from './organizations.controller';
+import { BaseController } from './shared';
 
 @injectable()
 export class RootApiController extends BaseController {
   constructor(
-    @inject(ConfigService) private readonly configService: ConfigService,
-    @inject(HealthCheckController) private readonly healthCheck: HealthCheckController,
-    @inject(AuthController) private readonly auth: AuthController,
+    @inject(ConfigService) configService: ConfigService,
+    @inject(HealthCheckController) healthCheck: HealthCheckController,
+    @inject(AuthController) auth: AuthController,
+    @inject(OrganizationsController) organizations: OrganizationsController,
   ) {
     super();
 
-    const { config, isEnv } = this.configService;
+    const { config, isEnv } = configService;
     const corsOrigins = (
       isEnv('dev')
         ? '*'
@@ -37,8 +39,9 @@ export class RootApiController extends BaseController {
           maxAge: 600,
         }),
       )
-      .route('/health-check', this.healthCheck.router)
-      .route('/auth', this.auth.router)
+      .route('/health-check', healthCheck.router)
+      .route('/auth', auth.router)
+      .route('/organizations', organizations.router)
       .all('*', notFoundMiddleware);
   }
 }

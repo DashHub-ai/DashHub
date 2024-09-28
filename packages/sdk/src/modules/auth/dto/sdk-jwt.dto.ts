@@ -2,33 +2,33 @@ import { z } from 'zod';
 
 import { SdkOrganizationUserRoleV } from '~/modules/dashboard/organizations';
 
-export const JWTUserOrganizationV = z.object({
+export const SdkJwtUserOrganizationV = z.object({
   id: z.coerce.number(),
   name: z.string(),
   role: SdkOrganizationUserRoleV,
 });
 
-export type JWTUserOrganizationT = z.infer<typeof JWTUserOrganizationV>;
+export type SdkJwtUserOrganizationT = z.infer<typeof SdkJwtUserOrganizationV>;
 
-export const JWTTokenRoleSpecificV = z.discriminatedUnion('role', [
+export const SdkJwtTokenRoleSpecificV = z.discriminatedUnion('role', [
   z.object({
     role: z.literal('root'),
   }),
   z.object({
     role: z.literal('user'),
-    organization: JWTUserOrganizationV,
+    organization: SdkJwtUserOrganizationV,
   }),
 ]);
 
-export type JWTTokenRoleSpecificT = z.infer<typeof JWTTokenRoleSpecificV>;
+export type SdkJwtTokenRoleSpecificT = z.infer<typeof SdkJwtTokenRoleSpecificV>;
 
-export const JWTTokenV = z
+export const SdkJwtTokenV = z
   .object({
     sub: z.coerce.number(),
     exp: z.number(),
     iat: z.number(),
     email: z.string(),
   })
-  .and(JWTTokenRoleSpecificV);
+  .and(SdkJwtTokenRoleSpecificV);
 
-export type JWTTokenT = z.infer<typeof JWTTokenV>;
+export type SdkJwtTokenT = z.infer<typeof SdkJwtTokenV>;

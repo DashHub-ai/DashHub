@@ -3,5 +3,5 @@ import type { TableWithArchivedAtColumn, TableWithDefaultColumns } from '../data
 export type OrganizationsTable = TableWithDefaultColumns &
   TableWithArchivedAtColumn & {
     name: string;
-    maxNumberOfUsers: number;
+    max_number_of_users: number;
   };

@@ -6,13 +6,15 @@ import {
 } from '@llm/sdk';
 
 export function notFoundMiddleware(context: Context<any, any>) {
+  const error = new SdkServerError(
+    {
+      message: '404 - Not found!',
+    },
+  );
+
   return context.json(
     {
-      error: new SdkServerError(
-        {
-          message: '404 - Not found!',
-        },
-      ).serialize(),
+      error: error.serialize(),
     } satisfies SdkErrorResponseT,
     404,
   );

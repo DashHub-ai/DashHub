@@ -5,9 +5,9 @@ import { pipe } from 'fp-ts/function';
 
 import {
   createAccessLevelGuard,
-  type JWTTokenT,
   ofSdkUnauthorizedErrorTE,
   type SdkAccessLevelGuards,
+  type SdkJwtTokenT,
   type SdkUnauthorizedError,
   type SdkUserRoleT,
 } from '@llm/sdk';
@@ -15,7 +15,7 @@ import {
 /**
  * Returns unauthorized status BEFORE task either execution when assert fails
  */
-export function tryTaskEitherIfUser(token: JWTTokenT) {
+export function tryTaskEitherIfUser(token: SdkJwtTokenT) {
   const check = createAccessLevelGuard(token);
   const isAuthorizedAttrs: IsAuthorizedReaderAttrs = {
     token,
@@ -67,8 +67,13 @@ export function tryTaskEitherIfUser(token: JWTTokenT) {
           satisfies(() => token.role === type),
         );
 
+  const is = {
+    root: isOfRole('root'),
+    user: isOfRole('user'),
+  } satisfies Record<SdkUserRoleT, Function>;
+
   return {
-    ...check,
+    is,
     authorized: satisfies(() => true),
     satisfies,
     satisfiesTE,
@@ -78,6 +83,6 @@ export function tryTaskEitherIfUser(token: JWTTokenT) {
 }
 
 type IsAuthorizedReaderAttrs = {
-  token: JWTTokenT;
+  token: SdkJwtTokenT;
   check: SdkAccessLevelGuards;
 };

@@ -7,6 +7,7 @@ export * from './is-ssr';
 export * from './iterators';
 export * from './panic-error';
 export * from './pluck';
+export * from './reject-falsy-items';
 export * from './run-task';
 export * from './safe-to-array';
 export * from './shallow-compare-array';

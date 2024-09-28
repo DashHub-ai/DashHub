@@ -8,6 +8,8 @@ import type { TaggedError } from '@llm/commons';
 import { SdkServerError } from '@llm/sdk';
 import { LoggerService } from '~/modules/logger';
 
+import { respondWithTaggedError } from './respond-with-tagged-error';
+
 export function serializeSdkResponseTE<T extends TE.TaskEither<TaggedError<`Sdk${string}`, any>, any>>(context: Context) {
   const logger = LoggerService.of('serializeSdkResponseTE');
 
@@ -16,12 +18,7 @@ export function serializeSdkResponseTE<T extends TE.TaskEither<TaggedError<`Sdk$
       const result = await task();
 
       if (E.isLeft(result)) {
-        return context.json(
-          {
-            error: result.left.serialize(),
-          },
-          result.left.httpCode as any,
-        );
+        return respondWithTaggedError(context, result.left);
       }
 
       return context.json({

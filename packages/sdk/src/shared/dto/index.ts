@@ -1,3 +1,6 @@
+export * from './sdk-offset-pagination.dto';
+export * from './sdk-search-filters';
+export * from './sdk-search-sort.dto';
 export * from './sdk-table-row-id.dto';
 export * from './sdk-table-row-with-archive-protection.dto';
 export * from './sdk-table-row-with-archived.dto';

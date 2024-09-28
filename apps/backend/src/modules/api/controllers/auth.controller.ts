@@ -4,8 +4,8 @@ import { inject, injectable } from 'tsyringe';
 import { type AuthSdk, SdkPasswordLoginInputV, SdkRefreshJWTInputV } from '@llm/sdk';
 import { AuthJWTService, AuthPasswordLoginService } from '~/modules/auth';
 
-import { rejectUnsafeSdkErrors, sdkSchemaValidator, serializeSdkResponseTE } from '../../helpers';
-import { BaseController } from '../base.controller';
+import { rejectUnsafeSdkErrors, sdkSchemaValidator, serializeSdkResponseTE } from '../helpers';
+import { BaseController } from './shared';
 
 @injectable()
 export class AuthController extends BaseController {

@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe';
 
-import { BaseController } from '../base.controller';
+import { BaseController } from './shared';
 
 @injectable()
 export class HealthCheckController extends BaseController {

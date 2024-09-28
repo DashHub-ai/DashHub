@@ -2,6 +2,7 @@ import type {
   DecodeTokenFormatError,
   NoTokensInStorageError,
   SdkIncorrectUsernameOrPasswordError,
+  SdkInvalidJwtTokenError,
   SdkPayloadValidationError,
   SdkRequestError,
   SdkServerError,
@@ -15,7 +16,8 @@ export type SdkTranslatedErrors =
   | SdkPayloadValidationError
   | SdkRequestError
   | SdkServerError
-  | SdkUnauthorizedError;
+  | SdkUnauthorizedError
+  | SdkInvalidJwtTokenError;
 
 const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkIncorrectUsernameOrPasswordError: 'Incorrect email or password',
@@ -24,6 +26,7 @@ const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkRequestError: 'Request error',
   SdkServerError: 'Server error',
   SdkUnauthorizedError: 'Unauthorized',
+  SdkInvalidJwtTokenError: 'Invalid or missing JWT token',
 };
 
 export const I18N_PACK_EN = {
@@ -44,6 +47,9 @@ export const I18N_PACK_EN = {
     loggedIn: {
       logout: 'Logout',
     },
+  },
+  placeholders: {
+    noItemsFound: 'No items found',
   },
   routes: {
     shared: {
