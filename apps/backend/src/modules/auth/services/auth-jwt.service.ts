@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { JWTTokenRoleSpecificT, JWTTokenT } from '@llm/sdk';
+import type { SdkJwtTokenRoleSpecificT, SdkJwtTokenT } from '@llm/sdk';
 import type { TableId } from '~/modules/database';
 
 import { ConfigService } from '~/modules/config';
@@ -33,7 +33,7 @@ export class AuthJWTService {
     TE.map(({ email, organization, role, jwtRefreshToken }) => {
       const { jwt } = this.configService.config.auth;
 
-      const jwtRoleSpecific: JWTTokenRoleSpecificT = (() => {
+      const jwtRoleSpecific: SdkJwtTokenRoleSpecificT = (() => {
         switch (role) {
           case 'root':
             return {
@@ -52,7 +52,7 @@ export class AuthJWTService {
         }
       })();
 
-      const jwtToken: JWTTokenT = {
+      const jwtToken: SdkJwtTokenT = {
         sub: userId,
         iat: Date.now(),
         exp: Date.now() + jwt.expiresIn * 1000,

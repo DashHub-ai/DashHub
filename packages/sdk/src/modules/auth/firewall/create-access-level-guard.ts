@@ -4,11 +4,11 @@ import { pipe } from 'fp-ts/function';
 
 import type { SdkUserRoleT } from '~/modules/dashboard/users';
 
-import type { JWTTokenT } from '../dto';
+import type { SdkJwtTokenT } from '../dto';
 
 export type SdkAccessLevelGuards = ReturnType<typeof createAccessLevelGuard>;
 
-export function createAccessLevelGuard(jwt: JWTTokenT) {
+export function createAccessLevelGuard(jwt: SdkJwtTokenT) {
   const oneOfType = (...types: SdkUserRoleT[]) => types.includes(jwt.role);
   const noneOfType = (...types: SdkUserRoleT[]) => !oneOfType(...types);
   const isOfRole = (type: SdkUserRoleT) => type === jwt.role;

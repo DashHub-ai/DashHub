@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import type { JWTTokenT } from '@llm/sdk';
+import type { SdkJwtTokenT } from '@llm/sdk';
 
 import type { WithAuthFirewall } from '../auth';
 
@@ -15,5 +15,5 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
 
   search = this.searchRepo.search;
 
-  asUser = (jwt: JWTTokenT) => new OrganizationsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this);
 }

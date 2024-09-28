@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { SdkJwtTokensPairV } from './sdk-jwt-tokens-pair.dto';
-import { JWTTokenV } from './sdk-jwt.dto';
+import { SdkJwtTokenV } from './sdk-jwt.dto';
 
 export const SdkPasswordLoginInputV = z.object({
   email: z.string(),
@@ -13,7 +13,7 @@ export type SdkPasswordLoginInputT = z.infer<typeof SdkPasswordLoginInputV>;
 
 export const SdkPasswordLoginOutputV = z
   .object({
-    decoded: JWTTokenV,
+    decoded: SdkJwtTokenV,
   })
   .merge(SdkJwtTokensPairV);
 

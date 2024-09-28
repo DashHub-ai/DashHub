@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import type { AuthSdk, DashboardSdk, JWTTokenT } from '~/modules';
+import type { AuthSdk, DashboardSdk, SdkJwtTokenT } from '~/modules';
 
 export type SdkContextSessionT =
   | {
@@ -8,7 +8,7 @@ export type SdkContextSessionT =
   }
   | {
     isLoggedIn: true;
-    token: JWTTokenT;
+    token: SdkJwtTokenT;
   };
 
 export type SdkContextT = {

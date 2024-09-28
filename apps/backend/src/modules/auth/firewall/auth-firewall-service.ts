@@ -1,13 +1,13 @@
-import { createAccessLevelGuard, type JWTTokenT } from '@llm/sdk';
+import { createAccessLevelGuard, type SdkJwtTokenT } from '@llm/sdk';
 
 import { tryTaskEitherIfUser } from './try-task-either-if-user';
 
 export type WithAuthFirewall<A extends AuthFirewallService> = {
-  asUser: (jwt: JWTTokenT) => A;
+  asUser: (jwt: SdkJwtTokenT) => A;
 };
 
 export abstract class AuthFirewallService {
-  constructor(protected readonly jwt: JWTTokenT) {}
+  constructor(protected readonly jwt: SdkJwtTokenT) {}
 
   protected get userId() {
     return +this.jwt.sub;

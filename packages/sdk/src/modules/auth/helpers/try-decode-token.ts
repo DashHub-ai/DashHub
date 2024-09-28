@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 
 import { TaggedError, tryParseUsingZodSchema } from '@llm/commons';
 
-import { JWTTokenV } from '../dto';
+import { SdkJwtTokenV } from '../dto';
 
 export function tryDecodeToken(token: string) {
   return pipe(
@@ -12,7 +12,7 @@ export function tryDecodeToken(token: string) {
       () => jwtDecode(token),
       (err: any) => new DecodeTokenFormatError(err),
     ),
-    E.chainW(tryParseUsingZodSchema(JWTTokenV)),
+    E.chainW(tryParseUsingZodSchema(SdkJwtTokenV)),
   );
 }
 
