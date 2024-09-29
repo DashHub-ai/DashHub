@@ -2,7 +2,7 @@ import type { SelectType } from 'kysely';
 
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import type { DatabaseTablesWithId } from '../database.tables';
 import type { NormalizeSelectTableRow } from '../types';

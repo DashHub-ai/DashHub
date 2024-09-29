@@ -6,7 +6,7 @@ import glob from 'tiny-glob';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-import { nodeExternals } from '../../config/vite-plugins';
+import { nodeExternals } from '../../config/plugins/vite-node-externals';
 
 const CLI_ENTRIES = await (async () => {
   const files = await glob(
@@ -50,7 +50,9 @@ export default defineConfig({
     },
   },
   plugins: [
-    nodeExternals(),
+    nodeExternals({
+      exclude: [/@llm\/.*/],
+    }),
     tsconfigPaths(),
     swc({
       sourceMaps: true,

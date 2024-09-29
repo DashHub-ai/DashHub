@@ -19,6 +19,28 @@ export const I18N_PACK_PL: I18nLangPack = {
   errors: {
     tagged: I18N_SDK_ERRORS_PL,
   },
+  pagination: {
+    itemsPerPage: 'Elementów na stronę',
+    showNthToNthOf: 'Pokazano %{from} - %{to} ze %{total}',
+    pageNthOfTotal: 'Strona %{page} z %{total}',
+    searchPlaceholder: 'Szukaj...',
+    goto: {
+      firstPage: 'Pierwsza strona',
+      previousPage: 'Poprzednia strona',
+      nextPage: 'Następna strona',
+      lastPage: 'Ostatnia strona',
+    },
+  },
+  table: {
+    columns: {
+      id: 'ID',
+      name: 'Nazwa',
+      email: 'E-mail',
+      createdAt: 'Utworzono',
+      updatedAt: 'Zaktualizowano',
+      actions: 'Akcje',
+    },
+  },
   navigation: {
     links: {
       home: 'Podsumowanie',

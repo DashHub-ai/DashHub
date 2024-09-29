@@ -2,10 +2,20 @@
 
 import { type ControlBindProps, controlled } from '@under-control/forms';
 import clsx from 'clsx';
-import { type PropsWithChildren, useRef, useState } from 'react';
+import {
+  type PropsWithChildren,
+  type ReactNode,
+  useRef,
+  useState,
+} from 'react';
 
 import { useOutsideClickRef } from '@llm/commons-front';
 import { SelectExpandSVG } from '~/icons';
+
+export type SelectItem = {
+  id: string | number;
+  name?: ReactNode;
+};
 
 type Props = ControlBindProps<SelectItem> & PropsWithChildren & {
   className?: string;
@@ -92,11 +102,6 @@ export const Select = controlled<SelectItem | null, Props>((
     </div>
   );
 });
-
-type SelectItem = {
-  id: string | number;
-  name?: string;
-};
 
 declare global {
   namespace JSX {

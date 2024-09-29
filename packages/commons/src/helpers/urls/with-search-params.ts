@@ -1,4 +1,4 @@
-import { isEmpty } from 'fp-ts/Record';
+import { isEmpty } from 'fp-ts/lib/Record';
 
 import { decodeSearchParams } from './decode-search-params';
 import { dropSearchParams } from './drop-search-params';

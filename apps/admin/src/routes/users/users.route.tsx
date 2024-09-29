@@ -1,5 +1,6 @@
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { UsersTableContainer } from '~/modules/users';
 
 import { RouteMetaTags } from '../shared';
 
@@ -13,6 +14,8 @@ export function UsersRoute() {
         <LayoutHeader>
           {t.title}
         </LayoutHeader>
+
+        <UsersTableContainer />
       </PageWithNavigationLayout>
     </>
   );

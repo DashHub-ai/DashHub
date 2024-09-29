@@ -1,5 +1,5 @@
 import { taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import type { DatabaseTablesWithId } from '../database.tables';
 import type { QueryBasicFactoryAttrs } from './query-basic-factory-attrs.type';

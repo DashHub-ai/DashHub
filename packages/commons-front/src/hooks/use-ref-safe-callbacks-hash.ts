@@ -1,4 +1,4 @@
-import { mapWithIndex } from 'fp-ts/Record';
+import { mapWithIndex } from 'fp-ts/lib/Record';
 import { useMemo, useRef } from 'react';
 
 export type CallbacksHash<F extends Function = Function> = Record<string, F>;

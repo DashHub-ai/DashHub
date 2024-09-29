@@ -1,4 +1,4 @@
-import { flow } from 'fp-ts/function';
+import { flow } from 'fp-ts/lib/function';
 
 import type { SdkJwtTokenT } from '@llm/sdk';
 
@@ -21,6 +21,11 @@ export class UsersFirewall extends AuthFirewallService {
 
   createIfNotExists = flow(
     this.usersService.createIfNotExists,
+    this.tryTEIfUser.is.root,
+  );
+
+  search = flow(
+    this.usersService.search,
     this.tryTEIfUser.is.root,
   );
 }

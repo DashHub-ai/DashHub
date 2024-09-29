@@ -1,5 +1,5 @@
 import { type either as E, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import { type TaggedError, tapTaskEither } from '@llm/commons';
 import { type APIRequestAttrs, performApiRequest, type SdkApiRequestErrors } from '~/shared';

@@ -3,6 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import {
   SdkCreateUserInputV,
+  SdKSearchUsersInputV,
   type UsersSdk,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
@@ -13,8 +14,8 @@ import {
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
-} from '../helpers';
-import { AuthorizedController } from './shared/authorized.controller';
+} from '../../helpers';
+import { AuthorizedController } from '../shared/authorized.controller';
 
 @injectable()
 export class UsersController extends AuthorizedController {
@@ -25,6 +26,16 @@ export class UsersController extends AuthorizedController {
     super(configService);
 
     this.router
+      .get(
+        '/search',
+        sdkSchemaValidator('query', SdKSearchUsersInputV),
+        async context => pipe(
+          context.req.valid('query'),
+          usersService.asUser(context.var.jwt).search,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<UsersSdk['search']>>(context),
+        ),
+      )
       .post(
         '/',
         sdkSchemaValidator('json', SdkCreateUserInputV),

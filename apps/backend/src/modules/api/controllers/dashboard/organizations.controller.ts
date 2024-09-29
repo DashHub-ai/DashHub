@@ -16,8 +16,8 @@ import {
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
-} from '../helpers';
-import { AuthorizedController } from './shared/authorized.controller';
+} from '../../helpers';
+import { AuthorizedController } from '../shared/authorized.controller';
 
 @injectable()
 export class OrganizationsController extends AuthorizedController {

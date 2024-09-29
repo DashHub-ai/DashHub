@@ -1,5 +1,5 @@
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 

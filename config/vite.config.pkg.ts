@@ -1,9 +1,16 @@
+import path from 'node:path';
+
 import react from '@vitejs/plugin-react';
+import glob from 'tiny-glob/sync';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-import { nodeExternals } from './vite-plugins';
+import { nodeExternals } from './plugins/vite-node-externals';
+
+const ALL_PACKAGE_JSON_PATHS = glob(
+  path.resolve(import.meta.dirname, '../packages/*/package.json'),
+);
 
 export default defineConfig({
   build: {
@@ -20,6 +27,8 @@ export default defineConfig({
     dts(),
     react(),
     tsconfigPaths(),
-    nodeExternals(),
+    nodeExternals({
+      packagePath: ALL_PACKAGE_JSON_PATHS,
+    }),
   ],
 });

@@ -1,6 +1,7 @@
 export * from './camel-case-to-snake-case-object.type';
 export * from './can-be-array.type';
 export * from './can-be-promise.type';
+export * from './date-or-string';
 export * from './key-of-type.type';
 export * from './nullable.type';
 export * from './object-with-id.type';

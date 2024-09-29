@@ -1,6 +1,6 @@
 import { reader as R, record as RE } from 'fp-ts';
 import { invert } from 'fp-ts-std/Boolean';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import type { SdkUserRoleT } from '~/modules/dashboard/users';
 

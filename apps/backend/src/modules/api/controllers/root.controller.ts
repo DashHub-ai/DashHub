@@ -6,10 +6,9 @@ import { ConfigService } from '~/modules/config';
 
 import { notFoundMiddleware } from '../middlewares';
 import { AuthController } from './auth.controller';
+import { DashboardController } from './dashboard';
 import { HealthCheckController } from './health-check.controller';
-import { OrganizationsController } from './organizations.controller';
 import { BaseController } from './shared';
-import { UsersController } from './users.controller';
 
 @injectable()
 export class RootApiController extends BaseController {
@@ -17,8 +16,7 @@ export class RootApiController extends BaseController {
     @inject(ConfigService) configService: ConfigService,
     @inject(HealthCheckController) healthCheck: HealthCheckController,
     @inject(AuthController) auth: AuthController,
-    @inject(OrganizationsController) organizations: OrganizationsController,
-    @inject(UsersController) users: UsersController,
+    @inject(DashboardController) dashboard: DashboardController,
   ) {
     super();
 
@@ -46,8 +44,7 @@ export class RootApiController extends BaseController {
       )
       .route('/health-check', healthCheck.router)
       .route('/auth', auth.router)
-      .route('/organizations', organizations.router)
-      .route('/users', users.router)
+      .route('/dashboard', dashboard.router)
       .all('*', notFoundMiddleware);
   }
 }

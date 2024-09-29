@@ -2,7 +2,7 @@ import type { Env, MiddlewareHandler, ValidationTargets } from 'hono';
 import type { z } from 'zod';
 
 import { either as E } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 import { validator } from 'hono/validator';
 
 import { tryParseUsingZodSchema } from '@llm/commons';

@@ -16,13 +16,18 @@ export function useSdkBrowserTokensStorage() {
 
       setSessionTokens(tokens: SessionTokensSetterAttrs) {
         this.localTokensMemory = null;
-        localStorage.clear();
 
         if (!tokens) {
+          localStorage.clear();
           return;
         }
 
-        const { remember, refreshToken, token } = tokens;
+        const {
+          remember = O.isSome(localStorage.get()),
+          refreshToken,
+          token,
+        } = tokens;
+
         const truncatedTokens = {
           refreshToken,
           token,

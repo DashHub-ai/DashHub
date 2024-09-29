@@ -1,6 +1,6 @@
-import { pipe } from 'fp-ts/function';
-import * as NEA from 'fp-ts/NonEmptyArray';
-import * as TE from 'fp-ts/TaskEither';
+import { pipe } from 'fp-ts/lib/function';
+import * as NEA from 'fp-ts/lib/NonEmptyArray';
+import * as TE from 'fp-ts/lib/TaskEither';
 
 import type { DatabaseTablesWithId } from '../database.tables';
 import type { DatabaseTE } from '../errors';

@@ -1,4 +1,4 @@
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import type { DatabaseTables } from '../database.tables';
 import type { DatabaseRecordNotExists, DatabaseTE } from '../errors';

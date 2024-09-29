@@ -37,6 +37,28 @@ export const I18N_PACK_EN = {
   errors: {
     tagged: I18N_SDK_ERRORS_EN,
   },
+  pagination: {
+    itemsPerPage: 'Items per page',
+    showNthToNthOf: 'Shown %{from} - %{to} of %{total}',
+    pageNthOfTotal: 'Page %{page} of %{total}',
+    searchPlaceholder: 'Enter search phrase...',
+    goto: {
+      firstPage: 'First page',
+      previousPage: 'Previous page',
+      nextPage: 'Next page',
+      lastPage: 'Last page',
+    },
+  },
+  table: {
+    columns: {
+      id: 'ID',
+      name: 'Name',
+      email: 'E-Mail',
+      createdAt: 'Created at',
+      updatedAt: 'Updated at',
+      actions: 'Actions',
+    },
+  },
   navigation: {
     links: {
       home: 'Overview',
