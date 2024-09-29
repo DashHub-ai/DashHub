@@ -48,6 +48,14 @@ export const I18N_PACK_EN = {
       lastPage: 'Last page',
     },
   },
+  table: {
+    columns: {
+      name: 'Name',
+      createdAt: 'Created at',
+      updatedAt: 'Updated at',
+      actions: 'Actions',
+    },
+  },
   navigation: {
     links: {
       home: 'Overview',

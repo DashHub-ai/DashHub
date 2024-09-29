@@ -1,9 +1,11 @@
 import { SdKSearchOrganizationsInputV, useSdkForLoggedIn } from '@llm/sdk';
 import { PaginatedTable, useDebouncedPaginatedSearch } from '~/components';
+import { useI18n } from '~/i18n';
 
 import { OrganizationsTableRow } from './organizations-table-row';
 
 export function OrganizationsContainer() {
+  const t = useI18n().pack.table.columns;
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result } = useDebouncedPaginatedSearch({
     schema: SdKSearchOrganizationsInputV,
@@ -17,7 +19,10 @@ export function OrganizationsContainer() {
       pagination={pagination.bind.entire()}
       result={result}
       columns={[
-        { id: 'name', name: 'Name' },
+        { id: 'name', name: t.name, className: 'uk-table-expand' },
+        { id: 'createdAt', name: t.createdAt },
+        { id: 'updatedAt', name: t.updatedAt },
+        { id: 'actions', className: 'uk-table-shrink' },
       ]}
     >
       {({ item }) => (

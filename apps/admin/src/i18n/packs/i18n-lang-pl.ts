@@ -30,6 +30,14 @@ export const I18N_PACK_PL: I18nLangPack = {
       lastPage: 'Ostatnia strona',
     },
   },
+  table: {
+    columns: {
+      name: 'Nazwa',
+      createdAt: 'Utworzono',
+      updatedAt: 'Zaktualizowano',
+      actions: 'Akcje',
+    },
+  },
   navigation: {
     links: {
       home: 'Podsumowanie',

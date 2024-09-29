@@ -1,5 +1,6 @@
 export * from './async-debounce';
 export * from './clamp';
+export * from './date';
 export * from './delay-task-either';
 export * from './find-item-by-id';
 export * from './format';

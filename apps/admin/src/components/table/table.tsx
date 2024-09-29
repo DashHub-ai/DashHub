@@ -8,7 +8,7 @@ import { NoItemsPlaceholder } from '../list';
 
 export type TableColumnItem = {
   id: number | string;
-  name: ReactNode;
+  name?: ReactNode;
   className?: string;
 };
 
@@ -38,7 +38,7 @@ export function Table<I extends SdkTableRowWithIdT>(
         <thead>
           <tr>
             {columns.map(({ id, name, className }) => (
-              <th key={id} className={className ?? 'p-2'}>
+              <th key={id} className={clsx('p-2', className)}>
                 {name}
               </th>
             ))}
