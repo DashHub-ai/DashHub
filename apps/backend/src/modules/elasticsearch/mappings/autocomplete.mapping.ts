@@ -3,7 +3,7 @@ export function createAutocompleteFieldAnalyzeSettings() {
     char_filter: {
       special_characters_char_filter: {
         type: 'mapping',
-        mappings: ['_ => ', '- => ', '/ => '],
+        mappings: ['_ => ', '- => ', '/ => ', '. => ', '@ => '],
       },
     },
     analyzer: {
@@ -26,10 +26,13 @@ export function createAutocompleteFieldAnalyzeSettings() {
 export function createBaseAutocompleteFieldMappings(field: string = 'name') {
   return {
     [field]: {
-      type: 'text',
-      analyzer: 'folded_lowercase_analyzer',
+      type: 'keyword',
       fields: {
-        raw: {
+        text: {
+          type: 'text',
+          analyzer: 'folded_lowercase_analyzer',
+        },
+        raw_normalized: {
           type: 'keyword',
           normalizer: 'folded_lowercase_normalizer',
         },

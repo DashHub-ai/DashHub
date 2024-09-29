@@ -57,7 +57,7 @@ export class UsersEsSearchRepo {
     esb.boolQuery().must(
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
-        !!phrase && createPhraseFieldQuery()(phrase),
+        !!phrase && createPhraseFieldQuery('email')(phrase),
         !isNil(archived) && esb.termQuery('archived', archived),
       ]),
     );

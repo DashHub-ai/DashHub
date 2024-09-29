@@ -29,7 +29,6 @@ const UsersAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createArchivedRecordMappings(),
         ...createBaseAutocompleteFieldMappings('email'),
         role: { type: 'keyword' },
-        email: { type: 'text' },
         active: { type: 'boolean' },
         archive_protection: { type: 'boolean' },
         auth: {

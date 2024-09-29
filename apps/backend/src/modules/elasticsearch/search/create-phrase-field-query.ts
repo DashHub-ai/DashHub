@@ -5,15 +5,19 @@ import { rejectFalsyItems } from '@llm/commons';
 export function createPhraseFieldQuery(field: string = 'name') {
   return (phrase: string): esb.BoolQuery => {
     const normalizedPhrase = normalizeEsSearchPhrase(phrase);
-
     const autocompleteField = `${field}.autocomplete`;
-    const rawField = `${field}.raw`;
 
     return esb.boolQuery().should(
       rejectFalsyItems([
         phrase && Number.isNaN(+phrase)
           ? null
           : esb.termQuery('id', phrase).boost(4),
+        esb
+          .termQuery(field, phrase)
+          .boost(4),
+        esb
+          .prefixQuery(`${field}.raw_normalized`, normalizedPhrase)
+          .boost(3),
         esb
           .multiMatchQuery(
             [
@@ -28,20 +32,21 @@ export function createPhraseFieldQuery(field: string = 'name') {
           .operator('and')
           .boost(2),
         esb
-          .matchQuery(field, normalizedPhrase)
-          .fuzziness('auto')
-          .operator('and'),
-        esb
           .queryStringQuery(`*${normalizedPhrase}*`)
-          .field(rawField)
+          .field(field)
           .analyzeWildcard(true)
           .defaultOperator('AND')
-          .allowLeadingWildcard(true),
+          .allowLeadingWildcard(true)
+          .boost(1.5),
+        esb
+          .matchQuery(`${field}.text`, normalizedPhrase)
+          .fuzziness('auto')
+          .operator('and'),
       ]),
     );
   };
 }
 
 function normalizeEsSearchPhrase(phrase: string) {
-  return phrase.trim().replaceAll(/[^a-z0-9 ]/gi, '');
+  return phrase.trim().replaceAll(/[^a-z0-9 ]/gi, '').toLowerCase();
 }

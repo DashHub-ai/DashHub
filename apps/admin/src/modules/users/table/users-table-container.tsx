@@ -21,7 +21,14 @@ export function UsersTableContainer() {
   return (
     <section>
       <PaginationToolbar>
-        <PaginationSearchToolbarItem {...pagination.bind.path('phrase')} />
+        <PaginationSearchToolbarItem
+          {...pagination.bind.path('phrase', {
+            relatedInputs: ({ newGlobalValue, newControlValue }) => ({
+              ...newGlobalValue,
+              sort: newControlValue ? 'score:desc' : 'createdAt:asc',
+            }),
+          })}
+        />
       </PaginationToolbar>
 
       <PaginatedTable

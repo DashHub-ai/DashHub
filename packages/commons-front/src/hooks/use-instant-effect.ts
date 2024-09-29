@@ -1,4 +1,4 @@
-import { type DependencyList, useRef } from 'react';
+import { type DependencyList, useState } from 'react';
 
 import { shallowCompareArrays } from '@llm/commons';
 
@@ -9,10 +9,10 @@ import { shallowCompareArrays } from '@llm/commons';
  * @param deps The dependency list.
  */
 export function useInstantEffect(fn: VoidFunction, deps: DependencyList): void {
-  const prevDeps = useRef<any>(null);
+  const [prevDeps, setDeps] = useState<any>(null);
 
-  if (!shallowCompareArrays(prevDeps.current, deps)) {
-    prevDeps.current = [...deps];
+  if (!shallowCompareArrays(prevDeps, deps)) {
     fn();
+    setDeps([...deps]);
   }
 }

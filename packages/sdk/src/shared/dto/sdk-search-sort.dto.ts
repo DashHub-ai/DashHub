@@ -5,6 +5,9 @@ export type SdkSearchSortDirectionT = 'asc' | 'desc';
 export type SdkSortItemT<N extends string = string> = `${N}:${SdkSearchSortDirectionT}`;
 
 export const DEFAULT_SDK_SORT = [
+  'score:desc',
+  'score:asc',
+
   'createdAt:desc',
   'createdAt:asc',
 

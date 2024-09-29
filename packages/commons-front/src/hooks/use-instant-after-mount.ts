@@ -1,11 +1,5 @@
-import { useRef } from 'react';
+import { useInstantEffect } from './use-instant-effect';
 
 export function useInstantAfterMount(callback: () => void | VoidFunction) {
-  const executedRef = useRef<boolean>(false);
-
-  if (!executedRef.current) {
-    callback();
-  }
-
-  executedRef.current = true;
+  useInstantEffect(callback, []);
 }
