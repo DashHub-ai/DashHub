@@ -10,7 +10,7 @@ import { ValidationError } from '../errors/validation.error';
  *
  * @param schema - The Zod schema to use.
  */
-export function tryParseUsingZodSchema<S extends z.ZodType<any>>(schema: S) {
+export function tryParseUsingZodSchema<S extends z.ZodType<unknown>>(schema: S) {
   return (value: unknown): E.Either<ValidationError, z.infer<S>> =>
     ValidationError.tryIO(() => schema.parse(value) as z.infer<S>);
 }
@@ -20,7 +20,7 @@ export function tryParseUsingZodSchema<S extends z.ZodType<any>>(schema: S) {
  *
  * @param schema - The Zod schema to use.
  */
-export function tryParseUsingZodSchemaTE<S extends z.ZodType<any>>(schema: S) {
+export function tryParseUsingZodSchemaTE<S extends z.ZodType<unknown>>(schema: S) {
   return <E>(task: TE.TaskEither<any, E>): TE.TaskEither<ValidationError, z.infer<S>> =>
     pipe(task, TE.chainEitherKW(tryParseUsingZodSchema(schema)));
 }

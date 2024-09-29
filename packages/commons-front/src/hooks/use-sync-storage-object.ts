@@ -1,4 +1,4 @@
-import type { z, ZodFirstPartySchemaTypes } from 'zod';
+import type { z } from 'zod';
 
 import { pipe } from 'fp-ts/function';
 import * as O from 'fp-ts/Option';
@@ -14,14 +14,14 @@ type AbstractSyncStorage = {
   setItem: (key: string, value: string) => void;
 };
 
-export type SyncStorageConfig<S extends ZodFirstPartySchemaTypes> = {
+export type SyncStorageConfig<S extends z.ZodType<unknown>> = {
   schema: S;
   storage: AbstractSyncStorage;
   rerenderOnSet?: boolean;
   readBeforeMount?: boolean;
 };
 
-export function useSyncStorageObject<S extends ZodFirstPartySchemaTypes>(
+export function useSyncStorageObject<S extends z.ZodType<unknown>>(
   name: string,
   {
     schema,
