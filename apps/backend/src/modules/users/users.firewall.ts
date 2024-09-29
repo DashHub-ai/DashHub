@@ -23,4 +23,9 @@ export class UsersFirewall extends AuthFirewallService {
     this.usersService.createIfNotExists,
     this.tryTEIfUser.is.root,
   );
+
+  search = flow(
+    this.usersService.search,
+    this.tryTEIfUser.is.root,
+  );
 }
