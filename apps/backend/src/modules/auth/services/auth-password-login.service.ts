@@ -1,5 +1,5 @@
 import { taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import { catchTaskEitherTagError } from '@llm/commons';

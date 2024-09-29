@@ -1,7 +1,7 @@
-import * as E from 'fp-ts/Either';
-import { pipe } from 'fp-ts/function';
-import * as O from 'fp-ts/Option';
-import * as TE from 'fp-ts/TaskEither';
+import * as E from 'fp-ts/lib/Either';
+import { pipe } from 'fp-ts/lib/function';
+import * as O from 'fp-ts/lib/Option';
+import * as TE from 'fp-ts/lib/TaskEither';
 
 import { type Nullable, TaggedError } from '@llm/commons';
 

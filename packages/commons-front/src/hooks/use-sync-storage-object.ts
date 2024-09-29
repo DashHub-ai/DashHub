@@ -1,7 +1,7 @@
 import type { z } from 'zod';
 
-import { pipe } from 'fp-ts/function';
-import * as O from 'fp-ts/Option';
+import { pipe } from 'fp-ts/lib/function';
+import * as O from 'fp-ts/lib/Option';
 import { useRef } from 'react';
 
 import { tryParseJSON, tryParseUsingZodSchema } from '@llm/commons';

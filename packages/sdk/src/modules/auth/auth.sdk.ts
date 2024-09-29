@@ -1,4 +1,4 @@
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import { tapTaskEither } from '@llm/commons';
 import { performApiRequest, postPayload } from '~/shared';

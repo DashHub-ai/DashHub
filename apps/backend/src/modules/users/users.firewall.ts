@@ -1,4 +1,4 @@
-import { flow } from 'fp-ts/function';
+import { flow } from 'fp-ts/lib/function';
 
 import type { SdkJwtTokenT } from '@llm/sdk';
 

@@ -1,4 +1,4 @@
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import type { DatabaseTablesWithId } from '../database.tables';
 import type { TableId } from '../types';

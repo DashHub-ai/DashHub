@@ -1,12 +1,12 @@
-import type { Reader } from 'fp-ts/Reader';
-import type { TaskEither } from 'fp-ts/TaskEither';
+import type { Reader } from 'fp-ts/lib/Reader';
+import type { TaskEither } from 'fp-ts/lib/TaskEither';
 import type { z } from 'zod';
 
 import {
   type ControlChangeValueCallback,
   useControlStrict,
 } from '@under-control/inputs';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import type {
   SdkOffsetPaginationInputT,

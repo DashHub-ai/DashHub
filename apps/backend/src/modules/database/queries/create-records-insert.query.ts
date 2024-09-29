@@ -1,5 +1,5 @@
 import { nonEmptyArray as NEA, option as O } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 import snakeCaseKeys from 'snakecase-keys';
 
 import type { DatabaseTablesWithId } from '../database.tables';

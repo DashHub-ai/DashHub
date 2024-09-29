@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import esb from 'elastic-builder';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type {

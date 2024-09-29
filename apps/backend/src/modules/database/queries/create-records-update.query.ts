@@ -1,4 +1,4 @@
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 
 import type { DatabaseTablesWithId } from '../database.tables';

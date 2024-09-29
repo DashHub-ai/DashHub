@@ -1,5 +1,5 @@
 import { taskEither as TE } from 'fp-ts';
-import { flow } from 'fp-ts/function';
+import { flow } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type { SdkJwtTokenT } from '@llm/sdk';

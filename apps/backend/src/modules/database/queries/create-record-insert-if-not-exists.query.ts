@@ -1,7 +1,7 @@
-import type { ReaderTaskEither } from 'fp-ts/ReaderTaskEither';
+import type { ReaderTaskEither } from 'fp-ts/lib/ReaderTaskEither';
 
 import { taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import type { DatabaseTablesWithId } from '../database.tables';
 import type { DatabaseError, DatabaseTE } from '../errors';

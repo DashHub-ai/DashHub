@@ -1,5 +1,5 @@
 import { array as A, taskEither as TE } from 'fp-ts';
-import { flow, pipe } from 'fp-ts/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 import { singleton } from 'tsyringe';
 
 import type { TaggedError } from '@llm/commons';

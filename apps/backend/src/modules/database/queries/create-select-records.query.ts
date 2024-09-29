@@ -1,8 +1,8 @@
 import type { SelectQueryBuilder } from 'kysely';
 
 import camelcaseKeys from 'camelcase-keys';
-import { pipe } from 'fp-ts/function';
-import * as TE from 'fp-ts/TaskEither';
+import { pipe } from 'fp-ts/lib/function';
+import * as TE from 'fp-ts/lib/TaskEither';
 import { snakeCase } from 'snake-case';
 
 import type { DatabaseTables } from '../database.tables';

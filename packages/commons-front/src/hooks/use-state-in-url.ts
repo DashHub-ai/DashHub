@@ -1,6 +1,6 @@
 import type { z } from 'zod';
 
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 import { useState } from 'react';
 
 import {

@@ -1,7 +1,7 @@
 import type { Reader } from 'fp-ts/lib/Reader';
 
 import { taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import {
   createAccessLevelGuard,

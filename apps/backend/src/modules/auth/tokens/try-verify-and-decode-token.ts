@@ -1,5 +1,5 @@
 import { either as E } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 import jwtSimple from 'jwt-simple';
 
 import { tryParseUsingZodSchema } from '@llm/commons';

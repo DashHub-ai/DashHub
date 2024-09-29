@@ -1,4 +1,4 @@
-import * as E from 'fp-ts/Either';
+import * as E from 'fp-ts/lib/Either';
 
 import type { SdkJwtTokenT } from '../dto';
 
