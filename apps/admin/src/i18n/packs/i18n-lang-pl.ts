@@ -32,7 +32,9 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   table: {
     columns: {
+      id: 'ID',
       name: 'Nazwa',
+      email: 'E-mail',
       createdAt: 'Utworzono',
       updatedAt: 'Zaktualizowano',
       actions: 'Akcje',

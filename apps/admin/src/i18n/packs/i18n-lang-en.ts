@@ -50,7 +50,9 @@ export const I18N_PACK_EN = {
   },
   table: {
     columns: {
+      id: 'ID',
       name: 'Name',
+      email: 'E-Mail',
       createdAt: 'Created at',
       updatedAt: 'Updated at',
       actions: 'Actions',
