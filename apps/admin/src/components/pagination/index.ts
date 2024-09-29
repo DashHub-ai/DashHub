@@ -1,1 +1,2 @@
-export * from './pagination-list-wrapper';
+export * from './pagination-footer';
+export * from './pagination-items-per-page';

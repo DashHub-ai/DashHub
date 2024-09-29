@@ -37,6 +37,10 @@ export const I18N_PACK_EN = {
   errors: {
     tagged: I18N_SDK_ERRORS_EN,
   },
+  pagination: {
+    itemsPerPage: 'Items per page',
+    showNthToNthOf: 'Shown %{from} - %{to} of %{total}',
+  },
   navigation: {
     links: {
       home: 'Overview',

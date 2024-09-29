@@ -19,6 +19,10 @@ export const I18N_PACK_PL: I18nLangPack = {
   errors: {
     tagged: I18N_SDK_ERRORS_PL,
   },
+  pagination: {
+    itemsPerPage: 'Elementów na stronę',
+    showNthToNthOf: 'Pokazano %{from} - %{to} ze %{total}',
+  },
   navigation: {
     links: {
       home: 'Podsumowanie',

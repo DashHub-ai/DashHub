@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { v4 as uid } from 'uuid';
 
-import { isSSR } from '@llm/commons';
+import { isSSR, isTaggedError } from '@llm/commons';
 
 import { useIsUnmountedRef } from './use-is-unmounted-ref.js';
 import { useRefSafeCallback } from './use-ref-safe-callback.js';
@@ -9,7 +9,9 @@ import { useRefSafeCallback } from './use-ref-safe-callback.js';
 /**
  * A hook that allows to execute an asynchronous function and provides the state of the execution.
  */
-export function useAsyncCallback<A extends Array<unknown>, R>(callback: (...args: Array<A>) => Promise<R>): AsyncCallbackHookResult<A, R> {
+export function useAsyncCallback<A, R>(
+  callback: (...args: Array<A>) => Promise<R>,
+): AsyncCallbackHookResult<Array<A>, R> {
   // The state of the asynchronous callback.
   const [asyncState, setAsyncState] = useState<AsyncCallbackState<R>>({
     status: 'idle',
@@ -24,7 +26,7 @@ export function useAsyncCallback<A extends Array<unknown>, R>(callback: (...args
   const prevExecutionUIDRef = useRef<string | null>(null);
 
   // The asynchronous executor function, which is a wrapped version of the original callback.
-  const asyncExecutor = useRefSafeCallback(async (...args: Array<any>) => {
+  const asyncExecutor = useRefSafeCallback(async (...args: Array<A>) => {
     if (unmountedRef.current || isSSR()) {
       return null;
     }
@@ -55,7 +57,12 @@ export function useAsyncCallback<A extends Array<unknown>, R>(callback: (...args
       return result;
     }
     catch (error: any) {
-      console.error(error);
+      if (isTaggedError(error)) {
+        console.error(error.tag, error.context);
+      }
+      else {
+        console.error(error);
+      }
 
       // Update the state if the component is still mounted and the execution UUID matches the previous one, otherwise
       if (!unmountedRef.current && prevExecutionUIDRef.current === currentExecutionUUID) {
@@ -69,14 +76,14 @@ export function useAsyncCallback<A extends Array<unknown>, R>(callback: (...args
     return null;
   });
 
-  return [asyncExecutor, asyncState] as AsyncCallbackHookResult<A, R>;
+  return [asyncExecutor, asyncState] as AsyncCallbackHookResult<Array<A>, R>;
 }
 
 /**
  * Represents the result of the `useAsyncCallback` hook.
  */
 export type AsyncCallbackHookResult<A extends Array<unknown>, R> = [
-  (...args: Array<A>) => Promise<R | null>,
+  (...args: A) => Promise<R | null>,
   AsyncCallbackState<R>,
 ];
 

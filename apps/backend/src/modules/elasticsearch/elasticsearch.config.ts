@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { StrictBooleanV } from '@llm/commons';
+
 export const ElasticsearchConfigV = z.object({
   hostname: z.string().default('0.0.0.0'),
   port: z.coerce.number().default(9200),
@@ -13,7 +15,7 @@ export const ElasticsearchConfigV = z.object({
   ),
 
   syncMappings: z.object({
-    onStartup: z.coerce.boolean().default(true),
+    onStartup: StrictBooleanV.default(true),
     cron: z.string().optional(),
   }),
 });

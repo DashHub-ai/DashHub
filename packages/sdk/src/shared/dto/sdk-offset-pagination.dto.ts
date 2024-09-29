@@ -4,7 +4,7 @@ import { z } from 'zod';
  * Defines the schema for offset-based pagination input using Zod.
  */
 export const SdkOffsetPaginationInputV = z.object({
-  offset: z.coerce.number().int().positive().optional(),
+  offset: z.coerce.number().int().nonnegative().optional().default(0),
   limit: z.coerce.number().int().positive().optional().default(20),
 });
 
