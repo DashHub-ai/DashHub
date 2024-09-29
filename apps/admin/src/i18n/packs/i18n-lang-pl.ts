@@ -23,6 +23,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     itemsPerPage: 'Elementów na stronę',
     showNthToNthOf: 'Pokazano %{from} - %{to} ze %{total}',
     pageNthOfTotal: 'Strona %{page} z %{total}',
+    searchPlaceholder: 'Szukaj...',
     goto: {
       firstPage: 'Pierwsza strona',
       previousPage: 'Poprzednia strona',

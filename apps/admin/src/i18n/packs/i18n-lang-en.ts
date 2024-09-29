@@ -41,6 +41,7 @@ export const I18N_PACK_EN = {
     itemsPerPage: 'Items per page',
     showNthToNthOf: 'Shown %{from} - %{to} of %{total}',
     pageNthOfTotal: 'Page %{page} of %{total}',
+    searchPlaceholder: 'Enter search phrase...',
     goto: {
       firstPage: 'First page',
       previousPage: 'Previous page',
