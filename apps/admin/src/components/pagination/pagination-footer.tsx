@@ -5,10 +5,12 @@ import type { SdkOffsetPaginationInputT, SdkOffsetPaginationOutputT } from '@llm
 import { format } from '@llm/commons';
 import { useI18n } from '~/i18n';
 
+import { PageNumber } from './page-number';
+import { PaginationArrows } from './pagination-arrows';
 import { PaginationItemsPerPage } from './pagination-items-per-page';
 
 type Props = {
-  result: SdkOffsetPaginationOutputT<any>;
+  result: SdkOffsetPaginationOutputT<unknown>;
 };
 
 export const PaginationFooter = controlled<SdkOffsetPaginationInputT, Props>((
@@ -31,6 +33,11 @@ export const PaginationFooter = controlled<SdkOffsetPaginationInputT, Props>((
 
       <div className="flex flex-none items-center space-x-8">
         <PaginationItemsPerPage {...bind.path('limit')} />
+        <PageNumber result={result} pagination={value} />
+        <PaginationArrows
+          {...bind.entire()}
+          result={result}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { type ControlBindProps, controlled } from '@under-control/forms';
+import { controlled } from '@under-control/forms';
 import { useMemo } from 'react';
 
 import { findItemById, uniq } from '@llm/commons';
@@ -6,7 +6,7 @@ import { useI18n } from '~/i18n';
 
 import { Select, type SelectItem } from '../controls';
 
-type Props = ControlBindProps<number> & {
+type Props = {
   itemsPerPage?: number[];
 };
 

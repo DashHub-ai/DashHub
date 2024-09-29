@@ -22,6 +22,13 @@ export const I18N_PACK_PL: I18nLangPack = {
   pagination: {
     itemsPerPage: 'Elementów na stronę',
     showNthToNthOf: 'Pokazano %{from} - %{to} ze %{total}',
+    pageNthOfTotal: 'Strona %{page} z %{total}',
+    goto: {
+      firstPage: 'Pierwsza strona',
+      previousPage: 'Poprzednia strona',
+      nextPage: 'Następna strona',
+      lastPage: 'Ostatnia strona',
+    },
   },
   navigation: {
     links: {

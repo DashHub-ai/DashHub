@@ -40,6 +40,13 @@ export const I18N_PACK_EN = {
   pagination: {
     itemsPerPage: 'Items per page',
     showNthToNthOf: 'Shown %{from} - %{to} of %{total}',
+    pageNthOfTotal: 'Page %{page} of %{total}',
+    goto: {
+      firstPage: 'First page',
+      previousPage: 'Previous page',
+      nextPage: 'Next page',
+      lastPage: 'Last page',
+    },
   },
   navigation: {
     links: {
