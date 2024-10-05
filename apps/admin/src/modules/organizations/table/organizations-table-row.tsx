@@ -1,16 +1,20 @@
 import { pipe } from 'fp-ts/lib/function';
 
-import { formatDate, tapTaskEither } from '@llm/commons';
+import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchOrganizationItemT, useSdkForLoggedIn } from '@llm/sdk';
 import { EllipsisCrudDropdownButton } from '~/components';
+
+import { useOrganizationUpdateModal } from '../update';
 
 type Props = {
   item: SdkSearchOrganizationItemT;
   onAfterArchive: VoidFunction;
+  onAfterUpdate: VoidFunction;
 };
 
-export function OrganizationsTableRow({ item, onAfterArchive }: Props) {
+export function OrganizationsTableRow({ item, onAfterArchive, onAfterUpdate }: Props) {
   const { sdks } = useSdkForLoggedIn();
+  const updateModal = useOrganizationUpdateModal();
 
   return (
     <tr>
@@ -20,7 +24,14 @@ export function OrganizationsTableRow({ item, onAfterArchive }: Props) {
       <td>{formatDate(item.updatedAt)}</td>
       <td>
         <EllipsisCrudDropdownButton
-          onEdit={() => {}}
+          onUpdate={
+            pipe(
+              updateModal.showAsOptional({
+                defaultValue: item,
+              }),
+              tapTaskOption(onAfterUpdate),
+            )
+          }
           onArchive={
             pipe(
               sdks.dashboard.organizations.archive(item.id),

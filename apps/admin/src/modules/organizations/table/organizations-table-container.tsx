@@ -68,7 +68,12 @@ export function OrganizationsTableContainer() {
         ]}
       >
         {({ item }) => (
-          <OrganizationsTableRow key={item.id} item={item} onAfterArchive={reload} />
+          <OrganizationsTableRow
+            key={item.id}
+            item={item}
+            onAfterArchive={reload}
+            onAfterUpdate={reload}
+          />
         )}
       </PaginatedTable>
     </section>

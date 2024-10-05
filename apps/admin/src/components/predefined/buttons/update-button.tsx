@@ -3,12 +3,12 @@ import { useI18n } from '~/i18n';
 
 type Props = Omit<FormSpinnerCTAProps, 'children'>;
 
-export function ArchiveButton({ className, ...props }: Props) {
+export function UpdateButton({ className, ...props }: Props) {
   const { pack } = useI18n();
 
   return (
     <FormSpinnerCTA {...props}>
-      {pack.buttons.archive}
+      {pack.buttons.update}
     </FormSpinnerCTA>
   );
 }

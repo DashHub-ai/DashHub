@@ -2,31 +2,35 @@ import { type FormHookAttrs, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
-import { type SdkCreateOrganizationInputT, useSdkForLoggedIn } from '@llm/sdk';
+import {
+  type SdkTableRowWithIdT,
+  type SdkUpdateOrganizationInputT,
+  useSdkForLoggedIn,
+} from '@llm/sdk';
 import { usePredefinedFormValidators } from '~/hooks';
 
-type CreateOrganizationFormHookAttrs =
+type UpdateOrganizationFormHookAttrs =
   & Omit<
-    FormHookAttrs<SdkCreateOrganizationInputT>,
+    FormHookAttrs<SdkUpdateOrganizationInputT & SdkTableRowWithIdT>,
     'validation' | 'onSubmit'
   >
   & {
     onAfterSubmit?: VoidFunction;
   };
 
-export function useOrganizationCreateForm(
+export function useOrganizationUpdateForm(
   {
     onAfterSubmit,
     ...props
-  }: CreateOrganizationFormHookAttrs,
+  }: UpdateOrganizationFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { required } = usePredefinedFormValidators<SdkCreateOrganizationInputT>();
+  const { required } = usePredefinedFormValidators<SdkUpdateOrganizationInputT & SdkTableRowWithIdT>();
 
   return useForm({
     resetAfterSubmit: false,
     onSubmit: flow(
-      sdks.dashboard.organizations.create,
+      sdks.dashboard.organizations.update,
       tapTaskEither(() => onAfterSubmit?.()),
       runTask,
     ),

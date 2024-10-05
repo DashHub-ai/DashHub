@@ -1,36 +1,36 @@
-import type { SdkCreateOrganizationInputT } from '@llm/sdk';
+import type { SdkTableRowWithIdT, SdkUpdateOrganizationInputT } from '@llm/sdk';
 
 import {
   CancelButton,
-  CreateButton,
   FormErrorAlert,
   FormField,
   Input,
   Modal,
   type ModalProps,
   ModalTitle,
+  UpdateButton,
 } from '~/components';
 import { useI18n } from '~/i18n';
 
-import { useOrganizationCreateForm } from './use-organization-create-form';
+import { useOrganizationUpdateForm } from './use-organization-update-form';
 
-export type OrganizationCreateFormModalProps =
+export type OrganizationUpdateFormModalProps =
   & Omit<ModalProps, 'children' | 'header' | 'formProps'>
   & {
-    defaultValue: SdkCreateOrganizationInputT;
+    defaultValue: SdkUpdateOrganizationInputT & SdkTableRowWithIdT;
     onAfterSubmit?: VoidFunction;
   };
 
-export function OrganizationCreateFormModal(
+export function OrganizationUpdateFormModal(
   {
     defaultValue,
     onAfterSubmit,
     onClose,
     ...props
-  }: OrganizationCreateFormModalProps,
+  }: OrganizationUpdateFormModalProps,
 ) {
   const t = useI18n().pack.modules.organizations.form;
-  const { handleSubmitEvent, validator, submitState, bind } = useOrganizationCreateForm({
+  const { handleSubmitEvent, validator, submitState, bind } = useOrganizationUpdateForm({
     defaultValue,
     onAfterSubmit,
   });
@@ -44,13 +44,13 @@ export function OrganizationCreateFormModal(
       }}
       header={(
         <ModalTitle>
-          {t.title.create}
+          {t.title.edit}
         </ModalTitle>
       )}
       footer={(
         <>
           <CancelButton disabled={submitState.loading} onClick={onClose} />
-          <CreateButton loading={submitState.loading} type="submit" />
+          <UpdateButton loading={submitState.loading} type="submit" />
         </>
       )}
     >

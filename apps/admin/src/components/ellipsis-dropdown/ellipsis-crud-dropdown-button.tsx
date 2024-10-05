@@ -11,14 +11,14 @@ import {
 } from './ellipsis-dropdown-button';
 
 type Props = Omit<EllipsisDropdownButtonProps, 'items'> & {
-  onEdit?: VoidFunction;
+  onUpdate?: VoidFunction;
   onArchive?: ArchiveTE;
   onDelete?: VoidFunction;
 };
 
 export function EllipsisCrudDropdownButton(
   {
-    onEdit,
+    onUpdate,
     onArchive,
     onDelete,
     ...props
@@ -30,10 +30,10 @@ export function EllipsisCrudDropdownButton(
   );
 
   const items: EllipsisDropdownItem[] = rejectFalsyItems([
-    onEdit && {
+    onUpdate && {
       id: 'edit',
       name: t.edit,
-      onClick: onEdit,
+      onClick: onUpdate,
     },
 
     onArchive && {

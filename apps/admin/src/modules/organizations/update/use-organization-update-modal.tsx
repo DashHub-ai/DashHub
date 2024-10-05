@@ -1,22 +1,22 @@
-import type { SdkCreateOrganizationInputT } from '@llm/sdk';
+import type { SdkTableRowWithIdT, SdkUpdateOrganizationInputT } from '@llm/sdk';
 
 import { useAnimatedModal } from '@llm/commons-front';
 
 import {
-  OrganizationCreateFormModal,
-  type OrganizationCreateFormModalProps,
-} from './organization-create-form-modal';
+  OrganizationUpdateFormModal,
+  type OrganizationUpdateFormModalProps,
+} from './organization-update-form-modal';
 
 type OrganizationShowModalProps =
-  & Pick<OrganizationCreateFormModalProps, 'onAfterSubmit'>
+  & Pick<OrganizationUpdateFormModalProps, 'onAfterSubmit'>
   & {
-    defaultValue: SdkCreateOrganizationInputT;
+    defaultValue: SdkUpdateOrganizationInputT & SdkTableRowWithIdT;
   };
 
-export function useOrganizationCreateModal() {
+export function useOrganizationUpdateModal() {
   return useAnimatedModal<boolean, OrganizationShowModalProps>({
     renderModalContent: ({ showProps, hiding, onAnimatedClose }) => (
-      <OrganizationCreateFormModal
+      <OrganizationUpdateFormModal
         {...showProps}
         isLeaving={hiding}
         onAfterSubmit={() => {
