@@ -42,6 +42,11 @@ export function Modal(
         },
         className,
       )}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
     >
       <DialogTag
         role="dialog"
