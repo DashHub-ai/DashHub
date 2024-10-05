@@ -36,6 +36,12 @@ export const I18N_PACK_PL: I18nLangPack = {
     add: 'Dodaj',
     confirm: 'Potwierdź',
   },
+  badges: {
+    archive: {
+      archived: 'Archiwum',
+      active: 'Aktywne',
+    },
+  },
   tabs: {
     archiveFilters: {
       active: 'Aktywne',
@@ -83,6 +89,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       id: 'ID',
       name: 'Nazwa',
       email: 'E-mail',
+      status: 'Status',
       createdAt: 'Utworzono',
       updatedAt: 'Zaktualizowano',
       actions: 'Akcje',

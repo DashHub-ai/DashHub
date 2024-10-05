@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchOrganizationItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { EllipsisCrudDropdownButton } from '~/components';
+import { ArchivedBadge, EllipsisCrudDropdownButton } from '~/components';
 
 import { useOrganizationUpdateModal } from '../form/update';
 
@@ -20,6 +20,7 @@ export function OrganizationsTableRow({ item, onAfterArchive, onAfterUpdate }: P
     <tr>
       <td>{item.id}</td>
       <td>{item.name}</td>
+      <td><ArchivedBadge archived={item.archived} /></td>
       <td>{formatDate(item.createdAt)}</td>
       <td>{formatDate(item.updatedAt)}</td>
       <td>

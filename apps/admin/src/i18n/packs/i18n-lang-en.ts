@@ -60,6 +60,12 @@ export const I18N_PACK_EN = {
     add: 'Add',
     confirm: 'Confirm',
   },
+  badges: {
+    archive: {
+      archived: 'Archived',
+      active: 'Active',
+    },
+  },
   tabs: {
     archiveFilters: {
       active: 'Active',
@@ -107,6 +113,7 @@ export const I18N_PACK_EN = {
       id: 'ID',
       name: 'Name',
       email: 'E-Mail',
+      status: 'Status',
       createdAt: 'Created at',
       updatedAt: 'Updated at',
       actions: 'Actions',
