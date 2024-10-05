@@ -8,7 +8,6 @@ import {
   getFirstObjKeyValue,
   TaggedError,
   tapTaskEitherTE,
-  waitFor,
 } from '@llm/commons';
 
 import type {
@@ -117,7 +116,7 @@ export class ElasticsearchRepo {
 
       TE.chainW(() => (
         waitForRecordAvailability
-          ? this.waitForDocumentAvailabilityOrThrow(indexName, id, false)
+          ? this.refreshIndex(indexName)
           : TE.right(undefined)
       )),
     );
@@ -174,7 +173,7 @@ export class ElasticsearchRepo {
 
       TE.chainW(() => (
         waitForRecordAvailability
-          ? this.waitForDocumentAvailabilityOrThrow(indexName, _id)
+          ? this.refreshIndex(indexName)
           : TE.right(undefined)
       )),
     );
@@ -202,50 +201,6 @@ export class ElasticsearchRepo {
         doc,
       ]),
     }));
-
-  /**
-   * Elasticsearch has a delay between indexing and being able to query the document so this method
-   * will wait for the document to be available or throw an error.
-   *
-   * @param indexName - The name of the index.
-   * @param id - The id of the document.
-   * @param expectedExistState - The expected state of the document.
-   */
-  waitForDocumentAvailabilityOrThrow = (
-    indexName: string,
-    id: EsDocumentId,
-    expectedExistState: boolean = true,
-  ) =>
-    TE.tryCatch(
-      () => waitFor(
-        async () => {
-          this.logger.info('Waiting for document availability...', { indexName, id });
-
-          const result = await this.client.exists({
-            index: indexName,
-            id,
-          });
-
-          if (result !== expectedExistState) {
-            throw new EsDocumentNotFoundError(
-              {
-                id,
-                indexName,
-              },
-            );
-          }
-
-          this.logger.info('Looks like document is available!', { indexName, id });
-
-          return true;
-        },
-        {
-          timeOutAfter: 1500,
-          retryAfter: 150,
-        },
-      ),
-      error => error as EsDocumentNotFoundError,
-    );
 
   /**
    * Gets the indices associated with the specified alias.
@@ -323,6 +278,17 @@ export class ElasticsearchRepo {
 
       return result as EsHitsResponse<D>;
     });
+
+  /**
+   * Refreshes the specified index.
+   *
+   * @param index - The index to refresh.
+   * @returns The refreshed index.
+   */
+  refreshIndex = (index: string) =>
+    TaggedError.tryUnsafeTask(EsInternalError, async () => this.client.indices.refresh({
+      index,
+    }));
 
   /**
    * Gets the mapping for the specified index.

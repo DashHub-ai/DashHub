@@ -49,6 +49,16 @@ export class OrganizationsController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<OrganizationsSdk['create']>>(context),
         ),
       )
+      .patch(
+        '/archive/:id',
+        async context => pipe(
+          Number(context.req.param().id),
+          organizationsService.asUser(context.var.jwt).archive,
+          mapDbRecordNotFoundToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<OrganizationsSdk['archive']>>(context),
+        ),
+      )
       .put(
         '/:id',
         sdkSchemaValidator('json', SdkUpdateOrganizationInputV),

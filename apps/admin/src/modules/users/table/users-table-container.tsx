@@ -36,7 +36,7 @@ export function UsersTableContainer() {
         pagination={pagination.bind.entire()}
         result={result}
         columns={[
-          { id: 'id', name: t.id },
+          { id: 'id', name: t.id, className: 'uk-table-shrink' },
           { id: 'email', name: t.email, className: 'uk-table-expand' },
           { id: 'createdAt', name: t.createdAt, className: 'w-[200px]' },
           { id: 'updatedAt', name: t.updatedAt, className: 'w-[200px]' },

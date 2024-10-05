@@ -68,7 +68,6 @@ export function useDebouncedPaginatedSearch<
     {
       ...pagination.value,
       ...interceptFilters?.(pagination.value),
-      __revision: undefined,
     },
     pagination.value,
   );
@@ -76,7 +75,10 @@ export function useDebouncedPaginatedSearch<
   const deps = JSON.stringify(debouncedPagination.value);
   const promise = useAsyncValue(
     pipe(
-      fetchResultsTask(debouncedPagination.value),
+      fetchResultsTask({
+        ...debouncedPagination.value,
+        __revision: undefined,
+      }),
       tryOrThrowTE,
     ),
     [deps],
@@ -84,8 +86,10 @@ export function useDebouncedPaginatedSearch<
 
   const reload = () => {
     pagination.setValue({
-      ...pagination.value,
-      __revision: Date.now(),
+      value: {
+        ...pagination.value,
+        __revision: Date.now(),
+      },
     });
   };
 
@@ -100,7 +104,10 @@ export function useDebouncedPaginatedSearch<
 
   useUpdateEffect(() => {
     if (storeDataInUrl) {
-      urlPagination.shallowAssignState(debouncedPagination.value);
+      urlPagination.shallowAssignState({
+        ...debouncedPagination.value,
+        __revision: undefined,
+      });
     }
   }, [storeDataInUrl, debouncedPagination.value]);
 

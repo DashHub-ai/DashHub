@@ -36,7 +36,7 @@ export class OrganizationsSdk extends AbstractNestedSdkWithAuth {
     });
 
   archive = (id: SdkTableRowIdT) =>
-    this.fetch<void, SdkRecordNotFoundError>({
+    this.fetch<SdkTableRowWithIdT, SdkRecordNotFoundError>({
       url: this.endpoint(`/archive/${id}`),
       options: patchPayload({}),
     });

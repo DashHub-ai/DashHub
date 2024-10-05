@@ -1,9 +1,12 @@
+import { pipe } from 'fp-ts/lib/function';
+
 import type {
   DatabaseTablesWithArchivedAt,
   DatabaseTablesWithId,
 } from '../database.tables';
 import type { TableId } from '../types';
 
+import { tryGetFirstOrNotExists } from '../helpers';
 import {
   createArchiveRecordsQuery,
   type RecordsArchiveAttrs,
@@ -33,8 +36,11 @@ export type RecordArchiveAttrs<K extends keyof DatabaseTablesWithId> = Omit<
  */
 export function createArchiveRecordQuery<K extends keyof DatabaseTablesWithArchivedAt & keyof DatabaseTablesWithId>(basicAttrs: RecordsArchiveBasicAttrs<K>) {
   return ({ id, ...attrs }: RecordArchiveAttrs<K>) =>
-    createArchiveRecordsQuery(basicAttrs)({
-      ...attrs,
-      where: [['id' as any, '=', id]],
-    });
+    pipe(
+      createArchiveRecordsQuery(basicAttrs)({
+        ...attrs,
+        where: [['id' as any, '=', id]],
+      }),
+      tryGetFirstOrNotExists,
+    );
 }
