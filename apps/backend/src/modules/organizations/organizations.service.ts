@@ -27,6 +27,11 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
 
   asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this);
 
+  unarchive = (id: SdkTableRowIdT) => pipe(
+    this.repo.unarchive({ id }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
+
   archive = (id: SdkTableRowIdT) => pipe(
     this.repo.archive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),

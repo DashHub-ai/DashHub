@@ -31,6 +31,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     delete: 'Usuń',
     edit: 'Edytuj',
     archive: 'Archiwizuj',
+    unarchive: 'Odzyskaj',
     update: 'Aktualizuj',
     add: 'Dodaj',
     confirm: 'Potwierdź',
@@ -53,6 +54,14 @@ export const I18N_PACK_PL: I18nLangPack = {
       message: {
         single: 'Czy na pewno chcesz zarchiwizować ten element? Ten element może nadal być widoczny w przypisanych lokalizacjach systemowych po zarchiwizowaniu.',
         multiple: 'Czy na pewno chcesz zarchiwizować te %{count} elementy? Te elementy mogą nadal być widoczne w przypisanych lokalizacjach systemowych po zarchiwizowaniu.',
+      },
+      yesIAmSure: 'Tak, jestem pewny',
+    },
+    unarchiveConfirm: {
+      title: 'Odzyskaj',
+      message: {
+        single: 'Czy na pewno chcesz odzyskać ten element?',
+        multiple: 'Czy na pewno chcesz odzyskać te %{count} elementów?',
       },
       yesIAmSure: 'Tak, jestem pewny',
     },

@@ -55,8 +55,20 @@ export class OrganizationsController extends AuthorizedController {
           Number(context.req.param().id),
           organizationsService.asUser(context.var.jwt).archive,
           mapDbRecordNotFoundToSdkError,
+          mapDbRecordAlreadyExistsToSdkError,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<OrganizationsSdk['archive']>>(context),
+        ),
+      )
+      .patch(
+        '/unarchive/:id',
+        async context => pipe(
+          Number(context.req.param().id),
+          organizationsService.asUser(context.var.jwt).unarchive,
+          mapDbRecordNotFoundToSdkError,
+          mapDbRecordAlreadyExistsToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<OrganizationsSdk['unarchive']>>(context),
         ),
       )
       .put(

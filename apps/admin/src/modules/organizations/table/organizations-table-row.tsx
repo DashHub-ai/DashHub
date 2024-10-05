@@ -36,6 +36,12 @@ export function OrganizationsTableRow({ item, onAfterArchive, onAfterUpdate }: P
               tapTaskEither(onAfterArchive),
             ),
           }}
+          {...item.archived && {
+            onUnarchive: pipe(
+              sdks.dashboard.organizations.unarchive(item.id),
+              tapTaskEither(onAfterArchive),
+            ),
+          }}
         />
       </td>
     </tr>

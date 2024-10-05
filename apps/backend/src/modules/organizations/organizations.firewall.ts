@@ -14,6 +14,11 @@ export class OrganizationsFirewall extends AuthFirewallService {
     super(jwt);
   }
 
+  unarchive = flow(
+    this.organizationsService.unarchive,
+    this.tryTEIfUser.is.root,
+  );
+
   archive = flow(
     this.organizationsService.archive,
     this.tryTEIfUser.is.root,
