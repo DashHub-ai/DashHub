@@ -17,7 +17,6 @@ import {
   type StateInUrlProps,
   useAsyncValue,
   useDebounceValue,
-  useForceRerender,
   useStateInUrl,
   useUpdateEffect,
 } from '@llm/commons-front';
@@ -50,12 +49,14 @@ export function useDebouncedPaginatedSearch<
     ...urlDecoderAttrs
   }: z.infer<Z> extends SdkOffsetPaginationInputT ? DebouncedPaginatedSearchAttrs<Z, R> : never,
 ) {
-  const forceRerender = useForceRerender();
   const urlPagination = useStateInUrl(urlDecoderAttrs);
 
-  const pagination = useControlStrict<z.infer<Z>>({
+  const pagination = useControlStrict<z.infer<Z> & { __revision?: number; }>({
     onChange: onChangeFilters,
-    defaultValue: urlPagination.initialState,
+    defaultValue: {
+      ...urlPagination.initialState,
+      __revision: 0,
+    },
   });
 
   const debouncedPagination = useDebounceValue(
@@ -74,20 +75,45 @@ export function useDebouncedPaginatedSearch<
   const deps = JSON.stringify(debouncedPagination.value);
   const promise = useAsyncValue(
     pipe(
-      fetchResultsTask(debouncedPagination.value),
+      fetchResultsTask({
+        ...debouncedPagination.value,
+        __revision: undefined,
+      }),
       tryOrThrowTE,
     ),
-    [deps, forceRerender.revision],
+    [deps],
   );
+
+  const reload = () => {
+    pagination.setValue({
+      value: {
+        ...pagination.value,
+        __revision: Date.now(),
+      },
+    });
+  };
+
+  const reset = () => {
+    pagination.setValue({
+      value: {
+        ...urlPagination.initialState,
+        __revision: Date.now(),
+      },
+    });
+  };
 
   useUpdateEffect(() => {
     if (storeDataInUrl) {
-      urlPagination.shallowAssignState(debouncedPagination.value);
+      urlPagination.shallowAssignState({
+        ...debouncedPagination.value,
+        __revision: undefined,
+      });
     }
   }, [storeDataInUrl, debouncedPagination.value]);
 
   return {
-    reload: forceRerender.forceRerender,
+    reset,
+    reload,
     result: promise.status === 'success' ? promise.data : null,
     loading: debouncedPagination.loading || promise.status === 'loading',
     pagination,

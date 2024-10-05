@@ -9,15 +9,47 @@ const I18N_SDK_ERRORS_PL: Record<SdkTranslatedErrors['tag'], string> = {
   SdkServerError: 'Błąd serwera',
   SdkUnauthorizedError: 'Nieautoryzowany',
   SdkInvalidJwtTokenError: 'Niepoprawny format tokenu JWT',
+  SdkRecordAlreadyExistsError: 'Rekord już istnieje',
+  SdkRecordNotFoundError: 'Rekord nie znaleziono',
+  SdkEndpointNotFoundError: 'Nieprawidłowy endpoint API',
 };
 
 export const I18N_PACK_PL: I18nLangPack = {
   validation: {
     required: 'To pole jest wymagane',
     invalidEmail: 'To pole musi być adresem e-mail',
+    mustBeLargerThan: 'To pole musi być większe niż %{number}',
   },
   errors: {
     tagged: I18N_SDK_ERRORS_PL,
+  },
+  buttons: {
+    create: 'Utwórz',
+    cancel: 'Anuluj',
+    close: 'Zamknij',
+    save: 'Zapisz',
+    delete: 'Usuń',
+    edit: 'Edytuj',
+    archive: 'Archiwizuj',
+    update: 'Aktualizuj',
+    add: 'Dodaj',
+    confirm: 'Potwierdź',
+  },
+  notifications: {
+    save: {
+      success: 'Zapisano pomyślnie',
+      error: 'Wystąpił błąd podczas zapisywania',
+    },
+  },
+  modals: {
+    archiveConfirm: {
+      title: 'Archiwizuj',
+      message: {
+        single: 'Czy na pewno chcesz zarchiwizować ten element? Ten element może nadal być widoczny w przypisanych lokalizacjach systemowych po zarchiwizowaniu.',
+        multiple: 'Czy na pewno chcesz zarchiwizować te %{count} elementy? Te elementy mogą nadal być widoczne w przypisanych lokalizacjach systemowych po zarchiwizowaniu.',
+      },
+      yesIAmSure: 'Tak, jestem pewny',
+    },
   },
   pagination: {
     itemsPerPage: 'Elementów na stronę',
@@ -54,6 +86,26 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   placeholders: {
     noItemsFound: 'Nie znaleziono żadnych elementów',
+  },
+  modules: {
+    organizations: {
+      form: {
+        title: {
+          edit: 'Edytuj organizację',
+          create: 'Utwórz organizację',
+        },
+        fields: {
+          name: {
+            label: 'Nazwa',
+            placeholder: 'Wpisz nazwę organizacji',
+          },
+          maxNumberOfUsers: {
+            label: 'Maksymalna liczba użytkowników',
+            placeholder: 'Wpisz maksymalną liczbę użytkowników',
+          },
+        },
+      },
+    },
   },
   routes: {
     shared: {

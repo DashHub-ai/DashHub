@@ -13,6 +13,7 @@ import type {
 import type {
   SdkIncorrectUsernameError,
   SdkIncorrectUsernameOrPasswordError,
+  SdkInvalidJwtRefreshTokenError,
 } from './errors';
 
 import { AbstractNestedSdk } from '../abstract-nested-sdk';
@@ -48,7 +49,7 @@ export class AuthSdk extends AbstractNestedSdk {
     });
 
   rawRefreshToken = (data: SdkRefreshJWTInputT) =>
-    performApiRequest<SdkRefreshTokenOutputT>({
+    performApiRequest<SdkRefreshTokenOutputT, SdkInvalidJwtRefreshTokenError>({
       url: this.endpoint('/login/refresh'),
       options: postPayload(data),
     });

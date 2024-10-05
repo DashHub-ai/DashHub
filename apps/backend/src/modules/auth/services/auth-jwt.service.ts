@@ -2,9 +2,13 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkJwtTokenRoleSpecificT, SdkJwtTokenT } from '@llm/sdk';
 import type { TableId } from '~/modules/database';
 
+import {
+  SdkInvalidJwtRefreshTokenError,
+  type SdkJwtTokenRoleSpecificT,
+  type SdkJwtTokenT,
+} from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
 import { UsersRepo } from '~/modules/users/users.repo';
 
@@ -22,7 +26,8 @@ export class AuthJWTService {
       this.usersRepo.findByRefreshToken({
         refreshToken,
       }),
-      TE.chain(({ id }) => this.generateJWTTokensByUserId(id)),
+      TE.mapLeft(() => new SdkInvalidJwtRefreshTokenError({})),
+      TE.chainW(({ id }) => this.generateJWTTokensByUserId(id)),
     );
 
   generateJWTTokensByUserId = (userId: TableId) => pipe(

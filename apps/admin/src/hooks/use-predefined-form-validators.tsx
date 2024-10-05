@@ -2,6 +2,7 @@ import type { ControlValue } from '@under-control/forms';
 
 import {
   useEmailValidatorFormValidators,
+  useNumericFormValidator,
   useRequiredFormValidators,
 } from '@llm/commons-front';
 import { useI18n } from '~/i18n';
@@ -14,6 +15,9 @@ export function usePredefinedFormValidators<V extends ControlValue>() {
       messages: validation,
     }),
     ...useEmailValidatorFormValidators<V>({
+      messages: validation,
+    }),
+    ...useNumericFormValidator<V>({
       messages: validation,
     }),
   };

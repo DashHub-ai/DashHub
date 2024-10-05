@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import antfu from '@antfu/eslint-config';
 
 export default antfu({
@@ -9,10 +11,16 @@ export default antfu({
     '**/*/build',
     'node_modules',
   ],
+  languageOptions: {
+    parserOptions: {
+      project: path.join(import.meta.dirname, 'tsconfig.eslint.json'),
+    },
+  },
   typescript: {
     overrides: {
       'ts/no-unsafe-function-type': 0,
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/no-floating-promises': 'error',
     },
   },
   stylistic: {

@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import type {
   SdkCreateOrganizationInputT,
   SdkJwtTokenT,
+  SdkTableRowIdT,
   SdkUpdateOrganizationInputT,
 } from '@llm/sdk';
 
@@ -25,6 +26,11 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this);
+
+  archive = (id: SdkTableRowIdT) => pipe(
+    this.repo.archive({ id }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
 
   search = this.esSearchRepo.search;
 

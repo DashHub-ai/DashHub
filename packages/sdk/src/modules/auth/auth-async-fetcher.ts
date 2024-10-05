@@ -6,12 +6,18 @@ import { type APIRequestAttrs, performApiRequest, type SdkApiRequestErrors } fro
 
 import type { AuthSdk } from './auth.sdk';
 import type { SdkJwtTokensPairT } from './dto';
+import type { SdkInvalidJwtRefreshTokenError } from './errors';
 import type { SdkNoTokensInStorageError } from './storage';
 
 import { shouldRefreshToken } from './helpers';
 
 export class AuthAsyncFetcher {
-  private refreshTokenLock: Promise<E.Either<SdkApiRequestErrors, SdkJwtTokensPairT>> | null = null;
+  private refreshTokenLock: Promise<
+    E.Either<
+      SdkApiRequestErrors | SdkInvalidJwtRefreshTokenError,
+      SdkJwtTokensPairT
+    >
+  > | null = null;
 
   constructor(private readonly authSdk: AuthSdk) {}
 
@@ -39,7 +45,7 @@ export class AuthAsyncFetcher {
       TE.bindW('shouldRefresh', ({ tokens }) =>
         TE.fromEither(shouldRefreshToken(tokens.token))),
       TE.chain(({ tokens, shouldRefresh }): TE.TaskEither<
-        SdkNoTokensInStorageError | SdkApiRequestErrors,
+        SdkNoTokensInStorageError | SdkApiRequestErrors | SdkInvalidJwtRefreshTokenError,
         SdkJwtTokensPairT
       > => {
         if (!shouldRefresh) {
@@ -56,10 +62,16 @@ export class AuthAsyncFetcher {
         this.authSdk.rawRefreshToken({
           refreshToken,
         }),
-        tapTaskEither((tokens) => {
-          this.refreshTokenLock = null;
-          this.tokensStorage.setSessionTokens(tokens);
-        }),
+        tapTaskEither(
+          (tokens) => {
+            this.refreshTokenLock = null;
+            this.tokensStorage.setSessionTokens(tokens);
+          },
+          () => {
+            this.refreshTokenLock = null;
+            this.tokensStorage.clearSessionTokens();
+          },
+        ),
       )();
 
       return this.refreshTokenLock;

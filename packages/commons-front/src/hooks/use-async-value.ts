@@ -7,8 +7,8 @@ import { useInstantEffect } from './use-instant-effect';
  * A hook that allows to execute an asynchronous function and provides the state of the execution.
  * The asynchronous function is executed immediately after the component is mounted.
  */
-export function useAsyncValue<A extends Array<unknown>, R>(
-  callback: (...args: Array<A>) => Promise<R>,
+export function useAsyncValue<R>(
+  callback: () => Promise<R>,
   deps: DependencyList,
 ): AsyncValueHookResult<R> {
   const [asyncCallback, asyncState] = useAsyncCallback(callback);

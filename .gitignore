@@ -143,3 +143,6 @@ hetzner/keys/ansible
 hetzner/.vault_pass
 .DS_Store
 bun.lockb
+
+config/vite.config.pkg.ts.*
+config/vite.config.ts.*

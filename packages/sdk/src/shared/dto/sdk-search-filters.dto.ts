@@ -5,7 +5,7 @@ import { StrictBooleanV } from '@llm/commons';
 import { SdkTableRowIdV } from './sdk-table-row-id.dto';
 
 export const SdkArchivedFiltersInputV = z.object({
-  archived: StrictBooleanV.optional(),
+  archived: StrictBooleanV.optional().default(false),
 });
 
 export const SdkIdsFiltersInputV = z.object({

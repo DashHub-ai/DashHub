@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 
-type Props = JSX.IntrinsicElements['button'] & {
+export type FormSpinnerCTAProps = JSX.IntrinsicElements['button'] & {
   loading: boolean;
 };
 
-export function FormSpinnerCTA({ loading, className, children, ...props }: Props) {
+export function FormSpinnerCTA({ loading, className, children, ...props }: FormSpinnerCTAProps) {
   return (
     <button
       type="submit"

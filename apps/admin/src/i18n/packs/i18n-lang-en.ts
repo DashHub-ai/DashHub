@@ -1,9 +1,12 @@
 import type {
   SdkDecodeTokenFormatError,
+  SdkEndpointNotFoundError,
   SdkIncorrectUsernameOrPasswordError,
   SdkInvalidJwtTokenError,
   SdkNoTokensInStorageError,
   SdkPayloadValidationError,
+  SdkRecordAlreadyExistsError,
+  SdkRecordNotFoundError,
   SdkRequestError,
   SdkServerError,
   SdkUnauthorizedError,
@@ -17,7 +20,10 @@ export type SdkTranslatedErrors =
   | SdkRequestError
   | SdkServerError
   | SdkUnauthorizedError
-  | SdkInvalidJwtTokenError;
+  | SdkInvalidJwtTokenError
+  | SdkRecordAlreadyExistsError
+  | SdkRecordNotFoundError
+  | SdkEndpointNotFoundError;
 
 const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkIncorrectUsernameOrPasswordError: 'Incorrect email or password',
@@ -27,15 +33,47 @@ const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkServerError: 'Server error',
   SdkUnauthorizedError: 'Unauthorized',
   SdkInvalidJwtTokenError: 'Invalid or missing JWT token',
+  SdkRecordAlreadyExistsError: 'Record already exists',
+  SdkRecordNotFoundError: 'Record not found',
+  SdkEndpointNotFoundError: 'Invalid API endpoint',
 };
 
 export const I18N_PACK_EN = {
   validation: {
     required: 'This field is required',
     invalidEmail: 'This field must be an email address',
+    mustBeLargerThan: 'This field must be larger than %{number}',
   },
   errors: {
     tagged: I18N_SDK_ERRORS_EN,
+  },
+  buttons: {
+    create: 'Create',
+    cancel: 'Cancel',
+    close: 'Close',
+    save: 'Save',
+    delete: 'Delete',
+    edit: 'Edit',
+    archive: 'Archive',
+    update: 'Update',
+    add: 'Add',
+    confirm: 'Confirm',
+  },
+  notifications: {
+    save: {
+      success: 'Saved successfully',
+      error: 'An error occurred while saving',
+    },
+  },
+  modals: {
+    archiveConfirm: {
+      title: 'Archive',
+      message: {
+        single: 'Are you sure you want to archive this item? This item may still be visible in assigned system locations after archiving.',
+        multiple: 'Do you really want to archive these %{count} items? These items may still be visible in assigned system locations after archiving.',
+      },
+      yesIAmSure: 'Yes, I am sure',
+    },
   },
   pagination: {
     itemsPerPage: 'Items per page',
@@ -72,6 +110,26 @@ export const I18N_PACK_EN = {
   },
   placeholders: {
     noItemsFound: 'No items found',
+  },
+  modules: {
+    organizations: {
+      form: {
+        title: {
+          create: 'Create organization',
+          edit: 'Edit organization',
+        },
+        fields: {
+          name: {
+            label: 'Name',
+            placeholder: 'Enter organization name',
+          },
+          maxNumberOfUsers: {
+            label: 'Max number of users',
+            placeholder: 'Enter max number of users',
+          },
+        },
+      },
+    },
   },
   routes: {
     shared: {

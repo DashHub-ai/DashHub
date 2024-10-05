@@ -76,7 +76,13 @@ export function useAsyncCallback<A, R>(
     return null;
   });
 
-  return [asyncExecutor, asyncState] as AsyncCallbackHookResult<Array<A>, R>;
+  return [
+    asyncExecutor,
+    {
+      ...asyncState,
+      isLoading: asyncState.status === 'loading',
+    },
+  ] as AsyncCallbackHookResult<Array<A>, R>;
 }
 
 /**
@@ -84,7 +90,9 @@ export function useAsyncCallback<A, R>(
  */
 export type AsyncCallbackHookResult<A extends Array<unknown>, R> = [
   (...args: A) => Promise<R | null>,
-  AsyncCallbackState<R>,
+  AsyncCallbackState<R> & {
+    isLoading: boolean;
+  },
 ];
 
 /**
