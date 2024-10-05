@@ -11,6 +11,7 @@ const I18N_SDK_ERRORS_PL: Record<SdkTranslatedErrors['tag'], string> = {
   SdkInvalidJwtTokenError: 'Niepoprawny format tokenu JWT',
   SdkRecordAlreadyExistsError: 'Rekord już istnieje',
   SdkRecordNotFoundError: 'Rekord nie znaleziono',
+  SdkEndpointNotFoundError: 'Nieprawidłowy endpoint API',
 };
 
 export const I18N_PACK_PL: I18nLangPack = {

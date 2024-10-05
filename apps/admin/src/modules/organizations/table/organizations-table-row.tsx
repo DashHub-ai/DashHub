@@ -1,15 +1,17 @@
-import * as TE from 'fp-ts/lib/TaskEither';
+import { pipe } from 'fp-ts/lib/function';
 
-import type { SdkSearchOrganizationItemT } from '@llm/sdk';
-
-import { formatDate } from '@llm/commons';
+import { formatDate, tapTaskEither } from '@llm/commons';
+import { type SdkSearchOrganizationItemT, useSdkForLoggedIn } from '@llm/sdk';
 import { EllipsisCrudDropdownButton } from '~/components';
 
 type Props = {
   item: SdkSearchOrganizationItemT;
+  onAfterArchive: VoidFunction;
 };
 
-export function OrganizationsTableRow({ item }: Props) {
+export function OrganizationsTableRow({ item, onAfterArchive }: Props) {
+  const { sdks } = useSdkForLoggedIn();
+
   return (
     <tr>
       <td>{item.id}</td>
@@ -19,10 +21,12 @@ export function OrganizationsTableRow({ item }: Props) {
       <td>
         <EllipsisCrudDropdownButton
           onEdit={() => {}}
-          onArchive={TE.fromIO(() => {
-            // eslint-disable-next-line no-console
-            console.info('Archive!');
-          })}
+          onArchive={
+            pipe(
+              sdks.dashboard.organizations.archive(item.id),
+              tapTaskEither(onAfterArchive),
+            )
+          }
         />
       </td>
     </tr>

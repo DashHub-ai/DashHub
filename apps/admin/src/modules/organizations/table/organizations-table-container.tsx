@@ -19,7 +19,7 @@ export function OrganizationsTableContainer() {
   const t = useI18n().pack.table.columns;
   const { sdks } = useSdkForLoggedIn();
 
-  const { loading, pagination, result, reset } = useDebouncedPaginatedSearch({
+  const { loading, pagination, result, reset, reload } = useDebouncedPaginatedSearch({
     schema: SdKSearchOrganizationsInputV,
     fallbackSearchParams: {},
     fetchResultsTask: sdks.dashboard.organizations.search,
@@ -68,7 +68,7 @@ export function OrganizationsTableContainer() {
         ]}
       >
         {({ item }) => (
-          <OrganizationsTableRow key={item.id} item={item} />
+          <OrganizationsTableRow key={item.id} item={item} onAfterArchive={reload} />
         )}
       </PaginatedTable>
     </section>

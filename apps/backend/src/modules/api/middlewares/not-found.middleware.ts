@@ -1,12 +1,12 @@
 import type { Context } from 'hono';
 
 import {
+  SdkEndpointNotFoundError,
   type SdkErrorResponseT,
-  SdkServerError,
 } from '@llm/sdk';
 
 export function notFoundMiddleware(context: Context<any, any>) {
-  const error = new SdkServerError(
+  const error = new SdkEndpointNotFoundError(
     {
       message: '404 - Not found!',
     },
@@ -16,6 +16,6 @@ export function notFoundMiddleware(context: Context<any, any>) {
     {
       error: error.serialize(),
     } satisfies SdkErrorResponseT,
-    404,
+    error.httpCode,
   );
 }

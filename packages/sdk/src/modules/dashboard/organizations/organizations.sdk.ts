@@ -1,10 +1,12 @@
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
   getPayload,
+  patchPayload,
   postPayload,
   putPayload,
   type SdkRecordAlreadyExistsError,
   type SdkRecordNotFoundError,
+  type SdkTableRowIdT,
   type SdkTableRowWithIdT,
 } from '~/shared';
 
@@ -31,6 +33,12 @@ export class OrganizationsSdk extends AbstractNestedSdkWithAuth {
     this.fetch<SdkCreateOrganizationOutputT, SdkRecordAlreadyExistsError>({
       url: this.endpoint('/'),
       options: postPayload(data),
+    });
+
+  archive = (id: SdkTableRowIdT) =>
+    this.fetch<void, SdkRecordNotFoundError>({
+      url: this.endpoint(`/archive/${id}`),
+      options: patchPayload({}),
     });
 
   update = ({ id, ...data }: SdkUpdateOrganizationInputT & SdkTableRowWithIdT) =>

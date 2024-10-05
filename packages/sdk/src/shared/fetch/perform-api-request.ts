@@ -8,6 +8,7 @@ import {
 } from '@llm/commons';
 
 import {
+  type SdkEndpointNotFoundError,
   type SdkInvalidRequestError,
   SdkRequestError,
   type SdkServerError,
@@ -27,7 +28,8 @@ export type SdkApiRequestErrors =
   | SdkRequestError
   | SdkServerError
   | SdkUnauthorizedError
-  | SdkInvalidRequestError;
+  | SdkInvalidRequestError
+  | SdkEndpointNotFoundError;
 
 export type SdkApiRequestTE<A, E extends TaggedError<string, any> = never> = TE.TaskEither<
   E | SdkApiRequestErrors,
