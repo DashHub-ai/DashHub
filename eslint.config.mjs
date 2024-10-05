@@ -1,4 +1,5 @@
 import path from 'node:path';
+
 import antfu from '@antfu/eslint-config';
 
 export default antfu({
@@ -8,11 +9,11 @@ export default antfu({
     'build',
     '**/*/dist',
     '**/*/build',
-    'node_modules'
+    'node_modules',
   ],
   languageOptions: {
     parserOptions: {
-      project: path.join(import.meta.dirname, 'tsconfig.eslint.json')
+      project: path.join(import.meta.dirname, 'tsconfig.eslint.json'),
     },
   },
   typescript: {
