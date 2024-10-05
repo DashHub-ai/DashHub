@@ -108,7 +108,10 @@ export const I18N_PACK_EN = {
           edit: 'Edit organization',
         },
         fields: {
-          name: 'Name',
+          name: {
+            label: 'Name',
+            placeholder: 'Enter organization name',
+          },
         },
       },
     },

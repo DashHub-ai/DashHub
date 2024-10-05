@@ -59,7 +59,7 @@ export function FormField(
       {label && (
         <label
           className={clsx(
-            'uk-form-label uk-text-danger',
+            'uk-form-label',
             errorsEnabled && errors.length > 0 && 'uk-text-danger',
           )}
         >

@@ -3,7 +3,7 @@ import { flow } from 'fp-ts/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import { type SdkPasswordLoginInputT, useSdk } from '@llm/sdk';
-import { Checkbox, FormErrorAlert, FormField, FormSpinnerCTA } from '~/components';
+import { Checkbox, FormErrorAlert, FormField, FormSpinnerCTA, Input } from '~/components';
 import { usePredefinedFormValidators } from '~/hooks';
 import { useI18n } from '~/i18n';
 import { UkIcon } from '~/icons';
@@ -63,8 +63,7 @@ export function LoginUsingPassword(
 
       <form className="space-y-3" onSubmit={handleSubmitEvent}>
         <FormField {...validator.errors.extract('email')}>
-          <input
-            className="uk-input"
+          <Input
             name="email"
             type="email"
             placeholder={t.passwordStep.email}
@@ -75,8 +74,7 @@ export function LoginUsingPassword(
         </FormField>
 
         <FormField {...validator.errors.extract('password')}>
-          <input
-            className="uk-input"
+          <Input
             name="password"
             type="password"
             placeholder={t.passwordStep.password}

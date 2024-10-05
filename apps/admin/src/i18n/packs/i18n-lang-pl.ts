@@ -90,7 +90,10 @@ export const I18N_PACK_PL: I18nLangPack = {
           create: 'Utwórz organizację',
         },
         fields: {
-          name: 'Nazwa',
+          name: {
+            label: 'Nazwa',
+            placeholder: 'Wpisz nazwę organizacji',
+          },
         },
       },
     },

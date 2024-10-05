@@ -3,6 +3,8 @@ import type { SdkCreateOrganizationInputT } from '@llm/sdk';
 import {
   CancelButton,
   CreateButton,
+  FormField,
+  Input,
   Modal,
   type ModalProps,
   ModalTitle,
@@ -25,7 +27,7 @@ export function OrganizationFormModal(
   }: OrganizationFormModalProps,
 ) {
   const t = useI18n().pack.modules.organizations.form;
-  const form = useOrganizationCreateForm({
+  const { handleSubmitEvent, validator, submitState, bind } = useOrganizationCreateForm({
     defaultValue,
     onAfterSubmit,
   });
@@ -35,7 +37,7 @@ export function OrganizationFormModal(
       {...props}
       onClose={onClose}
       formProps={{
-        onSubmit: form.handleSubmitEvent,
+        onSubmit: handleSubmitEvent,
       }}
       header={(
         <ModalTitle>
@@ -44,15 +46,22 @@ export function OrganizationFormModal(
       )}
       footer={(
         <>
-          <CancelButton disabled={form.submitState.loading} onClick={onClose} />
-          <CreateButton
-            type="submit"
-            disabled={form.submitState.loading}
-          />
+          <CancelButton disabled={submitState.loading} onClick={onClose} />
+          <CreateButton disabled={submitState.loading} type="submit" />
         </>
       )}
     >
-      Modaaal
+      <FormField
+        label={t.fields.name.label}
+        {...validator.errors.extract('name')}
+      >
+        <Input
+          name="name"
+          placeholder={t.fields.name.placeholder}
+          required
+          {...bind.path('name')}
+        />
+      </FormField>
     </Modal>
   );
 }
