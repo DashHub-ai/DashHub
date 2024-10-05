@@ -1,7 +1,8 @@
 import { type FormHookAttrs, useForm } from '@under-control/forms';
+import { flow } from 'fp-ts/lib/function';
 
-import type { SdkCreateOrganizationInputT } from '@llm/sdk';
-
+import { runTask, tapTaskEither } from '@llm/commons';
+import { type SdkCreateOrganizationInputT, useSdkForLoggedIn } from '@llm/sdk';
 import { usePredefinedFormValidators } from '~/hooks';
 
 type CreateOrganizationFormHookAttrs = Omit<
@@ -17,16 +18,16 @@ export function useOrganizationCreateForm(
     ...props
   }: CreateOrganizationFormHookAttrs,
 ) {
+  const { sdks } = useSdkForLoggedIn();
   const { required } = usePredefinedFormValidators<SdkCreateOrganizationInputT>();
-  const onSubmit = async (data: SdkCreateOrganizationInputT) => {
-    // eslint-disable-next-line no-console
-    console.info(data);
-    onAfterSubmit?.();
-  };
 
   return useForm({
     resetAfterSubmit: false,
-    onSubmit,
+    onSubmit: flow(
+      sdks.dashboard.organizations.create,
+      tapTaskEither(() => onAfterSubmit?.()),
+      runTask,
+    ),
     validation: {
       mode: ['blur', 'submit'],
       validators: () => [

@@ -1,19 +1,14 @@
-import clsx from 'clsx';
-
+import { FormSpinnerCTA, type FormSpinnerCTAProps } from '~/components/form';
 import { useI18n } from '~/i18n';
 
-type Props = Omit<JSX.IntrinsicElements['button'], 'children'>;
+type Props = Omit<FormSpinnerCTAProps, 'children'>;
 
 export function CreateButton({ className, ...props }: Props) {
   const { pack } = useI18n();
 
   return (
-    <button
-      type="button"
-      className={clsx('uk-button uk-button-primary', className)}
-      {...props}
-    >
+    <FormSpinnerCTA {...props}>
       {pack.buttons.create}
-    </button>
+    </FormSpinnerCTA>
   );
 }

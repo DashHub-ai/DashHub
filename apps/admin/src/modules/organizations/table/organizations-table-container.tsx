@@ -1,6 +1,7 @@
 import { pipe } from 'fp-ts/lib/function';
 
 import { tapTaskOption } from '@llm/commons';
+import { useAsyncCallback } from '@llm/commons-front';
 import { SdKSearchOrganizationsInputV, useSdkForLoggedIn } from '@llm/sdk';
 import {
   CreateButton,
@@ -25,22 +26,23 @@ export function OrganizationsTableContainer() {
   });
 
   const createModal = useOrganizationCreateModal();
-
-  const onCreate = pipe(
-    createModal.showAsOptional({
-      defaultValue: {
-        name: '',
-        maxNumberOfUsers: 1,
-      },
-    }),
-    tapTaskOption(reset),
+  const [onCreate, createState] = useAsyncCallback(
+    pipe(
+      createModal.showAsOptional({
+        defaultValue: {
+          name: '',
+          maxNumberOfUsers: 1,
+        },
+      }),
+      tapTaskOption(reset),
+    ),
   );
 
   return (
     <section>
       <PaginationToolbar
         suffix={(
-          <CreateButton onClick={onCreate} />
+          <CreateButton loading={createState.isLoading} onClick={onCreate} />
         )}
       >
         <PaginationSearchToolbarItem

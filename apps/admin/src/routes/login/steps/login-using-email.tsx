@@ -1,5 +1,5 @@
 import { useForm } from '@under-control/forms';
-import { flow } from 'fp-ts/function';
+import { flow } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import { type SdkEmailLoginInputT, useSdk } from '@llm/sdk';

@@ -17,7 +17,6 @@ import {
   type StateInUrlProps,
   useAsyncValue,
   useDebounceValue,
-  useForceRerender,
   useStateInUrl,
   useUpdateEffect,
 } from '@llm/commons-front';
@@ -50,12 +49,14 @@ export function useDebouncedPaginatedSearch<
     ...urlDecoderAttrs
   }: z.infer<Z> extends SdkOffsetPaginationInputT ? DebouncedPaginatedSearchAttrs<Z, R> : never,
 ) {
-  const forceRerender = useForceRerender();
   const urlPagination = useStateInUrl(urlDecoderAttrs);
 
-  const pagination = useControlStrict<z.infer<Z>>({
+  const pagination = useControlStrict<z.infer<Z> & { __revision?: number; }>({
     onChange: onChangeFilters,
-    defaultValue: urlPagination.initialState,
+    defaultValue: {
+      ...urlPagination.initialState,
+      __revision: 0,
+    },
   });
 
   const debouncedPagination = useDebounceValue(
@@ -67,6 +68,7 @@ export function useDebouncedPaginatedSearch<
     {
       ...pagination.value,
       ...interceptFilters?.(pagination.value),
+      __revision: undefined,
     },
     pagination.value,
   );
@@ -77,12 +79,22 @@ export function useDebouncedPaginatedSearch<
       fetchResultsTask(debouncedPagination.value),
       tryOrThrowTE,
     ),
-    [deps, forceRerender.revision],
+    [deps],
   );
+
+  const reload = () => {
+    pagination.setValue({
+      ...pagination.value,
+      __revision: Date.now(),
+    });
+  };
 
   const reset = () => {
     pagination.setValue({
-      value: { ...urlPagination.initialState },
+      value: {
+        ...urlPagination.initialState,
+        __revision: Date.now(),
+      },
     });
   };
 
@@ -94,7 +106,7 @@ export function useDebouncedPaginatedSearch<
 
   return {
     reset,
-    reload: forceRerender.forceRerender,
+    reload,
     result: promise.status === 'success' ? promise.data : null,
     loading: debouncedPagination.loading || promise.status === 'loading',
     pagination,

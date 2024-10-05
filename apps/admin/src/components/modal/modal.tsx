@@ -44,10 +44,10 @@ export function Modal(
       )}
     >
       <DialogTag
-        className="uk-modal-dialog"
         role="dialog"
         aria-modal="true"
         {...formProps as any}
+        className={clsx('uk-modal-dialog', formProps?.className)}
       >
         <ModalCloseButton onClick={onClose} />
 

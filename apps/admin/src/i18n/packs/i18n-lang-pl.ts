@@ -9,6 +9,8 @@ const I18N_SDK_ERRORS_PL: Record<SdkTranslatedErrors['tag'], string> = {
   SdkServerError: 'Błąd serwera',
   SdkUnauthorizedError: 'Nieautoryzowany',
   SdkInvalidJwtTokenError: 'Niepoprawny format tokenu JWT',
+  SdkRecordAlreadyExistsError: 'Rekord już istnieje',
+  SdkRecordNotFoundError: 'Rekord nie znaleziono',
 };
 
 export const I18N_PACK_PL: I18nLangPack = {

@@ -3,6 +3,7 @@ import type { SdkCreateOrganizationInputT } from '@llm/sdk';
 import {
   CancelButton,
   CreateButton,
+  FormErrorAlert,
   FormField,
   Input,
   Modal,
@@ -47,11 +48,12 @@ export function OrganizationFormModal(
       footer={(
         <>
           <CancelButton disabled={submitState.loading} onClick={onClose} />
-          <CreateButton disabled={submitState.loading} type="submit" />
+          <CreateButton loading={submitState.loading} type="submit" />
         </>
       )}
     >
       <FormField
+        className="uk-margin"
         label={t.fields.name.label}
         {...validator.errors.extract('name')}
       >
@@ -62,6 +64,8 @@ export function OrganizationFormModal(
           {...bind.path('name')}
         />
       </FormField>
+
+      <FormErrorAlert result={submitState.result} />
     </Modal>
   );
 }

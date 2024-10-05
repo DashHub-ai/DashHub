@@ -4,6 +4,8 @@ import type {
   SdkInvalidJwtTokenError,
   SdkNoTokensInStorageError,
   SdkPayloadValidationError,
+  SdkRecordAlreadyExistsError,
+  SdkRecordNotFoundError,
   SdkRequestError,
   SdkServerError,
   SdkUnauthorizedError,
@@ -17,7 +19,9 @@ export type SdkTranslatedErrors =
   | SdkRequestError
   | SdkServerError
   | SdkUnauthorizedError
-  | SdkInvalidJwtTokenError;
+  | SdkInvalidJwtTokenError
+  | SdkRecordAlreadyExistsError
+  | SdkRecordNotFoundError;
 
 const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkIncorrectUsernameOrPasswordError: 'Incorrect email or password',
@@ -27,6 +31,8 @@ const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkServerError: 'Server error',
   SdkUnauthorizedError: 'Unauthorized',
   SdkInvalidJwtTokenError: 'Invalid or missing JWT token',
+  SdkRecordAlreadyExistsError: 'Record already exists',
+  SdkRecordNotFoundError: 'Record not found',
 };
 
 export const I18N_PACK_EN = {
