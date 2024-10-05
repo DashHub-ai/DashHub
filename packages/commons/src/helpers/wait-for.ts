@@ -46,7 +46,7 @@ export function waitFor<R>(
       }
     };
 
-    tick();
+    void tick();
   });
 }
 
