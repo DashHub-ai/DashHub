@@ -4,6 +4,7 @@ import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import { SdKSearchOrganizationsInputV, useSdkForLoggedIn } from '@llm/sdk';
 import {
+  ArchiveFilterTabs,
   CreateButton,
   PaginatedTable,
   PaginationSearchToolbarItem,
@@ -53,6 +54,8 @@ export function OrganizationsTableContainer() {
             }),
           })}
         />
+
+        <ArchiveFilterTabs {...pagination.bind.path('archived')} />
       </PaginationToolbar>
 
       <PaginatedTable

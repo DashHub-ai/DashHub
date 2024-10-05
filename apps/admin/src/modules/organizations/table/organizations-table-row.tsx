@@ -24,20 +24,18 @@ export function OrganizationsTableRow({ item, onAfterArchive, onAfterUpdate }: P
       <td>{formatDate(item.updatedAt)}</td>
       <td>
         <EllipsisCrudDropdownButton
-          onUpdate={
-            pipe(
+          {...!item.archived && {
+            onUpdate: pipe(
               updateModal.showAsOptional({
                 defaultValue: item,
               }),
               tapTaskOption(onAfterUpdate),
-            )
-          }
-          onArchive={
-            pipe(
+            ),
+            onArchive: pipe(
               sdks.dashboard.organizations.archive(item.id),
               tapTaskEither(onAfterArchive),
-            )
-          }
+            ),
+          }}
         />
       </td>
     </tr>

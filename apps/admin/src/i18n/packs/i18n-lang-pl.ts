@@ -35,6 +35,12 @@ export const I18N_PACK_PL: I18nLangPack = {
     add: 'Dodaj',
     confirm: 'Potwierdź',
   },
+  tabs: {
+    archiveFilters: {
+      active: 'Aktywne',
+      archived: 'Zarchiwizowane',
+    },
+  },
   notifications: {
     save: {
       success: 'Zapisano pomyślnie',

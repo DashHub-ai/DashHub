@@ -59,6 +59,12 @@ export const I18N_PACK_EN = {
     add: 'Add',
     confirm: 'Confirm',
   },
+  tabs: {
+    archiveFilters: {
+      active: 'Active',
+      archived: 'Archived',
+    },
+  },
   notifications: {
     save: {
       success: 'Saved successfully',
