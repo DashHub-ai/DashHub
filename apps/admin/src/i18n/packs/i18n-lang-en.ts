@@ -37,6 +37,32 @@ export const I18N_PACK_EN = {
   errors: {
     tagged: I18N_SDK_ERRORS_EN,
   },
+  buttons: {
+    cancel: 'Cancel',
+    close: 'Close',
+    save: 'Save',
+    delete: 'Delete',
+    archive: 'Archive',
+    edit: 'Edit',
+    add: 'Add',
+    confirm: 'Confirm',
+  },
+  notifications: {
+    save: {
+      success: 'Saved successfully',
+      error: 'An error occurred while saving',
+    },
+  },
+  modals: {
+    archiveConfirm: {
+      title: 'Archive',
+      message: {
+        single: 'Are you sure you want to archive this item? This item may still be visible in assigned system locations after archiving.',
+        multiple: 'Do you really want to archive these %{count} items? These items may still be visible in assigned system locations after archiving.',
+      },
+      yesIAmSure: 'Yes, I am sure',
+    },
+  },
   pagination: {
     itemsPerPage: 'Items per page',
     showNthToNthOf: 'Shown %{from} - %{to} of %{total}',

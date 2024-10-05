@@ -8,11 +8,20 @@ export default antfu({
     '**/*/dist',
     '**/*/build',
     'node_modules',
+    '*.mjs',
+    '*.js',
   ],
+  languageOptions: {
+    parserOptions: {
+      project: true,
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
   typescript: {
     overrides: {
       'ts/no-unsafe-function-type': 0,
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/no-floating-promises': 'error',
     },
   },
   stylistic: {

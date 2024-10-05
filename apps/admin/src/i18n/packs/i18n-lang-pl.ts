@@ -19,6 +19,32 @@ export const I18N_PACK_PL: I18nLangPack = {
   errors: {
     tagged: I18N_SDK_ERRORS_PL,
   },
+  buttons: {
+    cancel: 'Anuluj',
+    close: 'Zamknij',
+    save: 'Zapisz',
+    delete: 'Usuń',
+    archive: 'Archiwizuj',
+    edit: 'Edytuj',
+    add: 'Dodaj',
+    confirm: 'Potwierdź',
+  },
+  notifications: {
+    save: {
+      success: 'Zapisano pomyślnie',
+      error: 'Wystąpił błąd podczas zapisywania',
+    },
+  },
+  modals: {
+    archiveConfirm: {
+      title: 'Archiwizuj',
+      message: {
+        single: 'Czy na pewno chcesz zarchiwizować ten element? Ten element może nadal być widoczny w przypisanych lokalizacjach systemowych po zarchiwizowaniu.',
+        multiple: 'Czy na pewno chcesz zarchiwizować te %{count} elementy? Te elementy mogą nadal być widoczne w przypisanych lokalizacjach systemowych po zarchiwizowaniu.',
+      },
+      yesIAmSure: 'Tak, jestem pewny',
+    },
+  },
   pagination: {
     itemsPerPage: 'Elementów na stronę',
     showNthToNthOf: 'Pokazano %{from} - %{to} ze %{total}',

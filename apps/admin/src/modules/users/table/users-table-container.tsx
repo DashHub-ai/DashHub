@@ -38,8 +38,8 @@ export function UsersTableContainer() {
         columns={[
           { id: 'id', name: t.id },
           { id: 'email', name: t.email, className: 'uk-table-expand' },
-          { id: 'createdAt', name: t.createdAt },
-          { id: 'updatedAt', name: t.updatedAt },
+          { id: 'createdAt', name: t.createdAt, className: 'w-[200px]' },
+          { id: 'updatedAt', name: t.updatedAt, className: 'w-[200px]' },
           { id: 'actions', className: 'uk-table-shrink' },
         ]}
       >
