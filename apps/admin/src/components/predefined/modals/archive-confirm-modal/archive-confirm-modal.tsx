@@ -46,7 +46,8 @@ export function ArchiveConfirmModal(
           <CancelButton disabled={isLoading} onClick={onClose} />
           <ArchiveButton
             type="submit"
-            disabled={!confirm.value || isLoading}
+            disabled={!confirm.value}
+            loading={isLoading}
           />
         </>
       )}

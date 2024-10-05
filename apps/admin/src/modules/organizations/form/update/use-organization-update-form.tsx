@@ -25,7 +25,7 @@ export function useOrganizationUpdateForm(
   }: UpdateOrganizationFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { required } = usePredefinedFormValidators<SdkUpdateOrganizationInputT & SdkTableRowWithIdT>();
+  const { required, positive } = usePredefinedFormValidators<SdkUpdateOrganizationInputT & SdkTableRowWithIdT>();
 
   return useForm({
     resetAfterSubmit: false,
@@ -38,6 +38,7 @@ export function useOrganizationUpdateForm(
       mode: ['blur', 'submit'],
       validators: () => [
         required('name'),
+        positive('maxNumberOfUsers'),
       ],
     },
     ...props,

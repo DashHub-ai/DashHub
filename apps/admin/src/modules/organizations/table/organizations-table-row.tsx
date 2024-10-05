@@ -4,7 +4,7 @@ import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchOrganizationItemT, useSdkForLoggedIn } from '@llm/sdk';
 import { EllipsisCrudDropdownButton } from '~/components';
 
-import { useOrganizationUpdateModal } from '../update';
+import { useOrganizationUpdateModal } from '../form/update';
 
 type Props = {
   item: SdkSearchOrganizationItemT;

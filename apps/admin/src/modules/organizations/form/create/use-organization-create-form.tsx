@@ -21,7 +21,7 @@ export function useOrganizationCreateForm(
   }: CreateOrganizationFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { required } = usePredefinedFormValidators<SdkCreateOrganizationInputT>();
+  const { required, positive } = usePredefinedFormValidators<SdkCreateOrganizationInputT>();
 
   return useForm({
     resetAfterSubmit: false,
@@ -34,6 +34,7 @@ export function useOrganizationCreateForm(
       mode: ['blur', 'submit'],
       validators: () => [
         required('name'),
+        positive('maxNumberOfUsers'),
       ],
     },
     ...props,

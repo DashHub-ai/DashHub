@@ -1,3 +1,2 @@
-export * from './create';
+export * from './form';
 export * from './table';
-export * from './update';

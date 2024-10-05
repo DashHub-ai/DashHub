@@ -12,7 +12,7 @@ import {
 } from '~/components';
 import { useI18n } from '~/i18n';
 
-import { useOrganizationCreateModal } from '../create';
+import { useOrganizationCreateModal } from '../form/create';
 import { OrganizationsTableRow } from './organizations-table-row';
 
 export function OrganizationsTableContainer() {

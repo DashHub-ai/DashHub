@@ -42,6 +42,7 @@ export const I18N_PACK_EN = {
   validation: {
     required: 'This field is required',
     invalidEmail: 'This field must be an email address',
+    mustBeLargerThan: 'This field must be larger than %{number}',
   },
   errors: {
     tagged: I18N_SDK_ERRORS_EN,
@@ -121,6 +122,10 @@ export const I18N_PACK_EN = {
           name: {
             label: 'Name',
             placeholder: 'Enter organization name',
+          },
+          maxNumberOfUsers: {
+            label: 'Max number of users',
+            placeholder: 'Enter max number of users',
           },
         },
       },

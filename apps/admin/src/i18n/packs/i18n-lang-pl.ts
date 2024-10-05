@@ -18,6 +18,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   validation: {
     required: 'To pole jest wymagane',
     invalidEmail: 'To pole musi być adresem e-mail',
+    mustBeLargerThan: 'To pole musi być większe niż %{number}',
   },
   errors: {
     tagged: I18N_SDK_ERRORS_PL,
@@ -97,6 +98,10 @@ export const I18N_PACK_PL: I18nLangPack = {
           name: {
             label: 'Nazwa',
             placeholder: 'Wpisz nazwę organizacji',
+          },
+          maxNumberOfUsers: {
+            label: 'Maksymalna liczba użytkowników',
+            placeholder: 'Wpisz maksymalną liczbę użytkowników',
           },
         },
       },

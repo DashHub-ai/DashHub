@@ -3,8 +3,6 @@ import type { SdkTableRowWithIdT, SdkUpdateOrganizationInputT } from '@llm/sdk';
 import {
   CancelButton,
   FormErrorAlert,
-  FormField,
-  Input,
   Modal,
   type ModalProps,
   ModalTitle,
@@ -12,6 +10,7 @@ import {
 } from '~/components';
 import { useI18n } from '~/i18n';
 
+import { OrganizationSharedFormFields } from '../shared';
 import { useOrganizationUpdateForm } from './use-organization-update-form';
 
 export type OrganizationUpdateFormModalProps =
@@ -54,18 +53,10 @@ export function OrganizationUpdateFormModal(
         </>
       )}
     >
-      <FormField
-        className="uk-margin"
-        label={t.fields.name.label}
-        {...validator.errors.extract('name')}
-      >
-        <Input
-          name="name"
-          placeholder={t.fields.name.placeholder}
-          required
-          {...bind.path('name')}
-        />
-      </FormField>
+      <OrganizationSharedFormFields
+        errors={validator.errors.all as unknown as any}
+        {...bind.merged()}
+      />
 
       <FormErrorAlert result={submitState.result} />
     </Modal>
