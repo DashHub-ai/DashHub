@@ -13,7 +13,7 @@ const bootService = container.resolve(ElasticsearchRegistryBootService);
 const registry = container.resolve(ElasticsearchIndicesRegistryRepo);
 const esConnection = container.resolve(ElasticsearchRepo);
 
-pipe(
+void pipe(
   bootService.register,
   tapTaskEitherTE(registry.reindexAll),
   tapTaskEitherTE(() => esConnection.close),

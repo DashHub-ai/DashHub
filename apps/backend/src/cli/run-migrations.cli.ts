@@ -23,7 +23,7 @@ const {
 const databaseConnectionRepo = container.resolve(DatabaseConnectionRepo);
 const migrator = container.resolve(DatabaseMigrateService);
 
-pipe(
+void pipe(
   migrator.run(down ? 'down' : 'up'),
   TE.chainW(() => databaseConnectionRepo.close),
   tryOrThrowTE,

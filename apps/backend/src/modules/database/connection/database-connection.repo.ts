@@ -27,7 +27,7 @@ export class DatabaseConnectionRepo {
   }
 
   close = DatabaseError.tryTask(async () => {
-    this.connection.destroy();
+    await this.connection.destroy();
   });
 
   private createConnection() {

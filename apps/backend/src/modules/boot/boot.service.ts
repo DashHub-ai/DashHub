@@ -41,7 +41,7 @@ export class BootService {
 
     logger.info('Booting application...');
 
-    pipe(
+    await pipe(
       config.database.migration.checkMigrationsOnStartup
         ? this.databaseMigrateService.run('up')
         : TE.of(void 0),
