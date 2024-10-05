@@ -38,6 +38,7 @@ export const I18N_PACK_EN = {
     tagged: I18N_SDK_ERRORS_EN,
   },
   buttons: {
+    create: 'Create',
     cancel: 'Cancel',
     close: 'Close',
     save: 'Save',
@@ -98,6 +99,19 @@ export const I18N_PACK_EN = {
   },
   placeholders: {
     noItemsFound: 'No items found',
+  },
+  modules: {
+    organizations: {
+      form: {
+        title: {
+          create: 'Create organization',
+          edit: 'Edit organization',
+        },
+        fields: {
+          name: 'Name',
+        },
+      },
+    },
   },
   routes: {
     shared: {

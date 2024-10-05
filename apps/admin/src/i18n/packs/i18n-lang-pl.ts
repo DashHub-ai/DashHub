@@ -20,6 +20,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     tagged: I18N_SDK_ERRORS_PL,
   },
   buttons: {
+    create: 'Utwórz',
     cancel: 'Anuluj',
     close: 'Zamknij',
     save: 'Zapisz',
@@ -80,6 +81,19 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   placeholders: {
     noItemsFound: 'Nie znaleziono żadnych elementów',
+  },
+  modules: {
+    organizations: {
+      form: {
+        title: {
+          edit: 'Edytuj organizację',
+          create: 'Utwórz organizację',
+        },
+        fields: {
+          name: 'Nazwa',
+        },
+      },
+    },
   },
   routes: {
     shared: {

@@ -80,6 +80,12 @@ export function useDebouncedPaginatedSearch<
     [deps, forceRerender.revision],
   );
 
+  const reset = () => {
+    pagination.setValue({
+      value: { ...urlPagination.initialState },
+    });
+  };
+
   useUpdateEffect(() => {
     if (storeDataInUrl) {
       urlPagination.shallowAssignState(debouncedPagination.value);
@@ -87,6 +93,7 @@ export function useDebouncedPaginatedSearch<
   }, [storeDataInUrl, debouncedPagination.value]);
 
   return {
+    reset,
     reload: forceRerender.forceRerender,
     result: promise.status === 'success' ? promise.data : null,
     loading: debouncedPagination.loading || promise.status === 'loading',

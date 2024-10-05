@@ -1,5 +1,9 @@
+import { pipe } from 'fp-ts/lib/function';
+
+import { tapTaskOption } from '@llm/commons';
 import { SdKSearchOrganizationsInputV, useSdkForLoggedIn } from '@llm/sdk';
 import {
+  CreateButton,
   PaginatedTable,
   PaginationSearchToolbarItem,
   PaginationToolbar,
@@ -7,20 +11,38 @@ import {
 } from '~/components';
 import { useI18n } from '~/i18n';
 
+import { useOrganizationCreateModal } from '../create';
 import { OrganizationsTableRow } from './organizations-table-row';
 
 export function OrganizationsTableContainer() {
   const t = useI18n().pack.table.columns;
   const { sdks } = useSdkForLoggedIn();
-  const { loading, pagination, result } = useDebouncedPaginatedSearch({
+
+  const { loading, pagination, result, reset } = useDebouncedPaginatedSearch({
     schema: SdKSearchOrganizationsInputV,
     fallbackSearchParams: {},
     fetchResultsTask: sdks.dashboard.organizations.search,
   });
 
+  const createModal = useOrganizationCreateModal();
+
+  const onCreate = pipe(
+    createModal.showAsOptional({
+      defaultValue: {
+        name: '',
+        maxNumberOfUsers: 1,
+      },
+    }),
+    tapTaskOption(reset),
+  );
+
   return (
     <section>
-      <PaginationToolbar>
+      <PaginationToolbar
+        suffix={(
+          <CreateButton onClick={onCreate} />
+        )}
+      >
         <PaginationSearchToolbarItem
           {...pagination.bind.path('phrase', {
             relatedInputs: ({ newGlobalValue, newControlValue }) => ({
