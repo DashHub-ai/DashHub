@@ -55,9 +55,22 @@ export const I18N_PACK_EN = {
     delete: 'Delete',
     edit: 'Edit',
     archive: 'Archive',
+    unarchive: 'Unarchive',
     update: 'Update',
     add: 'Add',
     confirm: 'Confirm',
+  },
+  badges: {
+    archive: {
+      archived: 'Archived',
+      active: 'Active',
+    },
+  },
+  tabs: {
+    archiveFilters: {
+      active: 'Active',
+      archived: 'Archived',
+    },
   },
   notifications: {
     save: {
@@ -71,6 +84,14 @@ export const I18N_PACK_EN = {
       message: {
         single: 'Are you sure you want to archive this item? This item may still be visible in assigned system locations after archiving.',
         multiple: 'Do you really want to archive these %{count} items? These items may still be visible in assigned system locations after archiving.',
+      },
+      yesIAmSure: 'Yes, I am sure',
+    },
+    unarchiveConfirm: {
+      title: 'Unarchive',
+      message: {
+        single: 'Are you sure you want to unarchive this item?',
+        multiple: 'Do you really want to unarchive these %{count} items?',
       },
       yesIAmSure: 'Yes, I am sure',
     },
@@ -92,6 +113,7 @@ export const I18N_PACK_EN = {
       id: 'ID',
       name: 'Name',
       email: 'E-Mail',
+      status: 'Status',
       createdAt: 'Created at',
       updatedAt: 'Updated at',
       actions: 'Actions',

@@ -35,8 +35,20 @@ export class OrganizationsSdk extends AbstractNestedSdkWithAuth {
       options: postPayload(data),
     });
 
+  unarchive = (id: SdkTableRowIdT) =>
+    this.fetch<
+      SdkTableRowWithIdT,
+      SdkRecordNotFoundError | SdkRecordAlreadyExistsError
+    >({
+      url: this.endpoint(`/unarchive/${id}`),
+      options: patchPayload({}),
+    });
+
   archive = (id: SdkTableRowIdT) =>
-    this.fetch<SdkTableRowWithIdT, SdkRecordNotFoundError>({
+    this.fetch<
+      SdkTableRowWithIdT,
+      SdkRecordNotFoundError | SdkRecordAlreadyExistsError
+    >({
       url: this.endpoint(`/archive/${id}`),
       options: patchPayload({}),
     });

@@ -4,6 +4,7 @@ import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import { SdKSearchOrganizationsInputV, useSdkForLoggedIn } from '@llm/sdk';
 import {
+  ArchiveFilterTabs,
   CreateButton,
   PaginatedTable,
   PaginationSearchToolbarItem,
@@ -53,6 +54,8 @@ export function OrganizationsTableContainer() {
             }),
           })}
         />
+
+        <ArchiveFilterTabs {...pagination.bind.path('archived')} />
       </PaginationToolbar>
 
       <PaginatedTable
@@ -62,6 +65,7 @@ export function OrganizationsTableContainer() {
         columns={[
           { id: 'id', name: t.id, className: 'uk-table-shrink' },
           { id: 'name', name: t.name, className: 'uk-table-expand' },
+          { id: 'archived', name: t.status, className: 'w-[150px]' },
           { id: 'createdAt', name: t.createdAt, className: 'w-[200px]' },
           { id: 'updatedAt', name: t.updatedAt, className: 'w-[200px]' },
           { id: 'actions', className: 'uk-table-shrink' },

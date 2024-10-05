@@ -7,6 +7,7 @@ import {
   type SdkUpdateOrganizationInputT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useSaveTaskEitherNotification } from '~/components/notifications';
 import { usePredefinedFormValidators } from '~/hooks';
 
 type UpdateOrganizationFormHookAttrs =
@@ -26,11 +27,13 @@ export function useOrganizationUpdateForm(
 ) {
   const { sdks } = useSdkForLoggedIn();
   const { required, positive } = usePredefinedFormValidators<SdkUpdateOrganizationInputT & SdkTableRowWithIdT>();
+  const saveNotifications = useSaveTaskEitherNotification();
 
   return useForm({
     resetAfterSubmit: false,
     onSubmit: flow(
       sdks.dashboard.organizations.update,
+      saveNotifications,
       tapTaskEither(() => onAfterSubmit?.()),
       runTask,
     ),

@@ -11,7 +11,7 @@ export function Navigation() {
   const sitemap = useSitemap();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border px-4">
+    <header className="sticky top-0 z-50 w-full border-b border-border px-4 bg-white">
       <div className="container mx-auto p-4 flex h-14 max-w-screen-2xl items-center">
         <nav className="uk-navbar w-full" uk-navbar="">
           <div className="uk-navbar-left gap-x-4 lg:gap-x-10">
