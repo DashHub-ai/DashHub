@@ -195,6 +195,9 @@ export const I18N_PACK_EN = {
               label: 'Password',
               placeholder: 'Enter password',
             },
+            resetPassword: {
+              label: 'Reset password',
+            },
           },
         },
       },

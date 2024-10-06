@@ -34,6 +34,11 @@ export class UsersFirewall extends AuthFirewallService {
     this.tryTEIfUser.is.root,
   );
 
+  update = flow(
+    this.usersService.update,
+    this.tryTEIfUser.is.root,
+  );
+
   search = flow(
     this.usersService.search,
     this.tryTEIfUser.is.root,

@@ -171,6 +171,9 @@ export const I18N_PACK_PL: I18nLangPack = {
               label: 'Hasło',
               placeholder: 'Wpisz hasło',
             },
+            resetPassword: {
+              label: 'Resetuj hasło',
+            },
           },
         },
       },

@@ -1,10 +1,12 @@
 import { pipe } from 'fp-ts/lib/function';
 
-import { formatDate, tapTaskEither } from '@llm/commons';
+import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchUserItemT, useSdkForLoggedIn } from '@llm/sdk';
 import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/components';
 import { useI18n } from '~/i18n';
 import { UkIcon } from '~/icons';
+
+import { useUserUpdateModal } from '../form';
 
 type Props = {
   item: SdkSearchUserItemT;
@@ -15,6 +17,8 @@ export function UsersTableRow({ item, onUpdated }: Props) {
   const { pack } = useI18n();
   const { sdks } = useSdkForLoggedIn();
   const { auth } = item;
+
+  const updateModal = useUserUpdateModal();
 
   return (
     <tr>
@@ -47,6 +51,12 @@ export function UsersTableRow({ item, onUpdated }: Props) {
             onArchive: pipe(
               sdks.dashboard.users.archive(item.id),
               tapTaskEither(onUpdated),
+            ),
+            onUpdate: pipe(
+              updateModal.showAsOptional({
+                defaultValue: item,
+              }),
+              tapTaskOption(onUpdated),
             ),
           }}
           {...item.archived && {

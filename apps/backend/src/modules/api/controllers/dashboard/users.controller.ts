@@ -4,6 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   SdkCreateUserInputV,
   SdKSearchUsersInputV,
+  SdkUpdateUserInputV,
   type UsersSdk,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
@@ -69,6 +70,21 @@ export class UsersController extends AuthorizedController {
           mapDbRecordAlreadyExistsToSdkError,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<UsersSdk['create']>>(context),
+        ),
+      )
+      .put(
+        '/:id',
+        sdkSchemaValidator('json', SdkUpdateUserInputV),
+        async context => pipe(
+          {
+            id: Number(context.req.param().id),
+            ...context.req.valid('json'),
+          },
+          usersService.asUser(context.var.jwt).update,
+          mapDbRecordAlreadyExistsToSdkError,
+          mapDbRecordNotFoundToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<UsersSdk['update']>>(context),
         ),
       );
   }

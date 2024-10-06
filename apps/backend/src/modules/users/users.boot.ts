@@ -32,8 +32,11 @@ export class UsersBootService {
         active: true,
         archiveProtection: true,
         auth: {
-          email: null,
+          email: {
+            enabled: false,
+          },
           password: {
+            enabled: true,
             value: root.password ?? genRandomToken(10),
           },
         },
@@ -44,8 +47,7 @@ export class UsersBootService {
       if (result.created) {
         this.logger.info('Created root user!', {
           id: result.id,
-          email: dto.email,
-          password: dto.auth.password?.value,
+          ...dto,
         });
       }
     }),

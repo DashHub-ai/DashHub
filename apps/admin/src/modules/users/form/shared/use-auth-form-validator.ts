@@ -11,7 +11,12 @@ import { SDK_MIN_PASSWORD_LENGTH, type SdkCreateUserAuthMethodsT } from '@llm/sd
 import { useI18n } from '~/i18n';
 
 type AllAuthObjectPaths<V extends ControlValue> = Extract<GetAllObjectPathsEntries<V>, {
-  type: SdkCreateUserAuthMethodsT;
+  type: {
+    password: {
+      enabled: boolean;
+      value?: string | null;
+    };
+  };
 }>['path'];
 
 export function useUseAuthFormValidator<V extends ControlValue>() {
@@ -22,7 +27,11 @@ export function useUseAuthFormValidator<V extends ControlValue>() {
     fn: ({ value }) => {
       const castedValue = value as SdkCreateUserAuthMethodsT;
 
-      if (castedValue.password && castedValue.password.value.length < SDK_MIN_PASSWORD_LENGTH) {
+      if (
+        castedValue.password
+        && 'value' in castedValue.password
+        && castedValue.password.value.length < SDK_MIN_PASSWORD_LENGTH
+      ) {
         return error(
           format(t.mustBeLongerThan, { number: SDK_MIN_PASSWORD_LENGTH }),
           null,

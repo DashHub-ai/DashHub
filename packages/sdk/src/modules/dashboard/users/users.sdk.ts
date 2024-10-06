@@ -3,6 +3,7 @@ import {
   getPayload,
   patchPayload,
   postPayload,
+  putPayload,
   type SdkRecordAlreadyExistsError,
   type SdkRecordNotFoundError,
   type SdkTableRowIdT,
@@ -14,6 +15,8 @@ import type {
   SdkCreateUserOutputT,
   SdKSearchUsersInputT,
   SdKSearchUsersOutputT,
+  SdkUpdateUserInputT,
+  SdkUpdateUserOutputT,
 } from './dto';
 
 export class UsersSdk extends AbstractNestedSdkWithAuth {
@@ -48,5 +51,14 @@ export class UsersSdk extends AbstractNestedSdkWithAuth {
     this.fetch<SdkCreateUserOutputT, SdkRecordAlreadyExistsError>({
       url: this.endpoint('/'),
       options: postPayload(data),
+    });
+
+  update = ({ id, ...data }: SdkUpdateUserInputT & SdkTableRowWithIdT) =>
+    this.fetch<
+      SdkUpdateUserOutputT,
+      SdkRecordAlreadyExistsError | SdkRecordNotFoundError
+    >({
+      url: this.endpoint(`/${id}`),
+      options: putPayload(data),
     });
 };

@@ -9,6 +9,7 @@ import clsx from 'clsx';
 
 type Props = ControlBindProps<boolean> & PropsWithChildren & {
   name?: string;
+  disabled?: boolean;
   className?: string;
   checkboxClassName?: string;
 };
@@ -16,6 +17,7 @@ type Props = ControlBindProps<boolean> & PropsWithChildren & {
 export const Checkbox = controlled<boolean, Props>((
   {
     name,
+    disabled,
     control: { setValue, value },
     children,
     className = 'uk-text-small',
@@ -25,6 +27,7 @@ export const Checkbox = controlled<boolean, Props>((
   <label className={className}>
     <input
       name={name}
+      disabled={disabled}
       className={clsx('uk-checkbox', checkboxClassName)}
       type="checkbox"
       checked={value}

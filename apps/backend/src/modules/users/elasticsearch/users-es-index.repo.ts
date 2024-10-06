@@ -40,7 +40,7 @@ const UsersAbstractEsIndexRepo = createElasticsearchIndexRepo({
             },
             email: {
               properties: {
-                email: { type: 'keyword' },
+                enabled: { type: 'keyword' },
               },
             },
           },

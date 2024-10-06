@@ -36,8 +36,13 @@ export function UsersTableContainer() {
           active: true,
           archiveProtection: false,
           auth: {
-            email: { enabled: true },
-            password: { value: genRandomPassword() },
+            email: {
+              enabled: true,
+            },
+            password: {
+              enabled: true,
+              value: genRandomPassword(),
+            },
           },
         },
       }),
