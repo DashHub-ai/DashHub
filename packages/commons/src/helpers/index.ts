@@ -4,6 +4,7 @@ export * from './date';
 export * from './delay-task-either';
 export * from './find-item-by-id';
 export * from './format';
+export * from './gen-random-between-inclusive';
 export * from './get-first-obj-key-value';
 export * from './is-nil';
 export * from './is-object-with-id';

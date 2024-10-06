@@ -8,11 +8,10 @@ import { useOrganizationUpdateModal } from '../form/update';
 
 type Props = {
   item: SdkSearchOrganizationItemT;
-  onAfterArchive: VoidFunction;
-  onAfterUpdate: VoidFunction;
+  onUpdated: VoidFunction;
 };
 
-export function OrganizationsTableRow({ item, onAfterArchive, onAfterUpdate }: Props) {
+export function OrganizationsTableRow({ item, onUpdated }: Props) {
   const { sdks } = useSdkForLoggedIn();
   const updateModal = useOrganizationUpdateModal();
 
@@ -30,17 +29,17 @@ export function OrganizationsTableRow({ item, onAfterArchive, onAfterUpdate }: P
               updateModal.showAsOptional({
                 defaultValue: item,
               }),
-              tapTaskOption(onAfterUpdate),
+              tapTaskOption(onUpdated),
             ),
             onArchive: pipe(
               sdks.dashboard.organizations.archive(item.id),
-              tapTaskEither(onAfterArchive),
+              tapTaskEither(onUpdated),
             ),
           }}
           {...item.archived && {
             onUnarchive: pipe(
               sdks.dashboard.organizations.unarchive(item.id),
-              tapTaskEither(onAfterArchive),
+              tapTaskEither(onUpdated),
             ),
           }}
         />

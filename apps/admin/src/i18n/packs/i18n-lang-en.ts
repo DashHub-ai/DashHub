@@ -39,10 +39,17 @@ const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
 };
 
 export const I18N_PACK_EN = {
+  common: {
+    email: 'Email',
+    password: 'Password',
+  },
   validation: {
     required: 'This field is required',
     invalidEmail: 'This field must be an email address',
     mustBeLargerThan: 'This field must be larger than %{number}',
+    password: {
+      mustBeLongerThan: 'Password must be longer than %{number} characters',
+    },
   },
   errors: {
     tagged: I18N_SDK_ERRORS_EN,
@@ -64,6 +71,10 @@ export const I18N_PACK_EN = {
     archive: {
       archived: 'Archived',
       active: 'Active',
+    },
+    boolean: {
+      yes: 'Yes',
+      no: 'No',
     },
   },
   tabs: {
@@ -113,7 +124,9 @@ export const I18N_PACK_EN = {
       id: 'ID',
       name: 'Name',
       email: 'E-Mail',
-      status: 'Status',
+      archived: 'Archived',
+      active: 'Active',
+      auth: 'Authentication',
       createdAt: 'Created at',
       updatedAt: 'Updated at',
       actions: 'Actions',
@@ -148,6 +161,43 @@ export const I18N_PACK_EN = {
           maxNumberOfUsers: {
             label: 'Max number of users',
             placeholder: 'Enter max number of users',
+          },
+        },
+      },
+    },
+    users: {
+      form: {
+        title: {
+          create: 'Create user',
+          edit: 'Edit user',
+        },
+        fields: {
+          email: {
+            label: 'E-Mail',
+            placeholder: 'Enter e-mail address',
+          },
+          flags: {
+            label: 'Flags',
+          },
+          active: {
+            label: 'Active',
+          },
+          archiveProtection: {
+            label: 'Archive protection',
+          },
+          auth: {
+            label: 'Authentication',
+            email: {
+              label: 'Email',
+              placeholder: 'Enter email address',
+            },
+            password: {
+              label: 'Password',
+              placeholder: 'Enter password',
+            },
+            resetPassword: {
+              label: 'Reset password',
+            },
           },
         },
       },

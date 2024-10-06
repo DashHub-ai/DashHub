@@ -15,10 +15,17 @@ const I18N_SDK_ERRORS_PL: Record<SdkTranslatedErrors['tag'], string> = {
 };
 
 export const I18N_PACK_PL: I18nLangPack = {
+  common: {
+    email: 'E-mail',
+    password: 'Hasło',
+  },
   validation: {
     required: 'To pole jest wymagane',
     invalidEmail: 'To pole musi być adresem e-mail',
     mustBeLargerThan: 'To pole musi być większe niż %{number}',
+    password: {
+      mustBeLongerThan: 'Hasło musi mieć więcej niż %{number} znaków',
+    },
   },
   errors: {
     tagged: I18N_SDK_ERRORS_PL,
@@ -40,6 +47,10 @@ export const I18N_PACK_PL: I18nLangPack = {
     archive: {
       archived: 'Archiwum',
       active: 'Aktywne',
+    },
+    boolean: {
+      yes: 'Tak',
+      no: 'Nie',
     },
   },
   tabs: {
@@ -88,8 +99,10 @@ export const I18N_PACK_PL: I18nLangPack = {
     columns: {
       id: 'ID',
       name: 'Nazwa',
+      auth: 'Autoryzacja',
+      active: 'Aktywny',
       email: 'E-mail',
-      status: 'Status',
+      archived: 'Archived',
       createdAt: 'Utworzono',
       updatedAt: 'Zaktualizowano',
       actions: 'Akcje',
@@ -124,6 +137,43 @@ export const I18N_PACK_PL: I18nLangPack = {
           maxNumberOfUsers: {
             label: 'Maksymalna liczba użytkowników',
             placeholder: 'Wpisz maksymalną liczbę użytkowników',
+          },
+        },
+      },
+    },
+    users: {
+      form: {
+        title: {
+          edit: 'Edytuj użytkownika',
+          create: 'Utwórz użytkownika',
+        },
+        fields: {
+          email: {
+            label: 'E-mail',
+            placeholder: 'Wpisz adres e-mail',
+          },
+          flags: {
+            label: 'Flagi',
+          },
+          active: {
+            label: 'Aktywny',
+          },
+          archiveProtection: {
+            label: 'Ochrona przed archiwizacją',
+          },
+          auth: {
+            label: 'Autoryzacja',
+            email: {
+              label: 'E-mail',
+              placeholder: 'Wpisz adres e-mail',
+            },
+            password: {
+              label: 'Hasło',
+              placeholder: 'Wpisz hasło',
+            },
+            resetPassword: {
+              label: 'Resetuj hasło',
+            },
           },
         },
       },

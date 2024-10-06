@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkCreateUserAuthMethodsT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkCreateUserAuthMethodsT, SdkTableRowWithIdT, SdkUpdateUserAuthMethodsT } from '@llm/sdk';
 
 import { DatabaseConnectionRepo, type TransactionalAttrs, tryReuseOrCreateTransaction } from '~/modules/database';
 
@@ -11,7 +11,7 @@ import { AuthPasswordsRepo } from './auth-passwords.repo';
 import { AuthResetPasswordsRepo } from './auth-reset-passwords.repo';
 
 export type UpsertUserAuthMethodsAttrs = TransactionalAttrs &
-  SdkCreateUserAuthMethodsT &
+  (SdkCreateUserAuthMethodsT | SdkUpdateUserAuthMethodsT) &
   {
     user: SdkTableRowWithIdT;
   };
@@ -43,6 +43,9 @@ export class AuthRepo {
         {
           forwardTransaction: trx,
           user,
+          preserve: {
+            password: password.enabled && !('value' in password),
+          },
         },
       ),
       TE.chainW(() => {
@@ -58,7 +61,7 @@ export class AuthRepo {
         });
       }),
       TE.chainW(() => {
-        if (!password) {
+        if (!password.enabled || !('value' in password) || !password.value) {
           return TE.of(undefined);
         }
 
@@ -75,7 +78,8 @@ export class AuthRepo {
     {
       user,
       forwardTransaction,
-    }: TransactionalAttrs<{ user: SdkTableRowWithIdT; }>,
+      preserve,
+    }: TransactionalAttrs<{ user: SdkTableRowWithIdT; preserve: { password?: boolean; }; }>,
   ) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.databaseConnectionRepo.connection,
@@ -89,12 +93,18 @@ export class AuthRepo {
           ['userId', '=', user.id],
         ],
       }),
-      TE.chain(() => this.authPasswordsRepo.deleteAll({
-        forwardTransaction: trx,
-        where: [
-          ['userId', '=', user.id],
-        ],
-      })),
+      TE.chain(() => {
+        if (preserve?.password) {
+          return TE.of(undefined);
+        }
+
+        return this.authPasswordsRepo.deleteAll({
+          forwardTransaction: trx,
+          where: [
+            ['userId', '=', user.id],
+          ],
+        });
+      }),
       TE.chain(() => this.authResetPasswordsRepo.deleteAll({
         forwardTransaction: trx,
         where: [

@@ -3,14 +3,19 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkCreateUserInputT } from '@llm/sdk';
+import type { SdkCreateUserInputT, SdkTableRowWithIdT, SdkUpdateUserInputT } from '@llm/sdk';
 
 import { catchTaskEitherTagError, isNil, panicError } from '@llm/commons';
 import {
+  createArchiveRecordQuery,
+  createArchiveRecordsQuery,
   createProtectedDatabaseRepo,
+  createUnarchiveRecordQuery,
+  createUnarchiveRecordsQuery,
   DatabaseConnectionRepo,
   DatabaseError,
   type KyselyQueryCreator,
+  RecordsArchiveBasicAttrs,
   type TableId,
   type TransactionalAttrs,
   tryGetFirstOrNotExists,
@@ -32,6 +37,26 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
   ) {
     super(databaseConnectionRepo);
   }
+
+  archive = (attrs: TransactionalAttrs<SdkTableRowWithIdT>) =>
+    createArchiveRecordQuery(this.baseRepo.queryFactoryAttrs)({
+      ...attrs,
+      relatedRowValues: {
+        active: false,
+      },
+    });
+
+  archiveRecords = (attrs: RecordsArchiveBasicAttrs<'users'>) =>
+    createArchiveRecordsQuery(this.baseRepo.queryFactoryAttrs)({
+      ...attrs,
+      relatedRowValues: {
+        active: false,
+      },
+    });
+
+  unarchive = createUnarchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
+
+  unarchiveRecords = createUnarchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
 
   createIdsIterator = this.baseRepo.createIdsIterator;
 
@@ -55,6 +80,32 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
       TE.map(() => refreshToken),
     );
 
+  update = ({ forwardTransaction, id, value }: TransactionalAttrs<{ id: TableId; value: SdkUpdateUserInputT; }>) => {
+    const transaction = tryReuseOrCreateTransaction({
+      db: this.db,
+      forwardTransaction,
+    });
+
+    return transaction(trx => pipe(
+      this.baseRepo.update({
+        forwardTransaction: trx,
+        id,
+        value: {
+          email: value.email,
+          active: value.active,
+          archiveProtection: value.archiveProtection,
+        },
+      }),
+      TE.tap(({ id }) => pipe(
+        this.authRepo.upsertUserAuthMethods({
+          forwardTransaction: trx,
+          user: { id },
+          ...value.auth,
+        }),
+      )),
+    ));
+  };
+
   create = ({ forwardTransaction, value }: TransactionalAttrs<{ value: SdkCreateUserInputT; }>) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.db,
@@ -68,14 +119,14 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           email: value.email,
           active: value.active,
           role: value.role,
+          archiveProtection: value.archiveProtection,
         },
       }),
       TE.tap(({ id }) => pipe(
         this.authRepo.upsertUserAuthMethods({
           forwardTransaction: trx,
           user: { id },
-          email: value.auth.email,
-          password: value.auth.password,
+          ...value.auth,
         }),
       )),
       TE.tap(({ id }) => {

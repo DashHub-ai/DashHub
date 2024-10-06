@@ -19,7 +19,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .$call(addTimestampColumns)
     .addColumn('user_id', 'integer', col =>
       col.references('users.id').notNull().unique().onDelete('cascade'))
-    .addColumn('token', 'text', col => col.notNull())
+    .addColumn('token', 'text')
     .execute();
 
   await db.schema

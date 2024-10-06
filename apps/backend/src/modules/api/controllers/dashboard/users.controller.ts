@@ -4,6 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   SdkCreateUserInputV,
   SdKSearchUsersInputV,
+  SdkUpdateUserInputV,
   type UsersSdk,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
@@ -11,6 +12,7 @@ import { UsersService } from '~/modules/users';
 
 import {
   mapDbRecordAlreadyExistsToSdkError,
+  mapDbRecordNotFoundToSdkError,
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
@@ -36,6 +38,28 @@ export class UsersController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<UsersSdk['search']>>(context),
         ),
       )
+      .patch(
+        '/archive/:id',
+        async context => pipe(
+          Number(context.req.param().id),
+          usersService.asUser(context.var.jwt).archive,
+          mapDbRecordNotFoundToSdkError,
+          mapDbRecordAlreadyExistsToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<UsersSdk['archive']>>(context),
+        ),
+      )
+      .patch(
+        '/unarchive/:id',
+        async context => pipe(
+          Number(context.req.param().id),
+          usersService.asUser(context.var.jwt).unarchive,
+          mapDbRecordNotFoundToSdkError,
+          mapDbRecordAlreadyExistsToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<UsersSdk['unarchive']>>(context),
+        ),
+      )
       .post(
         '/',
         sdkSchemaValidator('json', SdkCreateUserInputV),
@@ -46,6 +70,21 @@ export class UsersController extends AuthorizedController {
           mapDbRecordAlreadyExistsToSdkError,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<UsersSdk['create']>>(context),
+        ),
+      )
+      .put(
+        '/:id',
+        sdkSchemaValidator('json', SdkUpdateUserInputV),
+        async context => pipe(
+          {
+            id: Number(context.req.param().id),
+            ...context.req.valid('json'),
+          },
+          usersService.asUser(context.var.jwt).update,
+          mapDbRecordAlreadyExistsToSdkError,
+          mapDbRecordNotFoundToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<UsersSdk['update']>>(context),
         ),
       );
   }

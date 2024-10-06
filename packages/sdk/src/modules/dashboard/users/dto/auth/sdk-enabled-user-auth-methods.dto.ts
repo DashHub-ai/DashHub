@@ -1,11 +1,13 @@
 import { z } from 'zod';
 
-export const SdkEnabledUserAuthMethodsV = z.record(
-  z.enum(['password', 'email']),
-  z.object({
-    enabled: z.boolean(),
-  }),
-);
+export const SdkIsAuthMethodEnabledV = z.object({
+  enabled: z.boolean(),
+});
+
+export const SdkEnabledUserAuthMethodsV = z.object({
+  password: SdkIsAuthMethodEnabledV,
+  email: SdkIsAuthMethodEnabledV,
+});
 
 export type SdkEnabledUserAuthMethodsT = z.infer<
   typeof SdkEnabledUserAuthMethodsV
