@@ -3,7 +3,7 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkCreateUserInputT } from '@llm/sdk';
+import type { SdkCreateUserInputT, SdkTableRowWithIdT } from '@llm/sdk';
 
 import { catchTaskEitherTagError, isNil, panicError } from '@llm/commons';
 import {
@@ -15,6 +15,7 @@ import {
   DatabaseConnectionRepo,
   DatabaseError,
   type KyselyQueryCreator,
+  RecordsArchiveBasicAttrs,
   type TableId,
   type TransactionalAttrs,
   tryGetFirstOrNotExists,
@@ -37,9 +38,21 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
     super(databaseConnectionRepo);
   }
 
-  archive = createArchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
+  archive = (attrs: TransactionalAttrs<SdkTableRowWithIdT>) =>
+    createArchiveRecordQuery(this.baseRepo.queryFactoryAttrs)({
+      ...attrs,
+      relatedRowValues: {
+        active: false,
+      },
+    });
 
-  archiveRecords = createArchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
+  archiveRecords = (attrs: RecordsArchiveBasicAttrs<'users'>) =>
+    createArchiveRecordsQuery(this.baseRepo.queryFactoryAttrs)({
+      ...attrs,
+      relatedRowValues: {
+        active: false,
+      },
+    });
 
   unarchive = createUnarchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
 

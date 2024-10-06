@@ -32,6 +32,7 @@ export class UsersBootService {
         active: true,
         archiveProtection: true,
         auth: {
+          email: null,
           password: {
             value: root.password ?? genRandomToken(10),
           },

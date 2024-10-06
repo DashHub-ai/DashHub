@@ -15,6 +15,10 @@ const I18N_SDK_ERRORS_PL: Record<SdkTranslatedErrors['tag'], string> = {
 };
 
 export const I18N_PACK_PL: I18nLangPack = {
+  common: {
+    email: 'E-mail',
+    password: 'Hasło',
+  },
   validation: {
     required: 'To pole jest wymagane',
     invalidEmail: 'To pole musi być adresem e-mail',
@@ -43,6 +47,10 @@ export const I18N_PACK_PL: I18nLangPack = {
     archive: {
       archived: 'Archiwum',
       active: 'Aktywne',
+    },
+    boolean: {
+      yes: 'Tak',
+      no: 'Nie',
     },
   },
   tabs: {
@@ -91,8 +99,10 @@ export const I18N_PACK_PL: I18nLangPack = {
     columns: {
       id: 'ID',
       name: 'Nazwa',
+      auth: 'Autoryzacja',
+      active: 'Aktywny',
       email: 'E-mail',
-      status: 'Status',
+      archived: 'Archived',
       createdAt: 'Utworzono',
       updatedAt: 'Zaktualizowano',
       actions: 'Akcje',
