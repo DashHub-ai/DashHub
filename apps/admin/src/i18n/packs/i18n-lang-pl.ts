@@ -1,3 +1,5 @@
+import type { SdkUserRoleT } from '@llm/sdk';
+
 import type { SdkTranslatedErrors } from './i18n-lang-en';
 import type { I18nLangPack } from './i18n-packs';
 
@@ -12,6 +14,12 @@ const I18N_SDK_ERRORS_PL: Record<SdkTranslatedErrors['tag'], string> = {
   SdkRecordAlreadyExistsError: 'Rekord już istnieje',
   SdkRecordNotFoundError: 'Rekord nie znaleziono',
   SdkEndpointNotFoundError: 'Nieprawidłowy endpoint API',
+  SdkInvalidRequestError: 'Nieprawidłowy format żądania',
+};
+
+export const I18N_USER_ROLES_PL: Record<SdkUserRoleT, string> = {
+  root: 'Root',
+  user: 'Użytkownik',
 };
 
 export const I18N_PACK_PL: I18nLangPack = {
@@ -27,6 +35,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       mustBeLongerThan: 'Hasło musi mieć więcej niż %{number} znaków',
     },
   },
+  roles: I18N_USER_ROLES_PL,
   errors: {
     tagged: I18N_SDK_ERRORS_PL,
   },
@@ -148,6 +157,9 @@ export const I18N_PACK_PL: I18nLangPack = {
           create: 'Utwórz użytkownika',
         },
         fields: {
+          role: {
+            label: 'Rola',
+          },
           email: {
             label: 'E-mail',
             placeholder: 'Wpisz adres e-mail',

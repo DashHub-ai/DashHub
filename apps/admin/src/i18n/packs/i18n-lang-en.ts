@@ -3,6 +3,7 @@ import type {
   SdkEndpointNotFoundError,
   SdkIncorrectUsernameOrPasswordError,
   SdkInvalidJwtTokenError,
+  SdkInvalidRequestError,
   SdkNoTokensInStorageError,
   SdkPayloadValidationError,
   SdkRecordAlreadyExistsError,
@@ -10,6 +11,7 @@ import type {
   SdkRequestError,
   SdkServerError,
   SdkUnauthorizedError,
+  SdkUserRoleT,
 } from '@llm/sdk';
 
 export type SdkTranslatedErrors =
@@ -23,7 +25,8 @@ export type SdkTranslatedErrors =
   | SdkInvalidJwtTokenError
   | SdkRecordAlreadyExistsError
   | SdkRecordNotFoundError
-  | SdkEndpointNotFoundError;
+  | SdkEndpointNotFoundError
+  | SdkInvalidRequestError;
 
 const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkIncorrectUsernameOrPasswordError: 'Incorrect email or password',
@@ -36,6 +39,12 @@ const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkRecordAlreadyExistsError: 'Record already exists',
   SdkRecordNotFoundError: 'Record not found',
   SdkEndpointNotFoundError: 'Invalid API endpoint',
+  SdkInvalidRequestError: 'Invalid request format',
+};
+
+const I18N_USER_ROLES_EN: Record<SdkUserRoleT, string> = {
+  root: 'Root',
+  user: 'User',
 };
 
 export const I18N_PACK_EN = {
@@ -51,6 +60,7 @@ export const I18N_PACK_EN = {
       mustBeLongerThan: 'Password must be longer than %{number} characters',
     },
   },
+  roles: I18N_USER_ROLES_EN,
   errors: {
     tagged: I18N_SDK_ERRORS_EN,
   },
@@ -172,6 +182,9 @@ export const I18N_PACK_EN = {
           edit: 'Edit user',
         },
         fields: {
+          role: {
+            label: 'Role',
+          },
           email: {
             label: 'E-Mail',
             placeholder: 'Enter e-mail address',

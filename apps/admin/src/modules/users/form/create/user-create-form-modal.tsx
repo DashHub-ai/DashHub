@@ -4,13 +4,14 @@ import {
   CancelButton,
   CreateButton,
   FormErrorAlert,
+  FormField,
   Modal,
   type ModalProps,
   ModalTitle,
 } from '~/components';
 import { useI18n } from '~/i18n';
 
-import { UserSharedFormFields } from '../shared';
+import { UserRoleSelect, UserSharedFormFields } from '../shared';
 import { UserCreateAuthMethodsFormField } from './fields';
 import { useUserCreateForm } from './use-user-create-form';
 
@@ -54,6 +55,14 @@ export function UserCreateFormModal(
         </>
       )}
     >
+      <FormField
+        className="uk-margin"
+        label={t.fields.role.label}
+        {...validator.errors.extract('role')}
+      >
+        <UserRoleSelect {...bind.path('role')} />
+      </FormField>
+
       <UserSharedFormFields
         errors={validator.errors.all as unknown as any}
         {...bind.merged()}
