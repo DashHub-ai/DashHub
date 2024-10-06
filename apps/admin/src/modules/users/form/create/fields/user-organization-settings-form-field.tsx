@@ -17,14 +17,11 @@ type Props = ValidationErrorsListProps<CreateUserOrganizationValue>;
 export const UserOrganizationSettingsFormField = controlled<CreateUserOrganizationValue, Props>((
   {
     errors,
-    control: { bind, value },
+    control: { bind },
   },
 ) => {
   const t = useI18n().pack.modules.users.form.fields.organization;
   const validation = useFormValidatorMessages({ errors });
-
-  // eslint-disable-next-line no-console
-  console.info(errors, bind, value);
 
   return (
     <>
@@ -33,7 +30,7 @@ export const UserOrganizationSettingsFormField = controlled<CreateUserOrganizati
         label={t.role.label}
         {...validation.extract('role')}
       >
-        <UserOrganizationRoleSelect {...bind.path('role')} />
+        <UserOrganizationRoleSelect {...bind.path('role')} required />
       </FormField>
 
       <FormField
@@ -41,7 +38,7 @@ export const UserOrganizationSettingsFormField = controlled<CreateUserOrganizati
         label={t.choose.label}
         {...validation.extract('item')}
       >
-        <OrganizationsSearchSelect {...bind.path('item')} />
+        <OrganizationsSearchSelect {...bind.path('item')} required />
       </FormField>
 
       <hr />

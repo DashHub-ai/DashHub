@@ -14,6 +14,8 @@ import { useOutsideClickRef, useUpdateEffect } from '@llm/commons-front';
 import { useI18n } from '~/i18n';
 import { SelectExpandSVG, UkIcon } from '~/icons';
 
+import { HiddenRequiredInput } from './hidden-required-input';
+
 export type SelectItem<I extends string | number = string | number> = {
   id: I;
   name: string;
@@ -30,6 +32,7 @@ export type SelectProps =
   & ControlBindProps<SelectItem>
   & PropsWithChildren
   & {
+    required?: boolean;
     placeholder?: string;
     toolbar?: ReactNode;
     className?: string;
@@ -42,6 +45,7 @@ export type SelectProps =
 
 export const Select = controlled<SelectItem | null, SelectProps>((
   {
+    required,
     placeholder,
     toolbar,
     className,
@@ -120,9 +124,10 @@ export const Select = controlled<SelectItem | null, SelectProps>((
     </div>
   );
 
+  const isFilled = value && !isObjectWithFakeID(value);
   const displayValue = (
-    value && !isObjectWithFakeID(value)
-      ? value?.name
+    isFilled
+      ? value.name
       : (
           <span className="uk-text-muted">
             {placeholder ?? pack.placeholders.selectItem}
@@ -148,7 +153,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
         </span>
         <SelectExpandSVG />
       </button>
-
+      {required && <HiddenRequiredInput isFilled={isFilled} />}
       {dropdown}
     </div>
   );

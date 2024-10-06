@@ -1,7 +1,7 @@
 import { type FormHookAttrs, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
-import { runTask, tapTaskEither } from '@llm/commons';
+import { isObjectWithFakeID, runTask, tapTaskEither } from '@llm/commons';
 import { useSdkForLoggedIn } from '@llm/sdk';
 import { useSaveTaskEitherNotification } from '~/components';
 import { usePredefinedFormValidators } from '~/hooks';
@@ -26,7 +26,7 @@ export function useUserCreateForm(
   }: CreateUserFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { emailFormatValidator } = usePredefinedFormValidators<CreateUserFormValue>();
+  const { emailFormatValidator, requiredPathByPred } = usePredefinedFormValidators<CreateUserFormValue>();
   const saveNotifications = useSaveTaskEitherNotification();
   const authValidator = useUseAuthFormValidator<CreateUserFormValue>();
 
@@ -43,6 +43,10 @@ export function useUserCreateForm(
       validators: () => [
         emailFormatValidator('email'),
         authValidator('auth'),
+        requiredPathByPred(
+          'organization',
+          ({ globalValue, value }) => globalValue.role === 'user' && (!value?.item || isObjectWithFakeID(value.item)),
+        ),
       ],
     },
     ...props,
