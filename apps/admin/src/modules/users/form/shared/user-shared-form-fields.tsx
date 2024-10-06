@@ -22,6 +22,7 @@ export const UserSharedFormFields = controlled<Value, Props>(({ errors, control:
       >
         <Input
           name="email"
+          autoComplete="new-email"
           placeholder={t.fields.email.placeholder}
           required
           {...bind.path('email')}

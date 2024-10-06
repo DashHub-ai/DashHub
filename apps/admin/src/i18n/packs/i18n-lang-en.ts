@@ -43,6 +43,9 @@ export const I18N_PACK_EN = {
     required: 'This field is required',
     invalidEmail: 'This field must be an email address',
     mustBeLargerThan: 'This field must be larger than %{number}',
+    password: {
+      mustBeLongerThan: 'Password must be longer than %{number} characters',
+    },
   },
   errors: {
     tagged: I18N_SDK_ERRORS_EN,
@@ -171,6 +174,17 @@ export const I18N_PACK_EN = {
           },
           archiveProtection: {
             label: 'Archive protection',
+          },
+          auth: {
+            label: 'Authentication',
+            email: {
+              label: 'Email',
+              placeholder: 'Enter email address',
+            },
+            password: {
+              label: 'Password',
+              placeholder: 'Enter password',
+            },
           },
         },
       },

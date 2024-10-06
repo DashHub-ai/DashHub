@@ -11,6 +11,7 @@ import {
   PaginationToolbar,
   useDebouncedPaginatedSearch,
 } from '~/components';
+import { genRandomPassword } from '~/helpers';
 import { useI18n } from '~/i18n';
 
 import { useUserCreateModal } from '../form';
@@ -34,7 +35,10 @@ export function UsersTableContainer() {
           role: 'root',
           active: true,
           archiveProtection: false,
-          auth: {},
+          auth: {
+            email: { enabled: true },
+            password: { value: genRandomPassword() },
+          },
         },
       }),
       tapTaskOption(reset),

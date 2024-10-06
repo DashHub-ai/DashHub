@@ -11,6 +11,7 @@ import {
 import { useI18n } from '~/i18n';
 
 import { UserSharedFormFields } from '../shared';
+import { UserCreateAuthMethodsFormField } from './fields';
 import { useUserCreateForm } from './use-user-create-form';
 
 export type UserCreateFormModalProps =
@@ -56,6 +57,11 @@ export function UserCreateFormModal(
       <UserSharedFormFields
         errors={validator.errors.all as unknown as any}
         {...bind.merged()}
+      />
+
+      <UserCreateAuthMethodsFormField
+        {...validator.errors.extract('auth', { nested: true })}
+        {...bind.path('auth')}
       />
 
       <FormErrorAlert result={submitState.result} />

@@ -6,6 +6,8 @@ import { type SdkCreateUserInputT, useSdkForLoggedIn } from '@llm/sdk';
 import { useSaveTaskEitherNotification } from '~/components';
 import { usePredefinedFormValidators } from '~/hooks';
 
+import { useUseAuthFormValidator } from '../shared';
+
 type CreateUserFormHookAttrs =
   & Omit<
     FormHookAttrs<SdkCreateUserInputT>,
@@ -24,6 +26,7 @@ export function useUserCreateForm(
   const { sdks } = useSdkForLoggedIn();
   const { emailFormatValidator } = usePredefinedFormValidators<SdkCreateUserInputT>();
   const saveNotifications = useSaveTaskEitherNotification();
+  const authValidator = useUseAuthFormValidator<SdkCreateUserInputT>();
 
   return useForm({
     resetAfterSubmit: false,
@@ -37,6 +40,7 @@ export function useUserCreateForm(
       mode: ['blur', 'submit'],
       validators: () => [
         emailFormatValidator('email'),
+        authValidator('auth'),
       ],
     },
     ...props,

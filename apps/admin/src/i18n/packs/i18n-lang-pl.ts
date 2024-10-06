@@ -19,6 +19,9 @@ export const I18N_PACK_PL: I18nLangPack = {
     required: 'To pole jest wymagane',
     invalidEmail: 'To pole musi być adresem e-mail',
     mustBeLargerThan: 'To pole musi być większe niż %{number}',
+    password: {
+      mustBeLongerThan: 'Hasło musi mieć więcej niż %{number} znaków',
+    },
   },
   errors: {
     tagged: I18N_SDK_ERRORS_PL,
@@ -147,6 +150,17 @@ export const I18N_PACK_PL: I18nLangPack = {
           },
           archiveProtection: {
             label: 'Ochrona przed archiwizacją',
+          },
+          auth: {
+            label: 'Autoryzacja',
+            email: {
+              label: 'E-mail',
+              placeholder: 'Wpisz adres e-mail',
+            },
+            password: {
+              label: 'Hasło',
+              placeholder: 'Wpisz hasło',
+            },
           },
         },
       },

@@ -10,12 +10,12 @@ export type AuthPasswordsTable = TableWithDefaultColumns & {
 
 export type AuthEmailsTable = TableWithDefaultColumns & {
   user_id: TableId;
-  token: ColumnType<string, string | undefined, string>;
+  token: string | null;
   expire_at: ColumnType<Date, Date | undefined, Date>;
 };
 
 export type AuthResetPasswordsTable = TableWithDefaultColumns & {
   user_id: TableId;
-  token: ColumnType<string, string | undefined, string>;
+  token: string;
   expire_at: ColumnType<Date, Date | undefined, Date>;
 };
