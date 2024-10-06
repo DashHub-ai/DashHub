@@ -15,7 +15,8 @@ import type {
   CreateUserOrganizationValue,
 } from './types';
 
-import { UserRoleSelect, UserSharedFormFields } from '../shared';
+import { UserRoleSelect } from '../../controls';
+import { UserSharedFormFields } from '../shared';
 import { UserCreateAuthMethodsFormField, UserOrganizationSettingsFormField } from './fields';
 import { useUserCreateForm } from './use-user-create-form';
 

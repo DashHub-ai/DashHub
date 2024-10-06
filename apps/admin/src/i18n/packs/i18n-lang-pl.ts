@@ -140,6 +140,9 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   modules: {
     organizations: {
+      prefix: {
+        organization: 'Organizacja',
+      },
       userRoles: I18N_USER_ORGANIZATION_ROLES_PL,
       form: {
         title: {

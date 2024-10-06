@@ -166,6 +166,9 @@ export const I18N_PACK_EN = {
   },
   modules: {
     organizations: {
+      prefix: {
+        organization: 'Organization',
+      },
       userRoles: I18N_USER_ORGANIZATION_ROLES_EN,
       form: {
         title: {

@@ -2,9 +2,7 @@ import type { SdkExtractUserT } from '@llm/sdk';
 
 import { FormField } from '~/components';
 import { useI18n } from '~/i18n';
-import { OrganizationsSearchSelect } from '~/modules/organizations';
-
-import { UserOrganizationRoleSelect } from '../../shared';
+import { OrganizationsSearchSelect, UserOrganizationRoleSelect } from '~/modules/organizations';
 
 type Props = {
   user: SdkExtractUserT<'user'>;

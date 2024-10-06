@@ -33,7 +33,7 @@ export type DebouncedPaginatedSearchAttrs<
   & {
     storeDataInUrl?: boolean;
     fetchResultsTask: (filters: z.infer<Z>) => TaskEither<any, R>;
-    interceptFilters?: Reader<z.infer<Z>, Partial<z.input<Z>>>;
+    interceptFilters?: Reader<z.infer<Z>, Partial<z.infer<Z>>>;
     onChangeFilters?: ControlChangeValueCallback<z.infer<Z>>;
   };
 

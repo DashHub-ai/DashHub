@@ -27,12 +27,14 @@ const SearchUsersUrlFiltersV = SdKSearchUsersInputV
   });
 
 export function UsersTableContainer() {
-  const t = useI18n().pack.table.columns;
+  const { pack } = useI18n();
+  const t = pack.table.columns;
+
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result, reset, reload } = useDebouncedPaginatedSearch({
     schema: SearchUsersUrlFiltersV,
     fallbackSearchParams: {},
-    interceptFilters: ({ organization, ...filters }) => ({
+    serializeSearchParams: ({ organization, ...filters }) => ({
       ...filters,
       ...organization && {
         organization: serializeSdkIdNameUrlEntry(organization),
@@ -90,7 +92,7 @@ export function UsersTableContainer() {
         />
 
         <OrganizationsSearchSelect
-          prefix="Organization"
+          prefix={pack.modules.organizations.prefix.organization}
           {...pagination.bind.path('organization')}
         />
       </PaginationToolbar>
