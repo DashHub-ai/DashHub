@@ -2,14 +2,14 @@ import { z } from 'zod';
 
 import { StrictBooleanV } from '@llm/commons';
 
-import { SdkTableRowIdV } from './sdk-table-row-id.dto';
+import { SdkIdsArrayV } from './sdk-ids-array.dto';
 
 export const SdkArchivedFiltersInputV = z.object({
   archived: StrictBooleanV.optional().default(false),
 });
 
 export const SdkIdsFiltersInputV = z.object({
-  ids: z.array(SdkTableRowIdV).optional(),
+  ids: SdkIdsArrayV.optional(),
 });
 
 export const SdkFilteredPhraseInputV = z.object({

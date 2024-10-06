@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
-import { SdKSearchUsersInputV, useSdkForLoggedIn } from '@llm/sdk';
+import { SdkIdNameUrlEntryV, SdKSearchUsersInputV, serializeSdkIdNameUrlEntry, useSdkForLoggedIn } from '@llm/sdk';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -13,17 +13,37 @@ import {
 } from '~/components';
 import { genRandomPassword } from '~/helpers';
 import { useI18n } from '~/i18n';
+import { OrganizationsSearchSelect } from '~/modules/organizations';
 
 import { useUserCreateModal } from '../form';
 import { UsersTableRow } from './users-table-row';
+
+const SearchUsersUrlFiltersV = SdKSearchUsersInputV
+  .omit({
+    organizationIds: true,
+  })
+  .extend({
+    organization: SdkIdNameUrlEntryV.optional().nullable(),
+  });
 
 export function UsersTableContainer() {
   const t = useI18n().pack.table.columns;
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result, reset, reload } = useDebouncedPaginatedSearch({
-    schema: SdKSearchUsersInputV,
+    schema: SearchUsersUrlFiltersV,
     fallbackSearchParams: {},
-    fetchResultsTask: sdks.dashboard.users.search,
+    interceptFilters: ({ organization, ...filters }) => ({
+      ...filters,
+      ...organization && {
+        organization: serializeSdkIdNameUrlEntry(organization),
+      },
+    }),
+    fetchResultsTask: ({ organization, ...filters }) => sdks.dashboard.users.search({
+      ...filters,
+      ...organization && {
+        organizationIds: [organization.id],
+      },
+    }),
   });
 
   const createModal = useUserCreateModal();
@@ -54,7 +74,10 @@ export function UsersTableContainer() {
     <section>
       <PaginationToolbar
         suffix={(
-          <CreateButton loading={createState.isLoading} onClick={onCreate} />
+          <>
+            <ArchiveFilterTabs {...pagination.bind.path('archived')} />
+            <CreateButton loading={createState.isLoading} onClick={onCreate} />
+          </>
         )}
       >
         <PaginationSearchToolbarItem
@@ -66,7 +89,10 @@ export function UsersTableContainer() {
           })}
         />
 
-        <ArchiveFilterTabs {...pagination.bind.path('archived')} />
+        <OrganizationsSearchSelect
+          prefix="Organization"
+          {...pagination.bind.path('organization')}
+        />
       </PaginationToolbar>
 
       <PaginatedTable

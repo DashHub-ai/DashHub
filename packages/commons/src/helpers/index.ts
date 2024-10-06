@@ -13,6 +13,7 @@ export * from './is-ssr';
 export * from './iterators';
 export * from './panic-error';
 export * from './pluck';
+export * from './reject-by-id';
 export * from './reject-falsy-items';
 export * from './run-task';
 export * from './safe-to-array';

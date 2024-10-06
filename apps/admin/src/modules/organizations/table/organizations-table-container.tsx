@@ -43,7 +43,10 @@ export function OrganizationsTableContainer() {
     <section>
       <PaginationToolbar
         suffix={(
-          <CreateButton loading={createState.isLoading} onClick={onCreate} />
+          <>
+            <ArchiveFilterTabs {...pagination.bind.path('archived')} />
+            <CreateButton loading={createState.isLoading} onClick={onCreate} />
+          </>
         )}
       >
         <PaginationSearchToolbarItem
@@ -54,8 +57,6 @@ export function OrganizationsTableContainer() {
             }),
           })}
         />
-
-        <ArchiveFilterTabs {...pagination.bind.path('archived')} />
       </PaginationToolbar>
 
       <PaginatedTable
