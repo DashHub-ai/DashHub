@@ -1,5 +1,6 @@
 import { SdKSearchUsersInputV, useSdkForLoggedIn } from '@llm/sdk';
 import {
+  ArchiveFilterTabs,
   PaginatedTable,
   PaginationSearchToolbarItem,
   PaginationToolbar,
@@ -12,7 +13,7 @@ import { UsersTableRow } from './users-table-row';
 export function UsersTableContainer() {
   const t = useI18n().pack.table.columns;
   const { sdks } = useSdkForLoggedIn();
-  const { loading, pagination, result } = useDebouncedPaginatedSearch({
+  const { loading, pagination, result, reload } = useDebouncedPaginatedSearch({
     schema: SdKSearchUsersInputV,
     fallbackSearchParams: {},
     fetchResultsTask: sdks.dashboard.users.search,
@@ -29,6 +30,8 @@ export function UsersTableContainer() {
             }),
           })}
         />
+
+        <ArchiveFilterTabs {...pagination.bind.path('archived')} />
       </PaginationToolbar>
 
       <PaginatedTable
@@ -44,7 +47,11 @@ export function UsersTableContainer() {
         ]}
       >
         {({ item }) => (
-          <UsersTableRow key={item.id} item={item} />
+          <UsersTableRow
+            key={item.id}
+            item={item}
+            onUpdated={reload}
+          />
         )}
       </PaginatedTable>
     </section>

@@ -75,8 +75,7 @@ export function OrganizationsTableContainer() {
           <OrganizationsTableRow
             key={item.id}
             item={item}
-            onAfterArchive={reload}
-            onAfterUpdate={reload}
+            onUpdated={reload}
           />
         )}
       </PaginatedTable>
