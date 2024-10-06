@@ -3,10 +3,11 @@ import {
   type OmitControlStateAttrs,
   useControlStrict,
 } from '@under-control/forms';
+import * as A from 'fp-ts/lib/Array';
+import { pipe } from 'fp-ts/lib/function';
 import { useRef } from 'react';
 
-import type { CanBePromise } from '@llm/commons';
-
+import { type CanBePromise, rejectById } from '@llm/commons';
 import { useAsyncDebounce, useAsyncValue, useUpdateEffect } from '@llm/commons-front';
 import { useI18n } from '~/i18n';
 import { UkIcon } from '~/icons';
@@ -75,15 +76,27 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
     }
   }, [value]);
 
+  const itemsWithSelected = (() => {
+    if (result.status !== 'success') {
+      return [];
+    }
+
+    if (value) {
+      return pipe(
+        result.data,
+        rejectById(value.id),
+        A.prepend(value),
+      );
+    }
+
+    return result.data;
+  })();
+
   return (
     <Select
       {...props}
       {...bind.entire()}
-      items={
-        result.status === 'success'
-          ? result.data
-          : []
-      }
+      items={itemsWithSelected}
       toolbar={(
         <div className="uk-custom-select-search">
           <UkIcon icon="search" />

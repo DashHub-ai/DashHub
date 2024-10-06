@@ -22,7 +22,7 @@ export function encodeSearchParams(query: SearchParamsMap) {
       }
 
       if (Array.isArray(value)) {
-        return value.map(nestedValue => [`${key}[]`, nestedValue]);
+        return value.map(nestedValue => [key, nestedValue]);
       }
 
       return [[key, value]];

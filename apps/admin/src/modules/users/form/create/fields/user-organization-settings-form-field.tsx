@@ -6,11 +6,9 @@ import {
 
 import { FormField } from '~/components';
 import { useI18n } from '~/i18n';
-import { OrganizationsSearchSelect } from '~/modules/organizations';
+import { OrganizationsSearchSelect, UserOrganizationRoleSelect } from '~/modules/organizations';
 
 import type { CreateUserOrganizationValue } from '../types';
-
-import { UserOrganizationRoleSelect } from '../../shared';
 
 type Props = ValidationErrorsListProps<CreateUserOrganizationValue>;
 

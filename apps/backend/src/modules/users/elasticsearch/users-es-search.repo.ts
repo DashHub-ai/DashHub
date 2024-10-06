@@ -51,12 +51,14 @@ export class UsersEsSearchRepo {
     {
       phrase,
       ids,
+      organizationIds,
       archived,
     }: SdKSearchUsersInputT,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
+        !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && createPhraseFieldQuery('email')(phrase),
         !isNil(archived) && esb.termQuery('archived', archived),
       ]),

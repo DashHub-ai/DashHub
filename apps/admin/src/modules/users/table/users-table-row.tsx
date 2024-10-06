@@ -24,6 +24,7 @@ export function UsersTableRow({ item, onUpdated }: Props) {
     <tr>
       <td>{item.id}</td>
       <td>{item.email}</td>
+      <td>{item.role === 'user' ? item.organization.name : '-'}</td>
       <td>
         <BooleanBadge value={item.active} />
       </td>

@@ -1,3 +1,5 @@
+export * from './sdk-id-name-url-entry.dto';
+export * from './sdk-ids-array.dto';
 export * from './sdk-offset-pagination.dto';
 export * from './sdk-search-filters.dto';
 export * from './sdk-search-sort.dto';

@@ -32,6 +32,7 @@ export type SelectProps =
   & ControlBindProps<SelectItem>
   & PropsWithChildren
   & {
+    prefix?: string | null;
     disabled?: boolean;
     required?: boolean;
     placeholder?: string;
@@ -46,6 +47,7 @@ export type SelectProps =
 
 export const Select = controlled<SelectItem | null, SelectProps>((
   {
+    prefix,
     disabled,
     required,
     placeholder,
@@ -98,30 +100,34 @@ export const Select = controlled<SelectItem | null, SelectProps>((
       <hr className="uk-hr" />
       <ul className="uk-dropdown-nav" tabIndex={-1}>
         {prependItems}
-        {items.map(item => (
-          <li
-            key={item.id}
-            tabIndex={-1}
-            className={clsx(
-              item.id === value?.id && 'uk-active',
-            )}
-          >
-            <a
+        {items.map((item) => {
+          const isActive = item.id === value?.id;
+
+          return (
+            <li
+              key={item.id}
               tabIndex={-1}
-              onClick={() => {
-                setIsOpen(false);
-                setValue({
-                  value: item,
-                });
-              }}
-            >
-              <span>{item.name}</span>
-              {item.id === value?.id && (
-                <UkIcon icon="check" />
+              className={clsx(
+                isActive && 'uk-active',
               )}
-            </a>
-          </li>
-        ))}
+            >
+              <a
+                tabIndex={-1}
+                onClick={() => {
+                  setIsOpen(false);
+                  setValue({
+                    value: isActive ? null : item,
+                  });
+                }}
+              >
+                <span>{item.name}</span>
+                {isActive && (
+                  <UkIcon icon="check" />
+                )}
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -151,9 +157,19 @@ export const Select = controlled<SelectItem | null, SelectProps>((
           setIsOpen(!isOpen);
         }}
       >
-        <span className="mr-2">
-          {displayValue}
-        </span>
+        {prefix && (
+          <span className="uk-text-muted mr-1">
+            {prefix}
+            {isFilled ? ':' : ''}
+          </span>
+        )}
+
+        {(!prefix || isFilled) && (
+          <span className="mr-2">
+            {displayValue}
+          </span>
+        )}
+
         <SelectExpandSVG />
       </button>
       {required && <HiddenRequiredInput isFilled={isFilled} />}
