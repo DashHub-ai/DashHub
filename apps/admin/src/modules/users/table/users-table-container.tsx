@@ -1,6 +1,11 @@
+import { pipe } from 'fp-ts/lib/function';
+
+import { tapTaskOption } from '@llm/commons';
+import { useAsyncCallback } from '@llm/commons-front';
 import { SdKSearchUsersInputV, useSdkForLoggedIn } from '@llm/sdk';
 import {
   ArchiveFilterTabs,
+  CreateButton,
   PaginatedTable,
   PaginationSearchToolbarItem,
   PaginationToolbar,
@@ -8,20 +13,41 @@ import {
 } from '~/components';
 import { useI18n } from '~/i18n';
 
+import { useUserCreateModal } from '../form';
 import { UsersTableRow } from './users-table-row';
 
 export function UsersTableContainer() {
   const t = useI18n().pack.table.columns;
   const { sdks } = useSdkForLoggedIn();
-  const { loading, pagination, result, reload } = useDebouncedPaginatedSearch({
+  const { loading, pagination, result, reset, reload } = useDebouncedPaginatedSearch({
     schema: SdKSearchUsersInputV,
     fallbackSearchParams: {},
     fetchResultsTask: sdks.dashboard.users.search,
   });
 
+  const createModal = useUserCreateModal();
+  const [onCreate, createState] = useAsyncCallback(
+    pipe(
+      createModal.showAsOptional({
+        defaultValue: {
+          email: '',
+          role: 'root',
+          active: true,
+          archiveProtection: false,
+          auth: {},
+        },
+      }),
+      tapTaskOption(reset),
+    ),
+  );
+
   return (
     <section>
-      <PaginationToolbar>
+      <PaginationToolbar
+        suffix={(
+          <CreateButton loading={createState.isLoading} onClick={onCreate} />
+        )}
+      >
         <PaginationSearchToolbarItem
           {...pagination.bind.path('phrase', {
             relatedInputs: ({ newGlobalValue, newControlValue }) => ({

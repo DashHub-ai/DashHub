@@ -128,6 +128,20 @@ export const I18N_PACK_PL: I18nLangPack = {
         },
       },
     },
+    users: {
+      form: {
+        title: {
+          edit: 'Edytuj użytkownika',
+          create: 'Utwórz użytkownika',
+        },
+        fields: {
+          email: {
+            label: 'E-mail',
+            placeholder: 'Wpisz adres e-mail',
+          },
+        },
+      },
+    },
   },
   routes: {
     shared: {

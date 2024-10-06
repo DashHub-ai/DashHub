@@ -152,6 +152,20 @@ export const I18N_PACK_EN = {
         },
       },
     },
+    users: {
+      form: {
+        title: {
+          create: 'Create user',
+          edit: 'Edit user',
+        },
+        fields: {
+          email: {
+            label: 'E-Mail',
+            placeholder: 'Enter e-mail address',
+          },
+        },
+      },
+    },
   },
   routes: {
     shared: {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { SdkTableRowWithIdV } from '~/shared';
+import { SdkTableRowWithArchiveProtectionV, SdkTableRowWithIdV } from '~/shared';
 
 import { SdkOrganizationUserRoleV } from '../../organizations/dto/sdk-organization-user.dto';
 import { SdkCreateUserAuthMethodsV } from './auth';
@@ -10,6 +10,7 @@ export const SdkCreateUserInputV = z.object({
   active: z.boolean(),
   auth: SdkCreateUserAuthMethodsV,
 })
+  .merge(SdkTableRowWithArchiveProtectionV)
   .and(
     z.discriminatedUnion('role', [
       z.object({
