@@ -142,6 +142,7 @@ export const I18N_PACK_EN = {
       archived: 'Archived',
       active: 'Active',
       auth: 'Authentication',
+      organization: 'Organization',
       createdAt: 'Created at',
       updatedAt: 'Updated at',
       actions: 'Actions',

@@ -76,6 +76,7 @@ export function UsersTableContainer() {
         columns={[
           { id: 'id', name: t.id, className: 'uk-table-shrink' },
           { id: 'email', name: t.email, className: 'uk-table-expand' },
+          { id: 'organization', name: t.organization, className: 'uk-table-expand' },
           { id: 'active', name: t.active, className: 'w-[150px]' },
           { id: 'auth', name: t.auth, className: 'w-[150px]' },
           { id: 'archived', name: t.archived, className: 'w-[150px]' },

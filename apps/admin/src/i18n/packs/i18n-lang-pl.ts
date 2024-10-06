@@ -113,6 +113,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       id: 'ID',
       name: 'Nazwa',
       auth: 'Autoryzacja',
+      organization: 'Organizacja',
       active: 'Aktywny',
       email: 'E-mail',
       archived: 'Archived',
