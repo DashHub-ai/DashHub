@@ -7,9 +7,14 @@ export function genRandomPassword(
 ): string {
   let password = '';
   for (let i = 0; i < length; i++) {
-    const randomIndex = (
-      window.crypto.getRandomValues(new Uint32Array(1))[0] % RANDOM_PASSWORD_CHARACTERS.length
-    );
+    let randomIndex;
+    while (true) {
+      const randomValue = window.crypto.getRandomValues(new Uint32Array(1))[0];
+      if (randomValue < Math.floor(4294967296 / RANDOM_PASSWORD_CHARACTERS.length) * RANDOM_PASSWORD_CHARACTERS.length) {
+        randomIndex = randomValue % RANDOM_PASSWORD_CHARACTERS.length;
+        break;
+      }
+    }
 
     password += RANDOM_PASSWORD_CHARACTERS[randomIndex];
   }
