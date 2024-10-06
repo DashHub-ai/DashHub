@@ -11,6 +11,7 @@ import { UsersService } from '~/modules/users';
 
 import {
   mapDbRecordAlreadyExistsToSdkError,
+  mapDbRecordNotFoundToSdkError,
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
@@ -34,6 +35,28 @@ export class UsersController extends AuthorizedController {
           usersService.asUser(context.var.jwt).search,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<UsersSdk['search']>>(context),
+        ),
+      )
+      .patch(
+        '/archive/:id',
+        async context => pipe(
+          Number(context.req.param().id),
+          usersService.asUser(context.var.jwt).archive,
+          mapDbRecordNotFoundToSdkError,
+          mapDbRecordAlreadyExistsToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<UsersSdk['archive']>>(context),
+        ),
+      )
+      .patch(
+        '/unarchive/:id',
+        async context => pipe(
+          Number(context.req.param().id),
+          usersService.asUser(context.var.jwt).unarchive,
+          mapDbRecordNotFoundToSdkError,
+          mapDbRecordAlreadyExistsToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<UsersSdk['unarchive']>>(context),
         ),
       )
       .post(

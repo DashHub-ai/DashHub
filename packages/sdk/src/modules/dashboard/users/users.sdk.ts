@@ -1,5 +1,13 @@
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
-import { getPayload, postPayload, type SdkRecordAlreadyExistsError } from '~/shared';
+import {
+  getPayload,
+  patchPayload,
+  postPayload,
+  type SdkRecordAlreadyExistsError,
+  type SdkRecordNotFoundError,
+  type SdkTableRowIdT,
+  type SdkTableRowWithIdT,
+} from '~/shared';
 
 import type {
   SdkCreateUserInputT,
@@ -10,6 +18,24 @@ import type {
 
 export class UsersSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/users';
+
+  unarchive = (id: SdkTableRowIdT) =>
+    this.fetch<
+      SdkTableRowWithIdT,
+      SdkRecordNotFoundError | SdkRecordAlreadyExistsError
+    >({
+      url: this.endpoint(`/unarchive/${id}`),
+      options: patchPayload({}),
+    });
+
+  archive = (id: SdkTableRowIdT) =>
+    this.fetch<
+      SdkTableRowWithIdT,
+      SdkRecordNotFoundError | SdkRecordAlreadyExistsError
+    >({
+      url: this.endpoint(`/archive/${id}`),
+      options: patchPayload({}),
+    });
 
   search = (data: SdKSearchUsersInputT) =>
     this.fetch<SdKSearchUsersOutputT>({

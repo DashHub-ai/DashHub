@@ -14,6 +14,16 @@ export class UsersFirewall extends AuthFirewallService {
     super(jwt);
   }
 
+  unarchive = flow(
+    this.usersService.unarchive,
+    this.tryTEIfUser.is.root,
+  );
+
+  archive = flow(
+    this.usersService.archive,
+    this.tryTEIfUser.is.root,
+  );
+
   create = flow(
     this.usersService.create,
     this.tryTEIfUser.is.root,

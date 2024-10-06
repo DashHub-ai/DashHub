@@ -7,7 +7,11 @@ import type { SdkCreateUserInputT } from '@llm/sdk';
 
 import { catchTaskEitherTagError, isNil, panicError } from '@llm/commons';
 import {
+  createArchiveRecordQuery,
+  createArchiveRecordsQuery,
   createProtectedDatabaseRepo,
+  createUnarchiveRecordQuery,
+  createUnarchiveRecordsQuery,
   DatabaseConnectionRepo,
   DatabaseError,
   type KyselyQueryCreator,
@@ -32,6 +36,14 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
   ) {
     super(databaseConnectionRepo);
   }
+
+  archive = createArchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
+
+  archiveRecords = createArchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
+
+  unarchive = createUnarchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
+
+  unarchiveRecords = createUnarchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
 
   createIdsIterator = this.baseRepo.createIdsIterator;
 

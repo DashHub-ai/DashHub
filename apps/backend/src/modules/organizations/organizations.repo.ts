@@ -10,11 +10,11 @@ import {
 
 @injectable()
 export class OrganizationsRepo extends createDatabaseRepo('organizations') {
-  readonly archive = createArchiveRecordQuery(this.queryFactoryAttrs);
+  archive = createArchiveRecordQuery(this.queryFactoryAttrs);
 
-  readonly archiveRecords = createArchiveRecordsQuery(this.queryFactoryAttrs);
+  archiveRecords = createArchiveRecordsQuery(this.queryFactoryAttrs);
 
-  readonly unarchive = createUnarchiveRecordQuery(this.queryFactoryAttrs);
+  unarchive = createUnarchiveRecordQuery(this.queryFactoryAttrs);
 
-  readonly unarchiveRecords = createUnarchiveRecordsQuery(this.queryFactoryAttrs);
+  unarchiveRecords = createUnarchiveRecordsQuery(this.queryFactoryAttrs);
 }
