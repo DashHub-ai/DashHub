@@ -159,7 +159,9 @@ export const I18N_PACK_EN = {
     },
   },
   placeholders: {
+    selectItem: 'Select item',
     noItemsFound: 'No items found',
+    search: 'Search...',
   },
   modules: {
     organizations: {

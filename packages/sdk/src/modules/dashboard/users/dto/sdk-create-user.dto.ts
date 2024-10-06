@@ -5,7 +5,8 @@ import { SdkTableRowWithArchiveProtectionV, SdkTableRowWithIdV } from '~/shared'
 import { SdkOrganizationUserRoleV } from '../../organizations/dto/sdk-organization-user.dto';
 import { SdkCreateUserAuthMethodsV } from './auth';
 
-export const SdkCreateUserOrganizationInputV = SdkTableRowWithIdV.extend({
+export const SdkCreateUserOrganizationInputV = z.object({
+  item: SdkTableRowWithIdV,
   role: SdkOrganizationUserRoleV,
 });
 

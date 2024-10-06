@@ -133,7 +133,9 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
   },
   placeholders: {
+    selectItem: 'Wybierz element',
     noItemsFound: 'Nie znaleziono żadnych elementów',
+    search: 'Szukaj...',
   },
   modules: {
     organizations: {

@@ -10,6 +10,8 @@ export const SdkOffsetPaginationInputV = z.object({
 
 export type SdkOffsetPaginationInputT = z.infer<typeof SdkOffsetPaginationInputV>;
 
+export type SdkOmitOffsetPaginationInputT<K> = Omit<K, keyof SdkOffsetPaginationInputT>;
+
 /**
  * Defines the schema for offset-based pagination output using Zod.
  */
@@ -24,3 +26,6 @@ export type SdkOffsetPaginationOutputT<T> = {
   items: T[];
   total: number;
 };
+
+export type SdkInferOffsetPaginationItemType<T> =
+  T extends SdkOffsetPaginationOutputT<infer R> ? R : never;

@@ -6,6 +6,7 @@ import {
 
 import { FormField } from '~/components';
 import { useI18n } from '~/i18n';
+import { OrganizationsSearchSelect } from '~/modules/organizations';
 
 import type { CreateUserOrganizationValue } from '../types';
 
@@ -38,8 +39,9 @@ export const UserOrganizationSettingsFormField = controlled<CreateUserOrganizati
       <FormField
         className="uk-margin"
         label={t.choose.label}
+        {...validation.extract('item')}
       >
-        Choose org
+        <OrganizationsSearchSelect {...bind.path('item')} />
       </FormField>
 
       <hr />

@@ -1,7 +1,7 @@
-import { FAKE_OBJECT_ID } from '@llm/commons';
 import {
   CancelButton,
   CreateButton,
+  createFakeSelectItem,
   FormErrorAlert,
   FormField,
   Modal,
@@ -70,8 +70,7 @@ export function UserCreateFormModal(
               ...newGlobalValue,
               organization: newControlValue === 'user'
                 ? {
-                  id: FAKE_OBJECT_ID,
-                  name: '',
+                  item: createFakeSelectItem(),
                   role: 'member',
                 } satisfies CreateUserOrganizationValue
                 : undefined,

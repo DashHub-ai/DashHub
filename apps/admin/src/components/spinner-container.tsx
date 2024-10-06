@@ -1,14 +1,18 @@
 import type { ReactNode } from 'react';
 
 export type SpinnerContainerProps = {
+  scale?: number;
   loading?: boolean;
   children?: () => ReactNode;
 };
 
-export function SpinnerContainer({
-  loading = true,
-  children,
-}: SpinnerContainerProps) {
+export function SpinnerContainer(
+  {
+    scale = 1.0,
+    loading = true,
+    children,
+  }: SpinnerContainerProps,
+) {
   if (!loading) {
     return <>{children?.()}</>;
   }
@@ -18,7 +22,7 @@ export function SpinnerContainer({
       <span
         className="mr-2 my-2 uk-spinner"
         role="status"
-        uk-spinner="ratio: 1.0"
+        uk-spinner={`ratio: ${scale}`}
       />
     </div>
   );
