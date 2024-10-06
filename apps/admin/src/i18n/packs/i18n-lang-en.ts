@@ -163,6 +163,15 @@ export const I18N_PACK_EN = {
             label: 'E-Mail',
             placeholder: 'Enter e-mail address',
           },
+          flags: {
+            label: 'Flags',
+          },
+          active: {
+            label: 'Active',
+          },
+          archiveProtection: {
+            label: 'Archive protection',
+          },
         },
       },
     },

@@ -139,6 +139,15 @@ export const I18N_PACK_PL: I18nLangPack = {
             label: 'E-mail',
             placeholder: 'Wpisz adres e-mail',
           },
+          flags: {
+            label: 'Flagi',
+          },
+          active: {
+            label: 'Aktywny',
+          },
+          archiveProtection: {
+            label: 'Ochrona przed archiwizacją',
+          },
         },
       },
     },
