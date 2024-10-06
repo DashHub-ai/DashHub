@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { formatDate, tapTaskEither } from '@llm/commons';
 import { type SdkSearchUserItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { EllipsisCrudDropdownButton } from '~/components';
+import { ArchivedBadge, EllipsisCrudDropdownButton } from '~/components';
 
 type Props = {
   item: SdkSearchUserItemT;
@@ -16,6 +16,7 @@ export function UsersTableRow({ item, onUpdated }: Props) {
     <tr>
       <td>{item.id}</td>
       <td>{item.email}</td>
+      <td><ArchivedBadge archived={item.archived} /></td>
       <td>{formatDate(item.createdAt)}</td>
       <td>{formatDate(item.updatedAt)}</td>
       <td>
