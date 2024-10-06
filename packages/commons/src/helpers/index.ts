@@ -7,6 +7,7 @@ export * from './format';
 export * from './gen-random-between-inclusive';
 export * from './get-first-obj-key-value';
 export * from './is-nil';
+export * from './is-object-with-fake-id';
 export * from './is-object-with-id';
 export * from './is-ssr';
 export * from './iterators';

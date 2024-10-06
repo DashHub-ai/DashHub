@@ -22,7 +22,7 @@ export const PaginationItemsPerPage = controlled<number, Props>(
           .sort((a, b) => a - b)
           .map((item): SelectItem => ({
             id: item,
-            name: item,
+            name: item.toString(),
           })),
       [itemsPerPage],
     );

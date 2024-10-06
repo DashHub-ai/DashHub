@@ -39,3 +39,5 @@ export const SdkUserV = z.object({
   );
 
 export type SdkUserT = z.infer<typeof SdkUserV>;
+
+export type SdkExtractUserT<R extends SdkUserRoleT> = Extract<SdkUserT, { role: R; }>;

@@ -1,3 +1,5 @@
+import type { SdkOrganizationUserRoleT, SdkUserRoleT } from '@llm/sdk';
+
 import type { SdkTranslatedErrors } from './i18n-lang-en';
 import type { I18nLangPack } from './i18n-packs';
 
@@ -12,6 +14,17 @@ const I18N_SDK_ERRORS_PL: Record<SdkTranslatedErrors['tag'], string> = {
   SdkRecordAlreadyExistsError: 'Rekord już istnieje',
   SdkRecordNotFoundError: 'Rekord nie znaleziono',
   SdkEndpointNotFoundError: 'Nieprawidłowy endpoint API',
+  SdkInvalidRequestError: 'Nieprawidłowy format żądania',
+};
+
+export const I18N_USER_ROLES_PL: Record<SdkUserRoleT, string> = {
+  root: 'Root',
+  user: 'Użytkownik',
+};
+
+export const I18N_USER_ORGANIZATION_ROLES_PL: Record<SdkOrganizationUserRoleT, string> = {
+  owner: 'Właściciel',
+  member: 'Pracownik',
 };
 
 export const I18N_PACK_PL: I18nLangPack = {
@@ -120,10 +133,13 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
   },
   placeholders: {
+    selectItem: 'Wybierz element',
     noItemsFound: 'Nie znaleziono żadnych elementów',
+    search: 'Szukaj...',
   },
   modules: {
     organizations: {
+      userRoles: I18N_USER_ORGANIZATION_ROLES_PL,
       form: {
         title: {
           edit: 'Edytuj organizację',
@@ -142,12 +158,16 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
     },
     users: {
+      roles: I18N_USER_ROLES_PL,
       form: {
         title: {
           edit: 'Edytuj użytkownika',
           create: 'Utwórz użytkownika',
         },
         fields: {
+          role: {
+            label: 'Rola',
+          },
           email: {
             label: 'E-mail',
             placeholder: 'Wpisz adres e-mail',
@@ -160,6 +180,14 @@ export const I18N_PACK_PL: I18nLangPack = {
           },
           archiveProtection: {
             label: 'Ochrona przed archiwizacją',
+          },
+          organization: {
+            choose: {
+              label: 'Organizacja',
+            },
+            role: {
+              label: 'Rola w organizacji',
+            },
           },
           auth: {
             label: 'Autoryzacja',

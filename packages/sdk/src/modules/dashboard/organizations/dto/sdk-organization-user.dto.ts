@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-import { SdkTableRowWithDatesV, SdkTableRowWithIdV } from '~/shared';
+import {
+  SdkTableRowWithDatesV,
+  SdkTableRowWithIdNameV,
+  SdkTableRowWithIdV,
+} from '~/shared';
 
 export const SdkOrganizationUserRoleV = z.enum(['owner', 'member']);
 
@@ -10,7 +14,7 @@ export const SdkOrganizationUserV = z.object({
   user: SdkTableRowWithIdV,
   role: SdkOrganizationUserRoleV,
 })
-  .merge(SdkTableRowWithIdV)
+  .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV);
 
 export type SdkOrganizationUserT = z.infer<typeof SdkOrganizationUserV>;

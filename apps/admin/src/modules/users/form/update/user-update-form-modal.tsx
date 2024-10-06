@@ -1,4 +1,4 @@
-import type { SdkTableRowWithIdT, SdkUpdateUserInputT } from '@llm/sdk';
+import type { SdkUserT } from '@llm/sdk';
 
 import {
   CancelButton,
@@ -11,19 +11,19 @@ import {
 import { useI18n } from '~/i18n';
 
 import { UserSharedFormFields } from '../shared';
-import { UserUpdateAuthMethodsFormField } from './fields';
+import { UserOrganizationInfoField, UserUpdateAuthMethodsFormField } from './fields';
 import { useUserUpdateForm } from './use-user-update-form';
 
 export type UserUpdateFormModalProps =
   & Omit<ModalProps, 'children' | 'header' | 'formProps'>
   & {
-    defaultValue: SdkUpdateUserInputT & SdkTableRowWithIdT;
+    user: SdkUserT;
     onAfterSubmit?: VoidFunction;
   };
 
 export function UserUpdateFormModal(
   {
-    defaultValue,
+    user,
     onAfterSubmit,
     onClose,
     ...props
@@ -31,7 +31,13 @@ export function UserUpdateFormModal(
 ) {
   const t = useI18n().pack.modules.users.form;
   const { handleSubmitEvent, validator, submitState, bind } = useUserUpdateForm({
-    defaultValue,
+    defaultValue: {
+      id: user.id,
+      active: user.active,
+      archiveProtection: user.archiveProtection,
+      auth: user.auth,
+      email: user.email,
+    },
     onAfterSubmit,
   });
 
@@ -54,6 +60,10 @@ export function UserUpdateFormModal(
         </>
       )}
     >
+      {user.role === 'user' && (
+        <UserOrganizationInfoField user={user} />
+      )}
+
       <UserSharedFormFields
         errors={validator.errors.all as unknown as any}
         {...bind.merged()}

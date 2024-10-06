@@ -3,13 +3,16 @@ import type {
   SdkEndpointNotFoundError,
   SdkIncorrectUsernameOrPasswordError,
   SdkInvalidJwtTokenError,
+  SdkInvalidRequestError,
   SdkNoTokensInStorageError,
+  SdkOrganizationUserRoleT,
   SdkPayloadValidationError,
   SdkRecordAlreadyExistsError,
   SdkRecordNotFoundError,
   SdkRequestError,
   SdkServerError,
   SdkUnauthorizedError,
+  SdkUserRoleT,
 } from '@llm/sdk';
 
 export type SdkTranslatedErrors =
@@ -23,7 +26,8 @@ export type SdkTranslatedErrors =
   | SdkInvalidJwtTokenError
   | SdkRecordAlreadyExistsError
   | SdkRecordNotFoundError
-  | SdkEndpointNotFoundError;
+  | SdkEndpointNotFoundError
+  | SdkInvalidRequestError;
 
 const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkIncorrectUsernameOrPasswordError: 'Incorrect email or password',
@@ -36,6 +40,17 @@ const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkRecordAlreadyExistsError: 'Record already exists',
   SdkRecordNotFoundError: 'Record not found',
   SdkEndpointNotFoundError: 'Invalid API endpoint',
+  SdkInvalidRequestError: 'Invalid request format',
+};
+
+const I18N_USER_ROLES_EN: Record<SdkUserRoleT, string> = {
+  root: 'Root',
+  user: 'User',
+};
+
+const I18N_USER_ORGANIZATION_ROLES_EN: Record<SdkOrganizationUserRoleT, string> = {
+  owner: 'Owner',
+  member: 'Member',
 };
 
 export const I18N_PACK_EN = {
@@ -144,10 +159,13 @@ export const I18N_PACK_EN = {
     },
   },
   placeholders: {
+    selectItem: 'Select item',
     noItemsFound: 'No items found',
+    search: 'Search...',
   },
   modules: {
     organizations: {
+      userRoles: I18N_USER_ORGANIZATION_ROLES_EN,
       form: {
         title: {
           create: 'Create organization',
@@ -166,12 +184,16 @@ export const I18N_PACK_EN = {
       },
     },
     users: {
+      roles: I18N_USER_ROLES_EN,
       form: {
         title: {
           create: 'Create user',
           edit: 'Edit user',
         },
         fields: {
+          role: {
+            label: 'Role',
+          },
           email: {
             label: 'E-Mail',
             placeholder: 'Enter e-mail address',
@@ -184,6 +206,14 @@ export const I18N_PACK_EN = {
           },
           archiveProtection: {
             label: 'Archive protection',
+          },
+          organization: {
+            choose: {
+              label: 'Organization',
+            },
+            role: {
+              label: 'Role in organization',
+            },
           },
           auth: {
             label: 'Authentication',

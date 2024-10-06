@@ -9,5 +9,7 @@ export * from './overwrite.type';
 export * from './record-of-type.type';
 export * from './relaxed-id.type';
 export * from './replace-fn-return-type.type';
+export * from './required-by.type';
+export * from './required-only-by.type';
 export * from './snake-case-to-camel-case.type';
 export * from './unparsed-env-object.type';

@@ -135,7 +135,7 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
             forwardTransaction: trx,
             value: {
               userId: id,
-              organizationId: value.organization.id,
+              organizationId: value.organization.item.id,
               role: value.organization.role,
             },
           });
