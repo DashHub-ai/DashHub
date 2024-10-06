@@ -1,6 +1,6 @@
-import type { SdkCreateUserInputT } from '@llm/sdk';
-
 import { useAnimatedModal } from '@llm/commons-front';
+
+import type { CreateUserFormValue } from './types';
 
 import {
   UserCreateFormModal,
@@ -10,7 +10,7 @@ import {
 type UserShowModalProps =
   & Pick<UserCreateFormModalProps, 'onAfterSubmit'>
   & {
-    defaultValue: SdkCreateUserInputT;
+    defaultValue: CreateUserFormValue;
   };
 
 export function useUserCreateModal() {

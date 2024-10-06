@@ -1,5 +1,4 @@
-import type { SdkCreateUserInputT } from '@llm/sdk';
-
+import { FAKE_OBJECT_ID } from '@llm/commons';
 import {
   CancelButton,
   CreateButton,
@@ -11,14 +10,19 @@ import {
 } from '~/components';
 import { useI18n } from '~/i18n';
 
+import type {
+  CreateUserFormValue,
+  CreateUserOrganizationValue,
+} from './types';
+
 import { UserRoleSelect, UserSharedFormFields } from '../shared';
-import { UserCreateAuthMethodsFormField } from './fields';
+import { UserCreateAuthMethodsFormField, UserOrganizationSettingsFormField } from './fields';
 import { useUserCreateForm } from './use-user-create-form';
 
 export type UserCreateFormModalProps =
   & Omit<ModalProps, 'children' | 'header' | 'formProps'>
   & {
-    defaultValue: SdkCreateUserInputT;
+    defaultValue: CreateUserFormValue;
     onAfterSubmit?: VoidFunction;
   };
 
@@ -31,7 +35,7 @@ export function UserCreateFormModal(
   }: UserCreateFormModalProps,
 ) {
   const t = useI18n().pack.modules.users.form;
-  const { handleSubmitEvent, validator, submitState, bind } = useUserCreateForm({
+  const { handleSubmitEvent, validator, submitState, bind, value } = useUserCreateForm({
     defaultValue,
     onAfterSubmit,
   });
@@ -60,8 +64,28 @@ export function UserCreateFormModal(
         label={t.fields.role.label}
         {...validator.errors.extract('role')}
       >
-        <UserRoleSelect {...bind.path('role')} />
+        <UserRoleSelect
+          {...bind.path('role', {
+            relatedInputs: ({ newGlobalValue, newControlValue }) => ({
+              ...newGlobalValue,
+              organization: newControlValue === 'user'
+                ? {
+                  id: FAKE_OBJECT_ID,
+                  name: '',
+                  role: 'member',
+                } satisfies CreateUserOrganizationValue
+                : undefined,
+            }) as unknown as CreateUserFormValue,
+          })}
+        />
       </FormField>
+
+      {value.role === 'user' && (
+        <UserOrganizationSettingsFormField
+          {...validator.errors.extract('organization', { nested: true })}
+          {...bind.path('organization')}
+        />
+      )}
 
       <UserSharedFormFields
         errors={validator.errors.all as unknown as any}

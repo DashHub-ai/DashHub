@@ -1,4 +1,4 @@
-import type { SdkUserRoleT } from '@llm/sdk';
+import type { SdkOrganizationUserRoleT, SdkUserRoleT } from '@llm/sdk';
 
 import type { SdkTranslatedErrors } from './i18n-lang-en';
 import type { I18nLangPack } from './i18n-packs';
@@ -22,6 +22,11 @@ export const I18N_USER_ROLES_PL: Record<SdkUserRoleT, string> = {
   user: 'Użytkownik',
 };
 
+export const I18N_USER_ORGANIZATION_ROLES_PL: Record<SdkOrganizationUserRoleT, string> = {
+  owner: 'Właściciel',
+  member: 'Pracownik',
+};
+
 export const I18N_PACK_PL: I18nLangPack = {
   common: {
     email: 'E-mail',
@@ -35,7 +40,6 @@ export const I18N_PACK_PL: I18nLangPack = {
       mustBeLongerThan: 'Hasło musi mieć więcej niż %{number} znaków',
     },
   },
-  roles: I18N_USER_ROLES_PL,
   errors: {
     tagged: I18N_SDK_ERRORS_PL,
   },
@@ -133,6 +137,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   modules: {
     organizations: {
+      userRoles: I18N_USER_ORGANIZATION_ROLES_PL,
       form: {
         title: {
           edit: 'Edytuj organizację',
@@ -151,6 +156,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
     },
     users: {
+      roles: I18N_USER_ROLES_PL,
       form: {
         title: {
           edit: 'Edytuj użytkownika',
@@ -172,6 +178,14 @@ export const I18N_PACK_PL: I18nLangPack = {
           },
           archiveProtection: {
             label: 'Ochrona przed archiwizacją',
+          },
+          organization: {
+            choose: {
+              label: 'Wybierz organizację',
+            },
+            role: {
+              label: 'Rola w organizacji',
+            },
           },
           auth: {
             label: 'Autoryzacja',

@@ -5,6 +5,7 @@ import type {
   SdkInvalidJwtTokenError,
   SdkInvalidRequestError,
   SdkNoTokensInStorageError,
+  SdkOrganizationUserRoleT,
   SdkPayloadValidationError,
   SdkRecordAlreadyExistsError,
   SdkRecordNotFoundError,
@@ -47,6 +48,11 @@ const I18N_USER_ROLES_EN: Record<SdkUserRoleT, string> = {
   user: 'User',
 };
 
+const I18N_USER_ORGANIZATION_ROLES_EN: Record<SdkOrganizationUserRoleT, string> = {
+  owner: 'Owner',
+  member: 'Member',
+};
+
 export const I18N_PACK_EN = {
   common: {
     email: 'Email',
@@ -60,7 +66,6 @@ export const I18N_PACK_EN = {
       mustBeLongerThan: 'Password must be longer than %{number} characters',
     },
   },
-  roles: I18N_USER_ROLES_EN,
   errors: {
     tagged: I18N_SDK_ERRORS_EN,
   },
@@ -158,6 +163,7 @@ export const I18N_PACK_EN = {
   },
   modules: {
     organizations: {
+      userRoles: I18N_USER_ORGANIZATION_ROLES_EN,
       form: {
         title: {
           create: 'Create organization',
@@ -176,6 +182,7 @@ export const I18N_PACK_EN = {
       },
     },
     users: {
+      roles: I18N_USER_ROLES_EN,
       form: {
         title: {
           create: 'Create user',
@@ -197,6 +204,14 @@ export const I18N_PACK_EN = {
           },
           archiveProtection: {
             label: 'Archive protection',
+          },
+          organization: {
+            choose: {
+              label: 'Choose organization',
+            },
+            role: {
+              label: 'Role in organization',
+            },
           },
           auth: {
             label: 'Authentication',

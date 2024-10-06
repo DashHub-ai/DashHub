@@ -48,16 +48,18 @@ export function UsersTableRow({ item, onUpdated }: Props) {
       <td>
         <EllipsisCrudDropdownButton
           {...!item.archived && {
-            onArchive: pipe(
-              sdks.dashboard.users.archive(item.id),
-              tapTaskEither(onUpdated),
-            ),
             onUpdate: pipe(
               updateModal.showAsOptional({
                 defaultValue: item,
               }),
               tapTaskOption(onUpdated),
             ),
+            ...!item.archiveProtection && {
+              onArchive: pipe(
+                sdks.dashboard.users.archive(item.id),
+                tapTaskEither(onUpdated),
+              ),
+            },
           }}
           {...item.archived && {
             onUnarchive: pipe(

@@ -5,6 +5,7 @@ import { error, type PathValidator } from '@under-control/validate';
 
 import {
   isNil,
+  isObjectWithFakeID,
   isRelaxedObjectWithID,
   type ReplaceFnReturnType,
 } from '@llm/commons';
@@ -54,7 +55,7 @@ export function useRequiredFormValidators<V extends ControlValue>({
   ): PathValidator<V, P> =>
     requiredPathByPred(
       path,
-      attrs => !isRelaxedObjectWithID(attrs.value) || !!refineFn?.(attrs),
+      attrs => !isRelaxedObjectWithID(attrs.value) || isObjectWithFakeID(attrs.value) || !!refineFn?.(attrs),
     );
 
   return {

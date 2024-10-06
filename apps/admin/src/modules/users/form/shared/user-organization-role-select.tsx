@@ -6,9 +6,9 @@ import { findItemById } from '@llm/commons';
 import { Select } from '~/components';
 import { useI18n } from '~/i18n';
 
-export const UserRoleSelect = controlled<SdkUserRoleT>(({ control: { value, setValue } }) => {
-  const { roles } = useI18n().pack.modules.users;
-  const items = Object.entries(roles).map(([role, name]) => ({
+export const UserOrganizationRoleSelect = controlled<SdkUserRoleT>(({ control: { value, setValue } }) => {
+  const { userRoles } = useI18n().pack.modules.organizations;
+  const items = Object.entries(userRoles).map(([role, name]) => ({
     id: role,
     name,
   }));

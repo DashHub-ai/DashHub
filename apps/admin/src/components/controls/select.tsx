@@ -4,7 +4,6 @@ import { type ControlBindProps, controlled } from '@under-control/forms';
 import clsx from 'clsx';
 import {
   type PropsWithChildren,
-  type ReactNode,
   useRef,
   useState,
 } from 'react';
@@ -14,7 +13,7 @@ import { SelectExpandSVG } from '~/icons';
 
 export type SelectItem = {
   id: string | number;
-  name?: ReactNode;
+  name: string;
 };
 
 type Props = ControlBindProps<SelectItem> & PropsWithChildren & {
