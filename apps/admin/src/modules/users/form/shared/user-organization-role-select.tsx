@@ -1,6 +1,6 @@
 import { controlled, type OmitControlStateAttrs } from '@under-control/forms';
 
-import type { SdkUserRoleT } from '@llm/sdk';
+import type { SdkOrganizationUserRoleT } from '@llm/sdk';
 
 import { findItemById } from '@llm/commons';
 import { Select, type SelectProps } from '~/components';
@@ -8,7 +8,7 @@ import { useI18n } from '~/i18n';
 
 type Props = Omit<OmitControlStateAttrs<SelectProps>, 'items'>;
 
-export const UserOrganizationRoleSelect = controlled<SdkUserRoleT, Props>((
+export const UserOrganizationRoleSelect = controlled<SdkOrganizationUserRoleT, Props>((
   {
     control: { value, setValue },
     ...props
@@ -29,7 +29,7 @@ export const UserOrganizationRoleSelect = controlled<SdkUserRoleT, Props>((
       }
       onChange={(role) => {
         setValue({
-          value: role?.id as unknown as SdkUserRoleT,
+          value: role?.id as unknown as SdkOrganizationUserRoleT,
         });
       }}
       {...props}

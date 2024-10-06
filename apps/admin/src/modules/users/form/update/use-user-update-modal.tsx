@@ -1,4 +1,4 @@
-import type { SdkTableRowWithIdT, SdkUpdateUserInputT } from '@llm/sdk';
+import type { SdkUserT } from '@llm/sdk';
 
 import { useAnimatedModal } from '@llm/commons-front';
 
@@ -10,7 +10,7 @@ import {
 type UserShowModalProps =
   & Pick<UserUpdateFormModalProps, 'onAfterSubmit'>
   & {
-    defaultValue: SdkUpdateUserInputT & SdkTableRowWithIdT;
+    user: SdkUserT;
   };
 
 export function useUserUpdateModal() {

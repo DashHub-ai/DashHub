@@ -32,6 +32,7 @@ export type SelectProps =
   & ControlBindProps<SelectItem>
   & PropsWithChildren
   & {
+    disabled?: boolean;
     required?: boolean;
     placeholder?: string;
     toolbar?: ReactNode;
@@ -45,6 +46,7 @@ export type SelectProps =
 
 export const Select = controlled<SelectItem | null, SelectProps>((
   {
+    disabled,
     required,
     placeholder,
     toolbar,
@@ -140,6 +142,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
       <button
         ref={outsideClickRef}
         type="button"
+        disabled={disabled}
         className={clsx(
           'uk-input-fake uk-flex uk-flex-between',
           buttonClassName,

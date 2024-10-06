@@ -27,18 +27,18 @@ export const UserOrganizationSettingsFormField = controlled<CreateUserOrganizati
     <>
       <FormField
         className="uk-margin"
-        label={t.role.label}
-        {...validation.extract('role')}
-      >
-        <UserOrganizationRoleSelect {...bind.path('role')} required />
-      </FormField>
-
-      <FormField
-        className="uk-margin"
         label={t.choose.label}
         {...validation.extract('item')}
       >
         <OrganizationsSearchSelect {...bind.path('item')} required />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.role.label}
+        {...validation.extract('role')}
+      >
+        <UserOrganizationRoleSelect {...bind.path('role')} required />
       </FormField>
 
       <hr />

@@ -183,7 +183,7 @@ export const I18N_PACK_PL: I18nLangPack = {
           },
           organization: {
             choose: {
-              label: 'Wybierz organizację',
+              label: 'Organizacja',
             },
             role: {
               label: 'Rola w organizacji',

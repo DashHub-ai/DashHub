@@ -50,7 +50,7 @@ export function UsersTableRow({ item, onUpdated }: Props) {
           {...!item.archived && {
             onUpdate: pipe(
               updateModal.showAsOptional({
-                defaultValue: item,
+                user: item,
               }),
               tapTaskOption(onUpdated),
             ),

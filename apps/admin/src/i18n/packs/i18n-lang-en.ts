@@ -209,7 +209,7 @@ export const I18N_PACK_EN = {
           },
           organization: {
             choose: {
-              label: 'Choose organization',
+              label: 'Organization',
             },
             role: {
               label: 'Role in organization',
