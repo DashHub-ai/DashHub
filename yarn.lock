@@ -563,6 +563,11 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
+"@dual-bundle/import-meta-resolve@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@dual-bundle/import-meta-resolve/-/import-meta-resolve-4.1.0.tgz#519c1549b0e147759e7825701ecffd25e5819f7b"
+  integrity sha512-+nxncfwHM5SgAtrVzgpzJOI1ol0PkumhVo469KCf9lUi21IGcY90G98VuHm9VRrUypmAzawAHO9bs6hqeADaVg==
+
 "@elastic/elasticsearch@^8.15.0":
   version "8.15.0"
   resolved "https://registry.yarnpkg.com/@elastic/elasticsearch/-/elasticsearch-8.15.0.tgz#cb29b3ae33203c545d435cf3dc4b557c8b4961d5"
@@ -1121,10 +1126,10 @@
   dependencies:
     levn "^0.4.1"
 
-"@fastify/deepmerge@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@fastify/deepmerge/-/deepmerge-1.3.0.tgz#8116858108f0c7d9fd460d05a7d637a13fe3239a"
-  integrity sha512-J8TOSBq3SoZbDhM9+R/u77hP93gz/rajSA+K2kGyijPpORPWUXHUpTaleoj+92As0S9uPRP7Oi8IqMf0u+ro6A==
+"@fastify/deepmerge@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@fastify/deepmerge/-/deepmerge-2.0.0.tgz#794e98a4eefd6e1edde852e924e25f47b0fed7d8"
+  integrity sha512-fsaybTGDyQ5KpPsplQqb9yKdCf2x/pbNpMNk8Tvp3rRz7lVcupKysH4b2ELMN2P4Hak1+UqTYdTj/u4FNV2p0g==
 
 "@hono/node-server@^1.12.2":
   version "1.13.1"
@@ -1522,7 +1527,7 @@
   dependencies:
     web-streams-polyfill "^3.1.1"
 
-"@rollup/pluginutils@^5.1.0":
+"@rollup/pluginutils@^5.1.0", "@rollup/pluginutils@^5.1.2":
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-5.1.2.tgz#d3bc9f0fea4fd4086aaac6aa102f3fa587ce8bd9"
   integrity sha512-/FIdS3PyZ39bjZlwqFnWqCOVnW7o963LtKMwQOD0NhQqw22gSr2YY1afu3FxRip4ZCZNsD5jq6Aaz6QV3D/Njw==
@@ -4911,7 +4916,7 @@ get-symbol-description@^1.0.2:
     es-errors "^1.3.0"
     get-intrinsic "^1.2.4"
 
-get-tsconfig@^4.7.0, get-tsconfig@^4.7.3:
+get-tsconfig@^4.7.0, get-tsconfig@^4.7.3, get-tsconfig@^4.8.1:
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/get-tsconfig/-/get-tsconfig-4.8.1.tgz#8995eb391ae6e1638d251118c7b56de7eb425471"
   integrity sha512-k9PN+cFBmaLWtVz29SkUoqU5O0slLuHJXt/2P+tMVFT+phsSGXGkp9t3rQIqdz0e+06EHNGs3oM6ZX1s2zHxRg==
@@ -8575,20 +8580,21 @@ rollup-plugin-node-externals@^7.1.3:
   resolved "https://registry.yarnpkg.com/rollup-plugin-node-externals/-/rollup-plugin-node-externals-7.1.3.tgz#7352584de22176422978ed9e2707984549c10c78"
   integrity sha512-RM+7tJAejAoRsCf93TptTSdqUhRA8S78DleihMiu54Kac+uLkd9VIegLPhGnaW3ehZTXh56+R301mFH6j2A7vw==
 
-rollup-plugin-swc3@^0.11.2:
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-swc3/-/rollup-plugin-swc3-0.11.2.tgz#91af9af9896524787fe927dfa4ffa7a8745a1042"
-  integrity sha512-o1ih9B806fV2wBSNk46T0cYfTF2eiiKmYXRpWw3K4j/Cp3tCAt10UCVsTqvUhGP58pcB3/GZcAVl5e7TCSKN6Q==
+rollup-plugin-swc3@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-swc3/-/rollup-plugin-swc3-0.12.0.tgz#a8ebec43298e8c784d3f2ad000356a09752a4d98"
+  integrity sha512-uT6EOMk4m8j7eeBtXk4maitFDKGCaZlc9xIJvv+prg7F59kSH7o1k4XsS9XFeI6IfmuV10ljH5kQWtF40ps+UQ==
   dependencies:
-    "@fastify/deepmerge" "^1.3.0"
-    "@rollup/pluginutils" "^5.1.0"
-    get-tsconfig "^4.7.3"
-    rollup-preserve-directives "^1.1.1"
+    "@dual-bundle/import-meta-resolve" "^4.1.0"
+    "@fastify/deepmerge" "^2.0.0"
+    "@rollup/pluginutils" "^5.1.2"
+    get-tsconfig "^4.8.1"
+    rollup-preserve-directives "^1.1.2"
 
-rollup-preserve-directives@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/rollup-preserve-directives/-/rollup-preserve-directives-1.1.1.tgz#40d58b412ff791278ef06e0fa0944cbca3d6bd6d"
-  integrity sha512-+eQafbuEfDPfxQ9hQPlwaROfin4yiVRxap8hnrvvvcSGoukv1tTiYpAW9mvm3uR8J+fe4xd8FdVd5rz9q7jZ+Q==
+rollup-preserve-directives@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/rollup-preserve-directives/-/rollup-preserve-directives-1.1.2.tgz#c6954aba9f767988c681e00d41a46af521ce764f"
+  integrity sha512-OOaYh4zO0Dcd/eVWGB8H69CgTiohl+jJqc2TLtjLENVIQaV2rxO3OW6RILzCQOdDvPT+/rzwRp+97OXhem895Q==
   dependencies:
     magic-string "^0.30.5"
 
