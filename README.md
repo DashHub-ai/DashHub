@@ -1,4 +1,4 @@
-# 🚀 DashHub: The Ultimate Open-Source Platform for AI Integration
+# 🚀 DashHub: Unified Open-Source Platform for AI Models
 
 Empower Your AI Journey with Seamless Integration, Unparalleled Flexibility, and Community-Driven Innovation
 
