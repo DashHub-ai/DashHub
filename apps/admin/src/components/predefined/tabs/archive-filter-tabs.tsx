@@ -6,7 +6,7 @@ import { useI18n } from '~/i18n';
 
 type Props = Omit<OmitControlStateAttrs<TabsProps>, 'tabs'>;
 
-export const ArchiveFilterTabs = controlled<boolean, Props>((
+export const ArchiveFilterTabs = controlled<boolean | null, Props>((
   {
     control: { value, setValue },
     className,
@@ -23,16 +23,20 @@ export const ArchiveFilterTabs = controlled<boolean, Props>((
       id: true,
       name: t.archived,
     },
+    {
+      id: -1,
+      name: t.all,
+    },
   ];
 
   return (
     <Tabs
       {...props}
       className={clsx(className, 'w-auto')}
-      value={value}
+      value={value ?? -1}
       onChange={(newValue) => {
         setValue({
-          value: newValue as boolean,
+          value: newValue === -1 ? null : Boolean(newValue),
         });
       }}
       tabs={tabs}

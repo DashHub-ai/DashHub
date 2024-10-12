@@ -33,7 +33,7 @@ export function useSitemap() {
 function defineRouteGenerator<
   S extends SearchParamsMap = SearchParamsMap,
   const H extends string = never,
->() {
+>(defaultSearchParams?: Partial<S>) {
   return <const P extends string>(schema: P) => ({
     raw: schema,
     generate: (attrs: GenerateRouteGeneratorAttrs<P, H, S>) => pipe(
@@ -45,8 +45,13 @@ function defineRouteGenerator<
         ? withHash(attrs.hash)
         : identity,
 
-      attrs.searchParams
-        ? withSearchParams(attrs.searchParams)
+      attrs.searchParams || defaultSearchParams
+        ? withSearchParams(
+          {
+            ...defaultSearchParams,
+            ...attrs.searchParams,
+          },
+        )
         : identity,
     ),
   });

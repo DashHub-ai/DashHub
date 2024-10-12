@@ -94,6 +94,7 @@ export const I18N_PACK_EN = {
   },
   tabs: {
     archiveFilters: {
+      all: 'All',
       active: 'Active',
       archived: 'Archived',
     },

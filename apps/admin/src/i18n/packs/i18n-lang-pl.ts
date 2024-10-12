@@ -68,6 +68,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   tabs: {
     archiveFilters: {
+      all: 'Wszystkie',
       active: 'Aktywne',
       archived: 'Zarchiwizowane',
     },
