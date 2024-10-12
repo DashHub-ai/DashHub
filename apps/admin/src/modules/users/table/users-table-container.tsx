@@ -1,3 +1,5 @@
+import type { z } from 'zod';
+
 import { pipe } from 'fp-ts/lib/function';
 
 import { tapTaskOption } from '@llm/commons';
@@ -25,6 +27,8 @@ const SearchUsersUrlFiltersV = SdKSearchUsersInputV
   .extend({
     organization: SdkIdNameUrlEntryV.optional().nullable(),
   });
+
+export type SearchUsersRouteUrlFiltersT = z.input<typeof SearchUsersUrlFiltersV>;
 
 export function UsersTableContainer() {
   const { pack } = useI18n();

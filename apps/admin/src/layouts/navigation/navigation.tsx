@@ -26,15 +26,15 @@ export function Navigation() {
                 {t.links.home}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.organizations} icon="building">
-                {t.links.organizations}
-              </NavigationItem>
-
-              <NavigationItem path={sitemap.users} icon="user">
+              <NavigationItem path={sitemap.users.index.raw} icon="user">
                 {t.links.users}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.s3} icon="cloud">
+              <NavigationItem path={sitemap.organizations.index.raw} icon="building">
+                {t.links.organizations}
+              </NavigationItem>
+
+              <NavigationItem path={sitemap.s3.index.raw} icon="cloud">
                 {t.links.s3}
               </NavigationItem>
             </ul>

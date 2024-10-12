@@ -1,3 +1,5 @@
+import type { z } from 'zod';
+
 import { pipe } from 'fp-ts/lib/function';
 
 import { tapTaskOption } from '@llm/commons';
@@ -15,6 +17,8 @@ import { useI18n } from '~/i18n';
 
 import { useOrganizationCreateModal } from '../form/create';
 import { OrganizationsTableRow } from './organizations-table-row';
+
+export type SearchOrganizationsRouteUrlFiltersT = z.input<typeof SdKSearchOrganizationsInputV>;
 
 export function OrganizationsTableContainer() {
   const t = useI18n().pack.table.columns;

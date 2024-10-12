@@ -2,10 +2,16 @@ import { z } from 'zod';
 
 import { isNil } from '@llm/commons';
 
+import type { SdkTableRowIdT } from './sdk-table-row-id.dto';
+
 import { SdkTableRowWithIdNameV } from './sdk-table-row-with-id-name.dto';
 
 export const SdkIdNameUrlEntryV = z
-  .string()
+  .custom<SdkIdNameUrlSerializedEntryT>(
+    value => typeof value === 'string'
+      ? /^\d+:.*$/.test(value)
+      : false,
+  )
   .transform((value) => {
     const [, id, name] = value.match(/^(\d+):(.*)$/) ?? [];
 
@@ -20,8 +26,10 @@ export const SdkIdNameUrlEntryV = z
   })
   .pipe(SdkTableRowWithIdNameV);
 
+export type SdkIdNameUrlSerializedEntryT = `${SdkTableRowIdT}:${string}`;
+
 export type SdkIdNameUrlEntryT = z.infer<typeof SdkIdNameUrlEntryV>;
 
-export function serializeSdkIdNameUrlEntry(value: SdkIdNameUrlEntryT): string {
+export function serializeSdkIdNameUrlEntry(value: SdkIdNameUrlEntryT): SdkIdNameUrlSerializedEntryT {
   return `${value.id}:${value.name}`;
 }
