@@ -1,5 +1,6 @@
 import { identity, pipe } from 'fp-ts/lib/function';
 
+import type { SdkTableRowIdT } from '@llm/sdk';
 import type {
   SearchOrganizationsRouteUrlFiltersT,
   SearchUsersRouteUrlFiltersT,
@@ -15,19 +16,27 @@ import {
 } from '@llm/commons';
 
 export function useSitemap() {
-  return {
+  const sitemap = {
     home: '/',
     login: '/login',
     organizations: {
-      index: defineRouteGenerator<SearchOrganizationsRouteUrlFiltersT>()('/organizations'),
+      index: defineRouteGenerator<SearchOrganizationsRouteUrlFiltersT, 'edit'>()('/organizations'),
+      edit: (id: SdkTableRowIdT) => sitemap.organizations.index.generate({
+        hash: 'edit',
+        searchParams: {
+          ids: [id],
+        },
+      }),
     },
     users: {
-      index: defineRouteGenerator<SearchUsersRouteUrlFiltersT>()('/users'),
+      index: defineRouteGenerator<SearchUsersRouteUrlFiltersT, 'edit'>()('/users'),
     },
     s3: {
       index: defineRouteGenerator()('/s3'),
     },
   };
+
+  return sitemap;
 };
 
 function defineRouteGenerator<
@@ -36,20 +45,20 @@ function defineRouteGenerator<
 >(defaultSearchParams?: Partial<S>) {
   return <const P extends string>(schema: P) => ({
     raw: schema,
-    generate: (attrs: GenerateRouteGeneratorAttrs<P, H, S>) => pipe(
-      'pathParams' in attrs
-        ? parameterizeStrictPath(schema, attrs.pathParams)
+    generate: ({ hash, pathParams, searchParams }: GenerateRouteGeneratorAttrs<P, H, S>) => pipe(
+      pathParams
+        ? parameterizeStrictPath(schema, pathParams)
         : schema,
 
-      'hash' in attrs
-        ? withHash(attrs.hash)
+      hash
+        ? withHash(hash)
         : identity,
 
-      attrs.searchParams || defaultSearchParams
+      searchParams || defaultSearchParams
         ? withSearchParams(
           {
             ...defaultSearchParams,
-            ...attrs.searchParams,
+            ...searchParams,
           },
         )
         : identity,
@@ -64,16 +73,10 @@ type GenerateRouteGeneratorAttrs<
 > =
   & {
     searchParams?: S;
+    hash?: H;
   }
-  & (H extends never
-    ? never
-    : {
-        hash?: H;
-      }
-  ) & (
+  & (
     InferStrictPathParams<P> extends never
-      ? never
-      : {
-          pathParams: StrictParametrizeParams<P>;
-        }
+      ? { pathParams?: undefined; }
+      : { pathParams: StrictParametrizeParams<P>; }
   );
