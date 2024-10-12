@@ -4,6 +4,7 @@ import {
   SdkArchivedFiltersInputV,
   SdkDefaultSortInputV,
   SdkFilteredPhraseInputV,
+  SdkIdsArrayV,
   SdkIdsFiltersInputV,
   SdkOffsetPaginationInputV,
   SdkOffsetPaginationOutputV,
@@ -16,6 +17,9 @@ export const SdkSearchProjectItemV = SdkProjectV;
 export type SdkSearchProjectItemT = z.infer<typeof SdkSearchProjectItemV>;
 
 export const SdKSearchProjectsInputV = SdkOffsetPaginationInputV
+  .extend({
+    organizationIds: SdkIdsArrayV.optional(),
+  })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkIdsFiltersInputV)

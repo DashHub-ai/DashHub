@@ -156,6 +156,7 @@ export const I18N_PACK_EN = {
       organizations: 'Organizations',
       users: 'Users',
       s3: 'S3',
+      projects: 'Projects',
     },
     loggedIn: {
       logout: 'Logout',
@@ -185,6 +186,26 @@ export const I18N_PACK_EN = {
           maxNumberOfUsers: {
             label: 'Max number of users',
             placeholder: 'Enter max number of users',
+          },
+        },
+      },
+    },
+    projects: {
+      prefix: {
+        project: 'Project',
+      },
+      form: {
+        title: {
+          create: 'Create project',
+          edit: 'Edit project',
+        },
+        fields: {
+          name: {
+            label: 'Name',
+            placeholder: 'Enter project name',
+          },
+          organization: {
+            label: 'Organization',
           },
         },
       },
@@ -286,6 +307,13 @@ export const I18N_PACK_EN = {
         description: 'Manage organizations',
       },
       title: 'Manage organizations',
+    },
+    projects: {
+      meta: {
+        title: 'Projects',
+        description: 'Manage projects',
+      },
+      title: 'Manage projects',
     },
     users: {
       meta: {

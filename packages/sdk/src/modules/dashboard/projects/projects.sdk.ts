@@ -20,7 +20,7 @@ import type {
 } from './dto';
 
 export class ProjectsSdk extends AbstractNestedSdkWithAuth {
-  protected endpointPrefix = '/dashboard/organizations';
+  protected endpointPrefix = '/dashboard/projects';
 
   search = (data: SdKSearchProjectsInputT) =>
     this.fetch<SdKSearchProjectsOutputT>({

@@ -28,8 +28,11 @@ export function useSitemap() {
         },
       }),
     },
+    projects: {
+      index: defineRouteGenerator<SearchUsersRouteUrlFiltersT>()('/projects'),
+    },
     users: {
-      index: defineRouteGenerator<SearchUsersRouteUrlFiltersT, 'edit'>()('/users'),
+      index: defineRouteGenerator<SearchUsersRouteUrlFiltersT>()('/users'),
     },
     s3: {
       index: defineRouteGenerator()('/s3'),

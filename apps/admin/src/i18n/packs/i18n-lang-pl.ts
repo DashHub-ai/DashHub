@@ -130,6 +130,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       organizations: 'Organizacje',
       users: 'Użytkownicy',
       s3: 'S3',
+      projects: 'Projekty',
     },
     loggedIn: {
       logout: 'Wyloguj się',
@@ -159,6 +160,26 @@ export const I18N_PACK_PL: I18nLangPack = {
           maxNumberOfUsers: {
             label: 'Maksymalna liczba użytkowników',
             placeholder: 'Wpisz maksymalną liczbę użytkowników',
+          },
+        },
+      },
+    },
+    projects: {
+      prefix: {
+        project: 'Projekt',
+      },
+      form: {
+        title: {
+          edit: 'Edytuj projekt',
+          create: 'Utwórz projekt',
+        },
+        fields: {
+          name: {
+            label: 'Nazwa',
+            placeholder: 'Wpisz nazwę projektu',
+          },
+          organization: {
+            label: 'Wybierz organizację',
           },
         },
       },
@@ -260,6 +281,13 @@ export const I18N_PACK_PL: I18nLangPack = {
         description: 'Zarządzaj organizacjami',
       },
       title: 'Zarządzaj organizacjami',
+    },
+    projects: {
+      meta: {
+        title: 'Projekty',
+        description: 'Zarządzaj projektami',
+      },
+      title: 'Zarządzaj projektami',
     },
     users: {
       meta: {
