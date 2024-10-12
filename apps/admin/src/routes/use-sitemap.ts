@@ -28,6 +28,9 @@ export function useSitemap() {
         },
       }),
     },
+    apps: {
+      index: defineRouteGenerator()('/apps'),
+    },
     projects: {
       index: defineRouteGenerator<SearchUsersRouteUrlFiltersT>()('/projects'),
     },

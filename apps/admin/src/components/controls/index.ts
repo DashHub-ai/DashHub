@@ -4,3 +4,4 @@ export * from './input';
 export * from './numeric-input';
 export * from './search-select';
 export * from './select';
+export * from './textarea';
