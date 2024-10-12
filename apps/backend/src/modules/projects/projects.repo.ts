@@ -34,7 +34,7 @@ export class ProjectsRepo extends createDatabaseRepo('projects') {
       transaction(
         async qb =>
           qb
-            .selectFrom('projects')
+            .selectFrom(this.table)
             .where('projects.id', 'in', ids)
             .innerJoin('organizations', 'organizations.id', 'organization_id')
             .selectAll('projects')
