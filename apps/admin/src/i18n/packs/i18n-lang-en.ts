@@ -156,6 +156,8 @@ export const I18N_PACK_EN = {
       organizations: 'Organizations',
       users: 'Users',
       s3: 'S3',
+      projects: 'Projects',
+      apps: 'Apps',
     },
     loggedIn: {
       logout: 'Logout',
@@ -185,6 +187,50 @@ export const I18N_PACK_EN = {
           maxNumberOfUsers: {
             label: 'Max number of users',
             placeholder: 'Enter max number of users',
+          },
+        },
+      },
+    },
+    projects: {
+      prefix: {
+        project: 'Project',
+      },
+      form: {
+        title: {
+          create: 'Create project',
+          edit: 'Edit project',
+        },
+        fields: {
+          name: {
+            label: 'Name',
+            placeholder: 'Enter project name',
+          },
+          organization: {
+            label: 'Organization',
+          },
+        },
+      },
+    },
+    apps: {
+      prefix: {
+        app: 'App',
+      },
+      form: {
+        title: {
+          create: 'Create app',
+          edit: 'Edit app',
+        },
+        fields: {
+          name: {
+            label: 'Name',
+            placeholder: 'Enter app name',
+          },
+          organization: {
+            label: 'Organization',
+          },
+          chatContext: {
+            label: 'Chat context',
+            placeholder: 'Enter chat context',
           },
         },
       },
@@ -286,6 +332,20 @@ export const I18N_PACK_EN = {
         description: 'Manage organizations',
       },
       title: 'Manage organizations',
+    },
+    projects: {
+      meta: {
+        title: 'Projects',
+        description: 'Manage projects',
+      },
+      title: 'Manage projects',
+    },
+    apps: {
+      meta: {
+        title: 'Apps',
+        description: 'Manage apps',
+      },
+      title: 'Manage apps',
     },
     users: {
       meta: {

@@ -1,0 +1,55 @@
+import { taskEither as TE } from 'fp-ts';
+import { pipe } from 'fp-ts/lib/function';
+import { inject, injectable } from 'tsyringe';
+
+import type {
+  SdkCreateProjectInputT,
+  SdkJwtTokenT,
+  SdkTableRowIdT,
+  SdkUpdateProjectInputT,
+} from '@llm/sdk';
+
+import type { WithAuthFirewall } from '../auth';
+import type { TableRowWithId } from '../database';
+
+import { ProjectsEsIndexRepo, ProjectsEsSearchRepo } from './elasticsearch';
+import { ProjectsFirewall } from './projects.firewall';
+import { ProjectsRepo } from './projects.repo';
+
+@injectable()
+export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
+  constructor(
+    @inject(ProjectsRepo) private readonly repo: ProjectsRepo,
+    @inject(ProjectsEsSearchRepo) private readonly esSearchRepo: ProjectsEsSearchRepo,
+    @inject(ProjectsEsIndexRepo) private readonly esIndexRepo: ProjectsEsIndexRepo,
+  ) {}
+
+  asUser = (jwt: SdkJwtTokenT) => new ProjectsFirewall(jwt, this);
+
+  unarchive = (id: SdkTableRowIdT) => pipe(
+    this.repo.unarchive({ id }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
+
+  archive = (id: SdkTableRowIdT) => pipe(
+    this.repo.archive({ id }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
+
+  search = this.esSearchRepo.search;
+
+  create = ({ organization, ...values }: SdkCreateProjectInputT) => pipe(
+    this.repo.create({
+      value: {
+        ...values,
+        organizationId: organization.id,
+      },
+    }),
+    TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
+
+  update = ({ id, ...value }: SdkUpdateProjectInputT & TableRowWithId) => pipe(
+    this.repo.update({ id, value }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
+}

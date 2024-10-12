@@ -130,6 +130,8 @@ export const I18N_PACK_PL: I18nLangPack = {
       organizations: 'Organizacje',
       users: 'Użytkownicy',
       s3: 'S3',
+      projects: 'Projekty',
+      apps: 'Aplikacje',
     },
     loggedIn: {
       logout: 'Wyloguj się',
@@ -159,6 +161,50 @@ export const I18N_PACK_PL: I18nLangPack = {
           maxNumberOfUsers: {
             label: 'Maksymalna liczba użytkowników',
             placeholder: 'Wpisz maksymalną liczbę użytkowników',
+          },
+        },
+      },
+    },
+    projects: {
+      prefix: {
+        project: 'Projekt',
+      },
+      form: {
+        title: {
+          edit: 'Edytuj projekt',
+          create: 'Utwórz projekt',
+        },
+        fields: {
+          name: {
+            label: 'Nazwa',
+            placeholder: 'Wpisz nazwę projektu',
+          },
+          organization: {
+            label: 'Wybierz organizację',
+          },
+        },
+      },
+    },
+    apps: {
+      prefix: {
+        app: 'Aplikacja',
+      },
+      form: {
+        title: {
+          create: 'Utwórz aplikację',
+          edit: 'Edytuj aplikację',
+        },
+        fields: {
+          name: {
+            label: 'Nazwa',
+            placeholder: 'Wpisz nazwę aplikacji',
+          },
+          organization: {
+            label: 'Organizacja',
+          },
+          chatContext: {
+            label: 'Kontekst czatu',
+            placeholder: 'Wpisz kontekst czatu',
           },
         },
       },
@@ -260,6 +306,20 @@ export const I18N_PACK_PL: I18nLangPack = {
         description: 'Zarządzaj organizacjami',
       },
       title: 'Zarządzaj organizacjami',
+    },
+    projects: {
+      meta: {
+        title: 'Projekty',
+        description: 'Zarządzaj projektami',
+      },
+      title: 'Zarządzaj projektami',
+    },
+    apps: {
+      meta: {
+        title: 'Aplikacje',
+        description: 'Zarządzaj aplikacjami',
+      },
+      title: 'Zarządzaj aplikacjami',
     },
     users: {
       meta: {

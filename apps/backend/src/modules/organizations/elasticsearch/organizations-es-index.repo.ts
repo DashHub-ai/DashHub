@@ -53,8 +53,8 @@ export class OrganizationsEsIndexRepo extends OrganizationsAbstractEsIndexRepo<O
       this.organizationsRepo.findByIds({ ids }),
       TE.map(
         A.map(entity => ({
-          ...(snakecaseKeys(entity, { deep: true }) as unknown as any),
-          _id: entity.id,
+          ...snakecaseKeys(entity, { deep: true }),
+          _id: String(entity.id),
         })),
       ),
       tryOrThrowTE,

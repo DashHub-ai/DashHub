@@ -14,6 +14,7 @@ export type ModalProps = PropsWithChildren & {
   header?: ReactNode;
   footer?: ReactNode;
   isLeaving?: boolean;
+  isOverflowVisible?: boolean;
   formProps?: JSX.IntrinsicElements['form'];
   onClose: VoidFunction;
 };
@@ -25,6 +26,7 @@ export function Modal(
     footer,
     className,
     isLeaving,
+    isOverflowVisible,
     formProps,
     onClose,
   }: ModalProps,
@@ -52,7 +54,11 @@ export function Modal(
         role="dialog"
         aria-modal="true"
         {...formProps as any}
-        className={clsx('uk-modal-dialog', formProps?.className)}
+        className={clsx(
+          'uk-modal-dialog',
+          isOverflowVisible && 'overflow-visible',
+          formProps?.className,
+        )}
       >
         <ModalCloseButton onClick={onClose} />
 
