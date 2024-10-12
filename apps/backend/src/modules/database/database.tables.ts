@@ -1,5 +1,6 @@
 import type { RecordOfType } from '@llm/commons';
 
+import type { AppsTable } from '../apps';
 import type {
   AuthEmailsTable,
   AuthPasswordsTable,
@@ -45,6 +46,9 @@ export type DatabaseTables = {
 
   // Projects
   projects: ProjectsTable;
+
+  // Apps
+  apps: AppsTable;
 };
 
 export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn>;
