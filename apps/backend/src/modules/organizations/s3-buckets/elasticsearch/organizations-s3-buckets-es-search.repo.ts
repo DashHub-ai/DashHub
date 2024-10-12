@@ -66,8 +66,7 @@ export class OrganizationsS3BucketsEsSearchRepo {
 
   private static mapOutputHit = (source: OrganizationsS3BucketsEsDocument): SdkSearchS3BucketItemT =>
     ({
-      ...camelcaseKeys(source.bucket, { deep: true }),
-      default: source.default,
-      organization: source.organization,
+      ...camelcaseKeys(source, { deep: true }),
+      id: Number(source.id),
     });
 }

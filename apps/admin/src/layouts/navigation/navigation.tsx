@@ -26,6 +26,10 @@ export function Navigation() {
                 {t.links.home}
               </NavigationItem>
 
+              <NavigationItem path={sitemap.organizations.index.raw} icon="building">
+                {t.links.organizations}
+              </NavigationItem>
+
               <NavigationItem path={sitemap.users.index.raw} icon="user">
                 {t.links.users}
               </NavigationItem>
@@ -38,12 +42,8 @@ export function Navigation() {
                 {t.links.projects}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.organizations.index.raw} icon="building">
-                {t.links.organizations}
-              </NavigationItem>
-
-              <NavigationItem path={sitemap.s3.index.raw} icon="cloud">
-                {t.links.s3}
+              <NavigationItem path={sitemap.s3Buckets.index.raw} icon="cloud">
+                {t.links.s3Buckets}
               </NavigationItem>
             </ul>
           </div>

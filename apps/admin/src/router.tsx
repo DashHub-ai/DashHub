@@ -7,7 +7,7 @@ import {
   LoginRoute,
   OrganizationsRoute,
   ProjectsRoute,
-  S3Route,
+  S3BucketsRoute,
   UsersRoute,
   useSitemap,
 } from '~/routes';
@@ -34,7 +34,7 @@ export function Router() {
       <Route path={sitemap.projects.index.raw} component={ProjectsRoute} />
       <Route path={sitemap.users.index.raw} component={UsersRoute} />
       <Route path={sitemap.organizations.index.raw} component={OrganizationsRoute} />
-      <Route path={sitemap.s3.index.raw} component={S3Route} />
+      <Route path={sitemap.s3Buckets.index.raw} component={S3BucketsRoute} />
       <Route>
         <Redirect to={sitemap.home} />
       </Route>

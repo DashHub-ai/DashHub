@@ -3,6 +3,9 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
+import type { NormalizeSelectTableRow, TableWithIdNameColumn } from '~/modules/database';
+import type { S3ResourcesBucketTableRow } from '~/modules/s3';
+
 import { tryOrThrowTE } from '@llm/commons';
 import {
   createArchivedRecordMappings,
@@ -14,8 +17,6 @@ import {
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
-
-import type { OrganizationS3BucketTableRowWithRelations } from '../organizations-s3-buckets.tables';
 
 import { OrganizationsS3BucketsRepo } from '../organizations-s3-buckets.repo';
 
@@ -39,7 +40,10 @@ const AbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type OrganizationsS3BucketsEsDocument = EsDocument<OrganizationS3BucketTableRowWithRelations>;
+export type OrganizationsS3BucketsEsDocument = EsDocument<S3ResourcesBucketTableRow & {
+  organization: NormalizeSelectTableRow<TableWithIdNameColumn>;
+  default: boolean;
+}>;
 
 @injectable()
 export class OrganizationsS3BucketsEsIndexRepo extends AbstractEsIndexRepo<OrganizationsS3BucketsEsDocument> {
@@ -54,9 +58,11 @@ export class OrganizationsS3BucketsEsIndexRepo extends AbstractEsIndexRepo<Organ
     return pipe(
       this.repo.findWithRelationsByIds({ ids }),
       TE.map(
-        A.map(entity => ({
-          ...snakecaseKeys(entity, { deep: true }),
-          _id: String(entity.bucket.id),
+        A.map(({ bucket, organization, default: isDefault }) => ({
+          ...snakecaseKeys(bucket, { deep: true }),
+          organization,
+          default: isDefault,
+          _id: String(bucket.id),
         })),
       ),
       tryOrThrowTE,

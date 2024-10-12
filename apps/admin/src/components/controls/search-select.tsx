@@ -5,9 +5,9 @@ import {
 } from '@under-control/forms';
 import * as A from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
-import { type CanBePromise, rejectById } from '@llm/commons';
+import { type CanBePromise, isObjectWithFakeID, rejectById } from '@llm/commons';
 import { useAsyncDebounce, useAsyncValue, useUpdateEffect } from '@llm/commons-front';
 import { useI18n } from '~/i18n';
 import { UkIcon } from '~/icons';
@@ -38,6 +38,8 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
   },
 ) => {
   const { pack } = useI18n();
+
+  const [wasOpened, setWasOpened] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const phrase = useControlStrict<string>({
     defaultValue: '',
@@ -48,18 +50,25 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
   });
 
   const result = useAsyncValue(
-    () => onDebouncedFetchItems({
-      limit,
-      ...phrase.value?.trim() && {
-        phrase: phrase.value,
-      },
-    }),
-    [phrase.value],
+    async () => {
+      if (!wasOpened) {
+        return [];
+      }
+
+      return onDebouncedFetchItems({
+        limit,
+        ...phrase.value?.trim() && {
+          phrase: phrase.value,
+        },
+      });
+    },
+    [phrase.value, wasOpened],
   );
 
   const onOpenChanged = (isOpen: boolean) => {
     if (isOpen) {
       searchInputRef.current?.focus();
+      setWasOpened(true);
     }
     else {
       phrase.setValue({
@@ -81,7 +90,7 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
       return [];
     }
 
-    if (value) {
+    if (value && !isObjectWithFakeID(value)) {
       return pipe(
         result.data,
         rejectById(value.id),
