@@ -15,12 +15,12 @@ import {
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import type { AppTableRowWithRelations } from '../apps.tables';
+import type { OrganizationS3BucketTableRowWithRelations } from '../organizations-s3-buckets.tables';
 
-import { AppsRepo } from '../apps.repo';
+import { OrganizationsS3BucketsRepo } from '../organizations-s3-buckets.repo';
 
-const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
-  indexName: 'dashboard-apps',
+const AbstractEsIndexRepo = createElasticsearchIndexRepo({
+  indexName: 'dashboard-s3-buckets',
   schema: {
     mappings: {
       dynamic: false,
@@ -28,6 +28,7 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings(),
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
+        ...createBaseAutocompleteFieldMappings(),
         organization: createIdNameObjectMapping(),
       },
     },
@@ -38,24 +39,24 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type AppsEsDocument = EsDocument<AppTableRowWithRelations>;
+export type OrganizationsS3BucketsEsDocument = EsDocument<OrganizationS3BucketTableRowWithRelations>;
 
 @injectable()
-export class AppsEsIndexRepo extends AppsAbstractEsIndexRepo<AppsEsDocument> {
+export class OrganizationsS3BucketsEsIndexRepo extends AbstractEsIndexRepo<OrganizationsS3BucketsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
-    @inject(AppsRepo) private readonly organizationsRepo: AppsRepo,
+    @inject(OrganizationsS3BucketsRepo) private readonly repo: OrganizationsS3BucketsRepo,
   ) {
     super(elasticsearchRepo);
   }
 
-  protected async findEntities(ids: number[]): Promise<AppsEsDocument[]> {
+  protected async findEntities(ids: number[]): Promise<OrganizationsS3BucketsEsDocument[]> {
     return pipe(
-      this.organizationsRepo.findWithRelationsByIds({ ids }),
+      this.repo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
           ...snakecaseKeys(entity, { deep: true }),
-          _id: String(entity.id),
+          _id: String(entity.bucket.id),
         })),
       ),
       tryOrThrowTE,
@@ -63,7 +64,7 @@ export class AppsEsIndexRepo extends AppsAbstractEsIndexRepo<AppsEsDocument> {
   }
 
   protected createAllEntitiesIdsIterator = () =>
-    this.organizationsRepo.createIdsIterator({
+    this.repo.createIdsIterator({
       chunkSize: 100,
     });
 }

@@ -63,8 +63,6 @@ export async function up(db: Kysely<any>): Promise<void> {
 
   await db.schema
     .createTable('organizations_s3_resources_buckets')
-    .$call(addIdColumn)
-    .$call(addTimestampColumns)
     .addColumn('organization_id', 'integer', col =>
       col.references('organizations.id').notNull().onDelete('restrict'))
     .addColumn('bucket_id', 'integer', col =>
