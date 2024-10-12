@@ -49,9 +49,14 @@ export class BootService {
       tapTaskEither(this.registerCronJobs),
       TE.chainW(this.usersBootService.ensureRootUserExists),
       TE.chainW(this.esRegistryBootService.registerAndReindexIfNeeded),
-      tapTaskEither(() => {
-        logger.info('Application booted successfully!');
-      }),
+      tapTaskEither(
+        () => {
+          logger.info('Application booted successfully!');
+        },
+        () => {
+          logger.error('What the hell happened? Application failed to boot!');
+        },
+      ),
       tryOrThrowTE,
       runTask,
     );

@@ -11,12 +11,18 @@ import type {
   OrganizationsUsersTable,
 } from '../organizations';
 import type {
+  ProjectsTable,
+} from '../projects';
+import type {
   S3ResourcesBucketsTable,
   S3ResourcesImagesTable,
   S3ResourcesTable,
 } from '../s3';
 import type { UsersTable } from '../users';
-import type { TableWithArchivedAtColumn, TableWithIdColumn } from './types';
+import type {
+  TableWithArchivedAtColumn,
+  TableWithIdColumn,
+} from './types';
 
 export type DatabaseTables = {
   // S3
@@ -36,6 +42,9 @@ export type DatabaseTables = {
   organizations: OrganizationsTable;
   organizations_s3_resources_buckets: OrganizationsS3BucketsTable;
   organizations_users: OrganizationsUsersTable;
+
+  // Projects
+  projects: ProjectsTable;
 };
 
 export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn>;

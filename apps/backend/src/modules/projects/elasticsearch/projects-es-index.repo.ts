@@ -10,16 +10,17 @@ import {
   createBaseAutocompleteFieldMappings,
   createBaseDatedRecordMappings,
   createElasticsearchIndexRepo,
+  createIdNameObjectMapping,
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import type { OrganizationTableRow } from '../organizations.tables';
+import type { ProjectTableRowWithRelations } from '../projects.tables';
 
-import { OrganizationsRepo } from '../organizations.repo';
+import { ProjectsRepo } from '../projects.repo';
 
-const OrganizationsAbstractEsIndexRepo = createElasticsearchIndexRepo({
-  indexName: 'dashboard-organizations',
+const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
+  indexName: 'dashboard-projects',
   schema: {
     mappings: {
       dynamic: false,
@@ -27,7 +28,7 @@ const OrganizationsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings(),
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
-        max_number_of_users: { type: 'integer' },
+        organization: createIdNameObjectMapping(),
       },
     },
     settings: {
@@ -37,23 +38,23 @@ const OrganizationsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type OrganizationsEsDocument = EsDocument<OrganizationTableRow>;
+export type ProjectsEsDocument = EsDocument<ProjectTableRowWithRelations>;
 
 @injectable()
-export class OrganizationsEsIndexRepo extends OrganizationsAbstractEsIndexRepo<OrganizationsEsDocument> {
+export class ProjectsEsIndexRepo extends ProjectsAbstractEsIndexRepo<ProjectsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
-    @inject(OrganizationsRepo) private readonly organizationsRepo: OrganizationsRepo,
+    @inject(ProjectsRepo) private readonly organizationsRepo: ProjectsRepo,
   ) {
     super(elasticsearchRepo);
   }
 
-  protected async findEntities(ids: number[]): Promise<OrganizationsEsDocument[]> {
+  protected async findEntities(ids: number[]): Promise<ProjectsEsDocument[]> {
     return pipe(
-      this.organizationsRepo.findByIds({ ids }),
+      this.organizationsRepo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
-          ...snakecaseKeys(entity, { deep: true }),
+          ...(snakecaseKeys(entity, { deep: true })),
           _id: String(entity.id),
         })),
       ),
