@@ -11,6 +11,7 @@ import {
   PaginatedTable,
   PaginationSearchToolbarItem,
   PaginationToolbar,
+  ResetFiltersButton,
   useDebouncedPaginatedSearch,
 } from '~/components';
 import { useI18n } from '~/i18n';
@@ -61,6 +62,8 @@ export function OrganizationsTableContainer() {
             }),
           })}
         />
+
+        <ResetFiltersButton onClick={reset} />
       </PaginationToolbar>
 
       <PaginatedTable

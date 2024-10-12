@@ -20,10 +20,10 @@ export function useSitemap() {
     home: '/',
     login: '/login',
     organizations: {
-      index: defineRouteGenerator<SearchOrganizationsRouteUrlFiltersT, 'edit'>()('/organizations'),
-      edit: (id: SdkTableRowIdT) => sitemap.organizations.index.generate({
-        hash: 'edit',
+      index: defineRouteGenerator<SearchOrganizationsRouteUrlFiltersT>()('/organizations'),
+      show: (id: SdkTableRowIdT) => sitemap.organizations.index.generate({
         searchParams: {
+          archived: null,
           ids: [id],
         },
       }),
@@ -50,10 +50,6 @@ function defineRouteGenerator<
         ? parameterizeStrictPath(schema, pathParams)
         : schema,
 
-      hash
-        ? withHash(hash)
-        : identity,
-
       searchParams || defaultSearchParams
         ? withSearchParams(
           {
@@ -61,6 +57,10 @@ function defineRouteGenerator<
             ...searchParams,
           },
         )
+        : identity,
+
+      hash
+        ? withHash(hash)
         : identity,
     ),
   });

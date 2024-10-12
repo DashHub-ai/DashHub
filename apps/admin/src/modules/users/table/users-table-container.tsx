@@ -11,6 +11,7 @@ import {
   PaginatedTable,
   PaginationSearchToolbarItem,
   PaginationToolbar,
+  ResetFiltersButton,
   useDebouncedPaginatedSearch,
 } from '~/components';
 import { genRandomPassword } from '~/helpers';
@@ -99,6 +100,8 @@ export function UsersTableContainer() {
           prefix={pack.modules.organizations.prefix.organization}
           {...pagination.bind.path('organization')}
         />
+
+        <ResetFiltersButton onClick={reset} />
       </PaginationToolbar>
 
       <PaginatedTable

@@ -31,7 +31,10 @@ export function UsersTableRow({ item, onUpdated }: Props) {
         {(
           item.role === 'user'
             ? (
-                <Link className="uk-link" href={sitemap.organizations.edit(item.organization.id)}>
+                <Link
+                  className="uk-link"
+                  href={sitemap.organizations.show(item.organization.id)}
+                >
                   {item.organization.name}
                 </Link>
               )

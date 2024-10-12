@@ -55,6 +55,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     update: 'Aktualizuj',
     add: 'Dodaj',
     confirm: 'Potwierdź',
+    resetFilters: 'Resetuj filtry',
   },
   badges: {
     archive: {
