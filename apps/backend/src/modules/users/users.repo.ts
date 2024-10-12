@@ -184,7 +184,7 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
       transaction(
         async qb =>
           qb
-            .selectFrom('users')
+            .selectFrom(this.table)
             .where('users.id', 'in', ids)
             .leftJoin('organizations_users', 'organizations_users.user_id', 'users.id')
             .leftJoin('organizations', 'organizations.id', 'organization_id')

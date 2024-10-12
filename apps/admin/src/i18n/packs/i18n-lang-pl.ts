@@ -129,7 +129,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       home: 'Podsumowanie',
       organizations: 'Organizacje',
       users: 'Użytkownicy',
-      s3: 'S3',
+      s3Buckets: 'S3',
       projects: 'Projekty',
       apps: 'Aplikacje',
     },
@@ -205,6 +205,46 @@ export const I18N_PACK_PL: I18nLangPack = {
           chatContext: {
             label: 'Kontekst czatu',
             placeholder: 'Wpisz kontekst czatu',
+          },
+        },
+      },
+    },
+    s3Buckets: {
+      prefix: {
+        s3Bucket: 'Kubełek S3',
+      },
+      table: {
+        columns: {
+          accessKeyId: 'Access key',
+        },
+      },
+      form: {
+        title: {
+          create: 'Utwórz kubełek S3',
+          edit: 'Edytuj kubełek S3',
+        },
+        fields: {
+          name: {
+            label: 'Nazwa',
+            placeholder: 'Wpisz nazwę kubełka S3',
+          },
+          organization: {
+            label: 'Organizacja',
+          },
+          region: {
+            label: 'Region',
+            placeholder: 'Wpisz region',
+          },
+          accessKeyId: {
+            label: 'Access key',
+            placeholder: 'Wpisz access key',
+          },
+          secretAccessKey: {
+            label: 'Secret key',
+            placeholder: 'Wpisz secret key',
+          },
+          default: {
+            label: 'Domyślny',
           },
         },
       },
@@ -328,12 +368,12 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
       title: 'Zarządzaj użytkownikami',
     },
-    s3: {
+    s3Buckets: {
       meta: {
         title: 'S3',
-        description: 'Zarządzaj plikami S3',
+        description: 'Zarządzaj kubełkami S3',
       },
-      title: 'Zarządzaj plikami S3',
+      title: 'Zarządzaj kubełkami S3',
     },
   },
 };

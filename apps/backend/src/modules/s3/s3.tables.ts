@@ -1,4 +1,5 @@
 import type {
+  NormalizeSelectTableRow,
   TableId,
   TableWithArchivedAtColumn,
   TableWithDefaultColumns,
@@ -29,3 +30,5 @@ export type S3ResourcesImagesTable = TableWithDefaultColumns &
     width: number;
     height: number;
   };
+
+export type S3ResourcesBucketTableRow = NormalizeSelectTableRow<S3ResourcesBucketsTable>;

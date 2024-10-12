@@ -34,7 +34,7 @@ export class AppsRepo extends createDatabaseRepo('apps') {
       transaction(
         async qb =>
           qb
-            .selectFrom('apps')
+            .selectFrom(this.table)
             .where('apps.id', 'in', ids)
             .innerJoin('organizations', 'organizations.id', 'organization_id')
             .selectAll('apps')

@@ -54,7 +54,7 @@ export class ProjectsEsIndexRepo extends ProjectsAbstractEsIndexRepo<ProjectsEsD
       this.organizationsRepo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
-          ...(snakecaseKeys(entity, { deep: true })),
+          ...snakecaseKeys(entity, { deep: true }),
           _id: String(entity.id),
         })),
       ),

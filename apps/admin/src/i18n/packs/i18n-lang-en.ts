@@ -155,7 +155,7 @@ export const I18N_PACK_EN = {
       home: 'Overview',
       organizations: 'Organizations',
       users: 'Users',
-      s3: 'S3',
+      s3Buckets: 'S3',
       projects: 'Projects',
       apps: 'Apps',
     },
@@ -231,6 +231,46 @@ export const I18N_PACK_EN = {
           chatContext: {
             label: 'Chat context',
             placeholder: 'Enter chat context',
+          },
+        },
+      },
+    },
+    s3Buckets: {
+      prefix: {
+        s3Bucket: 'S3 Bucket',
+      },
+      table: {
+        columns: {
+          accessKeyId: 'Access key',
+        },
+      },
+      form: {
+        title: {
+          create: 'Create S3 bucket',
+          edit: 'Edit S3 bucket',
+        },
+        fields: {
+          name: {
+            label: 'Name',
+            placeholder: 'Enter S3 bucket name',
+          },
+          organization: {
+            label: 'Organization',
+          },
+          region: {
+            label: 'Region',
+            placeholder: 'Enter region',
+          },
+          accessKeyId: {
+            label: 'Access key',
+            placeholder: 'Enter access key',
+          },
+          secretAccessKey: {
+            label: 'Secret access key',
+            placeholder: 'Enter secret access key',
+          },
+          default: {
+            label: 'Default',
           },
         },
       },
@@ -354,7 +394,7 @@ export const I18N_PACK_EN = {
       },
       title: 'Manage users',
     },
-    s3: {
+    s3Buckets: {
       meta: {
         title: 'S3 Buckets',
         description: 'Manage S3 buckets',

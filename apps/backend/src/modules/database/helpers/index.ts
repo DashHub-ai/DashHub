@@ -1,2 +1,2 @@
-export * from '../connection/is-silent-db-log';
+export * from './chain-database-promise-te';
 export * from './try-get-first-or-not-exists';

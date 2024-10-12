@@ -37,8 +37,8 @@ export function useSitemap() {
     users: {
       index: defineRouteGenerator<SearchUsersRouteUrlFiltersT>()('/users'),
     },
-    s3: {
-      index: defineRouteGenerator()('/s3'),
+    s3Buckets: {
+      index: defineRouteGenerator()('/s3-buckets'),
     },
   };
 
