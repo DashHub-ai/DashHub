@@ -4,8 +4,6 @@ import { toEntries } from 'fp-ts/lib/Record';
 
 import type { CanBeArray, Nullable } from '../../types';
 
-import { isNil } from '../is-nil';
-
 export type SearchParamValue = string | number | boolean | Date | null;
 
 export type SearchParamsMap = Record<
@@ -17,7 +15,9 @@ export function encodeSearchParams(query: SearchParamsMap) {
   return pipe(
     toEntries(query),
     A.chain<[string, any], [string, any]>(([key, value]) => {
-      if (isNil(value)) {
+      // `null` is a valid value for a query parameter, but `undefined` is not.
+      // Take a look at the `StrictNullableBooleanV` in typings.
+      if (value === undefined) {
         return [];
       }
 

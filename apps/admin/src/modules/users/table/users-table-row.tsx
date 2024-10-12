@@ -1,10 +1,12 @@
 import { pipe } from 'fp-ts/lib/function';
+import { Link } from 'wouter';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchUserItemT, useSdkForLoggedIn } from '@llm/sdk';
 import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/components';
 import { useI18n } from '~/i18n';
 import { UkIcon } from '~/icons';
+import { useSitemap } from '~/routes';
 
 import { useUserUpdateModal } from '../form';
 
@@ -14,6 +16,7 @@ type Props = {
 };
 
 export function UsersTableRow({ item, onUpdated }: Props) {
+  const sitemap = useSitemap();
   const { pack } = useI18n();
   const { sdks } = useSdkForLoggedIn();
   const { auth } = item;
@@ -24,7 +27,20 @@ export function UsersTableRow({ item, onUpdated }: Props) {
     <tr>
       <td>{item.id}</td>
       <td>{item.email}</td>
-      <td>{item.role === 'user' ? item.organization.name : '-'}</td>
+      <td>
+        {(
+          item.role === 'user'
+            ? (
+                <Link
+                  className="uk-link"
+                  href={sitemap.organizations.show(item.organization.id)}
+                >
+                  {item.organization.name}
+                </Link>
+              )
+            : '-'
+        )}
+      </td>
       <td>
         <BooleanBadge value={item.active} />
       </td>

@@ -94,9 +94,15 @@ export function useDebouncedPaginatedSearch<
   };
 
   const reset = () => {
+    const { initialState } = urlPagination;
+
     pagination.setValue({
       value: {
-        ...urlPagination.initialState,
+        offset: 0,
+        limit: initialState?.limit ?? 10,
+        ...'archived' in initialState && {
+          archived: false,
+        },
         __revision: Date.now(),
       },
     });

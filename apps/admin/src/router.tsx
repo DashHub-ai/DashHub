@@ -28,9 +28,9 @@ export function Router() {
   return (
     <Switch>
       <Route path={sitemap.home} component={HomeRoute} />
-      <Route path={sitemap.organizations} component={OrganizationsRoute} />
-      <Route path={sitemap.s3} component={S3Route} />
-      <Route path={sitemap.users} component={UsersRoute} />
+      <Route path={sitemap.users.index.raw} component={UsersRoute} />
+      <Route path={sitemap.organizations.index.raw} component={OrganizationsRoute} />
+      <Route path={sitemap.s3.index.raw} component={S3Route} />
       <Route>
         <Redirect to={sitemap.home} />
       </Route>

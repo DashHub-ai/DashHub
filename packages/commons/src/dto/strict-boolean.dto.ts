@@ -7,3 +7,12 @@ export const StrictBooleanV = z
     z.literal('false'),
   ])
   .transform(value => value === true || value === 'true');
+
+export const StrictNullableBooleanV = z.union([
+  StrictBooleanV,
+  z.union([
+    z.literal('null'),
+    z.null(),
+  ])
+    .transform(() => null),
+]);

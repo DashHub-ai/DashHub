@@ -81,6 +81,7 @@ export const I18N_PACK_EN = {
     update: 'Update',
     add: 'Add',
     confirm: 'Confirm',
+    resetFilters: 'Reset filters',
   },
   badges: {
     archive: {
@@ -94,6 +95,7 @@ export const I18N_PACK_EN = {
   },
   tabs: {
     archiveFilters: {
+      all: 'All',
       active: 'Active',
       archived: 'Archived',
     },

@@ -1,3 +1,5 @@
+import type { z } from 'zod';
+
 import { pipe } from 'fp-ts/lib/function';
 
 import { tapTaskOption } from '@llm/commons';
@@ -9,6 +11,7 @@ import {
   PaginatedTable,
   PaginationSearchToolbarItem,
   PaginationToolbar,
+  ResetFiltersButton,
   useDebouncedPaginatedSearch,
 } from '~/components';
 import { genRandomPassword } from '~/helpers';
@@ -25,6 +28,8 @@ const SearchUsersUrlFiltersV = SdKSearchUsersInputV
   .extend({
     organization: SdkIdNameUrlEntryV.optional().nullable(),
   });
+
+export type SearchUsersRouteUrlFiltersT = z.input<typeof SearchUsersUrlFiltersV>;
 
 export function UsersTableContainer() {
   const { pack } = useI18n();
@@ -95,6 +100,8 @@ export function UsersTableContainer() {
           prefix={pack.modules.organizations.prefix.organization}
           {...pagination.bind.path('organization')}
         />
+
+        <ResetFiltersButton onClick={reset} />
       </PaginationToolbar>
 
       <PaginatedTable

@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-import { StrictBooleanV } from '@llm/commons';
+import { StrictNullableBooleanV } from '@llm/commons';
 
 import { SdkIdsArrayV } from './sdk-ids-array.dto';
 
 export const SdkArchivedFiltersInputV = z.object({
-  archived: StrictBooleanV.optional().default(false),
+  archived: StrictNullableBooleanV.optional().default(false),
 });
 
 export const SdkIdsFiltersInputV = z.object({
