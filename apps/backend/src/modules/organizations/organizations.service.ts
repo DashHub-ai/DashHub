@@ -1,6 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import type {
   SdkCreateOrganizationInputT,
@@ -12,10 +12,15 @@ import type {
 import type { WithAuthFirewall } from '../auth';
 import type { TableRowWithId } from '../database';
 
+import { AppsService } from '../apps';
+import { ProjectsService } from '../projects';
+import { UsersService } from '../users';
 import { OrganizationsEsIndexRepo } from './elasticsearch';
 import { OrganizationsEsSearchRepo } from './elasticsearch/organizations-es-search.repo';
 import { OrganizationsFirewall } from './organizations.firewall';
 import { OrganizationsRepo } from './organizations.repo';
+import { OrganizationsS3BucketsService } from './s3-buckets';
+import { OrganizationsUsersRepo } from './users/organizations-users.repo';
 
 @injectable()
 export class OrganizationsService implements WithAuthFirewall<OrganizationsFirewall> {
@@ -23,6 +28,12 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     @inject(OrganizationsRepo) private readonly repo: OrganizationsRepo,
     @inject(OrganizationsEsSearchRepo) private readonly esSearchRepo: OrganizationsEsSearchRepo,
     @inject(OrganizationsEsIndexRepo) private readonly esIndexRepo: OrganizationsEsIndexRepo,
+    @inject(OrganizationsUsersRepo) private readonly organizationsUsersRepo: OrganizationsUsersRepo,
+    @inject(delay(() => UsersService)) private readonly usersService: Readonly<UsersService>,
+    @inject(delay(() => ProjectsService)) private readonly projectsService: Readonly<ProjectsService>,
+    @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
+    @inject(delay(() => OrganizationsS3BucketsService))
+    private readonly orgsS3BucketsService: Readonly<OrganizationsS3BucketsService>,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this);
@@ -33,7 +44,30 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
   );
 
   archive = (id: SdkTableRowIdT) => pipe(
-    this.repo.archive({ id }),
+    // Archive all related organization data in parallel.
+    TE.sequenceArray([
+      // Archive all users in the organization
+      TE.fromTask(
+        pipe(
+          this.organizationsUsersRepo.createOrganizationUsersIdsIterator({
+            organizationId: id,
+          }),
+          this.usersService.archiveSeqStream,
+        ),
+      ),
+
+      // Archive all projects in the organization
+      this.projectsService.archiveSeqByOrganizationId(id),
+
+      // Archive all apps in the organization
+      this.appsService.archiveSeqByOrganizationId(id),
+
+      // Archive all s3 buckets in the organization.
+      this.orgsS3BucketsService.archiveSeqByOrganizationId(id),
+    ]),
+
+    // Archive the organization itself.
+    TE.chain(() => this.repo.archive({ id })),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 

@@ -9,8 +9,15 @@ import type {
   SdkUpdateProjectInputT,
 } from '@llm/sdk';
 
+import {
+  asyncIteratorToVoidPromise,
+  runTaskAsVoid,
+  tapAsyncIterator,
+  tryOrThrowTE,
+} from '@llm/commons';
+
 import type { WithAuthFirewall } from '../auth';
-import type { TableRowWithId } from '../database';
+import type { TableId, TableRowWithId } from '../database';
 
 import { ProjectsEsIndexRepo, ProjectsEsSearchRepo } from './elasticsearch';
 import { ProjectsFirewall } from './projects.firewall';
@@ -35,6 +42,35 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     this.repo.archive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
+
+  archiveSeqByOrganizationId = (organizationId: SdkTableRowIdT) => TE.fromTask(
+    pipe(
+      this.repo.createIdsIterator({
+        where: [['organizationId', '=', organizationId]],
+        chunkSize: 100,
+      }),
+      this.archiveSeqStream,
+    ),
+  );
+
+  archiveSeqStream = (stream: AsyncIterableIterator<TableId[]>) => async () =>
+    pipe(
+      stream,
+      tapAsyncIterator<TableId[], void>(async ids =>
+        pipe(
+          this.repo.archiveRecords({
+            where: [
+              ['id', 'in', ids],
+              ['archived', '=', false],
+            ],
+          }),
+          TE.tap(() => this.esIndexRepo.findAndIndexDocumentsByIds(ids)),
+          tryOrThrowTE,
+          runTaskAsVoid,
+        ),
+      ),
+      asyncIteratorToVoidPromise,
+    );
 
   search = this.esSearchRepo.search;
 

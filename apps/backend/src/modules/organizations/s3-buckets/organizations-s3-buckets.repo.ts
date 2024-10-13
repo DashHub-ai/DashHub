@@ -35,6 +35,8 @@ export class OrganizationsS3BucketsRepo extends AbstractDatabaseRepo {
 
   archive = this.s3ResourcesBucketsRepo.archive;
 
+  archiveRecords = this.s3ResourcesBucketsRepo.archiveRecords;
+
   createIdsIterator = (
     { organizationId, ...attrs }: IdsChunkedIteratorAttrs<'s3_resources_buckets'> & {
       organizationId?: TableId;
