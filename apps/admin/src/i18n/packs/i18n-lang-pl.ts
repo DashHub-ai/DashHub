@@ -118,7 +118,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       organization: 'Organizacja',
       active: 'Aktywny',
       email: 'E-mail',
-      archived: 'Archived',
+      archived: 'Archiwum',
       createdAt: 'Utworzono',
       updatedAt: 'Zaktualizowano',
       actions: 'Akcje',
@@ -216,6 +216,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       table: {
         columns: {
           accessKeyId: 'Access key',
+          defaultForOrganization: 'Domyślny dla organizacji',
         },
       },
       form: {
@@ -230,6 +231,9 @@ export const I18N_PACK_PL: I18nLangPack = {
           },
           organization: {
             label: 'Organizacja',
+          },
+          defaultForOrganization: {
+            label: 'Domyślny dla organizacji',
           },
           region: {
             label: 'Region',

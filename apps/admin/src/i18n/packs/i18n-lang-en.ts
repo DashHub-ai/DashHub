@@ -242,6 +242,7 @@ export const I18N_PACK_EN = {
       table: {
         columns: {
           accessKeyId: 'Access key',
+          defaultForOrganization: 'Default for organization',
         },
       },
       form: {
@@ -256,6 +257,9 @@ export const I18N_PACK_EN = {
           },
           organization: {
             label: 'Organization',
+          },
+          defaultForOrganization: {
+            label: 'Default for organization',
           },
           region: {
             label: 'Region',

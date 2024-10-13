@@ -2,10 +2,13 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkS3BucketT } from '@llm/sdk';
 
-import { FormField, Input } from '~/components';
+import { Checkbox, FormField, Input } from '~/components';
 import { useI18n } from '~/i18n';
 
-type Value = Pick<SdkS3BucketT, 'name' | 'region' | 'accessKeyId' | 'secretAccessKey'>;
+type Value = Pick<
+  SdkS3BucketT,
+  'name' | 'region' | 'accessKeyId' | 'secretAccessKey' | 'default'
+>;
 
 type Props = ValidationErrorsListProps<Value>;
 
@@ -65,6 +68,19 @@ export const S3BucketSharedFormFields = controlled<Value, Props>(({ errors, cont
           required
           {...bind.path('secretAccessKey')}
         />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.defaultForOrganization.label}
+        {...validation.extract('default')}
+      >
+        <Checkbox
+          {...bind.path('default')}
+          className="block uk-text-small"
+        >
+          {t.fields.defaultForOrganization.label}
+        </Checkbox>
       </FormField>
     </>
   );

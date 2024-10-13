@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateS3BucketInputT, SdkUpdateS3BucketInputT } from '@llm/sdk';
 
-import { mapAsyncIterator } from '@llm/commons';
+import { isNil, mapAsyncIterator } from '@llm/commons';
 import {
   AbstractDatabaseRepo,
   chainDatabasePromiseTE,
@@ -13,6 +13,7 @@ import {
   DatabaseError,
   IdsChunkedIteratorAttrs,
   TableId,
+  tapDatabasePromiseTE,
   TransactionalAttrs,
   tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
@@ -35,18 +36,22 @@ export class OrganizationsS3BucketsRepo extends AbstractDatabaseRepo {
   archive = this.s3ResourcesBucketsRepo.archive;
 
   createIdsIterator = (
-    attrs: IdsChunkedIteratorAttrs<'s3_resources_buckets'>,
+    { organizationId, ...attrs }: IdsChunkedIteratorAttrs<'s3_resources_buckets'> & {
+      organizationId?: TableId;
+    },
   ): AsyncIterableIterator<TableId[]> => {
     const { queryBuilder } = this.s3ResourcesBucketsRepo;
+    const query = queryBuilder
+      .createSelectIdQuery()
+      .innerJoin(
+        'organizations_s3_resources_buckets',
+        's3_resources_buckets.id',
+        'bucket_id',
+      )
+      .$if(!isNil(organizationId), qb => qb.where('organization_id', '=', organizationId!));
 
     return pipe(
-      queryBuilder
-        .createSelectIdQuery()
-        .innerJoin(
-          'organizations_s3_resources_buckets',
-          's3_resources_buckets.id',
-          'bucket_id',
-        ),
+      query,
       queryBuilder.createChunkedIterator(attrs),
       mapAsyncIterator(A.map(item => item.id)),
     );
@@ -121,15 +126,16 @@ export class OrganizationsS3BucketsRepo extends AbstractDatabaseRepo {
           organizationId: organization.id,
         });
       }),
-      chainDatabasePromiseTE(
+      tapDatabasePromiseTE(
         async () => trx
           .updateTable('organizations_s3_resources_buckets')
           .set({ default: value.default })
           .where('bucket_id', '=', id)
           .execute(),
       ),
-      TE.map(() => ({
+      TE.map(({ organization }) => ({
         id,
+        organization,
       })),
     ));
   };

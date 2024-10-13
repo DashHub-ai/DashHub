@@ -115,6 +115,10 @@ export function S3BucketsTableContainer() {
             className: 'uk-table-expand',
           },
           { id: 'organization', name: t.organization, className: 'uk-table-expand' },
+          {
+            id: 'defaultForOrganization',
+            name: pack.modules.s3Buckets.table.columns.defaultForOrganization,
+          },
           { id: 'archived', name: t.archived, className: 'w-[150px]' },
           { id: 'createdAt', name: t.createdAt, className: 'w-[200px]' },
           { id: 'updatedAt', name: t.updatedAt, className: 'w-[200px]' },
