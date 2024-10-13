@@ -9,7 +9,14 @@ import type {
   SdkUpdateS3BucketInputT,
 } from '@llm/sdk';
 import type { WithAuthFirewall } from '~/modules/auth';
-import type { TableRowWithId } from '~/modules/database';
+import type { TableId, TableRowWithId } from '~/modules/database';
+
+import {
+  asyncIteratorToVoidPromise,
+  runTaskAsVoid,
+  tapAsyncIterator,
+  tryOrThrowTE,
+} from '@llm/commons';
 
 import { OrganizationsS3BucketsEsIndexRepo, OrganizationsS3BucketsEsSearchRepo } from './elasticsearch';
 import { OrganizationsS3BucketsFirewall } from './organizations-s3-buckets.firewall';
@@ -30,11 +37,6 @@ export class OrganizationsS3BucketsService implements WithAuthFirewall<Organizat
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  archive = (id: SdkTableRowIdT) => pipe(
-    this.repo.archive({ id }),
-    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
-  );
-
   search = this.esSearchRepo.search;
 
   create = (value: SdkCreateS3BucketInputT) => pipe(
@@ -48,4 +50,39 @@ export class OrganizationsS3BucketsService implements WithAuthFirewall<Organizat
     this.repo.update({ id, value }),
     TE.tap(({ organization }) => this.esIndexRepo.reindexAllOrganizationS3Buckets(organization.id)),
   );
+
+  archive = (id: SdkTableRowIdT) => pipe(
+    this.repo.archive({ id }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
+
+  archiveSeqByOrganizationId = (organizationId: SdkTableRowIdT) => TE.fromTask(
+    pipe(
+      this.repo.createIdsIterator({
+        organizationId,
+        chunkSize: 100,
+      }),
+      this.archiveSeqStream,
+    ),
+  );
+
+  // Private as there is no verification if ids are associated with the organizations.
+  private archiveSeqStream = (stream: AsyncIterableIterator<TableId[]>) => async () =>
+    pipe(
+      stream,
+      tapAsyncIterator<TableId[], void>(async ids =>
+        pipe(
+          this.repo.archiveRecords({
+            where: [
+              ['id', 'in', ids],
+              ['archived', '=', false],
+            ],
+          }),
+          TE.tap(() => this.esIndexRepo.findAndIndexDocumentsByIds(ids)),
+          tryOrThrowTE,
+          runTaskAsVoid,
+        ),
+      ),
+      asyncIteratorToVoidPromise,
+    );
 }

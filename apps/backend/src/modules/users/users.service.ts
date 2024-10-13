@@ -4,9 +4,16 @@ import { inject, injectable } from 'tsyringe';
 
 import type { SdkJwtTokenT, SdkTableRowIdT, SdkUpdateUserInputT } from '@llm/sdk';
 
+import {
+  asyncIteratorToVoidPromise,
+  runTaskAsVoid,
+  tapAsyncIterator,
+  tryOrThrowTE,
+} from '@llm/commons';
+
 import type { WithAuthFirewall } from '../auth';
 
-import { TableRowWithId } from '../database';
+import { TableId, TableRowWithId } from '../database';
 import { UsersEsSearchRepo } from './elasticsearch';
 import { UsersEsIndexRepo } from './elasticsearch/users-es-index.repo';
 import { UsersFirewall } from './users.firewall';
@@ -52,4 +59,23 @@ export class UsersService implements WithAuthFirewall<UsersFirewall> {
     this.repo.archive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
+
+  archiveSeqStream = (stream: AsyncIterableIterator<TableId[]>) => async () =>
+    pipe(
+      stream,
+      tapAsyncIterator<TableId[], void>(async ids =>
+        pipe(
+          this.repo.archiveRecords({
+            where: [
+              ['id', 'in', ids],
+              ['archived', '=', false],
+            ],
+          }),
+          TE.tap(() => this.esIndexRepo.findAndIndexDocumentsByIds(ids)),
+          tryOrThrowTE,
+          runTaskAsVoid,
+        ),
+      ),
+      asyncIteratorToVoidPromise,
+    );
 }

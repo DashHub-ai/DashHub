@@ -37,10 +37,12 @@ export type RecordsArchiveBasicAttrs<K extends keyof DatabaseTablesWithId> =
  *    TE.map(...),
  *  );
  */
-export function createArchiveRecordsQuery<K extends keyof DatabaseTablesWithArchivedAt & keyof DatabaseTablesWithId>({
-  defaultRelatedRowValues,
-  ...factoryAttrs
-}: RecordsArchiveBasicAttrs<K>) {
+export function createArchiveRecordsQuery<K extends keyof DatabaseTablesWithArchivedAt & keyof DatabaseTablesWithId>(
+  {
+    defaultRelatedRowValues,
+    ...factoryAttrs
+  }: RecordsArchiveBasicAttrs<K>,
+) {
   return ({
     relatedRowValues,
     tapUpdatedAt = true,

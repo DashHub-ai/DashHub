@@ -15,7 +15,7 @@ import {
   DatabaseConnectionRepo,
   DatabaseError,
   type KyselyQueryCreator,
-  RecordsArchiveBasicAttrs,
+  RecordsArchiveAttrs,
   type TableId,
   type TransactionalAttrs,
   tryGetFirstOrNotExists,
@@ -46,7 +46,7 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
       },
     });
 
-  archiveRecords = (attrs: RecordsArchiveBasicAttrs<'users'>) =>
+  archiveRecords = (attrs: Omit<RecordsArchiveAttrs<'users'>, 'relatedRowValues'>) =>
     createArchiveRecordsQuery(this.baseRepo.queryFactoryAttrs)({
       ...attrs,
       relatedRowValues: {
