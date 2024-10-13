@@ -72,8 +72,7 @@ export const S3BucketSharedFormFields = controlled<Value, Props>(({ errors, cont
 
       <FormField
         className="uk-margin"
-        label={t.fields.defaultForOrganization.label}
-        {...validation.extract('default')}
+        label={t.fields.settings.label}
       >
         <Checkbox
           {...bind.path('default')}

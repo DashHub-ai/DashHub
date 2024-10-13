@@ -258,6 +258,9 @@ export const I18N_PACK_EN = {
           organization: {
             label: 'Organization',
           },
+          settings: {
+            label: 'Settings',
+          },
           defaultForOrganization: {
             label: 'Default for organization',
           },

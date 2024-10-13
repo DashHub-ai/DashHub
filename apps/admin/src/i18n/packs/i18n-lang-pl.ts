@@ -232,6 +232,9 @@ export const I18N_PACK_PL: I18nLangPack = {
           organization: {
             label: 'Organizacja',
           },
+          settings: {
+            label: 'Ustawienia',
+          },
           defaultForOrganization: {
             label: 'Domyślny dla organizacji',
           },
