@@ -1,3 +1,4 @@
+export * from './are-paths-equal';
 export * from './concat-urls';
 export * from './concat-urls-parts';
 export * from './decode-search-params';

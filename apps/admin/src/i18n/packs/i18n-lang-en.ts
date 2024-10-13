@@ -169,6 +169,34 @@ export const I18N_PACK_EN = {
     search: 'Search...',
   },
   modules: {
+    searchBar: {
+      viewAll: 'View all',
+      input: {
+        placeholder: 'Search...',
+      },
+      groups: {
+        users: {
+          header: 'Users',
+          itemSubTitle: 'User',
+        },
+        organizations: {
+          header: 'Organizations',
+          itemSubTitle: 'Organization',
+        },
+        s3Buckets: {
+          header: 'S3 Buckets',
+          itemSubTitle: 'S3 Bucket',
+        },
+        projects: {
+          header: 'Projects',
+          itemSubTitle: 'Project',
+        },
+        apps: {
+          header: 'Apps',
+          itemSubTitle: 'App',
+        },
+      },
+    },
     organizations: {
       prefix: {
         organization: 'Organization',

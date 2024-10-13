@@ -143,6 +143,34 @@ export const I18N_PACK_PL: I18nLangPack = {
     search: 'Szukaj...',
   },
   modules: {
+    searchBar: {
+      viewAll: 'Wszystkie',
+      input: {
+        placeholder: 'Szukaj...',
+      },
+      groups: {
+        users: {
+          header: 'Użytkownicy',
+          itemSubTitle: 'Użytkownik',
+        },
+        organizations: {
+          header: 'Organizacje',
+          itemSubTitle: 'Organizacja',
+        },
+        projects: {
+          header: 'Projekty',
+          itemSubTitle: 'Projekt',
+        },
+        apps: {
+          header: 'Aplikacje',
+          itemSubTitle: 'Aplikacja',
+        },
+        s3Buckets: {
+          header: 'Kubełki S3',
+          itemSubTitle: 'Kubełek S3',
+        },
+      },
+    },
     organizations: {
       prefix: {
         organization: 'Organizacja',

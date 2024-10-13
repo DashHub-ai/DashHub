@@ -1,10 +1,10 @@
 import { useI18n } from '~/i18n';
+import { SearchBar } from '~/modules';
 import { useSitemap } from '~/routes';
 
 import { ChooseLanguageItem } from './choose-language-item';
 import { LoggedInUserItem } from './logged-in/logged-in-user-item';
 import { NavigationItem } from './navigation-item';
-import { SearchBar } from './search-bar';
 
 export function Navigation() {
   const t = useI18n().pack.navigation;
