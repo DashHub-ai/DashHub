@@ -40,6 +40,13 @@ export function useSitemap() {
     s3Buckets: {
       index: defineRouteGenerator()('/s3-buckets'),
     },
+    forceRedirect: {
+      raw: '/force-redirect',
+      generate: (targetUrl: string) => pipe(
+        '/force-redirect',
+        withSearchParams({ targetUrl: btoa(targetUrl) }),
+      ),
+    },
   };
 
   return sitemap;

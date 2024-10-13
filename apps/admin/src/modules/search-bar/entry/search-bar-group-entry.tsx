@@ -3,6 +3,8 @@ import type { PropsWithChildren } from 'react';
 import { Link } from 'wouter';
 
 import { useI18n } from '~/i18n';
+import { useSitemap } from '~/routes';
+import { useCheckReplaceableLinkPath } from '~/routes/use-check-replaceable-link-path';
 
 export type SearchBarGroupEntryProps = PropsWithChildren & {
   header: string;
@@ -11,6 +13,8 @@ export type SearchBarGroupEntryProps = PropsWithChildren & {
 
 export function SearchBarGroupEntry({ children, header, viewAllHref }: SearchBarGroupEntryProps) {
   const t = useI18n().pack.modules.searchBar;
+  const checkReplaceableLinkPath = useCheckReplaceableLinkPath();
+  const forceRedirectViewAllHref = useSitemap().forceRedirect.generate(viewAllHref);
 
   return (
     <div className="px-4 py-3 space-y-2">
@@ -19,7 +23,11 @@ export function SearchBarGroupEntry({ children, header, viewAllHref }: SearchBar
           {header}
         </h3>
 
-        <Link href={viewAllHref} className="uk-link text-xs">
+        <Link
+          href={forceRedirectViewAllHref}
+          replace={checkReplaceableLinkPath(forceRedirectViewAllHref)}
+          className="uk-link text-xs"
+        >
           {t.viewAll}
         </Link>
       </div>
