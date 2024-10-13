@@ -169,6 +169,11 @@ export const I18N_PACK_EN = {
     search: 'Search...',
   },
   modules: {
+    searchBar: {
+      input: {
+        placeholder: 'Search...',
+      },
+    },
     organizations: {
       prefix: {
         organization: 'Organization',

@@ -143,6 +143,11 @@ export const I18N_PACK_PL: I18nLangPack = {
     search: 'Szukaj...',
   },
   modules: {
+    searchBar: {
+      input: {
+        placeholder: 'Szukaj...',
+      },
+    },
     organizations: {
       prefix: {
         organization: 'Organizacja',
