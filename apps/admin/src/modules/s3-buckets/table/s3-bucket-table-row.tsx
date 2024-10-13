@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchS3BucketItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, EllipsisCrudDropdownButton } from '~/components';
+import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/components';
 import { useSitemap } from '~/routes';
 
 import { useS3BucketUpdateModal } from '../form/update';
@@ -31,6 +31,7 @@ export function S3BucketsTableRow({ item, onUpdated }: Props) {
           {item.organization.name}
         </Link>
       </td>
+      <td><BooleanBadge value={item.default} /></td>
       <td><ArchivedBadge archived={item.archived} /></td>
       <td>{formatDate(item.createdAt)}</td>
       <td>{formatDate(item.updatedAt)}</td>

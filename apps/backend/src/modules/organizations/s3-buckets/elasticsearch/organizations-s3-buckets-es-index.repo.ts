@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
-import type { NormalizeSelectTableRow, TableWithIdNameColumn } from '~/modules/database';
+import type { NormalizeSelectTableRow, TableId, TableWithIdNameColumn } from '~/modules/database';
 import type { S3ResourcesBucketTableRow } from '~/modules/s3';
 
 import { tryOrThrowTE } from '@llm/commons';
@@ -53,6 +53,14 @@ export class OrganizationsS3BucketsEsIndexRepo extends AbstractEsIndexRepo<Organ
   ) {
     super(elasticsearchRepo);
   }
+
+  reindexAllOrganizationS3Buckets = (organizationId: TableId) => pipe(
+    this.repo.createIdsIterator({
+      chunkSize: 100,
+      organizationId,
+    }),
+    this.findAndIndexDocumentsByStream,
+  )();
 
   protected async findEntities(ids: number[]): Promise<OrganizationsS3BucketsEsDocument[]> {
     return pipe(

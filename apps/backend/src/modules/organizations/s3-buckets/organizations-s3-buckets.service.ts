@@ -41,11 +41,11 @@ export class OrganizationsS3BucketsService implements WithAuthFirewall<Organizat
     this.repo.create({
       value,
     }),
-    TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(() => this.esIndexRepo.reindexAllOrganizationS3Buckets(value.organization.id)),
   );
 
   update = ({ id, ...value }: SdkUpdateS3BucketInputT & TableRowWithId) => pipe(
     this.repo.update({ id, value }),
-    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(({ organization }) => this.esIndexRepo.reindexAllOrganizationS3Buckets(organization.id)),
   );
 }
