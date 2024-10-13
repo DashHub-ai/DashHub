@@ -67,7 +67,7 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     ]),
 
     // Archive the organization itself.
-    TE.tap(() => this.repo.archive({ id })),
+    TE.chain(() => this.repo.archive({ id })),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
