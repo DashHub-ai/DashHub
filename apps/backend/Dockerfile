@@ -9,8 +9,8 @@ ENV NODE_ENV=production
 COPY package.json .
 COPY yarn.lock .
 
-RUN cat ./package.json | jq 'del(.devDependencies)' > ./package.json && \
-    yarn install --production --frozen-lockfile
+RUN jq 'del(.devDependencies)' package.json > temp.json && mv temp.json package.json && \
+    yarn install --production
 
 # Light image with compiled binary stuff
 FROM node:22-alpine3.20 as runner

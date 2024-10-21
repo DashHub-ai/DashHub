@@ -16,8 +16,8 @@ USER node
 COPY --chown=node:node package.json .
 COPY --chown=node:node yarn.lock .
 
-RUN cat ./package.json | jq 'del(.devDependencies)' > ./package.json && \
-    yarn install --production --frozen-lockfile
+RUN jq 'del(.devDependencies)' package.json > temp.json && mv temp.json package.json && \
+    yarn install --production
 
 # Copy the build folder from the previous stage
 COPY dist/ .
