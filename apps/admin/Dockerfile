@@ -1,6 +1,6 @@
 FROM node:22-alpine3.20
 
-ENV TZ Europe/Berlin
+ENV TZ=Europe/Berlin
 
 # Install http serve to serve the static files
 RUN npm i -g serve && \
