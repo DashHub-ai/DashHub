@@ -50,6 +50,11 @@ export class UsersBootService {
           ...dto,
         });
       }
+      else {
+        this.logger.info('Root user already exists!', {
+          id: result.id,
+        });
+      }
     }),
     toVoidTE,
   );

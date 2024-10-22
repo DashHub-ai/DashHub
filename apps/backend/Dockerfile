@@ -28,6 +28,6 @@ USER node
 
 COPY --from=builder --chown=node:node /package.json ./
 COPY --from=builder --chown=node:node /node_modules ./node_modules
-COPY dist/ .
+COPY dist/ dist/
 
-CMD [ "node", "--enable-source-maps", "--stack-trace-limit=1000", "index.mjs" ]
+CMD [ "node", "--enable-source-maps", "--stack-trace-limit=1000", "dist/index.mjs" ]
