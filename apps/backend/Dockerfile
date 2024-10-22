@@ -7,10 +7,9 @@ ENV NODE_ENV=production
 
 # Install dependenceis
 COPY package.json .
-COPY yarn.lock .
 
 RUN jq 'del(.devDependencies)' package.json > temp.json && mv temp.json package.json && \
-    yarn install --production
+    npm install --omit=dev --omit=optional
 
 # Light image with compiled binary stuff
 FROM node:22-alpine3.20 as runner

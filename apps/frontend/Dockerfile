@@ -14,10 +14,9 @@ USER node
 
 # Install dependenceis
 COPY --chown=node:node package.json .
-COPY --chown=node:node yarn.lock .
 
 RUN jq 'del(.devDependencies)' package.json > temp.json && mv temp.json package.json && \
-    yarn install --production
+    npm install --omit=dev --omit=optional
 
 # Copy the build folder from the previous stage
 COPY dist/ .

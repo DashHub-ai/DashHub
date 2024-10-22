@@ -12,6 +12,8 @@ concurrency:
 env:
   ANSIBLE_FORCE_COLOR: true
   TARGET_PLATFORMS: linux/arm64
+  NODE_ENV: production
+  APP_ENV: staging
 
 jobs:
   deploy-docker-images:
@@ -26,17 +28,15 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: |
-          yarn sync:lockfiles
-          yarn install --frozen-lockfile --prefer-offline --production=false
+        run: yarn install --frozen-lockfile --prefer-offline --production=false
 
       - name: Turbo Cache
         uses: actions/cache@v4
         with:
           path: .turbo
-          key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+          key: turbo-build-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            turbo-${{ github.job }}-${{ github.ref_name }}-
+            turbo-build-${{ github.job }}-${{ github.ref_name }}-
 
       - name: Build packages
         run: yarn build
