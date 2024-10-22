@@ -75,7 +75,7 @@ jobs:
       - name: Push admin
         uses: docker/build-push-action@v6
         with:
-          context: apps/backend
+          context: apps/admin
           push: true
           tags: staging.dashhub.ai/dashhub-admin:latest
           platforms: ${{ env.TARGET_PLATFORMS }}
