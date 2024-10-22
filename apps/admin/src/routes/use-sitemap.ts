@@ -59,7 +59,7 @@ function defineRouteGenerator<
   const H extends string = never,
 >(defaultSearchParams?: Partial<S>) {
   return <const P extends string>(schema: P) => ({
-    raw: schema,
+    raw: prefixWithBase(schema),
     generate: ({ hash, pathParams, searchParams }: GenerateRouteGeneratorAttrs<P, H, S>) => pipe(
       pathParams
         ? parameterizeStrictPath(schema, pathParams)
