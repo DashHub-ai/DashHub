@@ -7,6 +7,7 @@ import type {
 } from '~/modules';
 
 import {
+  concatUrls,
   type InferStrictPathParams,
   parameterizeStrictPath,
   type SearchParamsMap,
@@ -17,8 +18,8 @@ import {
 
 export function useSitemap() {
   const sitemap = {
-    home: '/',
-    login: '/login',
+    home: prefixWithBase('/'),
+    login: prefixWithBase('/login'),
     organizations: {
       index: defineRouteGenerator<SearchOrganizationsRouteUrlFiltersT>()('/organizations'),
       show: (id: SdkTableRowIdT) => sitemap.organizations.index.generate({
@@ -41,10 +42,11 @@ export function useSitemap() {
       index: defineRouteGenerator()('/s3-buckets'),
     },
     forceRedirect: {
-      raw: '/force-redirect',
+      raw: prefixWithBase('/force-redirect'),
       generate: (targetUrl: string) => pipe(
         '/force-redirect',
         withSearchParams({ targetUrl: btoa(targetUrl) }),
+        prefixWithBase,
       ),
     },
   };
@@ -75,8 +77,14 @@ function defineRouteGenerator<
       hash
         ? withHash(hash)
         : identity,
+
+      prefixWithBase,
     ),
   });
+}
+
+function prefixWithBase(path: string) {
+  return concatUrls(import.meta.env.BASE_URL ?? '/', path);
 }
 
 type GenerateRouteGeneratorAttrs<
