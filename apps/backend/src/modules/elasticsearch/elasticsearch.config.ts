@@ -16,7 +16,7 @@ export const ElasticsearchConfigV = z.object({
 
   syncMappings: z.object({
     onStartup: StrictBooleanV.default(true),
-    cron: z.string().optional(),
+    cron: z.string().default('1 0 * * *'),
   }),
 });
 
