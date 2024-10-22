@@ -21,5 +21,5 @@ CMD [ \
   "--listen", "tcp://0.0.0.0:3000", \
   "--no-clipboard", \
   "--no-compression", \
-  "--no-port-switching"
+  "--no-port-switching" \
 ]
