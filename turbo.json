@@ -6,19 +6,20 @@
       "dependsOn": ["^build"],
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
-      "cache": false
+      "cache": false,
+      "env": ["NODE_ENV", "VITE_API_URL"]
     },
     "build:dev": {
       "dependsOn": ["^build:dev"],
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
       "cache": true,
-      "env": ["NODE_ENV=development"]
+      "env": ["NODE_ENV=development", "VITE_API_URL"]
     },
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": ["NODE_ENV=development"]
+      "env": ["NODE_ENV=development", "VITE_API_URL"]
     },
     "lint": {
       "cache": true
