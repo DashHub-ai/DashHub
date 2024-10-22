@@ -66,7 +66,7 @@ export default antfu({
         'internal-type',
         'internal',
         ['parent-type', 'sibling-type', 'index-type'],
-        ['parent', 'sibling', 'index'],
+        ['parent', 'sibling'],
         'index',
       ],
     }],
