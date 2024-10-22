@@ -1,6 +1,6 @@
 import process from 'node:process';
 
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import { pipe } from 'fp-ts/lib/function';
 import { fromError } from 'zod-validation-error';
 
@@ -14,8 +14,7 @@ import {
 import { type ConfigT, ConfigV } from './config.dto';
 
 export function tryReadEnvOrPanic() {
-  dotenv.config();
-
+  const envFile = dotenv.config();
   const {
     // BASE
     APP_ENV,
@@ -48,7 +47,10 @@ export function tryReadEnvOrPanic() {
     // Auth
     JWT_SECRET,
     JWT_EXPIRES_IN,
-  } = process.env ?? {};
+  } = {
+    ...envFile.parsed,
+    ...process.env,
+  };
 
   const config: UnparsedEnvObject<ConfigT> = {
     env: APP_ENV,
