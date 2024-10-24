@@ -179,8 +179,9 @@ The Minimum Viable Product (MVP) includes the following features:
 
 Planned enhancements for future versions include:
 
-- **Integration with Other AI Services**: LLama, Gemini, Runway, Midjourney, and more.
+- **Integration with Other AI Services**: Claude, LLama, Gemini, Runway, Midjourney, and more.
 - **Expanded Storage Options**: Support for Azure, Google Cloud, and others.
+- **Enterprise-Level Security**: Single Sign-On
 - **Advanced Expert Creator**: Enhanced capabilities with agent systems.
 - **Multi-Language Support**: Interface and AI interactions in multiple languages.
 - **Enhanced Security and Compliance**: GDPR, HIPAA compliance, and advanced enterprise security features.
