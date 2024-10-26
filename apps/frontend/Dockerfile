@@ -1,25 +1,16 @@
-FROM node:22-alpine3.20
+FROM node:23-alpine3.19
 
-ENV TZ=Europe/Berlin
 ENV NODE_ENV=production
-ENV SERVER_HOST=0.0.0.0
-ENV SERVER_PORT=80
+ENV TZ=Europe/Berlin
+ENV HOST=0.0.0.0
+ENV PORT=3002
 
-RUN apk --no-cache add jq && \
-    mkdir /app && \
+RUN mkdir /app && \
     chown -R node:node /app
 
 WORKDIR /app
 USER node
 
-# Install dependenceis
-COPY --chown=node:node package.json .
+COPY dist/ dist/
 
-RUN jq 'del(.devDependencies)' package.json > temp.json && mv temp.json package.json && \
-    npm install --omit=dev --omit=optional
-
-# Copy the build folder from the previous stage
-COPY dist/ .
-
-# Copy the server folder
-CMD ["npx", "remix-serve", "server/index.js"]
+CMD [ "node", "--enable-source-maps", "--stack-trace-limit=1000", "dist/server/entry.mjs" ]

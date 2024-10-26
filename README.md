@@ -8,27 +8,28 @@ At DashHub, we believe tools should adapt to **your needs and use cases**, offer
 
 ## 📋 Table of Contents
 
-- [Introduction](#introduction)
-- [Why Choose DashHub](#why-choose-dashhub)
-- [Setup](#️-setup)
-- [Deployment](#-deployment)
-- [System Overview](#-system-overview)
-- [User Roles and Permissions](#user-roles-and-permissions)
-- [Key Features](#key-features)
-  - [Projects 📂](#projects-)
-  - [Experts 🧠](#experts-)
-  - [Applications 📱](#applications-)
-  - [Knowledge Management 📚](#knowledge-management-)
-- [MVP Phase](#-mvp-phase)
-- [Future Plans](#-future-plans)
-- [Integration Process](#integration-process)
-- [Technical Architecture](#️-technical-architecture)
-- [Security and Compliance](#-security-and-compliance)
-- [Limitations and Considerations](#️-limitations-and-considerations)
-- [License](#-license)
-- [Contributing](#-contributing)
-- [Community and Support](#-community-and-support)
-
+- [🚀 DashHub: The Unified Open-Source AI Platform for Enterprises](#-dashhub-the-unified-open-source-ai-platform-for-enterprises)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [🌟 Introduction](#-introduction)
+  - [🌟 Why Choose DashHub](#-why-choose-dashhub)
+  - [Setup ⚙️](#setup-️)
+  - [Migrations ⚙️](#migrations-️)
+  - [Elasticsearch](#elasticsearch)
+  - [Deployment 🚀](#deployment-)
+  - [👥 User Roles and Permissions](#-user-roles-and-permissions)
+  - [🔑 Key Features](#-key-features)
+    - [Projects 📂](#projects-)
+    - [Experts 🧠](#experts-)
+    - [Applications 📱](#applications-)
+    - [Knowledge Management 📚](#knowledge-management-)
+  - [🚀 MVP Phase](#-mvp-phase)
+  - [📈 Future Plans](#-future-plans)
+  - [🔄 Integration Process](#-integration-process)
+  - [🏗️ Technical Architecture](#️-technical-architecture)
+  - [🔒 Security and Compliance](#-security-and-compliance)
+  - [⚠️ Limitations and Considerations](#️-limitations-and-considerations)
+  - [📄 License](#-license)
+  - [🤝 Contributing](#-contributing)
 
 ## 🌟 Introduction
 
@@ -52,7 +53,6 @@ Welcome to **DashHub**, your ultimate solution for seamless AI integration. Our 
   - Role-based permissions and authentication for enhanced security.
 - **Flexible Deployment**
   - Deploy DashHub locally or in the cloud to suit your infrastructure.
-
 
 ## Setup ⚙️
 
@@ -129,7 +129,6 @@ The platform supports three types of users:
    - Utilize Experts within projects
    - Use Applications for specific tasks
 
-
 ## 🔑 Key Features
 
 ### Projects 📂
@@ -154,7 +153,6 @@ The platform supports three types of users:
 - **Knowledge Bases**: Users can add outputs to project knowledge bases.
 - **Export Options**: Download and export information as needed.
 
-
 ## 🚀 MVP Phase
 
 The Minimum Viable Product (MVP) includes the following features:
@@ -174,7 +172,6 @@ The Minimum Viable Product (MVP) includes the following features:
 - Limited number of pre-configured Experts.
 - Single storage provider (AWS).
 
-
 ## 📈 Future Plans
 
 Planned enhancements for future versions include:
@@ -188,7 +185,6 @@ Planned enhancements for future versions include:
 - **Cross-AI Analytics and Reporting**
 - **Enterprise Tool Integrations**: Slack, Microsoft 365, Salesforce, Google Workspace, Box, Zoho Docs, etc.
 
-
 ## 🔄 Integration Process
 
 Getting started with DashHub is simple:
@@ -200,7 +196,7 @@ Getting started with DashHub is simple:
 5. **Customize**: Upload your company logo and settings.
 6. **Start Creating**: Start using and enjoy the newest AI developments in a save enviroment.
 
-## 🏗️ Technical Architecture 
+## 🏗️ Technical Architecture
 
 The platform is designed as a web application with the following key components:
 

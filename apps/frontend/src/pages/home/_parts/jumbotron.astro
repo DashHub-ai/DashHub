@@ -1,0 +1,27 @@
+---
+import jumbotronImage from '~/images/jumbotron.jpg';
+---
+
+<section class="about">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <div class="flex flex-col justify-center md:p-6 md:pl-0 about-text">
+        <h2 class="mb-4 text-3xl font-semibold">About DashHub</h2>
+        <p class="mb-4 text-gray-600">
+          DashHub is an open-source AI platform designed to help enterprises streamline their AI processes. Our platform offers seamless integration with existing tools, unmatched flexibility for customization, and enterprise-grade security to protect your data and models.
+        </p>
+        <p class="text-gray-600">
+          With a community-driven approach, DashHub continuously evolves to meet the needs of modern enterprises. Join our community today and contribute to the future of enterprise AI.
+        </p>
+        <p class="mt-8">
+            <a href="https://github.com/DashHub-ai/DashHub" class="bg-black text-white px-4 py-3 rounded">
+              Join Our Community
+            </a>
+        </p>
+      </div>
+      <div class="p-6 about-image">
+        <img src={jumbotronImage.src} alt="Packages" class="h-[320px] mx-auto" />
+      </div>
+    </div>
+  </div>
+</section>
