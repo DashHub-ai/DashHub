@@ -17,15 +17,15 @@ const { title, description } = Astro.props;
     <meta name="description" content={description} />
     <title>{title}</title>
   </head>
-  <body>
-    <main class="flex flex-col min-h-screen">
+  <body class="flex min-h-screen w-full flex-col overflow-x-hidden antialiased selection:bg-blue-200 selection:text-black dark:selection:bg-blue-800 dark:selection:text-white bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+    <div class="flex flex-col min-h-screen">
       <Header />
 
-      <div class="flex flex-col flex-1">
+      <main class="max-sm:mt-2 mt-8 flex flex-1 flex-col">
         <slot />
-      </div>
+      </main>
 
       <Footer />
-    </main>
+    </div>
   </body>
 </html>
