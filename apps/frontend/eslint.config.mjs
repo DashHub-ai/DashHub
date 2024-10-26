@@ -1,1 +1,5 @@
-export { default } from '../../eslint.config.mjs';
+import { createAntfuEslintConfig } from '../../eslint.config.mjs';
+
+export default createAntfuEslintConfig({
+  astro: true,
+});
