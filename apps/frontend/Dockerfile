@@ -5,7 +5,8 @@ ENV TZ=Europe/Berlin
 ENV HOST=0.0.0.0
 ENV PORT=3002
 
-RUN mkdir /app && \
+RUN apk --no-cache add jq && \
+    mkdir /app && \
     chown -R node:node /app
 
 WORKDIR /app
