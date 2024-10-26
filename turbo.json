@@ -6,7 +6,7 @@
       "dependsOn": ["^build"],
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
-      "cache": false,
+      "cache": true,
       "env": ["NODE_ENV", "VITE_API_URL"]
     },
     "build:dev": {
