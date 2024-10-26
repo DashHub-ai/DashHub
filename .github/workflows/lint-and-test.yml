@@ -1,6 +1,9 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - 'hetzner/*'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
