@@ -63,6 +63,16 @@ jobs:
           restore-keys: |
             buildx-${{ github.job }}-${{ github.ref_name }}-
 
+      - name: Push frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: apps/frontend
+          push: true
+          tags: staging.dashhub.ai/dashhub-frontend:latest
+          platforms: ${{ env.TARGET_PLATFORMS }}
+          cache-from: type=local,src=/tmp/.buildx-staging-cache
+          cache-to: type=local,dest=/tmp/.buildx-staging-cache-new
+
       - name: Push backend
         uses: docker/build-push-action@v6
         with:
