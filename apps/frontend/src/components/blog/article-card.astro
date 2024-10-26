@@ -10,8 +10,8 @@ interface Props {
 const { alt, title, description, imageSrc, href } = Astro.props;
 ---
 
-<div class="w-full h-auto rounded p-6">
-  <img src={imageSrc} alt={alt} class="mb-4 w-full h-auto rounded">
+<div class="w-full h-auto rounded">
+  <img src={imageSrc} alt={alt} class="mb-4 w-full h-auto rounded" />
 
   <h3 class="mb-4 text-xl font-semibold">
     {title}
