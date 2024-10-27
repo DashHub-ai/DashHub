@@ -6,7 +6,11 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   output: 'server',
-  integrations: [tailwind()],
+  integrations: [
+    tailwind({
+      applyBaseStyles: false,
+    }),
+  ],
   adapter: node({
     mode: 'standalone',
   }),

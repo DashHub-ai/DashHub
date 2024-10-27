@@ -1,13 +1,18 @@
 ---
-import ArticleCard from '~/components/blog/article-card.astro';
 import { getArticles } from '~/directus';
+import ArticleCard from './article-card.astro';
 
+interface Props {
+  className?: string;
+}
+
+const { className } = Astro.props;
 const articles = await getArticles({
   limit: 3,
 });
 ---
 
-<section class="max-sm:py-6 py-16 pt-8 recent-articles">
+<section class:list={['max-sm:py-6 py-16 pt-8 recent-articles', className]}>
   <div class="container mx-auto px-4">
     <h2 class="mb-8 text-3xl font-semibold text-center">Recent Articles</h2>
     <div class="grid grid-cols-1 max-sm:gap-4 gap-6 lg:gap-16 md:grid-cols-3">

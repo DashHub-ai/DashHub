@@ -15,7 +15,7 @@ const {
   slug,
 } = Astro.props.article;
 ---
-<div class="w-full h-auto rounded flex flex-col">
+<article class="w-full h-auto rounded flex flex-col">
   <a href={`/blog/${slug}`}>
     <img
       src={getImageUrl(cover)}
@@ -40,4 +40,4 @@ const {
   <a href={`/blog/${slug}`} class="text-blue-500 hover:underline">
     Read more
   </a>
-</div>
+</article>
