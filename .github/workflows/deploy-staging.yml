@@ -42,7 +42,7 @@ jobs:
         run: yarn build
         env:
           VITE_API_URL: https://staging.dashhub.ai/api
-          PUBLIC_DIRECTUS_URL: https://staging.dashhub.ai/cms
+          VITE_DIRECTUS_URL: https://staging.dashhub.ai/cms
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
