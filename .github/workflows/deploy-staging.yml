@@ -55,14 +55,6 @@ jobs:
           username: ${{ secrets.STAGING_PODMAN_REGISTRY_USERNAME }}
           password: ${{ secrets.STAGING_PODMAN_REGISTRY_PASSWORD }}
 
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-staging-cache
-          key: buildx-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
-          restore-keys: |
-            buildx-${{ github.job }}-${{ github.ref_name }}-
-
       - name: Push frontend
         uses: docker/build-push-action@v6
         with:
@@ -70,8 +62,8 @@ jobs:
           push: true
           tags: staging.dashhub.ai/dashhub-frontend:latest
           platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: type=local,src=/tmp/.buildx-staging-cache
-          cache-to: type=local,dest=/tmp/.buildx-staging-cache-new
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Push backend
         uses: docker/build-push-action@v6
@@ -80,8 +72,8 @@ jobs:
           push: true
           tags: staging.dashhub.ai/dashhub-backend:latest
           platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: type=local,src=/tmp/.buildx-staging-cache
-          cache-to: type=local,dest=/tmp/.buildx-staging-cache-new
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Push admin
         uses: docker/build-push-action@v6
@@ -90,10 +82,5 @@ jobs:
           push: true
           tags: staging.dashhub.ai/dashhub-admin:latest
           platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: type=local,src=/tmp/.buildx-staging-cache
-          cache-to: type=local,dest=/tmp/.buildx-staging-cache-new
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-staging-cache
-          mv /tmp/.buildx-staging-cache-new /tmp/.buildx-staging-cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
