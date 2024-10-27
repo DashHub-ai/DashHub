@@ -14,7 +14,6 @@ env:
   TARGET_PLATFORMS: linux/arm64
   NODE_ENV: production
   APP_ENV: staging
-  VITE_API_URL: https://staging.dashhub.ai/api
 
 jobs:
   deploy-docker-images:
@@ -41,6 +40,9 @@ jobs:
 
       - name: Build packages
         run: yarn build
+        env:
+          VITE_API_URL: https://staging.dashhub.ai/api
+          PUBLIC_DIRECTUS_URL: https://staging.dashhub.ai/cms
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
