@@ -12,6 +12,11 @@ export function getArticles({ limit, offset = 0 }: ArticlesFetchAttrs) {
     readItems('Article', {
       fields: ['*', { author: ['*'] }],
       sort: ['-published_date'],
+      filter: {
+        status: {
+          _eq: 'published',
+        },
+      },
       offset,
       limit,
     }),

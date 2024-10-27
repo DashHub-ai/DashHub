@@ -5,9 +5,12 @@ export type Author = {
   name: string;
 };
 
+type ArticleStatus = 'published' | 'draft' | 'archived';
+
 export type Article = {
   cover: string;
   title: string;
+  status: ArticleStatus;
   author: Author;
   content: string;
   description: string;
