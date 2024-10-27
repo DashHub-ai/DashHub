@@ -571,6 +571,11 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
+"@directus/sdk@^17.0.2":
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/@directus/sdk/-/sdk-17.0.2.tgz#87ce836c96fd684c4d54a78a479a882e4da379b9"
+  integrity sha512-gKfWH6oQKnHw6mUl5lM32PTjtWrmSF6f09/zfN/74FKGPD853srCwip6rGif2R0GfdcrPHXwGHc7vTMXNDlniw==
+
 "@dual-bundle/import-meta-resolve@^4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@dual-bundle/import-meta-resolve/-/import-meta-resolve-4.1.0.tgz#519c1549b0e147759e7825701ecffd25e5819f7b"

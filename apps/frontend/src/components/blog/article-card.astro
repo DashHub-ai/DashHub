@@ -1,27 +1,38 @@
 ---
+import { truncateText } from '@llm/commons';
+import { type Article, getImageUrl } from '~/directus';
+
 interface Props {
-  title: string;
-  alt: string;
-  description: string;
-  imageSrc: string;
-  href: string;
+  article: Article;
 }
 
-const { alt, title, description, imageSrc, href } = Astro.props;
+const {
+  title,
+  cover,
+  description,
+  author,
+  published_date: publishDate,
+  slug,
+} = Astro.props.article;
 ---
+<div class="w-full h-auto rounded flex flex-col">
+  <a href={`/blog/${slug}`}>
+    <img src={getImageUrl(cover)} alt={title} class="mb-4 w-full rounded-lg aspect-video object-cover" />
+  </a>
 
-<div class="w-full h-auto rounded">
-  <img src={imageSrc} alt={alt} class="mb-4 w-full h-auto rounded" />
-
-  <h3 class="mb-4 text-xl font-semibold">
+  <h3 class="mb-4 text-xl font-semibold flex-1">
     {title}
   </h3>
 
-  <p class="mb-4 text-gray-600">
-    {description}
+  <p class="mb-2 text-gray-600 text-sm">
+    By {author.name} on {new Date(publishDate).toLocaleDateString()}
   </p>
 
-  <a href={href} class="text-blue-500 hover:underline">
+  <p class="mb-4 text-gray-600">
+    {truncateText(200)(description)}
+  </p>
+
+  <a href={`/blog/${slug}`} class="text-blue-500 hover:underline">
     Read more
   </a>
 </div>
