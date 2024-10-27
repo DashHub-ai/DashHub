@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "@astrojs/node": "^8.3.4",
-    "astro": "^4.16.7",
-    "fp-ts": "^2.16.1"
+    "astro": "^4.16.7"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
