@@ -13,13 +13,13 @@ import { type ServerConfigT, ServerConfigV } from './server-config.dto';
 
 export function tryReadEnvOrPanic() {
   const {
-    VITE_APP_ENV,
+    SECRET_APP_ENV,
     SECRET_BASIC_AUTH_USERNAME,
     SECRET_BASIC_AUTH_PASSWORD,
   } = import.meta.env ?? {};
 
   const config: UnparsedEnvObject<ServerConfigT> = {
-    env: VITE_APP_ENV,
+    env: SECRET_APP_ENV,
     ...SECRET_BASIC_AUTH_USERNAME && SECRET_BASIC_AUTH_PASSWORD && {
       basicAuth: {
         username: SECRET_BASIC_AUTH_USERNAME,
