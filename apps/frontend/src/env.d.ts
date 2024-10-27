@@ -2,7 +2,7 @@
 /// <reference path="../.astro/types.d.ts" />
 
 interface ImportMetaEnv {
-  readonly VITE_DIRECTUS_URL: string;
+  readonly PUBLIC_VITE_DIRECTUS_URL: string;
 }
 
 interface ImportMeta {

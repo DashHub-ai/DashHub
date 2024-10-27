@@ -7,19 +7,19 @@
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
       "cache": false,
-      "env": ["NODE_ENV=production", "VITE_API_URL", "VITE_DIRECTUS_URL"]
+      "env": ["NODE_ENV=production", "VITE_API_URL", "PUBLIC_VITE_DIRECTUS_URL"]
     },
     "build:dev": {
       "dependsOn": ["^build:dev"],
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
       "cache": true,
-      "env": ["NODE_ENV=development", "VITE_API_URL", "VITE_DIRECTUS_URL"]
+      "env": ["NODE_ENV=development", "VITE_API_URL", "PUBLIC_VITE_DIRECTUS_URL"]
     },
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": ["NODE_ENV=development", "VITE_API_URL", "VITE_DIRECTUS_URL"]
+      "env": ["NODE_ENV=development", "VITE_API_URL", "PUBLIC_VITE_DIRECTUS_URL"]
     },
     "lint": {
       "cache": true

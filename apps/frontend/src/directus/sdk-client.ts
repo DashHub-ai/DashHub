@@ -20,4 +20,4 @@ type Schema = {
   Article: Article[];
 };
 
-export const directusSdk = createDirectus<Schema>(import.meta.env.VITE_DIRECTUS_URL).with(rest());
+export const directusSdk = createDirectus<Schema>(import.meta.env.PUBLIC_VITE_DIRECTUS_URL).with(rest());

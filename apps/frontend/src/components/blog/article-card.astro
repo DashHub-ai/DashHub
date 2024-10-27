@@ -17,7 +17,12 @@ const {
 ---
 <div class="w-full h-auto rounded flex flex-col">
   <a href={`/blog/${slug}`}>
-    <img src={getImageUrl(cover)} alt={title} class="mb-4 w-full rounded-lg aspect-video object-cover" />
+    <img
+      src={getImageUrl(cover)}
+      alt={title}
+      class="mb-4 w-full rounded-lg aspect-video object-cover"
+      loading="lazy"
+    />
   </a>
 
   <h3 class="mb-4 text-xl font-semibold flex-1">
