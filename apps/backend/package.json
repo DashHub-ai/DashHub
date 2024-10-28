@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@elastic/elasticsearch": "^8.15.0",
-    "@hono/node-server": "^1.12.2",
+    "@hono/node-server": "^1.13.3",
     "@llm/sdk": "*",
     "@types/bcryptjs": "^2.4.6",
     "@types/object-hash": "^3.0.6",
