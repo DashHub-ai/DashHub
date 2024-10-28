@@ -25,7 +25,7 @@
     "@types/pg": "^8.11.10",
     "@types/pg-cursor": "^2.7.2",
     "async-await-queue": "^2.1.4",
-    "croner": "^8.1.1",
+    "croner": "^9.0.0",
     "dotenv": "^16.4.5",
     "elastic-builder": "^2.29.0",
     "fast-deep-equal": "^3.1.3",
