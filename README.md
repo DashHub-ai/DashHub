@@ -172,18 +172,18 @@ The Minimum Viable Product (MVP) includes the following features:
 - Limited number of pre-configured Experts.
 - Single storage provider (AWS).
 
-## 📈 Future Plans
+## 📈 Future Plans - feel free to contribute! 🤘
 
 Planned enhancements for future versions include:
 
-- **Integration with Other AI Services**: Claude, LLama, Gemini, Perplexity, Runway, Midjourney, and more.
+- **Integration with Other AI Services**: Claude, LLama, Gemini, Perplexity, Runway, Midjourney, Hugging Face and more.
 - **Expanded Storage Options**: Support for Azure, Google Cloud, local storage and more.
+- **Multi-Language Support**: Interface and AI interactions in multiple languages.
+- **Enterprise Tool Integrations**: Slack, Microsoft 365, Salesforce, Google Workspace, Box, Zoho Docs, etc.
+- **Cross-AI Analytics and Reporting**
 - **Enterprise-Level Security**: Single Sign-On
 - **Advanced Expert Creator**: Enhanced capabilities with agent systems.
-- **Multi-Language Support**: Interface and AI interactions in multiple languages.
 - **Enhanced Security and Compliance**: GDPR, HIPAA compliance, and advanced enterprise security features.
-- **Cross-AI Analytics and Reporting**
-- **Enterprise Tool Integrations**: Slack, Microsoft 365, Salesforce, Google Workspace, Box, Zoho Docs, etc.
 
 ## 🔄 Integration Process
 
