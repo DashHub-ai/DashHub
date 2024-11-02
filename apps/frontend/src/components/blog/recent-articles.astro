@@ -16,10 +16,18 @@ const articles = await getArticles({
 <section class:list={['max-sm:py-6 py-16 pt-8 recent-articles', className]}>
   <div class="container mx-auto px-4">
     <h2 class="mb-8 text-3xl font-semibold text-center">Recent Articles</h2>
-    <div class="grid grid-cols-1 max-sm:gap-4 gap-6 lg:gap-16 md:grid-cols-3">
-      {articles.map(article => (
-        <ArticleCard article={article} />
-      ))}
+    <div
+      class={
+        articles.length < 3
+          ? 'flex flex-col md:flex-row items-top gap-6 max-w-[1100px] mx-auto'
+          : 'grid grid-cols-1 max-sm:gap-4 gap-6 lg:gap-16 md:grid-cols-3'
+      }
+    >
+      {
+        articles.length > 0
+          ? articles.map(article => <ArticleCard article={article} />)
+          : <p class="text-center col-span-full">No articles available.</p>
+      }
     </div>
   </div>
 </section>
