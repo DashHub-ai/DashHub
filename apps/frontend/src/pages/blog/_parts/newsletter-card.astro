@@ -1,0 +1,39 @@
+---
+import { Mail } from 'lucide-astro';
+
+interface Props {
+  errors: string[];
+}
+
+const { errors } = Astro.props;
+
+---
+<div class="mt-8 p-6 bg-gray-100 rounded-lg">
+  <h2 class="text-xl font-bold mb-4">Subscribe to our Newsletter</h2>
+  <p class="mb-4">
+    Stay updated with the latest articles, tips, and exclusive promotions. Subscribe to our newsletter and never miss out on the best content for AI lovers!
+  </p>
+  <form method="post" class="flex flex-col gap-4">
+    <input
+      type="email"
+      name="email"
+      placeholder="Enter your email"
+      class="p-3 border border-gray-300 rounded-lg"
+      required
+    />
+    <button
+      type="submit"
+      class="p-3 bg-black text-white font-bold rounded-lg hover:bg-gray-800 flex items-center justify-center gap-2"
+    >
+      <Mail class="h-5 w-5" />
+
+      Subscribe
+    </button>
+
+    {errors.length > 0 && (
+      <div class="mt-4 p-4 bg-red-100 text-red-700 rounded-lg">
+        {errors.map(error => <p>{error}</p>)}
+      </div>
+    )}
+  </form>
+</div>

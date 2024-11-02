@@ -1,13 +1,42 @@
 ---
-import { Mail } from 'lucide-astro';
-
 import ArticleCard from '~/components/blog/article-card.astro';
-import { getArticles } from '~/directus';
+import { createNewsletterUser, getArticles } from '~/directus';
 import DefaultLayout from '~/layouts/default-layout.astro';
+
+import NewsletterCard from './_parts/newsletter-card.astro';
+
+const errors = [];
+let redirectTo = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const data = await Astro.request.formData();
+    const email = data.get('email');
+
+    if (!email || typeof email !== 'string') {
+      errors.push('Email is required.');
+    }
+
+    if (!errors.length) {
+      await createNewsletterUser(email!.toString())!;
+      redirectTo = '/newsletter/thank-you';
+    }
+  }
+  catch (error) {
+    console.error(error);
+    errors.push('Something went wrong. Please try again later.');
+  }
+}
+
+if (redirectTo) {
+  return Astro.redirect(redirectTo);
+}
 
 const articles = await getArticles({
   limit: 14,
 });
+
+
 ---
 <DefaultLayout
   title="DashHub.ai"
@@ -36,28 +65,7 @@ const articles = await getArticles({
           ))}
         </ul>
 
-        <div class="mt-8 p-6 bg-gray-100 rounded-lg">
-          <h2 class="text-xl font-bold mb-4">Subscribe to our Newsletter</h2>
-          <p class="mb-4">
-            Stay updated with the latest articles, tips, and exclusive promotions. Subscribe to our newsletter and never miss out on the best content for AI lovers!
-          </p>
-          <form class="flex flex-col gap-4">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              class="p-3 border border-gray-300 rounded-lg"
-              required
-            />
-            <button
-              type="submit"
-              class="p-3 bg-black text-white font-bold rounded-lg hover:bg-gray-800 flex items-center justify-center gap-2"
-            >
-              <Mail class="h-5 w-5" />
-
-              Subscribe
-            </button>
-          </form>
-        </div>
+        <NewsletterCard errors={errors} />
       </aside>
     </div>
   </section>
