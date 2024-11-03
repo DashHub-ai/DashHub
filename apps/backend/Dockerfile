@@ -1,5 +1,5 @@
 # Compiler and other heavy things
-FROM node:22-alpine3.20 as builder
+FROM node:22-alpine3.20 AS builder
 
 RUN apk --no-cache add make python3 gcc postgresql-dev g++ jq
 
@@ -12,7 +12,7 @@ RUN jq 'del(.devDependencies)' package.json > temp.json && mv temp.json package.
     npm install --omit=dev --omit=optional
 
 # Light image with compiled binary stuff
-FROM node:22-alpine3.20 as runner
+FROM node:22-alpine3.20 AS runner
 
 ENV TZ=Europe/Berlin
 ENV NODE_ENV=production
