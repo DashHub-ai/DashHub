@@ -91,9 +91,5 @@ jobs:
             staging.dashhub.ai/dashhub-${{ matrix.app.name }}:latest
             staging.dashhub.ai/dashhub-${{ matrix.app.name }}:${{ github.sha }}
           platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: |
-            type=registry,ref=staging.dashhub.ai/dashhub-${{ matrix.app.name }}:buildcache
-            type=gha,scope=${{ matrix.app.name }}
-          cache-to: |
-            type=registry,ref=staging.dashhub.ai/dashhub-${{ matrix.app.name }}:buildcache,mode=max
-            type=gha,scope=${{ matrix.app.name }},mode=max
+          cache-from: type=gha,scope=${{ matrix.app.name }}
+          cache-to: type=gha,scope=${{ matrix.app.name }},mode=max
