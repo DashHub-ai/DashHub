@@ -2,7 +2,7 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkUserT } from '@llm/sdk';
 
-import { Checkbox, FormField, Input } from '~/components';
+import { Checkbox, FormField, Input } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Value = Pick<SdkUserT, 'email' | 'active' | 'archiveProtection'>;

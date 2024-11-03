@@ -7,7 +7,7 @@ import {
   type ModalProps,
   ModalTitle,
   UpdateButton,
-} from '~/components';
+} from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 import { OrganizationSharedFormFields } from '../shared';

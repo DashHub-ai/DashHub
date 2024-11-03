@@ -3,9 +3,8 @@ import { Link } from 'wouter';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchUserItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/components';
+import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton, UkIcon } from '@llm/ui';
 import { useI18n } from '~/i18n';
-import { UkIcon } from '~/icons';
 import { useSitemap } from '~/routes';
 
 import { useUserUpdateModal } from '../form';

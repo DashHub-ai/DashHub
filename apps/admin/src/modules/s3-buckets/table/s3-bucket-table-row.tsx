@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchS3BucketItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/components';
+import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '@llm/ui';
 import { useSitemap } from '~/routes';
 
 import { useS3BucketUpdateModal } from '../form/update';

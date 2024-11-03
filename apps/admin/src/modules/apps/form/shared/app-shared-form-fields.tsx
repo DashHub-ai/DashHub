@@ -2,7 +2,7 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkAppT } from '@llm/sdk';
 
-import { FormField, Input, TextArea } from '~/components';
+import { FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Value = Pick<SdkAppT, 'name' | 'chatContext'>;

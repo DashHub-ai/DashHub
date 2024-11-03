@@ -1,6 +1,5 @@
-import { InputWithIcon, type InputWithIconProps } from '~/components';
+import { InputWithIcon, type InputWithIconProps, UkIcon } from '@llm/ui';
 import { useI18n } from '~/i18n';
-import { UkIcon } from '~/icons';
 
 type Props = Omit<InputWithIconProps, 'icon' | 'placeholder'>;
 

@@ -3,10 +3,16 @@ import { flow } from 'fp-ts/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import { type SdkPasswordLoginInputT, useSdk } from '@llm/sdk';
-import { Checkbox, FormErrorAlert, FormField, FormSpinnerCTA, Input } from '~/components';
-import { usePredefinedFormValidators } from '~/hooks';
+import {
+  Checkbox,
+  FormErrorAlert,
+  FormField,
+  FormSpinnerCTA,
+  Input,
+  UkIcon,
+  usePredefinedFormValidators,
+} from '@llm/ui';
 import { useI18n } from '~/i18n';
-import { UkIcon } from '~/icons';
 
 import { ContinueWithDivider } from '../parts';
 import { LoginTerms } from '../parts/login-terms';

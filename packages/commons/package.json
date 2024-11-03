@@ -27,6 +27,7 @@
   "dependencies": {
     "@types/uuid": "^10.0.0",
     "camelcase-keys": "^9.1.3",
+    "deepmerge": "^4.3.1",
     "fp-ts": "^2.16.1",
     "fp-ts-std": "^0.19.1",
     "snake-case": "^4.0.0",

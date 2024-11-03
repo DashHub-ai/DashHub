@@ -3,7 +3,7 @@ import { controlled, type OmitControlStateAttrs } from '@under-control/forms';
 import type { SdkOrganizationUserRoleT } from '@llm/sdk';
 
 import { findItemById } from '@llm/commons';
-import { Select, type SelectProps } from '~/components';
+import { Select, type SelectProps } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Props = Omit<OmitControlStateAttrs<SelectProps>, 'items'>;

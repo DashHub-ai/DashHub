@@ -1,4 +1,4 @@
-import { UkIcon } from '~/icons';
+import { UkIcon } from '@llm/ui';
 
 export function LoggedInButton() {
   return (

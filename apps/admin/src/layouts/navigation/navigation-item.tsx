@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react';
 import clsx from 'clsx';
 import { Link, useLocation } from 'wouter';
 
-import { UkIcon } from '~/icons';
+import { UkIcon } from '@llm/ui';
 
 type Props = PropsWithChildren & {
   path: string;

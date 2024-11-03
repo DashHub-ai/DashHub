@@ -1,47 +1,8 @@
-import type {
-  SdkDecodeTokenFormatError,
-  SdkEndpointNotFoundError,
-  SdkIncorrectUsernameOrPasswordError,
-  SdkInvalidJwtTokenError,
-  SdkInvalidRequestError,
-  SdkNoTokensInStorageError,
-  SdkOrganizationUserRoleT,
-  SdkPayloadValidationError,
-  SdkRecordAlreadyExistsError,
-  SdkRecordNotFoundError,
-  SdkRequestError,
-  SdkServerError,
-  SdkUnauthorizedError,
-  SdkUserRoleT,
-} from '@llm/sdk';
+import deepmerge from 'deepmerge';
 
-export type SdkTranslatedErrors =
-  | SdkIncorrectUsernameOrPasswordError
-  | SdkDecodeTokenFormatError
-  | SdkNoTokensInStorageError
-  | SdkPayloadValidationError
-  | SdkRequestError
-  | SdkServerError
-  | SdkUnauthorizedError
-  | SdkInvalidJwtTokenError
-  | SdkRecordAlreadyExistsError
-  | SdkRecordNotFoundError
-  | SdkEndpointNotFoundError
-  | SdkInvalidRequestError;
+import type { SdkOrganizationUserRoleT, SdkUserRoleT } from '@llm/sdk';
 
-const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
-  SdkIncorrectUsernameOrPasswordError: 'Incorrect email or password',
-  SdkDecodeTokenFormatError: 'Token format is incorrect',
-  SdkPayloadValidationError: 'Payload validation error',
-  SdkRequestError: 'Request error',
-  SdkServerError: 'Server error',
-  SdkUnauthorizedError: 'Unauthorized',
-  SdkInvalidJwtTokenError: 'Invalid or missing JWT token',
-  SdkRecordAlreadyExistsError: 'Record already exists',
-  SdkRecordNotFoundError: 'Record not found',
-  SdkEndpointNotFoundError: 'Invalid API endpoint',
-  SdkInvalidRequestError: 'Invalid request format',
-};
+import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
 
 const I18N_USER_ROLES_EN: Record<SdkUserRoleT, string> = {
   root: 'Root',
@@ -53,88 +14,10 @@ const I18N_USER_ORGANIZATION_ROLES_EN: Record<SdkOrganizationUserRoleT, string> 
   member: 'Member',
 };
 
-export const I18N_PACK_EN = {
+export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   common: {
     email: 'Email',
     password: 'Password',
-  },
-  validation: {
-    required: 'This field is required',
-    invalidEmail: 'This field must be an email address',
-    mustBeLargerThan: 'This field must be larger than %{number}',
-    password: {
-      mustBeLongerThan: 'Password must be longer than %{number} characters',
-    },
-  },
-  errors: {
-    tagged: I18N_SDK_ERRORS_EN,
-  },
-  buttons: {
-    create: 'Create',
-    cancel: 'Cancel',
-    close: 'Close',
-    save: 'Save',
-    delete: 'Delete',
-    edit: 'Edit',
-    archive: 'Archive',
-    unarchive: 'Unarchive',
-    update: 'Update',
-    add: 'Add',
-    confirm: 'Confirm',
-    resetFilters: 'Reset filters',
-  },
-  badges: {
-    archive: {
-      archived: 'Archived',
-      active: 'Active',
-    },
-    boolean: {
-      yes: 'Yes',
-      no: 'No',
-    },
-  },
-  tabs: {
-    archiveFilters: {
-      all: 'All',
-      active: 'Active',
-      archived: 'Archived',
-    },
-  },
-  notifications: {
-    save: {
-      success: 'Saved successfully',
-      error: 'An error occurred while saving',
-    },
-  },
-  modals: {
-    archiveConfirm: {
-      title: 'Archive',
-      message: {
-        single: 'Are you sure you want to archive this item? This item may still be visible in assigned system locations after archiving.',
-        multiple: 'Do you really want to archive these %{count} items? These items may still be visible in assigned system locations after archiving.',
-      },
-      yesIAmSure: 'Yes, I am sure',
-    },
-    unarchiveConfirm: {
-      title: 'Unarchive',
-      message: {
-        single: 'Are you sure you want to unarchive this item?',
-        multiple: 'Do you really want to unarchive these %{count} items?',
-      },
-      yesIAmSure: 'Yes, I am sure',
-    },
-  },
-  pagination: {
-    itemsPerPage: 'Items per page',
-    showNthToNthOf: 'Shown %{from} - %{to} of %{total}',
-    pageNthOfTotal: 'Page %{page} of %{total}',
-    searchPlaceholder: 'Enter search phrase...',
-    goto: {
-      firstPage: 'First page',
-      previousPage: 'Previous page',
-      nextPage: 'Next page',
-      lastPage: 'Last page',
-    },
   },
   table: {
     columns: {
@@ -162,11 +45,6 @@ export const I18N_PACK_EN = {
     loggedIn: {
       logout: 'Logout',
     },
-  },
-  placeholders: {
-    selectItem: 'Select item',
-    noItemsFound: 'No items found',
-    search: 'Search...',
   },
   modules: {
     searchBar: {
@@ -437,4 +315,4 @@ export const I18N_PACK_EN = {
       title: 'Manage S3 buckets',
     },
   },
-};
+});

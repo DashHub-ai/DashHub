@@ -3,7 +3,7 @@ import { controlled } from '@under-control/forms';
 import type { SdkUserRoleT } from '@llm/sdk';
 
 import { findItemById } from '@llm/commons';
-import { Select } from '~/components';
+import { Select } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 export const UserRoleSelect = controlled<SdkUserRoleT>(({ control: { value, setValue } }) => {

@@ -16,11 +16,10 @@ env:
   APP_ENV: staging
 
 jobs:
-  deploy-docker-images:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
@@ -44,45 +43,51 @@ jobs:
           VITE_API_URL: https://staging.dashhub.ai/api
           PUBLIC_VITE_DIRECTUS_URL: https://staging.dashhub.ai/cms
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-build-artifacts
+          overwrite: true
+          retention-days: 1
+          path: |
+            apps/*/dist
+            packages/*/dist
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+  deploy-docker-images:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app:
+          - name: frontend
+            context: apps/frontend
+          - name: backend
+            context: apps/backend
+          - name: admin
+            context: apps/admin
+          - name: chat
+            context: apps/chat
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-buildx-action@v2
 
-      - name: Login to registry
-        uses: docker/login-action@v2
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: staging-build-artifacts
+
+      - uses: docker/login-action@v2
         with:
           registry: staging.dashhub.ai
           username: ${{ secrets.STAGING_PODMAN_REGISTRY_USERNAME }}
           password: ${{ secrets.STAGING_PODMAN_REGISTRY_PASSWORD }}
 
-      - name: Push frontend
-        uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v6
         with:
-          context: apps/frontend
+          context: ${{ matrix.app.context }}
           push: true
-          tags: staging.dashhub.ai/dashhub-frontend:latest
-          platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Push backend
-        uses: docker/build-push-action@v6
-        with:
-          context: apps/backend
-          push: true
-          tags: staging.dashhub.ai/dashhub-backend:latest
-          platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Push admin
-        uses: docker/build-push-action@v6
-        with:
-          context: apps/admin
-          push: true
-          tags: staging.dashhub.ai/dashhub-admin:latest
+          tags: staging.dashhub.ai/dashhub-${{ matrix.app.name }}:latest
           platforms: ${{ env.TARGET_PLATFORMS }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
