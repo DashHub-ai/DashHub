@@ -1,7 +1,6 @@
 import { useDebounceValue } from '@llm/commons-front';
-import { NoItemsPlaceholder, SpinnerContainer } from '~/components';
+import { NoItemsPlaceholder, SpinnerContainer, UkIcon } from '@llm/ui';
 import { useI18n } from '~/i18n';
-import { UkIcon } from '~/icons';
 import { useSitemap } from '~/routes';
 
 import { SearchResultGroup } from './search-result-group';

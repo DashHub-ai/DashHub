@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 
-import { BrandLogoSVG } from '~/icons/svg/brand-logo.svg';
+import { BrandLogoSVG } from '@llm/ui';
 
 import { ChooseLanguageItem } from './navigation/choose-language-item';
 

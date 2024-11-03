@@ -2,7 +2,7 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkProjectT } from '@llm/sdk';
 
-import { FormField, Input } from '~/components';
+import { FormField, Input } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Value = Pick<SdkProjectT, 'name'>;

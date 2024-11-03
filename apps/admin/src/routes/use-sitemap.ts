@@ -1,4 +1,4 @@
-import { identity, pipe } from 'fp-ts/lib/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import type { SdkTableRowIdT } from '@llm/sdk';
 import type {
@@ -6,22 +6,15 @@ import type {
   SearchUsersRouteUrlFiltersT,
 } from '~/modules';
 
-import {
-  concatUrls,
-  type InferStrictPathParams,
-  parameterizeStrictPath,
-  type SearchParamsMap,
-  type StrictParametrizeParams,
-  withHash,
-  withSearchParams,
-} from '@llm/commons';
+import { withSearchParams } from '@llm/commons';
+import { defineSitemapRouteGenerator, prefixWithBaseRoute } from '@llm/ui';
 
 export function useSitemap() {
   const sitemap = {
-    home: prefixWithBase('/'),
-    login: prefixWithBase('/login'),
+    home: prefixWithBaseRoute('/'),
+    login: prefixWithBaseRoute('/login'),
     organizations: {
-      index: defineRouteGenerator<SearchOrganizationsRouteUrlFiltersT>()('/organizations'),
+      index: defineSitemapRouteGenerator<SearchOrganizationsRouteUrlFiltersT>()('/organizations'),
       show: (id: SdkTableRowIdT) => sitemap.organizations.index.generate({
         searchParams: {
           archived: null,
@@ -30,74 +23,26 @@ export function useSitemap() {
       }),
     },
     apps: {
-      index: defineRouteGenerator()('/apps'),
+      index: defineSitemapRouteGenerator()('/apps'),
     },
     projects: {
-      index: defineRouteGenerator<SearchUsersRouteUrlFiltersT>()('/projects'),
+      index: defineSitemapRouteGenerator<SearchUsersRouteUrlFiltersT>()('/projects'),
     },
     users: {
-      index: defineRouteGenerator<SearchUsersRouteUrlFiltersT>()('/users'),
+      index: defineSitemapRouteGenerator<SearchUsersRouteUrlFiltersT>()('/users'),
     },
     s3Buckets: {
-      index: defineRouteGenerator()('/s3-buckets'),
+      index: defineSitemapRouteGenerator()('/s3-buckets'),
     },
     forceRedirect: {
-      raw: prefixWithBase('/force-redirect'),
+      raw: prefixWithBaseRoute('/force-redirect'),
       generate: (targetUrl: string) => pipe(
         '/force-redirect',
         withSearchParams({ targetUrl: btoa(targetUrl) }),
-        prefixWithBase,
+        prefixWithBaseRoute,
       ),
     },
   };
 
   return sitemap;
 };
-
-function defineRouteGenerator<
-  S extends SearchParamsMap = SearchParamsMap,
-  const H extends string = never,
->(defaultSearchParams?: Partial<S>) {
-  return <const P extends string>(schema: P) => ({
-    raw: prefixWithBase(schema),
-    generate: ({ hash, pathParams, searchParams }: GenerateRouteGeneratorAttrs<P, H, S>) => pipe(
-      pathParams
-        ? parameterizeStrictPath(schema, pathParams)
-        : schema,
-
-      searchParams || defaultSearchParams
-        ? withSearchParams(
-          {
-            ...defaultSearchParams,
-            ...searchParams,
-          },
-        )
-        : identity,
-
-      hash
-        ? withHash(hash)
-        : identity,
-
-      prefixWithBase,
-    ),
-  });
-}
-
-function prefixWithBase(path: string) {
-  return concatUrls(import.meta.env.BASE_URL ?? '/', path);
-}
-
-type GenerateRouteGeneratorAttrs<
-  P extends string,
-  H extends string = never,
-  S extends SearchParamsMap = SearchParamsMap,
-> =
-  & {
-    searchParams?: S;
-    hash?: H;
-  }
-  & (
-    InferStrictPathParams<P> extends never
-      ? { pathParams?: undefined; }
-      : { pathParams: StrictParametrizeParams<P>; }
-  );

@@ -1,6 +1,6 @@
 import type { SdkExtractUserT } from '@llm/sdk';
 
-import { FormField } from '~/components';
+import { FormField } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { OrganizationsSearchSelect, UserOrganizationRoleSelect } from '~/modules/organizations';
 

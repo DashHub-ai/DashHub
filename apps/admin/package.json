@@ -9,8 +9,7 @@
     "check:types": "tsc"
   },
   "dependencies": {
-    "@llm/commons-front": "*",
-    "@llm/sdk": "*",
+    "@llm/ui": "*",
     "@types/uikit": "^3.14.5",
     "@under-control/forms": "^2.0.0",
     "clsx": "^2.1.1",

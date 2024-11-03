@@ -1,0 +1,39 @@
+{
+  "name": "@llm/ui",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "src/"
+  ],
+  "scripts": {
+    "build": "vite build --config ../../config/vite.config.pkg.ts",
+    "build:dev": "vite build --config ../../config/vite.config.pkg.ts",
+    "test": "vitest --run --passWithNoTests --config ../../config/vite.config.pkg.ts",
+    "test:watch": "vitest --watch --passWithNoTests --config ../../config/vite.config.pkg.ts",
+    "lint": "eslint . --config ./eslint.config.mjs",
+    "check:types": "tsc"
+  },
+  "dependencies": {
+    "@llm/commons": "*",
+    "@llm/commons-front": "*",
+    "@llm/sdk": "*",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

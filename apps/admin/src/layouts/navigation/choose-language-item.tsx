@@ -1,5 +1,5 @@
 import { findItemById } from '@llm/commons';
-import { Select } from '~/components';
+import { Select } from '@llm/ui';
 import { type I18nLangT, useI18n } from '~/i18n';
 
 export function ChooseLanguageItem() {

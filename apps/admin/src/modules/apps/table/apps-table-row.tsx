@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchAppItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, EllipsisCrudDropdownButton } from '~/components';
+import { ArchivedBadge, EllipsisCrudDropdownButton } from '@llm/ui';
 import { useSitemap } from '~/routes';
 
 import { useAppUpdateModal } from '../form/update';
