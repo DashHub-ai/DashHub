@@ -87,7 +87,13 @@ jobs:
         with:
           context: ${{ matrix.app.context }}
           push: true
-          tags: staging.dashhub.ai/dashhub-${{ matrix.app.name }}:latest
+          tags: |
+            staging.dashhub.ai/dashhub-${{ matrix.app.name }}:latest
+            staging.dashhub.ai/dashhub-${{ matrix.app.name }}:${{ github.sha }}
           platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: |
+            type=registry,ref=staging.dashhub.ai/dashhub-${{ matrix.app.name }}:buildcache
+            type=gha,scope=${{ matrix.app.name }}
+          cache-to: |
+            type=registry,ref=staging.dashhub.ai/dashhub-${{ matrix.app.name }}:buildcache,mode=max
+            type=gha,scope=${{ matrix.app.name }},mode=max
