@@ -29,3 +29,7 @@
 'package: sdk':
 - changed-files:
   - any-glob-to-any-file: ['packages/sdk/**/*']
+
+'package: ui':
+- changed-files:
+  - any-glob-to-any-file: ['packages/ui/**/*']
