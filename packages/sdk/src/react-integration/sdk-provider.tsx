@@ -7,15 +7,17 @@ import {
   DashboardSdk,
 } from '~/modules';
 
-import { useSdkBrowserTokensStorage } from './hooks/use-sdk-browser-tokens-storage';
+import { type TokensStorageAttrs, useSdkBrowserTokensStorage } from './hooks/use-sdk-browser-tokens-storage';
 import { SdkContext, type SdkContextSessionT, type SdkContextT } from './sdk-context';
 
 type SdkProviderProps = PropsWithChildren & {
   apiUrl: string;
+  storageKey?: string;
+  storageAttrs: TokensStorageAttrs;
 };
 
-export function SdkProvider({ children, apiUrl }: SdkProviderProps) {
-  const { tokensRevision, getTokensStorage } = useSdkBrowserTokensStorage();
+export function SdkProvider({ children, apiUrl, storageAttrs }: SdkProviderProps) {
+  const { tokensRevision, getTokensStorage } = useSdkBrowserTokensStorage(storageAttrs);
 
   const value = useMemo<SdkContextT>(() => {
     const authSdk = new AuthSdk({

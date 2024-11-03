@@ -5,8 +5,12 @@ import { useLocalStorageObject, useRefSafeCallback } from '@llm/commons-front';
 import { type SdkJwtTokensPairT, SdkJwtTokensPairV, type SessionTokensSetterAttrs } from '~/modules';
 import { TokensStorage } from '~/modules/auth/storage';
 
-export function useSdkBrowserTokensStorage() {
-  const localStorage = useLocalStorageObject('jwt-auth-tokens', {
+export type TokensStorageAttrs = {
+  storageKey: string;
+};
+
+export function useSdkBrowserTokensStorage({ storageKey }: TokensStorageAttrs) {
+  const localStorage = useLocalStorageObject(storageKey, {
     schema: SdkJwtTokensPairV,
   });
 

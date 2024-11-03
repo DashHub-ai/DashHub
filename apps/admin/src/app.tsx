@@ -11,7 +11,12 @@ export function App() {
 
   return (
     <HelmetProvider>
-      <SdkProvider apiUrl={config.apiUrl}>
+      <SdkProvider
+        apiUrl={config.apiUrl}
+        storageAttrs={{
+          storageKey: 'llm-admin-sdk-tokens',
+        }}
+      >
         <I18nProvider>
           <ModalsContextProvider>
             <Router />
