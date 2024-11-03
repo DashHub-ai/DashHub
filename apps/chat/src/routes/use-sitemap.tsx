@@ -1,4 +1,4 @@
-import { prefixWithBaseRoute } from '@llm/ui';
+import { concatUrls } from '@llm/commons';
 
 export function useSitemap() {
   const sitemap = {
@@ -8,3 +8,7 @@ export function useSitemap() {
 
   return sitemap;
 };
+
+function prefixWithBaseRoute(path: string) {
+  return concatUrls(import.meta.env.BASE_URL ?? '/', path);
+}

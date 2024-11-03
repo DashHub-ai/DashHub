@@ -1,3 +1,5 @@
+import type { Reader } from 'fp-ts/lib/Reader';
+
 import { identity, pipe } from 'fp-ts/lib/function';
 
 import {
@@ -9,14 +11,12 @@ import {
   withSearchParams,
 } from '@llm/commons';
 
-import { prefixWithBaseRoute } from './prefix-with-base-route';
-
 export function defineSitemapRouteGenerator<
   S extends SearchParamsMap = SearchParamsMap,
   const H extends string = never,
->(defaultSearchParams?: Partial<S>) {
+>(prefixFn: Reader<string, string>, defaultSearchParams?: Partial<S>) {
   return <const P extends string>(schema: P) => ({
-    raw: prefixWithBaseRoute(schema),
+    raw: prefixFn(schema),
     generate: ({ hash, pathParams, searchParams }: GenerateRouteGeneratorAttrs<P, H, S>) => pipe(
       pathParams
         ? parameterizeStrictPath(schema, pathParams)
@@ -35,7 +35,7 @@ export function defineSitemapRouteGenerator<
         ? withHash(hash)
         : identity,
 
-      prefixWithBaseRoute,
+      prefixFn,
     ),
   });
 }

@@ -6,15 +6,15 @@ import type {
   SearchUsersRouteUrlFiltersT,
 } from '~/modules';
 
-import { withSearchParams } from '@llm/commons';
-import { defineSitemapRouteGenerator, prefixWithBaseRoute } from '@llm/ui';
+import { concatUrls, withSearchParams } from '@llm/commons';
+import { defineSitemapRouteGenerator } from '@llm/ui';
 
 export function useSitemap() {
   const sitemap = {
     home: prefixWithBaseRoute('/'),
     login: prefixWithBaseRoute('/login'),
     organizations: {
-      index: defineSitemapRouteGenerator<SearchOrganizationsRouteUrlFiltersT>()('/organizations'),
+      index: defineSitemapRouteGenerator<SearchOrganizationsRouteUrlFiltersT>(prefixWithBaseRoute)('/organizations'),
       show: (id: SdkTableRowIdT) => sitemap.organizations.index.generate({
         searchParams: {
           archived: null,
@@ -23,16 +23,16 @@ export function useSitemap() {
       }),
     },
     apps: {
-      index: defineSitemapRouteGenerator()('/apps'),
+      index: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps'),
     },
     projects: {
-      index: defineSitemapRouteGenerator<SearchUsersRouteUrlFiltersT>()('/projects'),
+      index: defineSitemapRouteGenerator<SearchUsersRouteUrlFiltersT>(prefixWithBaseRoute)('/projects'),
     },
     users: {
-      index: defineSitemapRouteGenerator<SearchUsersRouteUrlFiltersT>()('/users'),
+      index: defineSitemapRouteGenerator<SearchUsersRouteUrlFiltersT>(prefixWithBaseRoute)('/users'),
     },
     s3Buckets: {
-      index: defineSitemapRouteGenerator()('/s3-buckets'),
+      index: defineSitemapRouteGenerator(prefixWithBaseRoute)('/s3-buckets'),
     },
     forceRedirect: {
       raw: prefixWithBaseRoute('/force-redirect'),
@@ -46,3 +46,7 @@ export function useSitemap() {
 
   return sitemap;
 };
+
+function prefixWithBaseRoute(path: string) {
+  return concatUrls(import.meta.env.BASE_URL ?? '/', path);
+}
