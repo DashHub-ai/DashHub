@@ -1,0 +1,22 @@
+{
+  "name": "@llm/chat",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite dev --host",
+    "lint": "eslint . --config ./eslint.config.mjs",
+    "check:types": "tsc"
+  },
+  "dependencies": {
+    "@llm/commons-front": "*",
+    "@llm/sdk": "*",
+    "@under-control/forms": "^2.0.0",
+    "clsx": "^2.1.1",
+    "postcss": "^8.4.47",
+    "postcss-combine-duplicated-selectors": "^10.0.3",
+    "react-helmet-async": "^2.0.5",
+    "tailwindcss": "^3.4.14",
+    "wouter": "^3.3.5"
+  }
+}
