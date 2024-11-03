@@ -16,11 +16,10 @@ env:
   APP_ENV: production
 
 jobs:
-  deploy-docker-images:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
@@ -44,45 +43,57 @@ jobs:
           VITE_API_URL: https://dashhub.ai/api
           PUBLIC_VITE_DIRECTUS_URL: https://dashhub.ai/cms
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build-artifacts
+          overwrite: true
+          retention-days: 1
+          path: |
+            apps/*/dist
+            packages/*/dist
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+  deploy-docker-images:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app:
+          - name: frontend
+            context: apps/frontend
+          - name: backend
+            context: apps/backend
+          - name: admin
+            context: apps/admin
+          - name: chat
+            context: apps/chat
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
 
-      - name: Login to registry
-        uses: docker/login-action@v2
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: production-build-artifacts
+
+      - uses: docker/login-action@v3
         with:
           registry: dashhub.ai
           username: ${{ secrets.PRODUCTION_PODMAN_REGISTRY_USERNAME }}
           password: ${{ secrets.PRODUCTION_PODMAN_REGISTRY_PASSWORD }}
 
-      - name: Push frontend
-        uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v6
         with:
-          context: apps/frontend
+          context: ${{ matrix.app.context }}
           push: true
-          tags: dashhub.ai/dashhub-frontend:latest
+          tags: |
+            dashhub.ai/dashhub-${{ matrix.app.name }}:latest
+            dashhub.ai/dashhub-${{ matrix.app.name }}:${{ github.sha }}
           platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Push backend
-        uses: docker/build-push-action@v6
-        with:
-          context: apps/backend
-          push: true
-          tags: dashhub.ai/dashhub-backend:latest
-          platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Push admin
-        uses: docker/build-push-action@v6
-        with:
-          context: apps/admin
-          push: true
-          tags: dashhub.ai/dashhub-admin:latest
-          platforms: ${{ env.TARGET_PLATFORMS }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: |
+            type=registry,ref=dashhub.ai/dashhub-${{ matrix.app.name }}:buildcache
+            type=gha,scope=${{ matrix.app.name }}
+          cache-to: |
+            type=registry,ref=dashhub.ai/dashhub-${{ matrix.app.name }}:buildcache,mode=max
+            type=gha,scope=${{ matrix.app.name }},mode=max
