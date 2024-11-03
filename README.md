@@ -23,7 +23,7 @@ At DashHub, we believe tools should adapt to **your needs and use cases**, offer
     - [Applications 📱](#applications-)
     - [Knowledge Management 📚](#knowledge-management-)
   - [🚀 MVP Phase](#-mvp-phase)
-  - [📈 Future Plans](#-future-plans)
+  - [📈 Future Plans - feel free to contribute! 🤘](#-future-plans---feel-free-to-contribute-)
   - [🔄 Integration Process](#-integration-process)
   - [🏗️ Technical Architecture](#️-technical-architecture)
   - [🔒 Security and Compliance](#-security-and-compliance)
@@ -104,10 +104,16 @@ To reindex all the data in Elasticsearch, run the following command:
 
 ## Deployment 🚀
 
-To deploy the project to the staging environment, run the following command:
+To deploy the project to the **staging** environment, run the following command:
 
 ```bash
-git push origin main:staging
+git push origin main:hetzner/staging
+```
+
+To deploy the project to the **production** environment, use the following command:
+
+```bash
+git push origin main:hetzner/production
 ```
 
 ## 👥 User Roles and Permissions
