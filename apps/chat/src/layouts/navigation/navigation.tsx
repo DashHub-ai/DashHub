@@ -10,17 +10,13 @@ export function Navigation() {
   const sitemap = useSitemap();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border px-4 bg-white">
-      <div className="container mx-auto p-4 flex h-14 max-w-screen-2xl items-center">
-        <nav className="uk-navbar w-full" uk-navbar="">
-          <div className="uk-navbar-left gap-x-4 lg:gap-x-10">
-            <div className="uk-navbar-item flex justify-start">
-              <span className="font-light text-lg">
-                DashHub
-              </span>
-            </div>
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-white">
+      <div className="container mx-auto px-4">
+        <nav className="flex h-16 items-center justify-between">
+          <div className="flex flex-1 items-center gap-10">
+            <span className="text-lg font-semibold">DashHub</span>
 
-            <ul className="uk-navbar-nav gap-x-4 lg:gap-x-8">
+            <ul className="flex items-center gap-2">
               <NavigationItem path={sitemap.projects} icon="folder-kanban">
                 {t.links.projects}
               </NavigationItem>
@@ -39,7 +35,8 @@ export function Navigation() {
             </ul>
           </div>
 
-          <div className="uk-navbar-right gap-x-4 lg:gap-x-6">
+          {/* Right side items */}
+          <div className="flex items-center gap-4">
             <ChooseLanguageItem />
             <LoggedInUserItem />
           </div>

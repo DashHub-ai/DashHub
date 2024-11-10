@@ -12,19 +12,21 @@ type Props = PropsWithChildren & {
 
 export function NavigationItem({ path, icon, children }: Props) {
   const [location] = useLocation();
-
-  const assignClassIfActive = (path: string) => ({
-    className: clsx(location === path && 'uk-active'),
-  });
+  const isActive = location === path;
 
   return (
-    <li {...assignClassIfActive(path)}>
+    <li>
       <Link href={path}>
-        <span className="mr-1 size-4">
-          <UkIcon icon={icon} />
-        </span>
-
-        {children}
+        <a
+          className={clsx(
+            'flex items-center gap-2 px-3 py-2 rounded-md transition-colors',
+            'hover:bg-gray-100',
+            isActive && 'bg-gray-100 text-primary',
+          )}
+        >
+          <UkIcon icon={icon} className="size-4" />
+          <span>{children}</span>
+        </a>
       </Link>
     </li>
   );
