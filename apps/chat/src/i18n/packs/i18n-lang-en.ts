@@ -98,5 +98,6 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     publicChat: 'Public chat',
     privateChat: 'Private chat',
     start: 'Start chat',
+    selectModel: 'AI Model',
   },
 });

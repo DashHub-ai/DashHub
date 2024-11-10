@@ -2,12 +2,13 @@ import { type FormHookAttrs, useForm } from '@under-control/forms';
 
 import type { SdkTableRowWithIdNameT } from '@llm/sdk';
 
-import { usePredefinedFormValidators } from '@llm/ui';
+import { type SelectItem, usePredefinedFormValidators } from '@llm/ui';
 
 type StartChatFormValue = {
   project: SdkTableRowWithIdNameT | null;
   public: boolean;
   message: string;
+  model: SelectItem;
 };
 
 type StartChatFormHookAttrs =
@@ -28,6 +29,7 @@ export function useStartChatForm(
     resetAfterSubmit: false,
     defaultValue: {
       message: '',
+      model: { id: 'gpt-4', name: 'GPT-4' },
       project: null,
       public: false,
     },

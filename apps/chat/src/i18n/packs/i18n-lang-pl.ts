@@ -100,5 +100,6 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     publicChat: 'Czat publiczny',
     privateChat: 'Czat prywatny',
     start: 'Rozpocznij czat',
+    selectModel: 'Model AI',
   },
 });

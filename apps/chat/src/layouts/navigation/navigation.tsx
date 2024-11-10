@@ -10,11 +10,11 @@ export function Navigation() {
   const sitemap = useSitemap();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-white">
-      <div className="container mx-auto px-4">
-        <nav className="flex h-16 items-center justify-between">
+    <header className="relative z-50 bg-white border-b border-border w-full">
+      <div className="mx-auto px-4 container">
+        <nav className="flex justify-between items-center h-16">
           <div className="flex flex-1 items-center gap-10">
-            <span className="text-lg font-semibold">DashHub</span>
+            <span className="font-semibold text-lg">DashHub</span>
 
             <ul className="flex items-center gap-2">
               <NavigationItem path={sitemap.home} icon="message-square-text">

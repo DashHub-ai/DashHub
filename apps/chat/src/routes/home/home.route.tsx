@@ -1,6 +1,6 @@
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
-import { StartChatSection } from '~/modules';
+import { ChatsHistorySection, StartChatSection } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
 export function HomeRoute() {
@@ -15,6 +15,8 @@ export function HomeRoute() {
       </LayoutHeader>
 
       <StartChatSection />
+
+      <ChatsHistorySection className="pt-12" />
     </PageWithNavigationLayout>
   );
 }
