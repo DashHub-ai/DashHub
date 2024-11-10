@@ -9,7 +9,7 @@ type Props = PropsWithChildren & {
 
 export function PaginationToolbar({ children, suffix, className }: Props) {
   return (
-    <div className={clsx('flex justify-between items-center', className ?? 'mt-8')}>
+    <div className={clsx('flex justify-between items-center', className)}>
       <div className="flex flex-1 gap-4">
         {children}
       </div>

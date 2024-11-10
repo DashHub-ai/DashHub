@@ -23,6 +23,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     columns: {
       id: 'ID',
       name: 'Name',
+      description: 'Description',
       email: 'E-Mail',
       archived: 'Archived',
       active: 'Active',
@@ -110,6 +111,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           name: {
             label: 'Name',
             placeholder: 'Enter project name',
+          },
+          description: {
+            label: 'Description',
+            placeholder: 'Enter project description',
           },
           organization: {
             label: 'Organization',

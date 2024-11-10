@@ -2,10 +2,10 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkProjectT } from '@llm/sdk';
 
-import { FormField, Input } from '@llm/ui';
+import { FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-type Value = Pick<SdkProjectT, 'name'>;
+type Value = Pick<SdkProjectT, 'name' | 'description'>;
 
 type Props = ValidationErrorsListProps<Value>;
 
@@ -14,17 +14,31 @@ export const ProjectSharedFormFields = controlled<Value, Props>(({ errors, contr
   const validation = useFormValidatorMessages({ errors });
 
   return (
-    <FormField
-      className="uk-margin"
-      label={t.fields.name.label}
-      {...validation.extract('name')}
-    >
-      <Input
-        name="name"
-        placeholder={t.fields.name.placeholder}
-        required
-        {...bind.path('name')}
-      />
-    </FormField>
+    <>
+      <FormField
+        className="uk-margin"
+        label={t.fields.name.label}
+        {...validation.extract('name')}
+      >
+        <Input
+          name="name"
+          placeholder={t.fields.name.placeholder}
+          required
+          {...bind.path('name')}
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.description.label}
+        {...validation.extract('description')}
+      >
+        <TextArea
+          name="description"
+          placeholder={t.fields.description.placeholder}
+          {...bind.path('description')}
+        />
+      </FormField>
+    </>
   );
 });

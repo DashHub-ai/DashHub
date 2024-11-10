@@ -58,7 +58,15 @@ export class ProjectsEsSearchRepo {
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
-        !!phrase && createPhraseFieldQuery()(phrase),
+        !!phrase && (
+          esb
+            .boolQuery()
+            .should([
+              createPhraseFieldQuery()(phrase).boost(3),
+              esb.matchPhrasePrefixQuery('description', phrase).boost(1.5),
+            ])
+            .minimumShouldMatch(1)
+        ),
         !isNil(archived) && esb.termQuery('archived', archived),
       ]),
     );
@@ -70,6 +78,7 @@ export class ProjectsEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       archived: source.archived,
+      description: source.description,
       organization: source.organization,
     });
 }
