@@ -7,6 +7,7 @@ import type { I18nLangPack } from './i18n-packs';
 export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   navigation: {
     links: {
+      home: 'Czaty',
       projects: 'Projekty',
       apps: 'Aplikacje',
       experts: 'Eksperci',
@@ -83,5 +84,21 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       },
       title: 'Ustawienia',
     },
+    home: {
+      meta: {
+        title: 'Strona główna',
+        description: 'Strona główna',
+      },
+      title: 'Czaty',
+    },
+  },
+  startChat: {
+    hello: 'Cześć, jak możemy Ci pomóc?',
+    placeholder: 'Wpisz swoją wiadomość tutaj...',
+    addFile: 'Dodaj plik',
+    selectProject: 'Wybierz projekt',
+    publicChat: 'Czat publiczny',
+    privateChat: 'Czat prywatny',
+    start: 'Rozpocznij czat',
   },
 });

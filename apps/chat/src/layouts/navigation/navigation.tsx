@@ -17,6 +17,10 @@ export function Navigation() {
             <span className="text-lg font-semibold">DashHub</span>
 
             <ul className="flex items-center gap-2">
+              <NavigationItem path={sitemap.home} icon="message-square-text">
+                {t.links.home}
+              </NavigationItem>
+
               <NavigationItem path={sitemap.projects} icon="folder-kanban">
                 {t.links.projects}
               </NavigationItem>

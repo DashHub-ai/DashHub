@@ -40,6 +40,7 @@ export type SelectProps =
     className?: string;
     buttonClassName?: string;
     dropdownClassName?: string;
+    placeholderClassName?: string;
     items: Array<SelectItem>;
     prependItems?: ReactNode;
     onOpenChanged?: (isOpen: boolean) => void;
@@ -55,6 +56,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
     className,
     buttonClassName,
     dropdownClassName,
+    placeholderClassName,
     items,
     prependItems,
     onOpenChanged,
@@ -137,7 +139,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
     isFilled
       ? value.name
       : (
-          <span className="uk-text-muted">
+          <span className={placeholderClassName || 'uk-text-muted '}>
             {placeholder ?? pack.placeholders.selectItem}
           </span>
         )
@@ -150,7 +152,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
         type="button"
         disabled={disabled}
         className={clsx(
-          'uk-input-fake uk-flex uk-flex-between',
+          'uk-flex uk-flex-between uk-input-fake',
           buttonClassName,
         )}
         onClick={() => {
@@ -158,7 +160,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
         }}
       >
         {prefix && (
-          <span className="uk-text-muted mr-1">
+          <span className={clsx('mr-1', placeholderClassName || 'uk-text-muted ')}>
             {prefix}
             {isFilled ? ':' : ''}
           </span>

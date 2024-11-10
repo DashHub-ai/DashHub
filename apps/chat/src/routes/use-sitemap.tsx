@@ -2,6 +2,7 @@ import { concatUrls } from '@llm/commons';
 
 export function useSitemap() {
   const sitemap = {
+    home: prefixWithBaseRoute('/'),
     projects: prefixWithBaseRoute('/projects'),
     apps: prefixWithBaseRoute('/apps'),
     experts: prefixWithBaseRoute('/experts'),

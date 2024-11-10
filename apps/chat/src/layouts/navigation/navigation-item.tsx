@@ -17,7 +17,7 @@ export function NavigationItem({ path, icon, children }: Props) {
   return (
     <li>
       <Link href={path}>
-        <a
+        <span
           className={clsx(
             'flex items-center gap-2 px-3 py-2 rounded-md transition-colors',
             'hover:bg-gray-100',
@@ -26,7 +26,7 @@ export function NavigationItem({ path, icon, children }: Props) {
         >
           <UkIcon icon={icon} className="size-4" />
           <span>{children}</span>
-        </a>
+        </span>
       </Link>
     </li>
   );
