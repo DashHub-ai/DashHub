@@ -2,8 +2,11 @@ import { Redirect, Route, Switch } from 'wouter';
 
 import { useSdkIsLoggedIn } from '@llm/sdk';
 import {
+  AppsRoute,
+  ExpertsRoute,
   LoginRoute,
   ProjectsRoute,
+  SettingsRoute,
   useSitemap,
 } from '~/routes';
 
@@ -25,6 +28,9 @@ export function Router() {
   return (
     <Switch>
       <Route path={sitemap.projects} component={ProjectsRoute} />
+      <Route path={sitemap.apps} component={AppsRoute} />
+      <Route path={sitemap.experts} component={ExpertsRoute} />
+      <Route path={sitemap.settings} component={SettingsRoute} />
       <Route>
         <Redirect to={sitemap.projects} />
       </Route>

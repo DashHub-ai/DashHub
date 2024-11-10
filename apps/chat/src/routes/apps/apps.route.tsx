@@ -2,8 +2,8 @@ import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { RouteMetaTags } from '~/routes/shared';
 
-export function ProjectsRoute() {
-  const t = useI18n().pack.routes.projects;
+export function AppsRoute() {
+  const t = useI18n().pack.routes.apps;
 
   return (
     <PageWithNavigationLayout>

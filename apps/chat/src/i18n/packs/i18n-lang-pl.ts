@@ -5,6 +5,22 @@ import { I18N_FORWARDED_PL_PACK } from '@llm/ui';
 import type { I18nLangPack } from './i18n-packs';
 
 export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
+  navigation: {
+    links: {
+      projects: 'Projekty',
+      apps: 'Aplikacje',
+      experts: 'Eksperci',
+      settings: 'Ustawienia',
+    },
+    loggedIn: {
+      logout: 'Wyloguj się',
+    },
+  },
+  breadcrumbs: {
+    routes: {
+      home: 'Strona główna',
+    },
+  },
   routes: {
     shared: {
       meta: {
@@ -38,6 +54,34 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         terms: 'Warunkami korzystania z usługi',
         privacy: 'Polityką prywatności',
       },
+    },
+    apps: {
+      meta: {
+        title: 'Aplikacje',
+        description: 'Zarządzaj aplikacjami',
+      },
+      title: 'Aplikacje',
+    },
+    projects: {
+      meta: {
+        title: 'Projekty',
+        description: 'Zarządzaj projektami',
+      },
+      title: 'Projekty',
+    },
+    experts: {
+      meta: {
+        title: 'Eksperci',
+        description: 'Zarządzaj ekspertami',
+      },
+      title: 'Eksperci',
+    },
+    settings: {
+      meta: {
+        title: 'Ustawienia',
+        description: 'Zarządzaj ustawieniami',
+      },
+      title: 'Ustawienia',
     },
   },
 });

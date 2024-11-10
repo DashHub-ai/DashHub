@@ -3,6 +3,22 @@ import deepmerge from 'deepmerge';
 import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
 
 export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
+  navigation: {
+    links: {
+      projects: 'Projects',
+      apps: 'Apps',
+      experts: 'Experts',
+      settings: 'Settings',
+    },
+    loggedIn: {
+      logout: 'Logout',
+    },
+  },
+  breadcrumbs: {
+    routes: {
+      home: 'Home',
+    },
+  },
   routes: {
     shared: {
       meta: {
@@ -36,6 +52,34 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         terms: 'Terms of Service',
         privacy: 'Privacy Policy',
       },
+    },
+    apps: {
+      meta: {
+        title: 'Apps',
+        description: 'Manage apps',
+      },
+      title: 'Apps',
+    },
+    projects: {
+      meta: {
+        title: 'Projects',
+        description: 'Manage projects',
+      },
+      title: 'Projects',
+    },
+    experts: {
+      meta: {
+        title: 'Experts',
+        description: 'Manage experts',
+      },
+      title: 'Experts',
+    },
+    settings: {
+      meta: {
+        title: 'Settings',
+        description: 'Manage settings',
+      },
+      title: 'Settings',
     },
   },
 });

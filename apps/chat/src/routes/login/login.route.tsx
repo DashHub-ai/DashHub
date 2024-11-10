@@ -1,5 +1,5 @@
 import { useI18n } from '~/i18n';
-import { CenteredLayout } from '~/layouts';
+import { CenteredPageLayout } from '~/layouts';
 
 import { RouteMetaTags } from '../shared';
 import { LoginForm } from './login.form';
@@ -11,9 +11,9 @@ export function LoginRoute() {
     <>
       <RouteMetaTags meta={pack.routes.login.meta} />
 
-      <CenteredLayout>
+      <CenteredPageLayout>
         <LoginForm />
-      </CenteredLayout>
+      </CenteredPageLayout>
     </>
   );
 }
