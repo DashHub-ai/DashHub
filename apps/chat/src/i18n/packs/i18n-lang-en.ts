@@ -134,4 +134,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     start: 'Start chat',
     selectModel: 'AI Model',
   },
+  footer: {
+    copyright: 'Open Source AI Platform',
+    madeWith: 'Made with',
+    withAI: 'with AI',
+    github: 'GitHub',
+    blog: 'Blog',
+    docs: 'Documentation',
+  },
 });
