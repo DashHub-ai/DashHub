@@ -60,7 +60,7 @@ export function StartChatSection() {
             </button>
 
             <Select
-              buttonClassName="border-gray-300 border rounded-md"
+              buttonClassName="border-gray-300 border rounded-md bg-white"
               placeholderClassName="text-black"
               placeholder={t.selectProject}
               items={[]}

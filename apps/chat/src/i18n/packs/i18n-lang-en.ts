@@ -67,6 +67,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Manage projects',
       },
       title: 'Projects',
+      buttons: {
+        create: 'New project',
+      },
     },
     experts: {
       meta: {

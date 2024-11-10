@@ -9,6 +9,7 @@ import {
 
 export const SdkProjectV = z.object({
   organization: SdkIdNameUrlEntryV,
+  description: z.string(),
 })
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)

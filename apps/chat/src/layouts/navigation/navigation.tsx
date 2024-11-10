@@ -16,7 +16,7 @@ export function Navigation() {
           <div className="flex flex-1 items-center gap-10">
             <span className="font-semibold text-lg">DashHub</span>
 
-            <ul className="flex items-center gap-2">
+            <ul className="flex items-center gap-4">
               <NavigationItem path={sitemap.home} icon="message-square-text">
                 {t.links.home}
               </NavigationItem>

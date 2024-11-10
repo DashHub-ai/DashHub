@@ -10,7 +10,7 @@ type Props = {
 
 export function ChatsHistorySection({ className }: Props) {
   return (
-    <section className={clsx('space-y-6 mx-auto w-full max-w-4xl', className)}>
+    <section className={clsx('space-y-6 mx-auto w-full max-w-5xl', className)}>
       <div className="flex items-center space-x-2 mx-auto max-w-[300px]">
         <Tabs
           defaultValue={1}
