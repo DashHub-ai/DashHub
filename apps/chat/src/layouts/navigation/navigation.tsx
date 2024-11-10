@@ -25,7 +25,7 @@ export function Navigation() {
                 {t.links.projects}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.apps} icon="app-window">
+              <NavigationItem path={sitemap.apps} icon="wand-sparkles">
                 {t.links.apps}
               </NavigationItem>
 

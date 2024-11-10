@@ -25,6 +25,7 @@ export const I18N_FORWARDED_PL_PACK: typeof I18N_FORWARDED_EN_PACK = {
   buttons: {
     edit: 'Edytuj',
     archive: 'Archiwizuj',
+    open: 'Otwórz',
     unarchive: 'Odzyskaj',
     delete: 'Usuń',
     cancel: 'Anuluj',
