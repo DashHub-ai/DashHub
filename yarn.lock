@@ -5652,10 +5652,10 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-lucide-astro@^0.453.0:
-  version "0.453.0"
-  resolved "https://registry.yarnpkg.com/lucide-astro/-/lucide-astro-0.453.0.tgz#5c03e2574e2e2bfe2b14e8b592c8f7a1db0c002a"
-  integrity sha512-RSbCNNSspnCmqsMrJV9CuZXcMYACEOWdhNj0k1NBND0xdv6oruBBSkbkOOFHSZJgnFVLUevpSOU14xmGsrN+KQ==
+lucide-astro@^0.454.0:
+  version "0.454.0"
+  resolved "https://registry.yarnpkg.com/lucide-astro/-/lucide-astro-0.454.0.tgz#0612f9dd25969a98e803f076090583ff70afc7ce"
+  integrity sha512-XVyOyFeHVCzTTamFzn5BCC7wfFKEd4wXA/ybiUDkngZvARi9SoC8HSrt+HKKZ2g91PsatxwuM+14jDm2f2Aq9w==
 
 lusca@1.6.1:
   version "1.6.1"
