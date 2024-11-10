@@ -44,13 +44,13 @@ export function Footer() {
               {t.blog}
             </a>
             <a
-              href="https://docs.dashhub.ai"
+              href="https://dashhub.ai/about"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-gray-400 hover:text-gray-500"
             >
-              <UkIcon icon="book" size={16} />
-              {t.docs}
+              <UkIcon icon="info" size={16} />
+              {t.about}
             </a>
           </div>
         </div>
