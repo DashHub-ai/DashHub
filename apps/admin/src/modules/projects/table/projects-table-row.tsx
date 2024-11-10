@@ -22,6 +22,7 @@ export function ProjectsTableRow({ item, onUpdated }: Props) {
     <tr>
       <td>{item.id}</td>
       <td>{item.name}</td>
+      <td>{item.description || '-'}</td>
       <td>
         <Link
           className="uk-link"

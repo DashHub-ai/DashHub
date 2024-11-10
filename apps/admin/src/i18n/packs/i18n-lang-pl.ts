@@ -25,6 +25,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     columns: {
       id: 'ID',
       name: 'Nazwa',
+      description: 'Opis',
       auth: 'Autoryzacja',
       organization: 'Organizacja',
       active: 'Aktywny',
@@ -113,6 +114,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
             label: 'Nazwa',
             placeholder: 'Wpisz nazwę projektu',
           },
+          description: {
+            label: 'Opis',
+            placeholder: 'Wpisz opis projektu',
+          },
           organization: {
             label: 'Wybierz organizację',
           },
@@ -132,6 +137,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           name: {
             label: 'Nazwa',
             placeholder: 'Wpisz nazwę aplikacji',
+          },
+          description: {
+            label: 'Opis',
+            placeholder: 'Wpisz opis aplikacji',
           },
           organization: {
             label: 'Organizacja',

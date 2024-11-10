@@ -23,6 +23,7 @@ export const I18N_FORWARDED_EN_PACK = {
   buttons: {
     create: 'Create',
     cancel: 'Cancel',
+    open: 'Open',
     close: 'Close',
     save: 'Save',
     delete: 'Delete',

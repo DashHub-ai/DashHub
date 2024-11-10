@@ -5,7 +5,7 @@ import type { SdkAppT } from '@llm/sdk';
 import { FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-type Value = Pick<SdkAppT, 'name' | 'chatContext'>;
+type Value = Pick<SdkAppT, 'name' | 'chatContext' | 'description'>;
 
 type Props = ValidationErrorsListProps<Value>;
 
@@ -25,6 +25,19 @@ export const AppSharedFormFields = controlled<Value, Props>(({ errors, control: 
           placeholder={t.fields.name.placeholder}
           required
           {...bind.path('name')}
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.description.label}
+        {...validation.extract('description')}
+      >
+        <TextArea
+          name="description"
+          placeholder={t.fields.description.placeholder}
+          required
+          {...bind.path('description')}
         />
       </FormField>
 

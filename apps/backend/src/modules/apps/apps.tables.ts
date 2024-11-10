@@ -13,6 +13,7 @@ export type AppsTable = TableWithDefaultColumns &
     organization_id: ColumnType<TableId, TableId, never>;
     name: string;
     chat_context: string;
+    description: string | null;
   };
 
 export type AppTableRow = NormalizeSelectTableRow<AppsTable>;

@@ -2,13 +2,16 @@
 type Props = {
   className?: string;
   icon: string;
+  size?: number;
 };
 
-export function UkIcon({ className, icon }: Props) {
+export function UkIcon({ className, icon, size = 16 }: Props) {
   return (
     <uk-icon
       class={className}
       icon={icon}
+      width={size}
+      height={size}
     />
   );
 }
@@ -19,6 +22,8 @@ declare global {
       'uk-icon': {
         icon: string;
         class?: string;
+        width?: number;
+        height?: number;
       };
     }
   }

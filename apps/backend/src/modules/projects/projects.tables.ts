@@ -12,6 +12,7 @@ export type ProjectsTable = TableWithDefaultColumns &
   TableWithArchivedAtColumn & {
     organization_id: ColumnType<TableId, TableId, never>;
     name: string;
+    description: string | null;
   };
 
 export type ProjectTableRow = NormalizeSelectTableRow<ProjectsTable>;

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { NonEmptyOrNullStringV } from '@llm/commons';
 import {
   SdkIdNameUrlEntryV,
   SdkTableRowWithArchivedV,
@@ -10,6 +11,7 @@ import {
 export const SdkAppV = z.object({
   organization: SdkIdNameUrlEntryV,
   chatContext: z.string(),
+  description: NonEmptyOrNullStringV,
 })
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)

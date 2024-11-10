@@ -1,3 +1,6 @@
+import 'franken-ui/js/core.iife';
+import 'franken-ui/js/icon.iife';
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
