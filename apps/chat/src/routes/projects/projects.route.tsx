@@ -8,6 +8,8 @@ import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { ProjectsGrid } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
+import { ProjectsTutorial } from './projects-tutorial';
+
 const SAMPLE_PROJECTS = [
   {
     id: '1',
@@ -81,6 +83,8 @@ export function ProjectsRoute() {
       <LayoutHeader>
         {t.title}
       </LayoutHeader>
+
+      <ProjectsTutorial />
 
       <section>
         <PaginationToolbar

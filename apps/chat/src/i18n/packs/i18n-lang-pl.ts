@@ -22,6 +22,11 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       home: 'Strona główna',
     },
   },
+  components: {
+    tutorialBox: {
+      gotIt: 'Rozumiem',
+    },
+  },
   routes: {
     shared: {
       meta: {
@@ -62,6 +67,11 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Zarządzaj aplikacjami',
       },
       title: 'Aplikacje',
+      tutorial: {
+        title: 'Czym są Aplikacje DashHub?',
+        tools: 'Specjalistyczne narzędzia oparte na LLM do tworzenia e-maili, organizacji danych i transformacji treści',
+        modular: 'Modularne i wielokrotnego użytku aplikacje zwiększające produktywność w projektach',
+      },
     },
     projects: {
       meta: {
@@ -71,6 +81,12 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       title: 'Projekty',
       buttons: {
         create: 'Utwórz projekt',
+      },
+      tutorial: {
+        title: 'Czym są Projekty DashHub?',
+        spaces: 'Twórz spersonalizowane przestrzenie robocze z dedykowanymi bazami wiedzy i konfiguracją',
+        collaboration: 'Buduj wspólnie - zapraszaj członków zespołu i współpracuj w jednym środowisku',
+        context: 'Zachowuj historię rozmów i kontekst projektu dla ciągłego postępu',
       },
     },
     experts: {
@@ -93,6 +109,12 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Strona główna',
       },
       title: 'Czaty',
+      tutorial: {
+        title: 'Witaj w DashHub Chat!',
+        ai: 'Potężny asystent AI gotowy pomóc w Twoich zadaniach i pytaniach',
+        knowledge: 'Dostęp do obszernej bazy wiedzy i wyspecjalizowanych narzędzi',
+        history: 'Śledź i kontynuuj swoje rozmowy bez przeszkód',
+      },
     },
   },
   startChat: {

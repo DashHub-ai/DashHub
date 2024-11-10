@@ -3,6 +3,8 @@ import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { ChatsHistorySection, StartChatSection } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
+import { HomeTutorial } from './home-tutorial';
+
 export function HomeRoute() {
   const t = useI18n().pack.routes.home;
 
@@ -14,9 +16,16 @@ export function HomeRoute() {
         {t.title}
       </LayoutHeader>
 
-      <StartChatSection />
+      <section>
+        <StartChatSection />
 
-      <ChatsHistorySection className="pt-12" />
+        <HomeTutorial className="mx-auto mt-8" />
+
+        <hr className="border-gray-200 mx-auto my-12 border-t max-w-2xl" />
+
+        <ChatsHistorySection />
+
+      </section>
     </PageWithNavigationLayout>
   );
 }

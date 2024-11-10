@@ -4,6 +4,8 @@ import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { AppsGrid } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
+import { AppsTutorial } from './apps-tutorial';
+
 const SAMPLE_APPS = [
   {
     id: '1',
@@ -77,6 +79,8 @@ export function AppsRoute() {
       <LayoutHeader>
         {t.title}
       </LayoutHeader>
+
+      <AppsTutorial />
 
       <section>
         <PaginationToolbar

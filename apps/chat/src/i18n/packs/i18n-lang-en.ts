@@ -20,6 +20,11 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       home: 'Home',
     },
   },
+  components: {
+    tutorialBox: {
+      gotIt: 'Got it, dismiss',
+    },
+  },
   routes: {
     shared: {
       meta: {
@@ -60,6 +65,11 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Manage apps',
       },
       title: 'Apps',
+      tutorial: {
+        title: 'What are DashHub Apps?',
+        tools: 'Specialized LLM-powered tools for email composition, data organization, and content transformation',
+        modular: 'Modular and reusable applications to boost your productivity across projects',
+      },
     },
     projects: {
       meta: {
@@ -69,6 +79,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       title: 'Projects',
       buttons: {
         create: 'New project',
+      },
+      tutorial: {
+        title: 'What are DashHub Projects?',
+        spaces: 'Create customized workspaces with dedicated knowledge bases and tailored configurations',
+        collaboration: 'Build together seamlessly - invite team members and collaborate in a shared environment',
+        context: 'Preserve conversation history and maintain project context for continuous progress',
       },
     },
     experts: {
@@ -91,6 +107,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Home',
       },
       title: 'Chats',
+      tutorial: {
+        title: 'Welcome to DashHub Chat!',
+        ai: 'Powerful AI assistant ready to help with your tasks and questions',
+        knowledge: 'Access to extensive knowledge base and specialized tools',
+        history: 'Track and continue your conversations seamlessly',
+      },
     },
   },
   startChat: {
