@@ -16,6 +16,15 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     loggedIn: {
       logout: 'Wyloguj się',
     },
+    search: {
+      placeholder: 'Szukaj...',
+      button: 'Szukaj',
+    },
+    notifications: {
+      title: 'Powiadomienia',
+      empty: 'Brak nowych powiadomień',
+    },
+    github: 'Zobacz na GitHub',
   },
   breadcrumbs: {
     routes: {

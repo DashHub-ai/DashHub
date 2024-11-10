@@ -14,6 +14,15 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     loggedIn: {
       logout: 'Logout',
     },
+    search: {
+      placeholder: 'Search...',
+      button: 'Search',
+    },
+    notifications: {
+      title: 'Notifications',
+      empty: 'No new notifications',
+    },
+    github: 'View on GitHub',
   },
   breadcrumbs: {
     routes: {
