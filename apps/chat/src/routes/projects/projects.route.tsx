@@ -1,3 +1,8 @@
+import {
+  CreateButton,
+  PaginationSearchToolbarItem,
+  PaginationToolbar,
+} from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { ProjectsGrid } from '~/modules';
@@ -78,6 +83,15 @@ export function ProjectsRoute() {
       </LayoutHeader>
 
       <section>
+        <PaginationToolbar
+          className="mb-6"
+          suffix={(
+            <CreateButton loading={false} />
+          )}
+        >
+          <PaginationSearchToolbarItem defaultValue="" />
+        </PaginationToolbar>
+
         <ProjectsGrid items={SAMPLE_PROJECTS} />
       </section>
     </PageWithNavigationLayout>
