@@ -1,9 +1,10 @@
 import { pipe } from 'fp-ts/lib/function';
+import { KeyRoundIcon, MailIcon } from 'lucide-react';
 import { Link } from 'wouter';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchUserItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton, UkIcon } from '@llm/ui';
+import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
 
@@ -47,13 +48,13 @@ export function UsersTableRow({ item, onUpdated }: Props) {
         <div className="uk-flex space-x-1.5">
           {auth.email?.enabled && (
             <span className="uk-badge uk-badge-secondary" title={pack.common.email}>
-              <UkIcon icon="mail" />
+              <MailIcon size={16} />
             </span>
           )}
 
           {auth.password?.enabled && (
             <span className="uk-badge uk-badge-secondary" title={pack.common.password}>
-              <UkIcon icon="key-round" />
+              <KeyRoundIcon size={16} />
             </span>
           )}
         </div>

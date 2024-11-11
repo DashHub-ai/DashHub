@@ -1,13 +1,11 @@
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 
 import clsx from 'clsx';
 import { Link, useLocation } from 'wouter';
 
-import { UkIcon } from '@llm/ui';
-
 type Props = PropsWithChildren & {
   path: string;
-  icon: string;
+  icon: ReactNode;
 };
 
 export function NavigationItem({ path, icon, children }: Props) {
@@ -24,7 +22,9 @@ export function NavigationItem({ path, icon, children }: Props) {
             isActive && 'bg-gray-100 text-primary',
           )}
         >
-          <UkIcon icon={icon} className="size-4" />
+          <span className="size-4">
+            {icon}
+          </span>
           <span>{children}</span>
         </span>
       </Link>

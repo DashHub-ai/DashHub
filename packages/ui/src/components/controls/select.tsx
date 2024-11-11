@@ -2,6 +2,7 @@
 
 import { type ControlBindProps, controlled } from '@under-control/forms';
 import clsx from 'clsx';
+import { CheckIcon } from 'lucide-react';
 import {
   type PropsWithChildren,
   type ReactNode,
@@ -12,7 +13,7 @@ import {
 import { FAKE_OBJECT_ID, isObjectWithFakeID } from '@llm/commons';
 import { useOutsideClickRef, useUpdateEffect } from '@llm/commons-front';
 import { useForwardedI18n } from '~/i18n';
-import { SelectExpandSVG, UkIcon } from '~/icons';
+import { SelectExpandSVG } from '~/icons';
 
 import { HiddenRequiredInput } from './hidden-required-input';
 
@@ -124,7 +125,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
               >
                 <span>{item.name}</span>
                 {isActive && (
-                  <UkIcon icon="check" />
+                  <CheckIcon size={16} />
                 )}
               </a>
             </li>

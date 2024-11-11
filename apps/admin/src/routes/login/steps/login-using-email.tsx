@@ -1,5 +1,6 @@
 import { useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
+import { KeyRoundIcon } from 'lucide-react';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import { type SdkEmailLoginInputT, useSdk } from '@llm/sdk';
@@ -8,7 +9,6 @@ import {
   FormField,
   FormSpinnerCTA,
   Input,
-  UkIcon,
   usePredefinedFormValidators,
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
@@ -53,12 +53,12 @@ export function LoginUsingEmail(
   });
 
   return (
-    <div className="w-[350px] space-y-6">
+    <div className="space-y-6 w-[350px]">
       <div className="flex flex-col space-y-2 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="font-semibold text-2xl tracking-tight">
           {t.emailStep.title}
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           {t.emailStep.description}
         </p>
       </div>
@@ -86,12 +86,12 @@ export function LoginUsingEmail(
 
       <button
         type="button"
-        className="uk-button uk-button-default w-full"
+        className="w-full uk-button uk-button-default"
         onClick={() => {
           onLoginUsingPassword?.(value);
         }}
       >
-        <UkIcon icon="key-round" className="mr-2 h-4 w-4" />
+        <KeyRoundIcon size={16} className="mr-2 w-4 h-4" />
         {t.cta.loginUsingPassword}
       </button>
 

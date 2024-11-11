@@ -1,4 +1,14 @@
-import { UkIcon } from '@llm/ui';
+import {
+  BellIcon,
+  CogIcon,
+  FolderKanbanIcon,
+  GithubIcon,
+  GraduationCapIcon,
+  MessageSquareTextIcon,
+  SearchIcon,
+  WandSparklesIcon,
+} from 'lucide-react';
+
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
 
@@ -18,23 +28,23 @@ export function Navigation() {
             <span className="font-semibold text-lg">DashHub</span>
 
             <ul className="flex items-center gap-4 ml-5">
-              <NavigationItem path={sitemap.home} icon="message-square-text">
+              <NavigationItem path={sitemap.home} icon={<MessageSquareTextIcon size={16} />}>
                 {t.links.home}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.projects} icon="folder-kanban">
+              <NavigationItem path={sitemap.projects} icon={<FolderKanbanIcon size={16} />}>
                 {t.links.projects}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.apps} icon="wand-sparkles">
+              <NavigationItem path={sitemap.apps} icon={<WandSparklesIcon size={16} />}>
                 {t.links.apps}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.experts} icon="graduation-cap">
+              <NavigationItem path={sitemap.experts} icon={<GraduationCapIcon size={16} />}>
                 {t.links.experts}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.settings} icon="cog">
+              <NavigationItem path={sitemap.settings} icon={<CogIcon size={16} />}>
                 {t.links.settings}
               </NavigationItem>
             </ul>
@@ -48,8 +58,7 @@ export function Navigation() {
                 placeholder={t.search.placeholder}
                 className="focus:border-gray-200 bg-gray-100/80 focus:bg-white py-2 pr-4 pl-10 border border-transparent rounded-full focus:ring-0 w-44 focus:w-64 text-gray-800 text-sm transition-all duration-200 placeholder-gray-500 focus:outline-none"
               />
-              <UkIcon
-                icon="search"
+              <SearchIcon
                 size={18}
                 className="top-1/2 left-3 absolute text-gray-500 -translate-y-1/2"
               />
@@ -60,7 +69,7 @@ export function Navigation() {
               className="relative hover:bg-gray-100/80 p-3 rounded-full text-gray-800 hover:text-gray-900"
               title={t.notifications.title}
             >
-              <UkIcon icon="bell" size={20} className="relative top-[1px]" />
+              <BellIcon size={20} className="relative top-[1px]" />
               <span className="top-2 right-2 absolute bg-red-500 rounded-full w-2.5 h-2.5" />
             </button>
 
@@ -71,7 +80,7 @@ export function Navigation() {
               className="hover:bg-gray-100/80 p-3 rounded-full text-gray-800 hover:text-gray-900"
               title={t.github}
             >
-              <UkIcon icon="github" size={20} className="relative top-[1px]" />
+              <GithubIcon size={20} className="relative top-[1px]" />
             </a>
 
             <ChooseLanguageItem />

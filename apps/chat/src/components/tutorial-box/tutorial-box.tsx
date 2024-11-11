@@ -3,10 +3,10 @@ import type { PropsWithChildren } from 'react';
 import clsx from 'clsx';
 import { flow } from 'fp-ts/lib/function';
 import * as O from 'fp-ts/lib/Option';
+import { CheckIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { useLocalStorageObject } from '@llm/commons-front';
-import { UkIcon } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 const STORAGE_KEY = 'tutorial-visibility';
@@ -93,7 +93,7 @@ export function TutorialBox({ variant = 'amber', title, backgroundIcon, classNam
             variant === 'amber' ? 'bg-amber-100 hover:bg-amber-200 text-amber-700' : 'bg-blue-100 hover:bg-blue-200 text-blue-700',
           )}
         >
-          <UkIcon icon="check" className="relative top-[2px] mr-2" />
+          <CheckIcon size={16} className="relative top-[2px] mr-2" />
           {t.gotIt}
         </button>
       </div>

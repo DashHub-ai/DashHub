@@ -134,6 +134,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     start: 'Start chat',
     selectModel: 'AI Model',
   },
+  apps: {
+    favorites: {
+      add: 'Add to favorites',
+      remove: 'Remove from favorites',
+    },
+  },
   footer: {
     copyright: 'Open Source AI Platform',
     madeWith: 'Made with',

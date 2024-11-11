@@ -1,4 +1,4 @@
-import { UkIcon } from '../../icons';
+import { XIcon } from 'lucide-react';
 
 type Props = {
   onClick: VoidFunction;
@@ -7,12 +7,12 @@ type Props = {
 export function ModalCloseButton({ onClick }: Props) {
   return (
     <button
-      className="uk-modal-close-default uk-icon uk-close"
+      className="uk-close uk-icon uk-modal-close-default"
       type="button"
       aria-label="Close"
       onClick={onClick}
     >
-      <UkIcon icon="x" />
+      <XIcon size={16} />
     </button>
   );
 }

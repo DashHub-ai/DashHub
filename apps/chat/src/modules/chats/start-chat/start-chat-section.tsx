@@ -1,4 +1,6 @@
-import { Checkbox, Select, UkIcon } from '@llm/ui';
+import { PaperclipIcon, SendIcon } from 'lucide-react';
+
+import { Checkbox, Select } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 import { useStartChatForm } from './use-start-chat-form';
@@ -55,7 +57,7 @@ export function StartChatSection() {
                 // Handle file input click
               }}
             >
-              <UkIcon icon="paperclip" className="mr-2" />
+              <PaperclipIcon size={16} className="mr-2" />
               {t.addFile}
             </button>
 
@@ -76,7 +78,7 @@ export function StartChatSection() {
                 type="submit"
                 className="uk-button uk-button-primary"
               >
-                <UkIcon icon="send" className="mr-2" />
+                <SendIcon size={16} className="mr-2" />
                 {t.start}
               </button>
             </div>

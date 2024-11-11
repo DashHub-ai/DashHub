@@ -5,12 +5,12 @@ import {
 } from '@under-control/forms';
 import * as A from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
+import { SearchIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 import { type CanBePromise, isObjectWithFakeID, rejectById } from '@llm/commons';
 import { useAsyncDebounce, useAsyncValue, useUpdateEffect } from '@llm/commons-front';
 import { useForwardedI18n } from '~/i18n';
-import { UkIcon } from '~/icons';
 
 import { SpinnerContainer } from '../spinner-container';
 import { Select, type SelectItem, type SelectProps } from './select';
@@ -108,7 +108,7 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
       items={itemsWithSelected}
       toolbar={(
         <div className="uk-custom-select-search">
-          <UkIcon icon="search" />
+          <SearchIcon size={16} />
           <input
             ref={searchInputRef}
             placeholder={pack.placeholders.search}

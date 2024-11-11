@@ -1,3 +1,12 @@
+import {
+  BotIcon,
+  BuildingIcon,
+  CloudIcon,
+  FolderIcon,
+  HomeIcon,
+  UserIcon,
+} from 'lucide-react';
+
 import { useI18n } from '~/i18n';
 import { SearchBar } from '~/modules';
 import { useSitemap } from '~/routes';
@@ -11,38 +20,38 @@ export function Navigation() {
   const sitemap = useSitemap();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border px-4 bg-white">
-      <div className="container mx-auto p-4 flex h-14 max-w-screen-2xl items-center">
-        <nav className="uk-navbar w-full" uk-navbar="">
+    <header className="top-0 z-50 sticky bg-white px-4 border-b border-border w-full">
+      <div className="flex items-center mx-auto p-4 max-w-screen-2xl h-14 container">
+        <nav className="w-full uk-navbar" uk-navbar="">
           <div className="uk-navbar-left gap-x-4 lg:gap-x-10">
-            <div className="uk-navbar-item flex justify-start">
+            <div className="flex justify-start uk-navbar-item">
               <span className="font-light text-lg">
                 DashHub
               </span>
             </div>
 
-            <ul className="uk-navbar-nav gap-x-4 lg:gap-x-8">
-              <NavigationItem path={sitemap.home} icon="home">
+            <ul className="gap-x-4 lg:gap-x-8 uk-navbar-nav">
+              <NavigationItem path={sitemap.home} icon={<HomeIcon size={16} />}>
                 {t.links.home}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.organizations.index.raw} icon="building">
+              <NavigationItem path={sitemap.organizations.index.raw} icon={<BuildingIcon size={16} />}>
                 {t.links.organizations}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.users.index.raw} icon="user">
+              <NavigationItem path={sitemap.users.index.raw} icon={<UserIcon size={16} />}>
                 {t.links.users}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.apps.index.raw} icon="bot">
+              <NavigationItem path={sitemap.apps.index.raw} icon={<BotIcon size={16} />}>
                 {t.links.apps}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.projects.index.raw} icon="folder">
+              <NavigationItem path={sitemap.projects.index.raw} icon={<FolderIcon size={16} />}>
                 {t.links.projects}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.s3Buckets.index.raw} icon="cloud">
+              <NavigationItem path={sitemap.s3Buckets.index.raw} icon={<CloudIcon size={16} />}>
                 {t.links.s3Buckets}
               </NavigationItem>
             </ul>

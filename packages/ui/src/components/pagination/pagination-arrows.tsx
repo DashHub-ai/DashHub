@@ -1,4 +1,5 @@
 import { controlled } from '@under-control/forms';
+import { ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react';
 
 import type {
   SdkOffsetPaginationInputT,
@@ -7,7 +8,6 @@ import type {
 
 import { clamp } from '@llm/commons';
 import { useForwardedI18n } from '~/i18n';
-import { UkIcon } from '~/icons';
 
 import { getTotalPages } from './helpers';
 
@@ -41,7 +41,7 @@ export const PaginationArrows = controlled<SdkOffsetPaginationInputT, Props>(
       <div className="flex flex-row space-x-4">
         <button
           type="button"
-          className="uk-icon-button uk-icon-button-small hidden lg:inline-flex"
+          className="lg:inline-flex hidden uk-icon-button uk-icon-button-small"
           disabled={!value.offset}
           onClick={() => {
             setOffset(0);
@@ -52,7 +52,7 @@ export const PaginationArrows = controlled<SdkOffsetPaginationInputT, Props>(
           </span>
 
           <span className="size-4">
-            <UkIcon icon="chevrons-left" />
+            <ChevronsLeftIcon size={16} />
           </span>
         </button>
 
@@ -69,7 +69,7 @@ export const PaginationArrows = controlled<SdkOffsetPaginationInputT, Props>(
           </span>
 
           <span className="size-4">
-            <UkIcon icon="chevron-left" />
+            <ChevronsLeftIcon size={16} />
           </span>
         </button>
 
@@ -86,13 +86,13 @@ export const PaginationArrows = controlled<SdkOffsetPaginationInputT, Props>(
           </span>
 
           <span className="size-4">
-            <UkIcon icon="chevron-right" />
+            <ChevronRightIcon size={16} />
           </span>
         </button>
 
         <button
           type="button"
-          className="uk-icon-button uk-icon-button-small hidden lg:inline-flex"
+          className="lg:inline-flex hidden uk-icon-button uk-icon-button-small"
           disabled={value.offset >= maxOffset}
           onClick={() => {
             setOffset(value.limit * (totalPages - 1));
@@ -103,7 +103,7 @@ export const PaginationArrows = controlled<SdkOffsetPaginationInputT, Props>(
           </span>
 
           <span className="size-4">
-            <UkIcon icon="chevrons-right" />
+            <ChevronsRightIcon size={16} />
           </span>
         </button>
       </div>

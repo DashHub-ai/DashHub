@@ -1,4 +1,6 @@
-import { InputWithIcon, type InputWithIconProps, UkIcon } from '@llm/ui';
+import { SearchIcon } from 'lucide-react';
+
+import { InputWithIcon, type InputWithIconProps } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Props = Omit<InputWithIconProps, 'icon' | 'placeholder'>;
@@ -8,7 +10,7 @@ export function SearchBarInput(props: Props) {
 
   return (
     <InputWithIcon
-      icon={<UkIcon icon="search" />}
+      icon={<SearchIcon size={16} />}
       placeholder={t.input.placeholder}
       {...props}
     />

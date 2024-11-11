@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-
-import { UkIcon } from '~/icons';
+import { EllipsisIcon } from 'lucide-react';
 
 import type { SelectItem } from '../controls';
 
@@ -26,7 +25,7 @@ export function EllipsisDropdownButton({ className, items }: EllipsisDropdownBut
         aria-expanded="false"
       >
         <span className="size-4">
-          <UkIcon icon="ellipsis" />
+          <EllipsisIcon size={16} />
         </span>
       </button>
 
@@ -38,7 +37,7 @@ export function EllipsisDropdownButton({ className, items }: EllipsisDropdownBut
           {items.map(item => (
             <li key={item.id}>
               <a
-                className="uk-drop-close justify-between"
+                className="justify-between uk-drop-close"
                 type="button"
                 href=""
                 onClick={item.onClick}

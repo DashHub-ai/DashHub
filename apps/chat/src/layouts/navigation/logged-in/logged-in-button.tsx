@@ -1,14 +1,14 @@
-import { UkIcon } from '@llm/ui';
+import { UserIcon } from 'lucide-react';
 
 export function LoggedInButton() {
   return (
     <button
       type="button"
-      className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground px-4 py-2 relative h-8 w-8 rounded-full"
+      className="inline-flex relative justify-center items-center hover:bg-accent disabled:opacity-50 px-4 py-2 rounded-full focus-visible:ring-1 focus-visible:ring-ring w-8 h-8 font-medium text-sm hover:text-accent-foreground whitespace-nowrap transition-colors focus-visible:outline-none disabled:pointer-events-none"
       aria-haspopup="true"
     >
-      <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full items-center justify-center uk-background-secondary">
-        <UkIcon icon="user" />
+      <span className="relative flex justify-center items-center rounded-full w-10 h-10 overflow-hidden shrink-0 uk-background-secondary">
+        <UserIcon size={16} />
       </span>
     </button>
   );

@@ -1,5 +1,7 @@
+import { BotIcon, BuildingIcon, CloudIcon, FolderIcon, UserIcon } from 'lucide-react';
+
 import { useDebounceValue } from '@llm/commons-front';
-import { NoItemsPlaceholder, SpinnerContainer, UkIcon } from '@llm/ui';
+import { NoItemsPlaceholder, SpinnerContainer } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
 
@@ -33,7 +35,7 @@ export function SearchResults({ phrase }: Props) {
 
   if (!totalItems) {
     return (
-      <div className="px-4 py-3 space-y-2">
+      <div className="space-y-2 px-4 py-3">
         <NoItemsPlaceholder />
       </div>
     );
@@ -51,7 +53,7 @@ export function SearchResults({ phrase }: Props) {
     <>
       {users.total > 0 && (
         <SearchResultGroup
-          icon={<UkIcon icon="user" />}
+          icon={<UserIcon size={16} />}
           groupProps={{
             header: t.groups.users.header,
             viewAllHref: sitemap.users.index.generate({
@@ -79,7 +81,7 @@ export function SearchResults({ phrase }: Props) {
 
       {organizations.total > 0 && (
         <SearchResultGroup
-          icon={<UkIcon icon="building" />}
+          icon={<BuildingIcon size={16} />}
           groupProps={{
             header: t.groups.organizations.header,
             viewAllHref: sitemap.organizations.index.generate({
@@ -107,7 +109,7 @@ export function SearchResults({ phrase }: Props) {
 
       {s3Buckets.total > 0 && (
         <SearchResultGroup
-          icon={<UkIcon icon="cloud" />}
+          icon={<CloudIcon size={16} />}
           groupProps={{
             header: t.groups.s3Buckets.header,
             viewAllHref: sitemap.s3Buckets.index.generate({
@@ -135,7 +137,7 @@ export function SearchResults({ phrase }: Props) {
 
       {projects.total > 0 && (
         <SearchResultGroup
-          icon={<UkIcon icon="folder" />}
+          icon={<FolderIcon size={16} />}
           groupProps={{
             header: t.groups.projects.header,
             viewAllHref: sitemap.projects.index.generate({
@@ -163,7 +165,7 @@ export function SearchResults({ phrase }: Props) {
 
       {apps.total > 0 && (
         <SearchResultGroup
-          icon={<UkIcon icon="bot" />}
+          icon={<BotIcon size={16} />}
           groupProps={{
             header: t.groups.apps.header,
             viewAllHref: sitemap.apps.index.generate({

@@ -1,9 +1,10 @@
 import { useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/function';
+import { MailIcon } from 'lucide-react';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import { type SdkPasswordLoginInputT, useSdk } from '@llm/sdk';
-import { Checkbox, FormErrorAlert, FormField, FormSpinnerCTA, Input, UkIcon } from '@llm/ui';
+import { Checkbox, FormErrorAlert, FormField, FormSpinnerCTA, Input } from '@llm/ui';
 import { usePredefinedFormValidators } from '~/hooks';
 import { useI18n } from '~/i18n';
 
@@ -50,12 +51,12 @@ export function LoginUsingPassword(
   });
 
   return (
-    <div className="w-[350px] space-y-6">
+    <div className="space-y-6 w-[350px]">
       <div className="flex flex-col space-y-2 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="font-semibold text-2xl tracking-tight">
           {t.passwordStep.title}
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           {t.passwordStep.description}
         </p>
       </div>
@@ -101,12 +102,12 @@ export function LoginUsingPassword(
       <button
         type="button"
         disabled={submitState.loading}
-        className="uk-button uk-button-default w-full"
+        className="w-full uk-button uk-button-default"
         onClick={() => {
           onLoginUsingEmail?.(value);
         }}
       >
-        <UkIcon icon="mail" className="mr-2 h-4 w-4" />
+        <MailIcon size={16} className="mr-2 w-4 h-4" />
         {t.cta.loginUsingEmail}
       </button>
 

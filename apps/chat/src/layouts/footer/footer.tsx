@@ -1,4 +1,5 @@
-import { UkIcon } from '@llm/ui';
+import { GithubIcon, InfoIcon, NewspaperIcon } from 'lucide-react';
+
 import { useI18n } from '~/i18n';
 
 export function Footer() {
@@ -31,7 +32,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-gray-400 hover:text-gray-500"
             >
-              <UkIcon icon="github" size={16} />
+              <GithubIcon size={16} />
               {t.github}
             </a>
             <a
@@ -40,7 +41,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-gray-400 hover:text-gray-500"
             >
-              <UkIcon icon="newspaper" size={16} />
+              <NewspaperIcon size={16} />
               {t.blog}
             </a>
             <a
@@ -49,7 +50,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-gray-400 hover:text-gray-500"
             >
-              <UkIcon icon="info" size={16} />
+              <InfoIcon size={16} />
               {t.about}
             </a>
           </div>
