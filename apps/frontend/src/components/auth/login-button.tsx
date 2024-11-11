@@ -7,16 +7,9 @@ export const LoginButton = withSdk(() => {
 
   if (session.isLoggedIn) {
     return (
-      <div className="flex items-center gap-2">
-        <span className="text-sm">
-          Welcome,
-          {session.token.email}
-          !
-        </span>
-        <a href="/app" className="bg-black hover:bg-gray-800 px-4 py-2 rounded text-white">
-          Go to App
-        </a>
-      </div>
+      <a href="/app" className="bg-black hover:bg-gray-800 px-4 py-2 rounded text-white">
+        Go to App
+      </a>
     );
   }
 
