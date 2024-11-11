@@ -104,6 +104,12 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Zarządzaj ekspertami',
       },
       title: 'Eksperci',
+      tutorial: {
+        title: 'Czym są Eksperci DashHub?',
+        custom: 'Wyspecjalizowani asystenci AI zaprojektowani do konkretnych zadań i dziedzin',
+        organization: 'Wdrażaj i zarządzaj ekspertami AI w całej organizacji',
+        knowledge: 'Wzbogaceni o wiedzę specyficzną dla projektu dla dokładniejszej pomocy',
+      },
     },
     settings: {
       meta: {
@@ -137,6 +143,12 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     selectModel: 'Model AI',
   },
   apps: {
+    favorites: {
+      add: 'Dodaj do ulubionych',
+      remove: 'Usuń z ulubionych',
+    },
+  },
+  experts: {
     favorites: {
       add: 'Dodaj do ulubionych',
       remove: 'Usuń z ulubionych',

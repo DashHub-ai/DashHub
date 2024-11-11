@@ -102,6 +102,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Manage experts',
       },
       title: 'Experts',
+      tutorial: {
+        title: 'What are DashHub Experts?',
+        custom: 'Specialized AI assistants designed for specific tasks and domains',
+        organization: 'Deploy and manage AI experts across your entire organization',
+        knowledge: 'Enhanced with project-specific knowledge for more accurate assistance',
+      },
     },
     settings: {
       meta: {
@@ -135,6 +141,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     selectModel: 'AI Model',
   },
   apps: {
+    favorites: {
+      add: 'Add to favorites',
+      remove: 'Remove from favorites',
+    },
+  },
+  experts: {
     favorites: {
       add: 'Add to favorites',
       remove: 'Remove from favorites',
