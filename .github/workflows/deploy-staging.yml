@@ -13,7 +13,6 @@ env:
   ANSIBLE_FORCE_COLOR: true
   TARGET_PLATFORMS: linux/arm64
   NODE_ENV: production
-  APP_ENV: staging
 
 jobs:
   build:
@@ -40,7 +39,8 @@ jobs:
       - name: Build packages
         run: yarn build
         env:
-          VITE_API_URL: https://staging.dashhub.ai/api
+          PUBLIC_VITE_APP_ENV: staging
+          PUBLIC_VITE_API_URL: https://staging.dashhub.ai/api
           PUBLIC_VITE_DIRECTUS_URL: https://staging.dashhub.ai/cms
 
       - name: Upload build artifacts

@@ -152,6 +152,14 @@
   dependencies:
     prismjs "^1.29.0"
 
+"@astrojs/react@^3.6.2":
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/@astrojs/react/-/react-3.6.2.tgz#615d4ab94f8a8700c593ca4812a5c4efb11ff7cb"
+  integrity sha512-fK29lYI7zK/KG4ZBy956x4dmauZcZ18osFkuyGa8r3gmmCQa2NZ9XNu9WaVYEUm0j89f4Gii4tbxLoyM8nk2MA==
+  dependencies:
+    "@vitejs/plugin-react" "^4.3.1"
+    ultrahtml "^1.5.3"
+
 "@astrojs/tailwind@^5.1.2":
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/@astrojs/tailwind/-/tailwind-5.1.2.tgz#53efa39de7a8faa047e90d0229af4041d2554563"
@@ -1826,7 +1834,7 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vitejs/plugin-react@^4.3.3":
+"@vitejs/plugin-react@^4.3.1", "@vitejs/plugin-react@^4.3.3":
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-react/-/plugin-react-4.3.3.tgz#28301ac6d7aaf20b73a418ee5c65b05519b4836c"
   integrity sha512-NooDe9GpHGqNns1i8XDERg0Vsg5SSYRhRxxyTGogUdkdNt47jal+fbuYi+Yfq6pzRCKXyoPcWisfxE6RIM3GKA==
@@ -4311,11 +4319,6 @@ forwarded@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.2.0.tgz#2269936428aad4c15c7ebe9779a84bf0b2a81811"
   integrity sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==
-
-fp-ts-std@^0.19.1:
-  version "0.19.1"
-  resolved "https://registry.yarnpkg.com/fp-ts-std/-/fp-ts-std-0.19.1.tgz#896f5f1b2a9e64edf46d7f6a151be7c7baf49321"
-  integrity sha512-LY+hEhLwgklnQ4LJTrETQ/qm9nWFG1YuFrFBmZwPIh2OGin2+LA7qtdRn5JaoKRRNX2q+Uco8IUj2sMYdm+6oQ==
 
 fp-ts@^2.16.1:
   version "2.16.9"
@@ -8763,6 +8766,11 @@ uikit@^3.21.13:
   version "3.21.13"
   resolved "https://registry.yarnpkg.com/uikit/-/uikit-3.21.13.tgz#81aa7a6b8460ff7dacf1a94e323adba126f2acee"
   integrity sha512-Yc1VWCarqK8kMu9KCXfMH+1lQLZ0PxQRWML1ElJYt2KCwSNGxUVLJSDXcO4qtBR8asRAY+pHBtuM5iIQq0Odsg==
+
+ultrahtml@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/ultrahtml/-/ultrahtml-1.5.3.tgz#e7a903a4b28a0e49b71b0801b444050bb0a369c7"
+  integrity sha512-GykOvZwgDWZlTQMtp5jrD4BVL+gNn2NVlVafjcFUJ7taY20tqYdwdoWBFy6GBJsNTZe1GkGPkSl5knQAjtgceg==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"

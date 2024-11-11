@@ -1,4 +1,4 @@
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 import * as TO from 'fp-ts/TaskOption';
 
 export function tapTaskOption<A>(fn: (data: A) => void) {

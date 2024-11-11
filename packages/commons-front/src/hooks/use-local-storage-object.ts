@@ -12,7 +12,7 @@ export function useLocalStorageObject<S extends z.ZodType<unknown>>(
     name,
     {
       ...config,
-      storage: localStorage,
+      storage: window.localStorage,
     },
   );
 }

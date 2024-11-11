@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { v4 as uid } from 'uuid';
+import * as uuid from 'uuid';
 
 import { isSSR, isTaggedError } from '@llm/commons';
 
@@ -31,7 +31,7 @@ export function useAsyncCallback<A, R>(
       return null;
     }
 
-    const currentExecutionUUID = uid();
+    const currentExecutionUUID = uuid.v4();
     prevExecutionUIDRef.current = currentExecutionUUID;
 
     try {

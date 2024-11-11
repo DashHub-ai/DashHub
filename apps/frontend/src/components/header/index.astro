@@ -1,19 +1,20 @@
 ---
 import { Menu, X } from 'lucide-astro';
 
+import { LoginButton } from '../auth/login-button.tsx';
 import HeaderLink from './header-link.astro';
 ---
 
 <header>
-  <div class="container mx-auto px-4 py-6 flex justify-between items-center">
-    <div class="text-lg font-bold">
-      <a href="/" class="text-gray-900 hover:text-gray-700 flex items-center">
+  <div class="flex justify-between items-center mx-auto px-4 py-6 container">
+    <div class="font-bold text-lg">
+      <a href="/" class="flex items-center text-gray-900 hover:text-gray-700">
         DashHub.ai
       </a>
     </div>
 
     <!-- Desktop menu -->
-    <nav class="hidden md:flex space-x-10 items-center">
+    <nav class="md:flex items-center space-x-10 hidden">
       <HeaderLink href="/">
         Home
       </HeaderLink>
@@ -37,24 +38,18 @@ import HeaderLink from './header-link.astro';
       </HeaderLink>
 
       <div class="flex flex-row gap-4">
-        <a href="/app" class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">
-          Login
-        </a>
-
-        <!-- <button class="border border-primary text-primary px-4 py-2 rounded">
-          Sign Up
-        </button> -->
+        <LoginButton client:only="react" />
       </div>
     </nav>
 
     <!-- Mobile menu -->
-    <div class="md:hidden relative">
+    <div class="relative md:hidden">
       <button id="menu-button" class="text-gray-900 hover:text-gray-700 focus:outline-none" aria-label="Menu">
         <Menu class="w-6 h-6" />
       </button>
 
-      <div id="mobile-menu" class="hidden fixed inset-0 bg-white flex flex-col items-center justify-center space-y-4 z-50">
-        <button id="close-menu" class="absolute top-4 right-4 text-gray-900 hover:text-gray-700 focus:outline-none">
+      <div id="mobile-menu" class="z-50 fixed inset-0 flex flex-col justify-center items-center space-y-4 hidden bg-white">
+        <button id="close-menu" class="top-4 right-4 absolute text-gray-900 hover:text-gray-700 focus:outline-none">
           <X class="w-6 h-6" />
         </button>
 

@@ -28,7 +28,6 @@
     "@llm/commons": "*",
     "@llm/commons-front": "*",
     "fp-ts": "^2.16.1",
-    "fp-ts-std": "^0.19.1",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",

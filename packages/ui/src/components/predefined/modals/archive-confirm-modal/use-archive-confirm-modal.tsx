@@ -1,5 +1,5 @@
 import { option as O, task as T } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import { useAnimatedModal } from '@llm/commons-front';
 

@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
     host: true,
     port: 5173,
   },
+  envPrefix: ['VITE_', 'PUBLIC_VITE_'],
   plugins: [
     react(),
     tsconfigPaths(),

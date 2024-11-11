@@ -1,5 +1,5 @@
 import { option as O } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import { useLocalStorageObject, useRefSafeCallback } from '@llm/commons-front';
 import { type SdkJwtTokensPairT, SdkJwtTokensPairV, type SessionTokensSetterAttrs } from '~/modules';

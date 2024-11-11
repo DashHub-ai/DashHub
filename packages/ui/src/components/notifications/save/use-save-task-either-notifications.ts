@@ -1,6 +1,6 @@
 import type { TaskEither } from 'fp-ts/TaskEither';
 
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import { type TaggedError, tapTaskEither } from '@llm/commons';
 

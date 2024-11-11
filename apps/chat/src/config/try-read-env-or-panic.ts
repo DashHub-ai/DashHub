@@ -12,13 +12,13 @@ import { type ConfigT, ConfigV } from './config.dto';
 
 export function tryReadEnvOrPanic() {
   const {
-    VITE_APP_ENV,
-    VITE_API_URL,
+    PUBLIC_VITE_APP_ENV,
+    PUBLIC_VITE_API_URL,
   } = import.meta.env ?? {};
 
   const config: UnparsedEnvObject<ConfigT> = {
-    env: VITE_APP_ENV,
-    apiUrl: VITE_API_URL,
+    env: PUBLIC_VITE_APP_ENV,
+    apiUrl: PUBLIC_VITE_API_URL,
   };
 
   return pipe(

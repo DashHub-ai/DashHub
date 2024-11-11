@@ -3,6 +3,7 @@
 
 interface ImportMetaEnv {
   readonly PUBLIC_VITE_DIRECTUS_URL: string;
+  readonly PUBLIC_VITE_API_URL: string;
 }
 
 interface ImportMeta {

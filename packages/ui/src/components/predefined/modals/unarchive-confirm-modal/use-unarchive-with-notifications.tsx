@@ -2,7 +2,7 @@ import type { taskEither as TE } from 'fp-ts';
 
 import { usePromiseCallback } from '@under-control/forms';
 import { taskOption as TO } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import { useSaveTaskEitherNotification } from '~/components/notifications';
 
