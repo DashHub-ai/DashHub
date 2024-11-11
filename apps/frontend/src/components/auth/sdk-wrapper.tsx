@@ -7,7 +7,7 @@ export function SdkWrapper({ children }: PropsWithChildren) {
     <SdkProvider
       apiUrl={import.meta.env.PUBLIC_VITE_API_URL}
       storageAttrs={{
-        storageKey: 'llm-frontend-sdk-tokens',
+        storageKey: 'llm-chat-sdk-tokens',
       }}
     >
       {children}
