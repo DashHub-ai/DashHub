@@ -1,4 +1,4 @@
-import type { SelectQueryBuilder } from 'kysely';
+import type { SelectQueryBuilder, SelectType } from 'kysely';
 
 import * as A from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
@@ -87,13 +87,13 @@ export function createDatabaseRepo<K extends keyof DatabaseTablesWithId>(table: 
 
     createIdsIterator = (
       attrs: IdsChunkedIteratorAttrs<K>,
-    ): AsyncIterableIterator<Table['id'][]> => {
+    ): AsyncIterableIterator<SelectType<Table['id']>[]> => {
       const { createSelectIdQuery, createChunkedIterator } = this.queryBuilder;
 
       return pipe(
         createSelectIdQuery(),
         createChunkedIterator(attrs),
-        mapAsyncIterator(A.map(item => item.id as Table['id'])),
+        mapAsyncIterator(A.map(item => item.id as SelectType<Table['id']>)),
       );
     };
 
