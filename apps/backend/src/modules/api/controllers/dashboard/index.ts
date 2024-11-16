@@ -1,4 +1,5 @@
 export * from './apps.controller';
+export * from './chats.controller';
 export * from './dashboard.controller';
 export * from './organizations.controller';
 export * from './projects.controller';

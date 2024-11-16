@@ -9,12 +9,7 @@ import { useStartChatForm } from './use-start-chat-form';
 export function StartChatSection() {
   const t = useI18n().pack.chats.start;
   const focusInputRef = useFocusAfterMount<HTMLTextAreaElement>();
-  const { value, bind, handleSubmitEvent } = useStartChatForm({
-    onSubmit: (data) => {
-      // eslint-disable-next-line no-console
-      console.info(data);
-    },
-  });
+  const { value, bind, handleSubmitEvent } = useStartChatForm();
 
   return (
     <section className="mx-auto px-4 max-w-3xl container">
@@ -57,9 +52,6 @@ export function StartChatSection() {
               type="button"
               className="border-gray-300 border uk-button uk-button-default"
               disabled
-              onClick={() => {
-                // Handle file input click
-              }}
             >
               <PaperclipIcon size={16} className="mr-2" />
               {t.addFile}

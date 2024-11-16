@@ -6,4 +6,8 @@ export class SdkUnauthorizedError extends TaggedError.ofLiteral<any>()('SdkUnaut
   readonly httpCode = 401;
 }
 
-export const ofSdkUnauthorizedErrorTE = () => TE.left(new SdkUnauthorizedError(null));
+export function ofSdkUnauthorizedErrorTE<T = unknown>() {
+  return TE.left<SdkUnauthorizedError, T>(
+    new SdkUnauthorizedError(null),
+  );
+}

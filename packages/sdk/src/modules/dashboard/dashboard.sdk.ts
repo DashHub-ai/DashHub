@@ -1,6 +1,7 @@
 import type { AbstractNestedSdkWithAuthConfig } from '../abstract-nested-sdk-with-auth';
 
 import { AppsSdk } from './apps';
+import { ChatsSdk } from './chats';
 import { ExpertsSdk } from './experts';
 import { OrganizationsSdk } from './organizations';
 import { ProjectsSdk } from './projects';
@@ -17,6 +18,8 @@ export class DashboardSdk {
   public readonly apps = new AppsSdk(this.config);
 
   public readonly experts = new ExpertsSdk(this.config);
+
+  public readonly chats = new ChatsSdk(this.config);
 
   public readonly s3Buckets = new S3BucketsSdk(this.config);
 

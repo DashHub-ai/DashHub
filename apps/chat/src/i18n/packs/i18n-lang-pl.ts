@@ -130,6 +130,30 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         history: 'Śledź i kontynuuj swoje rozmowy bez przeszkód',
       },
     },
+    chat: {
+      meta: {
+        title: 'Czat',
+        description: 'Rozmawiaj z AI',
+      },
+      title: 'Czat',
+    },
+    chooseOrganization: {
+      meta: {
+        title: 'Wybierz organizację',
+        description: 'Wybierz organizację',
+      },
+      title: 'Wybierz organizację',
+      tutorial: {
+        title: 'Wymagany wybór organizacji',
+        select: 'Użyj rozwijanej listy w nawigacji, aby wybrać swoją organizację',
+        dashboard: 'Wybór organizacji jest wymagany do korzystania z funkcji panelu',
+        rootOnly: 'Ten krok jest wymagany tylko dla użytkowników root - zwykli użytkownicy są automatycznie przypisani do swojej organizacji',
+      },
+    },
+  },
+  workspace: {
+    selectOrganization: 'Wybierz organizację',
+    organization: 'Organizacja',
   },
   chats: {
     start: {
@@ -144,6 +168,15 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     history: {
       title: 'Twoje czaty',
+    },
+  },
+  chat: {
+    title: 'Czat',
+    messages: {
+      empty: 'Brak wiadomości',
+    },
+    actions: {
+      send: 'Wyślij',
     },
   },
   apps: {

@@ -22,7 +22,7 @@ export function Router() {
       <Switch>
         <Route path={sitemap.login} component={LoginRoute} />
         <Route>
-          <Redirect to={sitemap.login} />
+          <Redirect to={sitemap.login} replace />
         </Route>
       </Switch>
     );
@@ -38,7 +38,7 @@ export function Router() {
       <Route path={sitemap.s3Buckets.index.raw} component={S3BucketsRoute} />
       <Route path={sitemap.forceRedirect.raw} component={ForceRedirectRoute} />
       <Route>
-        <Redirect to={sitemap.home} />
+        <Redirect to={sitemap.home} replace />
       </Route>
     </Switch>
   );

@@ -1,8 +1,12 @@
-import { type FormHookAttrs, useForm } from '@under-control/forms';
+import { useForm } from '@under-control/forms';
+import { pipe } from 'fp-ts/lib/function';
+import { useLocation } from 'wouter';
 
-import type { SdkTableRowWithIdNameT } from '@llm/sdk';
-
-import { type SelectItem, usePredefinedFormValidators } from '@llm/ui';
+import { runTask, tapTaskEither } from '@llm/commons';
+import { type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@llm/sdk';
+import { type SelectItem, usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
+import { useWorkspaceOrganization } from '~/modules/workspace';
+import { useSitemap } from '~/routes';
 
 type StartChatFormValue = {
   project: SdkTableRowWithIdNameT | null;
@@ -11,19 +15,28 @@ type StartChatFormValue = {
   model: SelectItem;
 };
 
-type StartChatFormHookAttrs =
-  & Omit<
-    FormHookAttrs<StartChatFormValue>,
-    'validation' | 'defaultValue'
-  >;
+export function useStartChatForm() {
+  const [, navigate] = useLocation();
+  const sitemap = useSitemap();
 
-export function useStartChatForm(
-  {
-    onSubmit,
-    ...props
-  }: StartChatFormHookAttrs,
-) {
+  const { sdks } = useSdkForLoggedIn();
   const { required } = usePredefinedFormValidators<StartChatFormValue>();
+  const { assignWorkspaceOrganization } = useWorkspaceOrganization();
+
+  const showErrorNotification = useSaveErrorNotification();
+  const onSubmit = (value: StartChatFormValue) => pipe(
+    assignWorkspaceOrganization({
+      public: value.public,
+    }),
+    sdks.dashboard.chats.create,
+    tapTaskEither(
+      ({ id }) => {
+        navigate(sitemap.chat.generate({ pathParams: { id } }));
+      },
+      showErrorNotification,
+    ),
+    runTask,
+  );
 
   return useForm({
     resetAfterSubmit: false,
@@ -40,6 +53,5 @@ export function useStartChatForm(
         required('message'),
       ],
     },
-    ...props,
   });
 }

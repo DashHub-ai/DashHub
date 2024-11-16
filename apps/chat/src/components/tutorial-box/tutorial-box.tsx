@@ -35,12 +35,23 @@ const VARIANT_STYLES: Record<TutorialBoxVariant, {
 type TutorialBoxProps = PropsWithChildren & {
   className?: string;
   variant?: TutorialBoxVariant;
+  withHideToolbar?: boolean;
   title: string;
   backgroundIcon: string;
   id: string;
 };
 
-export function TutorialBox({ variant = 'amber', title, backgroundIcon, className, children, id }: TutorialBoxProps) {
+export function TutorialBox(
+  {
+    variant = 'amber',
+    title,
+    backgroundIcon,
+    withHideToolbar = true,
+    className,
+    children,
+    id,
+  }: TutorialBoxProps,
+) {
   const t = useI18n().pack.components.tutorialBox;
 
   const styles = VARIANT_STYLES[variant];
@@ -69,7 +80,7 @@ export function TutorialBox({ variant = 'amber', title, backgroundIcon, classNam
   return (
     <div
       className={clsx(
-        'relative bg-gradient-to-r mb-6 p-4 border rounded-lg max-w-4xl overflow-hidden',
+        'relative bg-gradient-to-r mb-6 p-4 pr-[90px] border rounded-lg max-w-4xl overflow-hidden',
         styles.gradient,
         styles.border,
         className,
@@ -84,19 +95,22 @@ export function TutorialBox({ variant = 'amber', title, backgroundIcon, classNam
       <div className="relative z-10 space-y-2 text-gray-600 text-sm">
         {children}
       </div>
-      <div className="mt-6">
-        <button
-          onClick={handleClose}
-          type="button"
-          className={clsx(
-            'flex flex-row px-4 py-2 rounded-md font-medium text-sm transition-colors',
-            variant === 'amber' ? 'bg-amber-100 hover:bg-amber-200 text-amber-700' : 'bg-blue-100 hover:bg-blue-200 text-blue-700',
-          )}
-        >
-          <CheckIcon size={16} className="relative top-[2px] mr-2" />
-          {t.gotIt}
-        </button>
-      </div>
+
+      {withHideToolbar && (
+        <div className="mt-6">
+          <button
+            onClick={handleClose}
+            type="button"
+            className={clsx(
+              'flex flex-row px-4 py-2 rounded-md font-medium text-sm transition-colors',
+              variant === 'amber' ? 'bg-amber-100 hover:bg-amber-200 text-amber-700' : 'bg-blue-100 hover:bg-blue-200 text-blue-700',
+            )}
+          >
+            <CheckIcon size={16} className="relative top-[2px] mr-2" />
+            {t.gotIt}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

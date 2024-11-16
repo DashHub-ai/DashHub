@@ -1,4 +1,4 @@
-import type { SelectQueryBuilder } from 'kysely';
+import type { SelectQueryBuilder, SelectType } from 'kysely';
 
 import * as A from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
@@ -10,7 +10,6 @@ import {
 } from '@llm/commons';
 
 import type { DatabaseTables, DatabaseTablesWithId } from './database.tables';
-import type { TableId } from './types';
 
 import { DatabaseConnectionRepo } from './connection';
 import {
@@ -46,6 +45,8 @@ export abstract class AbstractDatabaseRepo {
 }
 
 export function createDatabaseRepo<K extends keyof DatabaseTablesWithId>(table: K) {
+  type Table = DatabaseTablesWithId[K];
+
   return class DatabaseRepo extends AbstractDatabaseRepo {
     get table() {
       return table;
@@ -86,13 +87,13 @@ export function createDatabaseRepo<K extends keyof DatabaseTablesWithId>(table: 
 
     createIdsIterator = (
       attrs: IdsChunkedIteratorAttrs<K>,
-    ): AsyncIterableIterator<TableId[]> => {
+    ): AsyncIterableIterator<SelectType<Table['id']>[]> => {
       const { createSelectIdQuery, createChunkedIterator } = this.queryBuilder;
 
       return pipe(
         createSelectIdQuery(),
         createChunkedIterator(attrs),
-        mapAsyncIterator(A.map(item => item.id)),
+        mapAsyncIterator(A.map(item => item.id as SelectType<Table['id']>)),
       );
     };
 

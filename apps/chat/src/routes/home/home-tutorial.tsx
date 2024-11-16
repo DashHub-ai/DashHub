@@ -20,10 +20,12 @@ export function HomeTutorial({ className }: Props) {
         <span className="text-blue-500">🤖</span>
         <span>{t.ai}</span>
       </p>
+
       <p className="flex items-start gap-2">
         <span className="text-blue-500">📚</span>
         <span>{t.knowledge}</span>
       </p>
+
       <p className="flex items-start gap-2">
         <span className="text-blue-500">🔄</span>
         <span>{t.history}</span>

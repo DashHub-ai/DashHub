@@ -20,6 +20,7 @@ export * from './run-task';
 export * from './safe-to-array';
 export * from './shallow-compare-array';
 export * from './tap-task-either';
+export * from './tap-task-either-error';
 export * from './tap-task-either-error-te';
 export * from './tap-task-option';
 export * from './time';
