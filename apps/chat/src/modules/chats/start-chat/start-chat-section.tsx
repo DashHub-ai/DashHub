@@ -3,6 +3,7 @@ import { PaperclipIcon, SendIcon } from 'lucide-react';
 import { useFocusAfterMount } from '@llm/commons-front';
 import { Checkbox, Select } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { AIModelsSearchSelect } from '~/modules/ai-models';
 
 import { useStartChatForm } from './use-start-chat-form';
 
@@ -32,14 +33,10 @@ export function StartChatSection() {
           />
 
           <div className="bottom-3 left-3 absolute">
-            <Select
+            <AIModelsSearchSelect
               buttonClassName="border-gray-300 border rounded-md h-7 text-xs"
               placeholderClassName="text-black text-xs"
               placeholder={t.selectModel}
-              items={[
-                { id: 'gpt-4', name: 'GPT-4' },
-                { id: 'gpt-3.5-turbo', name: 'GPT-3.5 Turbo' },
-              ]}
               className="w-36"
               {...bind.path('model')}
             />

@@ -33,15 +33,18 @@ export function AppCard({ app }: AppCardProps) {
             : {}}
         />
       </button>
+
       <div className="flex items-center gap-2 mb-2">
         <div className="text-muted-foreground">
           <WandSparklesIcon size={16} />
         </div>
         <h3 className="font-medium">{app.name}</h3>
       </div>
+
       <p className="flex-1 mb-4 line-clamp-2 text-muted-foreground text-sm">
         {app.description}
       </p>
+
       <div className="flex flex-row justify-between items-center">
         <div className="text-muted-foreground text-xs">
           {formatDate(app.updatedAt)}

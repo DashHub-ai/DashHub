@@ -4,7 +4,7 @@ import { useLocation } from 'wouter';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import { type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@llm/sdk';
-import { type SelectItem, usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
+import { usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
 import { useWorkspaceOrganization } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
@@ -12,7 +12,7 @@ type StartChatFormValue = {
   project: SdkTableRowWithIdNameT | null;
   public: boolean;
   message: string;
-  model: SelectItem;
+  model: SdkTableRowWithIdNameT | null;
 };
 
 export function useStartChatForm() {
@@ -42,7 +42,7 @@ export function useStartChatForm() {
     resetAfterSubmit: false,
     defaultValue: {
       message: '',
-      model: { id: 'gpt-4', name: 'GPT-4' },
+      model: null,
       project: null,
       public: false,
     },

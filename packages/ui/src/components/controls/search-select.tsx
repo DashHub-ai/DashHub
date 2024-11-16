@@ -90,7 +90,7 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
       return [];
     }
 
-    if (value && !isObjectWithFakeID(value)) {
+    if (value && !phrase.value.length && !isObjectWithFakeID(value)) {
       return pipe(
         result.data,
         rejectById(value.id),
