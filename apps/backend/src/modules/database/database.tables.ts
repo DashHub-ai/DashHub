@@ -1,6 +1,6 @@
 import type { RecordOfType } from '@llm/commons';
 
-import type { AIModelsTable } from '../ai-model';
+import type { AIModelsTable } from '../ai-models';
 import type { AppsTable } from '../apps';
 import type {
   AuthEmailsTable,

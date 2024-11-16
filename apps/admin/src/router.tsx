@@ -2,6 +2,7 @@ import { Redirect, Route, Switch } from 'wouter';
 
 import { useSdkIsLoggedIn } from '@llm/sdk';
 import {
+  AIModelsRoute,
   AppsRoute,
   ForceRedirectRoute,
   HomeRoute,
@@ -36,6 +37,7 @@ export function Router() {
       <Route path={sitemap.users.index.raw} component={UsersRoute} />
       <Route path={sitemap.organizations.index.raw} component={OrganizationsRoute} />
       <Route path={sitemap.s3Buckets.index.raw} component={S3BucketsRoute} />
+      <Route path={sitemap.aiModels.index.raw} component={AIModelsRoute} />
       <Route path={sitemap.forceRedirect.raw} component={ForceRedirectRoute} />
       <Route>
         <Redirect to={sitemap.home} replace />

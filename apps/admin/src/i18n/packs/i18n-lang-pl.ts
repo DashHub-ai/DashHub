@@ -44,6 +44,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       s3Buckets: 'S3',
       projects: 'Projekty',
       apps: 'Aplikacje',
+      aiModels: 'Modele AI',
     },
     loggedIn: {
       logout: 'Wyloguj się',
@@ -148,6 +149,30 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           chatContext: {
             label: 'Kontekst czatu',
             placeholder: 'Wpisz kontekst czatu',
+          },
+        },
+      },
+    },
+    aiModels: {
+      prefix: {
+        app: 'Model AI',
+      },
+      form: {
+        title: {
+          create: 'Utwórz model AI',
+          edit: 'Edytuj model AI',
+        },
+        fields: {
+          name: {
+            label: 'Nazwa',
+            placeholder: 'Wpisz nazwę modelu AI',
+          },
+          description: {
+            label: 'Opis',
+            placeholder: 'Wpisz opis modelu AI',
+          },
+          organization: {
+            label: 'Organizacja',
           },
         },
       },
@@ -310,6 +335,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Zarządzaj aplikacjami',
       },
       title: 'Zarządzaj aplikacjami',
+    },
+    aiModels: {
+      meta: {
+        title: 'Modele AI',
+        description: 'Zarządzaj modelami AI',
+      },
+      title: 'Zarządzaj modelami AI',
     },
     users: {
       meta: {

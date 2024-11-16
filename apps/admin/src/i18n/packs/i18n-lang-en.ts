@@ -42,6 +42,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       s3Buckets: 'S3',
       projects: 'Projects',
       apps: 'Apps',
+      aiModels: 'AI Models',
     },
     loggedIn: {
       logout: 'Logout',
@@ -146,6 +147,30 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           chatContext: {
             label: 'Chat context',
             placeholder: 'Enter chat context',
+          },
+        },
+      },
+    },
+    aiModels: {
+      prefix: {
+        app: 'AI Model',
+      },
+      form: {
+        title: {
+          create: 'Create AI model',
+          edit: 'Edit AI model',
+        },
+        fields: {
+          name: {
+            label: 'Name',
+            placeholder: 'Enter AI model name',
+          },
+          description: {
+            label: 'Description',
+            placeholder: 'Enter AI model description',
+          },
+          organization: {
+            label: 'Organization',
           },
         },
       },
@@ -308,6 +333,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Manage apps',
       },
       title: 'Manage apps',
+    },
+    aiModels: {
+      meta: {
+        title: 'AI Models',
+        description: 'Manage AI models',
+      },
+      title: 'Manage AI models',
     },
     users: {
       meta: {

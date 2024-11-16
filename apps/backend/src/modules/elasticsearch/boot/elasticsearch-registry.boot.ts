@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import { tapTaskEitherTE } from '@llm/commons';
-import { AIModelsEsIndexRepo } from '~/modules/ai-model/elasticsearch/ai-models-es-index.repo';
+import { AIModelsEsIndexRepo } from '~/modules/ai-models/elasticsearch/ai-models-es-index.repo';
 import { AppsEsIndexRepo } from '~/modules/apps/elasticsearch/apps-es-index.repo';
 import { LoggerService } from '~/modules/logger';
 import { OrganizationsEsIndexRepo } from '~/modules/organizations/elasticsearch';
