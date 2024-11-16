@@ -1,5 +1,6 @@
 import { PaperclipIcon, SendIcon } from 'lucide-react';
 
+import { useFocusAfterMount } from '@llm/commons-front';
 import { Checkbox, Select } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
@@ -7,6 +8,7 @@ import { useStartChatForm } from './use-start-chat-form';
 
 export function StartChatSection() {
   const t = useI18n().pack.startChat;
+  const focusInputRef = useFocusAfterMount<HTMLTextAreaElement>();
   const { bind, handleSubmitEvent } = useStartChatForm({
     onSubmit: (data) => {
       // eslint-disable-next-line no-console
@@ -26,6 +28,7 @@ export function StartChatSection() {
       >
         <div className="relative z-10">
           <textarea
+            ref={focusInputRef}
             name="message"
             className="focus:border-primary bg-background p-4 pb-[45px] border border-border rounded-lg w-full min-h-[130px] resize-none focus:outline-none shadow-sm"
             placeholder={t.placeholder}
