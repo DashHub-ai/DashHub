@@ -8,6 +8,7 @@ import * as addDescriptionToProjects from './0006-add-description-to-projects-ta
 import * as addDescriptionToApps from './0007-add-description-to-apps-table';
 import * as addAiModelsTable from './0008-add-ai-models-tables';
 import * as addChatsTables from './0009-add-chats-tables';
+import * as fixUniqIndexInS3Buckets from './0010-fix-uniq-index-in-s3-buckets';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -20,4 +21,5 @@ export const DB_MIGRATIONS = {
   '0007-add-description-to-apps-table': addDescriptionToApps,
   '0008-add-ai-models-table': addAiModelsTable,
   '0009-add-chats-tables': addChatsTables,
+  '0010-fix-uniq-index-in-s3-buckets': fixUniqIndexInS3Buckets,
 };

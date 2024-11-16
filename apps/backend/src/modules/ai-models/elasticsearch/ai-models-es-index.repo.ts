@@ -3,6 +3,8 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
+import type { TableId } from '~/modules/database';
+
 import { tryOrThrowTE } from '@llm/commons';
 import {
   createArchivedRecordMappings,
@@ -29,6 +31,7 @@ const AIModelsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
         organization: createIdNameObjectMapping(),
+        default: { type: 'boolean' },
       },
     },
     settings: {
@@ -44,14 +47,22 @@ export type AIModelsEsDocument = EsDocument<AIModelTableRowWithRelations>;
 export class AIModelsEsIndexRepo extends AIModelsAbstractEsIndexRepo<AIModelsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
-    @inject(AIModelsRepo) private readonly organizationsRepo: AIModelsRepo,
+    @inject(AIModelsRepo) private readonly aiModelsRepo: AIModelsRepo,
   ) {
     super(elasticsearchRepo);
   }
 
+  reindexAllOrganizationDocuments = (organizationId: TableId) => pipe(
+    this.aiModelsRepo.createIdsIterator({
+      chunkSize: 100,
+      where: [['organizationId', '=', organizationId]],
+    }),
+    this.findAndIndexDocumentsByStream,
+  )();
+
   protected async findEntities(ids: number[]): Promise<AIModelsEsDocument[]> {
     return pipe(
-      this.organizationsRepo.findWithRelationsByIds({ ids }),
+      this.aiModelsRepo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
           ...snakecaseKeys(entity, { deep: true }),
@@ -63,7 +74,7 @@ export class AIModelsEsIndexRepo extends AIModelsAbstractEsIndexRepo<AIModelsEsD
   }
 
   protected createAllEntitiesIdsIterator = () =>
-    this.organizationsRepo.createIdsIterator({
+    this.aiModelsRepo.createIdsIterator({
       chunkSize: 100,
     });
 }

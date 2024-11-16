@@ -2,13 +2,16 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkAIModelT } from '@llm/sdk';
 
-import { FormField, Input, TextArea } from '@llm/ui';
+import { Checkbox, FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 import { AIModelCredentialsFormFields } from './ai-model-credentials-form-field';
 import { AIModelProviderSelect } from './ai-model-provider-select';
 
-type Value = Pick<SdkAIModelT, 'name' | 'provider' | 'description' | 'credentials'>;
+type Value = Pick<
+  SdkAIModelT,
+  'name' | 'provider' | 'description' | 'credentials' | 'default'
+>;
 
 type Props = ValidationErrorsListProps<Value>;
 
@@ -68,6 +71,20 @@ export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, contr
         {...bind.path('credentials')}
         {...validation.extract('credentials', { nested: true })}
       />
+
+      <hr />
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.settings.label}
+      >
+        <Checkbox
+          {...bind.path('default')}
+          className="block uk-text-small"
+        >
+          {t.fields.defaultForOrganization.label}
+        </Checkbox>
+      </FormField>
     </>
   );
 });

@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchAIModelItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, EllipsisCrudDropdownButton } from '@llm/ui';
+import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '@llm/ui';
 import { useSitemap } from '~/routes';
 
 import { useAIModelUpdateModal } from '../form/update';
@@ -31,6 +31,7 @@ export function AIModelsTableRow({ item, onUpdated }: Props) {
           {item.organization.name}
         </Link>
       </td>
+      <td><BooleanBadge value={item.default} /></td>
       <td><ArchivedBadge archived={item.archived} /></td>
       <td>{formatDate(item.createdAt)}</td>
       <td>{formatDate(item.updatedAt)}</td>

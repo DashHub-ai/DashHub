@@ -69,6 +69,7 @@ export function AIModelsTableContainer() {
             organization: '',
           },
           provider: 'openai',
+          default: false,
           description: null,
           organization: createFakeSelectItem(),
         },
@@ -113,6 +114,10 @@ export function AIModelsTableContainer() {
           { id: 'name', name: t.name, className: 'uk-table-expand' },
           { id: 'description', name: t.description, className: 'uk-table-expand' },
           { id: 'organization', name: t.organization, className: 'uk-table-expand' },
+          {
+            id: 'defaultForOrganization',
+            name: pack.modules.aiModels.table.columns.defaultForOrganization,
+          },
           { id: 'archived', name: t.archived, className: 'w-[150px]' },
           { id: 'createdAt', name: t.createdAt, className: 'w-[200px]' },
           { id: 'updatedAt', name: t.updatedAt, className: 'w-[200px]' },

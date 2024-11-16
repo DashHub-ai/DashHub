@@ -74,18 +74,13 @@ export class AIModelsService implements WithAuthFirewall<AIModelsFirewall> {
 
   search = this.esSearchRepo.search;
 
-  create = ({ organization, ...values }: SdkCreateAIModelInputT) => pipe(
-    this.repo.create({
-      value: {
-        ...values,
-        organizationId: organization.id,
-      },
-    }),
-    TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+  create = (value: SdkCreateAIModelInputT) => pipe(
+    this.repo.create({ value }),
+    TE.tap(() => this.esIndexRepo.reindexAllOrganizationDocuments(value.organization.id)),
   );
 
   update = ({ id, ...value }: SdkUpdateAIModelInputT & TableRowWithId) => pipe(
     this.repo.update({ id, value }),
-    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(({ organization }) => this.esIndexRepo.reindexAllOrganizationDocuments(organization.id)),
   );
 }

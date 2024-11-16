@@ -160,6 +160,11 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       prefix: {
         app: 'AI Model',
       },
+      table: {
+        columns: {
+          defaultForOrganization: 'Default for organization',
+        },
+      },
       form: {
         title: {
           create: 'Create AI model',
@@ -189,6 +194,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
               label: 'API Organization',
               placeholder: 'Enter organization',
             },
+          },
+          settings: {
+            label: 'Settings',
+          },
+          defaultForOrganization: {
+            label: 'Default for organization',
           },
         },
       },

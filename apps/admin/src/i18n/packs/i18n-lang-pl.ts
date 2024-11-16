@@ -162,6 +162,11 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       prefix: {
         app: 'Model AI',
       },
+      table: {
+        columns: {
+          defaultForOrganization: 'Domyślny dla organizacji',
+        },
+      },
       form: {
         title: {
           create: 'Utwórz model AI',
@@ -191,6 +196,12 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
               label: 'Organizacja API',
               placeholder: 'Wpisz organizację',
             },
+          },
+          settings: {
+            label: 'Ustawienia',
+          },
+          defaultForOrganization: {
+            label: 'Domyślny dla organizacji',
           },
         },
       },

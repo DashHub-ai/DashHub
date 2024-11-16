@@ -25,6 +25,7 @@ export const SdkAIModelV = z.object({
   description: NonEmptyOrNullStringV,
   provider: SdkAIProviderV,
   credentials: SdkAICredentialsV,
+  default: z.boolean(),
 })
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)

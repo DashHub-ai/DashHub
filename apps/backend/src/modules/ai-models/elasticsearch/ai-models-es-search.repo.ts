@@ -83,5 +83,6 @@ export class AIModelsEsSearchRepo {
       organization: source.organization,
       credentials: camelcaseKeys(source.credentials),
       provider: source.provider,
+      default: source.default,
     });
 }

@@ -10,10 +10,19 @@ export async function up(db: Kysely<any>) {
     .$call(addArchivedAtColumns)
     .addColumn('name', 'varchar', col => col.notNull())
     .addColumn('description', 'text')
+    .addColumn('default', 'boolean', col => col.notNull().defaultTo(false))
     .addColumn('provider', 'varchar', col => col.notNull())
     .addColumn('credentials', 'jsonb', col => col.notNull())
     .addColumn('organization_id', 'integer', col =>
       col.notNull().references('organizations.id').onDelete('cascade'))
+    .execute();
+
+  await db.schema
+    .createIndex('ai_models_organization_default_index')
+    .on('ai_models')
+    .columns(['organization_id', 'default'])
+    .where('default', '=', true)
+    .unique()
     .execute();
 
   await db.schema
