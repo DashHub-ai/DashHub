@@ -1,7 +1,5 @@
 import clsx from 'clsx';
 
-import { Tabs } from '@llm/ui';
-
 import { ChatCard } from './chat-card';
 
 type Props = {
@@ -11,22 +9,6 @@ type Props = {
 export function ChatsHistorySection({ className }: Props) {
   return (
     <section className={clsx('space-y-6 mx-auto w-full max-w-5xl', className)}>
-      <div className="flex items-center space-x-2 mx-auto max-w-[300px]">
-        <Tabs
-          defaultValue={1}
-          tabs={[
-            {
-              id: 1,
-              name: 'Your Chats',
-            },
-            {
-              id: 2,
-              name: 'Recent Chats',
-            },
-          ]}
-        />
-      </div>
-
       <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <ChatCard
           title="Example Chat"
