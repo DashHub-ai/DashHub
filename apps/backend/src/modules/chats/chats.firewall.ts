@@ -1,8 +1,14 @@
 import { flow } from 'fp-ts/lib/function';
 
-import { ofSdkUnauthorizedErrorTE, type SdkCreateChatInputT, type SdkJwtTokenT } from '@llm/sdk';
+import {
+  ofSdkUnauthorizedErrorTE,
+  type SdkCreateChatInputT,
+  type SdkJwtTokenT,
+  type SdkUnauthorizedError,
+} from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
+import type { DatabaseTE, TableRowWithId } from '../database';
 import type { ChatsService } from './chats.service';
 
 export class ChatsFirewall extends AuthFirewallService {
@@ -25,7 +31,7 @@ export class ChatsFirewall extends AuthFirewallService {
     this.tryTEIfUser.is.root,
   );
 
-  create = ({ creator, organization, ...chat }: SdkCreateChatInputT) => {
+  create = ({ creator, organization, ...chat }: SdkCreateChatInputT): DatabaseTE<TableRowWithId, SdkUnauthorizedError> => {
     const { jwt } = this;
 
     switch (jwt.role) {

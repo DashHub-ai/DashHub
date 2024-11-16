@@ -1,5 +1,5 @@
 import { pipe } from 'fp-ts/lib/function';
-import { inject } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
 import type { RequiredBy } from '@llm/commons';
 
@@ -9,6 +9,7 @@ import { WithAuthFirewall } from '../auth';
 import { ChatsFirewall } from './chats.firewall';
 import { ChatsRepo } from './chats.repo';
 
+@injectable()
 export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
   constructor(
     @inject(ChatsRepo) private readonly repo: ChatsRepo,
