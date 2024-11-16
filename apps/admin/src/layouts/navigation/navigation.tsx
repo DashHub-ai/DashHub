@@ -30,7 +30,7 @@ export function Navigation() {
               </span>
             </div>
 
-            <ul className="gap-x-4 lg:gap-x-8 uk-navbar-nav">
+            <ul className="gap-4 uk-navbar-nav">
               <NavigationItem path={sitemap.home} icon={<HomeIcon size={16} />}>
                 {t.links.home}
               </NavigationItem>
