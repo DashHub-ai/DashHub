@@ -4,17 +4,21 @@ import type { SdkMessageRoleT } from '@llm/sdk';
 import type {
   NormalizeSelectTableRow,
   TableId,
-  TableWithDefaultColumns,
+  TableWithAccessTimeColumns,
+  TableWithUuidColumn,
 } from '~/modules/database';
 
-export type MessagesTable = TableWithDefaultColumns & {
-  chat_id: ColumnType<TableId, TableId, never>;
-  content: string;
-  role: SdkMessageRoleT;
-  metadata: Record<string, unknown>;
-  original_message_id: ColumnType<TableId, TableId, null>;
-  repeat_count: ColumnType<number, number, never>;
-};
+export type MessagesTable =
+  & TableWithUuidColumn
+  & TableWithAccessTimeColumns
+  & {
+    chat_id: ColumnType<TableId, TableId, never>;
+    content: string;
+    role: SdkMessageRoleT;
+    metadata: Record<string, unknown>;
+    original_message_id: ColumnType<TableId, TableId, null>;
+    repeat_count: ColumnType<number, number, never>;
+  };
 
 export type MessageTableRow = NormalizeSelectTableRow<MessagesTable>;
 

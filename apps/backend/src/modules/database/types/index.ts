@@ -6,3 +6,4 @@ export * from './table-with-archive-protection-column.type';
 export * from './table-with-default-columns.type';
 export * from './table-with-id-column.type';
 export * from './table-with-id-name-column.type';
+export * from './table-with-uuid-column.type';
