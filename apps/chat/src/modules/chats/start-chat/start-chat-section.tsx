@@ -10,7 +10,9 @@ import { useStartChatForm } from './use-start-chat-form';
 export function StartChatSection() {
   const t = useI18n().pack.chats.start;
   const focusInputRef = useFocusAfterMount<HTMLTextAreaElement>();
-  const { value, bind, handleSubmitEvent } = useStartChatForm();
+
+  const { loading, form } = useStartChatForm();
+  const { bind, handleSubmitEvent, value } = form;
 
   return (
     <section className="mx-auto px-4 max-w-3xl container">
@@ -38,6 +40,9 @@ export function StartChatSection() {
               placeholderClassName="text-black text-xs"
               placeholder={t.selectModel}
               className="w-36"
+              withSearch={false}
+              disabled={loading}
+              preload
               {...bind.path('model')}
             />
           </div>

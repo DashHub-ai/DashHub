@@ -8,11 +8,14 @@ import { shallowCompareArrays } from '@llm/commons';
  * @param fn The effect function to execute.
  * @param deps The dependency list.
  */
-export function useInstantEffect(fn: VoidFunction, deps: DependencyList): void {
+export function useInstantEffect(fn: VoidFunction, deps: DependencyList): boolean {
   const [prevDeps, setDeps] = useState<any>(null);
 
   if (!shallowCompareArrays(prevDeps, deps)) {
     fn();
     setDeps([...deps]);
+    return true;
   }
+
+  return false;
 }

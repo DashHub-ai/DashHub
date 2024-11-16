@@ -2,6 +2,7 @@ export * from './form';
 export * from './use-after-mount';
 export * from './use-async-callback';
 export * from './use-async-debounce';
+export * from './use-async-setter';
 export * from './use-async-value';
 export * from './use-context-or-throw';
 export * from './use-debounce-value';

@@ -13,12 +13,12 @@ export function useAsyncValue<R>(
 ): AsyncValueHookResult<R> {
   const [asyncCallback, asyncState] = useAsyncCallback(callback);
 
-  useInstantEffect(asyncCallback, deps);
+  const executed = useInstantEffect(asyncCallback, deps);
 
   // There might be short delay between the effect and the state update.
   // So it is possible that the status is still 'idle' after the effect.
   // In such case, we should return 'loading' status because the effect is already queued to be executed.
-  if (asyncState.status === 'idle') {
+  if (executed || asyncState.status === 'idle') {
     return {
       status: 'loading',
     };

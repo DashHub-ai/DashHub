@@ -2,10 +2,11 @@ import { useForm } from '@under-control/forms';
 import { pipe } from 'fp-ts/lib/function';
 import { useLocation } from 'wouter';
 
-import { runTask, tapTaskEither } from '@llm/commons';
+import { runTask, tapTaskEither, tryOrThrowTE } from '@llm/commons';
+import { useAsyncSetter } from '@llm/commons-front';
 import { type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@llm/sdk';
 import { usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
-import { useWorkspaceOrganization } from '~/modules/workspace';
+import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
 type StartChatFormValue = {
@@ -21,7 +22,7 @@ export function useStartChatForm() {
 
   const { sdks } = useSdkForLoggedIn();
   const { required } = usePredefinedFormValidators<StartChatFormValue>();
-  const { assignWorkspaceOrganization } = useWorkspaceOrganization();
+  const { organization, assignWorkspaceOrganization } = useWorkspaceOrganizationOrThrow();
 
   const showErrorNotification = useSaveErrorNotification();
   const onSubmit = (value: StartChatFormValue) => pipe(
@@ -38,7 +39,7 @@ export function useStartChatForm() {
     runTask,
   );
 
-  return useForm({
+  const form = useForm({
     resetAfterSubmit: false,
     defaultValue: {
       message: '',
@@ -54,4 +55,25 @@ export function useStartChatForm() {
       ],
     },
   });
+
+  const defaultModelSetter = useAsyncSetter(
+    {
+      fetcher: pipe(sdks.dashboard.aiModels.getDefault(organization.id), tryOrThrowTE),
+      setter: (result) => {
+        if (form.value.model === null) {
+          form.setValue({
+            value: {
+              model: result,
+            },
+            merge: true,
+          });
+        }
+      },
+    },
+  );
+
+  return {
+    form,
+    loading: defaultModelSetter.setting,
+  };
 }

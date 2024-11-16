@@ -24,3 +24,13 @@ export function useWorkspaceOrganization() {
     }),
   };
 }
+
+export function useWorkspaceOrganizationOrThrow() {
+  const { organization, assignWorkspaceOrganization } = useWorkspaceOrganization();
+
+  if (!organization) {
+    throw new Error('Organization is not defined');
+  }
+
+  return { organization, assignWorkspaceOrganization };
+}

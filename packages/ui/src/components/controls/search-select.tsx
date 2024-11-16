@@ -25,12 +25,16 @@ export type SearchSelectProps =
     Omit<SelectProps, 'toolbar' | 'items' | 'prependItems' | 'onOpenChanged'>
   >
   & {
+    preload?: boolean;
+    withSearch?: boolean;
     limit?: number;
     onFetchItems: (attrs: SearchSelectFetchAttrs) => CanBePromise<SelectItem[]>;
   };
 
 export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
   {
+    preload,
+    withSearch = true,
     limit = 20,
     control: { bind, value },
     onFetchItems,
@@ -39,7 +43,7 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
 ) => {
   const { pack } = useForwardedI18n();
 
-  const [wasOpened, setWasOpened] = useState(false);
+  const [wasOpened, setWasOpened] = useState(!!preload);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const phrase = useControlStrict<string>({
     defaultValue: '',
@@ -55,10 +59,12 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
         return [];
       }
 
+      const trimmedValue = phrase.value?.trim();
+
       return onDebouncedFetchItems({
         limit,
-        ...phrase.value?.trim() && {
-          phrase: phrase.value,
+        ...trimmedValue && {
+          phrase: trimmedValue,
         },
       });
     },
@@ -67,8 +73,8 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
 
   const onOpenChanged = (isOpen: boolean) => {
     if (isOpen) {
-      searchInputRef.current?.focus();
       setWasOpened(true);
+      searchInputRef.current?.focus();
     }
     else {
       phrase.setValue({
@@ -86,7 +92,7 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
   }, [value]);
 
   const itemsWithSelected = (() => {
-    if (result.status !== 'success') {
+    if (!wasOpened || result.status !== 'success') {
       return [];
     }
 
@@ -106,17 +112,21 @@ export const SearchSelect = controlled<SelectItem | null, SearchSelectProps>((
       {...props}
       {...bind.entire()}
       items={itemsWithSelected}
-      toolbar={(
-        <div className="uk-custom-select-search">
-          <SearchIcon size={16} />
-          <input
-            ref={searchInputRef}
-            placeholder={pack.placeholders.search}
-            type="text"
-            {...phrase.bind.entire()}
-          />
-        </div>
-      )}
+      {...withSearch
+        ? {
+            toolbar: (
+              <div className="uk-custom-select-search">
+                <SearchIcon size={16} />
+                <input
+                  ref={searchInputRef}
+                  placeholder={pack.placeholders.search}
+                  type="text"
+                  {...phrase.bind.entire()}
+                />
+              </div>
+            ),
+          }
+        : {}}
       {...result.status === 'loading' && {
         prependItems: (
           <div className="flex justify-center w-full">
