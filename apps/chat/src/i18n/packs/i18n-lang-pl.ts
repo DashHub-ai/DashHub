@@ -11,10 +11,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       projects: 'Projekty',
       apps: 'Aplikacje',
       experts: 'Eksperci',
-      settings: 'Ustawienia',
     },
     loggedIn: {
       logout: 'Wyloguj się',
+      settings: 'Ustawienia',
     },
     search: {
       placeholder: 'Szukaj...',
@@ -24,7 +24,6 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       title: 'Powiadomienia',
       empty: 'Brak nowych powiadomień',
     },
-    github: 'Zobacz na GitHub',
   },
   breadcrumbs: {
     routes: {

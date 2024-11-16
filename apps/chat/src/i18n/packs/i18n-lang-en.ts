@@ -9,10 +9,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       projects: 'Projects',
       apps: 'Apps',
       experts: 'Experts',
-      settings: 'Settings',
     },
     loggedIn: {
       logout: 'Logout',
+      settings: 'Settings',
     },
     search: {
       placeholder: 'Search...',
@@ -22,7 +22,6 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       title: 'Notifications',
       empty: 'No new notifications',
     },
-    github: 'View on GitHub',
   },
   breadcrumbs: {
     routes: {

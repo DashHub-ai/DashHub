@@ -1,8 +1,6 @@
 import {
   BellIcon,
-  CogIcon,
   FolderKanbanIcon,
-  GithubIcon,
   GraduationCapIcon,
   MessageSquareTextIcon,
   SearchIcon,
@@ -43,10 +41,6 @@ export function Navigation() {
               <NavigationItem path={sitemap.experts} icon={<GraduationCapIcon size={16} />}>
                 {t.links.experts}
               </NavigationItem>
-
-              <NavigationItem path={sitemap.settings} icon={<CogIcon size={16} />}>
-                {t.links.settings}
-              </NavigationItem>
             </ul>
           </div>
 
@@ -72,16 +66,6 @@ export function Navigation() {
               <BellIcon size={20} className="relative top-[1px]" />
               <span className="top-2 right-2 absolute bg-red-500 rounded-full w-2.5 h-2.5" />
             </button>
-
-            <a
-              href="https://github.com/DashHub-ai/DashHub"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:bg-gray-100/80 p-3 rounded-full text-gray-800 hover:text-gray-900"
-              title={t.github}
-            >
-              <GithubIcon size={20} className="relative top-[1px]" />
-            </a>
 
             <ChooseLanguageItem />
 
