@@ -131,15 +131,20 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       },
     },
   },
-  startChat: {
-    hello: 'Cześć, jak możemy Ci pomóc?',
-    placeholder: 'Wpisz swoją wiadomość tutaj...',
-    addFile: 'Dodaj plik',
-    selectProject: 'Wybierz projekt',
-    publicChat: 'Czat publiczny',
-    privateChat: 'Czat prywatny',
-    start: 'Rozpocznij czat',
-    selectModel: 'Model AI',
+  chats: {
+    start: {
+      hello: 'Cześć, jak możemy Ci pomóc?',
+      placeholder: 'Wpisz swoją wiadomość tutaj...',
+      addFile: 'Dodaj plik',
+      selectProject: 'Wybierz projekt',
+      publicChat: 'Czat publiczny',
+      privateChat: 'Czat prywatny',
+      start: 'Rozpocznij czat',
+      selectModel: 'Model AI',
+    },
+    history: {
+      title: 'Twoje czaty',
+    },
   },
   apps: {
     favorites: {

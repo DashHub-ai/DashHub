@@ -129,15 +129,20 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       },
     },
   },
-  startChat: {
-    hello: 'Hello, how can we help you?',
-    placeholder: 'Type your message here...',
-    addFile: 'Add file',
-    selectProject: 'Select project',
-    publicChat: 'Public chat',
-    privateChat: 'Private chat',
-    start: 'Start chat',
-    selectModel: 'AI Model',
+  chats: {
+    start: {
+      hello: 'Hello, how can we help you?',
+      placeholder: 'Type your message here...',
+      addFile: 'Add file',
+      selectProject: 'Select project',
+      publicChat: 'Public chat',
+      privateChat: 'Private chat',
+      start: 'Start chat',
+      selectModel: 'AI Model',
+    },
+    history: {
+      title: 'Your Chats',
+    },
   },
   apps: {
     favorites: {

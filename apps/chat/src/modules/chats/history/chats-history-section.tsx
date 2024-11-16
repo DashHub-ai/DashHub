@@ -1,5 +1,7 @@
 import clsx from 'clsx';
 
+import { useI18n } from '~/i18n';
+
 import { ChatCard } from './chat-card';
 
 type Props = {
@@ -7,8 +9,14 @@ type Props = {
 };
 
 export function ChatsHistorySection({ className }: Props) {
+  const t = useI18n().pack.chats.history;
+
   return (
     <section className={clsx('space-y-6 mx-auto w-full max-w-5xl', className)}>
+      <h2 className="font-semibold text-2xl text-center">
+        {t.title}
+      </h2>
+
       <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <ChatCard
           title="Example Chat"

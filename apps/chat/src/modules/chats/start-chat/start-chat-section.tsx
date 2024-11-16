@@ -7,9 +7,9 @@ import { useI18n } from '~/i18n';
 import { useStartChatForm } from './use-start-chat-form';
 
 export function StartChatSection() {
-  const t = useI18n().pack.startChat;
+  const t = useI18n().pack.chats.start;
   const focusInputRef = useFocusAfterMount<HTMLTextAreaElement>();
-  const { bind, handleSubmitEvent } = useStartChatForm({
+  const { value, bind, handleSubmitEvent } = useStartChatForm({
     onSubmit: (data) => {
       // eslint-disable-next-line no-console
       console.info(data);
@@ -80,6 +80,7 @@ export function StartChatSection() {
               <button
                 type="submit"
                 className="uk-button uk-button-primary"
+                disabled={!value.message}
               >
                 <SendIcon size={16} className="mr-2" />
                 {t.start}
