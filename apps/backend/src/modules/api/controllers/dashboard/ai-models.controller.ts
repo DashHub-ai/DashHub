@@ -13,6 +13,7 @@ import { ConfigService } from '~/modules/config';
 import {
   mapDbRecordAlreadyExistsToSdkError,
   mapDbRecordNotFoundToSdkError,
+  mapEsDocumentNotFoundToSdkError,
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
@@ -28,6 +29,13 @@ export class AIModelsController extends AuthorizedController {
     super(configService);
 
     this.router
+      .get('/default/:organizationId', async context => pipe(
+        Number(context.req.param().organizationId),
+        aiModelsService.asUser(context.var.jwt).getDefault,
+        mapEsDocumentNotFoundToSdkError,
+        rejectUnsafeSdkErrors,
+        serializeSdkResponseTE<ReturnType<AIModelsSdk['getDefault']>>(context),
+      ))
       .get(
         '/search',
         sdkSchemaValidator('query', SdKSearchAIModelsInputV),

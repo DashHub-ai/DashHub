@@ -11,6 +11,7 @@ import {
 } from '~/shared';
 
 import type {
+  SdkAIModelT,
   SdkCreateAIModelInputT,
   SdkCreateAIModelOutputT,
   SdKSearchAIModelsInputT,
@@ -21,6 +22,12 @@ import type {
 
 export class AIModelsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/ai-models';
+
+  getDefault = (organizationId: SdkTableRowIdT) =>
+    this.fetch<SdkAIModelT, SdkRecordNotFoundError>({
+      url: this.endpoint(`/default/${organizationId}`),
+      options: getPayload(),
+    });
 
   search = (data: SdKSearchAIModelsInputT) =>
     this.fetch<SdKSearchAIModelsOutputT>({

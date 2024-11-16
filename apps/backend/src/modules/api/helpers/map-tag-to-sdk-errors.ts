@@ -5,6 +5,7 @@ import type { TaggedError } from '@llm/commons';
 
 import { isSdkTaggedError, SdkRecordAlreadyExistsError, SdkRecordNotFoundError } from '@llm/sdk';
 import { DatabaseRecordAlreadyExists, DatabaseRecordNotExists } from '~/modules/database';
+import { EsDocumentNotFoundError } from '~/modules/elasticsearch';
 import { LoggerService } from '~/modules/logger';
 
 export function mapTagToSdkError<const ET extends string, RET extends TaggedError<`Sdk${string}`>>(
@@ -42,5 +43,10 @@ export const mapDbRecordAlreadyExistsToSdkError = mapTagToSdkError(
 
 export const mapDbRecordNotFoundToSdkError = mapTagToSdkError(
   DatabaseRecordNotExists.tag,
+  () => new SdkRecordNotFoundError({}),
+);
+
+export const mapEsDocumentNotFoundToSdkError = mapTagToSdkError(
+  EsDocumentNotFoundError.tag,
   () => new SdkRecordNotFoundError({}),
 );

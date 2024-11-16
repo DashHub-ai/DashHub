@@ -13,7 +13,7 @@ import {
   useSitemap,
 } from '~/routes';
 
-import { useHasWorkspaceOrganization } from './modules';
+import { useHasWorkspaceOrganization, useWorkspace } from './modules';
 
 export function Router() {
   const sitemap = useSitemap();
@@ -36,6 +36,7 @@ export function Router() {
 function LoggedInRouter() {
   const sitemap = useSitemap();
   const hasOrganization = useHasWorkspaceOrganization();
+  const workspace = useWorkspace();
 
   if (!hasOrganization) {
     return (
@@ -49,7 +50,7 @@ function LoggedInRouter() {
   }
 
   return (
-    <Switch>
+    <Switch key={workspace.organization?.id ?? '-'}>
       <Route path={sitemap.home} component={HomeRoute} />
       <Route path={sitemap.projects} component={ProjectsRoute} />
       <Route path={sitemap.apps} component={AppsRoute} />

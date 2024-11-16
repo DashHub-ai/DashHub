@@ -1,8 +1,11 @@
+import type { ComponentProps } from 'react';
+
 import type { SdKSearchAIModelsInputT, SdKSearchAIModelsOutputT } from '@llm/sdk';
 
 import { createSdkAutocomplete } from '@llm/ui';
+import { useWorkspaceOrganization } from '~/modules/workspace';
 
-export const AIModelsSearchSelect = createSdkAutocomplete<
+const AIModelsSearchAbstractSelect = createSdkAutocomplete<
   SdKSearchAIModelsOutputT,
   SdKSearchAIModelsInputT
 >({
@@ -16,3 +19,17 @@ export const AIModelsSearchSelect = createSdkAutocomplete<
       ...filters,
     }),
 });
+
+export function AIModelsSearchSelect({ filters, ...props }: ComponentProps<typeof AIModelsSearchAbstractSelect>) {
+  const { organization } = useWorkspaceOrganization();
+
+  return (
+    <AIModelsSearchAbstractSelect
+      {...props}
+      filters={{
+        ...filters,
+        organizationIds: [organization!.id],
+      } as SdKSearchAIModelsInputT}
+    />
+  );
+}

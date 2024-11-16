@@ -8,12 +8,14 @@ import type {
   SdkSearchAIModelItemT,
   SdKSearchAIModelsInputT,
 } from '@llm/sdk';
+import type { TableId } from '~/modules/database';
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
 import {
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
+  tryGetFirstPaginationHitOrNotExists,
 } from '~/modules/elasticsearch';
 
 import {
@@ -26,6 +28,18 @@ export class AIModelsEsSearchRepo {
   constructor(
     @inject(AIModelsEsIndexRepo) private readonly indexRepo: AIModelsEsIndexRepo,
   ) {}
+
+  getDefault = (organizationId: TableId) => pipe(
+    this.search({
+      organizationIds: [organizationId],
+      archived: false,
+      default: true,
+      offset: 0,
+      limit: 1,
+      sort: 'id:desc',
+    }),
+    tryGetFirstPaginationHitOrNotExists,
+  );
 
   search = (dto: SdKSearchAIModelsInputT) =>
     pipe(
@@ -49,6 +63,7 @@ export class AIModelsEsSearchRepo {
 
   private static createEsRequestSearchFilters = (
     {
+      default: isDefault,
       phrase,
       ids,
       organizationIds,
@@ -59,6 +74,7 @@ export class AIModelsEsSearchRepo {
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
+        !isNil(isDefault) && esb.termQuery('default', isDefault),
         !!phrase && (
           esb
             .boolQuery()

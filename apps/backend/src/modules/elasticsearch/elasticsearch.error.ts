@@ -19,8 +19,8 @@ export class EsInternalError extends TaggedError.ofLiteral()('EsInternalError') 
  * Error that occurs when an Elasticsearch record is not found.
  */
 export class EsDocumentNotFoundError extends TaggedError.ofLiteral<{
-  id: EsDocumentId;
-  indexName: string;
+  id?: EsDocumentId;
+  indexName?: string;
 }>()('EsDocumentNotFoundError') {}
 
 /**

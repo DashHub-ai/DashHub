@@ -38,4 +38,9 @@ export class AIModelsFirewall extends AuthFirewallService {
     this.aiModelsService.search,
     this.tryTEIfUser.is.root,
   );
+
+  getDefault = flow(
+    this.aiModelsService.getDefault,
+    this.tryTEIfUser.is.root,
+  );
 }
