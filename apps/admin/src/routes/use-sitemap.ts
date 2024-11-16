@@ -34,6 +34,9 @@ export function useSitemap() {
     s3Buckets: {
       index: defineSitemapRouteGenerator(prefixWithBaseRoute)('/s3-buckets'),
     },
+    aiModels: {
+      index: defineSitemapRouteGenerator(prefixWithBaseRoute)('/ai-models'),
+    },
     forceRedirect: {
       raw: prefixWithBaseRoute('/force-redirect'),
       generate: (targetUrl: string) => pipe(

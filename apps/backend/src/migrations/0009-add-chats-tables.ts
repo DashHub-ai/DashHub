@@ -21,6 +21,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .$call(addTimestampColumns)
     .addColumn('chat_id', 'uuid', col => col.notNull().references('chats.id').onDelete('restrict'))
     .addColumn('content', 'text', col => col.notNull())
+    .addColumn('ai_model_id', 'integer', col => col.references('ai_models.id').onDelete('restrict'))
     .execute();
 
   await db.schema
@@ -38,6 +39,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('metadata', 'jsonb', col => col.notNull().defaultTo('{}'))
     .addColumn('original_message_id', 'uuid', col => col.references('messages.id').onDelete('restrict'))
     .addColumn('repeat_count', 'integer', col => col.notNull().defaultTo(0))
+    .addColumn('ai_model_id', 'integer', col => col.references('ai_models.id').onDelete('restrict'))
     .execute();
 
   await db.schema

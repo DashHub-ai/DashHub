@@ -1,8 +1,12 @@
 import deepmerge from 'deepmerge';
 
-import type { SdkOrganizationUserRoleT, SdkUserRoleT } from '@llm/sdk';
+import type { SdkAIProviderT, SdkOrganizationUserRoleT, SdkUserRoleT } from '@llm/sdk';
 
 import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
+
+const I18N_AI_PROVIDERS_EN: Record<SdkAIProviderT, string> = {
+  openai: 'OpenAI',
+};
 
 const I18N_USER_ROLES_EN: Record<SdkUserRoleT, string> = {
   root: 'Root',
@@ -42,6 +46,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       s3Buckets: 'S3',
       projects: 'Projects',
       apps: 'Apps',
+      aiModels: 'AI Models',
     },
     loggedIn: {
       logout: 'Logout',
@@ -146,6 +151,44 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           chatContext: {
             label: 'Chat context',
             placeholder: 'Enter chat context',
+          },
+        },
+      },
+    },
+    aiModels: {
+      providers: I18N_AI_PROVIDERS_EN,
+      prefix: {
+        app: 'AI Model',
+      },
+      form: {
+        title: {
+          create: 'Create AI model',
+          edit: 'Edit AI model',
+        },
+        fields: {
+          name: {
+            label: 'Name',
+            placeholder: 'Enter AI model name',
+          },
+          description: {
+            label: 'Description',
+            placeholder: 'Enter AI model description',
+          },
+          organization: {
+            label: 'Organization',
+          },
+          provider: {
+            label: 'AI provider',
+          },
+          credentials: {
+            apiKey: {
+              label: 'API key',
+              placeholder: 'Enter API key',
+            },
+            organization: {
+              label: 'API Organization',
+              placeholder: 'Enter organization',
+            },
           },
         },
       },
@@ -308,6 +351,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Manage apps',
       },
       title: 'Manage apps',
+    },
+    aiModels: {
+      meta: {
+        title: 'AI Models',
+        description: 'Manage AI models',
+      },
+      title: 'Manage AI models',
     },
     users: {
       meta: {

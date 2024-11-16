@@ -3,6 +3,7 @@ import {
   BuildingIcon,
   CloudIcon,
   FolderIcon,
+  GraduationCapIcon,
   HomeIcon,
   UserIcon,
 } from 'lucide-react';
@@ -30,7 +31,7 @@ export function Navigation() {
               </span>
             </div>
 
-            <ul className="gap-x-4 lg:gap-x-8 uk-navbar-nav">
+            <ul className="gap-4 uk-navbar-nav">
               <NavigationItem path={sitemap.home} icon={<HomeIcon size={16} />}>
                 {t.links.home}
               </NavigationItem>
@@ -49,6 +50,10 @@ export function Navigation() {
 
               <NavigationItem path={sitemap.projects.index.raw} icon={<FolderIcon size={16} />}>
                 {t.links.projects}
+              </NavigationItem>
+
+              <NavigationItem path={sitemap.aiModels.index.raw} icon={<GraduationCapIcon size={16} />}>
+                {t.links.aiModels}
               </NavigationItem>
 
               <NavigationItem path={sitemap.s3Buckets.index.raw} icon={<CloudIcon size={16} />}>

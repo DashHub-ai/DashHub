@@ -1,3 +1,4 @@
+export * from './ai-models';
 export * from './apps';
 export * from './organizations';
 export * from './projects';
