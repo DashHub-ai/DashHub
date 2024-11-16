@@ -160,14 +160,14 @@ export const Select = controlled<SelectItem | null, SelectProps>((
           setIsOpen(!isOpen);
         }}
       >
-        {prefix && (
+        {prefix && (!placeholder || isFilled) && (
           <span className={clsx('mr-1', placeholderClassName || 'uk-text-muted ')}>
             {prefix}
             {isFilled ? ':' : ''}
           </span>
         )}
 
-        {(!prefix || isFilled) && (
+        {(!prefix || isFilled || !!placeholder) && (
           <span className="mr-2">
             {displayValue}
           </span>

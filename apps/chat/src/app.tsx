@@ -6,6 +6,8 @@ import { useConfig } from '~/config';
 import { I18nProvider } from '~/i18n';
 import { Router } from '~/router';
 
+import { WorkspaceProvider } from './modules';
+
 export function App() {
   const config = useConfig();
 
@@ -19,7 +21,9 @@ export function App() {
       >
         <I18nProvider>
           <ModalsContextProvider>
-            <Router />
+            <WorkspaceProvider>
+              <Router />
+            </WorkspaceProvider>
           </ModalsContextProvider>
         </I18nProvider>
       </SdkProvider>

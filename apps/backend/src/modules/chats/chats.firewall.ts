@@ -36,13 +36,13 @@ export class ChatsFirewall extends AuthFirewallService {
 
     switch (jwt.role) {
       case 'root':
-        if (!creator || !organization) {
+        if (!organization) {
           return ofSdkUnauthorizedErrorTE();
         }
 
         return this.chatsService.create({
           ...chat,
-          creator,
+          creator: creator ?? this.userIdRow,
           organization,
         });
 

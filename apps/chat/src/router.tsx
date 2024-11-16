@@ -4,6 +4,7 @@ import { useSdkIsLoggedIn } from '@llm/sdk';
 import {
   AppsRoute,
   ChatRoute,
+  ChooseOrganizationRoute,
   ExpertsRoute,
   HomeRoute,
   LoginRoute,
@@ -11,6 +12,8 @@ import {
   SettingsRoute,
   useSitemap,
 } from '~/routes';
+
+import { useHasWorkspaceOrganization } from './modules';
 
 export function Router() {
   const sitemap = useSitemap();
@@ -22,6 +25,24 @@ export function Router() {
         <Route path={sitemap.login} component={LoginRoute} />
         <Route>
           <Redirect to={sitemap.login} replace />
+        </Route>
+      </Switch>
+    );
+  }
+
+  return <LoggedInRouter />;
+}
+
+function LoggedInRouter() {
+  const sitemap = useSitemap();
+  const hasOrganization = useHasWorkspaceOrganization();
+
+  if (!hasOrganization) {
+    return (
+      <Switch>
+        <Route path={sitemap.home} component={ChooseOrganizationRoute} />
+        <Route>
+          <Redirect to={sitemap.home} replace />
         </Route>
       </Switch>
     );

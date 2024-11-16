@@ -10,7 +10,6 @@ import {
 } from '@llm/commons';
 
 import type { DatabaseTables, DatabaseTablesWithId } from './database.tables';
-import type { TableId } from './types';
 
 import { DatabaseConnectionRepo } from './connection';
 import {
@@ -46,6 +45,8 @@ export abstract class AbstractDatabaseRepo {
 }
 
 export function createDatabaseRepo<K extends keyof DatabaseTablesWithId>(table: K) {
+  type Table = DatabaseTablesWithId[K];
+
   return class DatabaseRepo extends AbstractDatabaseRepo {
     get table() {
       return table;
@@ -86,13 +87,13 @@ export function createDatabaseRepo<K extends keyof DatabaseTablesWithId>(table: 
 
     createIdsIterator = (
       attrs: IdsChunkedIteratorAttrs<K>,
-    ): AsyncIterableIterator<TableId[]> => {
+    ): AsyncIterableIterator<Table['id'][]> => {
       const { createSelectIdQuery, createChunkedIterator } = this.queryBuilder;
 
       return pipe(
         createSelectIdQuery(),
         createChunkedIterator(attrs),
-        mapAsyncIterator(A.map(item => item.id)),
+        mapAsyncIterator(A.map(item => item.id as Table['id'])),
       );
     };
 

@@ -5,6 +5,7 @@ import { useLocation } from 'wouter';
 import { runTask, tapTaskEither } from '@llm/commons';
 import { type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@llm/sdk';
 import { type SelectItem, usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
+import { useWorkspaceOrganization } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
 type StartChatFormValue = {
@@ -20,12 +21,14 @@ export function useStartChatForm() {
 
   const { sdks } = useSdkForLoggedIn();
   const { required } = usePredefinedFormValidators<StartChatFormValue>();
+  const { assignWorkspaceOrganization } = useWorkspaceOrganization();
 
   const showErrorNotification = useSaveErrorNotification();
   const onSubmit = (value: StartChatFormValue) => pipe(
-    sdks.dashboard.chats.create({
+    assignWorkspaceOrganization({
       public: value.public,
     }),
+    sdks.dashboard.chats.create,
     tapTaskEither(
       ({ id }) => {
         navigate(sitemap.chat.generate({ pathParams: { id } }));

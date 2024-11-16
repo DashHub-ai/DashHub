@@ -135,6 +135,23 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       },
       title: 'Chat',
     },
+    chooseOrganization: {
+      meta: {
+        title: 'Choose Organization',
+        description: 'Choose organization',
+      },
+      title: 'Choose Organization',
+      tutorial: {
+        title: 'Organization Selection Required',
+        select: 'Use the navigation dropdown to select your organization',
+        dashboard: 'Organization must be selected to access dashboard features',
+        rootOnly: 'This step is only required for root users - regular users are automatically assigned to their organization',
+      },
+    },
+  },
+  workspace: {
+    selectOrganization: 'Select organization',
+    organization: 'Organization',
   },
   chats: {
     start: {

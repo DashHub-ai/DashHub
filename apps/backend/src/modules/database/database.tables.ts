@@ -24,6 +24,7 @@ import type { UsersTable } from '../users';
 import type {
   TableWithArchivedAtColumn,
   TableWithIdColumn,
+  TableWithUuidColumn,
 } from './types';
 
 export type DatabaseTables = {
@@ -56,7 +57,7 @@ export type DatabaseTables = {
   messages: MessagesTable;
 };
 
-export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn>;
+export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn | TableWithUuidColumn>;
 
 export type DatabaseTablesWithArchivedAt = RecordOfType<
   DatabaseTables,
