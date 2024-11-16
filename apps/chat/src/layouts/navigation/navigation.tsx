@@ -2,7 +2,7 @@ import { Link } from 'wouter';
 
 import { useSitemap } from '~/routes';
 
-import { NavigationLinks } from './navigation-links';
+import { NavigationLinks } from './links';
 import { NavigationRightToolbar } from './navigation-right-toolbar';
 import { NavigationWorkspaceSelector } from './navigation-workspace-selector';
 

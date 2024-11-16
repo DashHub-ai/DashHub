@@ -10,6 +10,7 @@ import { useHasWorkspaceOrganization } from '~/modules';
 import { useSitemap } from '~/routes';
 
 import { NavigationItem } from './navigation-item';
+import { StayTunedNavigationItem } from './stay-tuned-navigation-item';
 
 export function NavigationLinks() {
   const t = useI18n().pack.navigation;
@@ -27,14 +28,6 @@ export function NavigationLinks() {
       </NavigationItem>
 
       <NavigationItem
-        path={sitemap.projects}
-        icon={<FolderKanbanIcon size={16} />}
-        disabled={!hasOrganization}
-      >
-        {t.links.projects}
-      </NavigationItem>
-
-      <NavigationItem
         path={sitemap.apps}
         icon={<WandSparklesIcon size={16} />}
         disabled={!hasOrganization}
@@ -42,13 +35,21 @@ export function NavigationLinks() {
         {t.links.apps}
       </NavigationItem>
 
-      <NavigationItem
+      <StayTunedNavigationItem
+        path={sitemap.projects}
+        icon={<FolderKanbanIcon size={16} />}
+        disabled={!hasOrganization}
+      >
+        {t.links.projects}
+      </StayTunedNavigationItem>
+
+      <StayTunedNavigationItem
         path={sitemap.experts}
         icon={<GraduationCapIcon size={16} />}
         disabled={!hasOrganization}
       >
         {t.links.experts}
-      </NavigationItem>
+      </StayTunedNavigationItem>
     </ul>
   );
 }
