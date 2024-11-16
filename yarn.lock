@@ -3374,10 +3374,10 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
-elastic-builder@^2.29.0:
-  version "2.29.0"
-  resolved "https://registry.yarnpkg.com/elastic-builder/-/elastic-builder-2.29.0.tgz#472a667903aa594d01f1f2058d55e7ae91990158"
-  integrity sha512-PanRadFQs/nnGV3sJOlZ9eGeSzbVBtbbtpx1bqep64EYALIaTudSEW9Eqo4gp5rWqH4VOTMFV6vPFz26o9L0KQ==
+elastic-builder@^2.30.0:
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/elastic-builder/-/elastic-builder-2.30.0.tgz#3bd9098ca8b653929abff26de2905b146de6286f"
+  integrity sha512-2NvmeuTUb7mLH71mXqHTWyvtKwmHNXPOec9srONYvxLKorJdl8NUoHdge86IEIdEYMZM6Iba97K8rp/H4ig/4g==
   dependencies:
     lodash.has "^4.5.2"
     lodash.hasin "^4.5.2"
