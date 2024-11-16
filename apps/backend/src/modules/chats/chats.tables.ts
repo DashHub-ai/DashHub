@@ -4,14 +4,20 @@ import type { SdkOffsetPaginationOutputT } from '@llm/sdk';
 import type {
   NormalizeSelectTableRow,
   TableId,
+  TableUuid,
+  TableWithAccessTimeColumns,
   TableWithArchivedAtColumn,
   TableWithDefaultColumns,
+  TableWithUuidColumn,
 } from '~/modules/database';
 
 import type { MessageTableRowWithRelations } from './messages';
 
-export type ChatsTable = TableWithDefaultColumns &
-  TableWithArchivedAtColumn & {
+export type ChatsTable =
+  & TableWithUuidColumn
+  & TableWithAccessTimeColumns
+  & TableWithArchivedAtColumn
+  & {
     creator_user_id: ColumnType<TableId, TableId, never>;
     organization_id: ColumnType<TableId, TableId, never>;
     public: boolean;
@@ -19,7 +25,7 @@ export type ChatsTable = TableWithDefaultColumns &
   };
 
 export type ChatSummariesTable = TableWithDefaultColumns & {
-  chat_id: ColumnType<TableId, TableId, never>;
+  chat_id: ColumnType<TableUuid, TableUuid, never>;
   content: string;
 };
 

@@ -9,7 +9,7 @@ export function useSitemap() {
     experts: prefixWithBaseRoute('/experts'),
     login: prefixWithBaseRoute('/login'),
     settings: prefixWithBaseRoute('/settings'),
-    chat: defineSitemapRouteGenerator(prefixWithBaseRoute)('/chat/:uuid'),
+    chat: defineSitemapRouteGenerator(prefixWithBaseRoute)('/chat/:id'),
   };
 
   return sitemap;

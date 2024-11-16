@@ -6,7 +6,7 @@ import { addUuidColumn } from './utils/add-uuid';
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable('chats')
-    .$call(addIdColumn)
+    .$call(addUuidColumn)
     .$call(addTimestampColumns)
     .$call(addArchivedAtColumns)
     .addColumn('creator_user_id', 'integer', col => col.notNull().references('users.id').onDelete('restrict'))
@@ -19,7 +19,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('chat_summaries')
     .$call(addIdColumn)
     .$call(addTimestampColumns)
-    .addColumn('chat_id', 'bigint', col => col.notNull().references('chats.id').onDelete('restrict'))
+    .addColumn('chat_id', 'uuid', col => col.notNull().references('chats.id').onDelete('restrict'))
     .addColumn('content', 'text', col => col.notNull())
     .execute();
 
@@ -32,7 +32,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('messages')
     .$call(addUuidColumn)
     .$call(addTimestampColumns)
-    .addColumn('chat_id', 'bigint', col => col.notNull().references('chats.id').onDelete('restrict'))
+    .addColumn('chat_id', 'uuid', col => col.notNull().references('chats.id').onDelete('restrict'))
     .addColumn('content', 'text', col => col.notNull())
     .addColumn('role', sql`message_role`, col => col.notNull())
     .addColumn('metadata', 'jsonb', col => col.notNull().defaultTo('{}'))

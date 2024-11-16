@@ -4,7 +4,7 @@ import {
   SdkIdNameUrlEntryV,
   SdkTableRowWithArchivedV,
   SdkTableRowWithDatesV,
-  SdkTableRowWithIdV,
+  SdkTableRowWithUuidV,
   SdkTimestampV,
 } from '~/shared';
 
@@ -21,7 +21,7 @@ export const SdkChatV = z.object({
   public: z.boolean(),
   summary: SdkChatSummaryV.nullable(),
 })
-  .merge(SdkTableRowWithIdV)
+  .merge(SdkTableRowWithUuidV)
   .merge(SdkTableRowWithDatesV)
   .merge(SdkTableRowWithArchivedV);
 
