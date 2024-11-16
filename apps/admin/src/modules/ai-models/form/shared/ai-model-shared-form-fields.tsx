@@ -5,11 +5,14 @@ import type { SdkAIModelT } from '@llm/sdk';
 import { FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-type Value = Pick<SdkAIModelT, 'name' | 'description'>;
+import { AIModelCredentialsFormFields } from './ai-model-credentials-form-field';
+import { AIModelProviderSelect } from './ai-model-provider-select';
+
+type Value = Pick<SdkAIModelT, 'name' | 'provider' | 'description' | 'credentials'>;
 
 type Props = ValidationErrorsListProps<Value>;
 
-export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, control: { bind } }) => {
+export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, control: { value, bind } }) => {
   const t = useI18n().pack.modules.aiModels.form;
   const validation = useFormValidatorMessages({ errors });
 
@@ -39,6 +42,32 @@ export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, contr
           {...bind.path('description')}
         />
       </FormField>
+
+      <hr />
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.provider.label}
+        {...validation.extract('provider')}
+      >
+        <AIModelProviderSelect
+          {...bind.path('provider', {
+            relatedInputs: ({ newGlobalValue }) => ({
+              ...newGlobalValue,
+              credentials: {
+                apiKey: '',
+                organization: '',
+              },
+            }),
+          })}
+        />
+      </FormField>
+
+      <AIModelCredentialsFormFields
+        provider={value.provider}
+        {...bind.path('credentials')}
+        {...validation.extract('credentials', { nested: true })}
+      />
     </>
   );
 });

@@ -8,15 +8,15 @@ import {
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
-export const SdkAIProviderV = z.enum([
-  'openai',
-]);
+import { SdkOpenAICredentialsV } from './credentials';
+
+export const SDK_AI_PROVIDERS = ['openai'] as const;
+
+export const SdkAIProviderV = z.enum(SDK_AI_PROVIDERS);
 
 export type SdkAIProviderT = z.infer<typeof SdkAIProviderV>;
 
-export const SdkAICredentialsV = z.object({
-  apiKey: NonEmptyOrNullStringV,
-});
+export const SdkAICredentialsV = SdkOpenAICredentialsV;
 
 export type SdkAICredentialsT = z.infer<typeof SdkAICredentialsV>;
 

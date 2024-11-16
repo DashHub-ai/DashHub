@@ -1,17 +1,21 @@
 import deepmerge from 'deepmerge';
 
-import type { SdkOrganizationUserRoleT, SdkUserRoleT } from '@llm/sdk';
+import type { SdkAIProviderT, SdkOrganizationUserRoleT, SdkUserRoleT } from '@llm/sdk';
 
 import { I18N_FORWARDED_PL_PACK } from '@llm/ui';
 
 import type { I18nLangPack } from './i18n-packs';
 
-export const I18N_USER_ROLES_PL: Record<SdkUserRoleT, string> = {
+const I18N_AI_PROVIDERS_PL: Record<SdkAIProviderT, string> = {
+  openai: 'OpenAI',
+};
+
+const I18N_USER_ROLES_PL: Record<SdkUserRoleT, string> = {
   root: 'Root',
   user: 'Użytkownik',
 };
 
-export const I18N_USER_ORGANIZATION_ROLES_PL: Record<SdkOrganizationUserRoleT, string> = {
+const I18N_USER_ORGANIZATION_ROLES_PL: Record<SdkOrganizationUserRoleT, string> = {
   owner: 'Właściciel',
   member: 'Pracownik',
 };
@@ -154,6 +158,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       },
     },
     aiModels: {
+      providers: I18N_AI_PROVIDERS_PL,
       prefix: {
         app: 'Model AI',
       },
@@ -173,6 +178,19 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           },
           organization: {
             label: 'Organizacja',
+          },
+          provider: {
+            label: 'Dostawca AI',
+          },
+          credentials: {
+            apiKey: {
+              label: 'Klucz API',
+              placeholder: 'Wpisz klucz API',
+            },
+            organization: {
+              label: 'Organizacja API',
+              placeholder: 'Wpisz organizację',
+            },
           },
         },
       },

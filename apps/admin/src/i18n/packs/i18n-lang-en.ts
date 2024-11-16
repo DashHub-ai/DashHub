@@ -1,8 +1,12 @@
 import deepmerge from 'deepmerge';
 
-import type { SdkOrganizationUserRoleT, SdkUserRoleT } from '@llm/sdk';
+import type { SdkAIProviderT, SdkOrganizationUserRoleT, SdkUserRoleT } from '@llm/sdk';
 
 import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
+
+const I18N_AI_PROVIDERS_EN: Record<SdkAIProviderT, string> = {
+  openai: 'OpenAI',
+};
 
 const I18N_USER_ROLES_EN: Record<SdkUserRoleT, string> = {
   root: 'Root',
@@ -152,6 +156,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       },
     },
     aiModels: {
+      providers: I18N_AI_PROVIDERS_EN,
       prefix: {
         app: 'AI Model',
       },
@@ -171,6 +176,19 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           },
           organization: {
             label: 'Organization',
+          },
+          provider: {
+            label: 'AI provider',
+          },
+          credentials: {
+            apiKey: {
+              label: 'API key',
+              placeholder: 'Enter API key',
+            },
+            organization: {
+              label: 'API Organization',
+              placeholder: 'Enter organization',
+            },
           },
         },
       },
