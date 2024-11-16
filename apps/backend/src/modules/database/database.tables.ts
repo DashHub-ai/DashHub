@@ -6,6 +6,7 @@ import type {
   AuthPasswordsTable,
   AuthResetPasswordsTable,
 } from '../auth';
+import type { ChatsTable, MessagesTable } from '../chats';
 import type {
   OrganizationsS3BucketsTable,
   OrganizationsTable,
@@ -49,6 +50,10 @@ export type DatabaseTables = {
 
   // Apps
   apps: AppsTable;
+
+  // Chats
+  chats: ChatsTable;
+  messages: MessagesTable;
 };
 
 export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn>;

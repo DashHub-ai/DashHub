@@ -13,6 +13,12 @@ export abstract class AuthFirewallService {
     return +this.jwt.sub;
   }
 
+  protected get userIdRow() {
+    return {
+      id: this.userId,
+    };
+  }
+
   protected get check() {
     return createAccessLevelGuard(this.jwt);
   }

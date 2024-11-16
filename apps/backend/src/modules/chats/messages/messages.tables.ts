@@ -18,7 +18,7 @@ export type MessagesTable = TableWithDefaultColumns & {
 
 export type MessageTableRow = NormalizeSelectTableRow<MessagesTable>;
 
-export type MessageWithRelations =
+export type MessageTableRowWithRelations =
   & OmitRepeatFields<MessageTableRow>
   & {
     repeats: Array<OmitRepeatFields<MessageTableRow>>;
