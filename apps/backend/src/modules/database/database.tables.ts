@@ -1,5 +1,6 @@
 import type { RecordOfType } from '@llm/commons';
 
+import type { AIModelsTable } from '../ai-model';
 import type { AppsTable } from '../apps';
 import type {
   AuthEmailsTable,
@@ -55,6 +56,9 @@ export type DatabaseTables = {
   // Chats
   chats: ChatsTable;
   messages: MessagesTable;
+
+  // LLM
+  ai_models: AIModelsTable;
 };
 
 export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn | TableWithUuidColumn>;

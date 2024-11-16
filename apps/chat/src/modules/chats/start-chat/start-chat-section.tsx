@@ -50,7 +50,7 @@ export function StartChatSection() {
           <div className="flex flex-wrap items-center gap-4">
             <button
               type="button"
-              className="border-gray-300 border uk-button uk-button-default"
+              className="border-gray-300 border pointer-events-none uk-button uk-button-default"
               disabled
             >
               <PaperclipIcon size={16} className="mr-2" />
