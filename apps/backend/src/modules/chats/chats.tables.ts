@@ -5,7 +5,7 @@ import type {
   TableId,
   TableWithArchivedAtColumn,
   TableWithDefaultColumns,
-} from '../database';
+} from '~/modules/database';
 
 export type ChatsTable = TableWithDefaultColumns &
   TableWithArchivedAtColumn & {
