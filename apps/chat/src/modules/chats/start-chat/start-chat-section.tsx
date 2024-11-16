@@ -56,6 +56,7 @@ export function StartChatSection() {
             <button
               type="button"
               className="border-gray-300 border uk-button uk-button-default"
+              disabled
               onClick={() => {
                 // Handle file input click
               }}
@@ -69,6 +70,7 @@ export function StartChatSection() {
               placeholderClassName="text-black"
               placeholder={t.selectProject}
               items={[]}
+              disabled
               {...bind.path('project')}
             />
 
