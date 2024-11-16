@@ -6,6 +6,7 @@ import {
   SearchIcon,
   WandSparklesIcon,
 } from 'lucide-react';
+import { Link } from 'wouter';
 
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
@@ -23,7 +24,12 @@ export function Navigation() {
       <div className="mx-auto px-4 container">
         <nav className="flex justify-between items-center h-16">
           <div className="flex flex-1 items-center gap-10">
-            <span className="font-semibold text-lg">DashHub</span>
+            <Link
+              className="font-semibold text-lg"
+              to={sitemap.home}
+            >
+              DashHub
+            </Link>
 
             <ul className="flex items-center gap-4 ml-5">
               <NavigationItem path={sitemap.home} icon={<MessageSquareTextIcon size={16} />}>
