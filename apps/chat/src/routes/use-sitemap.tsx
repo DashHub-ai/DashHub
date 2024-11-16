@@ -1,4 +1,5 @@
 import { concatUrls } from '@llm/commons';
+import { defineSitemapRouteGenerator } from '@llm/ui';
 
 export function useSitemap() {
   const sitemap = {
@@ -8,6 +9,7 @@ export function useSitemap() {
     experts: prefixWithBaseRoute('/experts'),
     login: prefixWithBaseRoute('/login'),
     settings: prefixWithBaseRoute('/settings'),
+    chat: defineSitemapRouteGenerator(prefixWithBaseRoute)('/chat/:uuid'),
   };
 
   return sitemap;

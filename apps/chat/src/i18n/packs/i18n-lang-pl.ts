@@ -130,6 +130,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         history: 'Śledź i kontynuuj swoje rozmowy bez przeszkód',
       },
     },
+    chat: {
+      meta: {
+        title: 'Czat',
+        description: 'Rozmawiaj z AI',
+      },
+      title: 'Czat',
+    },
   },
   chats: {
     start: {
@@ -144,6 +151,15 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     history: {
       title: 'Twoje czaty',
+    },
+  },
+  chat: {
+    title: 'Czat',
+    messages: {
+      empty: 'Brak wiadomości',
+    },
+    actions: {
+      send: 'Wyślij',
     },
   },
   apps: {

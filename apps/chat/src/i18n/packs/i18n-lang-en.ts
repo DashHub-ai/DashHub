@@ -128,6 +128,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         history: 'Track and continue your conversations seamlessly',
       },
     },
+    chat: {
+      meta: {
+        title: 'Chat',
+        description: 'Chat with AI',
+      },
+      title: 'Chat',
+    },
   },
   chats: {
     start: {
@@ -142,6 +149,15 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     history: {
       title: 'Your Chats',
+    },
+  },
+  chat: {
+    title: 'Chat',
+    messages: {
+      empty: 'No messages yet',
+    },
+    actions: {
+      send: 'Send',
     },
   },
   apps: {

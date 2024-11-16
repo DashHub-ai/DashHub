@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'wouter';
 import { useSdkIsLoggedIn } from '@llm/sdk';
 import {
   AppsRoute,
+  ChatRoute,
   ExpertsRoute,
   HomeRoute,
   LoginRoute,
@@ -20,7 +21,7 @@ export function Router() {
       <Switch>
         <Route path={sitemap.login} component={LoginRoute} />
         <Route>
-          <Redirect to={sitemap.login} />
+          <Redirect to={sitemap.login} replace />
         </Route>
       </Switch>
     );
@@ -33,8 +34,9 @@ export function Router() {
       <Route path={sitemap.apps} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
       <Route path={sitemap.settings} component={SettingsRoute} />
+      <Route path={sitemap.chat.raw} component={ChatRoute} />
       <Route>
-        <Redirect to={sitemap.home} />
+        <Redirect to={sitemap.home} replace />
       </Route>
     </Switch>
   );

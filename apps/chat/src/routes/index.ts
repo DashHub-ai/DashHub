@@ -1,4 +1,5 @@
 export * from './apps';
+export * from './chat';
 export * from './experts';
 export * from './home';
 export * from './login';
