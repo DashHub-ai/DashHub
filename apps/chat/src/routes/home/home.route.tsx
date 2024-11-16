@@ -1,5 +1,5 @@
 import { useI18n } from '~/i18n';
-import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { PageWithNavigationLayout } from '~/layouts';
 import { ChatsHistorySection, StartChatSection } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
@@ -12,11 +12,7 @@ export function HomeRoute() {
     <PageWithNavigationLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <LayoutHeader>
-        {t.title}
-      </LayoutHeader>
-
-      <section>
+      <section className="pt-8">
         <StartChatSection />
 
         <HomeTutorial className="mx-auto mt-8" />

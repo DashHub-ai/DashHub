@@ -7,7 +7,7 @@ import type { I18nLangPack } from './i18n-packs';
 export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   navigation: {
     links: {
-      home: 'Czaty',
+      home: 'Strona główna',
       projects: 'Projekty',
       apps: 'Aplikacje',
       experts: 'Eksperci',

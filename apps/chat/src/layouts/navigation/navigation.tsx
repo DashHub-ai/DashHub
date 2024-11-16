@@ -2,7 +2,7 @@ import {
   BellIcon,
   FolderKanbanIcon,
   GraduationCapIcon,
-  MessageSquareTextIcon,
+  HomeIcon,
   SearchIcon,
   WandSparklesIcon,
 } from 'lucide-react';
@@ -23,7 +23,7 @@ export function Navigation() {
     <header className="relative z-50 bg-white border-b border-border w-full">
       <div className="mx-auto px-4 container">
         <nav className="flex justify-between items-center h-16">
-          <div className="flex flex-1 items-center gap-10">
+          <div className="flex flex-1 items-center gap-8">
             <Link
               className="font-semibold text-lg"
               to={sitemap.home}
@@ -32,7 +32,7 @@ export function Navigation() {
             </Link>
 
             <ul className="flex items-center gap-4 ml-5">
-              <NavigationItem path={sitemap.home} icon={<MessageSquareTextIcon size={16} />}>
+              <NavigationItem path={sitemap.home} icon={<HomeIcon size={16} />}>
                 {t.links.home}
               </NavigationItem>
 

@@ -52,7 +52,7 @@ export function StartChatSection() {
           <div className="flex flex-wrap items-center gap-4">
             <button
               type="button"
-              className="uk-button uk-button-default"
+              className="border-gray-300 border uk-button uk-button-default"
               onClick={() => {
                 // Handle file input click
               }}

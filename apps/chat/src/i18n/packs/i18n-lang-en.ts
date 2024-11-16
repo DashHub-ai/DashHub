@@ -5,7 +5,7 @@ import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
 export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   navigation: {
     links: {
-      home: 'Chats',
+      home: 'Home',
       projects: 'Projects',
       apps: 'Apps',
       experts: 'Experts',

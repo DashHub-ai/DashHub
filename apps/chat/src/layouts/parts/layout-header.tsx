@@ -6,35 +6,40 @@ import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
 
 type Props = PropsWithChildren & {
+  withBreadcrumbs?: boolean;
   breadcrumbs?: ReactNode;
   root?: boolean;
 };
 
-export function LayoutHeader({ children, breadcrumbs, root }: Props) {
+export function LayoutHeader({ children, breadcrumbs, withBreadcrumbs = true, root }: Props) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
 
   return (
     <div className="flex flex-col space-y-3">
-      <nav aria-label="Breadcrumb">
-        <ul className="uk-breadcrumb">
-          <li>
-            <Link href={sitemap.projects}>{t.breadcrumbs.routes.home}</Link>
-          </li>
-
-          {breadcrumbs}
-
-          {!root && (
+      {withBreadcrumbs && (
+        <nav aria-label="Breadcrumb">
+          <ul className="uk-breadcrumb">
             <li>
-              <span aria-current="page">
-                {children}
-              </span>
+              <Link href={sitemap.home}>
+                {t.breadcrumbs.routes.home}
+              </Link>
             </li>
-          )}
-        </ul>
-      </nav>
 
-      <h1 className="text-3xl font-bold tracking-tight">
+            {breadcrumbs}
+
+            {!root && (
+              <li>
+                <span aria-current="page">
+                  {children}
+                </span>
+              </li>
+            )}
+          </ul>
+        </nav>
+      )}
+
+      <h1 className="font-bold text-3xl tracking-tight">
         {children}
       </h1>
     </div>
