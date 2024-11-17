@@ -20,47 +20,55 @@ export function ChatConfigPanel({ defaultValue }: Props) {
 
   return (
     <div className="border-gray-200 p-4 border-l w-96">
+      <h2 className="mb-4 font-semibold text-xl">
+        {t.title}
+      </h2>
+
       <form className="space-y-4">
-        <FormField
-          {...validator.errors.extract('summary.name')}
-          label={t.name}
-        >
-          <div className="space-y-2">
-            <Input
-              {...bind.path('summary.name.value')}
-              placeholder={t.namePlaceholder}
-              disabled={value.summary?.name.generated}
-            />
+        <fieldset className="space-y-4">
+          <legend className="font-medium text-gray-700 text-sm">{t.summary}</legend>
 
-            <Checkbox
-              {...bind.path('summary.name.generated')}
-              className="block mt-2 uk-text-small"
-            >
-              {t.generated}
-            </Checkbox>
-          </div>
-        </FormField>
+          <FormField
+            {...validator.errors.extract('summary.name')}
+            label={t.name}
+          >
+            <div className="space-y-2">
+              <Input
+                {...bind.path('summary.name.value')}
+                placeholder={t.namePlaceholder}
+                disabled={value.summary?.name.generated}
+              />
 
-        <FormField
-          {...validator.errors.extract('summary.content')}
-          label={t.description}
-        >
-          <div className="space-y-2">
-            <TextArea
-              {...bind.path('summary.content.value')}
-              placeholder={t.descriptionPlaceholder}
-              className="min-h-[100px]"
-              disabled={value.summary?.content.generated}
-            />
+              <Checkbox
+                {...bind.path('summary.name.generated')}
+                className="block mt-2 uk-text-small"
+              >
+                {t.generated}
+              </Checkbox>
+            </div>
+          </FormField>
 
-            <Checkbox
-              {...bind.path('summary.content.generated')}
-              className="block mt-2 uk-text-small"
-            >
-              {t.generated}
-            </Checkbox>
-          </div>
-        </FormField>
+          <FormField
+            {...validator.errors.extract('summary.content')}
+            label={t.description}
+          >
+            <div className="space-y-2">
+              <TextArea
+                {...bind.path('summary.content.value')}
+                placeholder={t.descriptionPlaceholder}
+                className="min-h-[100px]"
+                disabled={value.summary?.content.generated}
+              />
+
+              <Checkbox
+                {...bind.path('summary.content.generated')}
+                className="block mt-2 uk-text-small"
+              >
+                {t.generated}
+              </Checkbox>
+            </div>
+          </FormField>
+        </fieldset>
 
         <div className="flex flex-row justify-end mt-4 pt-4 border-t">
           <SaveButton

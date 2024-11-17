@@ -177,11 +177,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       send: 'Send',
     },
     config: {
+      title: 'Chat Configuration',
       name: 'Title of chat',
       namePlaceholder: 'Enter title...',
       description: 'Description of chat',
       descriptionPlaceholder: 'Enter description...',
       generated: 'Auto-generate',
+      summary: 'Chat summary',
       tutorial: {
         title: 'Chat Configuration',
         help: {
