@@ -2,6 +2,7 @@ import type { ColumnType } from 'kysely';
 
 import type { SdkOffsetPaginationOutputT } from '@llm/sdk';
 import type {
+  AIGeneratedColumns,
   NormalizeSelectTableRow,
   TableId,
   TableUuid,
@@ -23,13 +24,12 @@ export type ChatsTable =
     public: boolean;
   };
 
-export type ChatSummariesTable = TableWithDefaultColumns & {
-  chat_id: ColumnType<TableUuid, TableUuid, never>;
-  name: string;
-  name_generated: boolean;
-  content: string;
-  content_generated: boolean;
-};
+export type ChatSummariesTable =
+  & TableWithDefaultColumns
+  & AIGeneratedColumns<'name' | 'content'>
+  & {
+    chat_id: ColumnType<TableUuid, TableUuid, never>;
+  };
 
 export type ChatTableRow = NormalizeSelectTableRow<ChatsTable>;
 export type ChatSummaryTableRow = NormalizeSelectTableRow<ChatSummariesTable>;

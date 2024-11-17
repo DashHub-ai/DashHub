@@ -1,3 +1,4 @@
+export * from './ai-generated-columns.type';
 export * from './kysely.type';
 export * from './normalize-table-row.type';
 export * from './table-with-access-time-columns.type';
