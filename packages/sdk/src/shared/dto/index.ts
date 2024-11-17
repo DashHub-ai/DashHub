@@ -15,3 +15,4 @@ export * from './sdk-table-row-with-id-name.dto';
 export * from './sdk-table-row-with-uuid.dto';
 export * from './sdk-table-row-with-uuid-name.dto';
 export * from './sdk-timestamp.dto';
+export * from './sdk-uuids-array.dto';

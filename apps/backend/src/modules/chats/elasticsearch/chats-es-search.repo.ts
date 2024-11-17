@@ -62,8 +62,8 @@ export class ChatsEsSearchRepo {
           esb
             .boolQuery()
             .should([
-              createPhraseFieldQuery()(phrase).boost(3),
-              esb.matchPhrasePrefixQuery('description', phrase).boost(1.5),
+              createPhraseFieldQuery('summary.name.value')(phrase).boost(3),
+              esb.matchPhrasePrefixQuery('summary.content.value', phrase).boost(1.5),
             ])
             .minimumShouldMatch(1)
         ),

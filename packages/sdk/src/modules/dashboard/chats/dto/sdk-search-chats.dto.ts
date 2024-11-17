@@ -5,9 +5,9 @@ import {
   SdkDefaultSortInputV,
   SdkFilteredPhraseInputV,
   SdkIdsArrayV,
-  SdkIdsFiltersInputV,
   SdkOffsetPaginationInputV,
   SdkOffsetPaginationOutputV,
+  SdkUuidsFiltersInputV,
 } from '~/shared';
 
 import { SdkChatV } from './sdk-chat.dto';
@@ -22,7 +22,7 @@ export const SdKSearchChatsInputV = SdkOffsetPaginationInputV
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)
-  .merge(SdkIdsFiltersInputV)
+  .merge(SdkUuidsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
 export type SdKSearchChatsInputT = z.infer<typeof SdKSearchChatsInputV>;
