@@ -64,8 +64,10 @@ export class ChatsController extends AuthorizedController {
         async context => pipe(
           context.req.valid('json'),
           message => messagesService.asUser(context.var.jwt).createMessage({
-            chatId: context.req.param('id'),
             message,
+            chat: {
+              id: context.req.param('id'),
+            },
           }),
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ChatsSdk['createMessage']>>(context),

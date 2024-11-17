@@ -1,8 +1,8 @@
-import { flow } from 'fp-ts/lib/function';
+import { pipe } from 'fp-ts/lib/function';
 
 import type { SdkJwtTokenT } from '@llm/sdk';
 
-import type { MessagesService } from './messages.service';
+import type { CreateInternalMessageInputT, MessagesService } from './messages.service';
 
 import { AuthFirewallService } from '../auth';
 
@@ -15,8 +15,12 @@ export class MessagesFirewall extends AuthFirewallService {
   }
 
   // TODO: Add belongs checks
-  createMessage = flow(
-    this.messagesService.createMessage,
-    this.tryTEIfUser.is.root,
-  );
+  createMessage = (dto: Omit<CreateInternalMessageInputT, 'creator'>) =>
+    pipe(
+      this.messagesService.createMessage({
+        ...dto,
+        creator: this.userIdRow,
+      }),
+      this.tryTEIfUser.is.root,
+    );
 }

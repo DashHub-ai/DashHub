@@ -19,7 +19,7 @@ export type MessagesTable =
     content: string;
     role: SdkMessageRoleT;
     metadata: Record<string, unknown>;
-    original_message_id: ColumnType<TableId, TableId, null>;
+    original_message_id: ColumnType<TableId | null, TableId | null, null>;
     repeat_count: ColumnType<number, number, never>;
   };
 

@@ -1,8 +1,6 @@
 import { injectable } from 'tsyringe';
 
-import { createProtectedDatabaseRepo } from '~/modules/database';
+import { createDatabaseRepo } from '~/modules/database';
 
 @injectable()
-export class MessagesRepo extends createProtectedDatabaseRepo('messages') {
-  createIdsIterator = this.baseRepo.createIdsIterator;
-}
+export class MessagesRepo extends createDatabaseRepo('messages') {}
