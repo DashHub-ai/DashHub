@@ -200,9 +200,9 @@ export function ChatConversation() {
           updatedAt: new Date(),
           creator: {
             id: 1,
-            name: 'admin',
+            email: 'admin',
           },
-          id: 1,
+          id: '1231212',
           organization: {
             id: 1,
             name: 'Organization',
@@ -212,10 +212,12 @@ export function ChatConversation() {
             name: {
               value: 'React Components',
               generated: true,
+              generatedAt: new Date(),
             },
             content: {
               value: 'Learn how to create and manage React components',
               generated: true,
+              generatedAt: new Date(),
             },
           },
         }}

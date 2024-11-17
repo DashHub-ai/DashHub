@@ -9,6 +9,7 @@ import {
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { DatabaseTE, TableRowWithUuid, TransactionError } from '../database';
+import type { EsDocumentNotFoundError, EsIndexingError, EsInternalError } from '../elasticsearch';
 import type { ChatsService } from './chats.service';
 
 export class ChatsFirewall extends AuthFirewallService {
@@ -39,7 +40,8 @@ export class ChatsFirewall extends AuthFirewallService {
 
   create = ({ creator, organization, ...chat }: SdkCreateChatInputT): DatabaseTE<
     TableRowWithUuid,
-    SdkUnauthorizedError | TransactionError
+    SdkUnauthorizedError | TransactionError | EsInternalError |
+    EsDocumentNotFoundError | EsIndexingError
   > => {
     const { jwt } = this;
 
