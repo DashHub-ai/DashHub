@@ -4,6 +4,7 @@ import type { SdkMessageRoleT } from '@llm/sdk';
 import type {
   NormalizeSelectTableRow,
   TableId,
+  TableRowWithUuid,
   TableUuid,
   TableWithAccessTimeColumns,
   TableWithUuidColumn,
@@ -14,6 +15,7 @@ export type MessagesTable =
   & TableWithAccessTimeColumns
   & {
     chat_id: ColumnType<TableUuid, TableUuid, never>;
+    creator_user_id: ColumnType<TableId | null, TableId | null, never>;
     content: string;
     role: SdkMessageRoleT;
     metadata: Record<string, unknown>;
@@ -24,9 +26,10 @@ export type MessagesTable =
 export type MessageTableRow = NormalizeSelectTableRow<MessagesTable>;
 
 export type MessageTableRowWithRelations =
-  & OmitRepeatFields<MessageTableRow>
+  & OmitRepeatFields<Omit<MessageTableRow, 'chatId'>>
   & {
-    repeats: Array<OmitRepeatFields<MessageTableRow>>;
+    repeats: Array<Omit<MessageTableRow, 'chatId'>>;
+    chat: TableRowWithUuid;
   };
 
 type OmitRepeatFields<T> = Omit<T, 'originalMessageId' | 'repeatCount'>;

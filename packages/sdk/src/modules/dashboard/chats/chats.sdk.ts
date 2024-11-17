@@ -2,12 +2,13 @@ import type {
   SdkRecordAlreadyExistsError,
   SdkRecordNotFoundError,
   SdkTableRowIdT,
-  SdkTableRowWithIdT,
+  SdkTableRowWithUuidT,
 } from '~/shared';
 
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import { getPayload, patchPayload, postPayload } from '~/shared';
 
+import type { SdkCreateMessageInputT } from '../messages';
 import type {
   SdkCreateChatInputT,
   SdkCreateChatOutputT,
@@ -33,10 +34,16 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
 
   archive = (id: SdkTableRowIdT) =>
     this.fetch<
-      SdkTableRowWithIdT,
+      SdkTableRowWithUuidT,
       SdkRecordNotFoundError | SdkRecordAlreadyExistsError
     >({
       url: this.endpoint(`/archive/${id}`),
       options: patchPayload({}),
+    });
+
+  createMessage = (chatId: SdkTableRowIdT, data: SdkCreateMessageInputT) =>
+    this.fetch<SdkTableRowWithUuidT>({
+      url: this.endpoint(`/${chatId}/messages`),
+      options: postPayload(data),
     });
 };

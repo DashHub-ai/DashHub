@@ -10,6 +10,7 @@ import * as addAiModelsTable from './0008-add-ai-models-tables';
 import * as addChatsTables from './0009-add-chats-tables';
 import * as fixUniqIndexInS3Buckets from './0010-fix-uniq-index-in-s3-buckets';
 import * as addNameToChatSummary from './0011-add-name-to-chat-summary';
+import * as addCreatorToMessagesTable from './0012-add-creator-to-messages-table';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -24,4 +25,5 @@ export const DB_MIGRATIONS = {
   '0009-add-chats-tables': addChatsTables,
   '0010-fix-uniq-index-in-s3-buckets': fixUniqIndexInS3Buckets,
   '0011-add-name-to-chat-summary': addNameToChatSummary,
+  '0012-add-creator-to-messages-table': addCreatorToMessagesTable,
 };
