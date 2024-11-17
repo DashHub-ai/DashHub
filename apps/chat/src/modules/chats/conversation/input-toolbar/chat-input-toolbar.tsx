@@ -1,6 +1,8 @@
 import { useForm } from '@under-control/forms';
+import { pipe } from 'fp-ts/lib/function';
 import { MessageCircle, SendIcon } from 'lucide-react';
 
+import { runTaskAsVoid, tryOrThrowTE } from '@llm/commons';
 import { type SdkChatT, type SdkCreateMessageInputT, useSdk } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 
@@ -17,10 +19,11 @@ export function ChatInputToolbar({ chat }: Props) {
     defaultValue: {
       content: '',
     },
-    onSubmit: (value) => {
-      // eslint-disable-next-line no-console
-      console.info('submit!', value, chat, sdks);
-    },
+    onSubmit: value => pipe(
+      sdks.dashboard.chats.createMessage(chat.id, value),
+      tryOrThrowTE,
+      runTaskAsVoid,
+    ),
   });
 
   return (
