@@ -76,7 +76,7 @@ export function ChatConversation({ chat, initialMessages }: Props) {
 
         <div
           ref={messagesContainerRef}
-          className="relative z-10 flex-1 p-4 overflow-y-auto"
+          className="relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]"
         >
           {messages.items.map((message, index) => (
             <ChatMessage
