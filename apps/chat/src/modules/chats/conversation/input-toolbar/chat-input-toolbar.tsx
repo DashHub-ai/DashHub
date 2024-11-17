@@ -1,41 +1,49 @@
-import { useForm } from '@under-control/forms';
-import { pipe } from 'fp-ts/lib/function';
+import { type CanBePromise, useForm } from '@under-control/forms';
+import clsx from 'clsx';
 import { MessageCircle, SendIcon } from 'lucide-react';
 
-import { runTaskAsVoid, StrictBooleanV, tryOrThrowTE } from '@llm/commons';
+import type { SdkCreateMessageInputT } from '@llm/sdk';
+
+import { StrictBooleanV } from '@llm/commons';
 import { useLocalStorageObject } from '@llm/commons-front';
-import { type SdkChatT, type SdkCreateMessageInputT, useSdk } from '@llm/sdk';
 import { Checkbox } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Props = {
-  chat: SdkChatT;
+  inputRef?: React.RefObject<HTMLInputElement>;
+  onSubmit: (message: SdkCreateMessageInputT) => CanBePromise<any>;
 };
 
-export function ChatInputToolbar({ chat }: Props) {
+export function ChatInputToolbar({ inputRef, onSubmit }: Props) {
   const t = useI18n().pack.chat;
-  const { sdks } = useSdk();
+
   const submitOnEnterStorage = useLocalStorageObject('chat-input-toolbar-submit-on-enter', {
     schema: StrictBooleanV.catch(true),
     readBeforeMount: true,
   });
 
-  const { bind, value, handleSubmitEvent, submit } = useForm<SdkCreateMessageInputT>({
-    resetAfterSubmit: true,
+  const { bind, value, handleSubmitEvent, submitState, submit, setValue } = useForm<SdkCreateMessageInputT>({
     defaultValue: {
       content: '',
     },
-    onSubmit: value => pipe(
-      sdks.dashboard.chats.createMessage(chat.id, value),
-      tryOrThrowTE,
-      runTaskAsVoid,
-    ),
+    onSubmit: (newValue) => {
+      setValue({
+        value: {
+          content: '',
+        },
+      });
+
+      return onSubmit(newValue);
+    },
   });
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (submitOnEnterStorage.getOrNull() && e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      void submit();
+
+      if (value.content.length) {
+        void submit();
+      }
     }
   };
 
@@ -47,6 +55,8 @@ export function ChatInputToolbar({ chat }: Props) {
       <div className="relative flex gap-2">
         <input
           type="text"
+          ref={inputRef}
+          disabled={submitState.loading}
           className="flex-1 border-gray-200 py-2 pr-4 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
           placeholder={t.placeholders.enterMessage}
           required
@@ -60,8 +70,13 @@ export function ChatInputToolbar({ chat }: Props) {
 
         <button
           type="submit"
-          className="flex flex-row items-center bg-gray-700 hover:bg-gray-800 px-6 py-2 rounded-lg text-white transition-colors"
-          disabled={!value.content}
+          className={clsx(
+            'flex flex-row items-center px-6 py-2 rounded-lg text-white transition-colors',
+            !value.content
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-gray-700 hover:bg-gray-800',
+          )}
+          disabled={!value.content || submitState.loading}
         >
           <SendIcon size={16} className="mr-2" />
           {t.actions.send}

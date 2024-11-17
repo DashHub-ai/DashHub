@@ -1,3 +1,4 @@
+import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { Redirect } from 'wouter';
 
@@ -23,7 +24,20 @@ export function ChatRoute({ id }: Props) {
   const { sdks } = useSdkForLoggedIn();
   const result = useAsyncValue(
     pipe(
-      sdks.dashboard.chats.get(id),
+      apply.sequenceS(TE.ApplicativePar)({
+        chat: sdks.dashboard.chats.get(id),
+        initialMessages: pipe(
+          sdks.dashboard.chats.searchMessages(id, {
+            offset: 0,
+            limit: 100,
+            sort: 'createdAt:desc',
+          }),
+          TE.map(({ items, ...pagination }) => ({
+            ...pagination,
+            items: items.toReversed(),
+          })),
+        ),
+      }),
       tryOrThrowTE,
     ),
     [id],
@@ -45,7 +59,7 @@ export function ChatRoute({ id }: Props) {
         {(
           result.status === 'loading'
             ? <SpinnerContainer loading />
-            : <ChatConversation chat={result.data} />
+            : <ChatConversation chat={result.data.chat} initialMessages={result.data.initialMessages} />
         )}
       </section>
     </PageWithNavigationLayout>
