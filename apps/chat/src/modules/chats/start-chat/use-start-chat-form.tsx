@@ -13,7 +13,7 @@ type StartChatFormValue = {
   project: SdkTableRowWithIdNameT | null;
   public: boolean;
   message: string;
-  model: SdkTableRowWithIdNameT | null;
+  aiModel: SdkTableRowWithIdNameT | null;
 };
 
 export function useStartChatForm() {
@@ -43,7 +43,7 @@ export function useStartChatForm() {
     resetAfterSubmit: false,
     defaultValue: {
       message: '',
-      model: null,
+      aiModel: null,
       project: null,
       public: false,
     },
@@ -60,10 +60,10 @@ export function useStartChatForm() {
     {
       fetcher: pipe(sdks.dashboard.aiModels.getDefault(organization.id), tryOrThrowTE),
       setter: (result) => {
-        if (form.value.model === null) {
+        if (form.value.aiModel === null) {
           form.setValue({
             value: {
-              model: result,
+              aiModel: result,
             },
             merge: true,
           });

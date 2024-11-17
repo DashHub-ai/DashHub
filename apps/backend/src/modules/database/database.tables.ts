@@ -10,8 +10,8 @@ import type {
 import type {
   ChatsTable,
   ChatSummariesTable,
-  MessagesTable,
 } from '../chats';
+import type { MessagesTable } from '../messages';
 import type {
   OrganizationsS3BucketsTable,
   OrganizationsTable,

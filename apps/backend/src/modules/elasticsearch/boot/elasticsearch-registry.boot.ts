@@ -7,6 +7,7 @@ import { AIModelsEsIndexRepo } from '~/modules/ai-models/elasticsearch/ai-models
 import { AppsEsIndexRepo } from '~/modules/apps/elasticsearch/apps-es-index.repo';
 import { ChatsEsIndexRepo } from '~/modules/chats/elasticsearch/chats-es-index.repo';
 import { LoggerService } from '~/modules/logger';
+import { MessagesEsIndexRepo } from '~/modules/messages/elasticsearch/messages-es-index.repo';
 import { OrganizationsEsIndexRepo } from '~/modules/organizations/elasticsearch';
 import { OrganizationsS3BucketsEsIndexRepo } from '~/modules/organizations/s3-buckets/elasticsearch/organizations-s3-buckets-es-index.repo';
 import { ProjectsEsIndexRepo } from '~/modules/projects/elasticsearch/projects-es-index.repo';
@@ -27,6 +28,7 @@ export class ElasticsearchRegistryBootService {
     @inject(OrganizationsS3BucketsEsIndexRepo) private readonly orgsS3BucketsEsIndexRepo: OrganizationsS3BucketsEsIndexRepo,
     @inject(AIModelsEsIndexRepo) private readonly aiModelsEsIndexRepo: AIModelsEsIndexRepo,
     @inject(ChatsEsIndexRepo) private readonly chatsEsIndexRepo: ChatsEsIndexRepo,
+    @inject(MessagesEsIndexRepo) private readonly messagesEsIndexRepo: MessagesEsIndexRepo,
   ) {}
 
   register = TE.fromIO(() => {
@@ -38,6 +40,7 @@ export class ElasticsearchRegistryBootService {
       this.orgsS3BucketsEsIndexRepo,
       this.aiModelsEsIndexRepo,
       this.chatsEsIndexRepo,
+      this.messagesEsIndexRepo,
     ]);
 
     this.logger.info('Registered elasticsearch repos!');

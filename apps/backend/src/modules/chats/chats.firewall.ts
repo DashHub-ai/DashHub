@@ -21,6 +21,12 @@ export class ChatsFirewall extends AuthFirewallService {
   }
 
   // TODO: Add belongs checks
+  get = flow(
+    this.chatsService.get,
+    this.tryTEIfUser.is.root,
+  );
+
+  // TODO: Add belongs checks
   search = flow(
     this.chatsService.search,
     this.tryTEIfUser.is.root,
@@ -40,8 +46,7 @@ export class ChatsFirewall extends AuthFirewallService {
 
   create = ({ creator, organization, ...chat }: SdkCreateChatInputT): DatabaseTE<
     TableRowWithUuid,
-    SdkUnauthorizedError | TransactionError | EsInternalError |
-    EsDocumentNotFoundError | EsIndexingError
+    SdkUnauthorizedError | TransactionError | EsInternalError | EsDocumentNotFoundError | EsIndexingError
   > => {
     const { jwt } = this;
 

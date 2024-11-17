@@ -1,14 +1,20 @@
 import type {
   SdkRecordAlreadyExistsError,
   SdkRecordNotFoundError,
-  SdkTableRowIdT,
-  SdkTableRowWithIdT,
+  SdkTableRowUuidT,
+  SdkTableRowWithUuidT,
 } from '~/shared';
 
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import { getPayload, patchPayload, postPayload } from '~/shared';
 
 import type {
+  SdkCreateMessageInputT,
+  SdKSearchMessagesInputT,
+  SdKSearchMessagesOutputT,
+} from '../messages';
+import type {
+  SdkChatT,
   SdkCreateChatInputT,
   SdkCreateChatOutputT,
   SdKSearchChatsInputT,
@@ -17,6 +23,12 @@ import type {
 
 export class ChatsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/chats';
+
+  get = (id: SdkTableRowUuidT) =>
+    this.fetch<SdkChatT>({
+      url: this.endpoint(`/${id}`),
+      options: getPayload(),
+    });
 
   search = (data: SdKSearchChatsInputT) =>
     this.fetch<SdKSearchChatsOutputT>({
@@ -31,12 +43,28 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
       options: postPayload(data),
     });
 
-  archive = (id: SdkTableRowIdT) =>
+  archive = (id: SdkTableRowUuidT) =>
     this.fetch<
-      SdkTableRowWithIdT,
+      SdkTableRowWithUuidT,
       SdkRecordNotFoundError | SdkRecordAlreadyExistsError
     >({
       url: this.endpoint(`/archive/${id}`),
       options: patchPayload({}),
+    });
+
+  searchMessages = (
+    chatId: SdkTableRowUuidT,
+    data: Omit<SdKSearchMessagesInputT, 'chatIds'>,
+  ) =>
+    this.fetch<SdKSearchMessagesOutputT>({
+      url: this.endpoint(`/${chatId}/messages`),
+      query: data,
+      options: getPayload(),
+    });
+
+  createMessage = (chatId: SdkTableRowUuidT, data: SdkCreateMessageInputT) =>
+    this.fetch<SdkTableRowWithUuidT>({
+      url: this.endpoint(`/${chatId}/messages`),
+      options: postPayload(data),
     });
 };

@@ -21,6 +21,8 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
 
   asUser = (jwt: SdkJwtTokenT) => new ChatsFirewall(jwt, this);
 
+  get = this.esSearchRepo.get;
+
   search = this.esSearchRepo.search;
 
   unarchive = (id: SdkTableRowIdT) => this.repo.unarchive({ id });

@@ -43,7 +43,7 @@ export function StartChatSection() {
               withSearch={false}
               disabled={loading}
               preload
-              {...bind.path('model')}
+              {...bind.path('aiModel')}
             />
           </div>
         </div>

@@ -175,9 +175,14 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     title: 'Czat',
     messages: {
       empty: 'Brak wiadomości',
+      you: 'Ty',
     },
     actions: {
       send: 'Wyślij',
+      submitOnEnter: 'Wyślij po naciśnięciu Enter',
+    },
+    placeholders: {
+      enterMessage: 'Wpisz wiadomość...',
     },
     config: {
       title: 'Konfiguracja czatu',

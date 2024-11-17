@@ -23,7 +23,11 @@ export default {
     'tiptap',
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        slideIn: 'slideIn 0.3s ease-out forwards',
+      },
+    },
   },
   plugins: [],
 } satisfies Config;

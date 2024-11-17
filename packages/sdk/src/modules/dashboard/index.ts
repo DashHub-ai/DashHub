@@ -3,6 +3,7 @@ export * from './apps';
 export * from './chats';
 export * from './dashboard.sdk';
 export * from './experts';
+export * from './messages';
 export * from './organizations';
 export * from './projects';
 export * from './s3-buckets';
