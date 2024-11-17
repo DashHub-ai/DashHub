@@ -166,6 +166,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     history: {
       title: 'Your Chats',
+      placeholder: 'No chats yet',
     },
   },
   chat: {

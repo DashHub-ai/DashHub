@@ -1,49 +1,39 @@
-import { type ControlledControlStateAttrs, useControlStrict } from '@under-control/forms';
+import clsx from 'clsx';
 
 import type {
   SdkOffsetPaginationInputT,
-  SdkOffsetPaginationOutputT,
   SdkTableRowWithIdT,
+  SdkTableRowWithUuidT,
 } from '@llm/sdk';
 
-import { PaginationFooter } from '../pagination';
-import { SpinnerContainer } from '../spinner-container';
+import { PaginatedList, type PaginatedListProps } from '../list';
 import { Table, type Props as TableProps } from './table';
 
 type Props<
-  I extends SdkTableRowWithIdT,
+  I extends SdkTableRowWithIdT | SdkTableRowWithUuidT,
   P extends SdkOffsetPaginationInputT,
 > =
   & Omit<TableProps<I>, 'items'>
-  & {
-    loading: boolean;
-    result?: SdkOffsetPaginationOutputT<I> | null;
-    pagination: ControlledControlStateAttrs<P>;
-  };
+  & Omit<PaginatedListProps<I, P>, 'children'>;
 
 export function PaginatedTable<
-  I extends SdkTableRowWithIdT,
+  I extends SdkTableRowWithIdT | SdkTableRowWithUuidT,
   P extends SdkOffsetPaginationInputT,
->({ result, loading, pagination, ...props }: Props<I, P>) {
-  const { bind } = useControlStrict<SdkOffsetPaginationInputT>(
-    pagination as unknown as ControlledControlStateAttrs<SdkOffsetPaginationInputT>,
-  );
-
+>({ result, loading, pagination, className, ...props }: Props<I, P>) {
   return (
-    <SpinnerContainer loading={loading}>
-      {() => result && (
-        <>
-          <Table
-            items={result.items}
-            {...props}
-          />
-
-          <PaginationFooter
-            result={result}
-            {...bind.entire()}
-          />
-        </>
+    <PaginatedList
+      result={result}
+      loading={loading}
+      pagination={pagination}
+      withEmptyPlaceholder={false}
+    >
+      {({ items }) => (
+        <Table
+          items={items}
+          className={clsx(className, 'mt-6')}
+          {...props}
+        />
       )}
-    </SpinnerContainer>
+    </PaginatedList>
   );
 }
