@@ -21,12 +21,14 @@ export type ChatsTable =
     creator_user_id: ColumnType<TableId, TableId, never>;
     organization_id: ColumnType<TableId, TableId, never>;
     public: boolean;
-    last_message_at: Date | null;
   };
 
 export type ChatSummariesTable = TableWithDefaultColumns & {
   chat_id: ColumnType<TableUuid, TableUuid, never>;
+  name: string;
+  name_generated: boolean;
   content: string;
+  content_generated: boolean;
 };
 
 export type ChatTableRow = NormalizeSelectTableRow<ChatsTable>;

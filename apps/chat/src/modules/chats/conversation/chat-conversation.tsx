@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useI18n } from '~/i18n';
 
 import { ChatBackground } from './chat-background';
-import { ChatConfigPanel } from './chat-config-panel';
+import { ChatConfigPanel } from './config-panel';
 
 type Message = {
   id: string;
@@ -38,7 +38,7 @@ const mockMessages: Message[] = [
   },
 ];
 
-export function Conversation() {
+export function ChatConversation() {
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [newMessage, setNewMessage] = useState('');
   const t = useI18n().pack.chat;
@@ -192,7 +192,34 @@ export function Conversation() {
           </div>
         </form>
       </div>
-      <ChatConfigPanel />
+
+      <ChatConfigPanel
+        defaultValue={{
+          archived: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          creator: {
+            id: 1,
+            name: 'admin',
+          },
+          id: 1,
+          organization: {
+            id: 1,
+            name: 'Organization',
+          },
+          public: true,
+          summary: {
+            name: {
+              value: 'React Components',
+              generated: true,
+            },
+            content: {
+              value: 'Learn how to create and manage React components',
+              generated: true,
+            },
+          },
+        }}
+      />
     </div>
   );
 }

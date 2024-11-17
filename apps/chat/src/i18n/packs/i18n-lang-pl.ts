@@ -178,6 +178,20 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     actions: {
       send: 'Wyślij',
     },
+    config: {
+      name: 'Tytuł czatu',
+      namePlaceholder: 'Wprowadź tytuł...',
+      description: 'Opis czatu',
+      descriptionPlaceholder: 'Wprowadź opis...',
+      generated: 'Automatycznie generuj',
+      tutorial: {
+        title: 'Konfiguracja czatu',
+        help: {
+          title: 'Tytuł i opis pomagają zidentyfikować czaty w historii',
+          autoGenerate: 'Nie martw się jeśli zostawisz puste - zostaną automatycznie wygenerowane na podstawie treści czatu',
+        },
+      },
+    },
   },
   apps: {
     favorites: {

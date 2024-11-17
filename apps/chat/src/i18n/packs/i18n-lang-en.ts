@@ -176,6 +176,20 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     actions: {
       send: 'Send',
     },
+    config: {
+      name: 'Title of chat',
+      namePlaceholder: 'Enter title...',
+      description: 'Description of chat',
+      descriptionPlaceholder: 'Enter description...',
+      generated: 'Auto-generate',
+      tutorial: {
+        title: 'Chat Configuration',
+        help: {
+          title: 'Title and description help you identify chats in your history',
+          autoGenerate: 'Don\'t worry if left empty - they will be auto-generated based on the chat content',
+        },
+      },
+    },
   },
   apps: {
     favorites: {

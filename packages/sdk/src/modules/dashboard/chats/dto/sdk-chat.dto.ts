@@ -5,11 +5,16 @@ import {
   SdkTableRowWithArchivedV,
   SdkTableRowWithDatesV,
   SdkTableRowWithUuidV,
-  SdkTimestampV,
 } from '~/shared';
 
+const SdkGeneratedStringV = z.object({
+  value: z.string(),
+  generated: z.boolean(),
+});
+
 export const SdkChatSummaryV = z.object({
-  content: z.string(),
+  name: SdkGeneratedStringV,
+  content: SdkGeneratedStringV,
 });
 
 export type SdkChatSummaryT = z.infer<typeof SdkChatSummaryV>;
@@ -17,7 +22,6 @@ export type SdkChatSummaryT = z.infer<typeof SdkChatSummaryV>;
 export const SdkChatV = z.object({
   creator: SdkIdNameUrlEntryV,
   organization: SdkIdNameUrlEntryV,
-  lastMessageAt: SdkTimestampV,
   public: z.boolean(),
   summary: SdkChatSummaryV.nullable(),
 })

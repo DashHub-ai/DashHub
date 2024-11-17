@@ -1,8 +1,15 @@
 import { MessagesSquare } from 'lucide-react';
 import { memo, useMemo } from 'react';
+import * as uuid from 'uuid';
+
+type Props = {
+  totalIcons?: number;
+  cols?: number;
+};
 
 function getIconStyle(col: number, row: number) {
   return {
+    id: uuid.v4(),
     size: Math.floor(Math.random() * (80 - 32) + 32),
     rotate: Math.floor(Math.random() * 60 - 30),
     left: `${(col * 16)}%`,
@@ -11,25 +18,28 @@ function getIconStyle(col: number, row: number) {
   };
 }
 
-const TOTAL_ICONS = 30;
-const COLS = 6;
-
-function ChatBackgroundComponent() {
+function ChatBackgroundComponent(
+  {
+    totalIcons = 30,
+    cols = 6,
+  }: Props,
+) {
   const icons = useMemo(() => {
-    return Array.from({ length: TOTAL_ICONS }).map((_, i) => {
-      const col = i % COLS;
-      const row = Math.floor(i / COLS);
+    return Array
+      .from({ length: totalIcons })
+      .map((_, i) => {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
 
-      return getIconStyle(col, row);
-    });
-  }, []);
+        return getIconStyle(col, row);
+      });
+  }, [totalIcons, cols]);
 
   return (
     <div className="absolute inset-0 pointer-events-none">
-      {icons.map((style, i) => (
+      {icons.map(style => (
         <MessagesSquare
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
+          key={style.id}
           size={style.size}
           className="absolute text-gray-300 transition-transform"
           style={{

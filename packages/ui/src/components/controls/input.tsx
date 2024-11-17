@@ -6,7 +6,7 @@ export function Input({ className, ...props }: InputProps) {
   return (
     <input
       {...props}
-      className={clsx('uk-input', className)}
+      className={clsx('bg-white uk-input', className)}
     />
   );
 }
