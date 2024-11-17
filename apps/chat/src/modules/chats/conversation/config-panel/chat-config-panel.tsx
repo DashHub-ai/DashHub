@@ -34,7 +34,7 @@ export function ChatConfigPanel({ defaultValue }: Props) {
           >
             <div className="space-y-2">
               <Input
-                {...bind.path('summary.name.value')}
+                {...bind.path('summary.name.value', { input: value => value ?? '' })}
                 placeholder={t.namePlaceholder}
                 disabled={value.summary?.name.generated}
               />
@@ -54,7 +54,7 @@ export function ChatConfigPanel({ defaultValue }: Props) {
           >
             <div className="space-y-2">
               <TextArea
-                {...bind.path('summary.content.value')}
+                {...bind.path('summary.content.value', { input: value => value ?? '' })}
                 placeholder={t.descriptionPlaceholder}
                 className="min-h-[100px]"
                 disabled={value.summary?.content.generated}

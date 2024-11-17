@@ -177,6 +177,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     actions: {
       send: 'Send',
     },
+    placeholders: {
+      enterMessage: 'Enter your message...',
+    },
     config: {
       title: 'Chat Configuration',
       name: 'Title of chat',

@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import { Bot, MessageCircle, RefreshCwIcon, ReplyIcon, SendIcon, User, WandSparklesIcon } from 'lucide-react';
-import { useState } from 'react';
+import { Bot, RefreshCwIcon, ReplyIcon, User, WandSparklesIcon } from 'lucide-react';
 
-import { useI18n } from '~/i18n';
+import type { SdkChatT } from '@llm/sdk';
 
 import { ChatBackground } from './chat-background';
 import { ChatConfigPanel } from './config-panel';
+import { ChatInputToolbar } from './input-toolbar';
 
 type Message = {
   id: string;
@@ -38,42 +38,18 @@ const mockMessages: Message[] = [
   },
 ];
 
-export function ChatConversation() {
-  const [messages, setMessages] = useState<Message[]>(mockMessages);
-  const [newMessage, setNewMessage] = useState('');
-  const t = useI18n().pack.chat;
+type Props = {
+  chat: SdkChatT;
+};
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newMessage.trim())
-      return;
-
-    setMessages([...messages, {
-      id: Date.now().toString(),
-      text: newMessage,
-      sender: 'human',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    }]);
-    setNewMessage('');
-  };
-
-  const handleRefresh = (messageId: string) => {
-    // TODO: Implement refresh logic
-    // eslint-disable-next-line no-console
-    console.log('Refreshing message:', messageId);
-  };
-
-  const isLastAiMessage = (index: number) => {
-    return index === messages.length - 1 && messages[index].sender === 'ai';
-  };
-
+export function ChatConversation({ chat }: Props) {
   return (
     <div className="flex gap-6 mx-auto max-w-7xl">
-      <div className="relative flex flex-col flex-1 h-[calc(100vh-200px)]">
+      <div className="top-3 sticky flex flex-col flex-1 h-[calc(100vh-200px)]">
         <ChatBackground />
 
         <div className="relative z-10 flex-1 p-4 overflow-y-auto">
-          {messages.map((message, index) => (
+          {mockMessages.map((message, index) => (
             <div
               key={message.id}
               className={clsx('flex items-start gap-2 mb-6', {
@@ -112,9 +88,8 @@ export function ChatConversation() {
                   {message.sender === 'ai'
                     ? (
                         <div className="flex items-center gap-2">
-                          {isLastAiMessage(index) && (
+                          {index + 1 === mockMessages.length && (
                             <button
-                              onClick={() => handleRefresh(message.id)}
                               type="button"
                               className="hover:bg-gray-200 p-1 rounded transition-colors"
                               title="Refresh response"
@@ -170,58 +145,10 @@ export function ChatConversation() {
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="relative border-gray-200 bg-white p-4 border-t">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={e => setNewMessage(e.target.value)}
-              className="flex-1 border-gray-200 py-2 pr-4 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-              placeholder="Enter message..."
-            />
-            <div className="top-1/2 left-7 absolute -translate-y-1/2">
-              <MessageCircle size={18} className="text-gray-400" />
-            </div>
-            <button
-              type="submit"
-              className="flex flex-row items-center bg-gray-700 hover:bg-gray-800 px-6 py-2 rounded-lg text-white transition-colors"
-            >
-              <SendIcon size={16} className="mr-2" />
-              {t.actions.send}
-            </button>
-          </div>
-        </form>
+        <ChatInputToolbar chat={chat} />
       </div>
 
-      <ChatConfigPanel
-        defaultValue={{
-          archived: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          creator: {
-            id: 1,
-            email: 'admin',
-          },
-          id: '1231212',
-          organization: {
-            id: 1,
-            name: 'Organization',
-          },
-          public: true,
-          summary: {
-            name: {
-              value: 'React Components',
-              generated: true,
-              generatedAt: new Date(),
-            },
-            content: {
-              value: 'Learn how to create and manage React components',
-              generated: true,
-              generatedAt: new Date(),
-            },
-          },
-        }}
-      />
+      <ChatConfigPanel defaultValue={chat} />
     </div>
   );
 }

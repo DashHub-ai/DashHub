@@ -2,6 +2,7 @@ import type {
   SdkRecordAlreadyExistsError,
   SdkRecordNotFoundError,
   SdkTableRowIdT,
+  SdkTableRowUuidT,
   SdkTableRowWithUuidT,
 } from '~/shared';
 
@@ -10,6 +11,7 @@ import { getPayload, patchPayload, postPayload } from '~/shared';
 
 import type { SdkCreateMessageInputT } from '../messages';
 import type {
+  SdkChatT,
   SdkCreateChatInputT,
   SdkCreateChatOutputT,
   SdKSearchChatsInputT,
@@ -18,6 +20,12 @@ import type {
 
 export class ChatsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/chats';
+
+  get = (id: SdkTableRowUuidT) =>
+    this.fetch<SdkChatT>({
+      url: this.endpoint(`/${id}`),
+      options: getPayload(),
+    });
 
   search = (data: SdKSearchChatsInputT) =>
     this.fetch<SdKSearchChatsOutputT>({

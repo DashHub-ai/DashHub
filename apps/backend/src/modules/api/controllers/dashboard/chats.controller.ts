@@ -38,6 +38,16 @@ export class ChatsController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<ChatsSdk['search']>>(context),
         ),
       )
+      .get(
+        '/:id',
+        sdkSchemaValidator('query', SdKSearchChatsInputV),
+        async context => pipe(
+          context.req.param('id'),
+          chatsService.asUser(context.var.jwt).get,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ChatsSdk['get']>>(context),
+        ),
+      )
       .post(
         '/',
         sdkSchemaValidator('json', SdkCreateChatInputV),

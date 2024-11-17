@@ -1,6 +1,6 @@
 import { Redirect, Route, Switch } from 'wouter';
 
-import { useSdkIsLoggedIn } from '@llm/sdk';
+import { type SdkTableRowWithUuidT, useSdkIsLoggedIn } from '@llm/sdk';
 import {
   AppsRoute,
   ChatRoute,
@@ -56,7 +56,9 @@ function LoggedInRouter() {
       <Route path={sitemap.apps} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
       <Route path={sitemap.settings} component={SettingsRoute} />
-      <Route path={sitemap.chat.raw} component={ChatRoute} />
+      <Route<SdkTableRowWithUuidT> path={sitemap.chat.raw}>
+        {params => <ChatRoute id={params.id} />}
+      </Route>
       <Route>
         <Redirect to={sitemap.home} replace />
       </Route>
