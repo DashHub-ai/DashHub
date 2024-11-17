@@ -2,7 +2,7 @@ import { useForm } from '@under-control/forms';
 import { pipe } from 'fp-ts/lib/function';
 import { useLocation } from 'wouter';
 
-import { runTask, tapTaskEither, tryOrThrowTE } from '@llm/commons';
+import { runTask, tapTaskEither, tapTaskEitherTE, tryOrThrowTE } from '@llm/commons';
 import { useAsyncSetter } from '@llm/commons-front';
 import { type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@llm/sdk';
 import { usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
@@ -30,6 +30,9 @@ export function useStartChatForm() {
       public: value.public,
     }),
     sdks.dashboard.chats.create,
+    tapTaskEitherTE(({ id }) => sdks.dashboard.chats.createMessage(id, {
+      content: value.message,
+    })),
     tapTaskEither(
       ({ id }) => {
         navigate(sitemap.chat.generate({ pathParams: { id } }));
