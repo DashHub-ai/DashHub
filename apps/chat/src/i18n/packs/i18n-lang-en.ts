@@ -186,7 +186,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         title: 'Chat Configuration',
         help: {
           title: 'Title and description help you identify chats in your history',
-          autoGenerate: 'Don\'t worry if left empty - they will be auto-generated based on the chat content',
+          autoGenerate: 'With auto-generating chat summaries, you can save time and maintain consistency in history',
         },
       },
     },
