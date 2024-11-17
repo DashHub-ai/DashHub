@@ -1,5 +1,5 @@
 import { MessagesSquare } from 'lucide-react';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 
 function getIconStyle(col: number, row: number) {
   return {
@@ -10,26 +10,34 @@ function getIconStyle(col: number, row: number) {
   };
 }
 
+const TOTAL_ICONS = 30;
+const COLS = 6;
+
 function ChatBackgroundComponent() {
+  const icons = useMemo(() => {
+    return Array.from({ length: TOTAL_ICONS }).map((_, i) => {
+      const col = i % COLS;
+      const row = Math.floor(i / COLS);
+
+      return getIconStyle(col, row);
+    });
+  }, []);
+
   return (
     <div className="absolute inset-0 pointer-events-none">
-      {Array.from({ length: 30 }).map((_, i) => {
-        const col = i % 6;
-        const row = Math.floor(i / 6);
-        const style = getIconStyle(col, row);
-        return (
-          <MessagesSquare
-            key={i}
-            size={style.size}
-            className="absolute opacity-20 text-gray-300 transition-transform"
-            style={{
-              transform: `rotate(${style.rotate}deg)`,
-              left: style.left,
-              top: style.top,
-            }}
-          />
-        );
-      })}
+      {icons.map((style, i) => (
+        <MessagesSquare
+          // eslint-disable-next-line react/no-array-index-key
+          key={i}
+          size={style.size}
+          className="absolute opacity-20 text-gray-300 transition-transform"
+          style={{
+            transform: `rotate(${style.rotate}deg)`,
+            left: style.left,
+            top: style.top,
+          }}
+        />
+      ))}
     </div>
   );
 }
