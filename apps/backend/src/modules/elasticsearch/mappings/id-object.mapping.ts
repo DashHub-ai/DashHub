@@ -1,9 +1,9 @@
 import { createMagicNullIdEsValue } from '../helpers';
 
-export function createIdObjectMapping(properties?: object) {
+export function createIdObjectMapping(properties?: object, idType = 'integer') {
   return {
     properties: {
-      id: { type: 'integer' },
+      id: { type: idType },
       ...properties,
     },
   };

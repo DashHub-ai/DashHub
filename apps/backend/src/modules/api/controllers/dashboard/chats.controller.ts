@@ -6,6 +6,7 @@ import {
   SdkCreateChatInputV,
   SdkCreateMessageInputV,
   SdKSearchChatsInputV,
+  SdKSearchMessagesInputV,
 } from '@llm/sdk';
 import { ChatsService } from '~/modules/chats';
 import { ConfigService } from '~/modules/config';
@@ -58,12 +59,26 @@ export class ChatsController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<ChatsSdk['create']>>(context),
         ),
       )
+      .get(
+        '/:id/messages',
+        sdkSchemaValidator('query', SdKSearchMessagesInputV),
+        async context => pipe(
+          messagesService.asUser(context.var.jwt).search(
+            {
+              ...context.req.valid('query'),
+              chatIds: [context.req.param('id')],
+            },
+          ),
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ChatsSdk['searchMessages']>>(context),
+        ),
+      )
       .post(
         '/:id/messages',
         sdkSchemaValidator('json', SdkCreateMessageInputV),
         async context => pipe(
           context.req.valid('json'),
-          message => messagesService.asUser(context.var.jwt).createMessage({
+          message => messagesService.asUser(context.var.jwt).create({
             message,
             chat: {
               id: context.req.param('id'),

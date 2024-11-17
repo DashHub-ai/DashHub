@@ -8,7 +8,11 @@ import type {
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import { getPayload, patchPayload, postPayload } from '~/shared';
 
-import type { SdkCreateMessageInputT } from '../messages';
+import type {
+  SdkCreateMessageInputT,
+  SdKSearchMessagesInputT,
+  SdKSearchMessagesOutputT,
+} from '../messages';
 import type {
   SdkChatT,
   SdkCreateChatInputT,
@@ -46,6 +50,16 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
     >({
       url: this.endpoint(`/archive/${id}`),
       options: patchPayload({}),
+    });
+
+  searchMessages = (
+    chatId: SdkTableRowUuidT,
+    data: Omit<SdKSearchMessagesInputT, 'chatIds'>,
+  ) =>
+    this.fetch<SdKSearchMessagesOutputT>({
+      url: this.endpoint(`/${chatId}/messages`),
+      query: data,
+      options: getPayload(),
     });
 
   createMessage = (chatId: SdkTableRowUuidT, data: SdkCreateMessageInputT) =>

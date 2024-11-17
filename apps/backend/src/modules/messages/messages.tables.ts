@@ -10,6 +10,8 @@ import type {
   TableWithUuidColumn,
 } from '~/modules/database';
 
+import type { UserTableRowBaseRelation } from '../users';
+
 export type MessagesTable =
   & TableWithUuidColumn
   & TableWithAccessTimeColumns
@@ -26,10 +28,11 @@ export type MessagesTable =
 export type MessageTableRow = NormalizeSelectTableRow<MessagesTable>;
 
 export type MessageTableRowWithRelations =
-  & OmitRepeatFields<Omit<MessageTableRow, 'chatId'>>
+  & OmitRepeatFields<Omit<MessageTableRow, 'chatId' | 'creatorUserId'>>
   & {
-    repeats: Array<Omit<MessageTableRow, 'chatId'>>;
+    repeats: Array<Omit<MessageTableRow, 'chatId' | 'creatorUserId'>>;
     chat: TableRowWithUuid;
+    creator: UserTableRowBaseRelation | null;
   };
 
 type OmitRepeatFields<T> = Omit<T, 'originalMessageId' | 'repeatCount'>;
