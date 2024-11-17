@@ -52,7 +52,7 @@ export function ChatMessage({ message, isLast }: Props) {
           },
         )}
       >
-        <p>{message.content}</p>
+        <p className="text-sm">{message.content}</p>
         <div className="flex justify-between items-center gap-6 mt-1 text-xs">
           <span className="opacity-50">{new Date(message.createdAt).toLocaleTimeString()}</span>
           {isAI

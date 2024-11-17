@@ -13,7 +13,7 @@ type Props = {
 
 export function ChatConfigPanel({ defaultValue }: Props) {
   const t = useI18n().pack.chat.config;
-  const { bind, validator, value, submitState } = useForm({
+  const { bind, validator, value, submitState, isDirty } = useForm({
     onSubmit: () => {},
     defaultValue,
   });
@@ -72,6 +72,7 @@ export function ChatConfigPanel({ defaultValue }: Props) {
 
         <div className="flex flex-row justify-end mt-4 pt-4 border-t">
           <SaveButton
+            disabled={!isDirty}
             loading={submitState.loading}
             type="submit"
           />

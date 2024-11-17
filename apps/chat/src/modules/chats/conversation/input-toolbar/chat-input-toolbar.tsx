@@ -6,7 +6,7 @@ import type { SdkCreateMessageInputT } from '@llm/sdk';
 
 import { StrictBooleanV } from '@llm/commons';
 import { useLocalStorageObject } from '@llm/commons-front';
-import { Checkbox } from '@llm/ui';
+import { Checkbox, FormSpinnerCTA } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Props = {
@@ -52,35 +52,38 @@ export function ChatInputToolbar({ inputRef, onSubmit }: Props) {
       className="border-gray-200 bg-white p-4 border-t"
       onSubmit={handleSubmitEvent}
     >
-      <div className="relative flex gap-2">
-        <input
-          type="text"
-          ref={inputRef}
-          disabled={submitState.loading}
-          className="flex-1 border-gray-200 py-2 pr-4 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-          placeholder={t.placeholders.enterMessage}
-          required
-          onKeyDown={handleKeyDown}
-          {...bind.path('content')}
-        />
+      <div className="relative gap-2 grid grid-cols-[1fr,auto]">
+        <div className="relative">
+          <input
+            type="text"
+            ref={inputRef}
+            disabled={submitState.loading}
+            className="border-gray-200 py-2 pr-4 pl-10 border rounded-lg focus:ring-2 focus:ring-gray-500 w-full focus:outline-none"
+            placeholder={t.placeholders.enterMessage}
+            required
+            onKeyDown={handleKeyDown}
+            {...bind.path('content')}
+          />
 
-        <div className="top-1/2 left-4 absolute -translate-y-1/2">
-          <MessageCircle size={18} className="text-gray-400" />
+          <div className="top-1/2 left-4 absolute -translate-y-1/2">
+            <MessageCircle size={18} className="text-gray-400" />
+          </div>
         </div>
 
-        <button
+        <FormSpinnerCTA
           type="submit"
+          loading={submitState.loading}
+          disabled={!value.content || submitState.loading}
           className={clsx(
-            'flex flex-row items-center px-6 py-2 rounded-lg text-white transition-colors',
+            'flex flex-row items-center px-6 py-2 rounded-lg h-full text-white transition-colors',
             !value.content
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-gray-700 hover:bg-gray-800',
           )}
-          disabled={!value.content || submitState.loading}
         >
           <SendIcon size={16} className="mr-2" />
           {t.actions.send}
-        </button>
+        </FormSpinnerCTA>
       </div>
 
       <div className="flex items-center gap-2 mt-3 text-gray-500 text-sm">
