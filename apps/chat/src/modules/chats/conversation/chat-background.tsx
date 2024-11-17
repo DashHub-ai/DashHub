@@ -7,6 +7,7 @@ function getIconStyle(col: number, row: number) {
     rotate: Math.floor(Math.random() * 60 - 30),
     left: `${(col * 16)}%`,
     top: `${(row * 20) + (col % 2 ? 10 : 0)}%`,
+    opacity: Math.max(0.05, 0.2 - row * 0.03),
   };
 }
 
@@ -30,11 +31,12 @@ function ChatBackgroundComponent() {
           // eslint-disable-next-line react/no-array-index-key
           key={i}
           size={style.size}
-          className="absolute opacity-20 text-gray-300 transition-transform"
+          className="absolute text-gray-300 transition-transform"
           style={{
             transform: `rotate(${style.rotate}deg)`,
             left: style.left,
             top: style.top,
+            opacity: style.opacity,
           }}
         />
       ))}
