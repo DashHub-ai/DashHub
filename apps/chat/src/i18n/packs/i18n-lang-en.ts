@@ -176,6 +176,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     actions: {
       send: 'Send',
+      submitOnEnter: 'Submit on Enter',
     },
     placeholders: {
       enterMessage: 'Enter your message...',

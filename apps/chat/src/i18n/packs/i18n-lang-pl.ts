@@ -178,6 +178,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     actions: {
       send: 'Wyślij',
+      submitOnEnter: 'Wyślij po naciśnięciu Enter',
     },
     placeholders: {
       enterMessage: 'Wpisz wiadomość...',

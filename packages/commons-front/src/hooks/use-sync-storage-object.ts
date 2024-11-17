@@ -1,6 +1,6 @@
 import type { z } from 'zod';
 
-import { pipe } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 import * as O from 'fp-ts/lib/Option';
 import { useRef } from 'react';
 
@@ -54,6 +54,8 @@ export function useSyncStorageObject<S extends z.ZodType<unknown>>(
     );
   };
 
+  const getOrNull = flow(get, O.toNullable);
+
   const set = (value: z.infer<S>) => {
     storage.setItem(name, JSON.stringify(value));
     cache.current = O.some(value);
@@ -70,6 +72,7 @@ export function useSyncStorageObject<S extends z.ZodType<unknown>>(
   return {
     revision,
     clear,
+    getOrNull,
     get,
     set,
   };
