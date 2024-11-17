@@ -1,4 +1,5 @@
-import { Bot, MessageCircle, RefreshCwIcon, SendIcon, User, WandSparklesIcon } from 'lucide-react';
+import clsx from 'clsx';
+import { Bot, MessageCircle, RefreshCwIcon, ReplyIcon, SendIcon, User, WandSparklesIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { useI18n } from '~/i18n';
@@ -75,12 +76,16 @@ export function Conversation() {
           {messages.map((message, index) => (
             <div
               key={message.id}
-              className={`mb-6 flex items-start gap-2 ${
-                message.sender === 'ai' ? 'flex-row' : 'flex-row-reverse'
-              }`}
+              className={clsx('flex items-start gap-2 mb-6', {
+                'flex-row': message.sender === 'ai',
+                'flex-row-reverse': message.sender === 'human',
+              })}
             >
-              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center
-                ${message.sender === 'ai' ? 'bg-gray-100' : 'bg-gray-700'}`}
+              <div
+                className={clsx('flex flex-shrink-0 justify-center items-center border rounded-full w-8 h-8', {
+                  'bg-gray-100 border-gray-200': message.sender === 'ai',
+                  'bg-gray-700 border-gray-600': message.sender === 'human',
+                })}
               >
                 {message.sender === 'ai'
                   ? (
@@ -92,19 +97,14 @@ export function Conversation() {
               </div>
 
               <div
-                className={`relative max-w-[70%] px-4 py-2 rounded-2xl border
-                  ${message.sender === 'ai'
-              ? 'bg-gray-100 before:border-gray-100 before:left-[-8px] border-gray-200'
-              : 'bg-gray-700 text-white before:border-gray-700 before:right-[-8px] border-gray-600'
-            }
-                  before:absolute before:top-[12px]
-                  before:border-8 before:border-transparent
-                  before:border-t-8
-                  ${message.sender === 'ai'
-              ? 'before:border-l-0 before:border-r-[12px]'
-              : 'before:border-r-0 before:border-l-[12px]'
-            }
-                `}
+                className={clsx(
+                  'relative px-4 py-2 border rounded-2xl max-w-[70%]',
+                  'before:absolute before:top-[12px] before:border-8 before:border-transparent before:border-t-8',
+                  {
+                    'bg-gray-100 before:border-gray-100 before:left-[-8px] border-gray-200 before:border-l-0 before:border-r-[12px]': message.sender === 'ai',
+                    'bg-gray-700 text-white before:border-gray-700 before:right-[-8px] border-gray-600 before:border-r-0 before:border-l-[12px]': message.sender === 'human',
+                  },
+                )}
               >
                 <p>{message.text}</p>
                 <div className="flex justify-between items-center mt-1 text-xs">
@@ -122,6 +122,15 @@ export function Conversation() {
                               <RefreshCwIcon size={14} className="opacity-50 hover:opacity-100" />
                             </button>
                           )}
+
+                          <button
+                            type="button"
+                            className="hover:bg-gray-200 p-1 rounded transition-colors"
+                            title="Reply to this message"
+                          >
+                            <ReplyIcon size={14} className="opacity-50 hover:opacity-100" />
+                          </button>
+
                           {message.model && (
                             <div className="flex items-center gap-1 text-muted-foreground">
                               <WandSparklesIcon size={12} />
@@ -137,6 +146,25 @@ export function Conversation() {
                         </div>
                       )}
                 </div>
+                {message.sender === 'ai' && (
+                  <div className="right-4 bottom-[-24px] absolute flex gap-0 border-gray-200 border border-t-0 rounded-b-lg rounded-t-none overflow-hidden">
+                    {[1, 2, 3].map((variant, index) => (
+                      <button
+                        key={variant}
+                        type="button"
+                        className={clsx(
+                          'flex justify-center items-center border-r last:border-r-0 w-6 h-[22px] text-xs transition-colors',
+                          {
+                            'bg-gray-200 text-gray-700 font-medium': !index,
+                            'bg-white hover:bg-gray-50 text-gray-500': index > 0,
+                          },
+                        )}
+                      >
+                        {variant}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}
