@@ -13,7 +13,7 @@ export function addAIGeneratedColumns<const F extends string>(field: F) {
       : CreateTableBuilder<any>,
   >(qb: C) => {
     return qb
-      .addColumn(field, 'text', col => col.notNull())
+      .addColumn(field, 'text')
       .addColumn(`${field}_generated`, 'boolean', col => col.notNull().defaultTo(true))
       .addColumn(`${field}_generated_at`, 'timestamptz') as unknown as R;
   };

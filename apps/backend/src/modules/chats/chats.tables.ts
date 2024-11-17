@@ -1,10 +1,11 @@
 import type { ColumnType } from 'kysely';
 
-import type { SdkOffsetPaginationOutputT } from '@llm/sdk';
 import type {
   AIGeneratedColumns,
+  DropTableRowAccessTime,
   NormalizeSelectTableRow,
   TableId,
+  TableRowWithIdName,
   TableUuid,
   TableWithAccessTimeColumns,
   TableWithArchivedAtColumn,
@@ -12,7 +13,7 @@ import type {
   TableWithUuidColumn,
 } from '~/modules/database';
 
-import type { MessageTableRowWithRelations } from './messages';
+import type { UserTableRowBaseRelation } from '../users';
 
 export type ChatsTable =
   & TableWithUuidColumn
@@ -34,7 +35,14 @@ export type ChatSummariesTable =
 export type ChatTableRow = NormalizeSelectTableRow<ChatsTable>;
 export type ChatSummaryTableRow = NormalizeSelectTableRow<ChatSummariesTable>;
 
-export type ChatTableRowWithRelations = ChatTableRow & {
-  summary: ChatSummaryTableRow | null;
-  recentMessages: SdkOffsetPaginationOutputT<MessageTableRowWithRelations>;
-};
+type ChatSummaryTableRowRelation = DropTableRowAccessTime<
+  Omit<ChatSummaryTableRow, 'chatId'>
+>;
+
+export type ChatTableRowWithRelations =
+  & Omit<ChatTableRow, 'organizationId' | 'creatorUserId'>
+  & {
+    summary: ChatSummaryTableRowRelation;
+    organization: TableRowWithIdName;
+    creator: UserTableRowBaseRelation;
+  };

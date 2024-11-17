@@ -1,6 +1,6 @@
 export type AIGeneratedColumns<T extends string> =
   & {
-    [key in T]: string;
+    [key in T]: string | null;
   }
   & {
     [key in `${T}_generated`]: boolean;

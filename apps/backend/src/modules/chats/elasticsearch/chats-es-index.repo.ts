@@ -4,34 +4,43 @@ import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
 import { tryOrThrowTE } from '@llm/commons';
+import { TableUuid } from '~/modules/database';
 import {
+  createAIGeneratedFieldMappings,
   createArchivedRecordMappings,
   createAutocompleteFieldAnalyzeSettings,
   createBaseAutocompleteFieldMappings,
   createBaseDatedRecordMappings,
   createElasticsearchIndexRepo,
   createIdNameObjectMapping,
+  createIdObjectMapping,
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import type { AppTableRowWithRelations } from '../apps.tables';
+import type { ChatTableRowWithRelations } from '../chats.tables';
 
-import { AppsRepo } from '../apps.repo';
+import { ChatsRepo } from '../repo/chats.repo';
 
-const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
-  indexName: 'dashboard-apps',
+const ChatsAbstractEsIndexRepo = createElasticsearchIndexRepo({
+  indexName: 'dashboard-chats',
   schema: {
     mappings: {
       dynamic: false,
       properties: {
-        ...createBaseDatedRecordMappings(),
-        ...createBaseAutocompleteFieldMappings(),
+        ...createBaseDatedRecordMappings({
+          uuid: true,
+        }),
         ...createArchivedRecordMappings(),
         organization: createIdNameObjectMapping(),
-        description: {
-          type: 'text',
-          analyzer: 'folded_lowercase_analyzer',
+        creator: createIdObjectMapping(),
+        summary: {
+          properties: {
+            name: createAIGeneratedFieldMappings(
+              createBaseAutocompleteFieldMappings('value'),
+            ),
+            content: createAIGeneratedFieldMappings(),
+          },
         },
       },
     },
@@ -42,20 +51,20 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type AppsEsDocument = EsDocument<AppTableRowWithRelations>;
+export type ChatsEsDocument = EsDocument<ChatTableRowWithRelations>;
 
 @injectable()
-export class AppsEsIndexRepo extends AppsAbstractEsIndexRepo<AppsEsDocument> {
+export class ChatsEsIndexRepo extends ChatsAbstractEsIndexRepo<ChatsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
-    @inject(AppsRepo) private readonly appsRepo: AppsRepo,
+    @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
   ) {
     super(elasticsearchRepo);
   }
 
-  protected async findEntities(ids: number[]): Promise<AppsEsDocument[]> {
+  protected async findEntities(ids: TableUuid[]): Promise<ChatsEsDocument[]> {
     return pipe(
-      this.appsRepo.findWithRelationsByIds({ ids }),
+      this.chatsRepo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
           ...snakecaseKeys(entity, { deep: true }),
@@ -67,7 +76,7 @@ export class AppsEsIndexRepo extends AppsAbstractEsIndexRepo<AppsEsDocument> {
   }
 
   protected createAllEntitiesIdsIterator = () =>
-    this.appsRepo.createIdsIterator({
-      chunkSize: 100,
+    this.chatsRepo.createIdsIterator({
+      chunkSize: 30,
     });
 }

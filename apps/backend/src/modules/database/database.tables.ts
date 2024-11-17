@@ -7,7 +7,11 @@ import type {
   AuthPasswordsTable,
   AuthResetPasswordsTable,
 } from '../auth';
-import type { ChatsTable, MessagesTable } from '../chats';
+import type {
+  ChatsTable,
+  ChatSummariesTable,
+  MessagesTable,
+} from '../chats';
 import type {
   OrganizationsS3BucketsTable,
   OrganizationsTable,
@@ -55,6 +59,7 @@ export type DatabaseTables = {
 
   // Chats
   chats: ChatsTable;
+  chat_summaries: ChatSummariesTable;
   messages: MessagesTable;
 
   // LLM

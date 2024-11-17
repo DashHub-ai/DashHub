@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import { tapTaskEitherTE } from '@llm/commons';
 import { AIModelsEsIndexRepo } from '~/modules/ai-models/elasticsearch/ai-models-es-index.repo';
 import { AppsEsIndexRepo } from '~/modules/apps/elasticsearch/apps-es-index.repo';
+import { ChatsEsIndexRepo } from '~/modules/chats/elasticsearch/chats-es-index.repo';
 import { LoggerService } from '~/modules/logger';
 import { OrganizationsEsIndexRepo } from '~/modules/organizations/elasticsearch';
 import { OrganizationsS3BucketsEsIndexRepo } from '~/modules/organizations/s3-buckets/elasticsearch/organizations-s3-buckets-es-index.repo';
@@ -25,6 +26,7 @@ export class ElasticsearchRegistryBootService {
     @inject(AppsEsIndexRepo) private readonly appsEsIndexRepo: AppsEsIndexRepo,
     @inject(OrganizationsS3BucketsEsIndexRepo) private readonly orgsS3BucketsEsIndexRepo: OrganizationsS3BucketsEsIndexRepo,
     @inject(AIModelsEsIndexRepo) private readonly aiModelsEsIndexRepo: AIModelsEsIndexRepo,
+    @inject(ChatsEsIndexRepo) private readonly chatsEsIndexRepo: ChatsEsIndexRepo,
   ) {}
 
   register = TE.fromIO(() => {
@@ -35,6 +37,7 @@ export class ElasticsearchRegistryBootService {
       this.appsEsIndexRepo,
       this.orgsS3BucketsEsIndexRepo,
       this.aiModelsEsIndexRepo,
+      this.chatsEsIndexRepo,
     ]);
 
     this.logger.info('Registered elasticsearch repos!');

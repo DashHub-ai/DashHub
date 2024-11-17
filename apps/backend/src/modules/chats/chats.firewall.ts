@@ -8,7 +8,7 @@ import {
 } from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
-import type { DatabaseTE, TableRowWithId } from '../database';
+import type { DatabaseTE, TableRowWithUuid, TransactionError } from '../database';
 import type { ChatsService } from './chats.service';
 
 export class ChatsFirewall extends AuthFirewallService {
@@ -18,6 +18,12 @@ export class ChatsFirewall extends AuthFirewallService {
   ) {
     super(jwt);
   }
+
+  // TODO: Add belongs checks
+  search = flow(
+    this.chatsService.search,
+    this.tryTEIfUser.is.root,
+  );
 
   // TODO: Add belongs checks
   unarchive = flow(
@@ -31,7 +37,10 @@ export class ChatsFirewall extends AuthFirewallService {
     this.tryTEIfUser.is.root,
   );
 
-  create = ({ creator, organization, ...chat }: SdkCreateChatInputT): DatabaseTE<TableRowWithId, SdkUnauthorizedError> => {
+  create = ({ creator, organization, ...chat }: SdkCreateChatInputT): DatabaseTE<
+    TableRowWithUuid,
+    SdkUnauthorizedError | TransactionError
+  > => {
     const { jwt } = this;
 
     switch (jwt.role) {

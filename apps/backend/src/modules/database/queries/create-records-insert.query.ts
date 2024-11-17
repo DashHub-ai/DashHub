@@ -1,9 +1,11 @@
+import type { SelectType } from 'kysely';
+
 import { nonEmptyArray as NEA, option as O } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import snakeCaseKeys from 'snakecase-keys';
 
 import type { DatabaseTablesWithId } from '../database.tables';
-import type { KyselyQueryCreator, NormalizeInsertTableRow, TableRowWithId } from '../types';
+import type { KyselyQueryCreator, NormalizeInsertTableRow } from '../types';
 import type { QueryBasicFactoryAttrs } from './query-basic-factory-attrs.type';
 
 import { DatabaseError, type DatabaseTE } from '../errors';
@@ -35,7 +37,7 @@ export function createRecordsInsertQuery<K extends keyof DatabaseTablesWithId>({
     values,
   }: TransactionalAttrs<{
     values: NEA.NonEmptyArray<NormalizeInsertTableRow<DatabaseTablesWithId[K]>>;
-  }>): DatabaseTE<NEA.NonEmptyArray<TableRowWithId>> => {
+  }>): DatabaseTE<NEA.NonEmptyArray<{ id: SelectType<DatabaseTablesWithId[K]['id']>; }>> => {
     const createRecordTask = async (qb: KyselyQueryCreator) => {
       const insertedRows = await qb
         .insertInto(table)
@@ -45,7 +47,7 @@ export function createRecordsInsertQuery<K extends keyof DatabaseTablesWithId>({
 
       const items = NEA.fromArray(
         insertedRows.map(item => ({
-          id: item.id as number,
+          id: item.id as any,
         })),
       );
 
