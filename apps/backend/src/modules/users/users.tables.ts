@@ -35,3 +35,5 @@ export type UserTableRowWithRelations = NormalizeSelectTableRow<UsersTable>
     | { role: 'root'; organization: null; }
     | { role: 'user'; organization: UserTableRowOrganizationRelation; }
   );
+
+export type UserTableRowBaseRelation = Pick<UserTableRowWithRelations, 'id' | 'email'>;

@@ -1,3 +1,4 @@
+export * from './sdk-ai-generated-string.dto';
 export * from './sdk-id-name-url-entry.dto';
 export * from './sdk-ids-array.dto';
 export * from './sdk-offset-pagination.dto';
@@ -14,3 +15,4 @@ export * from './sdk-table-row-with-id-name.dto';
 export * from './sdk-table-row-with-uuid.dto';
 export * from './sdk-table-row-with-uuid-name.dto';
 export * from './sdk-timestamp.dto';
+export * from './sdk-uuids-array.dto';

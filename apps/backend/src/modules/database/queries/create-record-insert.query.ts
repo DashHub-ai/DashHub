@@ -1,3 +1,5 @@
+import type { SelectType } from 'kysely';
+
 import { pipe } from 'fp-ts/lib/function';
 import * as NEA from 'fp-ts/lib/NonEmptyArray';
 import * as TE from 'fp-ts/lib/TaskEither';
@@ -5,7 +7,7 @@ import * as TE from 'fp-ts/lib/TaskEither';
 import type { DatabaseTablesWithId } from '../database.tables';
 import type { DatabaseTE } from '../errors';
 import type { TransactionalAttrs } from '../transaction';
-import type { NormalizeInsertTableRow, TableRowWithId } from '../types';
+import type { NormalizeInsertTableRow } from '../types';
 import type { QueryBasicFactoryAttrs } from './query-basic-factory-attrs.type';
 
 import { createRecordsInsertQuery } from './create-records-insert.query';
@@ -32,7 +34,7 @@ export function createRecordInsertQuery<K extends keyof DatabaseTablesWithId>(fa
     ...attrs
   }: TransactionalAttrs<{
     value: NormalizeInsertTableRow<DatabaseTablesWithId[K]>;
-  }>): DatabaseTE<TableRowWithId> =>
+  }>): DatabaseTE<{ id: SelectType<DatabaseTablesWithId[K]['id']>; }> =>
     pipe(
       createRecordsInsertQuery(factoryAttrs)({
         values: [value],

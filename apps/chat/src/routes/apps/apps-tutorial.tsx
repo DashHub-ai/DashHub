@@ -5,7 +5,7 @@ export function AppsTutorial() {
   const t = useI18n().pack.routes.apps.tutorial;
 
   return (
-    <TutorialBox title={t.title} backgroundIcon="?" id="apps-tutorial">
+    <TutorialBox title={t.title} icon="?" id="apps-tutorial">
       <p className="flex items-start gap-2">
         <span className="text-amber-500">🛠️</span>
         <span>{t.tools}</span>

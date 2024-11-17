@@ -4,6 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   type ChatsSdk,
   SdkCreateChatInputV,
+  SdKSearchChatsInputV,
 } from '@llm/sdk';
 import { ChatsService } from '~/modules/chats';
 import { ConfigService } from '~/modules/config';
@@ -24,6 +25,16 @@ export class ChatsController extends AuthorizedController {
     super(configService);
 
     this.router
+      .get(
+        '/search',
+        sdkSchemaValidator('query', SdKSearchChatsInputV),
+        async context => pipe(
+          context.req.valid('query'),
+          chatsService.asUser(context.var.jwt).search,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ChatsSdk['search']>>(context),
+        ),
+      )
       .post(
         '/',
         sdkSchemaValidator('json', SdkCreateChatInputV),

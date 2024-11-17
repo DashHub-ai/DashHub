@@ -7,7 +7,7 @@ export function ChooseOrganizationTutorial() {
   return (
     <TutorialBox
       title={t.title}
-      backgroundIcon="🏢"
+      icon="🏢"
       id="choose-organization-tutorial"
       withHideToolbar={false}
     >

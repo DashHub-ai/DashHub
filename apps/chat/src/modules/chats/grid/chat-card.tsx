@@ -1,36 +1,44 @@
 import { ExternalLinkIcon, MessageSquareTextIcon } from 'lucide-react';
+import { Link } from 'wouter';
 
-import type { SdkTableRowWithIdNameT } from '@llm/sdk';
+import type { SdkSearchChatItemT } from '@llm/sdk';
 
 import { formatDate } from '@llm/commons';
+import { useI18n } from '~/i18n';
+import { useSitemap } from '~/routes';
 
 type ChatCardProps = {
-  title: string;
-  project: SdkTableRowWithIdNameT;
-  createdAt: Date;
+  chat: SdkSearchChatItemT;
 };
 
-export function ChatCard({ title, project, createdAt }: ChatCardProps) {
+export function ChatCard({ chat }: ChatCardProps) {
+  const t = useI18n().pack;
+  const sitemap = useSitemap();
+
   return (
     <div className="flex flex-col bg-white shadow-sm hover:shadow-md p-4 pb-2 border border-border/50 rounded-lg transition-shadow">
       <div className="flex items-center gap-2 mb-2">
         <div className="text-muted-foreground">
           <MessageSquareTextIcon size={16} />
         </div>
-        <h3 className="font-medium">{title}</h3>
+
+        <h3 className="font-medium">
+          {chat.summary?.name?.value ?? 'Unnamed Chat'}
+        </h3>
       </div>
-      <p className="flex-1 mb-4 text-muted-foreground text-sm">
-        {project.name}
-      </p>
+
       <div className="flex flex-row justify-between items-center">
         <div className="text-muted-foreground text-xs">
-          {formatDate(createdAt)}
+          {formatDate(chat.createdAt)}
         </div>
 
-        <a href="#" className="uk-button uk-button-secondary uk-button-small">
+        <Link
+          href={sitemap.chat.generate({ pathParams: { id: chat.id } })}
+          className="uk-button uk-button-secondary uk-button-small"
+        >
           <ExternalLinkIcon size={16} className="mr-2" />
-          Open
-        </a>
+          {t.buttons.open}
+        </Link>
       </div>
     </div>
   );

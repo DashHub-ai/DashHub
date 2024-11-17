@@ -44,6 +44,7 @@ export type SelectProps =
     placeholderClassName?: string;
     items: Array<SelectItem>;
     prependItems?: ReactNode;
+    withBackground?: boolean;
     onOpenChanged?: (isOpen: boolean) => void;
   };
 
@@ -60,6 +61,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
     placeholderClassName,
     items,
     prependItems,
+    withBackground = true,
     onOpenChanged,
     control: {
       value,
@@ -154,6 +156,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
         disabled={disabled}
         className={clsx(
           'uk-flex uk-flex-between uk-input-fake',
+          withBackground && 'bg-white',
           buttonClassName,
         )}
         onClick={() => {

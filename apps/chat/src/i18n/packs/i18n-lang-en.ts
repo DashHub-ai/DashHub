@@ -166,6 +166,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     history: {
       title: 'Your Chats',
+      placeholder: 'No chats yet',
     },
   },
   chat: {
@@ -175,6 +176,22 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     actions: {
       send: 'Send',
+    },
+    config: {
+      title: 'Chat Configuration',
+      name: 'Title of chat',
+      namePlaceholder: 'Enter title...',
+      description: 'Description of chat',
+      descriptionPlaceholder: 'Enter description...',
+      generated: 'Auto-generate',
+      summary: 'Chat summary',
+      tutorial: {
+        title: 'Chat Configuration',
+        help: {
+          title: 'Title and description help you identify chats in your history',
+          autoGenerate: 'With auto-generating chat summaries, you can save time and maintain consistency in history',
+        },
+      },
     },
   },
   apps: {

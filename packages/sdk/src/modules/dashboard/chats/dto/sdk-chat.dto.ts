@@ -1,25 +1,27 @@
 import { z } from 'zod';
 
 import {
+  SdkAIGeneratedStringV,
   SdkIdNameUrlEntryV,
   SdkTableRowWithArchivedV,
   SdkTableRowWithDatesV,
   SdkTableRowWithUuidV,
-  SdkTimestampV,
 } from '~/shared';
 
+import { SdkUserListItemV } from '../../users/dto/sdk-user-list-item.dto';
+
 export const SdkChatSummaryV = z.object({
-  content: z.string(),
+  name: SdkAIGeneratedStringV,
+  content: SdkAIGeneratedStringV,
 });
 
 export type SdkChatSummaryT = z.infer<typeof SdkChatSummaryV>;
 
 export const SdkChatV = z.object({
-  creator: SdkIdNameUrlEntryV,
+  creator: SdkUserListItemV,
   organization: SdkIdNameUrlEntryV,
-  lastMessageAt: SdkTimestampV,
   public: z.boolean(),
-  summary: SdkChatSummaryV.nullable(),
+  summary: SdkChatSummaryV.optional(),
 })
   .merge(SdkTableRowWithUuidV)
   .merge(SdkTableRowWithDatesV)

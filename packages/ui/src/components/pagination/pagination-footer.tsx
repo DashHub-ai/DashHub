@@ -22,8 +22,8 @@ export const PaginationFooter = controlled<SdkOffsetPaginationInputT, Props>((
   const t = useForwardedI18n().pack.pagination;
 
   return (
-    <div className="mt-4 flex items-center justify-between px-2">
-      <div className="flex-1 text-sm text-muted-foreground">
+    <div className="flex justify-between items-center mt-6 px-2">
+      <div className="flex-1 text-muted-foreground text-sm">
         {format(t.showNthToNthOf, {
           from: value.offset + 1,
           to: Math.min(result.total, value.offset + result.items.length),

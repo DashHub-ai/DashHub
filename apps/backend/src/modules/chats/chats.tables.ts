@@ -1,9 +1,11 @@
 import type { ColumnType } from 'kysely';
 
-import type { SdkOffsetPaginationOutputT } from '@llm/sdk';
 import type {
+  AIGeneratedColumns,
+  DropTableRowAccessTime,
   NormalizeSelectTableRow,
   TableId,
+  TableRowWithIdName,
   TableUuid,
   TableWithAccessTimeColumns,
   TableWithArchivedAtColumn,
@@ -11,7 +13,7 @@ import type {
   TableWithUuidColumn,
 } from '~/modules/database';
 
-import type { MessageTableRowWithRelations } from './messages';
+import type { UserTableRowBaseRelation } from '../users';
 
 export type ChatsTable =
   & TableWithUuidColumn
@@ -21,18 +23,26 @@ export type ChatsTable =
     creator_user_id: ColumnType<TableId, TableId, never>;
     organization_id: ColumnType<TableId, TableId, never>;
     public: boolean;
-    last_message_at: Date | null;
   };
 
-export type ChatSummariesTable = TableWithDefaultColumns & {
-  chat_id: ColumnType<TableUuid, TableUuid, never>;
-  content: string;
-};
+export type ChatSummariesTable =
+  & TableWithDefaultColumns
+  & AIGeneratedColumns<'name' | 'content'>
+  & {
+    chat_id: ColumnType<TableUuid, TableUuid, never>;
+  };
 
 export type ChatTableRow = NormalizeSelectTableRow<ChatsTable>;
 export type ChatSummaryTableRow = NormalizeSelectTableRow<ChatSummariesTable>;
 
-export type ChatTableRowWithRelations = ChatTableRow & {
-  summary: ChatSummaryTableRow | null;
-  recentMessages: SdkOffsetPaginationOutputT<MessageTableRowWithRelations>;
-};
+type ChatSummaryTableRowRelation = DropTableRowAccessTime<
+  Omit<ChatSummaryTableRow, 'chatId'>
+>;
+
+export type ChatTableRowWithRelations =
+  & Omit<ChatTableRow, 'organizationId' | 'creatorUserId'>
+  & {
+    summary: ChatSummaryTableRowRelation;
+    organization: TableRowWithIdName;
+    creator: UserTableRowBaseRelation;
+  };

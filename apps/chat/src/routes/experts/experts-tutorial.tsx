@@ -5,7 +5,7 @@ export function ExpertsTutorial() {
   const t = useI18n().pack.routes.experts.tutorial;
 
   return (
-    <TutorialBox title={t.title} backgroundIcon="🧠" id="experts-tutorial">
+    <TutorialBox title={t.title} icon="🧠" id="experts-tutorial">
       <p className="flex items-start gap-2">
         <span className="text-amber-500">🤖</span>
         <span>{t.custom}</span>

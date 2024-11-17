@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import clsx from 'clsx';
 
-import type { SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkTableRowWithIdT, SdkTableRowWithUuidT } from '@llm/sdk';
 
 import { NoItemsPlaceholder } from '../list';
 
@@ -12,14 +12,14 @@ export type TableColumnItem = {
   className?: string;
 };
 
-export type Props<I extends SdkTableRowWithIdT> = {
+export type Props<I extends SdkTableRowWithIdT | SdkTableRowWithUuidT,> = {
   className?: string;
   columns: TableColumnItem[];
   items: I[];
   children: (params: { item: I; index: number; }) => ReactNode;
 };
 
-export function Table<I extends SdkTableRowWithIdT>(
+export function Table<I extends SdkTableRowWithIdT | SdkTableRowWithUuidT>(
   {
     className,
     items,
@@ -30,11 +30,11 @@ export function Table<I extends SdkTableRowWithIdT>(
   return (
     <div
       className={clsx(
-        'uk-overflow-auto mt-4 rounded-md border border-border',
+        'border border-border rounded-md uk-overflow-auto',
         className,
       )}
     >
-      <table className="uk-table uk-table-middle uk-table-divider uk-table-hover uk-table-small">
+      <table className="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-small">
         <thead>
           <tr>
             {columns.map(({ id, name, className }) => (

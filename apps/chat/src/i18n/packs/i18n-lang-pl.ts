@@ -168,6 +168,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     history: {
       title: 'Twoje czaty',
+      placeholder: 'Brak czatów',
     },
   },
   chat: {
@@ -177,6 +178,22 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     actions: {
       send: 'Wyślij',
+    },
+    config: {
+      title: 'Konfiguracja czatu',
+      name: 'Tytuł czatu',
+      namePlaceholder: 'Wprowadź tytuł...',
+      description: 'Opis czatu',
+      descriptionPlaceholder: 'Wprowadź opis...',
+      generated: 'Automatycznie generuj',
+      summary: 'Podsumowanie czatu',
+      tutorial: {
+        title: 'Konfiguracja czatu',
+        help: {
+          title: 'Tytuł i opis pomagają zidentyfikować czaty w historii',
+          autoGenerate: 'Dzięki automatycznemu generowaniu podsumowania czatu możesz zaoszczędzić czas i zachować spójność w historii',
+        },
+      },
     },
   },
   apps: {

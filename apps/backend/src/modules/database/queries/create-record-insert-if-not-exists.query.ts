@@ -1,11 +1,12 @@
 import type { ReaderTaskEither } from 'fp-ts/lib/ReaderTaskEither';
+import type { SelectType } from 'kysely';
 
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
 import type { DatabaseTablesWithId } from '../database.tables';
 import type { DatabaseError, DatabaseTE } from '../errors';
-import type { NormalizeInsertTableRow, TableRowWithId } from '../types';
+import type { NormalizeInsertTableRow } from '../types';
 import type { QueryBasicFactoryAttrs } from './query-basic-factory-attrs.type';
 
 import { DatabaseRecordAlreadyExists } from '../errors';
@@ -49,7 +50,7 @@ export function createRecordInsertIfNotExistsQuery<K extends keyof DatabaseTable
       value,
     }: TransactionalAttrs<{
       value: NormalizeInsertTableRow<DatabaseTablesWithId[K]>;
-    }>): DatabaseTE<TableRowWithId, DatabaseRecordAlreadyExists | TransactionError> => {
+    }>): DatabaseTE<{ id: SelectType<DatabaseTablesWithId[K]['id']>; }, DatabaseRecordAlreadyExists | TransactionError> => {
       const transaction = tryReuseOrCreateTransaction({
         db: factoryAttrs.db,
         forwardTransaction,
@@ -61,7 +62,7 @@ export function createRecordInsertIfNotExistsQuery<K extends keyof DatabaseTable
             value,
             forwardTransaction: trx,
           }),
-          TE.chain((exists): DatabaseTE<TableRowWithId, DatabaseRecordAlreadyExists> => {
+          TE.chain((exists) => {
             if (exists) {
               return TE.left(new DatabaseRecordAlreadyExists({}));
             }

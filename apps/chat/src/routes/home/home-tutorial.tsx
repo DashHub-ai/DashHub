@@ -12,7 +12,7 @@ export function HomeTutorial({ className }: Props) {
     <TutorialBox
       variant="blue"
       title={t.title}
-      backgroundIcon="💬"
+      icon="💬"
       className={className}
       id="home-tutorial"
     >
