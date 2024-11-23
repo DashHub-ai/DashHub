@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => ({
   base: mode === 'production' ? '/admin/' : '/',
   server: {
     host: true,
-    port: 5173,
+    port: 5174,
   },
   envPrefix: ['VITE_', 'PUBLIC_VITE_'],
   plugins: [
