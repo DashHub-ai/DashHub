@@ -22,7 +22,7 @@
     "test:watch": "turbo run test:watch --parallel"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.8.0",
+    "@antfu/eslint-config": "^3.9.1",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/ensure": "^19.5.0",
@@ -32,12 +32,12 @@
     "@manypkg/get-packages": "^2.2.2",
     "@swc/core": "^1.9.2",
     "@vitejs/plugin-react": "^4.3.3",
-    "@vitejs/plugin-vue": "^5.1.4",
+    "@vitejs/plugin-vue": "^5.2.0",
     "concurrently": "^9.0.1",
     "eslint": "^9.13.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.13",
-    "husky": "^9.1.6",
+    "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "nodemon": "^3.1.7",
     "pino": "^9.5.0",
@@ -51,7 +51,7 @@
     "vite": "^5.4.9",
     "vite-plugin-dts": "^4.2.4",
     "vite-tsconfig-paths": "^5.0.1",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.5"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
