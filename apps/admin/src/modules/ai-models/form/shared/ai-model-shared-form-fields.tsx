@@ -59,7 +59,7 @@ export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, contr
               ...newGlobalValue,
               credentials: {
                 apiKey: '',
-                organization: '',
+                apiModel: '',
               },
             }),
           })}

@@ -12,6 +12,7 @@ import type {
 import type { WithAuthFirewall } from '../auth';
 import type { TableRowWithId } from '../database';
 
+import { AIModelsService } from '../ai-models';
 import { AppsService } from '../apps';
 import { ProjectsService } from '../projects';
 import { UsersService } from '../users';
@@ -32,6 +33,7 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     @inject(delay(() => UsersService)) private readonly usersService: Readonly<UsersService>,
     @inject(delay(() => ProjectsService)) private readonly projectsService: Readonly<ProjectsService>,
     @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
+    @inject(delay(() => AIModelsService)) private readonly aiModelsService: Readonly<AIModelsService>,
     @inject(delay(() => OrganizationsS3BucketsService))
     private readonly orgsS3BucketsService: Readonly<OrganizationsS3BucketsService>,
   ) {}
@@ -44,9 +46,7 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
   );
 
   archive = (id: SdkTableRowIdT) => pipe(
-    // Archive all related organization data in parallel.
     TE.sequenceArray([
-      // Archive all users in the organization
       TE.fromTask(
         pipe(
           this.organizationsUsersRepo.createOrganizationUsersIdsIterator({
@@ -55,18 +55,11 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
           this.usersService.archiveSeqStream,
         ),
       ),
-
-      // Archive all projects in the organization
       this.projectsService.archiveSeqByOrganizationId(id),
-
-      // Archive all apps in the organization
       this.appsService.archiveSeqByOrganizationId(id),
-
-      // Archive all s3 buckets in the organization.
       this.orgsS3BucketsService.archiveSeqByOrganizationId(id),
+      this.aiModelsService.archiveSeqByOrganizationId(id),
     ]),
-
-    // Archive the organization itself.
     TE.chain(() => this.repo.archive({ id })),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
