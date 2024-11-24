@@ -1,7 +1,8 @@
+import type { SelectType } from 'kysely';
+
 import { pipe } from 'fp-ts/lib/function';
 
 import type { DatabaseTablesWithId } from '../database.tables';
-import type { TableId } from '../types';
 import type { QueryBasicFactoryAttrs } from './query-basic-factory-attrs.type';
 
 import { tryGetFirstOrNotExists } from '../helpers';
@@ -14,7 +15,7 @@ export type RecordUpdateTableRow<K extends keyof DatabaseTablesWithId> = Omit<
   RecordsUpdateTableRow<K>,
   'where'
 > & {
-  id: TableId;
+  id: SelectType<DatabaseTablesWithId[K]['id']>;
 };
 
 export function createRecordUpdateQuery<K extends keyof DatabaseTablesWithId>(basicAttrs: QueryBasicFactoryAttrs<K>) {

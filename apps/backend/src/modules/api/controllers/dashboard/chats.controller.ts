@@ -13,6 +13,8 @@ import { ConfigService } from '~/modules/config';
 import { MessagesService } from '~/modules/messages';
 
 import {
+  mapDbRecordAlreadyExistsToSdkError,
+  mapDbRecordNotFoundToSdkError,
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
@@ -57,6 +59,17 @@ export class ChatsController extends AuthorizedController {
           chatsService.asUser(context.var.jwt).create,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ChatsSdk['create']>>(context),
+        ),
+      )
+      .patch(
+        '/archive/:id',
+        async context => pipe(
+          context.req.param().id,
+          chatsService.asUser(context.var.jwt).archive,
+          mapDbRecordNotFoundToSdkError,
+          mapDbRecordAlreadyExistsToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ChatsSdk['archive']>>(context),
         ),
       )
       .get(

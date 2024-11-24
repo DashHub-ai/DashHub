@@ -1,10 +1,11 @@
+import type { SelectType } from 'kysely';
+
 import { pipe } from 'fp-ts/lib/function';
 
 import type {
   DatabaseTablesWithArchivedAt,
   DatabaseTablesWithId,
 } from '../database.tables';
-import type { TableId } from '../types';
 
 import { tryGetFirstOrNotExists } from '../helpers';
 import {
@@ -17,7 +18,7 @@ export type RecordArchiveAttrs<K extends keyof DatabaseTablesWithId> = Omit<
   RecordsArchiveAttrs<K>,
   'where'
 > & {
-  id: TableId;
+  id: SelectType<DatabaseTablesWithId[K]['id']>;
 };
 
 /**

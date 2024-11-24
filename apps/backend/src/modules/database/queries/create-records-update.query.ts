@@ -1,3 +1,5 @@
+import type { SelectType } from 'kysely';
+
 import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 
@@ -5,7 +7,6 @@ import type { DatabaseTablesWithId } from '../database.tables';
 import type {
   KyselyQueryCreator,
   NormalizeUpdateTableRow,
-  TableRowWithId,
 } from '../types';
 import type { QueryBasicFactoryAttrs } from './query-basic-factory-attrs.type';
 
@@ -32,7 +33,7 @@ export function createRecordsUpdateQuery<K extends keyof DatabaseTablesWithId>({
     where,
     tapUpdatedAt = true,
     forwardTransaction,
-  }: RecordsUpdateTableRow<K>): DatabaseTE<TableRowWithId[]> => {
+  }: RecordsUpdateTableRow<K>): DatabaseTE<Array<{ id: SelectType<DatabaseTablesWithId[K]['id']>; }>> => {
     const createRecordTask = async (qb: KyselyQueryCreator) =>
       qb
         .updateTable(table)

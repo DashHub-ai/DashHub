@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type { RequiredBy } from '@llm/commons';
 
-import { SdkCreateChatInputT, SdkJwtTokenT, SdkTableRowIdT } from '@llm/sdk';
+import { SdkCreateChatInputT, SdkJwtTokenT, SdkTableRowUuidT } from '@llm/sdk';
 
 import { WithAuthFirewall } from '../auth';
 import { ChatsFirewall } from './chats.firewall';
@@ -25,9 +25,15 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
 
   search = this.esSearchRepo.search;
 
-  unarchive = (id: SdkTableRowIdT) => this.repo.unarchive({ id });
+  unarchive = (id: SdkTableRowUuidT) => pipe(
+    this.repo.unarchive({ id }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
 
-  archive = (id: SdkTableRowIdT) => this.repo.archive({ id });
+  archive = (id: SdkTableRowUuidT) => pipe(
+    this.repo.archive({ id }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
 
   create = (value: RequiredBy<SdkCreateChatInputT, 'organization' | 'creator'>) => pipe(
     this.repo.create({
