@@ -1,4 +1,5 @@
 export * from './form';
+export * from './observable';
 export * from './use-after-mount';
 export * from './use-async-callback';
 export * from './use-async-debounce';

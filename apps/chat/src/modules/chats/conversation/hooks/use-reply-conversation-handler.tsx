@@ -1,7 +1,7 @@
 import { taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
+import { identity, pipe } from 'fp-ts/lib/function';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { tapTaskEither, tryOrThrowTE } from '@llm/commons';
 import { usePromiseOptimisticResponse } from '@llm/commons-front';
 import {
   type SdkChatT,
@@ -11,6 +11,7 @@ import {
   useSdkForLoggedIn,
 } from '@llm/sdk';
 
+import { useAIResponseObservable } from './use-ai-response-observable';
 import { useOptimisticResponseCreator } from './use-optimistic-response-creator';
 
 type Attrs = {
@@ -20,36 +21,51 @@ type Attrs = {
 
 export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
   const { sdks } = useSdkForLoggedIn();
-  const { result: messages, optimisticUpdate } = usePromiseOptimisticResponse(initialMessages);
+  const { createMessage, searchMessages } = sdks.dashboard.chats;
+
+  const { result, optimisticUpdate } = usePromiseOptimisticResponse(initialMessages);
+  const {
+    aiReplyObservable,
+    streamAIResponse,
+    resetAIReplyStream,
+  } = useAIResponseObservable({ chat });
 
   const optimisticResponseCreator = useOptimisticResponseCreator();
   const onReply = optimisticUpdate({
-    task: (value: SdkCreateMessageInputT & SdkRequestAIReplyInputT) => pipe(
-      sdks.dashboard.chats.createMessage(chat.id, value),
-      TE.chain(() => sdks.dashboard.chats.searchMessages(chat.id, {
+    task: ({ aiModel, content }: SdkCreateMessageInputT & SdkRequestAIReplyInputT) => pipe(
+      TE.Do,
+      tapTaskEither(resetAIReplyStream),
+      TE.bind('message', () => createMessage(chat.id, {
+        content,
+      })),
+      TE.bind('aiResponse', ({ message }) => TE.tryCatch(
+        () => streamAIResponse(aiModel, message),
+        identity,
+      )),
+      TE.bindW('messages', () => searchMessages(chat.id, {
         offset: 0,
         limit: 100,
         sort: 'createdAt:desc',
       })),
-      TE.map(({ items, ...pagination }) => ({
+      TE.map(({ messages: { items, ...pagination } }) => ({
         ...pagination,
         items: items.toReversed(),
       })),
       tryOrThrowTE,
     )(),
 
-    optimistic: (result, value) => ({
-      ...result,
-      total: result.total + 1,
+    optimistic: ({ items, total }, value) => ({
+      total: total + 1,
       items: [
-        ...result.items,
+        ...items,
         optimisticResponseCreator(value),
       ],
     }),
   });
 
   return {
-    messages,
+    aiReplyObservable,
+    messages: result,
     onReply,
   };
 }

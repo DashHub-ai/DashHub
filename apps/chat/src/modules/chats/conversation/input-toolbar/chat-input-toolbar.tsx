@@ -77,10 +77,10 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit }: Props) {
         <FormSpinnerCTA
           type="submit"
           loading={submitState.loading}
-          disabled={disabled || !value.content || submitState.loading}
+          disabled={disabled || submitState.loading}
           className={clsx(
             'flex flex-row items-center px-6 py-2 rounded-lg h-full text-white transition-colors',
-            !value.content
+            disabled || submitState.loading
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-gray-700 hover:bg-gray-800',
           )}

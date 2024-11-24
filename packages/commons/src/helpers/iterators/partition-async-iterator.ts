@@ -1,7 +1,5 @@
 export function partitionAsyncIterator<I>(predFn: (prev: I, item: I, acc: I[]) => boolean) {
-  return async function* walker(
-    iterator: AsyncIterableIterator<I>,
-  ): AsyncIterableIterator<I[]> {
+  return async function* walker(iterator: AsyncIterableIterator<I>): AsyncIterableIterator<I[]> {
     let acc: I[] = [];
 
     for await (const item of iterator) {

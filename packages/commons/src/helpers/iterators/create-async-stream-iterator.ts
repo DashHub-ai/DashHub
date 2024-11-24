@@ -1,4 +1,6 @@
-export async function* createAsyncStreamIterator(reader: ReadableStreamDefaultReader<any>) {
+export async function* createAsyncStreamIterator(
+  reader: ReadableStreamDefaultReader<any>,
+): AsyncIterableIterator<any> {
   while (true) {
     const { done, value } = await reader.read();
 

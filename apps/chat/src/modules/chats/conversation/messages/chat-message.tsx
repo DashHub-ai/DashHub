@@ -16,16 +16,19 @@ type Props = {
 export function ChatMessage({ message, isLast, readOnly }: Props) {
   const t = useI18n().pack.chat;
   const { session } = useSdkForLoggedIn();
+  const { role, content, repeats, creator } = message;
 
-  const isAI = message.role === 'assistant';
-  const isYou = message.creator?.email === session.token.email;
+  const isAI = role === 'assistant';
+  const isYou = creator?.email === session.token.email;
 
   return (
     <div
       className={clsx(
-        'flex items-start gap-2 mb-6',
+        'flex items-start gap-2',
         'animate-slideIn',
         {
+          'mb-6': !repeats.length,
+          'mb-10': repeats.length,
           'flex-row': isAI,
           'flex-row-reverse': !isAI,
           'opacity-75': readOnly,
@@ -59,7 +62,7 @@ export function ChatMessage({ message, isLast, readOnly }: Props) {
           },
         )}
       >
-        <p className="text-sm">{message.content}</p>
+        <p className="text-sm">{content}</p>
 
         <div className="flex justify-between items-center gap-6 mt-1 text-xs">
           <span className="opacity-50">{new Date(message.createdAt).toLocaleTimeString()}</span>
@@ -73,7 +76,7 @@ export function ChatMessage({ message, isLast, readOnly }: Props) {
               )}
         </div>
 
-        {isAI && <ChatMessageVariants />}
+        {isAI && repeats.length > 0 && <ChatMessageVariants />}
       </div>
     </div>
   );

@@ -25,7 +25,9 @@ export function ChatsContainer({ storeDataInUrl = false }: Props) {
   const { loading, pagination, result } = useDebouncedPaginatedSearch({
     storeDataInUrl,
     schema: SdKSearchChatsInputV,
-    fallbackSearchParams: {},
+    fallbackSearchParams: {
+      limit: 12,
+    },
     fetchResultsTask: filters => sdks.dashboard.chats.search({
       ...filters,
       organizationIds: [organization.id],

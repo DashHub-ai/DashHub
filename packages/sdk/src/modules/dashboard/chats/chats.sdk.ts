@@ -1,3 +1,6 @@
+import { pipe } from 'fp-ts/lib/function';
+import * as TE from 'fp-ts/lib/TaskEither';
+
 import type {
   SdkRecordAlreadyExistsError,
   SdkRecordNotFoundError,
@@ -5,6 +8,7 @@ import type {
   SdkTableRowWithUuidT,
 } from '~/shared';
 
+import { decodeTextAsyncStream } from '@llm/commons';
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
   getPayload,
@@ -87,9 +91,12 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
     messageId: SdkTableRowUuidT,
     data: SdkRequestAIReplyInputT,
   ) =>
-    this.fetch<AsyncIterator<string>>({
-      url: this.endpoint(`/${chatId}/messages/${messageId}/ai-reply`),
-      options: postPayload(data),
-      stream: true,
-    });
+    pipe(
+      this.fetch<AsyncGenerator<Uint8Array>>({
+        url: this.endpoint(`/${chatId}/messages/${messageId}/ai-reply`),
+        options: postPayload(data),
+        stream: true,
+      }),
+      TE.map(decodeTextAsyncStream),
+    );
 };

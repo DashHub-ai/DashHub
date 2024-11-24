@@ -38,7 +38,7 @@ export class MessagesEsSearchRepo {
     dto: Omit<SdKSearchMessagesInputT, 'chatIds'> = {
       offset: 0,
       limit: 200,
-      sort: 'id:desc',
+      sort: 'createdAt:desc',
     },
   ) =>
     this.search({

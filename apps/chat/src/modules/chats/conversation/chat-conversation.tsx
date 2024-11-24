@@ -2,6 +2,8 @@ import { memo } from 'react';
 
 import type { SdkChatT, SdKSearchMessagesOutputT } from '@llm/sdk';
 
+import { useNonRerenderSubscribeStore, useUpdateEffect } from '@llm/commons-front';
+
 import { ChatBackground } from './chat-background';
 import { ChatConfigPanel } from './config-panel';
 import { getLastUsedAIModel } from './helpers';
@@ -11,6 +13,7 @@ import {
   useSendInitialMessage,
 } from './hooks';
 import { ChatInputToolbar } from './input-toolbar';
+import { ChatAIStreamMessage } from './messages';
 import { ChatMessage } from './messages/chat-message';
 
 type Props = {
@@ -19,15 +22,23 @@ type Props = {
 };
 
 export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
-  const { messages, onReply } = useReplyConversationHandler({
+  const {
+    inputRef,
+    messagesContainerRef,
+    focusInput,
+    scrollConversation,
+  } = useAutoFocusConversationInput();
+
+  const { messages, aiReplyObservable, onReply } = useReplyConversationHandler({
     chat,
     initialMessages,
   });
 
-  const { inputRef, messagesContainerRef } = useAutoFocusConversationInput(messages);
   const aiModel = getLastUsedAIModel(messages.items);
 
   useSendInitialMessage(onReply);
+  useUpdateEffect(focusInput, [messages]);
+  useNonRerenderSubscribeStore(aiReplyObservable, scrollConversation);
 
   return (
     <div className="flex gap-6 mx-auto max-w-7xl">
@@ -47,6 +58,10 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
               readOnly={chat.archived}
             />
           ))}
+
+          {aiReplyObservable && (
+            <ChatAIStreamMessage observable={aiReplyObservable} />
+          )}
         </div>
 
         {!chat.archived && (

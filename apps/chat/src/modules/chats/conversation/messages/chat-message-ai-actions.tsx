@@ -28,10 +28,10 @@ export function ChatMessageAIActions({ isLast, message }: Props) {
         <ReplyIcon size={14} className="opacity-50 hover:opacity-100" />
       </button>
 
-      {(message as any).aiModel && (
+      {message.aiModel && (
         <div className="flex items-center gap-1 text-muted-foreground">
           <WandSparklesIcon size={12} />
-          <span>{(message as any).aiModel}</span>
+          <span>{message.aiModel.name}</span>
         </div>
       )}
     </div>

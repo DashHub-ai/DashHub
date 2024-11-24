@@ -1,6 +1,3 @@
-import type { ChatCompletionChunk } from 'openai/resources/index.mjs';
-import type { Stream } from 'openai/streaming.mjs';
-
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { streamText } from 'hono/streaming';
@@ -124,10 +121,10 @@ export class ChatsController extends AuthorizedController {
         '/:id/messages/:messageId/ai-reply',
         sdkSchemaValidator('json', SdkRequestAIReplyInputV),
         async (context) => {
-          const streamAIResponse = (response: Stream<ChatCompletionChunk>) =>
+          const streamAIResponse = (response: AsyncGenerator<string>) =>
             streamText(context, async (stream) => {
               for await (const chunk of response) {
-                await stream.write(chunk.choices[0]?.delta?.content ?? '');
+                await stream.write(chunk);
               }
             });
 

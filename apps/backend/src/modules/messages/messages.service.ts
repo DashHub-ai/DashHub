@@ -1,3 +1,5 @@
+import type { ChatCompletionChunk } from 'openai/resources/index.mjs';
+
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
@@ -8,9 +10,9 @@ import type {
   SdkRequestAIReplyInputT,
 } from '@llm/sdk';
 
-import { findItemIndexById } from '@llm/commons';
+import { findItemIndexById, mapAsyncIterator, tryOrThrowTE } from '@llm/commons';
 
-import type { TableRowWithId, TableRowWithUuid } from '../database';
+import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../database';
 
 import { AIConnectorService } from '../ai-connector';
 import { WithAuthFirewall } from '../auth';
@@ -18,10 +20,10 @@ import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
 import { MessagesFirewall } from './messages.firewall';
 import { MessagesRepo } from './messages.repo';
 
-export type CreateInternalMessageInputT = {
-  creator: TableRowWithId;
+export type CreateUserMessageInputT = {
   chat: TableRowWithUuid;
   message: SdkCreateMessageInputT;
+  creator: TableRowWithId;
 };
 
 @injectable()
@@ -39,7 +41,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
 
   searchByChatId = this.esSearchRepo.searchByChatId;
 
-  create = ({ creator, chat, message }: CreateInternalMessageInputT) =>
+  createUserMessage = ({ creator, chat, message }: CreateUserMessageInputT) =>
     pipe(
       this.repo.create({
         value: {
@@ -47,6 +49,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           content: message.content,
           metadata: {},
           originalMessageId: null,
+          aiModelId: null,
           creatorUserId: creator.id,
           repeatCount: 0,
           role: 'user',
@@ -63,18 +66,66 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       TE.map(({ items }) => {
         const historyIndex = findItemIndexById(message.id)(items);
 
-        // Exclude the current message from the history.
-        return items.slice(0, historyIndex);
+        return items.slice(historyIndex + 1).toReversed();
       }),
     )),
     TE.chainW(({ message, history }) =>
-      this.aiConnectorService.executePrompt({
-        aiModel,
-        history,
-        message: {
-          content: message.content,
-        },
-      }),
+      pipe(
+        this.aiConnectorService.executePrompt({
+          aiModel,
+          history,
+          message: {
+            content: message.content,
+          },
+        }),
+        TE.map(stream => pipe(
+          stream as unknown as AsyncIterableIterator<ChatCompletionChunk>,
+          mapAsyncIterator(chunk => chunk.choices[0]?.delta?.content ?? ''),
+        )),
+        TE.map(stream => this.createAIResponseMessage({
+          chatId: message.chatId,
+          aiModelId: aiModel.id,
+          stream,
+        })),
+      ),
     ),
   );
+
+  private async *createAIResponseMessage(
+    {
+      chatId,
+      aiModelId,
+      stream,
+    }: {
+      chatId: TableUuid;
+      aiModelId: TableId;
+      stream: AsyncIterableIterator<string>;
+    },
+  ) {
+    let content = '';
+
+    for await (const item of stream) {
+      content += item;
+      yield item;
+    }
+
+    await pipe(
+      this.repo.create({
+        value: {
+          chatId,
+          aiModelId,
+          content,
+          metadata: {},
+          originalMessageId: null,
+          creatorUserId: null,
+          repeatCount: 0,
+          role: 'assistant',
+        },
+      }),
+      TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+      tryOrThrowTE,
+    )();
+
+    yield '';
+  };
 }

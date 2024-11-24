@@ -66,7 +66,7 @@ export function AIModelsTableContainer() {
           name: '',
           credentials: {
             apiKey: '',
-            organization: '',
+            apiModel: '',
           },
           provider: 'openai',
           default: false,
