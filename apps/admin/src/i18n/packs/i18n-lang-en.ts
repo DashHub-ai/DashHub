@@ -186,13 +186,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
             label: 'AI provider',
           },
           credentials: {
+            apiModel: {
+              label: 'API model',
+              placeholder: 'Enter API model',
+            },
             apiKey: {
               label: 'API key',
               placeholder: 'Enter API key',
-            },
-            organization: {
-              label: 'API Organization',
-              placeholder: 'Enter organization',
             },
           },
           settings: {

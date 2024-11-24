@@ -34,14 +34,14 @@ export const AIModelCredentialsFormFields = controlled<SdkAICredentialsT, Props>
 
           <FormField
             className="uk-margin"
-            label={t.organization.label}
-            {...validation.extract('organization')}
+            label={t.apiModel.label}
+            {...validation.extract('apiModel')}
           >
             <Input
               name="name"
-              placeholder={t.organization.placeholder}
+              placeholder={t.apiModel.placeholder}
               required
-              {...bind.path('organization')}
+              {...bind.path('apiModel')}
             />
           </FormField>
         </>

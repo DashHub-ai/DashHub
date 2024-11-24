@@ -188,13 +188,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
             label: 'Dostawca AI',
           },
           credentials: {
+            apiModel: {
+              label: 'Model API',
+              placeholder: 'Wpisz model API',
+            },
             apiKey: {
               label: 'Klucz API',
               placeholder: 'Wpisz klucz API',
-            },
-            organization: {
-              label: 'Organizacja API',
-              placeholder: 'Wpisz organizację',
             },
           },
           settings: {
