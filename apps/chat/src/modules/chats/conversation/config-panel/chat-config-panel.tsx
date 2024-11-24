@@ -82,7 +82,7 @@ export function ChatConfigPanel({ defaultValue }: Props) {
         </div>
       </form>
 
-      <ChatConfigArchive />
+      <ChatConfigArchive chat={defaultValue} />
     </CollapsiblePanel>
   );
 }
