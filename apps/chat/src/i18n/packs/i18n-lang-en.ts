@@ -199,8 +199,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       },
       archive: {
         title: 'Archive your chat',
-        description: 'Archive your chat to keep it around without it cluttering your active chats.',
+        description: 'Archive your chat to keep your active chats organized. It\'s be moved to the archive section, where you can access it anytime.',
         button: 'Archive',
+      },
+      unarchive: {
+        title: 'Unarchive your chat',
+        description: 'Bring your chat back to active chats.',
+        button: 'Unarchive',
       },
     },
   },

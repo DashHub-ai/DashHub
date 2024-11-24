@@ -6,6 +6,7 @@ import {
   ChatRoute,
   ChooseOrganizationRoute,
   ExpertsRoute,
+  ForceRedirectRoute,
   HomeRoute,
   LoginRoute,
   ProjectsRoute,
@@ -56,6 +57,8 @@ function LoggedInRouter() {
       <Route path={sitemap.apps} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
       <Route path={sitemap.settings} component={SettingsRoute} />
+      <Route path={sitemap.forceRedirect.raw} component={ForceRedirectRoute} />
+
       <Route<SdkTableRowWithUuidT> path={sitemap.chat.raw}>
         {params => <ChatRoute id={params.id} />}
       </Route>

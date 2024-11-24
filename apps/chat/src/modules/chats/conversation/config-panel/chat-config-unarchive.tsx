@@ -1,5 +1,5 @@
 import { pipe } from 'fp-ts/function';
-import { Trash2Icon } from 'lucide-react';
+import { RefreshCwIcon } from 'lucide-react';
 import { memo } from 'react';
 import { useLocation } from 'wouter';
 
@@ -7,7 +7,7 @@ import type { SdkTableRowWithUuidT } from '@llm/sdk';
 
 import { tapTaskEither } from '@llm/commons';
 import { useSdkForLoggedIn } from '@llm/sdk';
-import { useArchiveWithNotifications } from '@llm/ui';
+import { useUnarchiveWithNotifications } from '@llm/ui';
 import { TutorialBox } from '~/components';
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
@@ -16,26 +16,32 @@ type Props = {
   chat: SdkTableRowWithUuidT;
 };
 
-export const ChatConfigArchive = memo(({ chat }: Props) => {
-  const t = useI18n().pack.chat.config.archive;
+export const ChatConfigUnarchive = memo(({ chat }: Props) => {
+  const t = useI18n().pack.chat.config.unarchive;
   const [, navigate] = useLocation();
   const sitemap = useSitemap();
   const { sdks } = useSdkForLoggedIn();
 
-  const [onArchive, { loading }] = useArchiveWithNotifications(
+  const [onUnarchive, { loading }] = useUnarchiveWithNotifications(
     pipe(
-      sdks.dashboard.chats.archive(chat.id),
+      sdks.dashboard.chats.unarchive(chat.id),
       tapTaskEither(() => {
-        navigate(sitemap.home);
+        const url = sitemap.chat.generate({
+          pathParams: {
+            id: chat.id,
+          },
+        });
+
+        navigate(sitemap.forceRedirect.generate(url), { replace: true });
       }),
     ),
   );
 
   return (
     <TutorialBox
-      id="chat-config-panel-archive"
-      variant="red"
-      icon="📦"
+      id="chat-config-panel-unarchive"
+      variant="green"
+      icon="📬"
       title={t.title}
       className="mt-10"
       withHideToolbar={false}
@@ -47,9 +53,9 @@ export const ChatConfigArchive = memo(({ chat }: Props) => {
 
       <button
         type="button"
-        className="uk-button uk-button-danger"
+        className="uk-button uk-button-primary"
         disabled={loading}
-        onClick={onArchive}
+        onClick={onUnarchive}
       >
         {(
           loading
@@ -60,7 +66,7 @@ export const ChatConfigArchive = memo(({ chat }: Props) => {
                   uk-spinner="ratio: 0.54"
                 />
               )
-            : <Trash2Icon size={16} className="mr-2" />
+            : <RefreshCwIcon size={16} className="mr-2" />
         )}
         {t.button}
       </button>

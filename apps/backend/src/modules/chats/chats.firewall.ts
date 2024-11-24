@@ -34,7 +34,7 @@ export class ChatsFirewall extends AuthFirewallService {
 
   // TODO: Add belongs checks
   unarchive = flow(
-    this.chatsService.archive,
+    this.chatsService.unarchive,
     this.tryTEIfUser.is.root,
   );
 

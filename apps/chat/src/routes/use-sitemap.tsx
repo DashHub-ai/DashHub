@@ -1,4 +1,6 @@
-import { concatUrls } from '@llm/commons';
+import { pipe } from 'fp-ts/lib/function';
+
+import { concatUrls, withSearchParams } from '@llm/commons';
 import { defineSitemapRouteGenerator } from '@llm/ui';
 
 export function useSitemap() {
@@ -10,6 +12,14 @@ export function useSitemap() {
     login: prefixWithBaseRoute('/login'),
     settings: prefixWithBaseRoute('/settings'),
     chat: defineSitemapRouteGenerator(prefixWithBaseRoute)('/chat/:id'),
+    forceRedirect: {
+      raw: prefixWithBaseRoute('/force-redirect'),
+      generate: (targetUrl: string) => pipe(
+        '/force-redirect',
+        withSearchParams({ targetUrl: btoa(targetUrl) }),
+        prefixWithBaseRoute,
+      ),
+    },
   };
 
   return sitemap;

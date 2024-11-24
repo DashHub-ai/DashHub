@@ -43,6 +43,15 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
       options: postPayload(data),
     });
 
+  unarchive = (id: SdkTableRowUuidT) =>
+    this.fetch<
+      SdkTableRowWithUuidT,
+      SdkRecordNotFoundError | SdkRecordAlreadyExistsError
+    >({
+      url: this.endpoint(`/unarchive/${id}`),
+      options: patchPayload({}),
+    });
+
   archive = (id: SdkTableRowUuidT) =>
     this.fetch<
       SdkTableRowWithUuidT,

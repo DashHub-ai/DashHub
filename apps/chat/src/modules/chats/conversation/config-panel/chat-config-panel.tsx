@@ -8,6 +8,7 @@ import { CollapsiblePanel } from '~/modules/shared/collapsible-panel';
 
 import { ChatConfigArchive } from './chat-config-archive';
 import { ChatConfigTutorial } from './chat-config-tutorial';
+import { ChatConfigUnarchive } from './chat-config-unarchive';
 
 type Props = {
   defaultValue: SdkChatT;
@@ -82,7 +83,11 @@ export function ChatConfigPanel({ defaultValue }: Props) {
         </div>
       </form>
 
-      <ChatConfigArchive chat={defaultValue} />
+      {(
+        defaultValue.archived
+          ? <ChatConfigUnarchive chat={defaultValue} />
+          : <ChatConfigArchive chat={defaultValue} />
+      )}
     </CollapsiblePanel>
   );
 }

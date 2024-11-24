@@ -1,8 +1,11 @@
 import clsx from 'clsx';
-import { Bot, RefreshCwIcon, ReplyIcon, User, WandSparklesIcon } from 'lucide-react';
+import { Bot, User } from 'lucide-react';
 
 import { type SdkSearchMessageItemT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+
+import { ChatMessageAIActions } from './chat-message-ai-actions';
+import { ChatMessageVariants } from './chat-message-variants';
 
 type Props = {
   message: SdkSearchMessageItemT;
@@ -34,12 +37,8 @@ export function ChatMessage({ message, isLast }: Props) {
         })}
       >
         {isAI
-          ? (
-              <Bot className="w-5 h-5 text-gray-600" />
-            )
-          : (
-              <User className="w-5 h-5 text-white" />
-            )}
+          ? <Bot className="w-5 h-5 text-gray-600" />
+          : <User className="w-5 h-5 text-white" />}
       </div>
 
       <div
@@ -56,9 +55,7 @@ export function ChatMessage({ message, isLast }: Props) {
         <div className="flex justify-between items-center gap-6 mt-1 text-xs">
           <span className="opacity-50">{new Date(message.createdAt).toLocaleTimeString()}</span>
           {isAI
-            ? (
-                <MessageAIActions isLast={isLast} message={message} />
-              )
+            ? <ChatMessageAIActions isLast={isLast} message={message} />
             : (
                 <div className="flex items-center gap-1 opacity-75 text-white">
                   <User size={12} />
@@ -66,61 +63,8 @@ export function ChatMessage({ message, isLast }: Props) {
                 </div>
               )}
         </div>
-        {isAI && <MessageVariants />}
+        {isAI && <ChatMessageVariants />}
       </div>
-    </div>
-  );
-}
-
-function MessageAIActions({ isLast, message }: { isLast: boolean; message: SdkSearchMessageItemT; }) {
-  return (
-    <div className="flex items-center gap-2">
-      {isLast && (
-        <button
-          type="button"
-          className="hover:bg-gray-200 p-1 rounded transition-colors"
-          title="Refresh response"
-        >
-          <RefreshCwIcon size={14} className="opacity-50 hover:opacity-100" />
-        </button>
-      )}
-
-      <button
-        type="button"
-        className="hover:bg-gray-200 p-1 rounded transition-colors"
-        title="Reply to this message"
-      >
-        <ReplyIcon size={14} className="opacity-50 hover:opacity-100" />
-      </button>
-
-      {(message as any).aiModel && (
-        <div className="flex items-center gap-1 text-muted-foreground">
-          <WandSparklesIcon size={12} />
-          <span>{(message as any).aiModel}</span>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function MessageVariants() {
-  return (
-    <div className="right-4 bottom-[-24px] absolute flex gap-0 border-gray-200 border border-t-0 rounded-b-lg rounded-t-none overflow-hidden">
-      {[1, 2, 3].map((variant, index) => (
-        <button
-          key={variant}
-          type="button"
-          className={clsx(
-            'flex justify-center items-center border-r last:border-r-0 w-6 h-[22px] text-xs transition-colors',
-            {
-              'bg-gray-200 text-gray-700 font-medium': !index,
-              'bg-white hover:bg-gray-50 text-gray-500': index > 0,
-            },
-          )}
-        >
-          {variant}
-        </button>
-      ))}
     </div>
   );
 }

@@ -12,10 +12,10 @@ import {
 } from '@llm/sdk';
 
 import { ChatBackground } from './chat-background';
-import { ChatMessage } from './chat-message';
 import { ChatConfigPanel } from './config-panel';
 import { useOptimisticResponseCreator } from './hooks';
 import { ChatInputToolbar } from './input-toolbar';
+import { ChatMessage } from './messages/chat-message';
 
 type Props = {
   chat: SdkChatT;

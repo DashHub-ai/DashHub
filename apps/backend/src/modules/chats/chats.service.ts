@@ -36,9 +36,7 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
   );
 
   create = (value: RequiredBy<SdkCreateChatInputT, 'organization' | 'creator'>) => pipe(
-    this.repo.create({
-      value,
-    }),
+    this.repo.create({ value }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 }

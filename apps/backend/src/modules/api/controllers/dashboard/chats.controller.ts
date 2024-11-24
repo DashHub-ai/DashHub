@@ -72,6 +72,17 @@ export class ChatsController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<ChatsSdk['archive']>>(context),
         ),
       )
+      .patch(
+        '/unarchive/:id',
+        async context => pipe(
+          context.req.param().id,
+          chatsService.asUser(context.var.jwt).unarchive,
+          mapDbRecordNotFoundToSdkError,
+          mapDbRecordAlreadyExistsToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ChatsSdk['unarchive']>>(context),
+        ),
+      )
       .get(
         '/:id/messages',
         sdkSchemaValidator('query', SdKSearchMessagesInputV),

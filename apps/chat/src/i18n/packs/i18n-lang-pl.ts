@@ -201,8 +201,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       },
       archive: {
         title: 'Archiwizuj swój czat',
-        description: 'Archiwizuj swój czat, aby zachować go bez zagracania aktywnymi czatami.',
+        description: 'Archiwizuj swój czat, aby zachować historię i kontekst, ale ukryć go z aktywnych czatów. Nadal będziesz mógł go odtworzyć w dowolnym momencie.',
         button: 'Archiwizuj czat',
+      },
+      unarchive: {
+        title: 'Odtwórz swój czat',
+        description: 'Przywróć swój czat z powrotem do aktywnych czatów.',
+        button: 'Przywróć czat',
       },
     },
   },
