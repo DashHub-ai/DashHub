@@ -171,6 +171,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   },
   chat: {
     title: 'Chat',
+    archived: 'Chat is archived',
     messages: {
       empty: 'No messages yet',
       you: 'You',

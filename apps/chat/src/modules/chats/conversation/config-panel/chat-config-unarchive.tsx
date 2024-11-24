@@ -40,7 +40,7 @@ export const ChatConfigUnarchive = memo(({ chat }: Props) => {
   return (
     <TutorialBox
       id="chat-config-panel-unarchive"
-      variant="green"
+      variant="blue"
       icon="📬"
       title={t.title}
       className="mt-10"

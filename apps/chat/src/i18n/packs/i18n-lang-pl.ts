@@ -173,6 +173,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   },
   chat: {
     title: 'Czat',
+    archived: 'Czat jest zarchiwizowany',
     messages: {
       empty: 'Brak wiadomości',
       you: 'Ty',

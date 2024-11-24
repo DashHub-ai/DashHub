@@ -84,11 +84,14 @@ export function ChatConversation({ chat, initialMessages }: Props) {
               key={index}
               message={message}
               isLast={index === messages.items.length - 1}
+              readOnly={chat.archived}
             />
           ))}
         </div>
 
-        <ChatInputToolbar inputRef={inputRef} onSubmit={onReply} />
+        {!chat.archived && (
+          <ChatInputToolbar inputRef={inputRef} onSubmit={onReply} />
+        )}
       </div>
 
       <ChatConfigPanel defaultValue={chat} />

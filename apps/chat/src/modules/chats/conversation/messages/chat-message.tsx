@@ -10,9 +10,10 @@ import { ChatMessageVariants } from './chat-message-variants';
 type Props = {
   message: SdkSearchMessageItemT;
   isLast: boolean;
+  readOnly?: boolean;
 };
 
-export function ChatMessage({ message, isLast }: Props) {
+export function ChatMessage({ message, isLast, readOnly }: Props) {
   const t = useI18n().pack.chat;
   const { session } = useSdkForLoggedIn();
 
@@ -23,18 +24,24 @@ export function ChatMessage({ message, isLast }: Props) {
     <div
       className={clsx(
         'flex items-start gap-2 mb-6',
-        'animate-slideIn opacity-0',
+        'animate-slideIn',
         {
           'flex-row': isAI,
           'flex-row-reverse': !isAI,
+          'opacity-75': readOnly,
+          'opacity-0': !readOnly,
         },
       )}
     >
       <div
-        className={clsx('flex flex-shrink-0 justify-center items-center border rounded-full w-8 h-8', {
-          'bg-gray-100 border-gray-200': isAI,
-          'bg-gray-700 border-gray-600': !isAI,
-        })}
+        className={clsx(
+          'flex flex-shrink-0 justify-center items-center border rounded-full w-8 h-8',
+          {
+            'bg-gray-100 border-gray-200': isAI,
+            'bg-gray-700 border-gray-600': !isAI,
+            'opacity-75': readOnly,
+          },
+        )}
       >
         {isAI
           ? <Bot className="w-5 h-5 text-gray-600" />
@@ -48,14 +55,16 @@ export function ChatMessage({ message, isLast }: Props) {
           {
             'bg-gray-100 before:border-gray-100 before:left-[-8px] border-gray-200 before:border-l-0 before:border-r-[12px]': isAI,
             'bg-gray-700 text-white before:border-gray-700 before:right-[-8px] border-gray-600 before:border-r-0 before:border-l-[12px]': !isAI,
+            'cursor-default opacity-75': readOnly,
           },
         )}
       >
         <p className="text-sm">{message.content}</p>
+
         <div className="flex justify-between items-center gap-6 mt-1 text-xs">
           <span className="opacity-50">{new Date(message.createdAt).toLocaleTimeString()}</span>
           {isAI
-            ? <ChatMessageAIActions isLast={isLast} message={message} />
+            ? (!readOnly && <ChatMessageAIActions isLast={isLast} message={message} />)
             : (
                 <div className="flex items-center gap-1 opacity-75 text-white">
                   <User size={12} />
@@ -63,6 +72,7 @@ export function ChatMessage({ message, isLast }: Props) {
                 </div>
               )}
         </div>
+
         {isAI && <ChatMessageVariants />}
       </div>
     </div>

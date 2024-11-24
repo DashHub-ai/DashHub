@@ -40,12 +40,13 @@ export function ChatConfigPanel({ defaultValue }: Props) {
               <Input
                 {...bind.path('summary.name.value', { input: value => value ?? '' })}
                 placeholder={t.namePlaceholder}
-                disabled={value.summary?.name.generated}
+                disabled={value.summary?.name.generated || defaultValue.archived}
               />
 
               <Checkbox
                 {...bind.path('summary.name.generated')}
                 className="block pt-2 uk-text-small"
+                disabled={defaultValue.archived}
               >
                 {t.generated}
               </Checkbox>
@@ -61,12 +62,13 @@ export function ChatConfigPanel({ defaultValue }: Props) {
                 {...bind.path('summary.content.value', { input: value => value ?? '' })}
                 placeholder={t.descriptionPlaceholder}
                 className="min-h-[100px]"
-                disabled={value.summary?.content.generated}
+                disabled={value.summary?.content.generated || defaultValue.archived}
               />
 
               <Checkbox
                 {...bind.path('summary.content.generated')}
                 className="block pt-2 uk-text-small"
+                disabled={defaultValue.archived}
               >
                 {t.generated}
               </Checkbox>
@@ -74,13 +76,15 @@ export function ChatConfigPanel({ defaultValue }: Props) {
           </FormField>
         </fieldset>
 
-        <div className="flex flex-row justify-end mt-4 pt-4 border-t">
-          <SaveButton
-            disabled={!isDirty}
-            loading={submitState.loading}
-            type="submit"
-          />
-        </div>
+        {!defaultValue.archived && (
+          <div className="flex flex-row justify-end mt-4 pt-4 border-t">
+            <SaveButton
+              disabled={!isDirty}
+              loading={submitState.loading}
+              type="submit"
+            />
+          </div>
+        )}
       </form>
 
       {(

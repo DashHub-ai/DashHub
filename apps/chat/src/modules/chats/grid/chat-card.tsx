@@ -1,4 +1,4 @@
-import { ExternalLinkIcon, MessageSquareTextIcon } from 'lucide-react';
+import { ArchiveIcon, ExternalLinkIcon, MessageSquareTextIcon } from 'lucide-react';
 import { Link } from 'wouter';
 
 import type { SdkSearchChatItemT } from '@llm/sdk';
@@ -18,18 +18,27 @@ export function ChatCard({ chat }: ChatCardProps) {
   return (
     <div className="flex flex-col bg-white shadow-sm hover:shadow-md p-4 pb-2 border border-border/50 rounded-lg transition-shadow">
       <div className="flex items-center gap-2 mb-2">
-        <div className="text-muted-foreground">
-          <MessageSquareTextIcon size={16} />
-        </div>
-
-        <h3 className="font-medium">
+        <MessageSquareTextIcon size={16} className="flex-shrink-0 text-gray-500" />
+        <h3 className="font-medium text-gray-900 truncate">
           {chat.summary?.name?.value ?? 'Unnamed Chat'}
         </h3>
       </div>
 
-      <div className="flex flex-row justify-between items-center">
-        <div className="text-muted-foreground text-xs">
-          {formatDate(chat.createdAt)}
+      <div className="flex justify-between items-center">
+        <div className="flex flex-col gap-2">
+          <time className="text-gray-500 text-xs">
+            {formatDate(chat.createdAt)}
+          </time>
+
+          {chat.archived && (
+            <span
+              className="inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded text-gray-600 text-xs"
+              title={t.chat.archived}
+            >
+              <ArchiveIcon size={12} />
+              {t.chat.archived}
+            </span>
+          )}
         </div>
 
         <Link
