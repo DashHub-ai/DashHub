@@ -6,6 +6,7 @@ import { Checkbox, FormField, Input, SaveButton, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { CollapsiblePanel } from '~/modules/shared/collapsible-panel';
 
+import { ChatConfigArchive } from './chat-config-archive';
 import { ChatConfigTutorial } from './chat-config-tutorial';
 
 type Props = {
@@ -25,6 +26,8 @@ export function ChatConfigPanel({ defaultValue }: Props) {
       title={t.title}
     >
       <form className="space-y-4">
+        <ChatConfigTutorial />
+
         <fieldset className="space-y-4">
           <legend className="font-medium text-gray-700 text-sm">{t.summary}</legend>
 
@@ -79,7 +82,7 @@ export function ChatConfigPanel({ defaultValue }: Props) {
         </div>
       </form>
 
-      <ChatConfigTutorial />
+      <ChatConfigArchive />
     </CollapsiblePanel>
   );
 }

@@ -197,6 +197,11 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           autoGenerate: 'With auto-generating chat summaries, you can save time and maintain consistency in history',
         },
       },
+      archive: {
+        title: 'Archive your chat',
+        description: 'Archive your chat to keep it around without it cluttering your active chats.',
+        button: 'Archive',
+      },
     },
   },
   apps: {

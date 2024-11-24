@@ -9,7 +9,7 @@ export function ChatConfigTutorial() {
       variant="green"
       title={t.title}
       icon="⚙️"
-      className="mt-10"
+      className="mb-4"
       id="chat-config-tutorial"
       showIconAsBackground
     >

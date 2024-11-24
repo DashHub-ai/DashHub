@@ -199,6 +199,11 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           autoGenerate: 'Dzięki automatycznemu generowaniu podsumowania czatu możesz zaoszczędzić czas i zachować spójność w historii',
         },
       },
+      archive: {
+        title: 'Archiwizuj swój czat',
+        description: 'Archiwizuj swój czat, aby zachować go bez zagracania aktywnymi czatami.',
+        button: 'Archiwizuj czat',
+      },
     },
   },
   apps: {

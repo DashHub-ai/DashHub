@@ -13,7 +13,7 @@ const STORAGE_KEY = 'tutorial-visibility';
 
 const tutorialVisibilitySchema = z.record(z.boolean());
 
-type TutorialBoxVariant = 'amber' | 'blue' | 'green';
+type TutorialBoxVariant = 'amber' | 'blue' | 'green' | 'red';
 
 const VARIANT_STYLES: Record<TutorialBoxVariant, {
   gradient: string;
@@ -35,12 +35,18 @@ const VARIANT_STYLES: Record<TutorialBoxVariant, {
     border: 'border-green-300',
     icon: 'text-green-300',
   },
+  red: {
+    gradient: 'from-red-50 to-rose-50',
+    border: 'border-red-200',
+    icon: 'text-red-200',
+  },
 };
 
 const BUTTON_STYLES: Record<TutorialBoxVariant, string> = {
   amber: 'bg-amber-100 hover:bg-amber-200 text-amber-700',
   blue: 'bg-blue-100 hover:bg-blue-200 text-blue-700',
   green: 'bg-green-200 hover:bg-green-300 text-green-800',
+  red: 'bg-red-100 hover:bg-red-200 text-red-700',
 };
 
 type TutorialBoxProps = PropsWithChildren & {
