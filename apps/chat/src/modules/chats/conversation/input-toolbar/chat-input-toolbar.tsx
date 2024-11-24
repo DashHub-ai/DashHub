@@ -59,7 +59,10 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit }: Props) {
             type="text"
             ref={inputRef}
             disabled={disabled || submitState.loading}
-            className="border-gray-200 py-2 pr-4 pl-10 border rounded-lg focus:ring-2 focus:ring-gray-500 w-full focus:outline-none"
+            className={clsx(
+              'border-gray-200 py-2 pr-4 pl-10 border rounded-lg focus:ring-2 focus:ring-gray-500 w-full focus:outline-none',
+              disabled && 'bg-gray-100 cursor-not-allowed',
+            )}
             placeholder={t.placeholders.enterMessage}
             required
             onKeyDown={handleKeyDown}

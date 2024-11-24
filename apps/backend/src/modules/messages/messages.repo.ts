@@ -25,9 +25,13 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             .selectFrom(this.table)
             .where('messages.id', 'in', ids)
             .leftJoin('users', 'users.id', 'messages.creator_user_id')
+            .leftJoin('ai_models', 'ai_models.id', 'messages.ai_model_id')
             .select([
               'users.id as creator_user_id',
               'users.email as creator_email',
+
+              'ai_models.id as ai_model_id',
+              'ai_models.name as ai_model_name',
             ])
             .selectAll('messages')
             .limit(ids.length)
@@ -37,8 +41,13 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
       TE.map(
         A.map(({
           chat_id: chatId,
+
           creator_user_id: userId,
           creator_email: userEmail,
+
+          ai_model_id: aiModelId,
+          ai_model_name: aiModelName,
+
           ...item
         }): MessageTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -46,6 +55,12 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
           chat: {
             id: chatId,
           },
+          aiModel: aiModelId && aiModelName
+            ? {
+                id: aiModelId,
+                name: aiModelName,
+              }
+            : null,
           creator: userId && userEmail
             ? {
                 id: userId,

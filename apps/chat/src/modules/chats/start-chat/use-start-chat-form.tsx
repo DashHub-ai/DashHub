@@ -86,6 +86,7 @@ export function useStartChatForm() {
 
   return {
     form,
+    submitting: form.submitState.loading,
     loading: defaultModelSetter.setting,
   };
 }

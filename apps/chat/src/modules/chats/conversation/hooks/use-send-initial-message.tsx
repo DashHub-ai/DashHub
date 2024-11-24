@@ -11,14 +11,13 @@ export function useSendInitialMessage(
   onReply: (input: SdkCreateMessageInputT & SdkRequestAIReplyInputT) => unknown,
 ) {
   useAfterMount(() => {
-    const maybeMessage = history.state?.message;
-
-    delete history.state?.message;
-
     pipe(
-      maybeMessage,
+      history.state?.message,
       tryParseUsingZodSchema(StartChatFormValueV),
-      tapEither(onReply),
+      tapEither((data) => {
+        history.replaceState(undefined, '', location.pathname);
+        onReply(data);
+      }),
     );
   });
 }

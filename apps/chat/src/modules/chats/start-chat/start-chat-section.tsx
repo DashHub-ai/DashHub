@@ -1,7 +1,7 @@
 import { PaperclipIcon, SendIcon } from 'lucide-react';
 
 import { useFocusAfterMount } from '@llm/commons-front';
-import { Checkbox, Select } from '@llm/ui';
+import { Checkbox, FormSpinnerCTA, Select } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';
 
@@ -11,7 +11,7 @@ export function StartChatSection() {
   const t = useI18n().pack.chats.start;
   const focusInputRef = useFocusAfterMount<HTMLTextAreaElement>();
 
-  const { loading, form } = useStartChatForm();
+  const { loading, form, submitting } = useStartChatForm();
   const { bind, handleSubmitEvent, value } = form;
 
   return (
@@ -73,14 +73,15 @@ export function StartChatSection() {
             </Checkbox>
 
             <div className="ml-auto">
-              <button
+              <FormSpinnerCTA
                 type="submit"
+                loading={submitting}
                 className="uk-button uk-button-primary"
-                disabled={!value.content}
+                disabled={loading || !value.content}
               >
-                <SendIcon size={16} className="mr-2" />
+                {!submitting && <SendIcon size={16} className="mr-2" />}
                 {t.start}
-              </button>
+              </FormSpinnerCTA>
             </div>
           </div>
         </div>

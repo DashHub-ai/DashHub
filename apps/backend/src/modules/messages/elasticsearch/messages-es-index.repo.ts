@@ -30,6 +30,7 @@ const MessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
         }),
         chat: createIdObjectMapping({}, 'keyword'),
         creator: createIdObjectMapping(),
+        aiModel: createIdObjectMapping(),
         content: {
           type: 'text',
           analyzer: 'folded_lowercase_analyzer',
