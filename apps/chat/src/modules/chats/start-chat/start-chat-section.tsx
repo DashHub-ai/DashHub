@@ -31,7 +31,7 @@ export function StartChatSection() {
             className="focus:border-primary bg-background p-4 pb-[45px] border border-border rounded-lg w-full min-h-[130px] resize-none focus:outline-none shadow-sm"
             placeholder={t.placeholder}
             required
-            {...bind.path('message')}
+            {...bind.path('content')}
           />
 
           <div className="bottom-3 left-3 absolute">
@@ -76,7 +76,7 @@ export function StartChatSection() {
               <button
                 type="submit"
                 className="uk-button uk-button-primary"
-                disabled={!value.message}
+                disabled={!value.content}
               >
                 <SendIcon size={16} className="mr-2" />
                 {t.start}

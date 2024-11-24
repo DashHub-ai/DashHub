@@ -1,6 +1,5 @@
-import { type DependencyList, useState } from 'react';
+import { type DependencyList, useEffect, useState } from 'react';
 
-import { useInstantEffect } from './use-instant-effect';
 import { useIsMountedRef } from './use-is-mounted-ref';
 
 type Attrs<R> = {
@@ -19,7 +18,7 @@ export function useAsyncSetter<R>(
   const [setting, setSetting] = useState(true);
   const isMountedRef = useIsMountedRef();
 
-  useInstantEffect(() => {
+  useEffect(() => {
     fetcher()
       .then((result) => {
         if (isMountedRef.current) {

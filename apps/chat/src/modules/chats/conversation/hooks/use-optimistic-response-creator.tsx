@@ -15,6 +15,7 @@ export function useOptimisticResponseCreator() {
     role: 'user',
     updatedAt: new Date(),
     createdAt: new Date(),
+    aiModel: null,
     creator: {
       id: token.sub,
       email: token.email,

@@ -1,19 +1,15 @@
-import { taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
-import { useLayoutEffect, useRef } from 'react';
+import { memo } from 'react';
 
-import { tryOrThrowTE } from '@llm/commons';
-import { useAfterMount, usePromiseOptimisticResponse } from '@llm/commons-front';
-import {
-  type SdkChatT,
-  type SdkCreateMessageInputT,
-  type SdKSearchMessagesOutputT,
-  useSdkForLoggedIn,
-} from '@llm/sdk';
+import type { SdkChatT, SdKSearchMessagesOutputT } from '@llm/sdk';
 
 import { ChatBackground } from './chat-background';
 import { ChatConfigPanel } from './config-panel';
-import { useOptimisticResponseCreator } from './hooks';
+import { getLastUsedAIModel } from './helpers';
+import {
+  useAutoFocusConversationInput,
+  useReplyConversationHandler,
+  useSendInitialMessage,
+} from './hooks';
 import { ChatInputToolbar } from './input-toolbar';
 import { ChatMessage } from './messages/chat-message';
 
@@ -22,52 +18,16 @@ type Props = {
   initialMessages: SdKSearchMessagesOutputT;
 };
 
-export function ChatConversation({ chat, initialMessages }: Props) {
-  const { sdks } = useSdkForLoggedIn();
-  const {
-    result: messages,
-    optimisticUpdate,
-  } = usePromiseOptimisticResponse(initialMessages);
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  const messagesContainerRef = useRef<HTMLDivElement>(null);
-
-  const optimisticResponseCreator = useOptimisticResponseCreator();
-  const onReply = optimisticUpdate({
-    task: (value: SdkCreateMessageInputT) => pipe(
-      sdks.dashboard.chats.createMessage(chat.id, value),
-      TE.chain(() => sdks.dashboard.chats.searchMessages(chat.id, {
-        offset: 0,
-        limit: 100,
-        sort: 'createdAt:desc',
-      })),
-      TE.map(({ items, ...pagination }) => ({
-        ...pagination,
-        items: items.toReversed(),
-      })),
-      tryOrThrowTE,
-    )(),
-
-    optimistic: (result, value) => ({
-      ...result,
-      items: [
-        ...result.items,
-        optimisticResponseCreator(value),
-      ],
-    }),
+export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
+  const { messages, onReply } = useReplyConversationHandler({
+    chat,
+    initialMessages,
   });
 
-  const focusInput = () => {
-    messagesContainerRef.current?.scrollTo({
-      top: messagesContainerRef.current.scrollHeight,
-      behavior: 'smooth',
-    });
+  const { inputRef, messagesContainerRef } = useAutoFocusConversationInput(messages);
+  const aiModel = getLastUsedAIModel(messages.items);
 
-    inputRef.current?.focus();
-  };
-
-  useAfterMount(focusInput);
-  useLayoutEffect(focusInput, [messages]);
+  useSendInitialMessage(onReply);
 
   return (
     <div className="flex gap-6 mx-auto max-w-7xl">
@@ -90,11 +50,18 @@ export function ChatConversation({ chat, initialMessages }: Props) {
         </div>
 
         {!chat.archived && (
-          <ChatInputToolbar inputRef={inputRef} onSubmit={onReply} />
+          <ChatInputToolbar
+            disabled={!aiModel}
+            inputRef={inputRef}
+            onSubmit={input => onReply({
+              content: input.content,
+              aiModel: aiModel!,
+            })}
+          />
         )}
       </div>
 
       <ChatConfigPanel defaultValue={chat} />
     </div>
   );
-}
+});

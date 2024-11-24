@@ -29,6 +29,12 @@ export class AIModelsEsSearchRepo {
     @inject(AIModelsEsIndexRepo) private readonly indexRepo: AIModelsEsIndexRepo,
   ) {}
 
+  get = (id: TableId) =>
+    pipe(
+      this.indexRepo.getDocument(id),
+      TE.map(AIModelsEsSearchRepo.mapOutputHit),
+    );
+
   getDefault = (organizationId: TableId) => pipe(
     this.search({
       organizationIds: [organizationId],

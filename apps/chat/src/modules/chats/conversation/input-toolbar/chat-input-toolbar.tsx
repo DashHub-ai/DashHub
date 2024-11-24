@@ -10,11 +10,12 @@ import { Checkbox, FormSpinnerCTA } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Props = {
+  disabled?: boolean;
   inputRef?: React.RefObject<HTMLInputElement>;
   onSubmit: (message: SdkCreateMessageInputT) => CanBePromise<any>;
 };
 
-export function ChatInputToolbar({ inputRef, onSubmit }: Props) {
+export function ChatInputToolbar({ disabled, inputRef, onSubmit }: Props) {
   const t = useI18n().pack.chat;
 
   const submitOnEnterStorage = useLocalStorageObject('chat-input-toolbar-submit-on-enter', {
@@ -57,7 +58,7 @@ export function ChatInputToolbar({ inputRef, onSubmit }: Props) {
           <input
             type="text"
             ref={inputRef}
-            disabled={submitState.loading}
+            disabled={disabled || submitState.loading}
             className="border-gray-200 py-2 pr-4 pl-10 border rounded-lg focus:ring-2 focus:ring-gray-500 w-full focus:outline-none"
             placeholder={t.placeholders.enterMessage}
             required
@@ -73,7 +74,7 @@ export function ChatInputToolbar({ inputRef, onSubmit }: Props) {
         <FormSpinnerCTA
           type="submit"
           loading={submitState.loading}
-          disabled={!value.content || submitState.loading}
+          disabled={disabled || !value.content || submitState.loading}
           className={clsx(
             'flex flex-row items-center px-6 py-2 rounded-lg h-full text-white transition-colors',
             !value.content

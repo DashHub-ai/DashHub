@@ -38,7 +38,7 @@ export class AuthAsyncFetcher {
       ),
     );
 
-  private readonly getRefreshedToken = () =>
+  readonly getRefreshedToken = () =>
     pipe(
       TE.Do,
       TE.bind('tokens', () => this.tokensStorage.getSessionTokensTE()),

@@ -1,6 +1,8 @@
+import type { SelectType } from 'kysely';
+
 import type { DatabaseTablesWithId } from '../database.tables';
 import type { DatabaseRecordNotExists, DatabaseTE } from '../errors';
-import type { NormalizeSelectTableRow, TableId } from '../types';
+import type { NormalizeSelectTableRow } from '../types';
 import type { CreateSelectRecordsQueryAttrs } from './create-select-records.query';
 import type { QueryBasicFactoryAttrs } from './query-basic-factory-attrs.type';
 
@@ -11,7 +13,7 @@ export function createSelectRecordByIdQuery<K extends keyof DatabaseTablesWithId
     id,
     ...attrs
   }: Omit<CreateSelectRecordsQueryAttrs<K, S>, 'limit' | 'where'> & {
-    id: TableId;
+    id: SelectType<DatabaseTablesWithId[K]['id']>;
   }): DatabaseTE<Pick<NormalizeSelectTableRow<DatabaseTablesWithId[K]>, S>, DatabaseRecordNotExists> =>
     createSelectRecordQuery<K>(factoryAttrs)({
       ...attrs,

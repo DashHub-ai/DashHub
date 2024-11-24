@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-import { SdkTableRowWithDatesV, SdkTableRowWithUuidV } from '~/shared';
+import {
+  SdkTableRowWithDatesV,
+  SdkTableRowWithIdNameV,
+  SdkTableRowWithUuidV,
+} from '~/shared';
 
 import { SdkUserListItemV } from '../../users/dto/sdk-user-list-item.dto';
 
@@ -22,6 +26,7 @@ export const SdkMessageV = z.object({
   role: SdkMessageRoleV,
   repeats: z.array(SdkRepeatedMessageV),
   creator: SdkUserListItemV.nullable(),
+  aiModel: SdkTableRowWithIdNameV.nullable(),
 })
   .merge(SdkTableRowWithUuidV)
   .merge(SdkTableRowWithDatesV);

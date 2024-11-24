@@ -10,6 +10,7 @@ import type {
 } from '@llm/sdk';
 
 import { pluck, rejectFalsyItems } from '@llm/commons';
+import { TableUuid } from '~/modules/database';
 import {
   createPaginationOffsetSearchQuery,
   createScoredSortFieldQuery,
@@ -25,6 +26,25 @@ export class MessagesEsSearchRepo {
   constructor(
     @inject(MessagesEsIndexRepo) private readonly indexRepo: MessagesEsIndexRepo,
   ) {}
+
+  get = (id: TableUuid) =>
+    pipe(
+      this.indexRepo.getDocument(id),
+      TE.map(MessagesEsSearchRepo.mapOutputHit),
+    );
+
+  searchByChatId = (
+    chatId: TableUuid,
+    dto: Omit<SdKSearchMessagesInputT, 'chatIds'> = {
+      offset: 0,
+      limit: 200,
+      sort: 'id:desc',
+    },
+  ) =>
+    this.search({
+      ...dto,
+      chatIds: [chatId],
+    });
 
   search = (dto: SdKSearchMessagesInputT) =>
     pipe(

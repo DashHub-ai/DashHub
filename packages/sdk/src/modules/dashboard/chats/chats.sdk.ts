@@ -6,10 +6,15 @@ import type {
 } from '~/shared';
 
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
-import { getPayload, patchPayload, postPayload } from '~/shared';
+import {
+  getPayload,
+  patchPayload,
+  postPayload,
+} from '~/shared';
 
 import type {
   SdkCreateMessageInputT,
+  SdkRequestAIReplyInputT,
   SdKSearchMessagesInputT,
   SdKSearchMessagesOutputT,
 } from '../messages';
@@ -75,5 +80,16 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
     this.fetch<SdkTableRowWithUuidT>({
       url: this.endpoint(`/${chatId}/messages`),
       options: postPayload(data),
+    });
+
+  requestAIReply = (
+    chatId: SdkTableRowUuidT,
+    messageId: SdkTableRowUuidT,
+    data: SdkRequestAIReplyInputT,
+  ) =>
+    this.fetch<AsyncIterator<string>>({
+      url: this.endpoint(`/${chatId}/messages/${messageId}/ai-reply`),
+      options: postPayload(data),
+      stream: true,
     });
 };

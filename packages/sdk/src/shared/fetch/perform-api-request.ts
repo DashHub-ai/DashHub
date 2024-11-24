@@ -1,6 +1,7 @@
 import * as TE from 'fp-ts/lib/TaskEither';
 
 import {
+  createAsyncStreamIterator,
   isSSR,
   type SearchParamsMap,
   TaggedError,
@@ -22,6 +23,7 @@ export type APIRequestAttrs = {
   authToken?: string;
   query?: SearchParamsMap;
   blob?: boolean;
+  stream?: boolean;
 };
 
 export type SdkApiRequestErrors =
@@ -42,6 +44,7 @@ export function performApiRequest<A, E extends TaggedError<string, any> = never>
   options,
   authToken,
   blob,
+  stream,
 }: APIRequestAttrs): SdkApiRequestTE<A, E> {
   const task = async () => {
     if (query) {
@@ -66,6 +69,10 @@ export function performApiRequest<A, E extends TaggedError<string, any> = never>
       ...options,
       headers,
     });
+
+    if (stream && result.ok && result.body instanceof ReadableStream) {
+      return createAsyncStreamIterator(result.body.getReader());
+    }
 
     if (blob) {
       if (!result.ok) {
@@ -93,15 +100,17 @@ export function performApiRequest<A, E extends TaggedError<string, any> = never>
     return response.data;
   };
 
-  return TE.tryCatch(task, (errorResponse: any) => {
-    const result = isSdkErrorResponseDto(errorResponse)
-      ? TaggedError.deserialize(errorResponse.error) as unknown as E
-      : new SdkRequestError(errorResponse);
+  return TE.tryCatch(task, catchApiRequestResponse);
+}
 
-    if (isSSR()) {
-      console.warn('Error response:', errorResponse);
-    }
+export function catchApiRequestResponse<E extends TaggedError<any, any>>(errorResponse: any) {
+  const result = isSdkErrorResponseDto(errorResponse)
+    ? TaggedError.deserialize(errorResponse.error) as unknown as E
+    : new SdkRequestError(errorResponse);
 
-    return result;
-  });
+  if (isSSR()) {
+    console.warn('Error response:', errorResponse);
+  }
+
+  return result;
 }

@@ -1,7 +1,6 @@
-import type { DependencyList } from 'react';
+import { type DependencyList, useLayoutEffect } from 'react';
 
 import { type AsyncCallbackState, useAsyncCallback } from './use-async-callback';
-import { useInstantEffect } from './use-instant-effect';
 
 /**
  * A hook that allows to execute an asynchronous function and provides the state of the execution.
@@ -13,12 +12,14 @@ export function useAsyncValue<R>(
 ): AsyncValueHookResult<R> {
   const [asyncCallback, asyncState] = useAsyncCallback(callback);
 
-  const executed = useInstantEffect(asyncCallback, deps);
+  useLayoutEffect(() => {
+    void asyncCallback();
+  }, deps);
 
   // There might be short delay between the effect and the state update.
   // So it is possible that the status is still 'idle' after the effect.
   // In such case, we should return 'loading' status because the effect is already queued to be executed.
-  if (executed || asyncState.status === 'idle') {
+  if (asyncState.status === 'idle') {
     return {
       status: 'loading',
     };

@@ -19,6 +19,7 @@ export function usePromiseOptimisticResponse<T>(result: T) {
     const uuid = v4();
 
     currentMigrationId.current = uuid;
+
     setOptimisticData(prevOptimisticData =>
       optimistic(prevOptimisticData ?? result, ...args),
     );

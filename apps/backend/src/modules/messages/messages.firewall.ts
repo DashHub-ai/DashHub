@@ -21,6 +21,12 @@ export class MessagesFirewall extends AuthFirewallService {
   );
 
   // TODO: Add belongs checks
+  searchByChatId = flow(
+    this.messagesService.searchByChatId,
+    this.tryTEIfUser.is.root,
+  );
+
+  // TODO: Add belongs checks
   create = (dto: Omit<CreateInternalMessageInputT, 'creator'>) =>
     pipe(
       this.messagesService.create({
@@ -29,4 +35,10 @@ export class MessagesFirewall extends AuthFirewallService {
       }),
       this.tryTEIfUser.is.root,
     );
+
+  // TODO: Add belongs checks
+  aiReply = flow(
+    this.messagesService.aiReply,
+    this.tryTEIfUser.is.root,
+  );
 }

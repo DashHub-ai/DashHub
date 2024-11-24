@@ -1,41 +1,49 @@
 import { useForm } from '@under-control/forms';
 import { pipe } from 'fp-ts/lib/function';
 import { useLocation } from 'wouter';
+import { z } from 'zod';
 
-import { runTask, tapTaskEither, tapTaskEitherTE, tryOrThrowTE } from '@llm/commons';
+import { runTask, StrictBooleanV, tapTaskEither, tryOrThrowTE } from '@llm/commons';
 import { useAsyncSetter } from '@llm/commons-front';
-import { type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@llm/sdk';
+import { SdkCreateMessageInputV, SdkRequestAIReplyInputV, SdkTableRowWithIdNameV, useSdkForLoggedIn } from '@llm/sdk';
 import { usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
-type StartChatFormValue = {
-  project: SdkTableRowWithIdNameT | null;
-  public: boolean;
-  message: string;
-  aiModel: SdkTableRowWithIdNameT | null;
-};
+export const StartChatFormValueV = z
+  .object({
+    public: StrictBooleanV,
+    project: SdkTableRowWithIdNameV.nullable(),
+  })
+  .merge(SdkRequestAIReplyInputV)
+  .merge(SdkCreateMessageInputV);
+
+type StartChatFormValueT = z.infer<typeof StartChatFormValueV>;
 
 export function useStartChatForm() {
   const [, navigate] = useLocation();
   const sitemap = useSitemap();
 
   const { sdks } = useSdkForLoggedIn();
-  const { required } = usePredefinedFormValidators<StartChatFormValue>();
+  const { required, requiredListItem } = usePredefinedFormValidators<StartChatFormValueT>();
   const { organization, assignWorkspaceOrganization } = useWorkspaceOrganizationOrThrow();
 
   const showErrorNotification = useSaveErrorNotification();
-  const onSubmit = (value: StartChatFormValue) => pipe(
+  const onSubmit = (value: StartChatFormValueT) => pipe(
     assignWorkspaceOrganization({
       public: value.public,
     }),
     sdks.dashboard.chats.create,
-    tapTaskEitherTE(({ id }) => sdks.dashboard.chats.createMessage(id, {
-      content: value.message,
-    })),
     tapTaskEither(
       ({ id }) => {
-        navigate(sitemap.chat.generate({ pathParams: { id } }));
+        navigate(
+          sitemap.chat.generate({ pathParams: { id } }),
+          {
+            state: {
+              message: value,
+            },
+          },
+        );
       },
       showErrorNotification,
     ),
@@ -45,8 +53,8 @@ export function useStartChatForm() {
   const form = useForm({
     resetAfterSubmit: false,
     defaultValue: {
-      message: '',
-      aiModel: null,
+      content: '',
+      aiModel: null as any,
       project: null,
       public: false,
     },
@@ -54,7 +62,8 @@ export function useStartChatForm() {
     validation: {
       mode: ['blur', 'submit'],
       validators: () => [
-        required('message'),
+        required('content'),
+        requiredListItem('aiModel'),
       ],
     },
   });

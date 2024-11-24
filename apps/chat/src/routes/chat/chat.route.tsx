@@ -59,7 +59,7 @@ export function ChatRoute({ id }: Props) {
         {(
           result.status === 'loading'
             ? <SpinnerContainer loading />
-            : <ChatConversation chat={result.data.chat} initialMessages={result.data.initialMessages} />
+            : <ChatConversation {...result.data} />
         )}
       </section>
     </PageWithNavigationLayout>

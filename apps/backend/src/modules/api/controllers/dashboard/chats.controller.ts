@@ -1,10 +1,17 @@
+import type { ChatCompletionChunk } from 'openai/resources/index.mjs';
+import type { Stream } from 'openai/streaming.mjs';
+
+import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
+import { streamText } from 'hono/streaming';
 import { inject, injectable } from 'tsyringe';
 
+import { runTask } from '@llm/commons';
 import {
   type ChatsSdk,
   SdkCreateChatInputV,
   SdkCreateMessageInputV,
+  SdkRequestAIReplyInputV,
   SdKSearchChatsInputV,
   SdKSearchMessagesInputV,
 } from '@llm/sdk';
@@ -16,6 +23,7 @@ import {
   mapDbRecordAlreadyExistsToSdkError,
   mapDbRecordNotFoundToSdkError,
   rejectUnsafeSdkErrors,
+  respondWithTaggedError,
   sdkSchemaValidator,
   serializeSdkResponseTE,
 } from '../../helpers';
@@ -111,6 +119,31 @@ export class ChatsController extends AuthorizedController {
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ChatsSdk['createMessage']>>(context),
         ),
+      )
+      .post(
+        '/:id/messages/:messageId/ai-reply',
+        sdkSchemaValidator('json', SdkRequestAIReplyInputV),
+        async (context) => {
+          const streamAIResponse = (response: Stream<ChatCompletionChunk>) =>
+            streamText(context, async (stream) => {
+              for await (const chunk of response) {
+                await stream.write(chunk.choices[0]?.delta?.content ?? '');
+              }
+            });
+
+          return pipe(
+            messagesService.asUser(context.var.jwt).aiReply({
+              ...context.req.valid('json'),
+              id: context.req.param('messageId'),
+            }),
+            rejectUnsafeSdkErrors,
+            TE.matchW(
+              respondWithTaggedError(context),
+              streamAIResponse,
+            ),
+            runTask,
+          );
+        },
       );
   }
 }

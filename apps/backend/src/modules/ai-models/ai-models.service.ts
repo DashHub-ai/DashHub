@@ -72,6 +72,8 @@ export class AIModelsService implements WithAuthFirewall<AIModelsFirewall> {
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
+  get = this.esSearchRepo.get;
+
   getDefault = this.esSearchRepo.getDefault;
 
   search = this.esSearchRepo.search;
