@@ -1,45 +1,57 @@
 import { taskEither as TE } from 'fp-ts';
 import { identity, pipe } from 'fp-ts/lib/function';
 
-import { tapTaskEither, tryOrThrowTE } from '@llm/commons';
+import { type Overwrite, tryOrThrowTE } from '@llm/commons';
 import { usePromiseOptimisticResponse } from '@llm/commons-front';
 import {
   type SdkChatT,
   type SdkCreateMessageInputT,
-  type SdkRequestAIReplyInputT,
   type SdKSearchMessagesOutputT,
+  type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 
 import { useAIResponseObservable } from './use-ai-response-observable';
-import { useOptimisticResponseCreator } from './use-optimistic-response-creator';
+import {
+  type OptimisticMessageOutputT,
+  useOptimisticResponseCreator,
+} from './use-optimistic-response-creator';
 
 type Attrs = {
   chat: SdkChatT;
   initialMessages: SdKSearchMessagesOutputT;
 };
 
+type OptimisticSearchMessagesOutputT = Overwrite<SdKSearchMessagesOutputT, {
+  items: OptimisticMessageOutputT[];
+}>;
+
 export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
   const { sdks } = useSdkForLoggedIn();
   const { createMessage, searchMessages } = sdks.dashboard.chats;
 
-  const { result, optimisticUpdate } = usePromiseOptimisticResponse(initialMessages);
-  const {
-    aiReplyObservable,
-    streamAIResponse,
-    resetAIReplyStream,
-  } = useAIResponseObservable({ chat });
+  const { streamAIResponse, createAIReplyObservable } = useAIResponseObservable({ chat });
+  const { loading, result, optimisticUpdate } = usePromiseOptimisticResponse<OptimisticSearchMessagesOutputT>(
+    initialMessages,
+  );
 
-  const optimisticResponseCreator = useOptimisticResponseCreator();
+  const createOptimisticResponse = useOptimisticResponseCreator();
   const onReply = optimisticUpdate({
-    task: ({ aiModel, content }: SdkCreateMessageInputT & SdkRequestAIReplyInputT) => pipe(
+    before: createAIReplyObservable,
+    task: (
+      observable,
+      { aiModel, content }: SdkCreateMessageInputT & { aiModel: SdkTableRowWithIdNameT; },
+    ) => pipe(
       TE.Do,
-      tapTaskEither(resetAIReplyStream),
       TE.bind('message', () => createMessage(chat.id, {
         content,
       })),
       TE.bind('aiResponse', ({ message }) => TE.tryCatch(
-        () => streamAIResponse(aiModel, message),
+        () => streamAIResponse({
+          observable,
+          aiModel,
+          message,
+        }),
         identity,
       )),
       TE.bindW('messages', () => searchMessages(chat.id, {
@@ -49,22 +61,29 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       })),
       TE.map(({ messages: { items, ...pagination } }) => ({
         ...pagination,
-        items: items.toReversed(),
+        items: [
+          ...items.toReversed(),
+        ],
       })),
       tryOrThrowTE,
     )(),
 
-    optimistic: ({ items, total }, value) => ({
+    optimistic: ({
+      before: observable,
+      result: { items, total },
+      args: [{ content, aiModel }],
+    }) => ({
       total: total + 1,
       items: [
         ...items,
-        optimisticResponseCreator(value),
+        createOptimisticResponse.user({ content }),
+        createOptimisticResponse.bot(aiModel, observable),
       ],
     }),
   });
 
   return {
-    aiReplyObservable,
+    replying: loading,
     messages: result,
     onReply,
   };

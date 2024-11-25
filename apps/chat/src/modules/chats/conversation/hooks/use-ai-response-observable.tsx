@@ -1,5 +1,4 @@
 import { pipe } from 'fp-ts/lib/function';
-import { useState } from 'react';
 
 import { createStoreSubscriber, type StoreSubscriber, tryOrThrowTE } from '@llm/commons';
 import { useRefSafeCallback } from '@llm/commons-front';
@@ -10,36 +9,45 @@ import {
   useSdkForLoggedIn,
 } from '@llm/sdk';
 
-type AIStreamContent = {
+export type AIStreamContent = {
   error: boolean;
   done: boolean;
+  message: SdkTableRowWithUuidT | null;
   content: string;
 };
+
+export type AIStreamObservable = StoreSubscriber<AIStreamContent>;
 
 type Attrs = {
   chat: SdkChatT;
 };
 
-export type AIStreamObservable = StoreSubscriber<AIStreamContent>;
-
 export function useAIResponseObservable({ chat }: Attrs) {
   const { sdks } = useSdkForLoggedIn();
-  const [aiReplyObservable, setAIReplyObservable] = useState<AIStreamObservable | null>(null);
 
-  const resetAIReplyStream = () => {
-    const newAIReplyObservable = createStoreSubscriber<AIStreamContent>({
+  const createAIReplyObservable = () => createStoreSubscriber<AIStreamContent>({
+    content: '',
+    message: null,
+    done: false,
+    error: false,
+  });
+
+  const streamAIResponse = useRefSafeCallback(async (
+    {
+      observable,
+      aiModel,
+      message,
+    }: {
+      observable: AIStreamObservable;
+      aiModel: SdkTableRowWithIdT;
+      message: SdkTableRowWithUuidT;
+    },
+  ) => {
+    observable.notify({
+      ...observable.getSnapshot(),
       content: '',
-      done: false,
-      error: false,
+      message,
     });
-
-    setAIReplyObservable(newAIReplyObservable);
-  };
-
-  const streamAIResponse = useRefSafeCallback(async (aiModel: SdkTableRowWithIdT, message: SdkTableRowWithUuidT) => {
-    if (!aiReplyObservable) {
-      return;
-    }
 
     const aiReply = await pipe(
       sdks.dashboard.chats.requestAIReply(chat.id, message.id, { aiModel }),
@@ -48,9 +56,9 @@ export function useAIResponseObservable({ chat }: Attrs) {
 
     try {
       for await (const message of aiReply) {
-        const acc = aiReplyObservable.getSnapshot();
+        const acc = observable.getSnapshot();
 
-        aiReplyObservable.notify({
+        observable.notify({
           ...acc,
           content: acc.content + message,
         });
@@ -58,24 +66,23 @@ export function useAIResponseObservable({ chat }: Attrs) {
     }
     catch (err) {
       console.error(err);
-      aiReplyObservable.notify({
-        ...aiReplyObservable.getSnapshot(),
+      observable.notify({
+        ...observable.getSnapshot(),
         error: true,
       });
 
       throw err;
     }
     finally {
-      aiReplyObservable.notify({
-        ...aiReplyObservable.getSnapshot(),
+      observable.notify({
+        ...observable.getSnapshot(),
         done: true,
       });
     }
   });
 
   return {
-    aiReplyObservable,
+    createAIReplyObservable,
     streamAIResponse,
-    resetAIReplyStream,
   };
 }

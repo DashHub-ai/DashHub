@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { runTask, StrictBooleanV, tapTaskEither, tryOrThrowTE } from '@llm/commons';
 import { useAsyncSetter } from '@llm/commons-front';
-import { SdkCreateMessageInputV, SdkRequestAIReplyInputV, SdkTableRowWithIdNameV, useSdkForLoggedIn } from '@llm/sdk';
+import { SdkCreateMessageInputV, SdkTableRowWithIdNameV, useSdkForLoggedIn } from '@llm/sdk';
 import { usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
@@ -14,11 +14,11 @@ export const StartChatFormValueV = z
   .object({
     public: StrictBooleanV,
     project: SdkTableRowWithIdNameV.nullable(),
+    aiModel: SdkTableRowWithIdNameV,
   })
-  .merge(SdkRequestAIReplyInputV)
   .merge(SdkCreateMessageInputV);
 
-type StartChatFormValueT = z.infer<typeof StartChatFormValueV>;
+export type StartChatFormValueT = z.infer<typeof StartChatFormValueV>;
 
 export function useStartChatForm() {
   const [, navigate] = useLocation();

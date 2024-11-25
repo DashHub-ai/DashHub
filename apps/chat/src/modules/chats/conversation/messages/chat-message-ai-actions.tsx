@@ -2,31 +2,26 @@ import { RefreshCwIcon, ReplyIcon, WandSparklesIcon } from 'lucide-react';
 
 import type { SdkSearchMessageItemT } from '@llm/sdk';
 
+import { ActionButton } from './action-button';
+
 type Props = {
   isLast: boolean;
-  message: SdkSearchMessageItemT;
+  disabled?: boolean;
+  message: Pick<SdkSearchMessageItemT, 'aiModel'>;
 };
 
-export function ChatMessageAIActions({ isLast, message }: Props) {
+export function ChatMessageAIActions({ isLast, disabled, message }: Props) {
   return (
     <div className="flex items-center gap-2">
       {isLast && (
-        <button
-          type="button"
-          className="hover:bg-gray-200 p-1 rounded transition-colors"
-          title="Refresh response"
-        >
+        <ActionButton disabled={disabled} title="Refresh response">
           <RefreshCwIcon size={14} className="opacity-50 hover:opacity-100" />
-        </button>
+        </ActionButton>
       )}
 
-      <button
-        type="button"
-        className="hover:bg-gray-200 p-1 rounded transition-colors"
-        title="Reply to this message"
-      >
+      <ActionButton disabled={disabled} title="Reply to this message">
         <ReplyIcon size={14} className="opacity-50 hover:opacity-100" />
-      </button>
+      </ActionButton>
 
       {message.aiModel && (
         <div className="flex items-center gap-1 text-muted-foreground">

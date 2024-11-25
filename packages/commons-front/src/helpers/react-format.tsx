@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from 'react';
 
 export function reactFormat(str: string, templateArgs: Record<string, ReactNode>): ReactNode {
-  const tokens = str.split(/(%\{[?.\w]*\})/g);
+  const tokens = str.split(/(%\{[?.\w]*\})/);
 
   return tokens.map((token) => {
     const match = token.match(/%\{([?.\w]*)\}/);

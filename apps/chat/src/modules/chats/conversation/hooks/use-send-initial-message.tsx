@@ -1,15 +1,11 @@
 import { pipe } from 'fp-ts/lib/function';
 
-import type { SdkCreateMessageInputT, SdkRequestAIReplyInputT } from '@llm/sdk';
-
 import { tapEither, tryParseUsingZodSchema } from '@llm/commons';
 import { useAfterMount } from '@llm/commons-front';
 
-import { StartChatFormValueV } from '../../start-chat/use-start-chat-form';
+import { type StartChatFormValueT, StartChatFormValueV } from '../../start-chat/use-start-chat-form';
 
-export function useSendInitialMessage(
-  onReply: (input: SdkCreateMessageInputT & SdkRequestAIReplyInputT) => unknown,
-) {
+export function useSendInitialMessage(onReply: (input: StartChatFormValueT) => unknown) {
   useAfterMount(() => {
     pipe(
       history.state?.message,

@@ -1,14 +1,22 @@
 import clsx from 'clsx';
 import { Bot, User } from 'lucide-react';
 
+import type { Overwrite } from '@llm/commons';
+
 import { type SdkSearchMessageItemT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 
+import type { AIStreamObservable } from '../hooks';
+
 import { ChatMessageAIActions } from './chat-message-ai-actions';
+import { ChatMessageContent } from './chat-message-content';
 import { ChatMessageVariants } from './chat-message-variants';
 
 type Props = {
-  message: SdkSearchMessageItemT;
+  message: Overwrite<SdkSearchMessageItemT, {
+    content: string | AIStreamObservable;
+  }>;
+
   isLast: boolean;
   readOnly?: boolean;
 };
@@ -62,7 +70,7 @@ export function ChatMessage({ message, isLast, readOnly }: Props) {
           },
         )}
       >
-        <p className="text-sm">{content}</p>
+        <ChatMessageContent key={typeof content} content={content} />
 
         <div className="flex justify-between items-center gap-6 mt-1 text-xs">
           <span className="opacity-50">{new Date(message.createdAt).toLocaleTimeString()}</span>

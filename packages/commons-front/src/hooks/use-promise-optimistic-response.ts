@@ -1,44 +1,67 @@
 import { useRef, useState } from 'react';
 import { v4 } from 'uuid';
 
-type OptimisticMigrateAttrs<A extends Array<any>, T> = {
-  task: (...array: A) => Promise<T>;
-  optimistic: (result: T, ...array: A) => T;
+type OptimisticMigrateAttrs<A extends Array<any>, T, B> = {
+  before?: () => B;
+  task: (before: B, ...array: A) => Promise<T>;
+  optimistic: (
+    attrs: {
+      before: B;
+      result: T;
+      args: A;
+    },
+  ) => T;
 };
 
 export function usePromiseOptimisticResponse<T>(result: T) {
   const currentMigrationId = useRef<string | null>(null);
+
+  const [loading, setLoading] = useState(false);
   const [optimisticData, setOptimisticData] = useState<T>(result);
 
-  const optimisticUpdate = <A extends Array<any>>(
+  const optimisticUpdate = <A extends Array<any>, B>(
     {
+      before,
       optimistic,
       task,
-    }: OptimisticMigrateAttrs<A, T>,
+    }: OptimisticMigrateAttrs<A, T, B>,
   ) => async (...args: A) => {
     const uuid = v4();
+    const beforeResult = before?.();
 
     currentMigrationId.current = uuid;
 
+    setLoading(true);
     setOptimisticData(prevOptimisticData =>
-      optimistic(prevOptimisticData ?? result, ...args),
+      optimistic({
+        before: beforeResult!,
+        result: prevOptimisticData ?? result,
+        args,
+      }),
     );
 
     try {
-      const result = await task(...args);
+      const newResult = await task(beforeResult!, ...args);
 
       if (currentMigrationId.current === uuid) {
-        setOptimisticData(result);
+        setOptimisticData(newResult);
+        setLoading(false);
       }
 
-      return result;
+      return newResult;
     }
     catch (e) {
       console.error(e);
+
+      if (currentMigrationId.current === uuid) {
+        setOptimisticData(result);
+        setLoading(false);
+      }
     }
   };
 
   return {
+    loading,
     result: optimisticData,
     optimisticUpdate,
   };
