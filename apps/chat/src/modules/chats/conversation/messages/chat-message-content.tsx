@@ -17,6 +17,7 @@ export const ChatMessageContent = memo(({ content }: Props) => {
         done: true,
         error: false,
         message: null,
+        abortController: new AbortController(),
       });
     }
 
