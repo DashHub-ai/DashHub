@@ -77,17 +77,27 @@ export class ChatsSummariesService {
 
       return TE.left(new MissingAIModelInChatError(chat));
     }),
-    TE.bindW('summarize', ({ chat, aiModel }) => this.aiConnectorService.executeInstructedPrompt({
-      aiModel,
-      history: chat.items,
-      message:
-        'Summarize this chat, create short title and description in the language of this chat.'
-        + 'Keep description compact to store in on the chat. You can use emojis in title and description.',
-      schema: z.object({
-        title: z.string(),
-        description: z.string(),
+    TE.bindW('summarize', ({ chat, aiModel }) => pipe(
+      this.aiConnectorService.executeInstructedPrompt({
+        aiModel,
+        history: chat.items,
+        message:
+          'Summarize this chat, create short title and description in the language of this chat.'
+          + 'Keep description compact to store in on the chat. You can use emojis in title and description.',
+        schema: z.object({
+          title: z.string(),
+          description: z.string(),
+        }),
       }),
-    })),
+      TE.orElse((error) => {
+        this.logger.error('Failed to summarize chat', { error });
+
+        return TE.of({
+          title: 'Untitled chat',
+          description: 'Cannot summarize chat. Please do it manually.',
+        });
+      }),
+    )),
     TE.chainW(({ summarize }) => this.repo.updateGeneratedSummarizeByChatId(
       {
         chatId: id,

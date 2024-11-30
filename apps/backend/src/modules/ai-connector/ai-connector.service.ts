@@ -78,7 +78,7 @@ export class AIConnectorService {
 
       const client = Instructor({
         client: ai,
-        mode: 'TOOLS',
+        mode: 'FUNCTIONS',
       });
 
       return OpenAIConnectionCreatorError.tryCatch(
