@@ -78,7 +78,7 @@ export class AIConnectorService {
 
       const client = Instructor({
         client: ai,
-        mode: 'FUNCTIONS',
+        mode: this.determineInstructorMode(credentials.apiModel),
       });
 
       return OpenAIConnectionCreatorError.tryCatch(
@@ -100,6 +100,26 @@ export class AIConnectorService {
       );
     }),
   );
+
+  private determineInstructorMode = (model: string): 'JSON' | 'JSON_SCHEMA' | 'FUNCTIONS' | 'TOOLS' => {
+    // GPT-4 models support function calling
+    if (model.includes('gpt-4')) {
+      return 'FUNCTIONS';
+    }
+
+    // GPT-3.5-turbo models after June 13th, 2023 support function calling
+    if (model.includes('gpt-3.5-turbo') && !model.includes('0301')) {
+      return 'FUNCTIONS';
+    }
+
+    // Claude models work best with JSON mode
+    if (model.includes('claude')) {
+      return 'JSON';
+    }
+
+    // Default to JSON mode as it's most widely supported
+    return 'JSON';
+  };
 
   private normalizeMessagesToCompletion = (messages: SdkMessageT[]) =>
     messages.map(({ content, role }): OpenAI.Chat.Completions.ChatCompletionMessageParam => ({
