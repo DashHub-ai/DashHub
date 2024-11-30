@@ -1,4 +1,4 @@
-import type { MouseEventHandler } from 'react';
+import type { KeyboardEventHandler, MouseEventHandler } from 'react';
 
 import { type CanBePromise, suppressEvent, useForm } from '@under-control/forms';
 import clsx from 'clsx';
@@ -22,6 +22,7 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit, onCancelSubmit 
   const t = useI18n().pack.chat;
 
   const submitOnEnterStorage = useLocalStorageObject('chat-input-toolbar-submit-on-enter', {
+    forceParseIfNotSet: true,
     schema: StrictBooleanV.catch(true),
     readBeforeMount: true,
   });
@@ -48,9 +49,11 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit, onCancelSubmit 
     },
   });
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (submitOnEnterStorage.getOrNull() && e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
+  const isTypingDisabled = disabled || submitState.loading;
+
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (submitOnEnterStorage.getOrNull() && event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
 
       if (value.content.length) {
         void submit();
@@ -73,10 +76,10 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit, onCancelSubmit 
           <input
             type="text"
             ref={inputRef}
-            disabled={disabled || submitState.loading}
+            disabled={isTypingDisabled}
             className={clsx(
               'border-gray-200 py-2 pr-4 pl-10 border rounded-lg focus:ring-2 focus:ring-gray-500 w-full focus:outline-none',
-              disabled && 'bg-gray-100 cursor-not-allowed',
+              isTypingDisabled && 'bg-gray-100 cursor-not-allowed',
             )}
             placeholder={t.placeholders.enterMessage}
             required

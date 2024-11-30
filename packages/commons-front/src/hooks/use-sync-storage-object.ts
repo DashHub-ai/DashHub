@@ -1,6 +1,6 @@
 import type { z } from 'zod';
 
-import { flow, pipe } from 'fp-ts/lib/function';
+import { flow, identity, pipe } from 'fp-ts/lib/function';
 import * as O from 'fp-ts/lib/Option';
 import { useRef } from 'react';
 
@@ -17,6 +17,7 @@ type AbstractSyncStorage = {
 export type SyncStorageConfig<S extends z.ZodType<unknown>> = {
   schema: S;
   storage: AbstractSyncStorage;
+  forceParseIfNotSet?: boolean;
   rerenderOnSet?: boolean;
   readBeforeMount?: boolean;
 };
@@ -26,6 +27,7 @@ export function useSyncStorageObject<S extends z.ZodType<unknown>>(
   {
     schema,
     storage,
+    forceParseIfNotSet,
     rerenderOnSet = true,
     readBeforeMount = true,
   }: SyncStorageConfig<S>,
@@ -50,6 +52,9 @@ export function useSyncStorageObject<S extends z.ZodType<unknown>>(
     return pipe(
       storage.getItem(name),
       data => tryParseJSON<z.infer<S>>(data),
+      forceParseIfNotSet
+        ? O.orElse(() => O.some(null))
+        : identity,
       O.chainEitherK(tryParseUsingZodSchema(schema)),
     );
   };

@@ -1,6 +1,9 @@
+import type { KeyboardEventHandler } from 'react';
+
 import { PaperclipIcon, SendIcon } from 'lucide-react';
 
-import { useFocusAfterMount } from '@llm/commons-front';
+import { StrictBooleanV } from '@llm/commons';
+import { useFocusAfterMount, useLocalStorageObject } from '@llm/commons-front';
 import { Checkbox, FormSpinnerCTA, Select } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';
@@ -13,6 +16,22 @@ export function StartChatSection() {
 
   const { loading, form, submitting } = useStartChatForm();
   const { bind, handleSubmitEvent, value } = form;
+
+  const submitOnEnterStorage = useLocalStorageObject('start-chat-input-toolbar-submit-on-enter', {
+    forceParseIfNotSet: true,
+    schema: StrictBooleanV.catch(true),
+    readBeforeMount: true,
+  });
+
+  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
+    if (submitOnEnterStorage.getOrNull() && event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+
+      if (value.content.length) {
+        void form.submit();
+      }
+    }
+  };
 
   return (
     <section className="mx-auto px-4 max-w-3xl container">
@@ -32,9 +51,10 @@ export function StartChatSection() {
             placeholder={t.placeholder}
             required
             {...bind.path('content')}
+            onKeyDown={handleKeyDown}
           />
 
-          <div className="bottom-3 left-3 absolute">
+          <div className="bottom-3 left-3 absolute flex flex-row gap-4">
             <AIModelsSearchSelect
               buttonClassName="border-gray-300 border rounded-md h-7 text-xs"
               placeholderClassName="text-black text-xs"
@@ -45,6 +65,15 @@ export function StartChatSection() {
               preload
               {...bind.path('aiModel')}
             />
+
+            <Checkbox
+              className="flex items-center text-sm"
+              checkboxClassName="mt-[1px]"
+              value={!!submitOnEnterStorage.getOrNull()}
+              onChange={submitOnEnterStorage.set}
+            >
+              {t.startOnEnter}
+            </Checkbox>
           </div>
         </div>
 
