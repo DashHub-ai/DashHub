@@ -20,12 +20,11 @@ export function useOptimisticResponseCreator() {
 
   const createBaseMessageFields = (): Pick<
     OptimisticMessageOutputT,
-    'id' | 'updatedAt' | 'createdAt' | 'repeats'
+    'id' | 'updatedAt' | 'createdAt'
   > => ({
     id: v4(),
     updatedAt: new Date(),
     createdAt: new Date(),
-    repeats: [],
   });
 
   return {
@@ -34,6 +33,7 @@ export function useOptimisticResponseCreator() {
       content: message.content,
       role: 'user',
       aiModel: null,
+      repliedMessage: null,
       creator: {
         id: token.sub,
         email: token.email,
@@ -49,6 +49,7 @@ export function useOptimisticResponseCreator() {
       role: 'assistant',
       aiModel,
       creator: null,
+      repliedMessage: null,
     }),
   };
 }
