@@ -86,15 +86,15 @@ export class ChatsEsSearchRepo {
       creator: source.creator,
       public: source.public,
       summary: {
-        name: {
-          value: summary.name,
-          generated: summary.name_generated,
-          generatedAt: summary.name_generated_at,
-        },
         content: {
-          value: summary.content,
-          generated: summary.content_generated,
-          generatedAt: summary.content_generated_at,
+          generated: summary.content.generated,
+          value: summary.content.value,
+          generatedAt: summary.content.generated_at,
+        },
+        name: {
+          generated: summary.name.generated,
+          value: summary.name.value,
+          generatedAt: summary.name.generated_at,
         },
       },
     });

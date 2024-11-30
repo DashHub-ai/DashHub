@@ -1,18 +1,16 @@
 import type { ColumnType } from 'kysely';
 
 import type {
-  AIGeneratedColumns,
   DropTableRowAccessTime,
   NormalizeSelectTableRow,
   TableId,
   TableRowWithIdName,
-  TableUuid,
   TableWithAccessTimeColumns,
   TableWithArchivedAtColumn,
-  TableWithDefaultColumns,
   TableWithUuidColumn,
 } from '~/modules/database';
 
+import type { ChatSummaryTableRow } from '../chats-summaries';
 import type { UserTableRowBaseRelation } from '../users';
 
 export type ChatsTable =
@@ -25,18 +23,10 @@ export type ChatsTable =
     public: boolean;
   };
 
-export type ChatSummariesTable =
-  & TableWithDefaultColumns
-  & AIGeneratedColumns<'name' | 'content'>
-  & {
-    chat_id: ColumnType<TableUuid, TableUuid, never>;
-  };
-
 export type ChatTableRow = NormalizeSelectTableRow<ChatsTable>;
-export type ChatSummaryTableRow = NormalizeSelectTableRow<ChatSummariesTable>;
 
 type ChatSummaryTableRowRelation = DropTableRowAccessTime<
-  Omit<ChatSummaryTableRow, 'chatId'>
+  Omit<ChatSummaryTableRow, 'chatId' | 'lastSummarizedMessageId'>
 >;
 
 export type ChatTableRowWithRelations =

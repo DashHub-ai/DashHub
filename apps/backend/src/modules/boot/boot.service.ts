@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import { runTask, tapTaskEither, tryOrThrowTE } from '@llm/commons';
 
 import { HttpServerService } from '../api';
+import { ChatSummariesCronJob } from '../chats-summaries';
 import { ConfigService } from '../config';
 import { DatabaseMigrateService } from '../database';
 import {
@@ -30,6 +31,7 @@ export class BootService {
 
     // Cron jobs
     @inject(ElasticsearchAutoReindexJob) private readonly elasticsearchReindexJob: ElasticsearchAutoReindexJob,
+    @inject(ChatSummariesCronJob) private readonly chatSummariesCronJob: ChatSummariesCronJob,
   ) {}
 
   /**
@@ -67,6 +69,8 @@ export class BootService {
    */
   private registerCronJobs = () => {
     this.elasticsearchReindexJob.registerCronJob();
+    this.chatSummariesCronJob.registerCronJob();
+
     this.logger.info('Registered cron jobs!');
   };
 }

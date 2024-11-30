@@ -8,3 +8,9 @@ export function createAIGeneratedFieldMappings(additionalMappings?: object) {
     },
   };
 }
+
+export type EsAIGeneratedField = {
+  generated: boolean;
+  generated_at: Date | null;
+  value: string | null;
+};

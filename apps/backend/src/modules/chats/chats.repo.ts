@@ -20,9 +20,9 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
-import type { ChatTableRowWithRelations } from '../chats.tables';
+import type { ChatTableRowWithRelations } from './chats.tables';
 
-import { ChatsSummariesRepo } from './chats-summaries.repo';
+import { ChatsSummariesRepo } from '../chats-summaries/chats-summaries.repo';
 
 @injectable()
 export class ChatsRepo extends createProtectedDatabaseRepo('chats') {

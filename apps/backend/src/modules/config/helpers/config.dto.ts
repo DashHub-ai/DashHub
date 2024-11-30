@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { AppEnvV } from '@llm/commons';
 import { HttpServerConfigV } from '~/modules/api/http-server.config';
 import { AuthConfigV } from '~/modules/auth/auth.config';
+import { ChatsSummariesConfigV } from '~/modules/chats-summaries/chats-summaries.config';
 import { DatabaseConfigV } from '~/modules/database/database.config';
 import { DatabaseMigrateConfigV } from '~/modules/database/migrate/database-migrate.config';
 import { ElasticsearchConfigV } from '~/modules/elasticsearch/elasticsearch.config';
@@ -18,6 +19,7 @@ export const ConfigV = z.object({
   }),
   users: UsersConfigV,
   auth: AuthConfigV,
+  chatsSummaries: ChatsSummariesConfigV,
 });
 
 export type ConfigT = z.infer<typeof ConfigV>;

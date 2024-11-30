@@ -47,6 +47,9 @@ export function tryReadEnvOrPanic() {
     // Auth
     JWT_SECRET,
     JWT_EXPIRES_IN,
+
+    // Chats summaries
+    CHATS_SUMMARIES_CRON,
   } = {
     ...envFile.parsed,
     ...process.env,
@@ -83,6 +86,9 @@ export function tryReadEnvOrPanic() {
       migration: {
         checkMigrationsOnStartup: DATABASE_CHECK_MIGRATIONS_ON_STARTUP,
       },
+    },
+    chatsSummaries: {
+      cron: CHATS_SUMMARIES_CRON,
     },
     users: {
       root: {

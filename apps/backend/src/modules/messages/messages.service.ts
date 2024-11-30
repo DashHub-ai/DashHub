@@ -84,7 +84,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     )),
     TE.chainW(({ message, history, replyContext }) =>
       pipe(
-        this.aiConnectorService.executePrompt(
+        this.aiConnectorService.executeStreamPrompt(
           {
             signal,
             aiModel,

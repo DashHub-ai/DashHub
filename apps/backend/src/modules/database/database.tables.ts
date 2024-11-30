@@ -9,8 +9,8 @@ import type {
 } from '../auth';
 import type {
   ChatsTable,
-  ChatSummariesTable,
 } from '../chats';
+import type { ChatSummariesTable } from '../chats-summaries';
 import type { MessagesTable } from '../messages';
 import type {
   OrganizationsS3BucketsTable,

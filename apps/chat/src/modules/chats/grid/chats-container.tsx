@@ -64,7 +64,7 @@ export function ChatsContainer({ storeDataInUrl = false }: Props) {
           }
 
           return (
-            <div className="gap-4 grid grid-cols-1 md:grid-cols-3">
+            <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
               {items.map(item => (
                 <ChatCard
                   key={item.id}

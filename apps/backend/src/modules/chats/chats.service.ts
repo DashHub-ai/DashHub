@@ -8,8 +8,8 @@ import { SdkCreateChatInputT, SdkJwtTokenT, SdkTableRowUuidT } from '@llm/sdk';
 
 import { WithAuthFirewall } from '../auth';
 import { ChatsFirewall } from './chats.firewall';
+import { ChatsRepo } from './chats.repo';
 import { ChatsEsIndexRepo, ChatsEsSearchRepo } from './elasticsearch';
-import { ChatsRepo } from './repo/chats.repo';
 
 @injectable()
 export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
