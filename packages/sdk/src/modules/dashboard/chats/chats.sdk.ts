@@ -30,6 +30,13 @@ import type {
   SdKSearchChatsOutputT,
 } from './dto';
 
+type AIRequestReplyAttrs = {
+  chatId: SdkTableRowUuidT;
+  messageId: SdkTableRowUuidT;
+  data: SdkRequestAIReplyInputT;
+  abortController: AbortController;
+};
+
 export class ChatsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/chats';
 
@@ -92,12 +99,7 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
       chatId,
       messageId,
       data,
-    }: {
-      chatId: SdkTableRowUuidT;
-      messageId: SdkTableRowUuidT;
-      data: SdkRequestAIReplyInputT;
-      abortController: AbortController;
-    },
+    }: AIRequestReplyAttrs,
   ) =>
     pipe(
       this.fetch<AsyncGenerator<Uint8Array>>({

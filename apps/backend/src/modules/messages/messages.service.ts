@@ -4,13 +4,13 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type {
-  SdkCreateMessageInputT,
-  SdkJwtTokenT,
-  SdkRequestAIReplyInputT,
-} from '@llm/sdk';
-
 import { findItemIndexById, mapAsyncIterator, tryOrThrowTE } from '@llm/commons';
+import {
+  groupSdkMessagesByRepeats,
+  type SdkCreateMessageInputT,
+  type SdkJwtTokenT,
+  type SdkRequestAIReplyInputT,
+} from '@llm/sdk';
 
 import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../database';
 
@@ -48,10 +48,8 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           chatId: chat.id,
           content: message.content,
           metadata: {},
-          originalMessageId: null,
           aiModelId: null,
           creatorUserId: creator.id,
-          repeatCount: 0,
           role: 'user',
         },
       }),
@@ -69,20 +67,23 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       TE.map(({ items }) => {
         const historyIndex = findItemIndexById(message.id)(items);
 
-        return items.slice(historyIndex + 1).toReversed();
+        return pipe(
+          items.slice(historyIndex + 1).toReversed(),
+          groupSdkMessagesByRepeats,
+        );
       }),
     )),
     TE.chainW(({ message, history }) =>
       pipe(
         this.aiConnectorService.executePrompt(
           {
+            signal,
             aiModel,
             history,
             message: {
               content: message.content,
             },
           },
-          signal,
         ),
         TE.map(
           stream => pipe(
@@ -92,6 +93,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         ),
         TE.map(stream => this.createAIResponseMessage(
           {
+            repliedMessageId: message.id,
             chatId: message.chatId,
             aiModelId: aiModel.id,
             stream,
@@ -107,7 +109,9 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       chatId,
       aiModelId,
       stream,
+      repliedMessageId,
     }: {
+      repliedMessageId: TableUuid;
       chatId: TableUuid;
       aiModelId: TableId;
       stream: AsyncIterableIterator<string>;
@@ -133,9 +137,8 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             aiModelId,
             content,
             metadata: {},
-            originalMessageId: null,
+            repliedMessageId,
             creatorUserId: null,
-            repeatCount: 0,
             role: 'assistant',
           },
         }),

@@ -1,5 +1,6 @@
 export * from './create-archive-record.query';
 export * from './create-archive-records.query';
+export * from './create-count-records.query';
 export * from './create-delete-record.query';
 export * from './create-delete-records.query';
 export * from './create-is-record-present.query';

@@ -1,12 +1,7 @@
 import type { SelectQueryBuilder } from 'kysely';
 
-import camelcaseKeys from 'camelcase-keys';
-import { pipe } from 'fp-ts/lib/function';
-import * as TE from 'fp-ts/lib/TaskEither';
-import { snakeCase } from 'snake-case';
-
 import type { DatabaseTables } from '../database.tables';
-import type { KyselySelectCreator, NormalizeSelectTableRow } from '../types';
+import type { KyselySelectCreator } from '../types';
 import type { QueryBasicFactoryAttrs } from './query-basic-factory-attrs.type';
 
 import { DatabaseError, type DatabaseTE } from '../errors';
@@ -16,25 +11,22 @@ import {
   type WhereQueryBuilderAttrs,
 } from './create-select-where.query';
 
-export type CreateSelectRecordsQueryAttrs<
+export type CreateCountRecordsQueryAttrs<
   K extends keyof DatabaseTables,
-  S extends keyof NormalizeSelectTableRow<DatabaseTables[K]>,
   Q = KyselySelectCreator<K>,
 > = WhereQueryBuilderAttrs<K> &
 TransactionalAttrs<{
-  select?: S[];
   limit?: number;
   modifyQuery?: (query: Q) => SelectQueryBuilder<DatabaseTables, any, any>;
 }>;
 
-export function createSelectRecordsQuery<K extends keyof DatabaseTables>({ table, db }: QueryBasicFactoryAttrs<K>) {
-  return <S extends keyof NormalizeSelectTableRow<DatabaseTables[K]>>(
-    attrs: CreateSelectRecordsQueryAttrs<K, S> = {},
-  ): DatabaseTE<Array<Pick<NormalizeSelectTableRow<DatabaseTables[K]>, S>>> => {
+export function createCountRecordsQuery<K extends keyof DatabaseTables>({ table, db }: QueryBasicFactoryAttrs<K>) {
+  return (
+    attrs: CreateCountRecordsQueryAttrs<K> = {},
+  ): DatabaseTE<number> => {
     const {
       forwardTransaction,
       modifyQuery,
-      select,
       where = [],
       limit,
     } = attrs;
@@ -43,15 +35,7 @@ export function createSelectRecordsQuery<K extends keyof DatabaseTables>({ table
     const query = transaction(async qb =>
       qb
         .selectFrom(table)
-        .$call((nqb) => {
-          if (select) {
-            return nqb.select(
-              select.map(field => snakeCase(field as string)) as unknown as any,
-            );
-          }
-
-          return nqb.selectAll();
-        })
+        .select(({ fn }) => fn.count<number>('*' as any).as('count'))
         .$call((nqb) => {
           if (modifyQuery) {
             return modifyQuery(nqb as any);
@@ -61,13 +45,10 @@ export function createSelectRecordsQuery<K extends keyof DatabaseTables>({ table
         })
         .$call(createWhereSelectQuery({ where }))
         .$call(nestedQuery => (limit ? nestedQuery.limit(limit) : nestedQuery))
-        .execute(),
+        .executeTakeFirst()
+        .then(result => result.count as number),
     );
 
-    return pipe(
-      query,
-      DatabaseError.tryTask,
-      TE.map(obj => camelcaseKeys(obj, { deep: true })),
-    ) as any;
+    return DatabaseError.tryTask(query);
   };
 }

@@ -8,6 +8,7 @@ import {
   type SdkCreateMessageInputT,
   type SdKSearchMessagesOutputT,
   type SdkTableRowWithIdNameT,
+  type SdkTableRowWithUuidT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 
@@ -31,7 +32,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
   const { sdks } = useSdkForLoggedIn();
   const { createMessage, searchMessages } = sdks.dashboard.chats;
 
-  const { streamAIResponse, createAIReplyObservable } = useAIResponseObservable({ chat });
+  const { streamAIReply, createAIReplyObservable } = useAIResponseObservable({ chat });
   const { loading, result, optimisticUpdate } = usePromiseOptimisticResponse<OptimisticSearchMessagesOutputT>(
     {
       ...initialMessages,
@@ -40,6 +41,10 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
   );
 
   const createOptimisticResponse = useOptimisticResponseCreator();
+
+  /**
+   * Sends a message and waits for the AI response.
+   */
   const onReply = optimisticUpdate({
     before: createAIReplyObservable,
     task: (
@@ -47,15 +52,13 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       { aiModel, content }: SdkCreateMessageInputT & { aiModel: SdkTableRowWithIdNameT; },
     ) => pipe(
       TE.Do,
-      TE.bind('message', () => createMessage(chat.id, {
-        content,
-      })),
-      TE.bindW('aiResponse', ({ message }) => pipe(
+      TE.bind('createdMessage', () => createMessage(chat.id, { content })),
+      TE.bindW('aiResponse', ({ createdMessage }) => pipe(
         TE.tryCatch(
-          () => streamAIResponse({
+          () => streamAIReply({
             observable: replyObservable,
+            message: createdMessage,
             aiModel,
-            message,
           }),
           identity,
         ),
@@ -63,7 +66,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
           // Do not treat errors from aborting the request as actual errors
           if (error instanceof Error && error.name === 'AbortError') {
             // Let's wait a bit for indexing aborted message.
-            return timeoutTE(1500);
+            return timeoutTE(500);
           }
 
           return TE.left(error);
@@ -97,9 +100,72 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
     }),
   });
 
+  /**
+   * Refreshes last message
+   */
+  const onRefreshAIResponse = optimisticUpdate({
+    before: createAIReplyObservable,
+    task: (
+      replyObservable,
+      { aiModel, message }: {
+        aiModel: SdkTableRowWithIdNameT;
+        message: SdkTableRowWithUuidT;
+      },
+    ) => pipe(
+      TE.Do,
+      TE.bindW('aiResponse', () => pipe(
+        TE.tryCatch(
+          () => streamAIReply({
+            observable: replyObservable,
+            message,
+            aiModel,
+          }),
+          identity,
+        ),
+        TE.orElse((error) => {
+          // Do not treat errors from aborting the request as actual errors
+          if (error instanceof Error && error.name === 'AbortError') {
+            // Let's wait a bit for indexing aborted message.
+            return timeoutTE(500);
+          }
+
+          return TE.left(error);
+        }),
+      )),
+      TE.bindW('messages', () => searchMessages(chat.id, {
+        offset: 0,
+        limit: 100,
+        sort: 'createdAt:desc',
+      })),
+      TE.map(({ messages: { items, ...pagination } }) => ({
+        replyObservable: null,
+        ...pagination,
+        items: items.toReversed(),
+      })),
+      tryOrThrowTE,
+    )(),
+
+    optimistic: ({
+      before: replyObservable,
+      result: { items, total },
+      args: [{ aiModel, message }],
+    }) => ({
+      replyObservable,
+      total: total + 1,
+      items: [
+        ...items,
+        {
+          ...createOptimisticResponse.bot(aiModel, replyObservable),
+          repliedMessage: message,
+        },
+      ],
+    }),
+  });
+
   return {
     replying: loading,
     messages: result,
     onReply,
+    onRefreshAIResponse,
   };
 }

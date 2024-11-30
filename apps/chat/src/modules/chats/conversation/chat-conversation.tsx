@@ -1,12 +1,18 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 
-import type { SdkChatT, SdKSearchMessagesOutputT } from '@llm/sdk';
-
+import { findItemById } from '@llm/commons';
 import { useUpdateEffect } from '@llm/commons-front';
+import {
+  getLastUsedSdkMessagesAIModel,
+  groupSdkMessagesByRepeats,
+  type SdkChatT,
+  type SdKSearchMessagesOutputT,
+} from '@llm/sdk';
+
+import type { SdkRepeatedMessageItemT } from './messages/chat-message';
 
 import { ChatBackground } from './chat-background';
 import { ChatConfigPanel } from './config-panel';
-import { getLastUsedAIModel } from './helpers';
 import {
   useAutoFocusConversationInput,
   useReplyConversationHandler,
@@ -27,12 +33,34 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     focusInput,
   } = useAutoFocusConversationInput();
 
-  const { messages, replying, onReply } = useReplyConversationHandler({
+  const { messages, replying, onReply, onRefreshAIResponse } = useReplyConversationHandler({
     chat,
     initialMessages,
   });
 
-  const aiModel = getLastUsedAIModel(messages.items);
+  const { groupedMessages, aiModel } = useMemo(
+    () => ({
+      groupedMessages: groupSdkMessagesByRepeats(messages.items),
+      aiModel: getLastUsedSdkMessagesAIModel(messages.items),
+    }),
+    [messages.items],
+  );
+
+  const onRefreshResponse = ({ repliedMessage }: Pick<SdkRepeatedMessageItemT, 'repliedMessage'>) => {
+    if (!repliedMessage) {
+      return;
+    }
+
+    const lastUserMessage = findItemById(repliedMessage.id)(messages.items);
+    if (!lastUserMessage) {
+      return;
+    }
+
+    void onRefreshAIResponse({
+      message: lastUserMessage,
+      aiModel: aiModel!,
+    });
+  };
 
   useSendInitialMessage(onReply);
   useUpdateEffect(focusInput, [messages]);
@@ -46,13 +74,14 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
           ref={messagesContainerRef}
           className="relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]"
         >
-          {messages.items.map((message, index) => (
+          {groupedMessages.map((message, index) => (
             <ChatMessage
               // eslint-disable-next-line react/no-array-index-key
               key={index}
               message={message}
-              isLast={index === messages.items.length - 1}
+              isLast={index === groupedMessages.length - 1}
               readOnly={chat.archived}
+              onRefreshResponse={onRefreshResponse}
             />
           ))}
         </div>
@@ -62,8 +91,8 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
             replying={replying}
             disabled={!aiModel}
             inputRef={inputRef}
-            onSubmit={input => onReply({
-              content: input.content,
+            onSubmit={message => onReply({
+              ...message,
               aiModel: aiModel!,
             })}
             onCancelSubmit={() => {

@@ -22,20 +22,17 @@ export type MessagesTable =
     content: string;
     role: SdkMessageRoleT;
     metadata: Record<string, unknown>;
-    original_message_id: ColumnType<TableId | null, TableId | null, null>;
-    repeat_count: ColumnType<number, number, never>;
     ai_model_id: ColumnType<TableId | null, TableId | null, never>;
+    replied_message_id: ColumnType<TableUuid | null, TableUuid | null, null>;
   };
 
 export type MessageTableRow = NormalizeSelectTableRow<MessagesTable>;
 
 export type MessageTableRowWithRelations =
-  & OmitRepeatFields<Omit<MessageTableRow, 'chatId' | 'creatorUserId' | 'aiModelId'>>
+  & Omit<MessageTableRow, 'chatId' | 'creatorUserId' | 'aiModelId' | 'repliedMessageId'>
   & {
-    repeats: Array<Omit<MessageTableRow, 'chatId' | 'creatorUserId' | 'aiModelId'>>;
     chat: TableRowWithUuid;
+    repliedMessage: TableRowWithUuid | null;
     creator: UserTableRowBaseRelation | null;
     aiModel: TableRowWithIdName | null;
   };
-
-type OmitRepeatFields<T> = Omit<T, 'originalMessageId' | 'repeatCount'>;
