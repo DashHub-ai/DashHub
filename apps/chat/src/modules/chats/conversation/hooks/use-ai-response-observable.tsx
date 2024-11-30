@@ -14,9 +14,12 @@ export type AIStreamContent = {
   done: boolean;
   message: SdkTableRowWithUuidT | null;
   content: string;
+  abortController: AbortController;
 };
 
-export type AIStreamObservable = StoreSubscriber<AIStreamContent>;
+export type AIStreamObservable = StoreSubscriber<AIStreamContent> & {
+  abort: VoidFunction;
+};
 
 type Attrs = {
   chat: SdkChatT;
@@ -25,12 +28,27 @@ type Attrs = {
 export function useAIResponseObservable({ chat }: Attrs) {
   const { sdks } = useSdkForLoggedIn();
 
-  const createAIReplyObservable = () => createStoreSubscriber<AIStreamContent>({
-    content: '',
-    message: null,
-    done: false,
-    error: false,
-  });
+  const createAIReplyObservable = (): AIStreamObservable => {
+    const abortController = new AbortController();
+    const store = createStoreSubscriber<AIStreamContent>({
+      content: '',
+      message: null,
+      done: false,
+      error: false,
+      abortController,
+    });
+
+    return {
+      ...store,
+      abort: () => {
+        try {
+          abortController.abort();
+        }
+        // eslint-disable-next-line unused-imports/no-unused-vars
+        catch (_: any) {}
+      },
+    };
+  };
 
   const streamAIResponse = useRefSafeCallback(async (
     {
@@ -50,7 +68,12 @@ export function useAIResponseObservable({ chat }: Attrs) {
     });
 
     const aiReply = await pipe(
-      sdks.dashboard.chats.requestAIReply(chat.id, message.id, { aiModel }),
+      sdks.dashboard.chats.requestAIReply({
+        abortController: observable.getSnapshot().abortController,
+        chatId: chat.id,
+        messageId: message.id,
+        data: { aiModel },
+      }),
       tryOrThrowTE,
     )();
 

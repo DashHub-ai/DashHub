@@ -87,15 +87,24 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
     });
 
   requestAIReply = (
-    chatId: SdkTableRowUuidT,
-    messageId: SdkTableRowUuidT,
-    data: SdkRequestAIReplyInputT,
+    {
+      abortController,
+      chatId,
+      messageId,
+      data,
+    }: {
+      chatId: SdkTableRowUuidT;
+      messageId: SdkTableRowUuidT;
+      data: SdkRequestAIReplyInputT;
+      abortController: AbortController;
+    },
   ) =>
     pipe(
       this.fetch<AsyncGenerator<Uint8Array>>({
         url: this.endpoint(`/${chatId}/messages/${messageId}/ai-reply`),
         options: postPayload(data),
         stream: true,
+        abortController,
       }),
       TE.map(decodeTextAsyncStream),
     );

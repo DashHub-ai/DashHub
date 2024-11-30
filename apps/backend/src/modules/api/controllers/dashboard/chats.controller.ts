@@ -1,6 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { streamText } from 'hono/streaming';
+import { streamSSE } from 'hono/streaming';
 import { inject, injectable } from 'tsyringe';
 
 import { runTask } from '@llm/commons';
@@ -121,18 +121,26 @@ export class ChatsController extends AuthorizedController {
         '/:id/messages/:messageId/ai-reply',
         sdkSchemaValidator('json', SdkRequestAIReplyInputV),
         async (context) => {
+          const abortController = new AbortController();
           const streamAIResponse = (response: AsyncGenerator<string>) =>
-            streamText(context, async (stream) => {
+            streamSSE(context, async (stream) => {
+              stream.onAbort(() => {
+                abortController.abort();
+              });
+
               for await (const chunk of response) {
                 await stream.write(chunk);
               }
             });
 
           return pipe(
-            messagesService.asUser(context.var.jwt).aiReply({
-              ...context.req.valid('json'),
-              id: context.req.param('messageId'),
-            }),
+            messagesService.asUser(context.var.jwt).aiReply(
+              {
+                ...context.req.valid('json'),
+                id: context.req.param('messageId'),
+              },
+              abortController.signal,
+            ),
             rejectUnsafeSdkErrors,
             TE.matchW(
               respondWithTaggedError(context),

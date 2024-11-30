@@ -30,6 +30,7 @@ export class AIConnectorService {
       history,
       message,
     }: ExecutePromptAttrs,
+    signal?: AbortSignal,
   ) => pipe(
     this.aiModelsService.get(aiModel.id),
     TE.chainW(({ credentials }) => {
@@ -48,7 +49,7 @@ export class AIConnectorService {
               content: message.content,
             },
           ],
-        }),
+        }, { signal }),
       );
     }),
   );
