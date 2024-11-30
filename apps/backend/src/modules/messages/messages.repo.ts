@@ -26,12 +26,22 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             .where('messages.id', 'in', ids)
             .leftJoin('users', 'users.id', 'messages.creator_user_id')
             .leftJoin('ai_models', 'ai_models.id', 'messages.ai_model_id')
+
+            .leftJoin('messages as reply_messages', 'reply_messages.id', 'messages.replied_message_id')
+            .leftJoin('users as reply_users', 'reply_users.id', 'reply_messages.creator_user_id')
+
             .select([
               'users.id as creator_user_id',
               'users.email as creator_email',
 
               'ai_models.id as ai_model_id',
               'ai_models.name as ai_model_name',
+
+              'reply_messages.role as reply_message_role',
+              'reply_messages.content as reply_message_content',
+
+              'reply_users.id as reply_message_creator_user_id',
+              'reply_users.email as reply_message_creator_email',
             ])
             .selectAll('messages')
             .limit(ids.length)
@@ -48,7 +58,12 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
           ai_model_id: aiModelId,
           ai_model_name: aiModelName,
 
-          replied_message_id: repliedMessageId,
+          replied_message_id: replyMessageId,
+          reply_message_role: replyMessageRole,
+          reply_message_content: replyMessageContent,
+
+          reply_message_creator_user_id: replyMessageCreatorUserId,
+          reply_message_creator_email: replyMessageCreatorEmail,
 
           ...item
         }): MessageTableRowWithRelations => ({
@@ -68,9 +83,17 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
                 email: userEmail,
               }
             : null,
-          repliedMessage: repliedMessageId
+          repliedMessage: replyMessageId
             ? {
-                id: repliedMessageId,
+                id: replyMessageId,
+                role: replyMessageRole!,
+                content: replyMessageContent!,
+                creator: replyMessageCreatorUserId && replyMessageCreatorEmail
+                  ? {
+                      id: replyMessageCreatorUserId!,
+                      email: replyMessageCreatorEmail,
+                    }
+                  : null,
               }
             : null,
         })),

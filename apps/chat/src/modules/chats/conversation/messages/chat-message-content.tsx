@@ -1,15 +1,16 @@
 import { memo, useMemo, useSyncExternalStore } from 'react';
 import sanitizeHtml from 'sanitize-html';
 
-import { createStoreSubscriber } from '@llm/commons';
+import { createStoreSubscriber, truncateText } from '@llm/commons';
 
 import type { AIStreamContent, AIStreamObservable } from '../hooks';
 
 type Props = {
   content: string | AIStreamObservable;
+  truncate?: number;
 };
 
-export const ChatMessageContent = memo(({ content }: Props) => {
+export const ChatMessageContent = memo(({ content, truncate }: Props) => {
   const observable = useMemo(() => {
     if (typeof content === 'string') {
       return createStoreSubscriber<AIStreamContent>({
@@ -30,7 +31,15 @@ export const ChatMessageContent = memo(({ content }: Props) => {
     observable.getSnapshot,
   );
 
-  const sanitizedContent = useMemo(() => sanitizeHtml(stream.content), [stream]);
+  const sanitizedContent = useMemo(() => {
+    const html = sanitizeHtml(stream.content);
+
+    if (truncate) {
+      return truncateText(truncate, '...')(html);
+    }
+
+    return html;
+  }, [stream, truncate]);
 
   return (
     <>

@@ -5,7 +5,7 @@ import { useAfterMount } from '@llm/commons-front';
 
 import { type StartChatFormValueT, StartChatFormValueV } from '../../start-chat/use-start-chat-form';
 
-export function useSendInitialMessage(onReply: (input: StartChatFormValueT) => unknown) {
+export function useSendInitialMessage(onReply: (input: Omit<StartChatFormValueT, 'replyToMessage'>) => unknown) {
   useAfterMount(() => {
     pipe(
       history.state?.message,

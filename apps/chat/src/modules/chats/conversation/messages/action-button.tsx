@@ -4,15 +4,20 @@ import { clsx } from 'clsx';
 
 type Props = ComponentPropsWithoutRef<'button'> & {
   title: string;
+  darkMode?: boolean;
 };
 
-export function ActionButton({ children, disabled, ...props }: Props) {
+export function ActionButton({ children, disabled, darkMode, ...props }: Props) {
   return (
     <button
       type="button"
       className={clsx(
         'p-1 rounded transition-colors',
-        disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200',
+        disabled
+          ? 'opacity-50 cursor-not-allowed'
+          : (darkMode
+              ? 'hover:bg-gray-600'
+              : 'hover:bg-gray-200'),
       )}
       disabled={disabled}
       {...props}

@@ -11,15 +11,33 @@ import { useLocalStorageObject } from '@llm/commons-front';
 import { Checkbox } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
+import type { SdkRepeatedMessageItemT } from '../messages';
+
+import { ChatReplyMessage } from './chat-reply-message';
+
+export type ChatInputValue = Omit<SdkCreateMessageInputT, 'replyToMessage'>;
+
 type Props = {
   replying: boolean;
+  replyToMessage?: SdkRepeatedMessageItemT | null;
   disabled?: boolean;
   inputRef?: React.RefObject<HTMLInputElement>;
-  onSubmit: (message: SdkCreateMessageInputT) => CanBePromise<any>;
-  onCancelSubmit: () => void;
+  onSubmit: (message: ChatInputValue) => CanBePromise<any>;
+  onCancelSubmit: VoidFunction;
+  onCancelReplyToMessage: VoidFunction;
 };
 
-export function ChatInputToolbar({ disabled, replying, inputRef, onSubmit, onCancelSubmit }: Props) {
+export function ChatInputToolbar(
+  {
+    disabled,
+    replying,
+    replyToMessage,
+    inputRef,
+    onSubmit,
+    onCancelSubmit,
+    onCancelReplyToMessage,
+  }: Props,
+) {
   const t = useI18n().pack.chat;
 
   const submitOnEnterStorage = useLocalStorageObject('chat-input-toolbar-submit-on-enter', {
@@ -34,7 +52,7 @@ export function ChatInputToolbar({ disabled, replying, inputRef, onSubmit, onCan
     handleSubmitEvent,
     submit,
     setValue,
-  } = useForm<SdkCreateMessageInputT>({
+  } = useForm<ChatInputValue>({
     defaultValue: {
       content: '',
     },
@@ -71,6 +89,13 @@ export function ChatInputToolbar({ disabled, replying, inputRef, onSubmit, onCan
       className="border-gray-200 bg-white p-4 border-t"
       onSubmit={handleSubmitEvent}
     >
+      {replyToMessage && (
+        <ChatReplyMessage
+          message={replyToMessage}
+          onClose={onCancelReplyToMessage}
+        />
+      )}
+
       <div className="relative gap-2 grid grid-cols-[1fr,auto]">
         <div className="relative">
           <input
