@@ -180,6 +180,8 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     actions: {
       send: 'Send',
       submitOnEnter: 'Submit on Enter',
+      refresh: 'Refresh response',
+      reply: 'Reply to this message',
     },
     placeholders: {
       enterMessage: 'Enter your message...',
