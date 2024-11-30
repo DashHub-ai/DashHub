@@ -12,13 +12,24 @@ export const SdkMessageRoleV = z.enum(['user', 'assistant', 'system']);
 
 export type SdkMessageRoleT = z.infer<typeof SdkMessageRoleV>;
 
-export const SdkMessageV = z.object({
-  content: z.string(),
-  role: SdkMessageRoleV,
-  creator: SdkUserListItemV.nullable(),
-  aiModel: SdkTableRowWithIdNameV.nullable(),
-  repliedMessage: SdkTableRowWithUuidV.nullable(),
-})
+export const SdkRepliedMessageV = z
+  .object({
+    role: SdkMessageRoleV,
+    content: z.string(),
+    creator: SdkUserListItemV.nullable(),
+  })
+  .merge(SdkTableRowWithUuidV);
+
+export type SdkRepliedMessageT = z.infer<typeof SdkRepliedMessageV>;
+
+export const SdkMessageV = z
+  .object({
+    content: z.string(),
+    role: SdkMessageRoleV,
+    creator: SdkUserListItemV.nullable(),
+    aiModel: SdkTableRowWithIdNameV.nullable(),
+    repliedMessage: SdkRepliedMessageV.nullable(),
+  })
   .merge(SdkTableRowWithUuidV)
   .merge(SdkTableRowWithDatesV);
 

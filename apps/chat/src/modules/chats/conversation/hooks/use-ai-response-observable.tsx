@@ -6,7 +6,7 @@ import { createStoreSubscriber, type StoreSubscriber, tryOrThrowTE } from '@llm/
 import { useRefSafeCallback } from '@llm/commons-front';
 import {
   type SdkChatT,
-  type SdkTableRowWithIdT,
+  type SdkRequestAIReplyInputT,
   type SdkTableRowWithUuidT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
@@ -104,16 +104,16 @@ export function useAIResponseObservable({ chat }: Attrs) {
     {
       aiModel,
       ...attrs
-    }: Omit<StreamAIResponseAttrs, 'task'> & {
-      aiModel: SdkTableRowWithIdT;
-    },
+    }: Omit<StreamAIResponseAttrs, 'task'> & SdkRequestAIReplyInputT,
   ) => streamAIResponse({
     ...attrs,
     task: sdks.dashboard.chats.requestAIReply({
       abortController: attrs.observable.getSnapshot().abortController,
       chatId: chat.id,
       messageId: attrs.message.id,
-      data: { aiModel },
+      data: {
+        aiModel,
+      },
     }),
   });
 

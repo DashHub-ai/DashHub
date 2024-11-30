@@ -1,6 +1,8 @@
-import { RefreshCwIcon, ReplyIcon, WandSparklesIcon } from 'lucide-react';
+import { RefreshCwIcon, WandSparklesIcon } from 'lucide-react';
 
 import type { SdkSearchMessageItemT } from '@llm/sdk';
+
+import { useI18n } from '~/i18n';
 
 import { ActionButton } from './action-button';
 
@@ -12,21 +14,19 @@ type Props = {
 };
 
 export function ChatMessageAIActions({ isLast, disabled, message, onRefreshResponse }: Props) {
+  const t = useI18n().pack.chat.actions;
+
   return (
-    <div className="flex items-center gap-2">
+    <>
       {isLast && (
         <ActionButton
           disabled={disabled}
-          title="Refresh response"
+          title={t.refresh}
           onClick={onRefreshResponse}
         >
           <RefreshCwIcon size={14} className="opacity-50 hover:opacity-100" />
         </ActionButton>
       )}
-
-      <ActionButton disabled={disabled} title="Reply to this message">
-        <ReplyIcon size={14} className="opacity-50 hover:opacity-100" />
-      </ActionButton>
 
       {message.aiModel && (
         <div className="flex items-center gap-1 text-muted-foreground">
@@ -34,6 +34,6 @@ export function ChatMessageAIActions({ isLast, disabled, message, onRefreshRespo
           <span>{message.aiModel.name}</span>
         </div>
       )}
-    </div>
+    </>
   );
 }

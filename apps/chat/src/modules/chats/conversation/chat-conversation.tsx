@@ -1,10 +1,10 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 
 import { findItemById } from '@llm/commons';
 import { useUpdateEffect } from '@llm/commons-front';
 import {
   getLastUsedSdkMessagesAIModel,
-  groupSdkMessagesByRepeats,
+  groupSdkAIMessagesByRepeats,
   type SdkChatT,
   type SdKSearchMessagesOutputT,
 } from '@llm/sdk';
@@ -14,11 +14,12 @@ import type { SdkRepeatedMessageItemT } from './messages/chat-message';
 import { ChatBackground } from './chat-background';
 import { ChatConfigPanel } from './config-panel';
 import {
+  extractOptimisticMessageContent,
   useAutoFocusConversationInput,
   useReplyConversationHandler,
   useSendInitialMessage,
 } from './hooks';
-import { ChatInputToolbar } from './input-toolbar';
+import { ChatInputToolbar, type ChatInputValue } from './input-toolbar';
 import { ChatMessage } from './messages/chat-message';
 
 type Props = {
@@ -33,6 +34,7 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     focusInput,
   } = useAutoFocusConversationInput();
 
+  const [replyToMessage, setReplyToMessage] = useState<SdkRepeatedMessageItemT | null>(null);
   const { messages, replying, onReply, onRefreshAIResponse } = useReplyConversationHandler({
     chat,
     initialMessages,
@@ -40,7 +42,7 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
 
   const { groupedMessages, aiModel } = useMemo(
     () => ({
-      groupedMessages: groupSdkMessagesByRepeats(messages.items),
+      groupedMessages: groupSdkAIMessagesByRepeats(messages.items),
       aiModel: getLastUsedSdkMessagesAIModel(messages.items),
     }),
     [messages.items],
@@ -57,13 +59,29 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     }
 
     void onRefreshAIResponse({
-      message: lastUserMessage,
+      message: {
+        ...lastUserMessage,
+        content: extractOptimisticMessageContent(lastUserMessage),
+      },
+      aiModel: aiModel!,
+    });
+  };
+
+  const onSendChatMessage = (message: ChatInputValue) => {
+    setReplyToMessage(null);
+
+    return onReply({
+      ...message,
+      replyToMessage: replyToMessage && {
+        ...replyToMessage,
+        content: extractOptimisticMessageContent(replyToMessage),
+      },
       aiModel: aiModel!,
     });
   };
 
   useSendInitialMessage(onReply);
-  useUpdateEffect(focusInput, [messages]);
+  useUpdateEffect(focusInput, [messages, replyToMessage]);
 
   return (
     <div className="flex gap-6 mx-auto max-w-7xl">
@@ -82,21 +100,23 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
               isLast={index === groupedMessages.length - 1}
               readOnly={chat.archived}
               onRefreshResponse={onRefreshResponse}
+              onReply={setReplyToMessage}
             />
           ))}
         </div>
 
         {!chat.archived && (
           <ChatInputToolbar
+            replyToMessage={replyToMessage}
             replying={replying}
             disabled={!aiModel}
             inputRef={inputRef}
-            onSubmit={message => onReply({
-              ...message,
-              aiModel: aiModel!,
-            })}
+            onSubmit={onSendChatMessage}
             onCancelSubmit={() => {
               messages.replyObservable?.abort();
+            }}
+            onCancelReplyToMessage={() => {
+              setReplyToMessage(null);
             }}
           />
         )}

@@ -53,3 +53,11 @@ export function useOptimisticResponseCreator() {
     }),
   };
 }
+
+export function extractOptimisticMessageContent(
+  message: Pick<OptimisticMessageOutputT, 'content'>,
+): string {
+  return typeof message.content === 'string'
+    ? message.content
+    : message.content.getSnapshot().content;
+}

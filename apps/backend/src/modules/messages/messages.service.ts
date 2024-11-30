@@ -6,7 +6,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { findItemIndexById, mapAsyncIterator, tryOrThrowTE } from '@llm/commons';
 import {
-  groupSdkMessagesByRepeats,
+  groupSdkAIMessagesByRepeats,
   type SdkCreateMessageInputT,
   type SdkJwtTokenT,
   type SdkRequestAIReplyInputT,
@@ -17,6 +17,7 @@ import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../da
 import { AIConnectorService } from '../ai-connector';
 import { WithAuthFirewall } from '../auth';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
+import { createReplyAiMessagePrefix } from './helpers';
 import { MessagesFirewall } from './messages.firewall';
 import { MessagesRepo } from './messages.repo';
 
@@ -50,6 +51,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           metadata: {},
           aiModelId: null,
           creatorUserId: creator.id,
+          repliedMessageId: message.replyToMessage?.id ?? null,
           role: 'user',
         },
       }),
@@ -62,6 +64,13 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
   ) => pipe(
     TE.Do,
     TE.bind('message', () => this.repo.findById({ id })),
+    TE.bindW('replyContext', ({ message }) => {
+      if (!message.repliedMessageId) {
+        return TE.of(null);
+      }
+
+      return this.repo.findById({ id: message.repliedMessageId });
+    }),
     TE.bindW('history', ({ message }) => pipe(
       this.searchByChatId(message.chatId),
       TE.map(({ items }) => {
@@ -69,11 +78,11 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
 
         return pipe(
           items.slice(historyIndex + 1).toReversed(),
-          groupSdkMessagesByRepeats,
+          groupSdkAIMessagesByRepeats,
         );
       }),
     )),
-    TE.chainW(({ message, history }) =>
+    TE.chainW(({ message, history, replyContext }) =>
       pipe(
         this.aiConnectorService.executePrompt(
           {
@@ -81,7 +90,9 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             aiModel,
             history,
             message: {
-              content: message.content,
+              content: replyContext
+                ? createReplyAiMessagePrefix(replyContext, message.content)
+                : message.content,
             },
           },
         ),

@@ -178,10 +178,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     messages: {
       empty: 'Brak wiadomości',
       you: 'Ty',
+      ai: 'AI',
     },
     actions: {
       send: 'Wyślij',
       submitOnEnter: 'Wyślij po naciśnięciu Enter',
+      refresh: 'Odśwież odpowiedź',
+      reply: 'Odpowiedz na tę wiadomość',
     },
     placeholders: {
       enterMessage: 'Wpisz wiadomość...',

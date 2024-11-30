@@ -1,7 +1,7 @@
 import { useControl } from '@under-control/forms';
 import clsx from 'clsx';
 import { takeRight } from 'fp-ts/lib/Array';
-import { Bot, User } from 'lucide-react';
+import { Bot, ReplyIcon, User } from 'lucide-react';
 
 import type { Overwrite } from '@llm/commons';
 
@@ -14,8 +14,10 @@ import { useI18n } from '~/i18n';
 
 import type { AIStreamObservable } from '../hooks';
 
+import { ActionButton } from './action-button';
 import { ChatMessageAIActions } from './chat-message-ai-actions';
 import { ChatMessageContent } from './chat-message-content';
+import { ChatMessageRepliedMessage } from './chat-message-replied-message';
 import { ChatMessageVariants } from './chat-message-variants';
 
 export type SdkRepeatedMessageItemT = SdkRepeatedMessageLike<
@@ -29,9 +31,10 @@ type Props = {
   isLast: boolean;
   readOnly?: boolean;
   onRefreshResponse: (message: Omit<SdkRepeatedMessageItemT, 'content'>) => void;
+  onReply: (message: SdkRepeatedMessageItemT) => void;
 };
 
-export function ChatMessage({ message, isLast, readOnly, onRefreshResponse }: Props) {
+export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onReply }: Props) {
   const t = useI18n().pack.chat;
   const { session } = useSdkForLoggedIn();
 
@@ -90,6 +93,13 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse }: Pr
           },
         )}
       >
+        {!isAI && message.repliedMessage && (
+          <ChatMessageRepliedMessage
+            message={message.repliedMessage}
+            darkMode
+          />
+        )}
+
         <ChatMessageContent key={typeof content} content={content} />
 
         <div className="flex justify-between items-center gap-6 mt-1 text-xs">
@@ -97,20 +107,33 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse }: Pr
             {new Date(createdAt).toLocaleTimeString()}
           </span>
 
-          {isAI
-            ? (!readOnly && (
-                <ChatMessageAIActions
-                  isLast={isLast}
-                  message={message}
-                  onRefreshResponse={() => onRefreshResponse(message)}
-                />
-              ))
-            : (
-                <div className="flex items-center gap-1 opacity-75 text-white">
-                  <User size={12} />
-                  <span>{isYou ? t.messages.you : creator?.email}</span>
-                </div>
-              )}
+          <div className="flex items-center gap-2">
+            <ActionButton
+              title={t.actions.reply}
+              darkMode={!isAI}
+              onClick={() => onReply(message)}
+            >
+              <ReplyIcon
+                size={14}
+                className="opacity-50 hover:opacity-100"
+              />
+            </ActionButton>
+
+            {isAI
+              ? (!readOnly && (
+                  <ChatMessageAIActions
+                    isLast={isLast}
+                    message={message}
+                    onRefreshResponse={() => onRefreshResponse(message)}
+                  />
+                ))
+              : (
+                  <div className="flex items-center gap-1 opacity-75 text-white">
+                    <User size={12} />
+                    <span>{isYou ? t.messages.you : creator?.email}</span>
+                  </div>
+                )}
+          </div>
         </div>
 
         {isAI && repeats.length > 0 && (

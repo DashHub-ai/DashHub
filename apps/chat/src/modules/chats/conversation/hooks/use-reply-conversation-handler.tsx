@@ -6,9 +6,9 @@ import { usePromiseOptimisticResponse } from '@llm/commons-front';
 import {
   type SdkChatT,
   type SdkCreateMessageInputT,
+  type SdkRepliedMessageT,
   type SdKSearchMessagesOutputT,
   type SdkTableRowWithIdNameT,
-  type SdkTableRowWithUuidT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 
@@ -49,10 +49,23 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
     before: createAIReplyObservable,
     task: (
       replyObservable,
-      { aiModel, content }: SdkCreateMessageInputT & { aiModel: SdkTableRowWithIdNameT; },
+      {
+        aiModel,
+        content,
+        replyToMessage,
+      }: Overwrite<SdkCreateMessageInputT, {
+        aiModel: SdkTableRowWithIdNameT;
+        replyToMessage?: SdkRepliedMessageT | null;
+      }>,
     ) => pipe(
       TE.Do,
-      TE.bind('createdMessage', () => createMessage(chat.id, { content })),
+      TE.bind('createdMessage', () => createMessage(
+        chat.id,
+        {
+          content,
+          replyToMessage,
+        },
+      )),
       TE.bindW('aiResponse', ({ createdMessage }) => pipe(
         TE.tryCatch(
           () => streamAIReply({
@@ -88,13 +101,16 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
     optimistic: ({
       before: replyObservable,
       result: { items, total },
-      args: [{ content, aiModel }],
+      args: [{ content, aiModel, replyToMessage }],
     }) => ({
       replyObservable,
       total: total + 1,
       items: [
         ...items,
-        createOptimisticResponse.user({ content }),
+        {
+          ...createOptimisticResponse.user({ content }),
+          repliedMessage: replyToMessage || null,
+        },
         createOptimisticResponse.bot(aiModel, replyObservable),
       ],
     }),
@@ -109,7 +125,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       replyObservable,
       { aiModel, message }: {
         aiModel: SdkTableRowWithIdNameT;
-        message: SdkTableRowWithUuidT;
+        message: SdkRepliedMessageT;
       },
     ) => pipe(
       TE.Do,

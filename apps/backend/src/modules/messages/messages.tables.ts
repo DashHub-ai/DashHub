@@ -28,11 +28,17 @@ export type MessagesTable =
 
 export type MessageTableRow = NormalizeSelectTableRow<MessagesTable>;
 
+type RepliedMessageTableRelationRow =
+  & Pick<MessageTableRow, 'id' | 'role' | 'content'>
+  & {
+    creator: UserTableRowBaseRelation | null;
+  };
+
 export type MessageTableRowWithRelations =
   & Omit<MessageTableRow, 'chatId' | 'creatorUserId' | 'aiModelId' | 'repliedMessageId'>
   & {
     chat: TableRowWithUuid;
-    repliedMessage: TableRowWithUuid | null;
+    repliedMessage: RepliedMessageTableRelationRow | null;
     creator: UserTableRowBaseRelation | null;
     aiModel: TableRowWithIdName | null;
   };
