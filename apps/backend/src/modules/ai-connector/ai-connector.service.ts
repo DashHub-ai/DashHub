@@ -1,7 +1,9 @@
+import Instructor from '@instructor-ai/instructor';
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { OpenAI } from 'openai';
 import { inject, injectable } from 'tsyringe';
+import { z } from 'zod';
 
 import type {
   SdkCreateMessageInputT,
@@ -14,26 +16,24 @@ import { rejectFalsyItems } from '@llm/commons';
 import { AIModelsService } from '../ai-models';
 import { OpenAIConnectionCreatorError } from './ai-connector.errors';
 
-type ExecutePromptAttrs = {
-  aiModel: SdkTableRowWithIdT;
-  history: SdkMessageT[];
-  message?: SdkCreateMessageInputT;
-  signal?: AbortSignal;
-};
-
 @injectable()
 export class AIConnectorService {
   constructor(
     @inject(AIModelsService) private readonly aiModelsService: AIModelsService,
   ) {}
 
-  executePrompt = (
+  executeStreamPrompt = (
     {
       aiModel,
       history,
       message,
       signal,
-    }: ExecutePromptAttrs,
+    }: {
+      aiModel: SdkTableRowWithIdT;
+      history: SdkMessageT[];
+      message?: SdkCreateMessageInputT;
+      signal?: AbortSignal;
+    },
   ) => pipe(
     this.aiModelsService.get(aiModel.id),
     TE.chainW(({ credentials }) => {
@@ -53,6 +53,50 @@ export class AIConnectorService {
             },
           ]),
         }, { signal }),
+      );
+    }),
+  );
+
+  executeInstructedPrompt = <Z extends z.AnyZodObject>(
+    {
+      aiModel,
+      history,
+      message,
+      schema,
+    }: {
+      aiModel: SdkTableRowWithIdT;
+      history: SdkMessageT[];
+      message: string;
+      schema: Z;
+    },
+  ) => pipe(
+    this.aiModelsService.get(aiModel.id),
+    TE.chainW(({ credentials }) => {
+      const ai = new OpenAI({
+        apiKey: credentials.apiKey,
+      });
+
+      const client = Instructor({
+        client: ai,
+        mode: 'TOOLS',
+      });
+
+      return OpenAIConnectionCreatorError.tryCatch(
+        async () => client.chat.completions.create({
+          model: credentials.apiModel,
+          messages: [
+            ...this.normalizeMessagesToCompletion(history),
+            {
+              role: 'user',
+              content: message,
+            },
+          ],
+          stream: false,
+          response_model: {
+            name: 'Extractor',
+            schema,
+          },
+        }),
       );
     }),
   );

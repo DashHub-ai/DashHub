@@ -1,4 +1,4 @@
-import type { SelectQueryBuilder } from 'kysely';
+import { type SelectQueryBuilder, sql } from 'kysely';
 
 import type { DatabaseTables } from '../database.tables';
 import type { KyselySelectCreator } from '../types';
@@ -35,7 +35,7 @@ export function createCountRecordsQuery<K extends keyof DatabaseTables>({ table,
     const query = transaction(async qb =>
       qb
         .selectFrom(table)
-        .select(({ fn }) => fn.count<number>('*' as any).as('count'))
+        .select(({ fn }) => fn.count<number>(sql.raw('*')).as('count'))
         .$call((nqb) => {
           if (modifyQuery) {
             return modifyQuery(nqb as any);
@@ -46,7 +46,7 @@ export function createCountRecordsQuery<K extends keyof DatabaseTables>({ table,
         .$call(createWhereSelectQuery({ where }))
         .$call(nestedQuery => (limit ? nestedQuery.limit(limit) : nestedQuery))
         .executeTakeFirst()
-        .then(result => result.count as number),
+        .then(result => +result.count as number),
     );
 
     return DatabaseError.tryTask(query);

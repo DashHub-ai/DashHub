@@ -179,6 +179,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       ai: 'AI',
     },
     actions: {
+      expand: {
+        more: 'Show more',
+        less: 'Show less',
+      },
       send: 'Send',
       submitOnEnter: 'Submit on Enter',
       refresh: 'Refresh response',

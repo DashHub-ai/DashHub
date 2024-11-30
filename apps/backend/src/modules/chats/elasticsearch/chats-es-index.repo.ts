@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { type Overwrite, tryOrThrowTE } from '@llm/commons';
 import { TableUuid } from '~/modules/database';
 import {
   createAIGeneratedFieldMappings,
@@ -15,12 +15,13 @@ import {
   createIdNameObjectMapping,
   createIdObjectMapping,
   ElasticsearchRepo,
+  EsAIGeneratedField,
   type EsDocument,
 } from '~/modules/elasticsearch';
 
 import type { ChatTableRowWithRelations } from '../chats.tables';
 
-import { ChatsRepo } from '../repo/chats.repo';
+import { ChatsRepo } from '../chats.repo';
 
 const ChatsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   indexName: 'dashboard-chats',
@@ -51,7 +52,12 @@ const ChatsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ChatsEsDocument = EsDocument<ChatTableRowWithRelations>;
+export type ChatsEsDocument = EsDocument<Overwrite<ChatTableRowWithRelations, {
+  summary: {
+    name: EsAIGeneratedField;
+    content: EsAIGeneratedField;
+  };
+}>>;
 
 @injectable()
 export class ChatsEsIndexRepo extends ChatsAbstractEsIndexRepo<ChatsEsDocument> {
@@ -66,9 +72,21 @@ export class ChatsEsIndexRepo extends ChatsAbstractEsIndexRepo<ChatsEsDocument> 
     return pipe(
       this.chatsRepo.findWithRelationsByIds({ ids }),
       TE.map(
-        A.map(entity => ({
+        A.map(({ summary, ...entity }): ChatsEsDocument => ({
           ...snakecaseKeys(entity, { deep: true }),
           _id: String(entity.id),
+          summary: {
+            content: {
+              value: summary.content,
+              generated: summary.contentGenerated,
+              generated_at: summary.contentGeneratedAt,
+            },
+            name: {
+              value: summary.name,
+              generated: summary.nameGenerated,
+              generated_at: summary.nameGeneratedAt,
+            },
+          },
         })),
       ),
       tryOrThrowTE,
