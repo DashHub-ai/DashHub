@@ -12,13 +12,14 @@ import { Checkbox } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Props = {
+  replying: boolean;
   disabled?: boolean;
   inputRef?: React.RefObject<HTMLInputElement>;
   onSubmit: (message: SdkCreateMessageInputT) => CanBePromise<any>;
   onCancelSubmit: () => void;
 };
 
-export function ChatInputToolbar({ disabled, inputRef, onSubmit, onCancelSubmit }: Props) {
+export function ChatInputToolbar({ disabled, replying, inputRef, onSubmit, onCancelSubmit }: Props) {
   const t = useI18n().pack.chat;
 
   const submitOnEnterStorage = useLocalStorageObject('chat-input-toolbar-submit-on-enter', {
@@ -31,7 +32,6 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit, onCancelSubmit 
     bind,
     value,
     handleSubmitEvent,
-    submitState,
     submit,
     setValue,
   } = useForm<SdkCreateMessageInputT>({
@@ -49,7 +49,7 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit, onCancelSubmit 
     },
   });
 
-  const isTypingDisabled = disabled || submitState.loading;
+  const isTypingDisabled = disabled || replying;
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (submitOnEnterStorage.getOrNull() && event.key === 'Enter' && !event.shiftKey) {
@@ -101,12 +101,12 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit, onCancelSubmit 
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-gray-700 hover:bg-gray-800',
           )}
-          {...submitState.loading && {
+          {...replying && {
             onClick: onClickCancelSubmit,
           }}
         >
           {(
-            submitState.loading
+            replying
               ? <CircleStopIcon size={16} />
               : <SendIcon size={16} />
           )}

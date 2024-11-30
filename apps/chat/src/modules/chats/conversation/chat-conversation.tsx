@@ -27,7 +27,7 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     focusInput,
   } = useAutoFocusConversationInput();
 
-  const { messages, onReply } = useReplyConversationHandler({
+  const { messages, replying, onReply } = useReplyConversationHandler({
     chat,
     initialMessages,
   });
@@ -59,6 +59,7 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
 
         {!chat.archived && (
           <ChatInputToolbar
+            replying={replying}
             disabled={!aiModel}
             inputRef={inputRef}
             onSubmit={input => onReply({
