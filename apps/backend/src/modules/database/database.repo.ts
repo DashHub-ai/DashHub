@@ -13,6 +13,7 @@ import type { DatabaseTables, DatabaseTablesWithId } from './database.tables';
 
 import { DatabaseConnectionRepo } from './connection';
 import {
+  createCountRecordsQuery,
   createDeleteRecordQuery,
   createDeleteRecordsQuery,
   createIsRecordPresentOrThrowQuery,
@@ -64,6 +65,8 @@ export function createDatabaseRepo<K extends keyof DatabaseTablesWithId>(table: 
     readonly isPresentOrThrow = createIsRecordPresentOrThrowQuery<K>(
       this.queryFactoryAttrs,
     );
+
+    readonly count = createCountRecordsQuery<K>(this.queryFactoryAttrs);
 
     readonly findOne = createSelectRecordQuery<K>(this.queryFactoryAttrs);
 

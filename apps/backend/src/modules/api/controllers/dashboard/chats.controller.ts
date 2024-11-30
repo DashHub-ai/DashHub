@@ -118,6 +118,39 @@ export class ChatsController extends AuthorizedController {
         ),
       )
       .post(
+        '/:id/messages/:messageId/ai-refresh',
+        sdkSchemaValidator('json', SdkRequestAIReplyInputV),
+        async (context) => {
+          const abortController = new AbortController();
+          const streamAIResponse = (response: AsyncGenerator<string>) =>
+            streamSSE(context, async (stream) => {
+              stream.onAbort(() => {
+                abortController.abort();
+              });
+
+              for await (const chunk of response) {
+                await stream.write(chunk);
+              }
+            });
+
+          return pipe(
+            messagesService.asUser(context.var.jwt).aiRefresh(
+              {
+                ...context.req.valid('json'),
+                id: context.req.param('messageId'),
+              },
+              abortController.signal,
+            ),
+            rejectUnsafeSdkErrors,
+            TE.matchW(
+              respondWithTaggedError(context),
+              streamAIResponse,
+            ),
+            runTask,
+          );
+        },
+      )
+      .post(
         '/:id/messages/:messageId/ai-reply',
         sdkSchemaValidator('json', SdkRequestAIReplyInputV),
         async (context) => {

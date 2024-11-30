@@ -29,6 +29,7 @@ const MessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
           uuid: true,
         }),
         chat: createIdObjectMapping({}, 'keyword'),
+        repliedMessage: createIdObjectMapping({}, 'keyword'),
         creator: createIdObjectMapping(),
         aiModel: createIdObjectMapping(),
         content: {

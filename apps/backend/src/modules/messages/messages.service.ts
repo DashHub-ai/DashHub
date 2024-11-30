@@ -76,13 +76,13 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       pipe(
         this.aiConnectorService.executePrompt(
           {
+            signal,
             aiModel,
             history,
             message: {
               content: message.content,
             },
           },
-          signal,
         ),
         TE.map(
           stream => pipe(
@@ -92,7 +92,52 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         ),
         TE.map(stream => this.createAIResponseMessage(
           {
+            repliedMessageId: message.id,
+            originalMessageId: null,
             chatId: message.chatId,
+            aiModelId: aiModel.id,
+            stream,
+          },
+          signal,
+        )),
+      ),
+    ),
+  );
+
+  aiRefresh = (
+    { id, aiModel }: TableRowWithUuid & SdkRequestAIReplyInputT,
+    signal?: AbortSignal,
+  ) => pipe(
+    TE.Do,
+    TE.bind('refreshedMessage', () => this.repo.findById({ id })),
+    TE.bindW('history', ({ refreshedMessage }) => pipe(
+      this.searchByChatId(refreshedMessage.chatId),
+      TE.map(({ items }) => {
+        const historyIndex = findItemIndexById(refreshedMessage.id)(items);
+
+        return items.slice(historyIndex).toReversed();
+      }),
+    )),
+    TE.chainW(({ refreshedMessage, history }) =>
+      pipe(
+        this.aiConnectorService.executePrompt(
+          {
+            signal,
+            aiModel,
+            history,
+          },
+        ),
+        TE.map(
+          stream => pipe(
+            stream as unknown as AsyncIterableIterator<ChatCompletionChunk>,
+            mapAsyncIterator(chunk => chunk.choices[0]?.delta?.content ?? ''),
+          ),
+        ),
+        TE.map(stream => this.createAIResponseMessage(
+          {
+            repliedMessageId: refreshedMessage.repliedMessageId,
+            originalMessageId: refreshedMessage.id,
+            chatId: refreshedMessage.chatId,
             aiModelId: aiModel.id,
             stream,
           },
@@ -107,7 +152,11 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       chatId,
       aiModelId,
       stream,
+      repliedMessageId,
+      originalMessageId,
     }: {
+      repliedMessageId: TableUuid | null;
+      originalMessageId: TableUuid | null;
       chatId: TableUuid;
       aiModelId: TableId;
       stream: AsyncIterableIterator<string>;
@@ -126,19 +175,31 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         yield item;
       }
 
+      const countRepeatsTask = (
+        originalMessageId
+          ? this.repo.count({
+            where: [
+              ['originalMessageId', '=', originalMessageId],
+            ],
+          })
+          : TE.of(0)
+      );
+
       await pipe(
-        this.repo.create({
+        countRepeatsTask,
+        TE.chain(repeatsCount => this.repo.create({
           value: {
             chatId,
             aiModelId,
             content,
             metadata: {},
-            originalMessageId: null,
+            repliedMessageId,
+            originalMessageId,
             creatorUserId: null,
-            repeatCount: 0,
+            repeatCount: repeatsCount,
             role: 'assistant',
           },
-        }),
+        })),
         TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
         tryOrThrowTE,
       )();

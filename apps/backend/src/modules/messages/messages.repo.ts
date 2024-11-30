@@ -48,6 +48,8 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
           ai_model_id: aiModelId,
           ai_model_name: aiModelName,
 
+          replied_message_id: repliedMessageId,
+
           ...item
         }): MessageTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -65,6 +67,11 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             ? {
                 id: userId,
                 email: userEmail,
+              }
+            : null,
+          repliedMessage: repliedMessageId
+            ? {
+                id: repliedMessageId,
               }
             : null,
         })),

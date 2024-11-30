@@ -9,13 +9,16 @@ import type {
   SdkTableRowWithIdT,
 } from '@llm/sdk';
 
+import { rejectFalsyItems } from '@llm/commons';
+
 import { AIModelsService } from '../ai-models';
 import { OpenAIConnectionCreatorError } from './ai-connector.errors';
 
 type ExecutePromptAttrs = {
   aiModel: SdkTableRowWithIdT;
   history: SdkMessageT[];
-  message: SdkCreateMessageInputT;
+  message?: SdkCreateMessageInputT;
+  signal?: AbortSignal;
 };
 
 @injectable()
@@ -29,8 +32,8 @@ export class AIConnectorService {
       aiModel,
       history,
       message,
+      signal,
     }: ExecutePromptAttrs,
-    signal?: AbortSignal,
   ) => pipe(
     this.aiModelsService.get(aiModel.id),
     TE.chainW(({ credentials }) => {
@@ -42,13 +45,13 @@ export class AIConnectorService {
         () => ai.chat.completions.create({
           stream: true,
           model: credentials.apiModel,
-          messages: [
+          messages: rejectFalsyItems([
             ...this.normalizeMessagesToCompletion(history),
-            {
+            !!message?.content && {
               role: 'user',
               content: message.content,
             },
-          ],
+          ]),
         }, { signal }),
       );
     }),
