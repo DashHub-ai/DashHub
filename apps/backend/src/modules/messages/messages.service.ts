@@ -58,7 +58,10 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
     );
 
-  aiReply = ({ id, aiModel }: TableRowWithUuid & SdkRequestAIReplyInputT) => pipe(
+  aiReply = (
+    { id, aiModel }: TableRowWithUuid & SdkRequestAIReplyInputT,
+    signal?: AbortSignal,
+  ) => pipe(
     TE.Do,
     TE.bind('message', () => this.repo.findById({ id })),
     TE.bindW('history', ({ message }) => pipe(
@@ -71,22 +74,30 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     )),
     TE.chainW(({ message, history }) =>
       pipe(
-        this.aiConnectorService.executePrompt({
-          aiModel,
-          history,
-          message: {
-            content: message.content,
+        this.aiConnectorService.executePrompt(
+          {
+            aiModel,
+            history,
+            message: {
+              content: message.content,
+            },
           },
-        }),
-        TE.map(stream => pipe(
-          stream as unknown as AsyncIterableIterator<ChatCompletionChunk>,
-          mapAsyncIterator(chunk => chunk.choices[0]?.delta?.content ?? ''),
+          signal,
+        ),
+        TE.map(
+          stream => pipe(
+            stream as unknown as AsyncIterableIterator<ChatCompletionChunk>,
+            mapAsyncIterator(chunk => chunk.choices[0]?.delta?.content ?? ''),
+          ),
+        ),
+        TE.map(stream => this.createAIResponseMessage(
+          {
+            chatId: message.chatId,
+            aiModelId: aiModel.id,
+            stream,
+          },
+          signal,
         )),
-        TE.map(stream => this.createAIResponseMessage({
-          chatId: message.chatId,
-          aiModelId: aiModel.id,
-          stream,
-        })),
       ),
     ),
   );
@@ -101,31 +112,45 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       aiModelId: TableId;
       stream: AsyncIterableIterator<string>;
     },
+    signal?: AbortSignal,
   ) {
     let content = '';
 
-    for await (const item of stream) {
-      content += item;
-      yield item;
+    try {
+      for await (const item of stream) {
+        if (signal?.aborted) {
+          return;
+        }
+
+        content += item;
+        yield item;
+      }
+
+      if (!signal?.aborted) {
+        await pipe(
+          this.repo.create({
+            value: {
+              chatId,
+              aiModelId,
+              content,
+              metadata: {},
+              originalMessageId: null,
+              creatorUserId: null,
+              repeatCount: 0,
+              role: 'assistant',
+            },
+          }),
+          TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+          tryOrThrowTE,
+        )();
+      }
+
+      yield '';
     }
-
-    await pipe(
-      this.repo.create({
-        value: {
-          chatId,
-          aiModelId,
-          content,
-          metadata: {},
-          originalMessageId: null,
-          creatorUserId: null,
-          repeatCount: 0,
-          role: 'assistant',
-        },
-      }),
-      TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
-      tryOrThrowTE,
-    )();
-
-    yield '';
+    catch (error) {
+      if (!signal?.aborted) {
+        throw error;
+      }
+    }
   };
 }
