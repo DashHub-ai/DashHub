@@ -8,13 +8,18 @@ type Props = {
   isLast: boolean;
   disabled?: boolean;
   message: Pick<SdkSearchMessageItemT, 'aiModel'>;
+  onRefreshResponse: () => void;
 };
 
-export function ChatMessageAIActions({ isLast, disabled, message }: Props) {
+export function ChatMessageAIActions({ isLast, disabled, message, onRefreshResponse }: Props) {
   return (
     <div className="flex items-center gap-2">
       {isLast && (
-        <ActionButton disabled={disabled} title="Refresh response">
+        <ActionButton
+          disabled={disabled}
+          title="Refresh response"
+          onClick={onRefreshResponse}
+        >
           <RefreshCwIcon size={14} className="opacity-50 hover:opacity-100" />
         </ActionButton>
       )}

@@ -110,22 +110,4 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
       }),
       TE.map(decodeTextAsyncStream),
     );
-
-  requestAIRefresh = (
-    {
-      abortController,
-      chatId,
-      messageId,
-      data,
-    }: AIRequestReplyAttrs,
-  ) =>
-    pipe(
-      this.fetch<AsyncGenerator<Uint8Array>>({
-        url: this.endpoint(`/${chatId}/messages/${messageId}/ai-refresh`),
-        options: postPayload(data),
-        stream: true,
-        abortController,
-      }),
-      TE.map(decodeTextAsyncStream),
-    );
 };

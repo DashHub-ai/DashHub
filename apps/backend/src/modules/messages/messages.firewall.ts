@@ -41,10 +41,4 @@ export class MessagesFirewall extends AuthFirewallService {
     this.messagesService.aiReply,
     this.tryTEIfUser.is.root,
   );
-
-  // TODO: Add belongs checks
-  aiRefresh = flow(
-    this.messagesService.aiRefresh,
-    this.tryTEIfUser.is.root,
-  );
 }

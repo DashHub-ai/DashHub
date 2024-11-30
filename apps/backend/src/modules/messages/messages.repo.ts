@@ -53,7 +53,6 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
           ...item
         }): MessageTableRowWithRelations => ({
           ...camelcaseKeys(item),
-          repeats: [],
           chat: {
             id: chatId,
           },

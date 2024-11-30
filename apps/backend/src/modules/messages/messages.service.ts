@@ -4,13 +4,13 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type {
-  SdkCreateMessageInputT,
-  SdkJwtTokenT,
-  SdkRequestAIReplyInputT,
-} from '@llm/sdk';
-
 import { findItemIndexById, mapAsyncIterator, tryOrThrowTE } from '@llm/commons';
+import {
+  groupSdkMessagesByRepeats,
+  type SdkCreateMessageInputT,
+  type SdkJwtTokenT,
+  type SdkRequestAIReplyInputT,
+} from '@llm/sdk';
 
 import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../database';
 
@@ -48,10 +48,8 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           chatId: chat.id,
           content: message.content,
           metadata: {},
-          originalMessageId: null,
           aiModelId: null,
           creatorUserId: creator.id,
-          repeatCount: 0,
           role: 'user',
         },
       }),
@@ -69,7 +67,10 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       TE.map(({ items }) => {
         const historyIndex = findItemIndexById(message.id)(items);
 
-        return items.slice(historyIndex + 1).toReversed();
+        return pipe(
+          items.slice(historyIndex + 1).toReversed(),
+          groupSdkMessagesByRepeats,
+        );
       }),
     )),
     TE.chainW(({ message, history }) =>
@@ -93,51 +94,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         TE.map(stream => this.createAIResponseMessage(
           {
             repliedMessageId: message.id,
-            originalMessageId: null,
             chatId: message.chatId,
-            aiModelId: aiModel.id,
-            stream,
-          },
-          signal,
-        )),
-      ),
-    ),
-  );
-
-  aiRefresh = (
-    { id, aiModel }: TableRowWithUuid & SdkRequestAIReplyInputT,
-    signal?: AbortSignal,
-  ) => pipe(
-    TE.Do,
-    TE.bind('refreshedMessage', () => this.repo.findById({ id })),
-    TE.bindW('history', ({ refreshedMessage }) => pipe(
-      this.searchByChatId(refreshedMessage.chatId),
-      TE.map(({ items }) => {
-        const historyIndex = findItemIndexById(refreshedMessage.id)(items);
-
-        return items.slice(historyIndex).toReversed();
-      }),
-    )),
-    TE.chainW(({ refreshedMessage, history }) =>
-      pipe(
-        this.aiConnectorService.executePrompt(
-          {
-            signal,
-            aiModel,
-            history,
-          },
-        ),
-        TE.map(
-          stream => pipe(
-            stream as unknown as AsyncIterableIterator<ChatCompletionChunk>,
-            mapAsyncIterator(chunk => chunk.choices[0]?.delta?.content ?? ''),
-          ),
-        ),
-        TE.map(stream => this.createAIResponseMessage(
-          {
-            repliedMessageId: refreshedMessage.repliedMessageId,
-            originalMessageId: refreshedMessage.id,
-            chatId: refreshedMessage.chatId,
             aiModelId: aiModel.id,
             stream,
           },
@@ -153,10 +110,8 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       aiModelId,
       stream,
       repliedMessageId,
-      originalMessageId,
     }: {
-      repliedMessageId: TableUuid | null;
-      originalMessageId: TableUuid | null;
+      repliedMessageId: TableUuid;
       chatId: TableUuid;
       aiModelId: TableId;
       stream: AsyncIterableIterator<string>;
@@ -175,31 +130,18 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         yield item;
       }
 
-      const countRepeatsTask = (
-        originalMessageId
-          ? this.repo.count({
-            where: [
-              ['originalMessageId', '=', originalMessageId],
-            ],
-          })
-          : TE.of(0)
-      );
-
       await pipe(
-        countRepeatsTask,
-        TE.chain(repeatsCount => this.repo.create({
+        this.repo.create({
           value: {
             chatId,
             aiModelId,
             content,
             metadata: {},
             repliedMessageId,
-            originalMessageId,
             creatorUserId: null,
-            repeatCount: repeatsCount,
             role: 'assistant',
           },
-        })),
+        }),
         TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
         tryOrThrowTE,
       )();

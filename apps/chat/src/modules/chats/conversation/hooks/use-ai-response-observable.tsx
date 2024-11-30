@@ -1,3 +1,5 @@
+import type { TaskEither } from 'fp-ts/lib/TaskEither';
+
 import { pipe } from 'fp-ts/lib/function';
 
 import { createStoreSubscriber, type StoreSubscriber, tryOrThrowTE } from '@llm/commons';
@@ -23,6 +25,12 @@ export type AIStreamObservable = StoreSubscriber<AIStreamContent> & {
 
 type Attrs = {
   chat: SdkChatT;
+};
+
+type StreamAIResponseAttrs = {
+  task: TaskEither<unknown, AsyncIterableIterator<string>>;
+  observable: AIStreamObservable;
+  message: SdkTableRowWithUuidT;
 };
 
 export function useAIResponseObservable({ chat }: Attrs) {
@@ -52,14 +60,10 @@ export function useAIResponseObservable({ chat }: Attrs) {
 
   const streamAIResponse = useRefSafeCallback(async (
     {
+      task,
       observable,
-      aiModel,
       message,
-    }: {
-      observable: AIStreamObservable;
-      aiModel: SdkTableRowWithIdT;
-      message: SdkTableRowWithUuidT;
-    },
+    }: StreamAIResponseAttrs,
   ) => {
     observable.notify({
       ...observable.getSnapshot(),
@@ -67,15 +71,7 @@ export function useAIResponseObservable({ chat }: Attrs) {
       message,
     });
 
-    const aiReply = await pipe(
-      sdks.dashboard.chats.requestAIReply({
-        abortController: observable.getSnapshot().abortController,
-        chatId: chat.id,
-        messageId: message.id,
-        data: { aiModel },
-      }),
-      tryOrThrowTE,
-    )();
+    const aiReply = await pipe(task, tryOrThrowTE)();
 
     try {
       for await (const message of aiReply) {
@@ -104,8 +100,25 @@ export function useAIResponseObservable({ chat }: Attrs) {
     }
   });
 
+  const streamAIReply = async (
+    {
+      aiModel,
+      ...attrs
+    }: Omit<StreamAIResponseAttrs, 'task'> & {
+      aiModel: SdkTableRowWithIdT;
+    },
+  ) => streamAIResponse({
+    ...attrs,
+    task: sdks.dashboard.chats.requestAIReply({
+      abortController: attrs.observable.getSnapshot().abortController,
+      chatId: chat.id,
+      messageId: attrs.message.id,
+      data: { aiModel },
+    }),
+  });
+
   return {
     createAIReplyObservable,
-    streamAIResponse,
+    streamAIReply,
   };
 }
