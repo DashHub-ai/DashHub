@@ -24,6 +24,7 @@ export type APIRequestAttrs = {
   query?: SearchParamsMap;
   blob?: boolean;
   stream?: boolean;
+  abortController?: AbortController;
 };
 
 export type SdkApiRequestErrors =
@@ -45,6 +46,7 @@ export function performApiRequest<A, E extends TaggedError<string, any> = never>
   authToken,
   blob,
   stream,
+  abortController,
 }: APIRequestAttrs): SdkApiRequestTE<A, E> {
   const task = async () => {
     if (query) {
@@ -68,6 +70,7 @@ export function performApiRequest<A, E extends TaggedError<string, any> = never>
       method: 'GET',
       ...options,
       headers,
+      signal: abortController?.signal,
     });
 
     if (stream && result.ok && result.body instanceof ReadableStream) {

@@ -65,6 +65,9 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
               content: input.content,
               aiModel: aiModel!,
             })}
+            onCancelSubmit={() => {
+              messages.replyObservable?.abort();
+            }}
           />
         )}
       </div>

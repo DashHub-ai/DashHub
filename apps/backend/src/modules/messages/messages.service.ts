@@ -126,26 +126,26 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         yield item;
       }
 
-      if (!signal?.aborted) {
-        await pipe(
-          this.repo.create({
-            value: {
-              chatId,
-              aiModelId,
-              content,
-              metadata: {},
-              originalMessageId: null,
-              creatorUserId: null,
-              repeatCount: 0,
-              role: 'assistant',
-            },
-          }),
-          TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
-          tryOrThrowTE,
-        )();
-      }
+      await pipe(
+        this.repo.create({
+          value: {
+            chatId,
+            aiModelId,
+            content,
+            metadata: {},
+            originalMessageId: null,
+            creatorUserId: null,
+            repeatCount: 0,
+            role: 'assistant',
+          },
+        }),
+        TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+        tryOrThrowTE,
+      )();
 
-      yield '';
+      if (!signal?.aborted) {
+        yield '';
+      }
     }
     catch (error) {
       if (!signal?.aborted) {

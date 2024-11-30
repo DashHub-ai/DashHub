@@ -1,21 +1,24 @@
-import { type CanBePromise, useForm } from '@under-control/forms';
+import type { MouseEventHandler } from 'react';
+
+import { type CanBePromise, suppressEvent, useForm } from '@under-control/forms';
 import clsx from 'clsx';
-import { MessageCircle, SendIcon } from 'lucide-react';
+import { CircleStopIcon, MessageCircle, SendIcon } from 'lucide-react';
 
 import type { SdkCreateMessageInputT } from '@llm/sdk';
 
 import { StrictBooleanV } from '@llm/commons';
 import { useLocalStorageObject } from '@llm/commons-front';
-import { Checkbox, FormSpinnerCTA } from '@llm/ui';
+import { Checkbox } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Props = {
   disabled?: boolean;
   inputRef?: React.RefObject<HTMLInputElement>;
   onSubmit: (message: SdkCreateMessageInputT) => CanBePromise<any>;
+  onCancelSubmit: () => void;
 };
 
-export function ChatInputToolbar({ disabled, inputRef, onSubmit }: Props) {
+export function ChatInputToolbar({ disabled, inputRef, onSubmit, onCancelSubmit }: Props) {
   const t = useI18n().pack.chat;
 
   const submitOnEnterStorage = useLocalStorageObject('chat-input-toolbar-submit-on-enter', {
@@ -23,7 +26,14 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit }: Props) {
     readBeforeMount: true,
   });
 
-  const { bind, value, handleSubmitEvent, submitState, submit, setValue } = useForm<SdkCreateMessageInputT>({
+  const {
+    bind,
+    value,
+    handleSubmitEvent,
+    submitState,
+    submit,
+    setValue,
+  } = useForm<SdkCreateMessageInputT>({
     defaultValue: {
       content: '',
     },
@@ -46,6 +56,11 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit }: Props) {
         void submit();
       }
     }
+  };
+
+  const onClickCancelSubmit: MouseEventHandler<HTMLButtonElement> = (evt) => {
+    suppressEvent(evt);
+    onCancelSubmit?.();
   };
 
   return (
@@ -74,20 +89,25 @@ export function ChatInputToolbar({ disabled, inputRef, onSubmit }: Props) {
           </div>
         </div>
 
-        <FormSpinnerCTA
+        <button
           type="submit"
-          loading={submitState.loading}
-          disabled={disabled || submitState.loading}
+          disabled={disabled}
           className={clsx(
-            'flex flex-row items-center px-6 py-2 rounded-lg h-full text-white transition-colors',
-            disabled || submitState.loading
+            'flex flex-row items-center px-4 py-2 rounded-lg h-full text-white transition-colors uk-button uk-button-primary',
+            disabled
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-gray-700 hover:bg-gray-800',
           )}
+          {...submitState.loading && {
+            onClick: onClickCancelSubmit,
+          }}
         >
-          <SendIcon size={16} className="mr-2" />
-          {t.actions.send}
-        </FormSpinnerCTA>
+          {(
+            submitState.loading
+              ? <CircleStopIcon size={16} />
+              : <SendIcon size={16} />
+          )}
+        </button>
       </div>
 
       <div className="flex items-center gap-2 mt-3 text-gray-500 text-sm">
