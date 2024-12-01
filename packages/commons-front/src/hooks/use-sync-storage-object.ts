@@ -6,9 +6,9 @@ import * as O from 'fp-ts/lib/Option';
 import { useRef } from 'react';
 
 import { tryParseJSON, tryParseUsingZodSchema } from '@llm/commons';
-import { useWindowListener } from '@llm/commons-front';
 
 import { useForceRerender } from './use-force-rerender';
+import { useWindowListener } from './use-window-listener';
 
 type AbstractSyncStorage = {
   removeItem: (key: string) => void;
