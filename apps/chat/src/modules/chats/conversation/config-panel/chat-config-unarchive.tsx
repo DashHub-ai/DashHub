@@ -7,8 +7,7 @@ import type { SdkTableRowWithUuidT } from '@llm/sdk';
 
 import { tapTaskEither } from '@llm/commons';
 import { useSdkForLoggedIn } from '@llm/sdk';
-import { useUnarchiveWithNotifications } from '@llm/ui';
-import { TutorialBox } from '~/components';
+import { TutorialBox, useUnarchiveWithNotifications } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
 

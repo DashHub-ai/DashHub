@@ -4,9 +4,15 @@ import { inject, injectable } from 'tsyringe';
 
 import type { RequiredBy } from '@llm/commons';
 
-import { SdkCreateChatInputT, SdkJwtTokenT, SdkTableRowUuidT } from '@llm/sdk';
+import {
+  SdkCreateChatInputT,
+  SdkJwtTokenT,
+  SdkTableRowUuidT,
+  SdkUpdateChatInputT,
+} from '@llm/sdk';
 
 import { WithAuthFirewall } from '../auth';
+import { TableRowWithUuid } from '../database';
 import { ChatsFirewall } from './chats.firewall';
 import { ChatsRepo } from './chats.repo';
 import { ChatsEsIndexRepo, ChatsEsSearchRepo } from './elasticsearch';
@@ -38,5 +44,10 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
   create = (value: RequiredBy<SdkCreateChatInputT, 'organization' | 'creator'>) => pipe(
     this.repo.create({ value }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
+
+  update = ({ id, ...value }: SdkUpdateChatInputT & TableRowWithUuid) => pipe(
+    this.repo.update({ id, value }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 }

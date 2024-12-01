@@ -14,6 +14,7 @@ import {
   getPayload,
   patchPayload,
   postPayload,
+  putPayload,
 } from '~/shared';
 
 import type {
@@ -28,6 +29,8 @@ import type {
   SdkCreateChatOutputT,
   SdKSearchChatsInputT,
   SdKSearchChatsOutputT,
+  SdkUpdateChatInputT,
+  SdkUpdateChatOutputT,
 } from './dto';
 
 type AIRequestReplyAttrs = {
@@ -57,6 +60,15 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
     this.fetch<SdkCreateChatOutputT>({
       url: this.endpoint('/'),
       options: postPayload(data),
+    });
+
+  update = ({ id, ...data }: SdkUpdateChatInputT & SdkTableRowWithUuidT) =>
+    this.fetch<
+      SdkUpdateChatOutputT,
+      SdkRecordAlreadyExistsError | SdkRecordNotFoundError
+    >({
+      url: this.endpoint(`/${id}`),
+      options: putPayload(data),
     });
 
   unarchive = (id: SdkTableRowUuidT) =>

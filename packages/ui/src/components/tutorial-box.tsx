@@ -7,7 +7,7 @@ import { CheckIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import { useLocalStorageObject } from '@llm/commons-front';
-import { useI18n } from '~/i18n';
+import { useForwardedI18n } from '~/i18n';
 
 const STORAGE_KEY = 'tutorial-visibility';
 
@@ -71,7 +71,7 @@ export function TutorialBox(
     id,
   }: TutorialBoxProps,
 ) {
-  const t = useI18n().pack.components.tutorialBox;
+  const t = useForwardedI18n().pack.tutorialBox;
 
   const styles = VARIANT_STYLES[variant];
   const visibility = useLocalStorageObject(STORAGE_KEY, {

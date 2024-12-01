@@ -20,6 +20,15 @@ export const I18N_FORWARDED_EN_PACK = {
     selectItem: 'Select item',
     noItemsFound: 'No items found',
   },
+  tutorialBox: {
+    gotIt: 'Rozumiem',
+  },
+  form: {
+    alerts: {
+      saveSuccess: 'Changes saved successfully!',
+      saveError: 'Failed to save changes!',
+    },
+  },
   buttons: {
     create: 'Create',
     cancel: 'Cancel',

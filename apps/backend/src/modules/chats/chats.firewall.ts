@@ -44,6 +44,12 @@ export class ChatsFirewall extends AuthFirewallService {
     this.tryTEIfUser.is.root,
   );
 
+  // TODO: Add belongs checks
+  update = flow(
+    this.chatsService.update,
+    this.tryTEIfUser.is.root,
+  );
+
   create = ({ creator, organization, ...chat }: SdkCreateChatInputT): DatabaseTE<
     TableRowWithUuid,
     SdkUnauthorizedError | TransactionError | EsInternalError | EsDocumentNotFoundError | EsIndexingError

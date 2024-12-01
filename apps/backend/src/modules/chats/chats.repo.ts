@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type { RequiredBy } from '@llm/commons';
 
-import { SdkCreateChatInputT } from '@llm/sdk';
+import { SdkCreateChatInputT, SdkUpdateChatInputT } from '@llm/sdk';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -16,6 +16,7 @@ import {
   DatabaseError,
   TableUuid,
   TransactionalAttrs,
+  tryGetFirstOrNotExists,
   tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
@@ -156,6 +157,36 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           },
         })),
       ),
+    );
+  };
+
+  update = ({ forwardTransaction, id, value }: TransactionalAttrs<{ id: TableUuid; value: SdkUpdateChatInputT; }>) => {
+    const { summary } = value;
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(async qb =>
+        qb
+          .updateTable('chat_summaries')
+          .where('chat_id', '=', id)
+          .set({
+            content: summary.content.value,
+            content_generated: summary.content.generated,
+            ...!summary.content.generated && {
+              content_generated_at: null,
+            },
+
+            name: summary.name.value,
+            name_generated: summary.name.generated,
+            ...!summary.name.generated && {
+              name_generated_at: null,
+            },
+          })
+          .returning('chat_id as id')
+          .execute(),
+      ),
+      DatabaseError.tryTask,
+      tryGetFirstOrNotExists,
     );
   };
 }
