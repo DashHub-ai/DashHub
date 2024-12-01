@@ -41,13 +41,24 @@ export function ChatConfigPanel({ defaultValue }: Props) {
               <Input
                 {...bind.path('summary.name.value', { input: value => value ?? '' })}
                 placeholder={t.namePlaceholder}
-                disabled={value.summary?.name.generated || defaultValue.archived}
+                disabled={value.summary.name.generated || defaultValue.archived}
               />
 
               <Checkbox
-                {...bind.path('summary.name.generated')}
                 className="block pt-2 uk-text-small"
                 disabled={defaultValue.archived}
+                {...bind.path('summary.name.generated', {
+                  relatedInputs: ({ newGlobalValue }) => ({
+                    ...newGlobalValue,
+                    summary: {
+                      ...newGlobalValue.summary,
+                      name: {
+                        ...newGlobalValue.summary.name,
+                        value: null,
+                      },
+                    },
+                  }),
+                })}
               >
                 {t.generated}
               </Checkbox>
@@ -63,13 +74,24 @@ export function ChatConfigPanel({ defaultValue }: Props) {
                 {...bind.path('summary.content.value', { input: value => value ?? '' })}
                 placeholder={t.descriptionPlaceholder}
                 className="min-h-[100px]"
-                disabled={value.summary?.content.generated || defaultValue.archived}
+                disabled={value.summary.content.generated || defaultValue.archived}
               />
 
               <Checkbox
-                {...bind.path('summary.content.generated')}
                 className="block pt-2 uk-text-small"
                 disabled={defaultValue.archived}
+                {...bind.path('summary.content.generated', {
+                  relatedInputs: ({ newGlobalValue }) => ({
+                    ...newGlobalValue,
+                    summary: {
+                      ...newGlobalValue.summary,
+                      content: {
+                        ...newGlobalValue.summary.content,
+                        value: null,
+                      },
+                    },
+                  }),
+                })}
               >
                 {t.generated}
               </Checkbox>

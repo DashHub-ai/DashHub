@@ -2,10 +2,10 @@ import { z } from 'zod';
 
 import { SdkTableRowWithUuidV } from '~/shared';
 
-import { SdkChatSummaryV } from './sdk-chat.dto';
+import { SdkChatSummaryInputV } from './sdk-create-chat.dto';
 
 export const SdkUpdateChatInputV = z.object({
-  summary: SdkChatSummaryV,
+  summary: SdkChatSummaryInputV,
 });
 
 export type SdkUpdateChatInputT = z.infer<typeof SdkUpdateChatInputV>;

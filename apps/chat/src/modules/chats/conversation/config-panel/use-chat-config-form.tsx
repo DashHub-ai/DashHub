@@ -2,12 +2,12 @@ import { type FormHookAttrs, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
-import { type SdkTableRowWithUuidT, type SdkUpdateChatInputT, useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkChatT, type SdkTableRowWithUuidT, useSdkForLoggedIn } from '@llm/sdk';
 import { useSaveTaskEitherNotification } from '@llm/ui';
 
 type UpdateChatFormHookAttrs =
   & Omit<
-    FormHookAttrs<SdkUpdateChatInputT & SdkTableRowWithUuidT>,
+    FormHookAttrs<SdkChatT & SdkTableRowWithUuidT>,
     'validation' | 'onSubmit'
   >
   & {
@@ -26,7 +26,18 @@ export function useChatConfigForm(
   return useForm({
     resetAfterSubmit: false,
     onSubmit: flow(
-      sdks.dashboard.chats.update,
+      value => sdks.dashboard.chats.update({
+        ...value,
+        summary: {
+          name: value.summary.name.generated
+            ? { generated: true, value: null }
+            : { generated: false, value: value.summary.name.value || '' },
+
+          content: value.summary.content.generated
+            ? { generated: true, value: null }
+            : { generated: false, value: value.summary.content.value || '' },
+        },
+      }),
       saveNotifications,
       tapTaskEither(() => onAfterSubmit?.()),
       runTask,

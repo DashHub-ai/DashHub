@@ -2,12 +2,14 @@ import { pipe } from 'fp-ts/lib/function';
 import { sql } from 'kysely';
 import { injectable } from 'tsyringe';
 
+import { SdkChatSummaryInputT } from '@llm/sdk';
 import {
   createDatabaseRepo,
   DatabaseError,
   KyselyDatabase,
   type TableUuid,
   type TransactionalAttrs,
+  tryGetFirstOrNotExists,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
@@ -147,4 +149,35 @@ export class ChatsSummariesRepo extends createDatabaseRepo('chat_summaries') {
           .where('ai_model_id', 'is not', null),
       ),
     ]));
+
+  updateByChatId = ({ forwardTransaction, id, value }: TransactionalAttrs<{ id: TableUuid; value: SdkChatSummaryInputT; }>) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(async qb =>
+        qb
+          .updateTable(this.table)
+          .where('chat_id', '=', id)
+          .set({
+            last_summarized_message_id: null,
+
+            ...value.content && {
+              content: value?.content.value,
+              content_generated: value.content.generated,
+              content_generated_at: null,
+            },
+
+            ...value.name && {
+              name: value.name.value,
+              name_generated: value.name.generated,
+              name_generated_at: null,
+            },
+          })
+          .returning('chat_id as id')
+          .execute(),
+      ),
+      DatabaseError.tryTask,
+      tryGetFirstOrNotExists,
+    );
+  };
 }
