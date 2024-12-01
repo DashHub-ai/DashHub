@@ -13,6 +13,7 @@ import * as addNameToChatSummary from './0011-add-name-to-chat-summary';
 import * as addCreatorToMessagesTable from './0012-add-creator-to-messages-table';
 import * as addRepliedMessageId from './0013-add-replied-message-id';
 import * as addLastSummarizedMessage from './0014-add-last-summarized-message';
+import * as addAttachedAppIdToMessages from './0015-add-attached-app-id-to-messages';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -30,4 +31,5 @@ export const DB_MIGRATIONS = {
   '0012-add-creator-to-messages-table': addCreatorToMessagesTable,
   '0013-add-replied-message-id': addRepliedMessageId,
   '0014-add-last-summarized-message': addLastSummarizedMessage,
+  '0015-add-attached-app-id-to-messages': addAttachedAppIdToMessages,
 };
