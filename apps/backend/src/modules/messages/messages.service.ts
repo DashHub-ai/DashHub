@@ -72,6 +72,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       TE.chainW(app => this.repo.create({
         value: {
           chatId: chat.id,
+          appId: app.id,
           content: createAttachAppAIMessage(app),
           metadata: {},
           aiModelId: null,

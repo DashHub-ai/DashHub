@@ -17,6 +17,7 @@ export function createAttachAppAIMessage(app: AttachableApp): string {
     app.description && `App description: ${app.description}.`,
     'Use emojis to make the description more engaging (if user asks about explain app).',
     `User has attached app ${app.name} to the chat.`,
+    'Do not include any information about adding this app in summarize.',
     'Behavior of the app:',
     '',
     app.chatContext,

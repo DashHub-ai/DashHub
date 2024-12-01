@@ -4,11 +4,15 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { tapEither, tryParseUsingZodSchema } from '@llm/commons';
 import { useAfterMount } from '@llm/commons-front';
-import { SdkCreateMessageInputV, SdkTableRowWithIdV } from '@llm/sdk';
+import { SdkCreateMessageInputV, SdkTableRowWithIdNameV } from '@llm/sdk';
 
-const InitialChatMessageV = SdkCreateMessageInputV.extend({
-  aiModel: SdkTableRowWithIdV,
-});
+const InitialChatMessageV = SdkCreateMessageInputV
+  .omit({
+    replyToMessage: true,
+  })
+  .extend({
+    aiModel: SdkTableRowWithIdNameV,
+  });
 
 export type InitialChatMessageT = z.TypeOf<typeof InitialChatMessageV>;
 

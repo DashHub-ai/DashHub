@@ -2,15 +2,17 @@ import { memo, useMemo, useSyncExternalStore } from 'react';
 import sanitizeHtml from 'sanitize-html';
 
 import { createStoreSubscriber, truncateText } from '@llm/commons';
+import { hydrateWithAppChatBadges } from '~/modules/apps';
 
 import type { AIStreamContent, AIStreamObservable } from '../hooks';
 
 type Props = {
   content: string | AIStreamObservable;
   truncate?: number;
+  darkMode?: boolean;
 };
 
-export const ChatMessageContent = memo(({ content, truncate }: Props) => {
+export const ChatMessageContent = memo(({ content, truncate, darkMode }: Props) => {
   const observable = useMemo(() => {
     if (typeof content === 'string') {
       return createStoreSubscriber<AIStreamContent>({
@@ -41,10 +43,15 @@ export const ChatMessageContent = memo(({ content, truncate }: Props) => {
     return html;
   }, [stream, truncate]);
 
+  const hydratedContent = useMemo(
+    () => hydrateWithAppChatBadges(sanitizedContent, { darkMode }),
+    [sanitizedContent, darkMode],
+  );
+
   return (
     <>
       <p className="text-sm whitespace-pre-wrap">
-        {sanitizedContent}
+        {hydratedContent}
       </p>
 
       {!stream.done && (

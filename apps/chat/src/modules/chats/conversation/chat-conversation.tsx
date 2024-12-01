@@ -11,6 +11,7 @@ import {
 
 import type { SdkRepeatedMessageItemT } from './messages/chat-message';
 
+import { ChatAttachedApp } from './chat-attached-app';
 import { ChatBackground } from './chat-background';
 import { ChatConfigPanel } from './config-panel';
 import {
@@ -83,6 +84,25 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
   useSendInitialMessage(onReply);
   useUpdateEffect(focusInput, [messages, replyToMessage]);
 
+  const renderMessage = (message: SdkRepeatedMessageItemT, index: number) => {
+    if (message.app) {
+      return (
+        <ChatAttachedApp key={index} app={message.app} />
+      );
+    }
+
+    return (
+      <ChatMessage
+        key={index}
+        message={message}
+        isLast={index === groupedMessages.length - 1}
+        readOnly={chat.archived}
+        onRefreshResponse={onRefreshResponse}
+        onReply={setReplyToMessage}
+      />
+    );
+  };
+
   return (
     <div className="flex gap-6 mx-auto max-w-7xl">
       <div className="top-3 sticky flex flex-col flex-1 h-[calc(100vh-200px)]">
@@ -92,17 +112,7 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
           ref={messagesContainerRef}
           className="relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]"
         >
-          {groupedMessages.map((message, index) => (
-            <ChatMessage
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
-              message={message}
-              isLast={index === groupedMessages.length - 1}
-              readOnly={chat.archived}
-              onRefreshResponse={onRefreshResponse}
-              onReply={setReplyToMessage}
-            />
-          ))}
+          {groupedMessages.map(renderMessage)}
         </div>
 
         {!chat.archived && (

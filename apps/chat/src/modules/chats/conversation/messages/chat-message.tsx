@@ -58,7 +58,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
         'flex items-start gap-2',
         'animate-slideIn',
         {
-          'mb-6': !repeats.length,
+          'mb-5': !repeats.length,
           'mb-10': repeats.length,
           'flex-row': isAI,
           'flex-row-reverse': !isAI,
@@ -100,7 +100,11 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
           />
         )}
 
-        <ChatMessageContent key={typeof content} content={content} />
+        <ChatMessageContent
+          key={typeof content}
+          content={content}
+          darkMode={!isAI}
+        />
 
         <div className="flex justify-between items-center gap-6 mt-1 text-xs">
           <span className="opacity-50">

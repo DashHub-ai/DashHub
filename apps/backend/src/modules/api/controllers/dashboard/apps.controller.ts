@@ -13,6 +13,7 @@ import { ConfigService } from '~/modules/config';
 import {
   mapDbRecordAlreadyExistsToSdkError,
   mapDbRecordNotFoundToSdkError,
+  mapEsDocumentNotFoundToSdkError,
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
@@ -36,6 +37,16 @@ export class AppsController extends AuthorizedController {
           appsService.asUser(context.var.jwt).search,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<AppsSdk['search']>>(context),
+        ),
+      )
+      .get(
+        '/:id',
+        async context => pipe(
+          Number(context.req.param().id),
+          appsService.asUser(context.var.jwt).get,
+          mapEsDocumentNotFoundToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<AppsSdk['get']>>(context),
         ),
       )
       .post(

@@ -38,4 +38,9 @@ export class AppsFirewall extends AuthFirewallService {
     this.appsService.search,
     this.tryTEIfUser.is.root,
   );
+
+  get = flow(
+    this.appsService.get,
+    this.tryTEIfUser.is.root,
+  );
 }

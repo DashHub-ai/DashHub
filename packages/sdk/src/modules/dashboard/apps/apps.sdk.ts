@@ -11,6 +11,7 @@ import {
 } from '~/shared';
 
 import type {
+  SdkAppT,
   SdkCreateAppInputT,
   SdkCreateAppOutputT,
   SdKSearchAppsInputT,
@@ -21,6 +22,12 @@ import type {
 
 export class AppsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/apps';
+
+  get = (id: SdkTableRowIdT) =>
+    this.fetch<SdkAppT, SdkRecordNotFoundError>({
+      url: this.endpoint(`/${id}`),
+      options: getPayload(),
+    });
 
   search = (data: SdKSearchAppsInputT) =>
     this.fetch<SdKSearchAppsOutputT>({
