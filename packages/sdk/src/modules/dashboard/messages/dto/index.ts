@@ -1,3 +1,4 @@
+export * from './sdk-attach-app.dto';
 export * from './sdk-create-message.dto';
 export * from './sdk-message.dto';
 export * from './sdk-request-ai-reply.dto';

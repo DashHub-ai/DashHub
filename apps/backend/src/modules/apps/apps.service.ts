@@ -33,6 +33,8 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
 
   asUser = (jwt: SdkJwtTokenT) => new AppsFirewall(jwt, this);
 
+  get = this.esSearchRepo.get;
+
   archiveSeqByOrganizationId = (organizationId: SdkTableRowIdT) => TE.fromTask(
     pipe(
       this.repo.createIdsIterator({

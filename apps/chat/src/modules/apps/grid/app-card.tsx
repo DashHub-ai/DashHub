@@ -5,6 +5,7 @@ import type { SdkAppT } from '@llm/sdk';
 
 import { formatDate } from '@llm/commons';
 import { useI18n } from '~/i18n';
+import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
 
 import { useFavoriteApps } from '../favorite';
 
@@ -17,6 +18,7 @@ export function AppCard({ app }: AppCardProps) {
   const { isFavorite, toggle } = useFavoriteApps();
 
   const favorite = isFavorite(app);
+  const createApp = useCreateChatWithInitialApp();
 
   return (
     <div className="relative flex flex-col bg-white shadow-sm hover:shadow-md p-4 pb-2 border border-border/50 rounded-lg transition-shadow">
@@ -63,7 +65,14 @@ export function AppCard({ app }: AppCardProps) {
           {formatDate(app.updatedAt)}
         </div>
 
-        <a href="#" className="uk-button uk-button-secondary uk-button-small">
+        <a
+          href=""
+          className="uk-button uk-button-secondary uk-button-small"
+          onClick={(e) => {
+            e.preventDefault();
+            void createApp(app)();
+          }}
+        >
           <ExternalLinkIcon size={16} className="mr-2" />
           {t.buttons.open}
         </a>

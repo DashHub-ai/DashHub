@@ -173,6 +173,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       you: 'You',
       ai: 'AI',
     },
+    prompts: {
+      explainApp: 'Please explain me what %{mention} does.',
+    },
     generating: {
       title: 'Generating title...',
       description: 'Generating description...',

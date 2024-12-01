@@ -34,6 +34,7 @@ export function useOptimisticResponseCreator() {
       role: 'user',
       aiModel: null,
       repliedMessage: null,
+      app: null,
       creator: {
         id: token.sub,
         email: token.email,
@@ -50,6 +51,7 @@ export function useOptimisticResponseCreator() {
       aiModel,
       creator: null,
       repliedMessage: null,
+      app: null,
     }),
   };
 }
