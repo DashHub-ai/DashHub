@@ -175,6 +175,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       you: 'Ty',
       ai: 'AI',
     },
+    prompts: {
+      explainApp: 'Wyjaśnij krótko, do czego służy aplikacja %{mention} i jak jej używać.',
+    },
     generating: {
       title: 'Generowanie tytułu...',
       description: 'Generowanie opisu...',
@@ -223,6 +226,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     favorites: {
       add: 'Dodaj do ulubionych',
       remove: 'Usuń z ulubionych',
+    },
+    grid: {
+      placeholder: 'Brak aplikacji!',
     },
   },
   experts: {

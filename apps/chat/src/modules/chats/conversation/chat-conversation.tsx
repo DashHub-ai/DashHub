@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react';
 
-import { findItemById } from '@llm/commons';
+import { findItemById, rejectFalsyItems } from '@llm/commons';
 import { useUpdateEffect } from '@llm/commons-front';
 import {
   getLastUsedSdkMessagesAIModel,
@@ -11,6 +11,7 @@ import {
 
 import type { SdkRepeatedMessageItemT } from './messages/chat-message';
 
+import { ChatAttachedApp } from './chat-attached-app';
 import { ChatBackground } from './chat-background';
 import { ChatConfigPanel } from './config-panel';
 import {
@@ -39,6 +40,11 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     chat,
     initialMessages,
   });
+
+  const apps = useMemo(
+    () => rejectFalsyItems(messages.items.map(({ app }) => app)),
+    [messages.items],
+  );
 
   const { groupedMessages, aiModel } = useMemo(
     () => ({
@@ -80,6 +86,25 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     });
   };
 
+  const renderMessage = (message: SdkRepeatedMessageItemT, index: number) => {
+    if (message.app) {
+      return (
+        <ChatAttachedApp key={index} app={message.app} />
+      );
+    }
+
+    return (
+      <ChatMessage
+        key={index}
+        message={message}
+        isLast={index === groupedMessages.length - 1}
+        readOnly={chat.archived}
+        onRefreshResponse={onRefreshResponse}
+        onReply={setReplyToMessage}
+      />
+    );
+  };
+
   useSendInitialMessage(onReply);
   useUpdateEffect(focusInput, [messages, replyToMessage]);
 
@@ -92,21 +117,12 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
           ref={messagesContainerRef}
           className="relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]"
         >
-          {groupedMessages.map((message, index) => (
-            <ChatMessage
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
-              message={message}
-              isLast={index === groupedMessages.length - 1}
-              readOnly={chat.archived}
-              onRefreshResponse={onRefreshResponse}
-              onReply={setReplyToMessage}
-            />
-          ))}
+          {groupedMessages.map(renderMessage)}
         </div>
 
         {!chat.archived && (
           <ChatInputToolbar
+            apps={apps}
             replyToMessage={replyToMessage}
             replying={replying}
             disabled={!aiModel}

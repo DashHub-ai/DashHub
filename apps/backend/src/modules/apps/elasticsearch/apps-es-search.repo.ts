@@ -1,6 +1,6 @@
 import esb from 'elastic-builder';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type {
@@ -26,6 +26,11 @@ export class AppsEsSearchRepo {
     @inject(AppsEsIndexRepo) private readonly indexRepo: AppsEsIndexRepo,
   ) {}
 
+  get = flow(
+    this.indexRepo.getDocument,
+    TE.map(AppsEsSearchRepo.mapOutputHit),
+  );
+
   search = (dto: SdKSearchAppsInputT) =>
     pipe(
       this.indexRepo.search(
@@ -50,6 +55,7 @@ export class AppsEsSearchRepo {
     {
       phrase,
       ids,
+      excludeIds,
       organizationIds,
       archived,
     }: SdKSearchAppsInputT,
@@ -57,6 +63,7 @@ export class AppsEsSearchRepo {
     esb.boolQuery().must(
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
+        !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
           esb

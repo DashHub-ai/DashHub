@@ -15,9 +15,10 @@ import {
 import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../database';
 
 import { AIConnectorService } from '../ai-connector';
+import { AppsService } from '../apps';
 import { WithAuthFirewall } from '../auth';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
-import { createReplyAiMessagePrefix } from './helpers';
+import { createAttachAppAIMessage, createReplyAiMessagePrefix } from './helpers';
 import { MessagesFirewall } from './messages.firewall';
 import { MessagesRepo } from './messages.repo';
 
@@ -27,10 +28,17 @@ export type CreateUserMessageInputT = {
   creator: TableRowWithId;
 };
 
+export type AttachAppInputT = {
+  chat: TableRowWithUuid;
+  app: TableRowWithId;
+  creator: TableRowWithId;
+};
+
 @injectable()
 export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
   constructor(
     @inject(MessagesRepo) private readonly repo: MessagesRepo,
+    @inject(AppsService) private readonly appsService: AppsService,
     @inject(MessagesEsSearchRepo) private readonly esSearchRepo: MessagesEsSearchRepo,
     @inject(MessagesEsIndexRepo) private readonly esIndexRepo: MessagesEsIndexRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
@@ -55,6 +63,23 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           role: 'user',
         },
       }),
+      TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+    );
+
+  attachApp = ({ chat, app, creator }: AttachAppInputT) =>
+    pipe(
+      this.appsService.get(app.id),
+      TE.chainW(app => this.repo.create({
+        value: {
+          chatId: chat.id,
+          appId: app.id,
+          content: createAttachAppAIMessage(app),
+          metadata: {},
+          aiModelId: null,
+          creatorUserId: creator.id,
+          role: 'system',
+        },
+      })),
       TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
     );
 

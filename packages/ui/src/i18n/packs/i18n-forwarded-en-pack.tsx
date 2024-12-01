@@ -107,5 +107,10 @@ export const I18N_FORWARDED_EN_PACK = {
       active: 'Active',
       archived: 'Archived',
     },
+    favoriteFilters: {
+      all: 'All',
+      favorite: 'Favorite',
+      rest: 'Rest',
+    },
   },
 };

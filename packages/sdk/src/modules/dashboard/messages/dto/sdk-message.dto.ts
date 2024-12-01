@@ -28,6 +28,7 @@ export const SdkMessageV = z
     role: SdkMessageRoleV,
     creator: SdkUserListItemV.nullable(),
     aiModel: SdkTableRowWithIdNameV.nullable(),
+    app: SdkTableRowWithIdNameV.nullable(),
     repliedMessage: SdkRepliedMessageV.nullable(),
   })
   .merge(SdkTableRowWithUuidV)

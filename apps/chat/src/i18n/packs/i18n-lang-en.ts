@@ -173,6 +173,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       you: 'You',
       ai: 'AI',
     },
+    prompts: {
+      explainApp: 'Could you briefly explain what %{mention} does and how to use it?',
+    },
     generating: {
       title: 'Generating title...',
       description: 'Generating description...',
@@ -221,6 +224,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     favorites: {
       add: 'Add to favorites',
       remove: 'Remove from favorites',
+    },
+    grid: {
+      placeholder: 'No apps yet. Stay tuned!',
     },
   },
   experts: {

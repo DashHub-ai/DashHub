@@ -26,6 +26,7 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             .where('messages.id', 'in', ids)
             .leftJoin('users', 'users.id', 'messages.creator_user_id')
             .leftJoin('ai_models', 'ai_models.id', 'messages.ai_model_id')
+            .leftJoin('apps', 'apps.id', 'messages.app_id')
 
             .leftJoin('messages as reply_messages', 'reply_messages.id', 'messages.replied_message_id')
             .leftJoin('users as reply_users', 'reply_users.id', 'reply_messages.creator_user_id')
@@ -36,6 +37,9 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
               'ai_models.id as ai_model_id',
               'ai_models.name as ai_model_name',
+
+              'apps.id as app_id',
+              'apps.name as app_name',
 
               'reply_messages.role as reply_message_role',
               'reply_messages.content as reply_message_content',
@@ -64,6 +68,9 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
           reply_message_creator_user_id: replyMessageCreatorUserId,
           reply_message_creator_email: replyMessageCreatorEmail,
+
+          app_id: appId,
+          app_name: appName,
 
           ...item
         }): MessageTableRowWithRelations => ({
@@ -94,6 +101,12 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
                       email: replyMessageCreatorEmail,
                     }
                   : null,
+              }
+            : null,
+          app: appId && appName
+            ? {
+                id: appId,
+                name: appName,
               }
             : null,
         })),

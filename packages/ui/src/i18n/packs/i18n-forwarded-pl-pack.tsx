@@ -109,5 +109,10 @@ export const I18N_FORWARDED_PL_PACK: typeof I18N_FORWARDED_EN_PACK = {
       active: 'Aktywne',
       archived: 'Zarchiwizowane',
     },
+    favoriteFilters: {
+      all: 'Wszystkie',
+      favorite: 'Ulubione',
+      rest: 'Reszta',
+    },
   },
 };

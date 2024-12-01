@@ -6,6 +6,7 @@ import { inject, injectable } from 'tsyringe';
 import { runTask } from '@llm/commons';
 import {
   type ChatsSdk,
+  SdkAttachAppInputV,
   SdkCreateChatInputV,
   SdkCreateMessageInputV,
   SdkRequestAIReplyInputV,
@@ -131,6 +132,21 @@ export class ChatsController extends AuthorizedController {
           }),
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ChatsSdk['createMessage']>>(context),
+        ),
+      )
+      .post(
+        '/:id/messages/attach-app',
+        sdkSchemaValidator('json', SdkAttachAppInputV),
+        async context => pipe(
+          context.req.valid('json'),
+          payload => messagesService.asUser(context.var.jwt).attachApp({
+            ...payload,
+            chat: {
+              id: context.req.param('id'),
+            },
+          }),
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ChatsSdk['attachApp']>>(context),
         ),
       )
       .post(

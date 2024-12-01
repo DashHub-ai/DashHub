@@ -83,7 +83,8 @@ export class ChatsSummariesService {
         history: chat.items,
         message:
           'Summarize this chat, create short title and description in the language of this chat.'
-          + 'Keep description compact to store in on the chat. You can use emojis in title and description.',
+          + 'Keep description compact to store in on the chat. You can use emojis in title and description.'
+          + 'Do not summarize the messages about describing app (these ones defined in chat).',
         schema: z.object({
           title: z.string(),
           description: z.string(),

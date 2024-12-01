@@ -23,6 +23,7 @@ export type MessagesTable =
     role: SdkMessageRoleT;
     metadata: Record<string, unknown>;
     ai_model_id: ColumnType<TableId | null, TableId | null, never>;
+    app_id: ColumnType<TableId | null, TableId | null, never>;
     replied_message_id: ColumnType<TableUuid | null, TableUuid | null, null>;
   };
 
@@ -35,10 +36,11 @@ type RepliedMessageTableRelationRow =
   };
 
 export type MessageTableRowWithRelations =
-  & Omit<MessageTableRow, 'chatId' | 'creatorUserId' | 'aiModelId' | 'repliedMessageId'>
+  & Omit<MessageTableRow, 'chatId' | 'creatorUserId' | 'aiModelId' | 'repliedMessageId' | 'appId'>
   & {
     chat: TableRowWithUuid;
     repliedMessage: RepliedMessageTableRelationRow | null;
     creator: UserTableRowBaseRelation | null;
     aiModel: TableRowWithIdName | null;
+    app: TableRowWithIdName | null;
   };

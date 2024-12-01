@@ -1,15 +1,26 @@
+import type { z } from 'zod';
+
 import { pipe } from 'fp-ts/lib/function';
 
 import { tapEither, tryParseUsingZodSchema } from '@llm/commons';
 import { useAfterMount } from '@llm/commons-front';
+import { SdkCreateMessageInputV, SdkTableRowWithIdNameV } from '@llm/sdk';
 
-import { type StartChatFormValueT, StartChatFormValueV } from '../../start-chat/use-start-chat-form';
+const InitialChatMessageV = SdkCreateMessageInputV
+  .omit({
+    replyToMessage: true,
+  })
+  .extend({
+    aiModel: SdkTableRowWithIdNameV,
+  });
 
-export function useSendInitialMessage(onReply: (input: Omit<StartChatFormValueT, 'replyToMessage'>) => unknown) {
+export type InitialChatMessageT = z.TypeOf<typeof InitialChatMessageV>;
+
+export function useSendInitialMessage(onReply: (input: InitialChatMessageT) => unknown) {
   useAfterMount(() => {
     pipe(
       history.state?.message,
-      tryParseUsingZodSchema(StartChatFormValueV),
+      tryParseUsingZodSchema(InitialChatMessageV),
       tapEither((data) => {
         history.replaceState(undefined, '', location.pathname);
         onReply(data);

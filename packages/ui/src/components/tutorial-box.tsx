@@ -9,10 +9,6 @@ import { z } from 'zod';
 import { useLocalStorageObject } from '@llm/commons-front';
 import { useForwardedI18n } from '~/i18n';
 
-const STORAGE_KEY = 'tutorial-visibility';
-
-const tutorialVisibilitySchema = z.record(z.boolean());
-
 type TutorialBoxVariant = 'amber' | 'blue' | 'green' | 'red';
 
 const VARIANT_STYLES: Record<TutorialBoxVariant, {
@@ -74,10 +70,10 @@ export function TutorialBox(
   const t = useForwardedI18n().pack.tutorialBox;
 
   const styles = VARIANT_STYLES[variant];
-  const visibility = useLocalStorageObject(STORAGE_KEY, {
+  const visibility = useLocalStorageObject('tutorial-visibility', {
     readBeforeMount: true,
     rerenderOnSet: true,
-    schema: tutorialVisibilitySchema,
+    schema: z.record(z.boolean()),
   });
 
   const getHiddenTutorials = flow(

@@ -32,6 +32,7 @@ const MessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
         repliedMessage: createIdObjectMapping({}, 'keyword'),
         creator: createIdObjectMapping(),
         aiModel: createIdObjectMapping(),
+        app: createIdObjectMapping(),
         content: {
           type: 'text',
           analyzer: 'folded_lowercase_analyzer',

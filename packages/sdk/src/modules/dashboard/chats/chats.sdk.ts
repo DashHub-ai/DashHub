@@ -18,6 +18,7 @@ import {
 } from '~/shared';
 
 import type {
+  SdkAttachAppInputT,
   SdkCreateMessageInputT,
   SdkRequestAIReplyInputT,
   SdKSearchMessagesInputT,
@@ -102,6 +103,12 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
   createMessage = (chatId: SdkTableRowUuidT, data: SdkCreateMessageInputT) =>
     this.fetch<SdkTableRowWithUuidT>({
       url: this.endpoint(`/${chatId}/messages`),
+      options: postPayload(data),
+    });
+
+  attachApp = (chatId: SdkTableRowUuidT, data: SdkAttachAppInputT) =>
+    this.fetch<SdkTableRowWithUuidT>({
+      url: this.endpoint(`/${chatId}/messages/attach-app`),
       options: postPayload(data),
     });
 
