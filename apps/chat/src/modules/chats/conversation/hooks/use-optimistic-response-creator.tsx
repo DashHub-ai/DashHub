@@ -53,6 +53,16 @@ export function useOptimisticResponseCreator() {
       repliedMessage: null,
       app: null,
     }),
+
+    app: (app: SdkTableRowWithIdNameT): OptimisticMessageOutputT => ({
+      ...createBaseMessageFields(),
+      content: 'System message',
+      role: 'assistant',
+      creator: null,
+      repliedMessage: null,
+      aiModel: null,
+      app,
+    }),
   };
 }
 

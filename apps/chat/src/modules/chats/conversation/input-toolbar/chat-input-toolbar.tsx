@@ -12,6 +12,7 @@ import { useI18n } from '~/i18n';
 
 import type { SdkRepeatedMessageItemT } from '../messages';
 
+import { ChatChooseAppButton } from './chat-choose-app-button';
 import { ChatReplyMessage } from './chat-reply-message';
 import { ChatSelectApp } from './chat-select-app';
 
@@ -27,6 +28,8 @@ type Props = {
   inputRef?: React.RefObject<HTMLInputElement>;
 
   onSubmit: (message: ChatInputValue) => CanBePromise<any>;
+  onSelectApp?: (app: SdkTableRowWithIdNameT) => void;
+
   onCancelSubmit: VoidFunction;
   onCancelReplyToMessage: VoidFunction;
 };
@@ -40,6 +43,7 @@ export function ChatInputToolbar(
     onSubmit,
     onCancelSubmit,
     onCancelReplyToMessage,
+    onSelectApp,
     apps,
   }: Props,
 ) {
@@ -164,13 +168,25 @@ export function ChatInputToolbar(
         </button>
       </div>
 
-      <div className="flex flex-row items-center gap-6 mt-2">
+      <div className="flex flex-row flex-wrap items-center gap-x-4 gap-y-2 mt-2">
         <Checkbox
           value={!!submitOnEnterStorage.getOrNull()}
           onChange={submitOnEnterStorage.set}
         >
           {t.actions.submitOnEnter}
         </Checkbox>
+
+        <ChatChooseAppButton
+          selectedApps={apps}
+          disabled={disabled}
+          onSelect={(app) => {
+            selectedApp.setValue({
+              value: app,
+            });
+
+            onSelectApp?.(app);
+          }}
+        />
 
         <ChatSelectApp
           apps={apps}

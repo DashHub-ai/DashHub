@@ -20,11 +20,11 @@ export function App() {
         }}
       >
         <I18nProvider>
-          <ModalsContextProvider>
-            <WorkspaceProvider>
+          <WorkspaceProvider>
+            <ModalsContextProvider>
               <Router />
-            </WorkspaceProvider>
-          </ModalsContextProvider>
+            </ModalsContextProvider>
+          </WorkspaceProvider>
         </I18nProvider>
       </SdkProvider>
     </HelmetProvider>

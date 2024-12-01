@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import { findItemById, rejectFalsyItems } from '@llm/commons';
 import { useUpdateEffect } from '@llm/commons-front';
@@ -7,6 +7,7 @@ import {
   groupSdkAIMessagesByRepeats,
   type SdkChatT,
   type SdKSearchMessagesOutputT,
+  type SdkTableRowWithIdNameT,
 } from '@llm/sdk';
 
 import type { SdkRepeatedMessageItemT } from './messages/chat-message';
@@ -33,10 +34,11 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     inputRef,
     messagesContainerRef,
     focusInput,
+    scrollConversation,
   } = useAutoFocusConversationInput();
 
   const [replyToMessage, setReplyToMessage] = useState<SdkRepeatedMessageItemT | null>(null);
-  const { messages, replying, onReply, onRefreshAIResponse } = useReplyConversationHandler({
+  const { messages, replying, onReply, onRefreshAIResponse, onAttachApp } = useReplyConversationHandler({
     chat,
     initialMessages,
   });
@@ -86,6 +88,15 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     });
   };
 
+  const onSelectApp = (app: SdkTableRowWithIdNameT) => {
+    if (!findItemById(app.id)(apps)) {
+      void onAttachApp({
+        app,
+        aiModel: aiModel!,
+      });
+    }
+  };
+
   const renderMessage = (message: SdkRepeatedMessageItemT, index: number) => {
     if (message.app) {
       return (
@@ -107,6 +118,14 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
 
   useSendInitialMessage(onReply);
   useUpdateEffect(focusInput, [messages, replyToMessage]);
+
+  useEffect(() => {
+    if (!messages.replyObservable) {
+      return;
+    }
+
+    return messages.replyObservable.subscribe(scrollConversation);
+  }, [messages.replyObservable]);
 
   return (
     <div className="flex gap-6 mx-auto max-w-7xl">
@@ -134,6 +153,7 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
             onCancelReplyToMessage={() => {
               setReplyToMessage(null);
             }}
+            onSelectApp={onSelectApp}
           />
         )}
       </div>

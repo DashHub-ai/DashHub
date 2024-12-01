@@ -2,8 +2,8 @@ import { useRef, useState } from 'react';
 import { v4 } from 'uuid';
 
 type OptimisticMigrateAttrs<A extends Array<any>, T, B> = {
-  before?: () => B;
   task: (before: B, ...array: A) => Promise<T>;
+  before?: (attrs: { args: A; }) => B;
   optimistic: (
     attrs: {
       before: B;
@@ -27,7 +27,7 @@ export function usePromiseOptimisticResponse<T>(result: T) {
     }: OptimisticMigrateAttrs<A, T, B>,
   ) => async (...args: A) => {
     const uuid = v4();
-    const beforeResult = before?.();
+    const beforeResult = before?.({ args });
 
     currentMigrationId.current = uuid;
 

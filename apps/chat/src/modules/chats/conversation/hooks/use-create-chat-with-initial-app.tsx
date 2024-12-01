@@ -2,7 +2,8 @@ import { pipe } from 'fp-ts/lib/function';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { useLocation } from 'wouter';
 
-import { format, tapTaskEither } from '@llm/commons';
+import { format, runTaskAsVoid, tapTaskEither, tryOrThrowTE } from '@llm/commons';
+import { useAsyncCallback } from '@llm/commons-front';
 import { getSdkAppMentionInChat, type SdkTableRowWithIdT, useSdkForLoggedIn } from '@llm/sdk';
 import { useSaveErrorNotification } from '@llm/ui';
 import { useI18n } from '~/i18n';
@@ -19,7 +20,7 @@ export function useCreateChatWithInitialApp() {
   const showErrorNotification = useSaveErrorNotification();
   const { prompts } = useI18n().pack.chat;
 
-  return (app: SdkTableRowWithIdT) => pipe(
+  return useAsyncCallback(async (app: SdkTableRowWithIdT) => pipe(
     TE.Do,
     TE.bind('aiModel', () => sdks.dashboard.aiModels.getDefault(organization.id)),
     TE.bindW('chat', () => sdks.dashboard.chats.create(
@@ -50,5 +51,7 @@ export function useCreateChatWithInitialApp() {
       },
       showErrorNotification,
     ),
-  );
+    tryOrThrowTE,
+    runTaskAsVoid,
+  ));
 };

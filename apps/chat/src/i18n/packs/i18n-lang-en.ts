@@ -174,7 +174,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       ai: 'AI',
     },
     prompts: {
-      explainApp: 'Could you briefly explain what %{mention} does and how to use it?',
+      explainApp: '%{mention}Could you briefly explain what this app does and how to use it?',
     },
     generating: {
       title: 'Generating title...',
@@ -189,6 +189,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       submitOnEnter: 'Submit on Enter',
       refresh: 'Refresh response',
       reply: 'Reply to this message',
+      addApp: 'Add app',
     },
     placeholders: {
       enterMessage: 'Enter your message...',
@@ -227,6 +228,11 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     grid: {
       placeholder: 'No apps yet. Stay tuned!',
+    },
+    chooseAppModal: {
+      title: 'Choose App',
+      select: 'Select',
+      selected: 'Selected',
     },
   },
   experts: {

@@ -1,9 +1,10 @@
 import { taskEither as TE } from 'fp-ts';
 import { identity, pipe } from 'fp-ts/lib/function';
 
-import { type Overwrite, timeoutTE, tryOrThrowTE } from '@llm/commons';
+import { format, type Overwrite, timeoutTE, tryOrThrowTE } from '@llm/commons';
 import { usePromiseOptimisticResponse } from '@llm/commons-front';
 import {
+  getSdkAppMentionInChat,
   type SdkChatT,
   type SdkCreateMessageInputT,
   type SdkRepliedMessageT,
@@ -11,6 +12,7 @@ import {
   type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useI18n } from '~/i18n';
 
 import { type AIStreamObservable, useAIResponseObservable } from './use-ai-response-observable';
 import {
@@ -29,8 +31,9 @@ type OptimisticSearchMessagesOutputT = Overwrite<SdKSearchMessagesOutputT, {
 }>;
 
 export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
+  const { prompts } = useI18n().pack.chat;
   const { sdks } = useSdkForLoggedIn();
-  const { createMessage, searchMessages } = sdks.dashboard.chats;
+  const { createMessage, searchMessages, attachApp } = sdks.dashboard.chats;
 
   const { streamAIReply, createAIReplyObservable } = useAIResponseObservable({ chat });
   const { loading, result, optimisticUpdate } = usePromiseOptimisticResponse<OptimisticSearchMessagesOutputT>(
@@ -178,10 +181,83 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
     }),
   });
 
+  /**
+   * Attaches an app to the chat
+   */
+  const onAttachApp = optimisticUpdate({
+    before: ({ args: [{ app }] }) => ({
+      replyObservable: createAIReplyObservable(),
+      initialPrompt: format(prompts.explainApp, {
+        mention: getSdkAppMentionInChat(app),
+      }),
+    }),
+    task: (
+      { initialPrompt, replyObservable },
+      { aiModel, app }: {
+        aiModel: SdkTableRowWithIdNameT;
+        app: SdkTableRowWithIdNameT;
+      },
+    ) => pipe(
+      TE.Do,
+      TE.bind('attachApp', () => attachApp(chat.id, {
+        app,
+      })),
+      TE.bind('message', () => createMessage(chat.id, {
+        content: initialPrompt,
+      })),
+      TE.bindW('aiResponse', ({ message }) => pipe(
+        TE.tryCatch(
+          () => streamAIReply({
+            observable: replyObservable,
+            message,
+            aiModel,
+          }),
+          identity,
+        ),
+        TE.orElse((error) => {
+          // Do not treat errors from aborting the request as actual errors
+          if (error instanceof Error && error.name === 'AbortError') {
+            // Let's wait a bit for indexing aborted message.
+            return timeoutTE(500);
+          }
+
+          return TE.left(error);
+        }),
+      )),
+      TE.bindW('messages', () => searchMessages(chat.id, {
+        offset: 0,
+        limit: 100,
+        sort: 'createdAt:desc',
+      })),
+      TE.map(({ messages: { items, ...pagination } }) => ({
+        replyObservable: null,
+        ...pagination,
+        items: items.toReversed(),
+      })),
+      tryOrThrowTE,
+    )(),
+
+    optimistic: ({
+      before: { initialPrompt, replyObservable },
+      result: { items, total },
+      args: [{ app, aiModel }],
+    }) => ({
+      replyObservable,
+      total: total + 1,
+      items: [
+        ...items,
+        createOptimisticResponse.app(app),
+        createOptimisticResponse.user({ content: initialPrompt }),
+        createOptimisticResponse.bot(aiModel, replyObservable),
+      ],
+    }),
+  });
+
   return {
     replying: loading,
     messages: result,
     onReply,
     onRefreshAIResponse,
+    onAttachApp,
   };
 }

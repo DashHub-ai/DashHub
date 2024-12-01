@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import {
+  type SdkAppT,
   SdKSearchAppsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
@@ -15,10 +16,14 @@ import {
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import { useFavoriteApps } from '../favorite';
-import { AppCard } from './app-card';
+import { AppCard, type AppCardProps } from './app-card';
 import { AppsPlaceholder } from './apps-placeholder';
 
-export function AppsContainer() {
+type Props = {
+  itemPropsFn?: (item: SdkAppT) => Omit<AppCardProps, 'app'>;
+};
+
+export function AppsContainer({ itemPropsFn }: Props) {
   const favorites = useFavoriteApps();
   const { organization } = useWorkspaceOrganizationOrThrow();
 
@@ -120,6 +125,7 @@ export function AppsContainer() {
                 <AppCard
                   key={item.id}
                   app={item}
+                  {...itemPropsFn?.(item)}
                 />
               ))}
             </div>

@@ -4,7 +4,7 @@ import { AppChatBadge, type AppChatBadgeProps } from './app-chat-badge';
 
 export function hydrateWithAppChatBadges(
   content: string,
-  props: Omit<AppChatBadgeProps, 'id'> = {},
+  props: Omit<AppChatBadgeProps, 'id' | 'className'> = {},
 ): ReactNode {
   const tokens = content.split(/(#app:\d+)/);
 
@@ -18,7 +18,7 @@ export function hydrateWithAppChatBadges(
     return (
       <Fragment key={id}>
         &nbsp;
-        <AppChatBadge id={+id} {...props} />
+        <AppChatBadge id={+id} {...props} className="top-[1px]" />
         &nbsp;
       </Fragment>
     );

@@ -13,11 +13,12 @@ export type AppChatBadgeProps = {
   id: SdkTableRowIdT;
   darkMode?: boolean;
   selected?: boolean;
+  className?: string;
   onClick?: () => void;
   disabled?: boolean;
 };
 
-export const AppChatBadge = memo(({ id, darkMode, selected, onClick, disabled }: AppChatBadgeProps) => {
+export const AppChatBadge = memo(({ id, darkMode, selected, onClick, className, disabled }: AppChatBadgeProps) => {
   const { sdks } = useSdkForLoggedIn();
   const value = useAsyncValue(
     async () => {
@@ -42,7 +43,7 @@ export const AppChatBadge = memo(({ id, darkMode, selected, onClick, disabled }:
       onClick={onClick}
       disabled={disabled}
       className={clsx(
-        'inline-flex relative top-[1px] items-center gap-1.5 shadow-sm px-2 py-1 border rounded-md font-medium text-xs transition-colors',
+        'inline-flex relative items-center gap-1.5 shadow-sm px-2 py-1 border rounded-md font-medium text-xs transition-colors',
         {
           'bg-gray-100 text-gray-800 border-gray-300 hover:border-gray-400': !darkMode && !selected,
           'bg-gray-700 text-white border-gray-500 hover:border-gray-400': darkMode && !selected,
@@ -51,6 +52,7 @@ export const AppChatBadge = memo(({ id, darkMode, selected, onClick, disabled }:
           'opacity-50 cursor-not-allowed': disabled,
           'cursor-pointer': !disabled,
         },
+        className,
       )}
     >
       <WandSparklesIcon size={12} />
