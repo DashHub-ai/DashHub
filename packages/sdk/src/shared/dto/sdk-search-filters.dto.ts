@@ -13,6 +13,10 @@ export const SdkIdsFiltersInputV = z.object({
   ids: SdkIdsArrayV.optional(),
 });
 
+export const SdkExcludeIdsFiltersInputV = z.object({
+  excludeIds: SdkIdsArrayV.optional(),
+});
+
 export const SdkUuidsFiltersInputV = z.object({
   ids: SdkUuidsArrayV.optional(),
 });

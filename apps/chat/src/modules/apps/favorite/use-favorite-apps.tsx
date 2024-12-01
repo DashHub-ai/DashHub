@@ -13,6 +13,7 @@ export function useFavoriteApps() {
   });
 
   const appsIds = useMemo(() => storage.getOrNull() || [], [storage.revision]);
+  const hasFavorites = appsIds.length > 0;
 
   const isFavorite = (app: SdkTableRowWithIdT) => appsIds.includes(app.id);
 
@@ -27,8 +28,10 @@ export function useFavoriteApps() {
   };
 
   return {
+    total: appsIds.length,
     ids: appsIds,
     isFavorite,
+    hasFavorites,
     toggle,
   };
 }

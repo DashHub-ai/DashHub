@@ -1,6 +1,6 @@
 import { controlled, type OmitControlStateAttrs } from '@under-control/forms';
 import clsx from 'clsx';
-import { Activity, Archive, LayoutGrid } from 'lucide-react';
+import { LayoutGrid, List, Star } from 'lucide-react';
 
 import { rejectFalsyItems } from '@llm/commons';
 import { Tabs, type TabsProps } from '~/components/tabs';
@@ -8,27 +8,45 @@ import { useForwardedI18n } from '~/i18n';
 
 type Props = Omit<OmitControlStateAttrs<TabsProps>, 'tabs'> & {
   withAll?: boolean;
+  totalFavorites: number;
 };
 
-export const ArchiveFilterTabs = controlled<boolean | null, Props>((
+export const FavoriteFiltersTabs = controlled<boolean | null, Props>((
   {
     control: { value, setValue },
     withAll = true,
+    totalFavorites,
     className,
     ...props
   },
 ) => {
-  const t = useForwardedI18n().pack.tabs.archiveFilters;
+  const t = useForwardedI18n().pack.tabs.favoriteFilters;
   const tabs = rejectFalsyItems([
     {
-      id: false,
-      name: t.active,
-      icon: <Activity size={16} />,
+      id: true,
+      name: (
+        <div className="flex items-center gap-2">
+          {t.favorite}
+          {totalFavorites > 0 && (
+            <span
+              className={clsx(
+                'px-1.5 rounded-md min-w-[1.2rem] text-center text-white text-xs',
+                value === true ? 'bg-yellow-500' : 'bg-gray-500',
+              )}
+            >
+              {totalFavorites}
+            </span>
+          )}
+        </div>
+      ),
+      icon: <Star size={16} />,
+      disabled: !totalFavorites,
     },
     {
-      id: true,
-      name: t.archived,
-      icon: <Archive size={16} />,
+      id: false,
+      name: t.rest,
+      icon: <List size={16} />,
+      disabled: !totalFavorites,
     },
     withAll && {
       id: -1,

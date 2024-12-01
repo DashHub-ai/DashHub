@@ -1,9 +1,12 @@
+import { useMemo } from 'react';
+
 import {
   SdKSearchAppsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import {
   ArchiveFilterTabs,
+  FavoriteFiltersTabs,
   PaginatedList,
   PaginationSearchToolbarItem,
   PaginationToolbar,
@@ -11,22 +14,24 @@ import {
 } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
+import { useFavoriteApps } from '../favorite';
 import { AppCard } from './app-card';
 import { AppsPlaceholder } from './apps-placeholder';
 
-type Props = {
-  storeDataInUrl?: boolean;
-};
-
-export function AppsContainer({ storeDataInUrl = false }: Props) {
+export function AppsContainer() {
+  const favorites = useFavoriteApps();
   const { organization } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result } = useDebouncedPaginatedSearch({
-    storeDataInUrl,
+    storeDataInUrl: false,
     schema: SdKSearchAppsInputV,
     fallbackSearchParams: {
       limit: 12,
+
+      ...favorites.hasFavorites && {
+        ids: [...favorites.ids],
+      },
     },
     fetchResultsTask: filters => sdks.dashboard.apps.search({
       ...filters,
@@ -34,12 +39,58 @@ export function AppsContainer({ storeDataInUrl = false }: Props) {
     }),
   });
 
+  const favoritesFilter = useMemo(
+    () => {
+      if (!favorites.hasFavorites) {
+        return null;
+      }
+
+      if (favorites.ids.every(id => pagination.value.ids?.includes(id))) {
+        return true;
+      }
+
+      if (favorites.ids.every(id => pagination.value.excludeIds?.includes(id))) {
+        return false;
+      }
+
+      return null;
+    },
+    [favorites.ids, pagination.value],
+  );
+
+  const onToggleFavoriteFilter = (value: boolean | null) => {
+    pagination.setValue({
+      merge: true,
+      value: {
+        ids: undefined,
+        excludeIds: undefined,
+        ...value && {
+          ids: favorites.ids,
+        },
+        ...value === false && {
+          excludeIds: favorites.ids,
+        },
+      },
+    });
+  };
+
   return (
     <section>
       <PaginationToolbar
         className="mb-6"
         suffix={(
-          <ArchiveFilterTabs {...pagination.bind.path('archived')} />
+          <>
+            <FavoriteFiltersTabs
+              totalFavorites={favorites.total}
+              value={favoritesFilter}
+              onChange={onToggleFavoriteFilter}
+            />
+
+            <ArchiveFilterTabs
+              {...pagination.bind.path('archived')}
+              withAll={false}
+            />
+          </>
         )}
       >
         <PaginationSearchToolbarItem

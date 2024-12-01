@@ -50,6 +50,7 @@ export class AppsEsSearchRepo {
     {
       phrase,
       ids,
+      excludeIds,
       organizationIds,
       archived,
     }: SdKSearchAppsInputT,
@@ -57,6 +58,7 @@ export class AppsEsSearchRepo {
     esb.boolQuery().must(
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
+        !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
           esb
