@@ -11,6 +11,7 @@ import {
   SdkRequestAIReplyInputV,
   SdKSearchChatsInputV,
   SdKSearchMessagesInputV,
+  SdkUpdateChatInputV,
 } from '@llm/sdk';
 import { ChatsService } from '~/modules/chats';
 import { ConfigService } from '~/modules/config';
@@ -64,6 +65,21 @@ export class ChatsController extends AuthorizedController {
           chatsService.asUser(context.var.jwt).create,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ChatsSdk['create']>>(context),
+        ),
+      )
+      .put(
+        '/:id',
+        sdkSchemaValidator('json', SdkUpdateChatInputV),
+        async context => pipe(
+          {
+            id: context.req.param().id,
+            ...context.req.valid('json'),
+          },
+          chatsService.asUser(context.var.jwt).update,
+          mapDbRecordNotFoundToSdkError,
+          mapDbRecordAlreadyExistsToSdkError,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ChatsSdk['update']>>(context),
         ),
       )
       .patch(

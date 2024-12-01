@@ -1,23 +1,21 @@
-import { useForm } from '@under-control/forms';
-
 import type { SdkChatT } from '@llm/sdk';
 
-import { Checkbox, FormField, Input, SaveButton, TextArea } from '@llm/ui';
+import { Checkbox, CollapsiblePanel, FormAlertBoxes, FormField, Input, SaveButton, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
-import { CollapsiblePanel } from '~/modules/shared/collapsible-panel';
 
 import { ChatConfigArchive } from './chat-config-archive';
 import { ChatConfigTutorial } from './chat-config-tutorial';
 import { ChatConfigUnarchive } from './chat-config-unarchive';
+import { useChatConfigForm } from './use-chat-config-form';
 
 type Props = {
   defaultValue: SdkChatT;
 };
 
 export function ChatConfigPanel({ defaultValue }: Props) {
-  const t = useI18n().pack.chat.config;
-  const { bind, validator, value, submitState, isDirty } = useForm({
-    onSubmit: () => {},
+  const { pack } = useI18n();
+  const t = pack.chat.config;
+  const { bind, validator, value, submitState, isDirty, handleSubmitEvent } = useChatConfigForm({
     defaultValue,
   });
 
@@ -26,7 +24,10 @@ export function ChatConfigPanel({ defaultValue }: Props) {
       storageKey="chat-config-panel-state"
       title={t.title}
     >
-      <form className="space-y-4">
+      <form
+        className="space-y-4"
+        onSubmit={handleSubmitEvent}
+      >
         <ChatConfigTutorial />
 
         <fieldset className="space-y-4">
@@ -75,6 +76,8 @@ export function ChatConfigPanel({ defaultValue }: Props) {
             </div>
           </FormField>
         </fieldset>
+
+        <FormAlertBoxes result={submitState.result} />
 
         {!defaultValue.archived && (
           <div className="flex flex-row justify-end mt-4 pt-4 border-t">

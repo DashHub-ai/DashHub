@@ -23,6 +23,7 @@ export * from './use-ref-safe-callback';
 export * from './use-ref-safe-callbacks-hash';
 export * from './use-state-in-url';
 export * from './use-sync-storage-object';
+export * from './use-timeout';
 export * from './use-update-effect';
 export * from './use-vanilla-history';
 export * from './use-window-listener';

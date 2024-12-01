@@ -22,6 +22,15 @@ export const I18N_FORWARDED_PL_PACK: typeof I18N_FORWARDED_EN_PACK = {
     selectItem: 'Wybierz element',
     noItemsFound: 'Nie znaleziono elementów',
   },
+  tutorialBox: {
+    gotIt: 'Rozumiem',
+  },
+  form: {
+    alerts: {
+      saveSuccess: 'Pomyślnie zapisano zmiany!',
+      saveError: 'Nie udało się zapisać zmian!',
+    },
+  },
   buttons: {
     edit: 'Edytuj',
     archive: 'Archiwizuj',

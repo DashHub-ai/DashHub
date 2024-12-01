@@ -1,3 +1,5 @@
+export * from './alert';
+export * from './collapsible-panel';
 export * from './controls';
 export * from './ellipsis-dropdown';
 export * from './form';
@@ -9,3 +11,4 @@ export * from './predefined';
 export * from './spinner-container';
 export * from './table';
 export * from './tabs';
+export * from './tutorial-box';
