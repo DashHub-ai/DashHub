@@ -1,10 +1,12 @@
 import type { z } from 'zod';
 
+import deepEq from 'fast-deep-equal';
 import { flow, identity, pipe } from 'fp-ts/lib/function';
 import * as O from 'fp-ts/lib/Option';
 import { useRef } from 'react';
 
 import { tryParseJSON, tryParseUsingZodSchema } from '@llm/commons';
+import { useWindowListener } from '@llm/commons-front';
 
 import { useForceRerender } from './use-force-rerender';
 
@@ -44,8 +46,8 @@ export function useSyncStorageObject<S extends z.ZodType<unknown>>(
     }
   };
 
-  const get = () => {
-    if (O.isSome(cache.current)) {
+  const get = (ignoreCache: boolean = false) => {
+    if (!ignoreCache && O.isSome(cache.current)) {
       return cache.current;
     }
 
@@ -64,11 +66,26 @@ export function useSyncStorageObject<S extends z.ZodType<unknown>>(
   const set = (value: z.infer<S>) => {
     storage.setItem(name, JSON.stringify(value));
     cache.current = O.some(value);
+    window.dispatchEvent(new Event('storage'));
 
     if (rerenderOnSet) {
       forceRerender();
     }
   };
+
+  useWindowListener({
+    storage: () => {
+      const newValue = get(true);
+
+      if (!deepEq(newValue, cache.current)) {
+        cache.current = newValue;
+
+        if (rerenderOnSet) {
+          forceRerender();
+        }
+      }
+    },
+  });
 
   if (readBeforeMount) {
     cache.current = get();
