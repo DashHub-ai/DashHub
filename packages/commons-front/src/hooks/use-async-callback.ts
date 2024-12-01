@@ -76,10 +76,33 @@ export function useAsyncCallback<A, R>(
     return null;
   });
 
+  // A function that forces the reload of the asynchronous function.
+  const silentReload = useRefSafeCallback(async (...args: Array<A>): Promise<R | null> => {
+    if (unmountedRef.current) {
+      return null;
+    }
+
+    const currentExecutionUUID = uuid.v4();
+
+    prevExecutionUIDRef.current = currentExecutionUUID;
+
+    const result = await callback(...args);
+
+    if (!unmountedRef.current && prevExecutionUIDRef.current === currentExecutionUUID) {
+      setAsyncState({
+        status: 'success',
+        data: result,
+      });
+    }
+
+    return result;
+  });
+
   return [
     asyncExecutor,
     {
       ...asyncState,
+      silentReload,
       isLoading: asyncState.status === 'loading',
     },
   ] as AsyncCallbackHookResult<Array<A>, R>;
@@ -90,10 +113,16 @@ export function useAsyncCallback<A, R>(
  */
 export type AsyncCallbackHookResult<A extends Array<unknown>, R> = [
   (...args: A) => Promise<R | null>,
-  AsyncCallbackState<R> & {
-    isLoading: boolean;
-  },
+  AsyncCallbackStateHookResult<A, R>,
 ];
+
+/**
+ * Represents the result of the `useAsyncCallback` hook.
+ */
+export type AsyncCallbackStateHookResult<A extends Array<unknown>, R> = AsyncCallbackState<R> & {
+  isLoading: boolean;
+  silentReload: (...args: A) => Promise<R | null>;
+};
 
 /**
  * Represents the state of an asynchronous callback.

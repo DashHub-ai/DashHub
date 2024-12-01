@@ -13,6 +13,7 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import { ChatCard } from './chat-card';
 import { ChatHistoryPlaceholder } from './chat-history-placeholder';
+import { useReloadIntervalIfGenerating } from './use-reload-interval-if-generating';
 
 type Props = {
   storeDataInUrl?: boolean;
@@ -22,7 +23,7 @@ export function ChatsContainer({ storeDataInUrl = false }: Props) {
   const { organization } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
-  const { loading, pagination, result } = useDebouncedPaginatedSearch({
+  const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
     storeDataInUrl,
     schema: SdKSearchChatsInputV,
     fallbackSearchParams: {
@@ -33,6 +34,8 @@ export function ChatsContainer({ storeDataInUrl = false }: Props) {
       organizationIds: [organization.id],
     }),
   });
+
+  useReloadIntervalIfGenerating(silentReload, result);
 
   return (
     <section>

@@ -1,6 +1,6 @@
 import { type DependencyList, useLayoutEffect } from 'react';
 
-import { type AsyncCallbackState, useAsyncCallback } from './use-async-callback';
+import { type AsyncCallbackStateHookResult, useAsyncCallback } from './use-async-callback';
 
 /**
  * A hook that allows to execute an asynchronous function and provides the state of the execution.
@@ -21,6 +21,8 @@ export function useAsyncValue<R>(
   // In such case, we should return 'loading' status because the effect is already queued to be executed.
   if (asyncState.status === 'idle') {
     return {
+      isLoading: true,
+      silentReload: asyncState.silentReload,
       status: 'loading',
     };
   }
@@ -31,4 +33,4 @@ export function useAsyncValue<R>(
 /**
  * The result of the `useAsyncValue` hook.
  */
-export type AsyncValueHookResult<R> = Exclude<AsyncCallbackState<R>, { status: 'idle'; }>;
+export type AsyncValueHookResult<R> = Exclude<AsyncCallbackStateHookResult<never, R>, { status: 'idle'; }>;

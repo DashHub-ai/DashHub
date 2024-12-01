@@ -119,6 +119,7 @@ export function useDebouncedPaginatedSearch<
 
   return {
     reset,
+    silentReload: promise.silentReload,
     reload,
     result: promise.status === 'success' ? promise.data : null,
     loading: debouncedPagination.loading || promise.status === 'loading',

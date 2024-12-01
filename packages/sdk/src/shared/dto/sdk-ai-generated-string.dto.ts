@@ -22,3 +22,7 @@ export const SdkAIGeneratedStringInputV = z.union([
 ]);
 
 export type SdkAIGeneratedStringInputT = z.infer<typeof SdkAIGeneratedStringInputV>;
+
+export function isSdkAIGeneratingString(input: SdkAIGeneratedStringT) {
+  return input.generated && input.value === null;
+}

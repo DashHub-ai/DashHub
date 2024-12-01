@@ -175,6 +175,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       you: 'Ty',
       ai: 'AI',
     },
+    generating: {
+      title: 'Generowanie tytułu...',
+      description: 'Generowanie opisu...',
+    },
     actions: {
       send: 'Wyślij',
       submitOnEnter: 'Wyślij po naciśnięciu Enter',

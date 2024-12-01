@@ -12,6 +12,7 @@ export * from './use-element-listener-ref';
 export * from './use-focus-after-mount';
 export * from './use-force-rerender';
 export * from './use-instant-update-effect';
+export * from './use-interval';
 export * from './use-is-mounted';
 export * from './use-is-mounted-ref';
 export * from './use-is-unmounted-ref';
