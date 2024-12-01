@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react';
 
-import { findItemById } from '@llm/commons';
+import { findItemById, rejectFalsyItems } from '@llm/commons';
 import { useUpdateEffect } from '@llm/commons-front';
 import {
   getLastUsedSdkMessagesAIModel,
@@ -40,6 +40,11 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     chat,
     initialMessages,
   });
+
+  const apps = useMemo(
+    () => rejectFalsyItems(messages.items.map(({ app }) => app)),
+    [messages.items],
+  );
 
   const { groupedMessages, aiModel } = useMemo(
     () => ({
@@ -81,9 +86,6 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     });
   };
 
-  useSendInitialMessage(onReply);
-  useUpdateEffect(focusInput, [messages, replyToMessage]);
-
   const renderMessage = (message: SdkRepeatedMessageItemT, index: number) => {
     if (message.app) {
       return (
@@ -103,6 +105,9 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     );
   };
 
+  useSendInitialMessage(onReply);
+  useUpdateEffect(focusInput, [messages, replyToMessage]);
+
   return (
     <div className="flex gap-6 mx-auto max-w-7xl">
       <div className="top-3 sticky flex flex-col flex-1 h-[calc(100vh-200px)]">
@@ -117,6 +122,7 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
 
         {!chat.archived && (
           <ChatInputToolbar
+            apps={apps}
             replyToMessage={replyToMessage}
             replying={replying}
             disabled={!aiModel}

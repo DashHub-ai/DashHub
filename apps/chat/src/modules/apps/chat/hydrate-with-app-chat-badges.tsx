@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import { AppChatBadge, type AppChatBadgeProps } from './app-chat-badge';
 
@@ -15,6 +15,12 @@ export function hydrateWithAppChatBadges(
     }
 
     const [, id] = match;
-    return <AppChatBadge key={id} id={+id} {...props} />;
+    return (
+      <Fragment key={id}>
+        &nbsp;
+        <AppChatBadge id={+id} {...props} />
+        &nbsp;
+      </Fragment>
+    );
   });
 }

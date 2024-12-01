@@ -1,27 +1,31 @@
 import type { KeyboardEventHandler, MouseEventHandler } from 'react';
 
-import { type CanBePromise, suppressEvent, useForm } from '@under-control/forms';
+import { type CanBePromise, suppressEvent, useControlStrict, useForm } from '@under-control/forms';
 import clsx from 'clsx';
 import { CircleStopIcon, MessageCircle, SendIcon } from 'lucide-react';
 
-import type { SdkCreateMessageInputT } from '@llm/sdk';
-
 import { StrictBooleanV } from '@llm/commons';
-import { useLocalStorageObject } from '@llm/commons-front';
+import { useAfterMount, useLocalStorageObject } from '@llm/commons-front';
+import { getSdkAppMentionInChat, type SdkCreateMessageInputT, type SdkTableRowWithIdNameT } from '@llm/sdk';
 import { Checkbox } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 import type { SdkRepeatedMessageItemT } from '../messages';
 
 import { ChatReplyMessage } from './chat-reply-message';
+import { ChatSelectApp } from './chat-select-app';
 
 export type ChatInputValue = Omit<SdkCreateMessageInputT, 'replyToMessage'>;
 
 type Props = {
+  apps: Array<SdkTableRowWithIdNameT>;
+
   replying: boolean;
   replyToMessage?: SdkRepeatedMessageItemT | null;
+
   disabled?: boolean;
   inputRef?: React.RefObject<HTMLInputElement>;
+
   onSubmit: (message: ChatInputValue) => CanBePromise<any>;
   onCancelSubmit: VoidFunction;
   onCancelReplyToMessage: VoidFunction;
@@ -36,6 +40,7 @@ export function ChatInputToolbar(
     onSubmit,
     onCancelSubmit,
     onCancelReplyToMessage,
+    apps,
   }: Props,
 ) {
   const t = useI18n().pack.chat;
@@ -44,6 +49,10 @@ export function ChatInputToolbar(
     forceParseIfNotSet: true,
     schema: StrictBooleanV.catch(true),
     readBeforeMount: true,
+  });
+
+  const selectedApp = useControlStrict<SdkTableRowWithIdNameT | null>({
+    defaultValue: null,
   });
 
   const {
@@ -63,7 +72,16 @@ export function ChatInputToolbar(
         },
       });
 
-      return onSubmit(newValue);
+      let mappedContent = newValue.content.trim();
+
+      if (selectedApp.value) {
+        mappedContent = `${getSdkAppMentionInChat(selectedApp.value)} ${mappedContent}`;
+      }
+
+      return onSubmit({
+        ...newValue,
+        content: mappedContent,
+      });
     },
   });
 
@@ -83,6 +101,14 @@ export function ChatInputToolbar(
     suppressEvent(evt);
     onCancelSubmit?.();
   };
+
+  useAfterMount(() => {
+    if (apps.length) {
+      selectedApp.setValue({
+        value: apps[0],
+      });
+    }
+  });
 
   return (
     <form
@@ -138,13 +164,19 @@ export function ChatInputToolbar(
         </button>
       </div>
 
-      <div className="flex items-center gap-2 mt-3 text-gray-500 text-sm">
+      <div className="flex flex-row items-center gap-6 mt-2">
         <Checkbox
           value={!!submitOnEnterStorage.getOrNull()}
           onChange={submitOnEnterStorage.set}
         >
           {t.actions.submitOnEnter}
         </Checkbox>
+
+        <ChatSelectApp
+          apps={apps}
+          disabled={disabled}
+          {...selectedApp.bind.entire()}
+        />
       </div>
     </form>
   );
