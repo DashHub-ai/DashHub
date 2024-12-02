@@ -36,7 +36,7 @@ export function useAsyncValue<R>(
       void asyncCallback();
     }
 
-    isFirstFetch.current = true;
+    isFirstFetch.current = false;
   }, deps);
 
   // There might be short delay between the effect and the state update.
