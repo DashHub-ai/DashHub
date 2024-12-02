@@ -10,16 +10,19 @@ export function hydrateWithAppChatBadges(
 
   return tokens.map((token) => {
     const match = token.match(/#app:(\d+)/);
+
+    if (!token.trim().length) {
+      return null;
+    }
+
     if (!match?.length) {
-      return token;
+      return <Fragment key={token}>{token}</Fragment>;
     }
 
     const [, id] = match;
     return (
       <Fragment key={id}>
-        &nbsp;
-        <AppChatBadge id={+id} {...props} className="top-[1px]" />
-        &nbsp;
+        <AppChatBadge id={+id} {...props} className="mx-1 my-1 first:ml-0" />
       </Fragment>
     );
   });

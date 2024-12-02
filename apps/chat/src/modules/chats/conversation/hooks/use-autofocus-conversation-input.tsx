@@ -9,7 +9,7 @@ export function useAutoFocusConversationInput() {
   const scrollConversation = () => {
     messagesContainerRef.current?.scrollTo({
       top: messagesContainerRef.current.scrollHeight,
-      behavior: 'smooth',
+      behavior: 'instant',
     });
   };
 

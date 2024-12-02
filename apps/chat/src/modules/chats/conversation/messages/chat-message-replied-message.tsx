@@ -35,6 +35,7 @@ export function ChatMessageRepliedMessage({ message, darkMode }: Props) {
         <ChatMessageContent
           content={message.content}
           truncate={60}
+          darkMode={darkMode}
         />
       </div>
     </div>
