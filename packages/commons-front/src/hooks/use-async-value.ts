@@ -1,4 +1,6 @@
-import { type DependencyList, useLayoutEffect } from 'react';
+import { type DependencyList, useLayoutEffect, useRef } from 'react';
+
+import type { Nullable } from '@llm/commons';
 
 import { type AsyncCallbackStateHookResult, useAsyncCallback } from './use-async-callback';
 
@@ -9,11 +11,32 @@ import { type AsyncCallbackStateHookResult, useAsyncCallback } from './use-async
 export function useAsyncValue<R>(
   callback: () => Promise<R>,
   deps: DependencyList,
+  {
+    initialValue,
+  }: {
+    initialValue?: Nullable<R>;
+  } = {},
 ): AsyncValueHookResult<R> {
-  const [asyncCallback, asyncState] = useAsyncCallback(callback);
+  const isFirstFetch = useRef(true);
+  const [asyncCallback, asyncState] = useAsyncCallback(
+    callback,
+    initialValue
+      ? {
+          data: initialValue,
+          status: 'success',
+        }
+      : {
+          status: 'loading',
+        },
+  );
 
   useLayoutEffect(() => {
-    void asyncCallback();
+    // Handle sync cache support.
+    if (!isFirstFetch.current || asyncState.status !== 'success') {
+      void asyncCallback();
+    }
+
+    isFirstFetch.current = true;
   }, deps);
 
   // There might be short delay between the effect and the state update.

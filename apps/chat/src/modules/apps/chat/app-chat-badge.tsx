@@ -1,13 +1,14 @@
 import clsx from 'clsx';
-import { pipe } from 'fp-ts/lib/function';
 import { CheckIcon, WandSparklesIcon } from 'lucide-react';
 import { memo } from 'react';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { AsyncTaskCache } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
-import { type SdkAppT, type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
+import { type AppsSdk, type SdkAppT, type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
 
-const APP_CHATS_BADGES_CACHE = new Map<SdkTableRowIdT, Promise<SdkAppT>>();
+const appChatsCache = new AsyncTaskCache<SdkTableRowIdT, AppsSdk, SdkAppT>(
+  (id, sdk) => sdk.get(id),
+);
 
 export type AppChatBadgeProps = {
   id: SdkTableRowIdT;
@@ -21,20 +22,11 @@ export type AppChatBadgeProps = {
 export const AppChatBadge = memo(({ id, darkMode, selected, onClick, className, disabled }: AppChatBadgeProps) => {
   const { sdks } = useSdkForLoggedIn();
   const value = useAsyncValue(
-    async () => {
-      if (APP_CHATS_BADGES_CACHE.has(id)) {
-        return APP_CHATS_BADGES_CACHE.get(id);
-      }
-
-      const promise = pipe(
-        sdks.dashboard.apps.get(id),
-        tryOrThrowTE,
-      )();
-
-      APP_CHATS_BADGES_CACHE.set(id, promise);
-      return promise;
-    },
+    () => appChatsCache.get(id, sdks.dashboard.apps),
     [id],
+    {
+      initialValue: appChatsCache.getSyncValue(id),
+    },
   );
 
   return (

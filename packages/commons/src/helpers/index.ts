@@ -1,4 +1,5 @@
 export * from './async-debounce';
+export * from './cache-async-task';
 export * from './clamp';
 export * from './date';
 export * from './delay-task-either';

@@ -11,11 +11,12 @@ import { useRefSafeCallback } from './use-ref-safe-callback.js';
  */
 export function useAsyncCallback<A, R>(
   callback: (...args: Array<A>) => Promise<R>,
+  initialAsyncState: AsyncCallbackState<R> = {
+    status: 'idle',
+  },
 ): AsyncCallbackHookResult<Array<A>, R> {
   // The state of the asynchronous callback.
-  const [asyncState, setAsyncState] = useState<AsyncCallbackState<R>>({
-    status: 'idle',
-  });
+  const [asyncState, setAsyncState] = useState<AsyncCallbackState<R>>(initialAsyncState);
 
   // A reference to the mounted state of the component.
   const unmountedRef = useIsUnmountedRef();
