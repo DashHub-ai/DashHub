@@ -11,7 +11,7 @@ type ChatAttachedAppProps = {
 
 export const ChatAttachedApp = memo(({ app }: ChatAttachedAppProps) => {
   return (
-    <div className="flex items-start gap-2 mb-5 animate-slideIn">
+    <div className="flex items-start gap-2 opacity-0 mb-5 animate-slideIn">
       <div className="flex flex-shrink-0 justify-center items-center border-gray-200 bg-gray-100 border rounded-full w-8 h-8">
         <Bot className="w-5 h-5 text-gray-600" />
       </div>

@@ -2,7 +2,11 @@ import { useEffect } from 'react';
 
 import { useRefSafeCallback } from './use-ref-safe-callback';
 
-export function useInterval(fn: VoidFunction, delay: number | null) {
+type Attrs = {
+  maxTicks?: number;
+};
+
+export function useInterval(fn: VoidFunction, delay: number | null, { maxTicks }: Attrs = {}) {
   const safeCallback = useRefSafeCallback(fn);
 
   useEffect(() => {
@@ -10,7 +14,15 @@ export function useInterval(fn: VoidFunction, delay: number | null) {
       return;
     }
 
-    const id = setInterval(safeCallback, delay);
+    let ticks = 0;
+    const id = setInterval(() => {
+      if (maxTicks && ticks++ >= maxTicks) {
+        clearInterval(id);
+        return;
+      }
+
+      safeCallback();
+    }, delay);
 
     return () => {
       clearInterval(id);

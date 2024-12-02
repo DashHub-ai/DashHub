@@ -1,7 +1,7 @@
 import { memo, useEffect, useMemo, useState } from 'react';
 
 import { findItemById, rejectFalsyItems } from '@llm/commons';
-import { useUpdateEffect } from '@llm/commons-front';
+import { useInterval, useUpdateEffect } from '@llm/commons-front';
 import {
   getLastUsedSdkMessagesAIModel,
   groupSdkAIMessagesByRepeats,
@@ -118,6 +118,7 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
 
   useSendInitialMessage(onReply);
   useUpdateEffect(focusInput, [messages, replyToMessage]);
+  useInterval(focusInput, 1, { maxTicks: 150 });
 
   useEffect(() => {
     if (!messages.replyObservable) {
