@@ -1,7 +1,8 @@
-import { memo, useEffect, useMemo, useState } from 'react';
+import clsx from 'clsx';
+import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { findItemById, rejectFalsyItems } from '@llm/commons';
-import { useInterval, useUpdateEffect } from '@llm/commons-front';
+import { useInterval } from '@llm/commons-front';
 import {
   getLastUsedSdkMessagesAIModel,
   groupSdkAIMessagesByRepeats,
@@ -19,6 +20,7 @@ import {
   extractOptimisticMessageContent,
   useAutoFocusConversationInput,
   useReplyConversationHandler,
+  useScrollFlickeringIndicator,
   useSendInitialMessage,
 } from './hooks';
 import { ChatInputToolbar, type ChatInputValue } from './input-toolbar';
@@ -30,6 +32,7 @@ type Props = {
 };
 
 export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
+  const flickeringIndicator = useScrollFlickeringIndicator();
   const {
     inputRef,
     messagesContainerRef,
@@ -117,8 +120,8 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
   };
 
   useSendInitialMessage(onReply);
-  useUpdateEffect(focusInput, [messages, replyToMessage]);
-  useInterval(focusInput, 1, { maxTicks: 150 });
+  useLayoutEffect(focusInput, [messages, replyToMessage]);
+  useInterval(focusInput, 1, { maxTicks: 50 });
 
   useEffect(() => {
     if (!messages.replyObservable) {
@@ -135,7 +138,10 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
 
         <div
           ref={messagesContainerRef}
-          className="relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]"
+          className={clsx(
+            'relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]',
+            flickeringIndicator.visible ? 'opacity-100' : 'opacity-0', // Avoid scroll flickering on first render
+          )}
         >
           {groupedMessages.map(renderMessage)}
         </div>

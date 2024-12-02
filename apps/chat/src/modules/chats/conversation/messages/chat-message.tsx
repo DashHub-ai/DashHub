@@ -56,7 +56,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
     <div
       className={clsx(
         'flex items-start gap-2',
-        'animate-slideIn',
+        'animate-messageSlideIn',
         {
           'mb-5': !repeats.length,
           'mb-10': repeats.length,
