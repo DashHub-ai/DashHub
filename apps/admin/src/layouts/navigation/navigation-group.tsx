@@ -35,10 +35,7 @@ export function NavigationGroup({ icon, label, items }: Props) {
           {label}
           <ChevronDownIcon
             size={16}
-            className={clsx(
-              'group-hover:rotate-180 transition-transform',
-              active && 'rotate-180',
-            )}
+            className="group-hover:rotate-180 transition-transform"
           />
         </span>
       </NavigationItem>

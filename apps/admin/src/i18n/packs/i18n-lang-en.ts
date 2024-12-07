@@ -39,6 +39,11 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
   },
   navigation: {
+    groups: {
+      resources: 'Resources',
+      development: 'Development',
+      aiAndStorage: 'AI & Storage',
+    },
     links: {
       home: 'Overview',
       organizations: 'Organizations',
@@ -46,6 +51,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       s3Buckets: 'S3',
       projects: 'Projects',
       apps: 'Apps',
+      appsCategories: 'Apps Categories',
       aiModels: 'AI Models',
     },
     loggedIn: {
@@ -151,6 +157,30 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           chatContext: {
             label: 'Chat context',
             placeholder: 'Enter chat context',
+          },
+        },
+      },
+    },
+    appsCategories: {
+      prefix: {
+        category: 'Category',
+      },
+      form: {
+        title: {
+          create: 'Create app category',
+          edit: 'Edit app category',
+        },
+        fields: {
+          name: {
+            label: 'Name',
+            placeholder: 'Enter app category name',
+          },
+          description: {
+            label: 'Description',
+            placeholder: 'Enter category description',
+          },
+          organization: {
+            label: 'Organization',
           },
         },
       },
@@ -362,6 +392,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Manage apps',
       },
       title: 'Manage apps',
+    },
+    appsCategories: {
+      meta: {
+        title: 'Apps Categories',
+        description: 'Manage apps categories',
+      },
+      title: 'Manage apps categories',
     },
     aiModels: {
       meta: {

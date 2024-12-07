@@ -6,7 +6,7 @@ import type {
   SdkCreateAppCategoryInputT,
   SdkJwtTokenT,
   SdkTableRowIdT,
-  SdkUpdateAppInputT,
+  SdkUpdateAppCategoryInputT,
 } from '@llm/sdk';
 
 import {
@@ -77,8 +77,14 @@ export class AppsCategoriesService implements WithAuthFirewall<AppsCategoriesFir
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, ...value }: SdkUpdateAppInputT & TableRowWithId) => pipe(
-    this.repo.update({ id, value }),
+  update = ({ id, parentCategory, ...value }: SdkUpdateAppCategoryInputT & TableRowWithId) => pipe(
+    this.repo.update({
+      id,
+      value: {
+        ...value,
+        parentCategoryId: parentCategory?.id || null,
+      },
+    }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 }

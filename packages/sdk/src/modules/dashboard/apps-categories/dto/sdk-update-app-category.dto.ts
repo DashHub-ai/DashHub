@@ -8,6 +8,8 @@ export const SdkUpdateAppCategoryInputV = SdkAppCategoryV.omit({
   ...ZodOmitDateFields,
   ...ZodOmitArchivedFields,
   id: true,
+  organization: true,
+  aggs: true,
 });
 
 export type SdkUpdateAppCategoryInputT = z.infer<typeof SdkUpdateAppCategoryInputV>;

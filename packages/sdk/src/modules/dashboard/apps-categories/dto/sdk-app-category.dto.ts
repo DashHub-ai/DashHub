@@ -13,7 +13,7 @@ export const SdkAppCategoryAggsV = z.object({
 
 export type SdkAppCategoryAggsT = z.TypeOf<typeof SdkAppCategoryAggsV>;
 
-export const SdkAppCategoryV = z.object({
+export const SdkAppCategoryV = z.strictObject({
   icon: z.string(),
   description: NonEmptyOrNullStringV,
   parentCategory: SdkTableRowWithIdNameV.nullable(),

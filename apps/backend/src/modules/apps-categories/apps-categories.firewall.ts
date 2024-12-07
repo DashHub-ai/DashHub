@@ -9,38 +9,38 @@ import type { AppsCategoriesService } from './apps-categories.service';
 export class AppsCategoriesFirewall extends AuthFirewallService {
   constructor(
     jwt: SdkJwtTokenT,
-    private readonly appsService: AppsCategoriesService,
+    private readonly appsCategoriesService: AppsCategoriesService,
   ) {
     super(jwt);
   }
 
   unarchive = flow(
-    this.appsService.unarchive,
+    this.appsCategoriesService.unarchive,
     this.tryTEIfUser.is.root,
   );
 
   archive = flow(
-    this.appsService.archive,
+    this.appsCategoriesService.archive,
     this.tryTEIfUser.is.root,
   );
 
   update = flow(
-    this.appsService.update,
+    this.appsCategoriesService.update,
     this.tryTEIfUser.is.root,
   );
 
   create = flow(
-    this.appsService.create,
+    this.appsCategoriesService.create,
     this.tryTEIfUser.is.root,
   );
 
   search = flow(
-    this.appsService.search,
+    this.appsCategoriesService.search,
     this.tryTEIfUser.is.root,
   );
 
   get = flow(
-    this.appsService.get,
+    this.appsCategoriesService.get,
     this.tryTEIfUser.is.root,
   );
 }

@@ -5,6 +5,7 @@ import {
   FolderIcon,
   GraduationCapIcon,
   HomeIcon,
+  LayersIcon,
   UserIcon,
 } from 'lucide-react';
 
@@ -41,8 +42,13 @@ export function Navigation() {
       label: t.links.apps,
     },
     {
-      path: sitemap.projects.index.raw,
+      path: sitemap.apps.categories.index.raw,
       icon: <FolderIcon size={16} />,
+      label: t.links.appsCategories,
+    },
+    {
+      path: sitemap.projects.index.raw,
+      icon: <LayersIcon size={16} />,
       label: t.links.projects,
     },
   ];
@@ -78,19 +84,19 @@ export function Navigation() {
 
               <NavigationGroup
                 icon={<BuildingIcon size={16} />}
-                label="Resources"
+                label={t.groups.resources}
                 items={resourcesGroup}
               />
 
               <NavigationGroup
                 icon={<FolderIcon size={16} />}
-                label="Development"
+                label={t.groups.development}
                 items={devToolsGroup}
               />
 
               <NavigationGroup
                 icon={<GraduationCapIcon size={16} />}
-                label="AI & Storage"
+                label={t.groups.aiAndStorage}
                 items={aiGroup}
               />
             </ul>

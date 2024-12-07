@@ -8,7 +8,7 @@ import {
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
-export const SdkAppV = z.object({
+export const SdkAppV = z.strictObject({
   organization: SdkIdNameUrlEntryV,
   chatContext: z.string(),
   description: NonEmptyOrNullStringV,

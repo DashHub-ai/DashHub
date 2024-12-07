@@ -48,7 +48,10 @@ export class DatabaseConnectionRepo {
         cursor: Cursor,
       }),
       log: (event) => {
-        if (configService.isEnv('dev') && !isSilentDbLog(event)) {
+        if (event.level === 'error') {
+          this.logger.error(event.error);
+        }
+        else if (configService.isEnv('dev') && !isSilentDbLog(event)) {
           const { sql, parameters } = event.query;
 
           this.logger.info(

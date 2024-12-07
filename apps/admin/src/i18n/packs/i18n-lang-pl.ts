@@ -41,6 +41,11 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
   },
   navigation: {
+    groups: {
+      resources: 'Zasoby',
+      development: 'Rozwój',
+      aiAndStorage: 'AI i Storage',
+    },
     links: {
       home: 'Podsumowanie',
       organizations: 'Organizacje',
@@ -48,6 +53,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       s3Buckets: 'S3',
       projects: 'Projekty',
       apps: 'Aplikacje',
+      appsCategories: 'Kategorie aplikacji',
       aiModels: 'Modele AI',
     },
     loggedIn: {
@@ -153,6 +159,30 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           chatContext: {
             label: 'Kontekst czatu',
             placeholder: 'Wpisz kontekst czatu',
+          },
+        },
+      },
+    },
+    appsCategories: {
+      prefix: {
+        category: 'Kategoria',
+      },
+      form: {
+        title: {
+          create: 'Utwórz kategorię aplikacji',
+          edit: 'Edytuj kategorię aplikacji',
+        },
+        fields: {
+          name: {
+            label: 'Nazwa',
+            placeholder: 'Wpisz nazwę kategorii aplikacji',
+          },
+          description: {
+            label: 'Opis',
+            placeholder: 'Wpisz opis kategorii',
+          },
+          organization: {
+            label: 'Organizacja',
           },
         },
       },
@@ -364,6 +394,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Zarządzaj aplikacjami',
       },
       title: 'Zarządzaj aplikacjami',
+    },
+    appsCategories: {
+      meta: {
+        title: 'Kategorie aplikacji',
+        description: 'Zarządzaj kategoriami aplikacji',
+      },
+      title: 'Zarządzaj kategoriami aplikacji',
     },
     aiModels: {
       meta: {

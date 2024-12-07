@@ -11,11 +11,10 @@ export const SdkCreateAppCategoryInputV = SdkAppCategoryV.omit({
   parentCategory: true,
   organization: true,
   aggs: true,
-})
-  .extend({
-    organization: SdkTableRowWithIdV,
-    parentCategory: SdkTableRowWithIdV.nullable(),
-  });
+}).extend({
+  organization: SdkTableRowWithIdV,
+  parentCategory: SdkTableRowWithIdV.nullable(),
+});
 
 export type SdkCreateAppCategoryInputT = z.infer<typeof SdkCreateAppCategoryInputV>;
 
