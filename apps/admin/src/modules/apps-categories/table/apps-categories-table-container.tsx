@@ -60,7 +60,7 @@ export function AppsCategoriesTableContainer() {
       createModal.showAsOptional({
         defaultValue: {
           name: '',
-          icon: 'ellipsis',
+          icon: 'folder',
           parentCategory: null,
           description: null,
           organization: createFakeSelectItem(),

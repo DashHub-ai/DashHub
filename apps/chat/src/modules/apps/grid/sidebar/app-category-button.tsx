@@ -27,6 +27,7 @@ export function AppCategoryButton({
   return (
     <button
       type="button"
+      title={label}
       onClick={onClick}
       className={clsx(
         'flex justify-between items-center px-3 py-2 rounded-md w-full text-sm transition-colors',
@@ -36,20 +37,20 @@ export function AppCategoryButton({
         depth > 0 && 'pl-6',
       )}
     >
-      <span className="flex items-center gap-2">
-        {icon}
-        {label}
+      <span className="flex flex-1 items-center gap-2 min-w-0">
+        <span className="flex-shrink-0">{icon}</span>
+        <span className="truncate">{label}</span>
         {hasChildren && (
           <ChevronDownIcon
             size={14}
             className={clsx(
-              'transition-transform',
+              'flex-shrink-0 transition-transform',
               isExpanded ? 'transform rotate-0' : '-rotate-90',
             )}
           />
         )}
       </span>
-      <span className="text-xs">{count}</span>
+      <span className="flex-shrink-0 ml-2 text-xs">{count}</span>
     </button>
   );
 }
