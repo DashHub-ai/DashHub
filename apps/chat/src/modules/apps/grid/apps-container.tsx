@@ -17,6 +17,7 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import { useFavoriteApps } from '../favorite';
 import { AppCard, type AppCardProps } from './app-card';
+import { AppsCategoriesSidebar } from './apps-categories-sidebar';
 import { AppsPlaceholder } from './apps-placeholder';
 
 type Props = {
@@ -80,58 +81,66 @@ export function AppsContainer({ itemPropsFn }: Props) {
   };
 
   return (
-    <section>
-      <PaginationToolbar
-        className="mb-6"
-        suffix={(
-          <>
-            <FavoriteFiltersTabs
-              totalFavorites={favorites.total}
-              value={favoritesFilter}
-              onChange={onToggleFavoriteFilter}
-            />
-
-            <ArchiveFilterTabs
-              {...pagination.bind.path('archived')}
-              withAll={false}
-            />
-          </>
-        )}
-      >
-        <PaginationSearchToolbarItem
-          {...pagination.bind.path('phrase', {
-            relatedInputs: ({ newGlobalValue, newControlValue }) => ({
-              ...newGlobalValue,
-              sort: newControlValue ? 'score:desc' : 'createdAt:asc',
-            }),
-          })}
-        />
-      </PaginationToolbar>
-
-      <PaginatedList
-        result={result}
-        loading={loading}
-        pagination={pagination.bind.entire()}
-        withEmptyPlaceholder={false}
-      >
-        {({ items, total }) => {
-          if (!total) {
-            return <AppsPlaceholder />;
-          }
-
-          return (
-            <div className="gap-4 grid grid-cols-1 md:grid-cols-3">
-              {items.map(item => (
-                <AppCard
-                  key={item.id}
-                  app={item}
-                  {...itemPropsFn?.(item)}
-                />
-              ))}
-            </div>
-          );
+    <div className="flex">
+      <AppsCategoriesSidebar
+        onSelect={(categoryId) => {
+          // eslint-disable-next-line no-console
+          console.info(categoryId);
         }}
-      </PaginatedList>
-    </section>
+      />
+      <section className="flex-1 pl-6">
+        <PaginationToolbar
+          className="mb-6"
+          suffix={(
+            <>
+              <FavoriteFiltersTabs
+                totalFavorites={favorites.total}
+                value={favoritesFilter}
+                onChange={onToggleFavoriteFilter}
+              />
+
+              <ArchiveFilterTabs
+                {...pagination.bind.path('archived')}
+                withAll={false}
+              />
+            </>
+          )}
+        >
+          <PaginationSearchToolbarItem
+            {...pagination.bind.path('phrase', {
+              relatedInputs: ({ newGlobalValue, newControlValue }) => ({
+                ...newGlobalValue,
+                sort: newControlValue ? 'score:desc' : 'createdAt:asc',
+              }),
+            })}
+          />
+        </PaginationToolbar>
+
+        <PaginatedList
+          result={result}
+          loading={loading}
+          pagination={pagination.bind.entire()}
+          withEmptyPlaceholder={false}
+        >
+          {({ items, total }) => {
+            if (!total) {
+              return <AppsPlaceholder />;
+            }
+
+            return (
+              <div className="gap-4 grid grid-cols-1 md:grid-cols-3">
+                {items.map(item => (
+                  <AppCard
+                    key={item.id}
+                    app={item}
+                    {...itemPropsFn?.(item)}
+                  />
+                ))}
+              </div>
+            );
+          }}
+        </PaginatedList>
+      </section>
+    </div>
   );
 }
