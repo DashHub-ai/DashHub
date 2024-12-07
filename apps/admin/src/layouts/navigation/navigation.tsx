@@ -14,11 +14,51 @@ import { useSitemap } from '~/routes';
 
 import { ChooseLanguageItem } from './choose-language-item';
 import { LoggedInUserItem } from './logged-in/logged-in-user-item';
+import { NavigationGroup } from './navigation-group';
 import { NavigationItem } from './navigation-item';
 
 export function Navigation() {
   const t = useI18n().pack.navigation;
   const sitemap = useSitemap();
+
+  const resourcesGroup = [
+    {
+      path: sitemap.organizations.index.raw,
+      icon: <BuildingIcon size={16} />,
+      label: t.links.organizations,
+    },
+    {
+      path: sitemap.users.index.raw,
+      icon: <UserIcon size={16} />,
+      label: t.links.users,
+    },
+  ];
+
+  const devToolsGroup = [
+    {
+      path: sitemap.apps.index.raw,
+      icon: <BotIcon size={16} />,
+      label: t.links.apps,
+    },
+    {
+      path: sitemap.projects.index.raw,
+      icon: <FolderIcon size={16} />,
+      label: t.links.projects,
+    },
+  ];
+
+  const aiGroup = [
+    {
+      path: sitemap.aiModels.index.raw,
+      icon: <GraduationCapIcon size={16} />,
+      label: t.links.aiModels,
+    },
+    {
+      path: sitemap.s3Buckets.index.raw,
+      icon: <CloudIcon size={16} />,
+      label: t.links.s3Buckets,
+    },
+  ];
 
   return (
     <header className="top-0 z-50 sticky bg-white px-4 border-b border-border w-full">
@@ -36,29 +76,23 @@ export function Navigation() {
                 {t.links.home}
               </NavigationItem>
 
-              <NavigationItem path={sitemap.organizations.index.raw} icon={<BuildingIcon size={16} />}>
-                {t.links.organizations}
-              </NavigationItem>
+              <NavigationGroup
+                icon={<BuildingIcon size={16} />}
+                label="Resources"
+                items={resourcesGroup}
+              />
 
-              <NavigationItem path={sitemap.users.index.raw} icon={<UserIcon size={16} />}>
-                {t.links.users}
-              </NavigationItem>
+              <NavigationGroup
+                icon={<FolderIcon size={16} />}
+                label="Development"
+                items={devToolsGroup}
+              />
 
-              <NavigationItem path={sitemap.apps.index.raw} icon={<BotIcon size={16} />}>
-                {t.links.apps}
-              </NavigationItem>
-
-              <NavigationItem path={sitemap.projects.index.raw} icon={<FolderIcon size={16} />}>
-                {t.links.projects}
-              </NavigationItem>
-
-              <NavigationItem path={sitemap.aiModels.index.raw} icon={<GraduationCapIcon size={16} />}>
-                {t.links.aiModels}
-              </NavigationItem>
-
-              <NavigationItem path={sitemap.s3Buckets.index.raw} icon={<CloudIcon size={16} />}>
-                {t.links.s3Buckets}
-              </NavigationItem>
+              <NavigationGroup
+                icon={<GraduationCapIcon size={16} />}
+                label="AI & Storage"
+                items={aiGroup}
+              />
             </ul>
           </div>
 
