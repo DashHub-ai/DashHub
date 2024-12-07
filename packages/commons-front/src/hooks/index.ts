@@ -16,6 +16,7 @@ export * from './use-interval';
 export * from './use-is-mounted';
 export * from './use-is-mounted-ref';
 export * from './use-is-unmounted-ref';
+export * from './use-last-non-null-value';
 export * from './use-local-storage-object';
 export * from './use-modal';
 export * from './use-outside-click-ref';

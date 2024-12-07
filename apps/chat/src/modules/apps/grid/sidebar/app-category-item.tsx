@@ -1,3 +1,4 @@
+import { EllipsisIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import type { SdkCountedAppCategoryTreeNodeT, SdkTableRowIdT } from '@llm/sdk';
@@ -13,41 +14,51 @@ export type AppCategoryItemProps = {
   selected: SdkTableRowIdT[];
   onSelect: (id: SdkTableRowIdT[]) => void;
   depth?: number;
+  itemsLimit?: number;
 };
 
-export function AppCategoryItem({ category, selected, onSelect, depth = 0 }: AppCategoryItemProps) {
+const DEFAULT_ITEMS_LIMIT = 5;
+
+export function AppCategoryItem(
+  {
+    category,
+    selected,
+    onSelect,
+    depth = 0,
+    itemsLimit = DEFAULT_ITEMS_LIMIT,
+  }: AppCategoryItemProps,
+) {
   const t = useI18n().pack.apps.grid.sidebar;
-  const [isExpanded, setIsExpanded] = useState(category.children.length <= 5);
+  const [isExpanded, setIsExpanded] = useState(category.children.length <= itemsLimit);
   const [showAll, setShowAll] = useState(false);
 
   const { children } = category;
+  const childrenTotalCount = children.reduce((sum, child) => sum + child.count, 0);
+  const otherItemsCount = category.count - childrenTotalCount;
 
   const hasChildren = children.length > 0;
-  const hasMoreChildren = children.length > 5;
+  const hasMoreChildren = children.length > itemsLimit;
   const isSelected = selected.includes(category.id);
 
   const visibleChildren = showAll
     ? children
-    : children.slice(0, 5);
+    : children.slice(0, itemsLimit);
 
   return (
     <>
       <AppCategoryButton
         onClick={() => {
-          const rejectedCategoryIds = selected.filter(id => id !== category.id);
-
           if (hasChildren) {
-            onSelect([...rejectedCategoryIds]);
             setIsExpanded(!isExpanded);
           }
           else {
-            onSelect([...rejectedCategoryIds, category.id]);
+            onSelect([category.id]);
           }
         }}
         icon={<LazyIcon name={category.icon as any} size={16} />}
         label={category.name}
         count={category.count}
-        isSelected={isSelected}
+        isSelected={!hasChildren && isSelected}
         hasChildren={hasChildren}
         isExpanded={isExpanded}
         depth={depth}
@@ -64,6 +75,18 @@ export function AppCategoryItem({ category, selected, onSelect, depth = 0 }: App
               depth={depth + 1}
             />
           ))}
+
+          {otherItemsCount > 0 && (
+            <AppCategoryButton
+              isSelected={isSelected}
+              onClick={() => onSelect([category.id])}
+              icon={<EllipsisIcon size={16} />}
+              label={t.otherCategoryItems}
+              count={otherItemsCount}
+              depth={depth + 1}
+            />
+          )}
+
           {hasMoreChildren && !showAll && (
             <button
               type="button"
@@ -71,7 +94,7 @@ export function AppCategoryItem({ category, selected, onSelect, depth = 0 }: App
               className="px-3 py-1 w-full text-left text-muted-foreground text-xs hover:text-foreground"
             >
               {format(t.showMore, {
-                count: children.length - 5,
+                count: children.length - itemsLimit,
               })}
             </button>
           )}

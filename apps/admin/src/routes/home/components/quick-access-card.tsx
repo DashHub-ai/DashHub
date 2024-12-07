@@ -16,7 +16,7 @@ export function QuickAccessCard({ icon, title, href, description }: Props) {
   const { pack } = useI18n();
 
   return (
-    <div className="relative h-[180px]">
+    <div className="relative min-h-[180px]">
       <Link href={href}>
         <a className="flex flex-col hover:border-primary border border-border rounded-lg h-full transition-colors cursor-pointer group">
           <div className="flex flex-col flex-1 p-4">
@@ -25,7 +25,7 @@ export function QuickAccessCard({ icon, title, href, description }: Props) {
               <h3 className="font-medium text-sm">{title}</h3>
             </div>
             {description && (
-              <p className="line-clamp-4 text-muted-foreground text-xs">{description}</p>
+              <p className="py-2 line-clamp-4 text-muted-foreground text-sm">{description}</p>
             )}
           </div>
 

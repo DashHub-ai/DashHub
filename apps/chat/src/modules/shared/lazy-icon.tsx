@@ -1,7 +1,7 @@
 import type { LucideProps } from 'lucide-react';
 
 import dynamicIconImports from 'lucide-react/dynamicIconImports';
-import { lazy, Suspense } from 'react';
+import { lazy, memo, Suspense } from 'react';
 
 type IconProps =
   & Omit<LucideProps, 'ref'>
@@ -9,7 +9,7 @@ type IconProps =
     name: keyof typeof dynamicIconImports;
   };
 
-export function LazyIcon({ name, ...props }: IconProps) {
+export const LazyIcon = memo(({ name, ...props }: IconProps) => {
   const LucideIcon = lazy(dynamicIconImports[name]);
 
   return (
@@ -17,4 +17,4 @@ export function LazyIcon({ name, ...props }: IconProps) {
       <LucideIcon {...props} />
     </Suspense>
   );
-}
+});

@@ -234,6 +234,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         header: 'Kategorie',
         allApps: 'Wszystkie aplikacje',
         showMore: 'Pokaż wszystkie (%{count} więcej)',
+        otherCategoryItems: 'Pozostałe',
       },
     },
     chooseAppModal: {

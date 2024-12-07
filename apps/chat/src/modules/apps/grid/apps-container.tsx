@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { useLastNonNullValue } from '@llm/commons-front';
 import {
   type SdkAppT,
   SdKSearchAppsInputV,
@@ -45,7 +46,7 @@ export function AppsContainer({ itemPropsFn }: Props) {
     }),
   });
 
-  const categoriesTree = result?.aggs?.categories;
+  const categoriesTree = useLastNonNullValue(result?.aggs?.categories);
 
   const favoritesFilter = useMemo(
     () => {
