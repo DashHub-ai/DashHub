@@ -5,6 +5,7 @@ import {
   SdkDefaultSortInputV,
   SdkExcludeIdsFiltersInputV,
   SdkFilteredPhraseInputV,
+  SdkIdsArrayV,
   SdkIdsFiltersInputV,
   SdkOffsetPaginationInputV,
   SdkOffsetPaginationOutputV,
@@ -17,6 +18,9 @@ export const SdkSearchAppCategoryItemV = SdkAppCategoryV;
 export type SdkSearchAppCategoryItemT = z.infer<typeof SdkSearchAppCategoryItemV>;
 
 export const SdKSearchAppsCategoriesInputV = SdkOffsetPaginationInputV
+  .extend({
+    organizationIds: SdkIdsArrayV.optional(),
+  })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkIdsFiltersInputV)

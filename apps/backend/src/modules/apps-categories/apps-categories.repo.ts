@@ -36,9 +36,13 @@ export class AppsCategoriesRepo extends createDatabaseRepo('apps_categories') {
           qb
             .selectFrom(`${this.table} as category`)
             .where('category.id', 'in', ids)
+            .innerJoin('organizations', 'organizations.id', 'organization_id')
             .leftJoin('apps_categories as parent_categories', 'parent_categories.id', 'category.parent_category_id')
             .selectAll('category')
             .select([
+              'organizations.id as organization_id',
+              'organizations.name as organization_name',
+
               'parent_categories.id as parent_category_id',
               'parent_categories.name as parent_category_name',
             ])
@@ -48,11 +52,18 @@ export class AppsCategoriesRepo extends createDatabaseRepo('apps_categories') {
       DatabaseError.tryTask,
       TE.map(
         A.map(({
+          organization_id: orgId,
+          organization_name: orgName,
+
           parent_category_id: parentId,
           parent_category_name: parentName,
           ...item
         }): AppTableRowWithRelations => ({
           ...camelcaseKeys(item),
+          organization: {
+            id: orgId,
+            name: orgName,
+          },
           parentCategory: parentId
             ? {
                 id: parentId,

@@ -66,10 +66,11 @@ export class AppsCategoriesService implements WithAuthFirewall<AppsCategoriesFir
 
   search = this.esSearchRepo.search;
 
-  create = ({ parentCategory, ...values }: SdkCreateAppCategoryInputT) => pipe(
+  create = ({ parentCategory, organization, ...values }: SdkCreateAppCategoryInputT) => pipe(
     this.repo.create({
       value: {
         ...values,
+        organizationId: organization.id,
         parentCategoryId: parentCategory?.id || null,
       },
     }),

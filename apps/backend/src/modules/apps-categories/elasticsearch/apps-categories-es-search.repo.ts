@@ -56,6 +56,7 @@ export class AppsCategoriesEsSearchRepo {
       phrase,
       ids,
       excludeIds,
+      organizationIds,
       archived,
     }: SdKSearchAppsCategoriesInputT,
   ): esb.Query =>
@@ -63,6 +64,7 @@ export class AppsCategoriesEsSearchRepo {
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
         !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
+        !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
           esb
             .boolQuery()
@@ -85,6 +87,10 @@ export class AppsCategoriesEsSearchRepo {
       updatedAt: source.updated_at,
       archived: source.archived,
       icon: source.icon,
+      organization: source.organization,
       parentCategory: source.parent_category,
+      aggs: {
+        totalApps: 0,
+      },
     });
 }

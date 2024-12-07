@@ -11,11 +11,15 @@ export type AppsCategoriesTable = TableWithDefaultColumns &
     name: string;
     description: string | null;
     icon: string;
+    organization_id: TableId;
     parent_category_id: TableId | null;
   };
 
 export type AppCategoryTableRow = NormalizeSelectTableRow<AppsCategoriesTable>;
 
-export type AppTableRowWithRelations = Omit<AppCategoryTableRow, 'parentCategoryId'> & {
-  parentCategory: TableRowWithIdName | null;
-};
+export type AppTableRowWithRelations =
+  & Omit<AppCategoryTableRow, 'parentCategoryId' | 'organizationId'>
+  & {
+    organization: TableRowWithIdName;
+    parentCategory: TableRowWithIdName | null;
+  };

@@ -9,8 +9,11 @@ export const SdkCreateAppCategoryInputV = SdkAppCategoryV.omit({
   ...ZodOmitArchivedFields,
   id: true,
   parentCategory: true,
+  organization: true,
+  aggs: true,
 })
   .extend({
+    organization: SdkTableRowWithIdV,
     parentCategory: SdkTableRowWithIdV.nullable(),
   });
 
