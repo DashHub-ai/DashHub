@@ -202,7 +202,7 @@ Getting started with DashHub is simple:
 3. **Add LLM API Credentials**: (Simulated in MVP)
 4. **Configure Storage Solution**: AWS in MVP; more options coming soon.
 5. **Customize**: Upload your company logo and settings.
-6. **Start Creating**: Start using and enjoy the newest AI developments in a save enviroment.
+6. **Start Creating**: Start using and enjoy the newest AI developments in a save environment.
 
 ## 🏗️ Technical Architecture
 
