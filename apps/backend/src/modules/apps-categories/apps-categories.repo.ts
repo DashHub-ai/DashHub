@@ -15,10 +15,10 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
-import { AppTableRowWithRelations } from './apps.tables';
+import { AppTableRowWithRelations } from './apps-categories.tables';
 
 @injectable()
-export class AppsRepo extends createDatabaseRepo('apps') {
+export class AppsCategoriesRepo extends createDatabaseRepo('apps_categories') {
   archive = createArchiveRecordQuery(this.queryFactoryAttrs);
 
   archiveRecords = createArchiveRecordsQuery(this.queryFactoryAttrs);
@@ -34,17 +34,13 @@ export class AppsRepo extends createDatabaseRepo('apps') {
       transaction(
         async qb =>
           qb
-            .selectFrom(this.table)
-            .where('apps.id', 'in', ids)
-            .innerJoin('organizations', 'organizations.id', 'organization_id')
-            .innerJoin('apps_categories', 'apps_categories.id', 'category_id')
-            .selectAll('apps')
+            .selectFrom(`${this.table} as category`)
+            .where('category.id', 'in', ids)
+            .leftJoin('apps_categories as parent_categories', 'parent_categories.id', 'category.parent_category_id')
+            .selectAll('category')
             .select([
-              'organizations.id as organization_id',
-              'organizations.name as organization_name',
-
-              'apps_categories.id as category_id',
-              'apps_categories.name as category_name',
+              'parent_categories.id as parent_category_id',
+              'parent_categories.name as parent_category_name',
             ])
             .limit(ids.length)
             .execute(),
@@ -52,19 +48,17 @@ export class AppsRepo extends createDatabaseRepo('apps') {
       DatabaseError.tryTask,
       TE.map(
         A.map(({
-          organization_id: orgId,
-          organization_name: orgName,
+          parent_category_id: parentId,
+          parent_category_name: parentName,
           ...item
         }): AppTableRowWithRelations => ({
           ...camelcaseKeys(item),
-          organization: {
-            id: orgId,
-            name: orgName,
-          },
-          category: {
-            id: item.category_id,
-            name: item.category_name,
-          },
+          parentCategory: parentId
+            ? {
+                id: parentId,
+                name: parentName || '',
+              }
+            : null,
         })),
       ),
     );

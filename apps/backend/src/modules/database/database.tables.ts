@@ -2,6 +2,7 @@ import type { RecordOfType } from '@llm/commons';
 
 import type { AIModelsTable } from '../ai-models';
 import type { AppsTable } from '../apps';
+import type { AppsCategoriesTable } from '../apps-categories';
 import type {
   AuthEmailsTable,
   AuthPasswordsTable,
@@ -56,6 +57,7 @@ export type DatabaseTables = {
 
   // Apps
   apps: AppsTable;
+  apps_categories: AppsCategoriesTable;
 
   // Chats
   chats: ChatsTable;

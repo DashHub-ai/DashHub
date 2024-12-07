@@ -2,20 +2,18 @@ import { z } from 'zod';
 
 import { NonEmptyOrNullStringV } from '@llm/commons';
 import {
-  SdkIdNameUrlEntryV,
   SdkTableRowWithArchivedV,
   SdkTableRowWithDatesV,
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
-export const SdkAppV = z.object({
-  organization: SdkIdNameUrlEntryV,
-  chatContext: z.string(),
+export const SdkAppCategoryV = z.object({
+  icon: z.string(),
   description: NonEmptyOrNullStringV,
-  category: SdkTableRowWithIdNameV,
+  parentCategory: SdkTableRowWithIdNameV.nullable(),
 })
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)
   .merge(SdkTableRowWithArchivedV);
 
-export type SdkAppT = z.infer<typeof SdkAppV>;
+export type SdkAppCategoryT = z.infer<typeof SdkAppCategoryV>;

@@ -2,6 +2,7 @@ import type { AbstractNestedSdkWithAuthConfig } from '../abstract-nested-sdk-wit
 
 import { AIModelsSdk } from './ai-models';
 import { AppsSdk } from './apps';
+import { AppsCategoriesSdk } from './apps-categories';
 import { ChatsSdk } from './chats';
 import { ExpertsSdk } from './experts';
 import { OrganizationsSdk } from './organizations';
@@ -17,6 +18,8 @@ export class DashboardSdk {
   public readonly projects = new ProjectsSdk(this.config);
 
   public readonly apps = new AppsSdk(this.config);
+
+  public readonly appsCategories = new AppsCategoriesSdk(this.config);
 
   public readonly experts = new ExpertsSdk(this.config);
 

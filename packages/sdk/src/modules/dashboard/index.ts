@@ -1,5 +1,6 @@
 export * from './ai-models';
 export * from './apps';
+export * from './apps-categories';
 export * from './chats';
 export * from './dashboard.sdk';
 export * from './experts';

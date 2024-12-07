@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type {
-  SdkCreateAppInputT,
+  SdkCreateAppCategoryInputT,
   SdkJwtTokenT,
   SdkTableRowIdT,
   SdkUpdateAppInputT,
@@ -19,31 +19,21 @@ import {
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
 
-import { AppsFirewall } from './apps.firewall';
-import { AppsRepo } from './apps.repo';
-import { AppsEsIndexRepo, AppsEsSearchRepo } from './elasticsearch';
+import { AppsCategoriesFirewall } from './apps-categories.firewall';
+import { AppsCategoriesRepo } from './apps-categories.repo';
+import { AppsCategoriesEsIndexRepo, AppsCategoriesEsSearchRepo } from './elasticsearch';
 
 @injectable()
-export class AppsService implements WithAuthFirewall<AppsFirewall> {
+export class AppsCategoriesService implements WithAuthFirewall<AppsCategoriesFirewall> {
   constructor(
-    @inject(AppsRepo) private readonly repo: AppsRepo,
-    @inject(AppsEsSearchRepo) private readonly esSearchRepo: AppsEsSearchRepo,
-    @inject(AppsEsIndexRepo) private readonly esIndexRepo: AppsEsIndexRepo,
+    @inject(AppsCategoriesRepo) private readonly repo: AppsCategoriesRepo,
+    @inject(AppsCategoriesEsSearchRepo) private readonly esSearchRepo: AppsCategoriesEsSearchRepo,
+    @inject(AppsCategoriesEsIndexRepo) private readonly esIndexRepo: AppsCategoriesEsIndexRepo,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new AppsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new AppsCategoriesFirewall(jwt, this);
 
   get = this.esSearchRepo.get;
-
-  archiveSeqByOrganizationId = (organizationId: SdkTableRowIdT) => TE.fromTask(
-    pipe(
-      this.repo.createIdsIterator({
-        where: [['organizationId', '=', organizationId]],
-        chunkSize: 100,
-      }),
-      this.archiveSeqStream,
-    ),
-  );
 
   archiveSeqStream = (stream: AsyncIterableIterator<TableId[]>) => async () =>
     pipe(
@@ -76,12 +66,11 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
 
   search = this.esSearchRepo.search;
 
-  create = ({ organization, category, ...values }: SdkCreateAppInputT) => pipe(
+  create = ({ parentCategory, ...values }: SdkCreateAppCategoryInputT) => pipe(
     this.repo.create({
       value: {
         ...values,
-        organizationId: organization.id,
-        categoryId: category.id,
+        parentCategoryId: parentCategory?.id || null,
       },
     }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),

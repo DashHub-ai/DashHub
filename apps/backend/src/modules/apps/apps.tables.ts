@@ -14,10 +14,12 @@ export type AppsTable = TableWithDefaultColumns &
     name: string;
     chat_context: string;
     description: string | null;
+    category_id: TableId;
   };
 
 export type AppTableRow = NormalizeSelectTableRow<AppsTable>;
 
-export type AppTableRowWithRelations = Omit<AppTableRow, 'organizationId'> & {
+export type AppTableRowWithRelations = Omit<AppTableRow, 'organizationId' | 'categoryId'> & {
   organization: TableRowWithIdName;
+  category: TableRowWithIdName;
 };

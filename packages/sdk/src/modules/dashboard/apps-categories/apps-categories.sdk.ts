@@ -11,33 +11,33 @@ import {
 } from '~/shared';
 
 import type {
-  SdkAppT,
-  SdkCreateAppInputT,
-  SdkCreateAppOutputT,
-  SdKSearchAppsInputT,
-  SdkSearchAppsOutputT,
-  SdkUpdateAppInputT,
-  SdkUpdateAppOutputT,
+  SdkAppCategoryT,
+  SdkCreateAppCategoryInputT,
+  SdkCreateAppCategoryOutputT,
+  SdKSearchAppsCategoriesInputT,
+  SdkSearchAppsCategoriesOutputT,
+  SdkUpdateAppCategoryInputT,
+  SdkUpdateAppCategoryOutputT,
 } from './dto';
 
-export class AppsSdk extends AbstractNestedSdkWithAuth {
-  protected endpointPrefix = '/dashboard/apps';
+export class AppsCategoriesSdk extends AbstractNestedSdkWithAuth {
+  protected endpointPrefix = '/dashboard/apps/categories';
 
   get = (id: SdkTableRowIdT) =>
-    this.fetch<SdkAppT, SdkRecordNotFoundError>({
+    this.fetch<SdkAppCategoryT, SdkRecordNotFoundError>({
       url: this.endpoint(`/${id}`),
       options: getPayload(),
     });
 
-  search = (data: SdKSearchAppsInputT) =>
-    this.fetch<SdkSearchAppsOutputT>({
+  search = (data: SdKSearchAppsCategoriesInputT) =>
+    this.fetch<SdkSearchAppsCategoriesOutputT>({
       url: this.endpoint('/search'),
       query: data,
       options: getPayload(),
     });
 
-  create = (data: SdkCreateAppInputT) =>
-    this.fetch<SdkCreateAppOutputT, SdkRecordAlreadyExistsError>({
+  create = (data: SdkCreateAppCategoryInputT) =>
+    this.fetch<SdkCreateAppCategoryOutputT, SdkRecordAlreadyExistsError>({
       url: this.endpoint('/'),
       options: postPayload(data),
     });
@@ -60,9 +60,9 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
       options: patchPayload({}),
     });
 
-  update = ({ id, ...data }: SdkUpdateAppInputT & SdkTableRowWithIdT) =>
+  update = ({ id, ...data }: SdkUpdateAppCategoryInputT & SdkTableRowWithIdT) =>
     this.fetch<
-      SdkUpdateAppOutputT,
+      SdkUpdateAppCategoryOutputT,
       SdkRecordAlreadyExistsError | SdkRecordNotFoundError
     >({
       url: this.endpoint(`/${id}`),

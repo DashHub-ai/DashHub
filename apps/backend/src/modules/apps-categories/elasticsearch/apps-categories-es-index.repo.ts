@@ -15,12 +15,12 @@ import {
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import type { AppTableRowWithRelations } from '../apps.tables';
+import type { AppTableRowWithRelations } from '../apps-categories.tables';
 
-import { AppsRepo } from '../apps.repo';
+import { AppsCategoriesRepo } from '../apps-categories.repo';
 
 const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
-  indexName: 'dashboard-apps',
+  indexName: 'dashboard-apps-categories',
   schema: {
     mappings: {
       dynamic: false,
@@ -28,8 +28,7 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings(),
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
-        organization: createIdNameObjectMapping(),
-        category: createIdNameObjectMapping(),
+        parent_category: createIdNameObjectMapping(),
         description: {
           type: 'text',
           analyzer: 'folded_lowercase_analyzer',
@@ -46,10 +45,10 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
 export type AppsEsDocument = EsDocument<AppTableRowWithRelations>;
 
 @injectable()
-export class AppsEsIndexRepo extends AppsAbstractEsIndexRepo<AppsEsDocument> {
+export class AppsCategoriesEsIndexRepo extends AppsAbstractEsIndexRepo<AppsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
-    @inject(AppsRepo) private readonly appsRepo: AppsRepo,
+    @inject(AppsCategoriesRepo) private readonly appsRepo: AppsCategoriesRepo,
   ) {
     super(elasticsearchRepo);
   }

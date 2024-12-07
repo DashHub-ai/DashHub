@@ -4,8 +4,8 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type {
-  SdkSearchAppItemT,
-  SdKSearchAppsInputT,
+  SdkSearchAppCategoryItemT,
+  SdKSearchAppsCategoriesInputT,
 } from '@llm/sdk';
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
@@ -16,39 +16,39 @@ import {
 } from '~/modules/elasticsearch';
 
 import {
+  AppsCategoriesEsIndexRepo,
   type AppsEsDocument,
-  AppsEsIndexRepo,
-} from './apps-es-index.repo';
+} from './apps-categories-es-index.repo';
 
 @injectable()
-export class AppsEsSearchRepo {
+export class AppsCategoriesEsSearchRepo {
   constructor(
-    @inject(AppsEsIndexRepo) private readonly indexRepo: AppsEsIndexRepo,
+    @inject(AppsCategoriesEsIndexRepo) private readonly indexRepo: AppsCategoriesEsIndexRepo,
   ) {}
 
   get = flow(
     this.indexRepo.getDocument,
-    TE.map(AppsEsSearchRepo.mapOutputHit),
+    TE.map(AppsCategoriesEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdKSearchAppsInputT) =>
+  search = (dto: SdKSearchAppsCategoriesInputT) =>
     pipe(
       this.indexRepo.search(
-        AppsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
+        AppsCategoriesEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
       ),
       TE.map(({ hits: { total, hits } }) => ({
         items: pipe(
           hits,
           pluck('_source'),
-          A.map(item => AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument)),
+          A.map(item => AppsCategoriesEsSearchRepo.mapOutputHit(item as AppsEsDocument)),
         ),
         total: total.value,
       })),
     );
 
-  private static createEsRequestSearchBody = (dto: SdKSearchAppsInputT) =>
+  private static createEsRequestSearchBody = (dto: SdKSearchAppsCategoriesInputT) =>
     createPaginationOffsetSearchQuery(dto)
-      .query(AppsEsSearchRepo.createEsRequestSearchFilters(dto))
+      .query(AppsCategoriesEsSearchRepo.createEsRequestSearchFilters(dto))
       .sorts(createScoredSortFieldQuery(dto.sort));
 
   private static createEsRequestSearchFilters = (
@@ -56,17 +56,13 @@ export class AppsEsSearchRepo {
       phrase,
       ids,
       excludeIds,
-      organizationIds,
-      categoriesIds,
       archived,
-    }: SdKSearchAppsInputT,
+    }: SdKSearchAppsCategoriesInputT,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
         !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
-        !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
-        !!categoriesIds?.length && esb.termsQuery('category.id', categoriesIds),
         !!phrase && (
           esb
             .boolQuery()
@@ -80,7 +76,7 @@ export class AppsEsSearchRepo {
       ]),
     );
 
-  private static mapOutputHit = (source: AppsEsDocument): SdkSearchAppItemT =>
+  private static mapOutputHit = (source: AppsEsDocument): SdkSearchAppCategoryItemT =>
     ({
       id: source.id,
       name: source.name,
@@ -88,8 +84,7 @@ export class AppsEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       archived: source.archived,
-      organization: source.organization,
-      category: source.category,
-      chatContext: source.chat_context,
+      icon: source.icon,
+      parentCategory: source.parent_category,
     });
 }
