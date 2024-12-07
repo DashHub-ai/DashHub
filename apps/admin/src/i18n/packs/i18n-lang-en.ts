@@ -375,6 +375,51 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Overview of your account',
       },
       title: 'Summary',
+      sections: {
+        resources: {
+          title: 'Resources',
+          cards: {
+            organizations: {
+              title: 'Organizations',
+              description: 'Create and manage organizations, configure their settings, and control access permissions. Set up billing, team structures, and organizational policies.',
+            },
+            users: {
+              title: 'Users',
+              description: 'Manage user accounts, roles, and permissions across the platform. Monitor user activity, handle authentication settings, and maintain security protocols.',
+            },
+          },
+        },
+        development: {
+          title: 'Development Tools',
+          cards: {
+            apps: {
+              title: 'Apps',
+              description: 'Access and manage your application portfolio. Deploy, monitor, and configure applications. Track performance metrics and manage application lifecycle.',
+            },
+            appsCategories: {
+              title: 'Apps Categories',
+              description: 'Organize applications into logical categories for better management. Create hierarchical structures and maintain clear application taxonomies.',
+            },
+            projects: {
+              title: 'Projects',
+              description: 'Oversee development projects from inception to deployment. Track project progress, manage resources, and coordinate team efforts effectively.',
+            },
+          },
+        },
+        aiAndStorage: {
+          title: 'AI & Storage',
+          cards: {
+            aiModels: {
+              title: 'AI Models',
+              description: 'Deploy and manage AI/ML models in production. Monitor model performance, version control, and handle model lifecycle management efficiently.',
+            },
+            s3Buckets: {
+              title: 'S3 Buckets',
+              description: 'Manage cloud storage buckets for your applications. Configure access policies, monitor storage usage, and optimize data management strategies.',
+            },
+          },
+        },
+      },
     },
     organizations: {
       meta: {

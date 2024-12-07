@@ -8,6 +8,7 @@ import {
   LayersIcon,
   UserIcon,
 } from 'lucide-react';
+import { Link } from 'wouter';
 
 import { useI18n } from '~/i18n';
 import { SearchBar } from '~/modules';
@@ -72,9 +73,9 @@ export function Navigation() {
         <nav className="w-full uk-navbar" uk-navbar="">
           <div className="uk-navbar-left gap-x-4 lg:gap-x-10">
             <div className="flex justify-start uk-navbar-item">
-              <span className="font-light text-lg">
+              <Link to={sitemap.home} className="font-light text-lg hover:text-primary transition-colors">
                 DashHub
-              </span>
+              </Link>
             </div>
 
             <ul className="gap-4 uk-navbar-nav">

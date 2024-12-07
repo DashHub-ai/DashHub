@@ -377,6 +377,51 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Podsumowanie twojego konta',
       },
       title: 'Strona główna',
+      sections: {
+        resources: {
+          title: 'Zasoby',
+          cards: {
+            organizations: {
+              title: 'Organizacje',
+              description: 'Twórz i zarządzaj organizacjami, konfiguruj ich ustawienia i kontroluj uprawnienia dostępu. Konfiguruj rozliczenia, struktury zespołów i polityki organizacyjne.',
+            },
+            users: {
+              title: 'Użytkownicy',
+              description: 'Zarządzaj kontami użytkowników, rolami i uprawnieniami w całej platformie. Monitoruj aktywność użytkowników, zarządzaj ustawieniami uwierzytelniania i utrzymuj protokoły bezpieczeństwa.',
+            },
+          },
+        },
+        development: {
+          title: 'Narzędzia deweloperskie',
+          cards: {
+            apps: {
+              title: 'Aplikacje',
+              description: 'Uzyskaj dostęp i zarządzaj portfolio aplikacji. Wdrażaj, monitoruj i konfiguruj aplikacje. Śledź metryki wydajności i zarządzaj cyklem życia aplikacji.',
+            },
+            appsCategories: {
+              title: 'Kategorie aplikacji',
+              description: 'Organizuj aplikacje w logiczne kategorie dla lepszego zarządzania. Twórz struktury hierarchiczne i utrzymuj przejrzystą taksonomię aplikacji.',
+            },
+            projects: {
+              title: 'Projekty',
+              description: 'Nadzoruj projekty rozwojowe od powstania do wdrożenia. Śledź postęp projektu, zarządzaj zasobami i efektywnie koordynuj pracę zespołu.',
+            },
+          },
+        },
+        aiAndStorage: {
+          title: 'AI i przechowywanie',
+          cards: {
+            aiModels: {
+              title: 'Modele AI',
+              description: 'Wdrażaj i zarządzaj modelami AI/ML w produkcji. Monitoruj wydajność modeli, kontroluj wersje i efektywnie zarządzaj cyklem życia modeli.',
+            },
+            s3Buckets: {
+              title: 'Kubełki S3',
+              description: 'Zarządzaj kubełkami w chmurze dla swoich aplikacji. Konfiguruj polityki dostępu, monitoruj wykorzystanie pamięci i optymalizuj strategie zarządzania danymi.',
+            },
+          },
+        },
+      },
     },
     organizations: {
       meta: {
