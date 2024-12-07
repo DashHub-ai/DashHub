@@ -7,17 +7,10 @@ import {
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
-export const SdkAppCategoryAggsV = z.object({
-  totalApps: z.number(),
-});
-
-export type SdkAppCategoryAggsT = z.TypeOf<typeof SdkAppCategoryAggsV>;
-
 export const SdkAppCategoryV = z.strictObject({
   icon: z.string(),
   description: NonEmptyOrNullStringV,
   parentCategory: SdkTableRowWithIdNameV.nullable(),
-  aggs: SdkAppCategoryAggsV,
   organization: SdkTableRowWithIdNameV,
 })
   .merge(SdkTableRowWithIdNameV)

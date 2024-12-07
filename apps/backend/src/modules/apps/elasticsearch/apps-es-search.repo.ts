@@ -4,13 +4,14 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type {
+  SdkCountedIdRecordT,
   SdkSearchAppItemT,
-  SdkSearchAppsAggsT,
   SdKSearchAppsInputT,
   SdkSearchAppsOutputT,
 } from '@llm/sdk';
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
+import { AppsCategoriesEsTreeRepo } from '~/modules/apps-categories/elasticsearch';
 import {
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,
@@ -26,6 +27,7 @@ import {
 export class AppsEsSearchRepo {
   constructor(
     @inject(AppsEsIndexRepo) private readonly indexRepo: AppsEsIndexRepo,
+    @inject(AppsCategoriesEsTreeRepo) private readonly categoriesTreeRepo: AppsCategoriesEsTreeRepo,
   ) {}
 
   get = flow(
@@ -34,17 +36,25 @@ export class AppsEsSearchRepo {
   );
 
   search = (dto: SdKSearchAppsInputT) => pipe(
-    this.indexRepo.search(
+    TE.Do,
+    TE.bind('query', () => this.indexRepo.search(
       AppsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
-    ),
-    TE.map(({ hits: { total, hits }, aggregations }): SdkSearchAppsOutputT => ({
+    )),
+    TE.bindW('categoriesAggs', ({ query: { aggregations } }) =>
+      this.categoriesTreeRepo.createCountedTree({
+        countedAggs: AppsEsSearchRepo.mapCategoriesAggregations(aggregations),
+        organizationIds: dto.organizationIds,
+      })),
+    TE.map(({ categoriesAggs, query: { hits: { total, hits } } }): SdkSearchAppsOutputT => ({
       items: pipe(
         hits,
         pluck('_source'),
         A.map(item => AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument)),
       ),
       total: total.value,
-      aggs: AppsEsSearchRepo.mapEsAggregations(aggregations),
+      aggs: {
+        categories: categoriesAggs,
+      },
     })),
   );
 
@@ -85,12 +95,11 @@ export class AppsEsSearchRepo {
       ]),
     );
 
-  private static mapEsAggregations = (aggregations: any): SdkSearchAppsAggsT => ({
-    categories: aggregations.categories.buckets.map((bucket: any) => ({
+  private static mapCategoriesAggregations = (aggregations: any) =>
+    aggregations.categories.buckets.map((bucket: any): SdkCountedIdRecordT => ({
       id: bucket.key,
       count: bucket.doc_count,
-    })),
-  });
+    }));
 
   private static mapOutputHit = (source: AppsEsDocument): SdkSearchAppItemT =>
     ({

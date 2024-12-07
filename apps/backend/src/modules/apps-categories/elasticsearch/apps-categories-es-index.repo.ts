@@ -49,14 +49,14 @@ export type AppsEsDocument = EsDocument<AppTableRowWithRelations>;
 export class AppsCategoriesEsIndexRepo extends AppsAbstractEsIndexRepo<AppsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
-    @inject(AppsCategoriesRepo) private readonly appsRepo: AppsCategoriesRepo,
+    @inject(AppsCategoriesRepo) private readonly categoriesRepo: AppsCategoriesRepo,
   ) {
     super(elasticsearchRepo);
   }
 
   protected async findEntities(ids: number[]): Promise<AppsEsDocument[]> {
     return pipe(
-      this.appsRepo.findWithRelationsByIds({ ids }),
+      this.categoriesRepo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
           ...snakecaseKeys(entity, { deep: true }),
@@ -68,7 +68,7 @@ export class AppsCategoriesEsIndexRepo extends AppsAbstractEsIndexRepo<AppsEsDoc
   }
 
   protected createAllEntitiesIdsIterator = () =>
-    this.appsRepo.createIdsIterator({
+    this.categoriesRepo.createIdsIterator({
       chunkSize: 100,
     });
 }

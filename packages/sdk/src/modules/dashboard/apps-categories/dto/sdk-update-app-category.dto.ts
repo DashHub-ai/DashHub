@@ -10,7 +10,6 @@ export const SdkUpdateAppCategoryInputV = SdkAppCategoryV
     ...ZodOmitArchivedFields,
     id: true,
     organization: true,
-    aggs: true,
     parentCategory: true,
   })
   .extend({

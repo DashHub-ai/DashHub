@@ -97,8 +97,5 @@ export class AppsCategoriesEsSearchRepo {
       icon: source.icon,
       organization: source.organization,
       parentCategory: source.parent_category,
-      aggs: {
-        totalApps: 0,
-      },
     });
 }

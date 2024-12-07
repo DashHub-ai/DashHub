@@ -31,6 +31,7 @@ export * from './tap-task-option';
 export * from './time';
 export * from './timeout';
 export * from './to-void-task-either';
+export * from './tree';
 export * from './truncate-text';
 export * from './try-or-throw-either';
 export * from './try-or-throw-task-either';

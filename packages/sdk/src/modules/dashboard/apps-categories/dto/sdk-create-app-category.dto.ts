@@ -10,7 +10,6 @@ export const SdkCreateAppCategoryInputV = SdkAppCategoryV.omit({
   id: true,
   parentCategory: true,
   organization: true,
-  aggs: true,
 }).extend({
   organization: SdkTableRowWithIdV,
   parentCategory: SdkTableRowWithIdV.nullable(),
