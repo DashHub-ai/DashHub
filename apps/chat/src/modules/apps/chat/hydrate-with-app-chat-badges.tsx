@@ -1,4 +1,8 @@
-import { Fragment, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
+
+import clsx from 'clsx';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import { AppChatBadge, type AppChatBadgeProps } from './app-chat-badge';
 
@@ -16,14 +20,25 @@ export function hydrateWithAppChatBadges(
     }
 
     if (!match?.length) {
-      return <Fragment key={token}>{token}</Fragment>;
+      return (
+        <Markdown
+          key={token}
+          className={clsx(
+            'prose-table:border-collapse prose-td:border-gray-300 prose-th:border-gray-300 prose-td:p-2 prose-th:p-2 prose-td:border prose-th:border',
+            'prose-a:underline prose-code:overflow-auto prose-pre:overflow-auto',
+            'prose-ol:list-decimal chat-markdown prose-sm',
+          )}
+          remarkPlugins={[remarkGfm]}
+        >
+          {token}
+        </Markdown>
+      );
     }
 
     const [, id] = match;
+
     return (
-      <Fragment key={id}>
-        <AppChatBadge id={+id} {...props} className="mx-1 my-1 first:ml-0" />
-      </Fragment>
+      <AppChatBadge key={id} id={+id} {...props} className="mx-1 my-1 first:mb-2 first:ml-0" />
     );
   });
 }

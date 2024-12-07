@@ -50,9 +50,9 @@ export const ChatMessageContent = memo(({ content, truncate, darkMode }: Props) 
 
   return (
     <>
-      <p className="text-sm whitespace-pre-wrap">
+      <div className="text-sm">
         {hydratedContent}
-      </p>
+      </div>
 
       {!stream.done && (
         <div className="flex gap-1 my-2">

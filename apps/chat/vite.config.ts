@@ -13,4 +13,11 @@ export default defineConfig(({ mode }) => ({
     react(),
     tsconfigPaths(),
   ],
+  ...mode !== 'production' && {
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true,
+      },
+    },
+  },
 }));

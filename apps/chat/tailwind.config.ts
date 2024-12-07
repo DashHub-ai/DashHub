@@ -2,6 +2,7 @@ import type { Config } from 'tailwindcss';
 
 import path from 'node:path';
 
+import typography from '@tailwindcss/typography';
 import franken from 'franken-ui/shadcn-ui/preset-quick';
 
 export default {
@@ -30,5 +31,7 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    typography,
+  ],
 } satisfies Config;
