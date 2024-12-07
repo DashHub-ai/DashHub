@@ -1,8 +1,12 @@
+import type { ControlHookResult } from '@under-control/forms';
+
+import { clsx } from 'clsx';
 import { useMemo } from 'react';
 
-import { useLastNonNullValue } from '@llm/commons-front';
+import { useLastNonNullValue, useUpdateEffect } from '@llm/commons-front';
 import {
   type SdkAppT,
+  type SdKSearchAppsInputT,
   SdKSearchAppsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
@@ -23,9 +27,10 @@ import { AppsCategoriesSidebar, AppsCategoriesSidebarLoader } from './sidebar';
 
 type Props = {
   itemPropsFn?: (item: SdkAppT) => Omit<AppCardProps, 'app'>;
+  columns?: number;
 };
 
-export function AppsContainer({ itemPropsFn }: Props) {
+export function AppsContainer({ itemPropsFn, columns = 3 }: Props) {
   const favorites = useFavoriteApps();
   const { organization } = useWorkspaceOrganizationOrThrow();
 
@@ -47,41 +52,7 @@ export function AppsContainer({ itemPropsFn }: Props) {
   });
 
   const categoriesTree = useLastNonNullValue(result?.aggs?.categories);
-
-  const favoritesFilter = useMemo(
-    () => {
-      if (!favorites.hasFavorites) {
-        return null;
-      }
-
-      if (favorites.ids.every(id => pagination.value.ids?.includes(id))) {
-        return true;
-      }
-
-      if (favorites.ids.every(id => pagination.value.excludeIds?.includes(id))) {
-        return false;
-      }
-
-      return null;
-    },
-    [favorites.ids, pagination.value],
-  );
-
-  const onToggleFavoriteFilter = (value: boolean | null) => {
-    pagination.setValue({
-      merge: true,
-      value: {
-        ids: undefined,
-        excludeIds: undefined,
-        ...value && {
-          ids: favorites.ids,
-        },
-        ...value === false && {
-          excludeIds: favorites.ids,
-        },
-      },
-    });
-  };
+  const { favoritesFilter, onToggleFavoriteFilter } = useAppsFavoritesFilter(pagination, favorites);
 
   return (
     <div className="flex">
@@ -141,7 +112,12 @@ export function AppsContainer({ itemPropsFn }: Props) {
             }
 
             return (
-              <div className="gap-4 grid grid-cols-1 md:grid-cols-3">
+              <div
+                className={clsx(
+                  'gap-4 grid grid-cols-1',
+                  getGridColumns(columns),
+                )}
+              >
                 {items.map(item => (
                   <AppCard
                     key={item.id}
@@ -156,4 +132,72 @@ export function AppsContainer({ itemPropsFn }: Props) {
       </section>
     </div>
   );
+}
+
+function useAppsFavoritesFilter(
+  pagination: ControlHookResult<SdKSearchAppsInputT>,
+  favorites: ReturnType<typeof useFavoriteApps>,
+) {
+  const favoritesFilter = useMemo(
+    () => {
+      if (!favorites.hasFavorites) {
+        return null;
+      }
+
+      if (favorites.ids.every(id => pagination.value.ids?.includes(id))) {
+        return true;
+      }
+
+      if (favorites.ids.every(id => pagination.value.excludeIds?.includes(id))) {
+        return false;
+      }
+
+      return null;
+    },
+    [favorites.ids, pagination.value],
+  );
+
+  const prevFavoritesFilter = useLastNonNullValue(favoritesFilter);
+
+  const onToggleFavoriteFilter = (value: boolean | null) => {
+    pagination.setValue({
+      merge: true,
+      value: {
+        ids: undefined,
+        excludeIds: undefined,
+        ...value && {
+          ids: favorites.ids,
+        },
+        ...value === false && {
+          excludeIds: favorites.ids,
+        },
+      },
+    });
+  };
+
+  useUpdateEffect(() => {
+    if (prevFavoritesFilter && !favoritesFilter && pagination.value.ids?.length) {
+      onToggleFavoriteFilter(null);
+    }
+  }, [favoritesFilter]);
+
+  return {
+    favoritesFilter,
+    onToggleFavoriteFilter,
+  };
+}
+
+function getGridColumns(columns: number) {
+  switch (columns) {
+    case 2:
+      return 'md:grid-cols-2';
+    case 4:
+      return 'md:grid-cols-4';
+    case 5:
+      return 'md:grid-cols-5';
+    case 6:
+      return 'md:grid-cols-6';
+    default:
+      return 'md:grid-cols-3';
+  }
 }
