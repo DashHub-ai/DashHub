@@ -150,6 +150,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
             label: 'Nazwa',
             placeholder: 'Wpisz nazwę aplikacji',
           },
+          category: {
+            label: 'Kategoria',
+          },
           description: {
             label: 'Opis',
             placeholder: 'Wpisz opis aplikacji',
@@ -177,6 +180,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           name: {
             label: 'Nazwa',
             placeholder: 'Wpisz nazwę kategorii aplikacji',
+          },
+          icon: {
+            label: 'Ikona',
+            placeholder: 'Wpisz ikonę kategorii aplikacji',
           },
           description: {
             label: 'Opis',

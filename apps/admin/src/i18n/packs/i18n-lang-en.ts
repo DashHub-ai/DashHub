@@ -148,6 +148,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
             label: 'Name',
             placeholder: 'Enter app name',
           },
+          category: {
+            label: 'Category',
+          },
           description: {
             label: 'Description',
             placeholder: 'Enter app description',
@@ -175,6 +178,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           name: {
             label: 'Name',
             placeholder: 'Enter app category name',
+          },
+          icon: {
+            label: 'Icon',
+            placeholder: 'Enter app category icon',
           },
           description: {
             label: 'Description',

@@ -4,12 +4,17 @@ import { SdkTableRowWithIdV, ZodOmitArchivedFields, ZodOmitDateFields } from '~/
 
 import { SdkAppV } from './sdk-app.dto';
 
-export const SdkUpdateAppInputV = SdkAppV.omit({
-  ...ZodOmitDateFields,
-  ...ZodOmitArchivedFields,
-  id: true,
-  organization: true,
-});
+export const SdkUpdateAppInputV = SdkAppV
+  .omit({
+    ...ZodOmitDateFields,
+    ...ZodOmitArchivedFields,
+    id: true,
+    organization: true,
+    category: true,
+  })
+  .extend({
+    category: SdkTableRowWithIdV,
+  });
 
 export type SdkUpdateAppInputT = z.infer<typeof SdkUpdateAppInputV>;
 

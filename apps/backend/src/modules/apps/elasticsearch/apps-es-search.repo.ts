@@ -5,7 +5,9 @@ import { inject, injectable } from 'tsyringe';
 
 import type {
   SdkSearchAppItemT,
+  SdkSearchAppsAggsT,
   SdKSearchAppsInputT,
+  SdkSearchAppsOutputT,
 } from '@llm/sdk';
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
@@ -31,24 +33,27 @@ export class AppsEsSearchRepo {
     TE.map(AppsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdKSearchAppsInputT) =>
-    pipe(
-      this.indexRepo.search(
-        AppsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
+  search = (dto: SdKSearchAppsInputT) => pipe(
+    this.indexRepo.search(
+      AppsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
+    ),
+    TE.map(({ hits: { total, hits }, aggregations }): SdkSearchAppsOutputT => ({
+      items: pipe(
+        hits,
+        pluck('_source'),
+        A.map(item => AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument)),
       ),
-      TE.map(({ hits: { total, hits } }) => ({
-        items: pipe(
-          hits,
-          pluck('_source'),
-          A.map(item => AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument)),
-        ),
-        total: total.value,
-      })),
-    );
+      total: total.value,
+      aggs: AppsEsSearchRepo.mapEsAggregations(aggregations),
+    })),
+  );
 
   private static createEsRequestSearchBody = (dto: SdKSearchAppsInputT) =>
     createPaginationOffsetSearchQuery(dto)
       .query(AppsEsSearchRepo.createEsRequestSearchFilters(dto))
+      .aggs([
+        esb.termsAggregation('categories', 'category.id'),
+      ])
       .sorts(createScoredSortFieldQuery(dto.sort));
 
   private static createEsRequestSearchFilters = (
@@ -79,6 +84,13 @@ export class AppsEsSearchRepo {
         !isNil(archived) && esb.termQuery('archived', archived),
       ]),
     );
+
+  private static mapEsAggregations = (aggregations: any): SdkSearchAppsAggsT => ({
+    categories: aggregations.categories.buckets.map((bucket: any) => ({
+      id: bucket.key,
+      count: bucket.doc_count,
+    })),
+  });
 
   private static mapOutputHit = (source: AppsEsDocument): SdkSearchAppItemT =>
     ({

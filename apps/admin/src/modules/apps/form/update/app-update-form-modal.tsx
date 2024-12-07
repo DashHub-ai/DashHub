@@ -63,6 +63,7 @@ export function AppUpdateFormModal(
       </FormField>
 
       <AppSharedFormFields
+        organization={app.organization}
         errors={validator.errors.all as unknown as any}
         {...bind.merged()}
       />

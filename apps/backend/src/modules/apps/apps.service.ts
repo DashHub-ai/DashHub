@@ -87,8 +87,14 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, ...value }: SdkUpdateAppInputT & TableRowWithId) => pipe(
-    this.repo.update({ id, value }),
+  update = ({ id, category, ...value }: SdkUpdateAppInputT & TableRowWithId) => pipe(
+    this.repo.update({
+      id,
+      value: {
+        ...value,
+        categoryId: category.id,
+      },
+    }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 }

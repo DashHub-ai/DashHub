@@ -1,20 +1,42 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkAppT } from '@llm/sdk';
+import type { SdkTableRowWithIdT, SdkUpdateAppInputT } from '@llm/sdk';
 
 import { FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { AppsCategoriesSearchSelect } from '~/modules/apps-categories';
 
-type Value = Pick<SdkAppT, 'name' | 'chatContext' | 'description'>;
+type Value = Pick<
+  SdkUpdateAppInputT,
+  'name' | 'chatContext' | 'description' | 'category'
+>;
 
-type Props = ValidationErrorsListProps<Value>;
+type Props =
+  & ValidationErrorsListProps<Value>
+  & {
+    organization: SdkTableRowWithIdT;
+  };
 
-export const AppSharedFormFields = controlled<Value, Props>(({ errors, control: { bind } }) => {
+export const AppSharedFormFields = controlled<Value, Props>(({ errors, organization, control: { bind } }) => {
   const t = useI18n().pack.modules.apps.form;
   const validation = useFormValidatorMessages({ errors });
 
   return (
     <>
+      <FormField
+        className="uk-margin"
+        label={t.fields.category.label}
+        {...validation.extract('category')}
+      >
+        <AppsCategoriesSearchSelect
+          {...bind.path('category')}
+          filters={{
+            archived: false,
+            organizationIds: [organization.id],
+          }}
+        />
+      </FormField>
+
       <FormField
         className="uk-margin"
         label={t.fields.name.label}
