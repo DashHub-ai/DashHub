@@ -32,6 +32,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       description: 'Opis',
       auth: 'Autoryzacja',
       organization: 'Organizacja',
+      parentCategory: 'Kategoria nadrzędna',
       active: 'Aktywny',
       email: 'E-mail',
       archived: 'Archiwum',
@@ -183,6 +184,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           },
           organization: {
             label: 'Organizacja',
+          },
+          parentCategory: {
+            label: 'Kategoria nadrzędna',
           },
         },
       },

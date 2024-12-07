@@ -1,20 +1,48 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkCreateAppCategoryInputT } from '@llm/sdk';
+import type { SdkCreateAppCategoryInputT, SdkTableRowIdT, SdkTableRowWithIdT } from '@llm/sdk';
 
 import { FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-type Value = Pick<SdkCreateAppCategoryInputT, 'name' | 'description'>;
+import { AppsCategoriesSearchSelect } from '../../controls';
 
-type Props = ValidationErrorsListProps<Value>;
+type Value = Pick<SdkCreateAppCategoryInputT, 'name' | 'description' | 'parentCategory'>;
 
-export const AppCategorySharedFormFields = controlled<Value, Props>(({ errors, control: { bind } }) => {
+type Props =
+  & ValidationErrorsListProps<Value>
+  & {
+    organization: SdkTableRowWithIdT;
+    excludeParentCategoriesIds?: SdkTableRowIdT[];
+  };
+
+export const AppCategorySharedFormFields = controlled<Value, Props>(({
+  errors,
+  organization,
+  excludeParentCategoriesIds,
+  control: { bind },
+}) => {
   const t = useI18n().pack.modules.appsCategories.form;
   const validation = useFormValidatorMessages({ errors });
 
   return (
     <>
+      <FormField
+        className="uk-margin"
+        label={t.fields.parentCategory.label}
+        {...validation.extract('parentCategory')}
+      >
+        <AppsCategoriesSearchSelect
+          {...bind.path('parentCategory')}
+          filters={{
+            archived: false,
+            organizationIds: [organization.id],
+            excludeIds: excludeParentCategoriesIds || [],
+          }}
+          required
+        />
+      </FormField>
+
       <FormField
         className="uk-margin"
         label={t.fields.name.label}

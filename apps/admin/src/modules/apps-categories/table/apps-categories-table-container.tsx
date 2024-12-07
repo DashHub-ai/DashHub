@@ -105,6 +105,7 @@ export function AppsCategoriesTableContainer() {
           { id: 'id', name: t.id, className: 'uk-table-shrink' },
           { id: 'name', name: t.name, className: 'uk-table-expand' },
           { id: 'description', name: t.description, className: 'uk-table-expand' },
+          { id: 'parentCategory', name: t.parentCategory, className: 'uk-table-expand' },
           { id: 'organization', name: t.organization, className: 'uk-table-expand' },
           { id: 'archived', name: t.archived, className: 'w-[150px]' },
           { id: 'createdAt', name: t.createdAt, className: 'w-[200px]' },

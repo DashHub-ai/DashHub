@@ -18,11 +18,28 @@ export function AppsCategoriesTableRow({ item, onUpdated }: Props) {
   const { sdks } = useSdkForLoggedIn();
   const updateModal = useAppCategoryUpdateModal();
 
+  const { parentCategory } = item;
+
   return (
     <tr>
       <td>{item.id}</td>
       <td>{item.name}</td>
       <td>{item.description || '-'}</td>
+      <td>
+        {parentCategory
+          ? (
+              <Link
+                className="uk-link"
+                href={sitemap.forceRedirect.generate(
+                  sitemap.apps.categories.show(parentCategory.id),
+                )}
+                replace
+              >
+                {parentCategory.name}
+              </Link>
+            )
+          : '-'}
+      </td>
       <td>
         <Link
           className="uk-link"

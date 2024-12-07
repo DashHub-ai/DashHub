@@ -31,7 +31,7 @@ export function AppCategoryCreateFormModal(
   }: AppCategoryCreateFormModalProps,
 ) {
   const t = useI18n().pack.modules.appsCategories.form;
-  const { handleSubmitEvent, validator, submitState, bind } = useAppCategoryCreateForm({
+  const { handleSubmitEvent, validator, submitState, bind, value } = useAppCategoryCreateForm({
     defaultValue,
     onAfterSubmit,
   });
@@ -66,6 +66,7 @@ export function AppCategoryCreateFormModal(
 
       <AppCategorySharedFormFields
         errors={validator.errors.all as any}
+        organization={value.organization}
         {...bind.merged()}
       />
 

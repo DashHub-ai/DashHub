@@ -33,6 +33,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       active: 'Active',
       auth: 'Authentication',
       organization: 'Organization',
+      parentCategory: 'Parent category',
       createdAt: 'Created at',
       updatedAt: 'Updated at',
       actions: 'Actions',
@@ -181,6 +182,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           },
           organization: {
             label: 'Organization',
+          },
+          parentCategory: {
+            label: 'Parent category',
           },
         },
       },

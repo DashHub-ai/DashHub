@@ -10,6 +10,7 @@ import type {
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
 import {
+  createMagicNullIdEsValue,
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
@@ -58,13 +59,20 @@ export class AppsCategoriesEsSearchRepo {
       excludeIds,
       organizationIds,
       archived,
+      root,
     }: SdKSearchAppsCategoriesInputT,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        root === true && esb.termQuery('parent_category.id', createMagicNullIdEsValue()),
+        root === false && esb.boolQuery().mustNot(
+          esb.termQuery('parent_category.id', createMagicNullIdEsValue()),
+        ),
+
         !!ids?.length && esb.termsQuery('id', ids),
         !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
+
         !!phrase && (
           esb
             .boolQuery()

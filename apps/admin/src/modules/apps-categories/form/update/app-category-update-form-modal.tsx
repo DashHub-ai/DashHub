@@ -59,11 +59,17 @@ export function AppCategoryUpdateFormModal(
         className="uk-margin"
         label={t.fields.organization.label}
       >
-        <OrganizationsSearchSelect defaultValue={category.organization} required disabled />
+        <OrganizationsSearchSelect
+          defaultValue={category.organization}
+          required
+          disabled
+        />
       </FormField>
 
       <AppCategorySharedFormFields
+        organization={category.organization}
         errors={validator.errors.all as unknown as any}
+        excludeParentCategoriesIds={[category.id]}
         {...bind.merged()}
       />
 

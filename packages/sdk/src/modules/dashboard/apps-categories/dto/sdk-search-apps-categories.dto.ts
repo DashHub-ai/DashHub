@@ -1,5 +1,6 @@
 import type { z } from 'zod';
 
+import { StrictBooleanV } from '@llm/commons';
 import {
   SdkArchivedFiltersInputV,
   SdkDefaultSortInputV,
@@ -19,6 +20,7 @@ export type SdkSearchAppCategoryItemT = z.infer<typeof SdkSearchAppCategoryItemV
 
 export const SdKSearchAppsCategoriesInputV = SdkOffsetPaginationInputV
   .extend({
+    root: StrictBooleanV.optional(),
     organizationIds: SdkIdsArrayV.optional(),
   })
   .merge(SdkDefaultSortInputV)
