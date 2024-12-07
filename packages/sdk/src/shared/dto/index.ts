@@ -1,4 +1,5 @@
 export * from './sdk-ai-generated-string.dto';
+export * from './sdk-counted-id-record.dto';
 export * from './sdk-id-name-url-entry.dto';
 export * from './sdk-ids-array.dto';
 export * from './sdk-offset-pagination.dto';

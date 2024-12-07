@@ -4,11 +4,14 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type {
+  SdkCountedIdRecordT,
   SdkSearchAppItemT,
   SdKSearchAppsInputT,
+  SdkSearchAppsOutputT,
 } from '@llm/sdk';
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
+import { AppsCategoriesEsTreeRepo } from '~/modules/apps-categories/elasticsearch';
 import {
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,
@@ -24,6 +27,7 @@ import {
 export class AppsEsSearchRepo {
   constructor(
     @inject(AppsEsIndexRepo) private readonly indexRepo: AppsEsIndexRepo,
+    @inject(AppsCategoriesEsTreeRepo) private readonly categoriesTreeRepo: AppsCategoriesEsTreeRepo,
   ) {}
 
   get = flow(
@@ -31,25 +35,28 @@ export class AppsEsSearchRepo {
     TE.map(AppsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdKSearchAppsInputT) =>
-    pipe(
-      this.indexRepo.search(
-        AppsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
-      ),
-      TE.map(({ hits: { total, hits } }) => ({
-        items: pipe(
-          hits,
-          pluck('_source'),
-          A.map(item => AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument)),
-        ),
-        total: total.value,
+  search = (dto: SdKSearchAppsInputT) => pipe(
+    TE.Do,
+    TE.bind('query', () => this.indexRepo.search(
+      AppsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
+    )),
+    TE.bindW('categoriesAggs', ({ query: { aggregations } }) =>
+      this.categoriesTreeRepo.createCountedTree({
+        countedAggs: AppsEsSearchRepo.mapCategoriesAggregations(aggregations),
+        organizationIds: dto.organizationIds,
       })),
-    );
-
-  private static createEsRequestSearchBody = (dto: SdKSearchAppsInputT) =>
-    createPaginationOffsetSearchQuery(dto)
-      .query(AppsEsSearchRepo.createEsRequestSearchFilters(dto))
-      .sorts(createScoredSortFieldQuery(dto.sort));
+    TE.map(({ categoriesAggs, query: { hits: { total, hits } } }): SdkSearchAppsOutputT => ({
+      items: pipe(
+        hits,
+        pluck('_source'),
+        A.map(item => AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument)),
+      ),
+      total: total.value,
+      aggs: {
+        categories: categoriesAggs,
+      },
+    })),
+  );
 
   private static createEsRequestSearchFilters = (
     {
@@ -57,6 +64,7 @@ export class AppsEsSearchRepo {
       ids,
       excludeIds,
       organizationIds,
+      categoriesIds,
       archived,
     }: SdKSearchAppsInputT,
   ): esb.Query =>
@@ -65,6 +73,7 @@ export class AppsEsSearchRepo {
         !!ids?.length && esb.termsQuery('id', ids),
         !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
+        !!categoriesIds?.length && esb.termsQuery('category.id', categoriesIds),
         !!phrase && (
           esb
             .boolQuery()
@@ -78,6 +87,32 @@ export class AppsEsSearchRepo {
       ]),
     );
 
+  private static createEsRequestSearchBody = (dto: SdKSearchAppsInputT) =>
+    createPaginationOffsetSearchQuery(dto)
+      .query(AppsEsSearchRepo.createEsRequestSearchFilters(dto))
+      .aggs([
+        esb
+          .globalAggregation('global_categories')
+          .agg(
+            esb
+              .filterAggregation('filtered')
+              .filter(AppsEsSearchRepo.createEsRequestSearchFilters({
+                ...dto,
+                categoriesIds: [],
+              }))
+              .agg(
+                esb.termsAggregation('terms', 'category.id'),
+              ),
+          ),
+      ])
+      .sorts(createScoredSortFieldQuery(dto.sort));
+
+  private static mapCategoriesAggregations = (aggregations: any) =>
+    aggregations.global_categories.filtered.terms.buckets.map((bucket: any): SdkCountedIdRecordT => ({
+      id: bucket.key,
+      count: bucket.doc_count,
+    }));
+
   private static mapOutputHit = (source: AppsEsDocument): SdkSearchAppItemT =>
     ({
       id: source.id,
@@ -87,6 +122,7 @@ export class AppsEsSearchRepo {
       updatedAt: source.updated_at,
       archived: source.archived,
       organization: source.organization,
+      category: source.category,
       chatContext: source.chat_context,
     });
 }

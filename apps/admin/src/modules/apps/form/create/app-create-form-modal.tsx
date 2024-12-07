@@ -31,7 +31,7 @@ export function AppCreateFormModal(
   }: AppCreateFormModalProps,
 ) {
   const t = useI18n().pack.modules.apps.form;
-  const { handleSubmitEvent, validator, submitState, bind } = useAppCreateForm({
+  const { handleSubmitEvent, validator, submitState, bind, value } = useAppCreateForm({
     defaultValue,
     onAfterSubmit,
   });
@@ -65,6 +65,7 @@ export function AppCreateFormModal(
       </FormField>
 
       <AppSharedFormFields
+        organization={value.organization}
         errors={validator.errors.all as any}
         {...bind.merged()}
       />

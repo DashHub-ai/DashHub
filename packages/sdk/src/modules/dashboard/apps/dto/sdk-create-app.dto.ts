@@ -9,10 +9,11 @@ export const SdkCreateAppInputV = SdkAppV.omit({
   ...ZodOmitArchivedFields,
   id: true,
   organization: true,
-})
-  .extend({
-    organization: SdkTableRowWithIdV,
-  });
+  category: true,
+}).extend({
+  organization: SdkTableRowWithIdV,
+  category: SdkTableRowWithIdV,
+});
 
 export type SdkCreateAppInputT = z.infer<typeof SdkCreateAppInputV>;
 

@@ -24,6 +24,15 @@ export function useSitemap() {
     },
     apps: {
       index: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps'),
+      categories: {
+        index: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/categories'),
+        show: (id: SdkTableRowIdT) => sitemap.apps.categories.index.generate({
+          searchParams: {
+            archived: null,
+            ids: [id],
+          },
+        }),
+      },
     },
     projects: {
       index: defineSitemapRouteGenerator<SearchUsersRouteUrlFiltersT>(prefixWithBaseRoute)('/projects'),

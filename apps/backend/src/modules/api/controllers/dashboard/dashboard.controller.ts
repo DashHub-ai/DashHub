@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { BaseController } from '../shared';
 import { AIModelsController } from './ai-models.controller';
+import { AppsCategoriesController } from './apps-categories.controller';
 import { AppsController } from './apps.controller';
 import { ChatsController } from './chats.controller';
 import { OrganizationsController } from './organizations.controller';
@@ -16,6 +17,7 @@ export class DashboardController extends BaseController {
     @inject(UsersController) users: UsersController,
     @inject(ProjectsController) projects: ProjectsController,
     @inject(AppsController) apps: AppsController,
+    @inject(AppsCategoriesController) appsCategories: AppsCategoriesController,
     @inject(S3BucketsController) s3Buckets: S3BucketsController,
     @inject(ChatsController) chats: ChatsController,
     @inject(AIModelsController) aiModels: AIModelsController,
@@ -26,6 +28,7 @@ export class DashboardController extends BaseController {
       .route('/organizations', organizations.router)
       .route('/users', users.router)
       .route('/projects', projects.router)
+      .route('/apps/categories', appsCategories.router)
       .route('/apps', apps.router)
       .route('/s3-buckets', s3Buckets.router)
       .route('/chats', chats.router)

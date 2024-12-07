@@ -66,6 +66,7 @@ export function AppsTableContainer() {
           name: '',
           chatContext: '',
           description: null,
+          category: createFakeSelectItem(),
           organization: createFakeSelectItem(),
         },
       }),

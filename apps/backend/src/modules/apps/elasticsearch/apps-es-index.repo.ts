@@ -29,6 +29,7 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
         organization: createIdNameObjectMapping(),
+        category: createIdNameObjectMapping(),
         description: {
           type: 'text',
           analyzer: 'folded_lowercase_analyzer',

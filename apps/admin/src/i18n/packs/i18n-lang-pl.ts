@@ -32,6 +32,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       description: 'Opis',
       auth: 'Autoryzacja',
       organization: 'Organizacja',
+      parentCategory: 'Kategoria nadrzędna',
       active: 'Aktywny',
       email: 'E-mail',
       archived: 'Archiwum',
@@ -41,6 +42,11 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
   },
   navigation: {
+    groups: {
+      resources: 'Zasoby',
+      development: 'Rozwój',
+      aiAndStorage: 'AI i Storage',
+    },
     links: {
       home: 'Podsumowanie',
       organizations: 'Organizacje',
@@ -48,6 +54,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       s3Buckets: 'S3',
       projects: 'Projekty',
       apps: 'Aplikacje',
+      appsCategories: 'Kategorie aplikacji',
       aiModels: 'Modele AI',
     },
     loggedIn: {
@@ -143,6 +150,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
             label: 'Nazwa',
             placeholder: 'Wpisz nazwę aplikacji',
           },
+          category: {
+            label: 'Kategoria',
+          },
           description: {
             label: 'Opis',
             placeholder: 'Wpisz opis aplikacji',
@@ -153,6 +163,37 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           chatContext: {
             label: 'Kontekst czatu',
             placeholder: 'Wpisz kontekst czatu',
+          },
+        },
+      },
+    },
+    appsCategories: {
+      prefix: {
+        category: 'Kategoria',
+      },
+      form: {
+        title: {
+          create: 'Utwórz kategorię aplikacji',
+          edit: 'Edytuj kategorię aplikacji',
+        },
+        fields: {
+          name: {
+            label: 'Nazwa',
+            placeholder: 'Wpisz nazwę kategorii aplikacji',
+          },
+          icon: {
+            label: 'Ikona',
+            placeholder: 'Wpisz ikonę kategorii aplikacji',
+          },
+          description: {
+            label: 'Opis',
+            placeholder: 'Wpisz opis kategorii',
+          },
+          organization: {
+            label: 'Organizacja',
+          },
+          parentCategory: {
+            label: 'Kategoria nadrzędna',
           },
         },
       },
@@ -343,6 +384,51 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Podsumowanie twojego konta',
       },
       title: 'Strona główna',
+      sections: {
+        resources: {
+          title: 'Zasoby',
+          cards: {
+            organizations: {
+              title: 'Organizacje',
+              description: 'Twórz i zarządzaj organizacjami, konfiguruj ich ustawienia i kontroluj uprawnienia dostępu. Konfiguruj rozliczenia, struktury zespołów i polityki organizacyjne.',
+            },
+            users: {
+              title: 'Użytkownicy',
+              description: 'Zarządzaj kontami użytkowników, rolami i uprawnieniami w całej platformie. Monitoruj aktywność użytkowników, zarządzaj ustawieniami uwierzytelniania i utrzymuj protokoły bezpieczeństwa.',
+            },
+          },
+        },
+        development: {
+          title: 'Narzędzia deweloperskie',
+          cards: {
+            apps: {
+              title: 'Aplikacje',
+              description: 'Uzyskaj dostęp i zarządzaj portfolio aplikacji. Wdrażaj, monitoruj i konfiguruj aplikacje. Śledź metryki wydajności i zarządzaj cyklem życia aplikacji.',
+            },
+            appsCategories: {
+              title: 'Kategorie aplikacji',
+              description: 'Organizuj aplikacje w logiczne kategorie dla lepszego zarządzania. Twórz struktury hierarchiczne i utrzymuj przejrzystą taksonomię aplikacji.',
+            },
+            projects: {
+              title: 'Projekty',
+              description: 'Nadzoruj projekty rozwojowe od powstania do wdrożenia. Śledź postęp projektu, zarządzaj zasobami i efektywnie koordynuj pracę zespołu.',
+            },
+          },
+        },
+        aiAndStorage: {
+          title: 'AI i przechowywanie',
+          cards: {
+            aiModels: {
+              title: 'Modele AI',
+              description: 'Wdrażaj i zarządzaj modelami AI/ML w produkcji. Monitoruj wydajność modeli, kontroluj wersje i efektywnie zarządzaj cyklem życia modeli.',
+            },
+            s3Buckets: {
+              title: 'Kubełki S3',
+              description: 'Zarządzaj kubełkami w chmurze dla swoich aplikacji. Konfiguruj polityki dostępu, monitoruj wykorzystanie pamięci i optymalizuj strategie zarządzania danymi.',
+            },
+          },
+        },
+      },
     },
     organizations: {
       meta: {
@@ -364,6 +450,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Zarządzaj aplikacjami',
       },
       title: 'Zarządzaj aplikacjami',
+    },
+    appsCategories: {
+      meta: {
+        title: 'Kategorie aplikacji',
+        description: 'Zarządzaj kategoriami aplikacji',
+      },
+      title: 'Zarządzaj kategoriami aplikacji',
     },
     aiModels: {
       meta: {

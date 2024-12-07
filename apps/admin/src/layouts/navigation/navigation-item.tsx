@@ -4,36 +4,49 @@ import clsx from 'clsx';
 import { Link, useLocation } from 'wouter';
 
 type Props = PropsWithChildren & {
-  path: string;
+  as?: any;
+  path?: string;
   icon: ReactNode;
   disabled?: boolean;
+  active?: boolean;
+  className?: string;
 };
 
-export function NavigationItem({ path, icon, children, disabled }: Props) {
+export function NavigationItem({ as: Tag = 'li', path, icon, children, disabled, active, className }: Props) {
   const [location] = useLocation();
-  const isActive = location === path;
+
+  active ??= path ? location === path : false;
+
+  const content = (
+    <span
+      className={clsx(
+        'flex items-center gap-2 px-3 py-2 rounded-md transition-colors',
+        'hover:bg-gray-100 cursor-default',
+        active && 'bg-gray-100 text-primary',
+        disabled && 'text-gray-400',
+        className,
+      )}
+    >
+      <span className="size-4">
+        {icon}
+      </span>
+      <span>{children}</span>
+    </span>
+  );
+
+  if (!path) {
+    return <Tag>{content}</Tag>;
+  }
 
   return (
-    <li>
+    <Tag>
       <Link
         href={path}
         aria-disabled={disabled}
         className={clsx(disabled && 'pointer-events-none')}
       >
-        <span
-          className={clsx(
-            'flex items-center gap-2 px-3 py-2 rounded-md transition-colors',
-            'hover:bg-gray-100',
-            isActive && 'bg-gray-100 text-primary',
-            disabled && 'text-gray-400',
-          )}
-        >
-          <span className="size-4">
-            {icon}
-          </span>
-          <span>{children}</span>
-        </span>
+        {content}
       </Link>
-    </li>
+    </Tag>
   );
 }

@@ -37,10 +37,14 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             .selectFrom(this.table)
             .where('apps.id', 'in', ids)
             .innerJoin('organizations', 'organizations.id', 'organization_id')
+            .innerJoin('apps_categories', 'apps_categories.id', 'category_id')
             .selectAll('apps')
             .select([
               'organizations.id as organization_id',
               'organizations.name as organization_name',
+
+              'apps_categories.id as category_id',
+              'apps_categories.name as category_name',
             ])
             .limit(ids.length)
             .execute(),
@@ -56,6 +60,10 @@ export class AppsRepo extends createDatabaseRepo('apps') {
           organization: {
             id: orgId,
             name: orgName,
+          },
+          category: {
+            id: item.category_id,
+            name: item.category_name,
           },
         })),
       ),

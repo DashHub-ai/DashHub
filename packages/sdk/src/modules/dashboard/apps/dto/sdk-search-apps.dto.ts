@@ -1,4 +1,4 @@
-import type { z } from 'zod';
+import { z } from 'zod';
 
 import {
   SdkArchivedFiltersInputV,
@@ -11,6 +11,7 @@ import {
   SdkOffsetPaginationOutputV,
 } from '~/shared';
 
+import { SdkCountedAppsCategoriesTreeV } from '../../apps-categories/dto/sdk-counted-apps-categories-tree.dto';
 import { SdkAppV } from './sdk-app.dto';
 
 export const SdkSearchAppItemV = SdkAppV;
@@ -20,6 +21,7 @@ export type SdkSearchAppItemT = z.infer<typeof SdkSearchAppItemV>;
 export const SdKSearchAppsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
+    categoriesIds: SdkIdsArrayV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)
@@ -29,6 +31,14 @@ export const SdKSearchAppsInputV = SdkOffsetPaginationInputV
 
 export type SdKSearchAppsInputT = z.infer<typeof SdKSearchAppsInputV>;
 
-export const SdKSearchAppsOutputV = SdkOffsetPaginationOutputV(SdkSearchAppItemV);
+export const SdkSearchAppsAggsV = z.object({
+  categories: SdkCountedAppsCategoriesTreeV,
+});
 
-export type SdKSearchAppsOutputT = z.infer<typeof SdKSearchAppsOutputV>;
+export type SdkSearchAppsAggsT = z.infer<typeof SdkSearchAppsAggsV>;
+
+export const SdKSearchAppsOutputV = SdkOffsetPaginationOutputV(SdkSearchAppItemV).extend({
+  aggs: SdkSearchAppsAggsV,
+});
+
+export type SdkSearchAppsOutputT = z.infer<typeof SdKSearchAppsOutputV>;

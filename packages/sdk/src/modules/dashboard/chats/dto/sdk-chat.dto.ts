@@ -10,7 +10,7 @@ import {
 
 import { SdkUserListItemV } from '../../users/dto/sdk-user-list-item.dto';
 
-export const SdkChatSummaryV = z.object({
+export const SdkChatSummaryV = z.strictObject({
   name: SdkAIGeneratedStringV,
   content: SdkAIGeneratedStringV,
 });

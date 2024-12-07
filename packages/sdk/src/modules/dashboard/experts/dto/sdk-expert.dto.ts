@@ -8,7 +8,7 @@ import {
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
-export const SdkExpertV = z.object({
+export const SdkExpertV = z.strictObject({
   organization: SdkIdNameUrlEntryV,
   aiModels: z.array(SdkIdNameUrlEntryV),
   description: NonEmptyOrNullStringV,

@@ -33,12 +33,18 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       active: 'Active',
       auth: 'Authentication',
       organization: 'Organization',
+      parentCategory: 'Parent category',
       createdAt: 'Created at',
       updatedAt: 'Updated at',
       actions: 'Actions',
     },
   },
   navigation: {
+    groups: {
+      resources: 'Resources',
+      development: 'Development',
+      aiAndStorage: 'AI & Storage',
+    },
     links: {
       home: 'Overview',
       organizations: 'Organizations',
@@ -46,6 +52,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       s3Buckets: 'S3',
       projects: 'Projects',
       apps: 'Apps',
+      appsCategories: 'Apps Categories',
       aiModels: 'AI Models',
     },
     loggedIn: {
@@ -141,6 +148,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
             label: 'Name',
             placeholder: 'Enter app name',
           },
+          category: {
+            label: 'Category',
+          },
           description: {
             label: 'Description',
             placeholder: 'Enter app description',
@@ -151,6 +161,37 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           chatContext: {
             label: 'Chat context',
             placeholder: 'Enter chat context',
+          },
+        },
+      },
+    },
+    appsCategories: {
+      prefix: {
+        category: 'Category',
+      },
+      form: {
+        title: {
+          create: 'Create app category',
+          edit: 'Edit app category',
+        },
+        fields: {
+          name: {
+            label: 'Name',
+            placeholder: 'Enter app category name',
+          },
+          icon: {
+            label: 'Icon',
+            placeholder: 'Enter app category icon',
+          },
+          description: {
+            label: 'Description',
+            placeholder: 'Enter category description',
+          },
+          organization: {
+            label: 'Organization',
+          },
+          parentCategory: {
+            label: 'Parent category',
           },
         },
       },
@@ -341,6 +382,51 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Overview of your account',
       },
       title: 'Summary',
+      sections: {
+        resources: {
+          title: 'Resources',
+          cards: {
+            organizations: {
+              title: 'Organizations',
+              description: 'Create and manage organizations, configure their settings, and control access permissions. Set up billing, team structures, and organizational policies.',
+            },
+            users: {
+              title: 'Users',
+              description: 'Manage user accounts, roles, and permissions across the platform. Monitor user activity, handle authentication settings, and maintain security protocols.',
+            },
+          },
+        },
+        development: {
+          title: 'Development Tools',
+          cards: {
+            apps: {
+              title: 'Apps',
+              description: 'Access and manage your application portfolio. Deploy, monitor, and configure applications. Track performance metrics and manage application lifecycle.',
+            },
+            appsCategories: {
+              title: 'Apps Categories',
+              description: 'Organize applications into logical categories for better management. Create hierarchical structures and maintain clear application taxonomies.',
+            },
+            projects: {
+              title: 'Projects',
+              description: 'Oversee development projects from inception to deployment. Track project progress, manage resources, and coordinate team efforts effectively.',
+            },
+          },
+        },
+        aiAndStorage: {
+          title: 'AI & Storage',
+          cards: {
+            aiModels: {
+              title: 'AI Models',
+              description: 'Deploy and manage AI/ML models in production. Monitor model performance, version control, and handle model lifecycle management efficiently.',
+            },
+            s3Buckets: {
+              title: 'S3 Buckets',
+              description: 'Manage cloud storage buckets for your applications. Configure access policies, monitor storage usage, and optimize data management strategies.',
+            },
+          },
+        },
+      },
     },
     organizations: {
       meta: {
@@ -362,6 +448,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Manage apps',
       },
       title: 'Manage apps',
+    },
+    appsCategories: {
+      meta: {
+        title: 'Apps Categories',
+        description: 'Manage apps categories',
+      },
+      title: 'Manage apps categories',
     },
     aiModels: {
       meta: {
