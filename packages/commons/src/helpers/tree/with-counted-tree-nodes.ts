@@ -18,8 +18,7 @@ export function withCountedTreeNodes<T extends ObjectWithStrictId>(
   tree: TreeNode<T>[],
 ): CountedTreeNode<T>[] {
   const filteredTree = filterTreeByIds(tree, aggs.map(({ id }) => id));
-
-  return mapTree<T, CountedTreeNode<T>>(filteredTree, (node, mappedChildren) => {
+  const mappedTree = mapTree<T, CountedTreeNode<T>>(filteredTree, (node, mappedChildren) => {
     const nodeAgg = aggs.find(agg => agg.id === node.id);
     const count = (nodeAgg?.count || 0) + mappedChildren.reduce(
       (sum, child) => sum + child.count,
@@ -34,4 +33,8 @@ export function withCountedTreeNodes<T extends ObjectWithStrictId>(
       count,
     };
   });
+
+  mappedTree.sort((a, b) => b.count - a.count);
+
+  return mappedTree;
 }
