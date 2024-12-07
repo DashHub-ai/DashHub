@@ -17,8 +17,8 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import { useFavoriteApps } from '../favorite';
 import { AppCard, type AppCardProps } from './app-card';
-import { AppsCategoriesSidebar } from './apps-categories-sidebar';
 import { AppsPlaceholder } from './apps-placeholder';
+import { AppsCategoriesSidebar, AppsCategoriesSidebarLoader } from './sidebar';
 
 type Props = {
   itemPropsFn?: (item: SdkAppT) => Omit<AppCardProps, 'app'>;
@@ -44,6 +44,8 @@ export function AppsContainer({ itemPropsFn }: Props) {
       organizationIds: [organization.id],
     }),
   });
+
+  const categoriesTree = result?.aggs?.categories;
 
   const favoritesFilter = useMemo(
     () => {
@@ -82,12 +84,22 @@ export function AppsContainer({ itemPropsFn }: Props) {
 
   return (
     <div className="flex">
-      <AppsCategoriesSidebar
-        onSelect={(categoryId) => {
-          // eslint-disable-next-line no-console
-          console.info(categoryId);
-        }}
-      />
+      {!categoriesTree
+        ? (
+            <AppsCategoriesSidebarLoader />
+          )
+        : (
+            <AppsCategoriesSidebar
+              tree={categoriesTree ?? []}
+              selected={pagination.value.categoriesIds ?? []}
+              onSelect={(categoriesIds) => {
+                pagination.setValue({
+                  merge: true,
+                  value: { categoriesIds },
+                });
+              }}
+            />
+          )}
       <section className="flex-1 pl-6">
         <PaginationToolbar
           className="mb-6"

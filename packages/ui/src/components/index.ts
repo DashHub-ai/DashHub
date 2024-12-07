@@ -8,6 +8,7 @@ export * from './modal';
 export * from './notifications';
 export * from './pagination';
 export * from './predefined';
+export * from './skeleton';
 export * from './spinner-container';
 export * from './table';
 export * from './tabs';

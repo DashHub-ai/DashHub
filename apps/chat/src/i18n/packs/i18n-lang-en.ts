@@ -228,6 +228,11 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     grid: {
       placeholder: 'No apps yet. Stay tuned!',
+      sidebar: {
+        header: 'Categories',
+        allApps: 'All Apps',
+        showMore: 'Show all (%{count} more)',
+      },
     },
     chooseAppModal: {
       title: 'Choose App',

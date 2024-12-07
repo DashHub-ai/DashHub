@@ -26,6 +26,8 @@ export function withCountedTreeNodes<T extends ObjectWithStrictId>(
       0,
     );
 
+    mappedChildren.sort((a, b) => b.count - a.count);
+
     return {
       ...node,
       children: mappedChildren,

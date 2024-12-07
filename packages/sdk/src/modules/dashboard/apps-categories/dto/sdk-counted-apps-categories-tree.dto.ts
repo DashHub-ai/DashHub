@@ -4,9 +4,11 @@ import type { CountedTreeNode } from '@llm/commons';
 
 import { type SdkAppCategoryT, SdkAppCategoryV } from './sdk-app-category.dto';
 
-export type SdkCountedAppsCategoriesTreeT = CountedTreeNode<SdkAppCategoryT>[];
+export type SdkCountedAppCategoryTreeNodeT = CountedTreeNode<SdkAppCategoryT>;
 
-const SdkCountedAppsCategoryNodeV: z.ZodType<CountedTreeNode<SdkAppCategoryT>> = z.lazy(() =>
+export type SdkCountedAppsCategoriesTreeT = SdkCountedAppCategoryTreeNodeT[];
+
+const SdkCountedAppsCategoryNodeV: z.ZodType<SdkCountedAppCategoryTreeNodeT> = z.lazy(() =>
   SdkAppCategoryV.extend({
     children: z.array(SdkCountedAppsCategoryNodeV),
     count: z.number(),
