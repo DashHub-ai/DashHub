@@ -1,1 +1,1 @@
-export * from './chat-conversation';
+export * from './chat-conversation-with-sidebar';

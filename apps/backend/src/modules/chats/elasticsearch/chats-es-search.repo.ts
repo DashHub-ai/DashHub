@@ -61,6 +61,7 @@ export class ChatsEsSearchRepo {
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        esb.termsQuery('internal', false),
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
@@ -85,6 +86,7 @@ export class ChatsEsSearchRepo {
       organization: source.organization,
       creator: source.creator,
       public: source.public,
+      internal: source.internal,
       summary: {
         content: {
           generated: summary.content.generated,

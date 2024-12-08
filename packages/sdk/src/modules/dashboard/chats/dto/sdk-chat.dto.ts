@@ -21,6 +21,7 @@ export const SdkChatV = z.object({
   creator: SdkUserListItemV,
   organization: SdkIdNameUrlEntryV,
   public: z.boolean(),
+  internal: z.boolean(),
   summary: SdkChatSummaryV,
 })
   .merge(SdkTableRowWithUuidV)

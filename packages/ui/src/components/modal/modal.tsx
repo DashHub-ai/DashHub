@@ -6,7 +6,7 @@ import { useIsMounted } from '@llm/commons-front';
 
 import { ModalBody } from './modal-body';
 import { ModalCloseButton } from './modal-close-button';
-import { ModalFooter } from './modal-footer';
+import { ModalFooter, type ModalFooterProps } from './modal-footer';
 import { ModalHeader } from './modal-header';
 
 export type ModalProps = PropsWithChildren & {
@@ -16,6 +16,7 @@ export type ModalProps = PropsWithChildren & {
   isLeaving?: boolean;
   isOverflowVisible?: boolean;
   formProps?: JSX.IntrinsicElements['form'];
+  footerProps?: ModalFooterProps;
   onClose: VoidFunction;
 };
 
@@ -28,6 +29,7 @@ export function Modal(
     isLeaving,
     isOverflowVisible,
     formProps,
+    footerProps,
     onClose,
   }: ModalProps,
 ) {
@@ -37,7 +39,7 @@ export function Modal(
   return (
     <div
       className={clsx(
-        'uk-flex-top uk-modal uk-flex',
+        'uk-flex uk-flex-top uk-modal',
         {
           'uk-open': isMounted && !isLeaving,
           'uk-display-block': isMounted,
@@ -73,7 +75,7 @@ export function Modal(
         </ModalBody>
 
         {footer && (
-          <ModalFooter>
+          <ModalFooter {...footerProps}>
             {footer}
           </ModalFooter>
         )}

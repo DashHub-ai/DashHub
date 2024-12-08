@@ -21,6 +21,7 @@ export type ChatsTable =
     creator_user_id: ColumnType<TableId, TableId, never>;
     organization_id: ColumnType<TableId, TableId, never>;
     public: boolean;
+    internal: boolean;
   };
 
 export type ChatTableRow = NormalizeSelectTableRow<ChatsTable>;
