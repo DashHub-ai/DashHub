@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { WandSparklesIcon } from 'lucide-react';
 
 import { tapTaskOption } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
+import { useAsyncCallback, useForceRerender } from '@llm/commons-front';
 import { createFakeSelectItem, FormSpinnerCTA } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
@@ -13,6 +13,8 @@ import { AppsTutorial } from './apps-tutorial';
 
 export function AppsRoute() {
   const t = useI18n().pack.routes.apps;
+
+  const { revision, forceRerender } = useForceRerender();
   const createModal = useAppCreateModal();
   const [onCreate, createState] = useAsyncCallback(
     pipe(
@@ -22,13 +24,9 @@ export function AppsRoute() {
           chatContext: '',
           description: '',
           category: createFakeSelectItem(),
-          organization: createFakeSelectItem(),
         },
       }),
-      tapTaskOption((result) => {
-        // eslint-disable-next-line no-console
-        console.info(result);
-      }),
+      tapTaskOption(forceRerender),
     ),
   );
 
@@ -43,15 +41,14 @@ export function AppsRoute() {
       <AppsTutorial />
 
       <AppsContainer
+        key={revision}
         toolbar={(
           <FormSpinnerCTA
             className="uk-button-small"
             loading={createState.isLoading}
             onClick={() => void onCreate()}
           >
-            {!createState.isLoading && (
-              <WandSparklesIcon className="mr-2" size={16} />
-            )}
+            {!createState.isLoading && <WandSparklesIcon className="mr-2" size={16} />}
             {t.buttons.create}
           </FormSpinnerCTA>
         )}
