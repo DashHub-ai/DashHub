@@ -1,3 +1,5 @@
+import { WandSparklesIcon } from 'lucide-react';
+
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { AppsContainer } from '~/modules';
@@ -18,7 +20,17 @@ export function AppsRoute() {
 
       <AppsTutorial />
 
-      <AppsContainer />
+      <AppsContainer
+        toolbar={(
+          <button
+            type="button"
+            className="uk-button uk-button-primary uk-button-small"
+          >
+            <WandSparklesIcon className="mr-2" size={16} />
+            {t.buttons.create}
+          </button>
+        )}
+      />
     </PageWithNavigationLayout>
   );
 }

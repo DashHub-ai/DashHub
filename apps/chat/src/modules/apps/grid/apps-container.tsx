@@ -1,7 +1,7 @@
 import type { ControlHookResult } from '@under-control/forms';
 
 import { clsx } from 'clsx';
-import { useMemo } from 'react';
+import { type ReactNode, useMemo } from 'react';
 
 import { useLastNonNullValue, useUpdateEffect } from '@llm/commons-front';
 import {
@@ -27,10 +27,11 @@ import { AppsCategoriesSidebar, AppsCategoriesSidebarLoader } from './sidebar';
 
 type Props = {
   itemPropsFn?: (item: SdkAppT) => Omit<AppCardProps, 'app'>;
+  toolbar?: ReactNode;
   columns?: number;
 };
 
-export function AppsContainer({ itemPropsFn, columns = 3 }: Props) {
+export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
   const favorites = useFavoriteApps();
   const { organization } = useWorkspaceOrganizationOrThrow();
 
@@ -90,6 +91,8 @@ export function AppsContainer({ itemPropsFn, columns = 3 }: Props) {
                 {...pagination.bind.path('archived')}
                 withAll={false}
               />
+
+              {toolbar}
             </>
           )}
         >

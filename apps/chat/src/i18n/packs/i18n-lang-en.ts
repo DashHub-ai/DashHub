@@ -73,6 +73,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         tools: 'Specialized LLM-powered tools for email composition, data organization, and content transformation',
         modular: 'Modular and reusable applications to boost your productivity across projects',
       },
+      buttons: {
+        create: 'New app',
+      },
     },
     projects: {
       meta: {

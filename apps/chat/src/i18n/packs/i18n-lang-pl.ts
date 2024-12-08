@@ -75,6 +75,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         tools: 'Specjalistyczne narzędzia oparte na LLM do tworzenia e-maili, organizacji danych i transformacji treści',
         modular: 'Modularne i wielokrotnego użytku aplikacje zwiększające produktywność w projektach',
       },
+      buttons: {
+        create: 'Nowa appka',
+      },
     },
     projects: {
       meta: {
