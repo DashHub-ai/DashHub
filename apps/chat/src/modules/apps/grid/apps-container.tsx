@@ -67,7 +67,10 @@ export function AppsContainer({ itemPropsFn, columns = 3 }: Props) {
               onSelect={(categoriesIds) => {
                 pagination.setValue({
                   merge: true,
-                  value: { categoriesIds },
+                  value: {
+                    categoriesIds,
+                    offset: 0,
+                  },
                 });
               }}
             />
