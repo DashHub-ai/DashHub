@@ -43,4 +43,9 @@ export class AppsFirewall extends AuthFirewallService {
     this.appsService.get,
     this.tryTEIfUser.is.root,
   );
+
+  summarizeChatToApp = flow(
+    this.appsService.summarizeChatToApp,
+    this.tryTEIfUser.is.root,
+  );
 }

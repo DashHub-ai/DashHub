@@ -11,11 +11,12 @@ type Props = {
   content: string | AIStreamObservable;
   truncate?: number;
   darkMode?: boolean;
+  disabled?: boolean;
   showToolbars?: boolean;
   onAction?: (action: string) => void;
 };
 
-export const ChatMessageContent = memo(({ content, truncate, darkMode, showToolbars = true, onAction }: Props) => {
+export const ChatMessageContent = memo(({ content, truncate, disabled, darkMode, showToolbars = true, onAction }: Props) => {
   const observable = useMemo(() => {
     if (typeof content === 'string') {
       return createStoreSubscriber<AIStreamContent>({
@@ -47,6 +48,7 @@ export const ChatMessageContent = memo(({ content, truncate, darkMode, showToolb
   }, [stream, truncate]);
 
   const hydrationResult = useContentHydration({
+    disabled,
     content: sanitizedContent,
     darkMode,
     onAction,

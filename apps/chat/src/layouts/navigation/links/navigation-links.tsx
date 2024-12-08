@@ -28,7 +28,7 @@ export function NavigationLinks() {
       </NavigationItem>
 
       <NavigationItem
-        path={sitemap.apps}
+        path={sitemap.apps.index}
         icon={<WandSparklesIcon size={16} />}
         disabled={!hasOrganization}
       >

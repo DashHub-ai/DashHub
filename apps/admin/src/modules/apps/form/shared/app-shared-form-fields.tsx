@@ -30,6 +30,7 @@ export const AppSharedFormFields = controlled<Value, Props>(({ errors, organizat
       >
         <AppsCategoriesSearchSelect
           {...bind.path('category')}
+          required
           key={organization.id}
           filters={{
             archived: false,

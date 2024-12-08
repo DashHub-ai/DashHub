@@ -26,6 +26,7 @@ export function useCreateChatWithInitialApp() {
     TE.bindW('chat', () => sdks.dashboard.chats.create(
       assignWorkspaceOrganization({
         public: false,
+        internal: false,
       }),
     )),
     TE.bindW('app', ({ chat }) => sdks.dashboard.chats.attachApp(chat.id, {

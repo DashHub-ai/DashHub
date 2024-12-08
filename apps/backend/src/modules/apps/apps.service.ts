@@ -1,13 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
-
-import type {
-  SdkCreateAppInputT,
-  SdkJwtTokenT,
-  SdkTableRowIdT,
-  SdkUpdateAppInputT,
-} from '@llm/sdk';
+import { delay, inject, injectable } from 'tsyringe';
 
 import {
   asyncIteratorToVoidPromise,
@@ -15,6 +8,15 @@ import {
   tapAsyncIterator,
   tryOrThrowTE,
 } from '@llm/commons';
+import {
+  SdkAppFromChatV,
+  type SdkCreateAppInputT,
+  type SdkJwtTokenT,
+  type SdkTableRowIdT,
+  type SdkTableRowWithUuidT,
+  type SdkUpdateAppInputT,
+} from '@llm/sdk';
+import { ChatsSummariesService } from '~/modules/chats-summaries';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
@@ -29,11 +31,23 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     @inject(AppsRepo) private readonly repo: AppsRepo,
     @inject(AppsEsSearchRepo) private readonly esSearchRepo: AppsEsSearchRepo,
     @inject(AppsEsIndexRepo) private readonly esIndexRepo: AppsEsIndexRepo,
+    @inject(delay(() => ChatsSummariesService)) private readonly chatsSummariesService: Readonly<ChatsSummariesService>,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new AppsFirewall(jwt, this);
 
   get = this.esSearchRepo.get;
+
+  summarizeChatToApp = ({ id }: SdkTableRowWithUuidT) =>
+    this.chatsSummariesService.summarizeChatUsingSchema({
+      id,
+      schema: SdkAppFromChatV,
+      prompt:
+        'Summarize this chat to an app. Extract the core functionality and create a system context that defines what this app is.'
+        + ' If the chat demonstrates advisory patterns, create a system context for a specialized advisor. For teaching patterns - an expert mentor.'
+        + ' Focus on describing the app\'s purpose, expertise areas, behavior patterns, and how it should interact with users.'
+        + ' The output will be used directly as a system context, so write it as a clear definition of the app\'s role and capabilities.',
+    });
 
   archiveSeqByOrganizationId = (organizationId: SdkTableRowIdT) => TE.fromTask(
     pipe(

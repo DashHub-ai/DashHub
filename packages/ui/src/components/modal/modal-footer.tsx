@@ -1,8 +1,19 @@
 import type { PropsWithChildren } from 'react';
 
-export function ModalFooter({ children }: PropsWithChildren) {
+import clsx from 'clsx';
+
+export type ModalFooterProps = PropsWithChildren & {
+  absolute?: boolean;
+};
+
+export function ModalFooter({ children, absolute }: ModalFooterProps) {
   return (
-    <div className="uk-modal-footer flex space-x-2 justify-end">
+    <div
+      className={clsx(
+        'flex justify-end space-x-2 uk-modal-footer',
+        absolute && 'absolute bottom-0 right-0 w-full',
+      )}
+    >
       {children}
     </div>
   );

@@ -32,6 +32,7 @@ export function useStartChatForm() {
   const onSubmit = (value: StartChatFormValueT) => pipe(
     assignWorkspaceOrganization({
       public: value.public,
+      internal: false,
     }),
     sdks.dashboard.chats.create,
     tapTaskEither(

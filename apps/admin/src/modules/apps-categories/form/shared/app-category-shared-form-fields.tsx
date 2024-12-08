@@ -37,6 +37,7 @@ export const AppCategorySharedFormFields = controlled<Value, Props>(({
       >
         <AppsCategoriesSearchSelect
           {...bind.path('parentCategory')}
+          required
           key={organization.id}
           filters={{
             archived: false,

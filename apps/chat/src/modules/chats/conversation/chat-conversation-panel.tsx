@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { findItemById, rejectFalsyItems } from '@llm/commons';
-import { useInterval } from '@llm/commons-front';
+import { useAfterMount, useInterval } from '@llm/commons-front';
 import {
   getLastUsedSdkMessagesAIModel,
   groupSdkAIMessagesByRepeats,
@@ -14,8 +14,7 @@ import {
 import type { SdkRepeatedMessageItemT } from './messages/chat-message';
 
 import { ChatAttachedApp } from './chat-attached-app';
-import { ChatBackground } from './chat-background';
-import { ChatConfigPanel } from './config-panel';
+import { type ChatBackdropSettings, ChatBackground } from './chat-background';
 import {
   extractOptimisticMessageContent,
   useAutoFocusConversationInput,
@@ -28,11 +27,18 @@ import { ChatMessage } from './messages/chat-message';
 
 type Props = {
   chat: SdkChatT;
-  initialMessages: SdKSearchMessagesOutputT;
+  initialMessages?: SdKSearchMessagesOutputT;
+  replyAfterMount?: {
+    content: string;
+    aiModel: SdkTableRowWithIdNameT;
+  };
+  className?: string;
+  backdropSettings?: ChatBackdropSettings;
 };
 
-export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
+export const ChatConversationPanel = memo(({ chat, initialMessages, className, backdropSettings, replyAfterMount }: Props) => {
   const flickeringIndicator = useScrollFlickeringIndicator();
+  const sentInitialMessageRef = useRef(false);
   const {
     inputRef,
     messagesContainerRef,
@@ -43,7 +49,11 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
   const [replyToMessage, setReplyToMessage] = useState<SdkRepeatedMessageItemT | null>(null);
   const { messages, replying, onReply, onRefreshAIResponse, onAttachApp } = useReplyConversationHandler({
     chat,
-    initialMessages,
+    initialMessages: {
+      items: [],
+      total: 0,
+      ...initialMessages,
+    },
   });
 
   const apps = useMemo(
@@ -130,6 +140,13 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
   useLayoutEffect(focusInput, [messages, replyToMessage]);
   useInterval(focusInput, 1, { maxTicks: 50 });
 
+  useAfterMount(() => {
+    if (replyAfterMount && !sentInitialMessageRef.current) {
+      sentInitialMessageRef.current = true;
+      void onReply(replyAfterMount);
+    }
+  });
+
   useEffect(() => {
     if (!messages.replyObservable) {
       return;
@@ -139,40 +156,36 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
   }, [messages.replyObservable]);
 
   return (
-    <div className="flex gap-6 mx-auto max-w-7xl">
-      <div className="top-3 sticky flex flex-col flex-1 h-[calc(100vh-200px)]">
-        <ChatBackground />
+    <div className={clsx('relative flex flex-col flex-1', className)}>
+      <ChatBackground {...backdropSettings} />
 
-        <div
-          ref={messagesContainerRef}
-          className={clsx(
-            'relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]',
-            flickeringIndicator.visible ? 'opacity-100' : 'opacity-0', // Avoid scroll flickering on first render
-          )}
-        >
-          {groupedMessages.map(renderMessage)}
-        </div>
-
-        {!chat.archived && (
-          <ChatInputToolbar
-            apps={apps}
-            replyToMessage={replyToMessage}
-            replying={replying}
-            disabled={!aiModel}
-            inputRef={inputRef}
-            onSubmit={onSendChatMessage}
-            onCancelSubmit={() => {
-              messages.replyObservable?.abort();
-            }}
-            onCancelReplyToMessage={() => {
-              setReplyToMessage(null);
-            }}
-            onSelectApp={onSelectApp}
-          />
+      <div
+        ref={messagesContainerRef}
+        className={clsx(
+          'relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]',
+          flickeringIndicator.visible ? 'opacity-100' : 'opacity-0', // Avoid scroll flickering on first render
         )}
+      >
+        {groupedMessages.map(renderMessage)}
       </div>
 
-      <ChatConfigPanel defaultValue={chat} />
+      {!chat.archived && (
+        <ChatInputToolbar
+          apps={apps}
+          replyToMessage={replyToMessage}
+          replying={replying}
+          disabled={!aiModel}
+          inputRef={inputRef}
+          onSubmit={onSendChatMessage}
+          onCancelSubmit={() => {
+            messages.replyObservable?.abort();
+          }}
+          onCancelReplyToMessage={() => {
+            setReplyToMessage(null);
+          }}
+          onSelectApp={onSelectApp}
+        />
+      )}
     </div>
   );
 });

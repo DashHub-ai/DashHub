@@ -2,7 +2,7 @@ import type { ChatCompletionChunk } from 'openai/resources/index.mjs';
 
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import { findItemIndexById, mapAsyncIterator, tryOrThrowTE } from '@llm/commons';
 import {
@@ -38,7 +38,7 @@ export type AttachAppInputT = {
 export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
   constructor(
     @inject(MessagesRepo) private readonly repo: MessagesRepo,
-    @inject(AppsService) private readonly appsService: AppsService,
+    @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
     @inject(MessagesEsSearchRepo) private readonly esSearchRepo: MessagesEsSearchRepo,
     @inject(MessagesEsIndexRepo) private readonly esIndexRepo: MessagesEsIndexRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,

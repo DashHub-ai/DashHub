@@ -25,7 +25,7 @@ export class ChatsSummariesRepo extends createDatabaseRepo('chat_summaries') {
       transaction(qb =>
         this
           .createSummarizeChatsQuery(qb)
-          .select(({ fn }) => fn.count<number>('id').as('count'))
+          .select(({ fn }) => fn.count<number>('summary.id').as('count'))
           .executeTakeFirstOrThrow()
           .then(result => +result.count as number),
       ),
@@ -37,8 +37,8 @@ export class ChatsSummariesRepo extends createDatabaseRepo('chat_summaries') {
     pipe(
       this
         .createSummarizeChatsQuery()
-        .select(['id', 'chat_id as chatId'])
-        .orderBy('created_at', 'asc'),
+        .select(['summary.id', 'summary.chat_id as chatId'])
+        .orderBy('summary.created_at', 'asc'),
       this.queryBuilder.createChunkedIterator({
         chunkSize: 100,
       }),
@@ -107,18 +107,22 @@ export class ChatsSummariesRepo extends createDatabaseRepo('chat_summaries') {
   };
 
   private createSummarizeChatsQuery = (qb: KyselyDatabase = this.db) => qb
-    .selectFrom(this.table)
+    .selectFrom(`${this.table} as summary`)
+    .innerJoin('chats as chat', 'chat.id', 'summary.chat_id')
     .where(({ and, or, eb }) => and([
+      // Check if the chat is not internal
+      eb('chat.internal', '=', false),
+
       // Check if something can be summarized
       or([
-        eb('content_generated', 'is', true),
-        eb('name_generated', 'is', true),
+        eb('summary.content_generated', 'is', true),
+        eb('summary.name_generated', 'is', true),
       ]),
 
       // Check if the chat was not summarized recently
       or([
-        eb('name_generated_at', 'is', null),
-        eb('content_generated_at', 'is', null),
+        eb('summary.name_generated_at', 'is', null),
+        eb('summary.content_generated_at', 'is', null),
         eb(
           sql`GREATEST(name_generated_at, content_generated_at)`,
           '<',
@@ -128,13 +132,13 @@ export class ChatsSummariesRepo extends createDatabaseRepo('chat_summaries') {
 
       // Check if there is message younger than the last summary
       or([
-        eb('last_summarized_message_id', 'is', null),
+        eb('summary.last_summarized_message_id', 'is', null),
         eb.exists(
           this.db
             .selectFrom('messages')
-            .select('id')
-            .where('chat_id', '=', eb.ref('chat_summaries.chat_id'))
-            .where('created_at', '>', sql<Date>`GREATEST(name_generated_at, content_generated_at)`),
+            .select('messages.id')
+            .where('messages.chat_id', '=', eb.ref('summary.chat_id'))
+            .where('messages.created_at', '>', sql<Date>`GREATEST(name_generated_at, content_generated_at)`),
         ),
 
       ]),
@@ -143,10 +147,10 @@ export class ChatsSummariesRepo extends createDatabaseRepo('chat_summaries') {
       eb.exists(
         this.db
           .selectFrom('messages')
-          .select('id')
-          .where('chat_id', '=', eb.ref('chat_summaries.chat_id'))
-          .where('role', '=', 'assistant')
-          .where('ai_model_id', 'is not', null),
+          .select('messages.id')
+          .where('messages.chat_id', '=', eb.ref('summary.chat_id'))
+          .where('messages.role', '=', 'assistant')
+          .where('messages.ai_model_id', 'is not', null),
       ),
     ]));
 

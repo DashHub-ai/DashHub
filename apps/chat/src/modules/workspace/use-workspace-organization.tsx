@@ -26,11 +26,17 @@ export function useWorkspaceOrganization() {
 }
 
 export function useWorkspaceOrganizationOrThrow() {
-  const { organization, assignWorkspaceOrganization } = useWorkspaceOrganization();
+  const { organization } = useWorkspaceOrganization();
 
   if (!organization) {
     throw new Error('Organization is not defined');
   }
 
-  return { organization, assignWorkspaceOrganization };
+  return {
+    organization,
+    assignWorkspaceOrganization: <D extends object>(obj: D) => ({
+      ...obj,
+      ...organization && { organization },
+    }),
+  };
 }

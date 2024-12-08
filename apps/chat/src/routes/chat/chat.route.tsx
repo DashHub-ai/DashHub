@@ -8,7 +8,7 @@ import { type SdkTableRowUuidT, useSdkForLoggedIn } from '@llm/sdk';
 import { SpinnerContainer } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
-import { ChatConversation } from '~/modules';
+import { ChatConversationWithSidebar } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
 import { useSitemap } from '../use-sitemap';
@@ -59,7 +59,7 @@ export function ChatRoute({ id }: Props) {
         {(
           result.status === 'loading'
             ? <SpinnerContainer loading />
-            : <ChatConversation {...result.data} />
+            : <ChatConversationWithSidebar {...result.data} />
         )}
       </section>
     </PageWithNavigationLayout>

@@ -1,5 +1,3 @@
-import { SendHorizontalIcon } from 'lucide-react';
-
 import type { ContentHydrator } from './hydrate-result';
 
 import { MessageContentActionButton } from '../messages/buttons';
@@ -9,9 +7,18 @@ type ChatAction = {
   action: string;
 };
 
+export type HydratedChatActionsAttrs = {
+  onAction: (action: string) => void;
+  darkMode?: boolean;
+  disabled?: boolean;
+};
+
 export function hydrateWithChatActions(
-  onAction: (action: string) => void,
-  darkMode?: boolean,
+  {
+    onAction,
+    darkMode,
+    disabled,
+  }: HydratedChatActionsAttrs,
 ): ContentHydrator {
   return (content) => {
     const actions: ChatAction[] = [];
@@ -43,8 +50,8 @@ export function hydrateWithChatActions(
             {actions.map(({ label, action }) => (
               <MessageContentActionButton
                 key={`${label}-${action}`}
+                disabled={disabled}
                 darkMode={darkMode}
-                icon={<SendHorizontalIcon size={16} />}
                 onClick={() => onAction(action)}
               >
                 {label}

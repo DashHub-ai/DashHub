@@ -73,6 +73,16 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         tools: 'Specialized LLM-powered tools for email composition, data organization, and content transformation',
         modular: 'Modular and reusable applications to boost your productivity across projects',
       },
+      buttons: {
+        create: 'New app',
+      },
+    },
+    appsEditor: {
+      meta: {
+        title: 'App Editor',
+        description: 'Edit app',
+      },
+      title: 'App Editor',
     },
     projects: {
       meta: {
@@ -239,6 +249,37 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       title: 'Choose App',
       select: 'Select',
       selected: 'Selected',
+    },
+  },
+  appsCreator: {
+    create: {
+      title: 'Create New App',
+      nextStep: 'Next step',
+      step: 'Step',
+      backStep: 'Previous step',
+    },
+    prompts: {
+      createApp: 'Help me create a chatbot app. I\'ll describe what the app does, and you\'ll generate a prompt, app name, and description based on that. Ready?',
+    },
+    edit: {
+      title: 'Edit App',
+    },
+    fields: {
+      category: {
+        label: 'Category',
+      },
+      name: {
+        label: 'Name',
+        placeholder: 'Enter app name',
+      },
+      description: {
+        label: 'Description',
+        placeholder: 'Enter app description',
+      },
+      chatContext: {
+        label: 'Chat prompt',
+        placeholder: 'Enter app chat prompt description, it will help AI generate responses',
+      },
     },
   },
   experts: {
