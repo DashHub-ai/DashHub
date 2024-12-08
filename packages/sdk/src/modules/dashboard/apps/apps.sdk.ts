@@ -1,3 +1,6 @@
+import { taskEither as TE } from 'fp-ts';
+import { pipe } from 'fp-ts/lib/function';
+
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
   getPayload,
@@ -5,7 +8,7 @@ import {
   postPayload,
   putPayload,
   type SdkRecordAlreadyExistsError,
-  type SdkRecordNotFoundError,
+  SdkRecordNotFoundError,
   type SdkTableRowIdT,
   type SdkTableRowUuidT,
   type SdkTableRowWithIdT,
@@ -30,6 +33,25 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
       url: this.endpoint(`/${id}`),
       options: getPayload(),
     });
+
+  getAppCreatorApp = () =>
+    pipe(
+      this.search({
+        phrase: 'App Creator',
+        archived: false,
+        offset: 0,
+        limit: 1,
+        sort: 'createdAt:desc',
+      }),
+      TE.map(({ items }) => items[0]),
+      TE.chainW((item) => {
+        if (!item) {
+          return TE.left(new SdkRecordNotFoundError({ id: 'App Creator' }));
+        }
+
+        return TE.right(item);
+      }),
+    );
 
   search = (data: SdKSearchAppsInputT) =>
     this.fetch<SdkSearchAppsOutputT>({

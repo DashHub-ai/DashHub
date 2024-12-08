@@ -260,12 +260,6 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       step: 'Krok',
       backStep: 'Poprzedni krok',
     },
-    prompts: {
-      createApp:
-        'Pomóż mi w stworzeniu aplikacji chatbotowej.'
-        + 'Stań się kreatorem, który pozwoli opisać czym jest aplikacja, i na tej podstawie wygenerujesz prompt, nazwę aplikacji i opis.'
-        + 'Nie generuj podsumowań, zaś co jakiś czas daj krótki opis, w kilku zdaniach, co zostało ustalone. Gotowy?',
-    },
     edit: {
       title: 'Edytuj aplikację',
     },

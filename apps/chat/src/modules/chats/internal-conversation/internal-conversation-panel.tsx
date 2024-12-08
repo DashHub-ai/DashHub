@@ -2,9 +2,9 @@ import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { memo } from 'react';
 
-import { tapTaskEither, tryOrThrowTE } from '@llm/commons';
+import { type Nullable, tapTaskEither, tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
-import { type SdkChatT, useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkChatT, type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@llm/sdk';
 import { SpinnerContainer } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
@@ -12,11 +12,12 @@ import { ChatConversationPanel } from '../conversation/chat-conversation-panel';
 
 type Props = {
   className?: string;
-  initialMessage: string;
+  initialApp?: Nullable<SdkTableRowWithIdNameT>;
+  initialMessage?: string;
   onChatCreated?: (chat: SdkChatT) => void;
 };
 
-export const InternalConversationPanel = memo(({ className, initialMessage, onChatCreated }: Props) => {
+export const InternalConversationPanel = memo(({ className, initialMessage, initialApp, onChatCreated }: Props) => {
   const { sdks } = useSdkForLoggedIn();
   const { organization, assignWorkspaceOrganization } = useWorkspaceOrganizationOrThrow();
 
@@ -53,6 +54,7 @@ export const InternalConversationPanel = memo(({ className, initialMessage, onCh
       className={className}
       chat={chat}
       replyAfterMount={{
+        app: initialApp,
         content: initialMessage,
         aiModel,
       }}

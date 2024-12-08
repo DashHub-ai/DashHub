@@ -258,12 +258,6 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       step: 'Step',
       backStep: 'Previous step',
     },
-    prompts: {
-      createApp:
-        'Help me create a chatbot application.'
-        + 'Be a creator who will help describe what the application is, and based on that, you will generate a prompt, application name, and description.'
-        + 'Do not generate summaries, but from time to time give a brief description, in a few sentences, of what has been established. Ready?',
-    },
     edit: {
       title: 'Edit App',
     },

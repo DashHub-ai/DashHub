@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
-import { findItemById, rejectFalsyItems } from '@llm/commons';
+import { findItemById, type Nullable, rejectFalsyItems } from '@llm/commons';
 import { useAfterMount, useInterval } from '@llm/commons-front';
 import {
   getLastUsedSdkMessagesAIModel,
@@ -29,7 +29,8 @@ type Props = {
   chat: SdkChatT;
   initialMessages?: SdKSearchMessagesOutputT;
   replyAfterMount?: {
-    content: string;
+    app?: Nullable<SdkTableRowWithIdNameT>;
+    content?: Nullable<string>;
     aiModel: SdkTableRowWithIdNameT;
   };
   className?: string;
@@ -101,15 +102,15 @@ export const ChatConversationPanel = memo(({ chat, initialMessages, className, b
     });
   };
 
-  const onAction = (action: string) => {
-    void onSendChatMessage({
+  const onAction = async (action: string) => {
+    await onSendChatMessage({
       content: action,
     });
   };
 
-  const onSelectApp = (app: SdkTableRowWithIdNameT) => {
+  const onSelectApp = async (app: SdkTableRowWithIdNameT) => {
     if (!findItemById(app.id)(apps)) {
-      void onAttachApp({
+      await onAttachApp({
         app,
         aiModel: aiModel!,
       });
@@ -143,7 +144,22 @@ export const ChatConversationPanel = memo(({ chat, initialMessages, className, b
   useAfterMount(() => {
     if (replyAfterMount && !sentInitialMessageRef.current) {
       sentInitialMessageRef.current = true;
-      void onReply(replyAfterMount);
+
+      void (async () => {
+        if (replyAfterMount.app) {
+          await onAttachApp({
+            app: replyAfterMount.app,
+            aiModel: replyAfterMount.aiModel,
+          });
+        }
+
+        if (replyAfterMount.content) {
+          await onReply({
+            aiModel: replyAfterMount.aiModel,
+            content: replyAfterMount.content,
+          });
+        }
+      })();
     }
   });
 

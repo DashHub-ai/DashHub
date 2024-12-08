@@ -1,9 +1,12 @@
 import type { ReactNode } from 'react';
 
+import clsx from 'clsx';
+
 export type SpinnerContainerProps = {
   scale?: number;
   loading?: boolean;
   children?: () => ReactNode;
+  className?: string;
 };
 
 export function SpinnerContainer(
@@ -11,6 +14,7 @@ export function SpinnerContainer(
     scale = 1.0,
     loading = true,
     children,
+    className,
   }: SpinnerContainerProps,
 ) {
   if (!loading) {
@@ -18,9 +22,9 @@ export function SpinnerContainer(
   }
 
   return (
-    <div className="flex justify-center items-center min-height-[300px]">
+    <div className={clsx('flex justify-center items-center min-height-[300px]', className)}>
       <span
-        className="mr-2 my-2 uk-spinner"
+        className="my-2 mr-2 uk-spinner"
         role="status"
         uk-spinner={`ratio: ${scale}`}
       />
