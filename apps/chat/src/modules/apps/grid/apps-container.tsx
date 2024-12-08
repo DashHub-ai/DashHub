@@ -128,9 +128,8 @@ export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
                   <AppCard
                     key={item.id}
                     app={item}
-                    onAfterEdit={() => {
-                      void silentReload();
-                    }}
+                    onAfterEdit={silentReload}
+                    onAfterArchive={silentReload}
                     {...itemPropsFn?.(item)}
                   />
                 ))}
