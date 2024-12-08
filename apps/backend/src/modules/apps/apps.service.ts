@@ -25,6 +25,36 @@ import { AppsFirewall } from './apps.firewall';
 import { AppsRepo } from './apps.repo';
 import { AppsEsIndexRepo, AppsEsSearchRepo } from './elasticsearch';
 
+const APP_SUMMARY_TEMPLATE = [
+  'Prompt is the chatContext field. It is a string that represents the context of the conversation.',
+  'Generate prompt about this conversation with given format:',
+  '**Purpose**: [Summarize the App\'s purpose based on user input, e.g., "Provide feedback on sales calls for sales reps."]',
+  '',
+  '**Target Audience**: [Specify the user group, e.g., "Sales team members who may not have technical experience."]',
+  '',
+  '**Expected Input Files**: ',
+  '- Input types: [Specify file types like audio files, CSV spreadsheets, or Word documents]',
+  '- Sample file provided: [Yes/No]',
+  '',
+  '**Expected Output Format**: ',
+  '- Output type: [Describe expected output, e.g., "Summary of key customer feedback issues," or "Rewritten professional email."]',
+  '- Sample format provided: [Yes/No]',
+  '',
+  '**Response Style**: [Specify response tone, e.g., "Friendly and supportive, like a coach."]',
+  '',
+  '**Clarification Handling**:',
+  '- Always ask for clarification on vague inputs: [Yes]',
+  '- Example for handling unclear inputs: [Provide specific example if user gave one, e.g., "Ask for a clearer audio recording if the quality is low."]',
+  '',
+  '**Sample Scenarios**:',
+  '- Scenario 1: [E.g., "Analyze a feedback file and provide top customer concerns."]',
+  '- Scenario 2: [E.g., "Rewrite a casual email into a formal, professional tone."]',
+  '- Scenario 3: [E.g., "Provide feedback on a sales call, noting strengths and improvement areas."]',
+  '',
+  '**Feedback Collection**:',
+  '- Should the App request feedback to improve responses? [Yes/No]',
+].join('\n');
+
 @injectable()
 export class AppsService implements WithAuthFirewall<AppsFirewall> {
   constructor(
@@ -42,11 +72,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     this.chatsSummariesService.summarizeChatUsingSchema({
       id,
       schema: SdkAppFromChatV,
-      prompt:
-        'Summarize this chat to an app. Extract the core functionality and create a system context that defines what this app is.'
-        + ' If the chat demonstrates advisory patterns, create a system context for a specialized advisor. For teaching patterns - an expert mentor.'
-        + ' Focus on describing the app\'s purpose, expertise areas, behavior patterns, and how it should interact with users.'
-        + ' The output will be used directly as a system context, so write it as a clear definition of the app\'s role and capabilities.',
+      prompt: APP_SUMMARY_TEMPLATE,
     });
 
   archiveSeqByOrganizationId = (organizationId: SdkTableRowIdT) => TE.fromTask(
