@@ -1,4 +1,5 @@
 export * from './apps';
+export * from './apps-editor';
 export * from './chat';
 export * from './choose-organization';
 export * from './experts';

@@ -2,6 +2,7 @@ import { Redirect, Route, Switch } from 'wouter';
 
 import { type SdkTableRowWithUuidT, useSdkIsLoggedIn } from '@llm/sdk';
 import {
+  AppsEditorRoute,
   AppsRoute,
   ChatRoute,
   ChooseOrganizationRoute,
@@ -54,7 +55,8 @@ function LoggedInRouter() {
     <Switch key={workspace.organization?.id ?? '-'}>
       <Route path={sitemap.home} component={HomeRoute} />
       <Route path={sitemap.projects} component={ProjectsRoute} />
-      <Route path={sitemap.apps} component={AppsRoute} />
+      <Route path={sitemap.apps.editor.raw} component={AppsEditorRoute} />
+      <Route path={sitemap.apps.raw} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
       <Route path={sitemap.settings} component={SettingsRoute} />
       <Route path={sitemap.forceRedirect.raw} component={ForceRedirectRoute} />

@@ -77,6 +77,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         create: 'New app',
       },
     },
+    appsEditor: {
+      meta: {
+        title: 'App Editor',
+        description: 'Edit app',
+      },
+      title: 'App Editor',
+    },
     projects: {
       meta: {
         title: 'Projects',

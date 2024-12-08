@@ -7,7 +7,14 @@ export function useSitemap() {
   const sitemap = {
     home: prefixWithBaseRoute('/'),
     projects: prefixWithBaseRoute('/projects'),
-    apps: prefixWithBaseRoute('/apps'),
+    apps: {
+      raw: prefixWithBaseRoute('/apps'),
+      editor: {
+        raw: prefixWithBaseRoute('/apps/editor/:id?'),
+        new: prefixWithBaseRoute('/apps/editor'),
+        edit: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/editor/:id'),
+      },
+    },
     experts: prefixWithBaseRoute('/experts'),
     login: prefixWithBaseRoute('/login'),
     settings: prefixWithBaseRoute('/settings'),

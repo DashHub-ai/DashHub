@@ -79,6 +79,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         create: 'Nowa appka',
       },
     },
+    appsEditor: {
+      meta: {
+        title: 'Edytor aplikacji',
+        description: 'Edytuj aplikacje',
+      },
+      title: 'Edytor aplikacji',
+    },
     projects: {
       meta: {
         title: 'Projekty',
