@@ -1,5 +1,4 @@
-import type { LucideProps } from 'lucide-react';
-
+import { FileWarningIcon, type LucideProps } from 'lucide-react';
 import dynamicIconImports from 'lucide-react/dynamicIconImports';
 import { lazy, memo, Suspense } from 'react';
 
@@ -10,7 +9,7 @@ type IconProps =
   };
 
 export const LazyIcon = memo(({ name, ...props }: IconProps) => {
-  const LucideIcon = lazy(dynamicIconImports[name]);
+  const LucideIcon = name in dynamicIconImports ? lazy(dynamicIconImports[name]) : FileWarningIcon;
 
   return (
     <Suspense fallback={<div style={{ width: 24, height: 24 }} />}>

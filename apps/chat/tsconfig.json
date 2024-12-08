@@ -5,7 +5,9 @@
     "paths": {
       "~/*": ["*"]
     },
-    "types": ["vite/client"]
+    "types": [
+      "vite/client"
+    ]
   },
   "include": ["src/"]
 }

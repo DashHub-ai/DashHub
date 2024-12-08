@@ -1,3 +1,5 @@
+import { resolve } from 'node:path';
+
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -14,9 +16,9 @@ export default defineConfig(({ mode }) => ({
     tsconfigPaths(),
   ],
   ...mode !== 'production' && {
-    rollupOptions: {
-      output: {
-        inlineDynamicImports: true,
+    resolve: {
+      alias: {
+        'lucide-react/dynamicIconImports': resolve(__dirname, './src/modules/shared/fake-lazy-dynamic-icons.tsx'),
       },
     },
   },
