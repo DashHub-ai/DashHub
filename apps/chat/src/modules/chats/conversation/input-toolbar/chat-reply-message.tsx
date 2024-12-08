@@ -2,10 +2,10 @@ import { clsx } from 'clsx';
 import { Bot, X as CloseIcon, User } from 'lucide-react';
 
 import {
-  ActionButton,
   ChatMessageContent,
   type SdkRepeatedMessageItemT,
 } from '../messages';
+import { ToolbarSmallActionButton } from '../messages/buttons';
 
 type Props = {
   message: SdkRepeatedMessageItemT;
@@ -36,12 +36,12 @@ export function ChatReplyMessage({ message, onClose }: Props) {
         </div>
       </div>
 
-      <ActionButton
+      <ToolbarSmallActionButton
         title="Close"
         onClick={onClose}
       >
         <CloseIcon size={14} className="opacity-50 hover:opacity-100" />
-      </ActionButton>
+      </ToolbarSmallActionButton>
     </div>
   );
 }

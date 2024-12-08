@@ -91,6 +91,12 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
     });
   };
 
+  const onAction = (action: string) => {
+    void onSendChatMessage({
+      content: action,
+    });
+  };
+
   const onSelectApp = (app: SdkTableRowWithIdNameT) => {
     if (!findItemById(app.id)(apps)) {
       void onAttachApp({
@@ -115,6 +121,7 @@ export const ChatConversation = memo(({ chat, initialMessages }: Props) => {
         readOnly={chat.archived}
         onRefreshResponse={onRefreshResponse}
         onReply={setReplyToMessage}
+        onAction={onAction}
       />
     );
   };

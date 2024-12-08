@@ -2,17 +2,24 @@ import { memo, useMemo, useSyncExternalStore } from 'react';
 import sanitizeHtml from 'sanitize-html';
 
 import { createStoreSubscriber, truncateText } from '@llm/commons';
-import { hydrateWithAppChatBadges } from '~/modules/apps';
 
 import type { AIStreamContent, AIStreamObservable } from '../hooks';
+
+import {
+  createHydratePipe,
+  hydrateWithAppChatBadges,
+  hydrateWithChatActions,
+  MessageMarkdown,
+} from '../content-parse';
 
 type Props = {
   content: string | AIStreamObservable;
   truncate?: number;
   darkMode?: boolean;
+  onAction?: (action: string) => void;
 };
 
-export const ChatMessageContent = memo(({ content, truncate, darkMode }: Props) => {
+export const ChatMessageContent = memo(({ content, truncate, darkMode, onAction }: Props) => {
   const observable = useMemo(() => {
     if (typeof content === 'string') {
       return createStoreSubscriber<AIStreamContent>({
@@ -43,16 +50,21 @@ export const ChatMessageContent = memo(({ content, truncate, darkMode }: Props) 
     return html;
   }, [stream, truncate]);
 
-  const hydratedContent = useMemo(
-    () => hydrateWithAppChatBadges(sanitizedContent, { darkMode }),
-    [sanitizedContent, darkMode],
+  const hydrationResult = useMemo(
+    () => createHydratePipe(
+      hydrateWithChatActions(onAction ?? (() => {}), darkMode),
+      hydrateWithAppChatBadges({ darkMode }),
+    )(sanitizedContent),
+    [sanitizedContent, darkMode, onAction],
   );
 
   return (
-    <>
-      <div className="text-sm">
-        {hydratedContent}
-      </div>
+    <div className="text-sm">
+      {hydrationResult.prependToolbars}
+
+      <MessageMarkdown content={hydrationResult.content} />
+
+      {hydrationResult.appendToolbars}
 
       {!stream.done && (
         <div className="flex gap-1 my-2">
@@ -61,6 +73,6 @@ export const ChatMessageContent = memo(({ content, truncate, darkMode }: Props) 
           <div className="bg-gray-400 rounded-full w-1 h-1 animate-bounce [animation-delay:0.4s]" />
         </div>
       )}
-    </>
+    </div>
   );
 });

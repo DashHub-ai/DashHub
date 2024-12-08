@@ -7,7 +7,7 @@ type Props = ComponentPropsWithoutRef<'button'> & {
   darkMode?: boolean;
 };
 
-export function ActionButton({ children, disabled, darkMode, ...props }: Props) {
+export function ToolbarSmallActionButton({ children, disabled, darkMode, ...props }: Props) {
   return (
     <button
       type="button"

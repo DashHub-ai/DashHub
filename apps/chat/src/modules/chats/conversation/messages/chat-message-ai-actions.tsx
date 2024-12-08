@@ -4,7 +4,7 @@ import type { SdkSearchMessageItemT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
 
-import { ActionButton } from './action-button';
+import { ToolbarSmallActionButton } from './buttons';
 
 type Props = {
   isLast: boolean;
@@ -19,13 +19,13 @@ export function ChatMessageAIActions({ isLast, disabled, message, onRefreshRespo
   return (
     <>
       {isLast && (
-        <ActionButton
+        <ToolbarSmallActionButton
           disabled={disabled}
           title={t.refresh}
           onClick={onRefreshResponse}
         >
           <RefreshCwIcon size={14} className="opacity-50 hover:opacity-100" />
-        </ActionButton>
+        </ToolbarSmallActionButton>
       )}
 
       {message.aiModel && (

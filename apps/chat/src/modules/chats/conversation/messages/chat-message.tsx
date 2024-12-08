@@ -14,7 +14,7 @@ import { useI18n } from '~/i18n';
 
 import type { AIStreamObservable } from '../hooks';
 
-import { ActionButton } from './action-button';
+import { ToolbarSmallActionButton } from './buttons';
 import { ChatMessageAIActions } from './chat-message-ai-actions';
 import { ChatMessageContent } from './chat-message-content';
 import { ChatMessageRepliedMessage } from './chat-message-replied-message';
@@ -32,9 +32,10 @@ type Props = {
   readOnly?: boolean;
   onRefreshResponse: (message: Omit<SdkRepeatedMessageItemT, 'content'>) => void;
   onReply: (message: SdkRepeatedMessageItemT) => void;
+  onAction: (action: string) => void;
 };
 
-export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onReply }: Props) {
+export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onReply, onAction }: Props) {
   const t = useI18n().pack.chat;
   const { session } = useSdkForLoggedIn();
 
@@ -104,6 +105,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
           key={typeof content}
           content={content}
           darkMode={!isAI}
+          onAction={onAction}
         />
 
         <div className="flex justify-between items-center gap-6 mt-1 text-xs">
@@ -112,7 +114,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
           </span>
 
           <div className="flex items-center gap-2">
-            <ActionButton
+            <ToolbarSmallActionButton
               title={t.actions.reply}
               darkMode={!isAI}
               onClick={() => onReply(message)}
@@ -121,7 +123,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
                 size={14}
                 className="opacity-50 hover:opacity-100"
               />
-            </ActionButton>
+            </ToolbarSmallActionButton>
 
             {isAI
               ? (!readOnly && (
