@@ -56,7 +56,7 @@ function LoggedInRouter() {
       <Route path={sitemap.home} component={HomeRoute} />
       <Route path={sitemap.projects} component={ProjectsRoute} />
       <Route path={sitemap.apps.editor.raw} component={AppsEditorRoute} />
-      <Route path={sitemap.apps.raw} component={AppsRoute} />
+      <Route path={sitemap.apps.index} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
       <Route path={sitemap.settings} component={SettingsRoute} />
       <Route path={sitemap.forceRedirect.raw} component={ForceRedirectRoute} />

@@ -251,6 +251,26 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       selected: 'Selected',
     },
   },
+  appsCreator: {
+    title: 'Create New App',
+    fields: {
+      category: {
+        label: 'Category',
+      },
+      name: {
+        label: 'Name',
+        placeholder: 'Enter app name',
+      },
+      description: {
+        label: 'Description',
+        placeholder: 'Enter app description',
+      },
+      chatContext: {
+        label: 'Chat prompt',
+        placeholder: 'Enter app chat prompt description, it will help AI generate responses',
+      },
+    },
+  },
   experts: {
     favorites: {
       add: 'Add to favorites',

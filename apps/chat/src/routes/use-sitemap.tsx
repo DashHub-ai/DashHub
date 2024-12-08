@@ -8,12 +8,8 @@ export function useSitemap() {
     home: prefixWithBaseRoute('/'),
     projects: prefixWithBaseRoute('/projects'),
     apps: {
-      raw: prefixWithBaseRoute('/apps'),
-      editor: {
-        raw: prefixWithBaseRoute('/apps/editor/:id?'),
-        new: prefixWithBaseRoute('/apps/editor'),
-        edit: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/editor/:id'),
-      },
+      index: prefixWithBaseRoute('/apps'),
+      editor: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/:id'),
     },
     experts: prefixWithBaseRoute('/experts'),
     login: prefixWithBaseRoute('/login'),

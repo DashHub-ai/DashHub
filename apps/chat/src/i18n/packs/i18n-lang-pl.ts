@@ -253,6 +253,26 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       selected: 'Wybrano',
     },
   },
+  appsCreator: {
+    title: 'Nowa aplikacja',
+    fields: {
+      category: {
+        label: 'Kategoria',
+      },
+      name: {
+        label: 'Nazwa',
+        placeholder: 'Wpisz nazwę aplikacji',
+      },
+      description: {
+        label: 'Opis',
+        placeholder: 'Wpis opis aplikacji',
+      },
+      chatContext: {
+        label: 'Prompt',
+        placeholder: 'Wpisz opis prompt aplikacji, to pomoże AI w generowaniu odpowiedzi',
+      },
+    },
+  },
   experts: {
     favorites: {
       add: 'Dodaj do ulubionych',
