@@ -1,21 +1,26 @@
 import { useMemo } from 'react';
 
-import type { HydrateResult } from './hydrate-result';
+import { createHydratePipe, type HydrateResult } from './hydrate-result';
+import { hydrateWithAppChatBadges } from './hydrate-with-app-chat-badges';
+import { type HydratedChatActionsAttrs, hydrateWithChatActions } from './hydrate-with-chat-actions';
 
-import { createHydratePipe, hydrateWithAppChatBadges, hydrateWithChatActions } from './';
+type Attrs =
+  & Partial<HydratedChatActionsAttrs>
+  & {
+    content: string;
+  };
 
-type UseContentHydrationProps = {
-  content: string;
-  darkMode?: boolean;
-  onAction?: (action: string) => void;
-};
-
-export function useContentHydration({ content, darkMode, onAction }: UseContentHydrationProps): HydrateResult {
+export function useContentHydration({ darkMode, content, disabled, ...attrs }: Attrs): HydrateResult {
   return useMemo(
     () => createHydratePipe(
-      hydrateWithChatActions(onAction ?? (() => {}), darkMode),
+      hydrateWithChatActions({
+        darkMode,
+        disabled,
+        onAction: () => {},
+        ...attrs,
+      }),
       hydrateWithAppChatBadges({ darkMode }),
     )(content),
-    [content, darkMode, onAction],
+    [content, disabled, darkMode],
   );
 }
