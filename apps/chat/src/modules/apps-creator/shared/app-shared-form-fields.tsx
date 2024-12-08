@@ -1,4 +1,4 @@
-import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
+import { type ControlBindProps, controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
 import type { SdkTableRowWithIdT, SdkUpdateAppInputT } from '@llm/sdk';
 
@@ -11,13 +11,14 @@ type Value = Pick<
   'name' | 'chatContext' | 'description' | 'category'
 >;
 
-type Props =
+export type AppSharedFormFieldsProps =
   & ValidationErrorsListProps<Value>
+  & ControlBindProps<Value>
   & {
     organization: SdkTableRowWithIdT;
   };
 
-export const AppSharedFormFields = controlled<Value, Props>(({ errors, organization, control: { bind } }) => {
+export const AppSharedFormFields = controlled<Value, AppSharedFormFieldsProps>(({ errors, organization, control: { bind } }) => {
   const t = useI18n().pack.appsCreator;
   const validation = useFormValidatorMessages({ errors });
 
@@ -31,6 +32,7 @@ export const AppSharedFormFields = controlled<Value, Props>(({ errors, organizat
         <AppsCategoriesSearchSelect
           key={organization.id}
           {...bind.path('category')}
+          required
           filters={{
             archived: false,
             organizationIds: [organization.id],
@@ -59,6 +61,7 @@ export const AppSharedFormFields = controlled<Value, Props>(({ errors, organizat
         <TextArea
           name="description"
           placeholder={t.fields.description.placeholder}
+          rows={4}
           required
           {...bind.path('description')}
         />
@@ -72,7 +75,7 @@ export const AppSharedFormFields = controlled<Value, Props>(({ errors, organizat
         <TextArea
           name="chat-context"
           placeholder={t.fields.chatContext.placeholder}
-          rows={3}
+          rows={10}
           required
           {...bind.path('chatContext')}
         />

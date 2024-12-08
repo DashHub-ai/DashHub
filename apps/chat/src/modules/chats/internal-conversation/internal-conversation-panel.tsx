@@ -2,9 +2,9 @@ import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { memo } from 'react';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { tapTaskEither, tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkChatT, useSdkForLoggedIn } from '@llm/sdk';
 import { SpinnerContainer } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
@@ -13,9 +13,10 @@ import { ChatConversationPanel } from '../conversation/chat-conversation-panel';
 type Props = {
   className?: string;
   initialMessage: string;
+  onChatCreated?: (chat: SdkChatT) => void;
 };
 
-export const InternalConversationPanel = memo(({ className, initialMessage }: Props) => {
+export const InternalConversationPanel = memo(({ className, initialMessage, onChatCreated }: Props) => {
   const { sdks } = useSdkForLoggedIn();
   const { organization, assignWorkspaceOrganization } = useWorkspaceOrganizationOrThrow();
 
@@ -30,6 +31,9 @@ export const InternalConversationPanel = memo(({ className, initialMessage }: Pr
         chat: sdks.dashboard.chats.get(id),
         aiModel: sdks.dashboard.aiModels.getDefault(organization.id),
       })),
+      tapTaskEither(({ chat }) => {
+        onChatCreated?.(chat);
+      }),
       tryOrThrowTE,
     ),
     [],

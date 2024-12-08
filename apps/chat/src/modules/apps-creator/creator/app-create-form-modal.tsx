@@ -24,7 +24,7 @@ export function AppCreateFormModal({
 }: AppCreateFormModalProps) {
   const t = useI18n().pack.appsCreator;
   const [currentStep, setCurrentStep] = useState(1);
-  const { handleSubmitEvent, validator, submitState, bind, value } = useAppCreateForm({
+  const { handleSubmitEvent, validator, submitState, bind, value, setValue } = useAppCreateForm({
     defaultValue,
     onAfterSubmit,
   });
@@ -51,19 +51,25 @@ export function AppCreateFormModal({
     >
       <div className={clsx({ block: currentStep === 1, hidden: currentStep !== 1 })}>
         <AppCreateFormStep1
-          onNext={() => setCurrentStep(2)}
           loading={submitState.loading}
-          value={value}
+          onNext={(summarizedChat) => {
+            setValue({
+              merge: true,
+              value: summarizedChat,
+            });
+
+            setCurrentStep(2);
+          }}
         />
       </div>
 
       <div className={clsx({ block: currentStep === 2, hidden: currentStep !== 2 })}>
         <AppCreateFormStep2
           onBack={() => setCurrentStep(1)}
+          organization={value.organization}
           loading={submitState.loading}
-          value={value}
-          errors={validator.errors.all}
-          bind={bind.merged()}
+          errors={validator.errors.all as any}
+          {...bind.merged()}
         />
       </div>
 

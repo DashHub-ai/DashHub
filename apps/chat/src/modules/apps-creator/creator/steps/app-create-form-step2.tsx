@@ -1,20 +1,19 @@
 import { useI18n } from '~/i18n';
 
-import type { StepProps } from './app-create-form-types';
+import { AppSharedFormFields, type AppSharedFormFieldsProps } from '../../shared';
 
-import { AppSharedFormFields } from '../../shared';
+type StepProps = AppSharedFormFieldsProps & {
+  onBack?: () => void;
+  loading?: boolean;
+};
 
-export function AppCreateFormStep2({ onBack, loading, value, errors, bind }: StepProps & { errors: any; bind: any; }) {
+export function AppCreateFormStep2({ onBack, loading, ...props }: StepProps) {
   const { pack } = useI18n();
   const t = pack.appsCreator;
 
   return (
     <>
-      <AppSharedFormFields
-        organization={value.organization}
-        errors={errors}
-        {...bind}
-      />
+      <AppSharedFormFields {...props} />
 
       <div>
         <button

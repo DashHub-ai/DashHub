@@ -7,10 +7,12 @@ import {
   type SdkRecordAlreadyExistsError,
   type SdkRecordNotFoundError,
   type SdkTableRowIdT,
+  type SdkTableRowUuidT,
   type SdkTableRowWithIdT,
 } from '~/shared';
 
 import type {
+  SdkAppFromChatT,
   SdkAppT,
   SdkCreateAppInputT,
   SdkCreateAppOutputT,
@@ -67,5 +69,11 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
     >({
       url: this.endpoint(`/${id}`),
       options: putPayload(data),
+    });
+
+  summarizeChatToApp = (chatId: SdkTableRowUuidT) =>
+    this.fetch<SdkAppFromChatT, SdkRecordNotFoundError>({
+      url: this.endpoint(`/summarize-chat-to-app/${chatId}`),
+      options: getPayload(),
     });
 };

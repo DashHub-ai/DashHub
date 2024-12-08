@@ -33,7 +33,7 @@ export class ChatsSummariesService {
 
   summarizeChats = ({ ids }: { ids: TableUuid[]; }) => pipe(
     ids,
-    A.map(id => this.summarizeChat({ id })),
+    A.map(id => this.summarizeChatAndUpdate({ id })),
     TE.sequenceSeqArray,
   );
 
@@ -50,7 +50,7 @@ export class ChatsSummariesService {
         await pipe(
           chats,
           A.map(summary => pipe(
-            this.summarizeChat({
+            this.summarizeChatAndUpdate({
               id: summary.chatId,
             }),
             tapTaskEitherError((error) => {
@@ -65,7 +65,16 @@ export class ChatsSummariesService {
     ))),
   );
 
-  private summarizeChat = ({ id }: TableRowWithUuid) => pipe(
+  summarizeChatUsingSchema = <S extends z.AnyZodObject>(
+    {
+      id,
+      schema,
+      prompt,
+    }: TableRowWithUuid & {
+      prompt: string;
+      schema: S;
+    },
+  ) => pipe(
     TE.Do,
     TE.bind('chat', () => this.messagesService.searchByChatId(id)),
     TE.bindW('aiModel', ({ chat }) => {
@@ -77,29 +86,37 @@ export class ChatsSummariesService {
 
       return TE.left(new MissingAIModelInChatError(chat));
     }),
-    TE.bindW('summarize', ({ chat, aiModel }) => pipe(
+    TE.chainW(({ chat, aiModel }) => pipe(
       this.aiConnectorService.executeInstructedPrompt({
         aiModel,
         history: chat.items,
-        message:
+        message: prompt,
+        schema,
+      }),
+    )),
+  );
+
+  private summarizeChatAndUpdate = ({ id }: TableRowWithUuid) => pipe(
+    this.summarizeChatUsingSchema({
+      id,
+      schema: z.object({
+        title: z.string(),
+        description: z.string(),
+      }),
+      prompt:
           'Summarize this chat, create short title and description in the language of this chat.'
           + 'Keep description compact to store in on the chat. You can use emojis in title and description.'
           + 'Do not summarize the messages about describing app (these ones defined in chat).',
-        schema: z.object({
-          title: z.string(),
-          description: z.string(),
-        }),
-      }),
-      TE.orElse((error) => {
-        this.logger.error('Failed to summarize chat', { error });
+    }),
+    TE.orElseW((error) => {
+      this.logger.error('Failed to summarize chat', { error });
 
-        return TE.of({
-          title: 'Untitled chat',
-          description: 'Cannot summarize chat. Please do it manually.',
-        });
-      }),
-    )),
-    TE.chainW(({ summarize }) => this.repo.updateGeneratedSummarizeByChatId(
+      return TE.of({
+        title: 'Untitled chat',
+        description: 'Cannot summarize chat. Please do it manually.',
+      });
+    }),
+    TE.chainW(summarize => this.repo.updateGeneratedSummarizeByChatId(
       {
         chatId: id,
         name: summarize.title,
