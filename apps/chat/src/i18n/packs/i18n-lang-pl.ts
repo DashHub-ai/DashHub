@@ -254,7 +254,12 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
   },
   appsCreator: {
-    title: 'Nowa aplikacja',
+    create: {
+      title: 'Nowa aplikacja',
+    },
+    edit: {
+      title: 'Edytuj aplikację',
+    },
     fields: {
       category: {
         label: 'Kategoria',

@@ -252,7 +252,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
   },
   appsCreator: {
-    title: 'Create New App',
+    create: {
+      title: 'Create New App',
+    },
+    edit: {
+      title: 'Edit App',
+    },
     fields: {
       category: {
         label: 'Category',

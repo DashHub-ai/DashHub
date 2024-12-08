@@ -2,7 +2,7 @@ import type { SdkCreateAppInputT, SdkCreateAppOutputT } from '@llm/sdk';
 
 import { useAnimatedModal } from '@llm/commons-front';
 
-import { useWorkspaceOrganizationOrThrow } from '../workspace';
+import { useWorkspaceOrganizationOrThrow } from '../../workspace';
 import { AppCreateFormModal } from './app-create-form-modal';
 
 type AppShowModalProps = {

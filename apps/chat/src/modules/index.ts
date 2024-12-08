@@ -1,6 +1,6 @@
 export * from './ai-models';
 export * from './apps';
-export * from './apps-creator';
+export * from './apps-creator/creator';
 export * from './chats';
 export * from './experts';
 export * from './organizations';

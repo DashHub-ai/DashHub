@@ -36,7 +36,7 @@ export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
   const { organization } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
-  const { loading, pagination, result } = useDebouncedPaginatedSearch({
+  const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
     storeDataInUrl: false,
     schema: SdKSearchAppsInputV,
     fallbackSearchParams: {
@@ -128,6 +128,9 @@ export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
                   <AppCard
                     key={item.id}
                     app={item}
+                    onAfterEdit={() => {
+                      void silentReload();
+                    }}
                     {...itemPropsFn?.(item)}
                   />
                 ))}
