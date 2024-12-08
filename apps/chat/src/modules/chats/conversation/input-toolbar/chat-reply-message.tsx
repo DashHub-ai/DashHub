@@ -32,7 +32,7 @@ export function ChatReplyMessage({ message, onClose }: Props) {
         </div>
 
         <div className="flex-1 line-clamp-1 text-gray-500">
-          <ChatMessageContent content={message.content} />
+          <ChatMessageContent content={message.content} truncate={80} />
         </div>
       </div>
 

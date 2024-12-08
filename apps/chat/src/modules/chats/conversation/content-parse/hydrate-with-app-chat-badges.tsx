@@ -9,10 +9,6 @@ export function hydrateWithAppChatBadges(
   props: Omit<AppChatBadgeProps, 'id' | 'className'> = {},
 ): ContentHydrator {
   return (content: string) => {
-    if (Array.isArray(content)) {
-      return { content, prependToolbars: [], appendToolbars: [] };
-    }
-
     const badges: ReactNode[] = [];
     const cleanContent = content.replace(/#app:(\d+)/g, (_, id) => {
       badges.push(

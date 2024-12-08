@@ -5,21 +5,17 @@ import { createStoreSubscriber, truncateText } from '@llm/commons';
 
 import type { AIStreamContent, AIStreamObservable } from '../hooks';
 
-import {
-  createHydratePipe,
-  hydrateWithAppChatBadges,
-  hydrateWithChatActions,
-  MessageMarkdown,
-} from '../content-parse';
+import { MessageMarkdown, useContentHydration } from '../content-parse';
 
 type Props = {
   content: string | AIStreamObservable;
   truncate?: number;
   darkMode?: boolean;
+  showToolbars?: boolean;
   onAction?: (action: string) => void;
 };
 
-export const ChatMessageContent = memo(({ content, truncate, darkMode, onAction }: Props) => {
+export const ChatMessageContent = memo(({ content, truncate, darkMode, showToolbars = true, onAction }: Props) => {
   const observable = useMemo(() => {
     if (typeof content === 'string') {
       return createStoreSubscriber<AIStreamContent>({
@@ -50,21 +46,19 @@ export const ChatMessageContent = memo(({ content, truncate, darkMode, onAction 
     return html;
   }, [stream, truncate]);
 
-  const hydrationResult = useMemo(
-    () => createHydratePipe(
-      hydrateWithChatActions(onAction ?? (() => {}), darkMode),
-      hydrateWithAppChatBadges({ darkMode }),
-    )(sanitizedContent),
-    [sanitizedContent, darkMode, onAction],
-  );
+  const hydrationResult = useContentHydration({
+    content: sanitizedContent,
+    darkMode,
+    onAction,
+  });
 
   return (
     <div className="text-sm">
-      {hydrationResult.prependToolbars}
+      {!truncate && showToolbars && hydrationResult.prependToolbars}
 
       <MessageMarkdown content={hydrationResult.content} />
 
-      {hydrationResult.appendToolbars}
+      {!truncate && showToolbars && hydrationResult.appendToolbars}
 
       {!stream.done && (
         <div className="flex gap-1 my-2">

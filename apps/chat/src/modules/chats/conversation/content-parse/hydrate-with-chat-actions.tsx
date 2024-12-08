@@ -14,11 +14,14 @@ export function hydrateWithChatActions(
   darkMode?: boolean,
 ): ContentHydrator {
   return (content) => {
-    if (Array.isArray(content)) {
-      return { content, prependToolbars: [], appendToolbars: [] };
+    const actions: ChatAction[] = [];
+
+    // Prevent CLS with flashing unclosed tags
+    const unclosedTagIndex = content.lastIndexOf('[action:');
+    if (unclosedTagIndex !== -1 && !content.slice(unclosedTagIndex).includes(']')) {
+      content = content.slice(0, unclosedTagIndex);
     }
 
-    const actions: ChatAction[] = [];
     const cleanContent = content.replace(
       /\[action:([^|\]]+)\|([^|\]]+)\]/g,
       (_, label, action) => {

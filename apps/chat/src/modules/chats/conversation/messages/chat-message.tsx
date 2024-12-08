@@ -105,6 +105,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
           key={typeof content}
           content={content}
           darkMode={!isAI}
+          showToolbars={isAI}
           onAction={onAction}
         />
 
