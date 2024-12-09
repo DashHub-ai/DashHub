@@ -28,7 +28,7 @@ export function AppCategoryItem(
     itemsLimit = DEFAULT_ITEMS_LIMIT,
   }: AppCategoryItemProps,
 ) {
-  const t = useI18n().pack.apps.grid.sidebar;
+  const t = useI18n().pack.appsCategories.sidebar;
   const [isExpanded, setIsExpanded] = useState(category.children.length <= itemsLimit);
   const [showAll, setShowAll] = useState(false);
 
@@ -47,6 +47,14 @@ export function AppCategoryItem(
   return (
     <>
       <AppCategoryButton
+        className="flex-1"
+        icon={<LazyIcon name={category.icon as any} size={16} />}
+        label={category.name}
+        count={category.count}
+        isSelected={!hasChildren && isSelected}
+        hasChildren={hasChildren}
+        isExpanded={isExpanded}
+        depth={depth}
         onClick={() => {
           if (hasChildren) {
             setIsExpanded(!isExpanded);
@@ -55,13 +63,6 @@ export function AppCategoryItem(
             onSelect([category.id]);
           }
         }}
-        icon={<LazyIcon name={category.icon as any} size={16} />}
-        label={category.name}
-        count={category.count}
-        isSelected={!hasChildren && isSelected}
-        hasChildren={hasChildren}
-        isExpanded={isExpanded}
-        depth={depth}
       />
 
       {hasChildren && isExpanded && (

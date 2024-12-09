@@ -28,6 +28,22 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       home: 'Home',
     },
   },
+  table: {
+    columns: {
+      id: 'ID',
+      name: 'Name',
+      description: 'Description',
+      email: 'E-Mail',
+      archived: 'Archived',
+      active: 'Active',
+      auth: 'Authentication',
+      organization: 'Organization',
+      parentCategory: 'Parent category',
+      createdAt: 'Created at',
+      updatedAt: 'Updated at',
+      actions: 'Actions',
+    },
+  },
   routes: {
     shared: {
       meta: {
@@ -238,12 +254,6 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     grid: {
       placeholder: 'No apps yet. Stay tuned!',
-      sidebar: {
-        header: 'Categories',
-        allApps: 'All Apps',
-        showMore: 'Show all (%{count} more)',
-        otherCategoryItems: 'Other',
-      },
     },
     chooseAppModal: {
       title: 'Choose App',
@@ -277,6 +287,43 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         label: 'Chat prompt',
         placeholder: 'Enter app chat prompt description, it will help AI generate responses',
       },
+    },
+  },
+  appsCategories: {
+    sidebar: {
+      allApps: 'All Apps',
+      header: 'Categories',
+      otherCategoryItems: 'Other',
+      showMore: 'Show all (%{count} more)',
+    },
+    form: {
+      title: {
+        create: 'Create app category',
+        edit: 'Edit app category',
+      },
+      fields: {
+        name: {
+          label: 'Name',
+          placeholder: 'Enter app category name',
+        },
+        icon: {
+          label: 'Icon',
+          placeholder: 'Enter app category icon',
+        },
+        description: {
+          label: 'Description',
+          placeholder: 'Enter category description',
+        },
+        organization: {
+          label: 'Organization',
+        },
+        parentCategory: {
+          label: 'Parent category',
+        },
+      },
+    },
+    manageAppsCategories: {
+      title: 'Manage Apps Categories',
     },
   },
   experts: {
