@@ -7,7 +7,7 @@ type Props = PropsWithChildren<{
 }>;
 
 export function AppsCategoriesSidebarLayout({ children, suffix }: Props) {
-  const t = useI18n().pack.apps.grid.sidebar;
+  const t = useI18n().pack.appsCategories.sidebar;
 
   return (
     <div className="pr-6 border-r border-border w-80">

@@ -20,10 +20,10 @@ import {
 } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
+import { AppsCategoriesSidebar, AppsCategoriesSidebarLoader } from '../../apps-categories/sidebar';
 import { useFavoriteApps } from '../favorite';
 import { AppCard, type AppCardProps } from './app-card';
 import { AppsPlaceholder } from './apps-placeholder';
-import { AppsCategoriesSidebar, AppsCategoriesSidebarLoader } from './sidebar';
 
 type Props = {
   itemPropsFn?: (item: SdkAppT) => Omit<AppCardProps, 'app'>;
@@ -74,6 +74,7 @@ export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
                   },
                 });
               }}
+              onReload={silentReload}
             />
           )}
       <section className="flex-1 pl-6">

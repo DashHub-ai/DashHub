@@ -30,6 +30,22 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       home: 'Strona główna',
     },
   },
+  table: {
+    columns: {
+      id: 'ID',
+      name: 'Name',
+      description: 'Description',
+      email: 'E-Mail',
+      archived: 'Archived',
+      active: 'Active',
+      auth: 'Authentication',
+      organization: 'Organization',
+      parentCategory: 'Parent category',
+      createdAt: 'Created at',
+      updatedAt: 'Updated at',
+      actions: 'Actions',
+    },
+  },
   routes: {
     shared: {
       meta: {
@@ -240,12 +256,6 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     grid: {
       placeholder: 'Brak aplikacji!',
-      sidebar: {
-        header: 'Kategorie',
-        allApps: 'Wszystkie aplikacje',
-        showMore: 'Pokaż wszystkie (%{count} więcej)',
-        otherCategoryItems: 'Pozostałe',
-      },
     },
     chooseAppModal: {
       title: 'Wybierz aplikację',
@@ -279,6 +289,43 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         label: 'Prompt',
         placeholder: 'Wpisz opis prompt aplikacji, to pomoże AI w generowaniu odpowiedzi',
       },
+    },
+  },
+  appsCategories: {
+    sidebar: {
+      allApps: 'Wszystkie aplikacje',
+      header: 'Kategorie',
+      showMore: 'Pokaż wszystkie (%{count} więcej)',
+      otherCategoryItems: 'Pozostałe',
+    },
+    form: {
+      title: {
+        create: 'Utwórz kategorię aplikacji',
+        edit: 'Edytuj kategorię aplikacji',
+      },
+      fields: {
+        name: {
+          label: 'Nazwa',
+          placeholder: 'Wpisz nazwę kategorii aplikacji',
+        },
+        icon: {
+          label: 'Ikona',
+          placeholder: 'Wpisz ikonę kategorii aplikacji',
+        },
+        description: {
+          label: 'Opis',
+          placeholder: 'Wpisz opis kategorii',
+        },
+        organization: {
+          label: 'Organizacja',
+        },
+        parentCategory: {
+          label: 'Kategoria nadrzędna',
+        },
+      },
+    },
+    manageAppsCategories: {
+      title: 'Zarządzaj kategoriami aplikacji',
     },
   },
   experts: {

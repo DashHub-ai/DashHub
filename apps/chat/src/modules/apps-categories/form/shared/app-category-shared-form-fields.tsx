@@ -25,7 +25,7 @@ export const AppCategorySharedFormFields = controlled<Value, Props>(({
   excludeParentCategoriesIds,
   control: { bind },
 }) => {
-  const t = useI18n().pack.modules.appsCategories.form;
+  const t = useI18n().pack.appsCategories.form;
   const validation = useFormValidatorMessages({ errors });
 
   return (
@@ -80,7 +80,7 @@ export const AppCategorySharedFormFields = controlled<Value, Props>(({
         <TextArea
           name="description"
           placeholder={t.fields.description.placeholder}
-          {...bind.path('description')}
+          {...bind.path('description', { input: value => value || '' })}
         />
       </FormField>
     </>

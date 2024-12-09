@@ -8,22 +8,28 @@ type Props = {
   icon: ReactNode;
   label: string;
   count: number;
+  className?: string;
   isSelected: boolean;
   hasChildren?: boolean;
   isExpanded?: boolean;
   depth?: number;
+  suffix?: ReactNode;
 };
 
-export function AppCategoryButton({
-  onClick,
-  icon,
-  label,
-  count,
-  isSelected,
-  hasChildren,
-  isExpanded,
-  depth = 0,
-}: Props) {
+export function AppCategoryButton(
+  {
+    onClick,
+    icon,
+    label,
+    count,
+    className,
+    isSelected,
+    hasChildren,
+    isExpanded,
+    suffix,
+    depth = 0,
+  }: Props,
+) {
   return (
     <button
       type="button"
@@ -35,6 +41,7 @@ export function AppCategoryButton({
           ? 'bg-primary/5 text-primary font-semibold'
           : 'hover:bg-muted text-muted-foreground hover:text-foreground',
         depth > 0 && 'pl-6',
+        className,
       )}
     >
       <span className="flex flex-1 items-center gap-2 min-w-0">
@@ -48,6 +55,9 @@ export function AppCategoryButton({
               isExpanded ? 'transform rotate-0' : '-rotate-90',
             )}
           />
+        )}
+        {suffix && (
+          <span className="flex flex-row items-center ml-auto">{suffix}</span>
         )}
       </span>
       <span className="flex-shrink-0 ml-2 text-xs">{count}</span>
