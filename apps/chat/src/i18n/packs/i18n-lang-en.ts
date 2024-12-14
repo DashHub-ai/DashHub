@@ -326,6 +326,30 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       title: 'Manage Apps Categories',
     },
   },
+  projects: {
+    grid: {
+      placeholder: 'No projects yet. Feel free to create one!',
+    },
+    form: {
+      title: {
+        create: 'Create project',
+        edit: 'Edit project',
+      },
+      fields: {
+        name: {
+          label: 'Name',
+          placeholder: 'Enter project name',
+        },
+        description: {
+          label: 'Description',
+          placeholder: 'Enter project description',
+        },
+        organization: {
+          label: 'Organization',
+        },
+      },
+    },
+  },
   experts: {
     favorites: {
       add: 'Add to favorites',

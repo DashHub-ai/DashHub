@@ -1,2 +1,3 @@
 export * from './project-card';
-export * from './projects-grid';
+export * from './projects-container';
+export * from './projects-placeholder';

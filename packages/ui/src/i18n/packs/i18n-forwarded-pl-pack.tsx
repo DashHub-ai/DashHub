@@ -21,6 +21,7 @@ export const I18N_FORWARDED_PL_PACK: typeof I18N_FORWARDED_EN_PACK = {
     search: 'Szukaj...',
     selectItem: 'Wybierz element',
     noItemsFound: 'Nie znaleziono elementów',
+    noDescription: 'Brak opisu',
   },
   tutorialBox: {
     gotIt: 'Rozumiem',

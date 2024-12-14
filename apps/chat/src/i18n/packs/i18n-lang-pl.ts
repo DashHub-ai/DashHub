@@ -328,6 +328,30 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       title: 'Zarządzaj kategoriami aplikacji',
     },
   },
+  projects: {
+    grid: {
+      placeholder: 'Brak projektów! Dodaj nowy projekt, aby zacząć',
+    },
+    form: {
+      title: {
+        edit: 'Edytuj projekt',
+        create: 'Utwórz projekt',
+      },
+      fields: {
+        name: {
+          label: 'Nazwa',
+          placeholder: 'Wpisz nazwę projektu',
+        },
+        description: {
+          label: 'Opis',
+          placeholder: 'Wpisz opis projektu',
+        },
+        organization: {
+          label: 'Wybierz organizację',
+        },
+      },
+    },
+  },
   experts: {
     favorites: {
       add: 'Dodaj do ulubionych',

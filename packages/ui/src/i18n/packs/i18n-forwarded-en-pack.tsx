@@ -19,6 +19,7 @@ export const I18N_FORWARDED_EN_PACK = {
     search: 'Search...',
     selectItem: 'Select item',
     noItemsFound: 'No items found',
+    noDescription: 'No description',
   },
   tutorialBox: {
     gotIt: 'Rozumiem',
