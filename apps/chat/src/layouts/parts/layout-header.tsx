@@ -7,11 +7,12 @@ import { useSitemap } from '~/routes';
 
 type Props = PropsWithChildren & {
   withBreadcrumbs?: boolean;
+  currentBreadcrumb?: ReactNode;
   breadcrumbs?: ReactNode;
   root?: boolean;
 };
 
-export function LayoutHeader({ children, breadcrumbs, withBreadcrumbs = true, root }: Props) {
+export function LayoutHeader({ children, currentBreadcrumb, breadcrumbs, withBreadcrumbs = true, root }: Props) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
 
@@ -19,7 +20,7 @@ export function LayoutHeader({ children, breadcrumbs, withBreadcrumbs = true, ro
     <div className="flex flex-col space-y-3">
       {withBreadcrumbs && (
         <nav aria-label="Breadcrumb">
-          <ul className="uk-breadcrumb">
+          <ul className="flex items-center uk-breadcrumb">
             <li>
               <Link href={sitemap.home}>
                 {t.breadcrumbs.routes.home}
@@ -29,10 +30,8 @@ export function LayoutHeader({ children, breadcrumbs, withBreadcrumbs = true, ro
             {breadcrumbs}
 
             {!root && (
-              <li>
-                <span aria-current="page">
-                  {children}
-                </span>
+              <li aria-current="page">
+                {currentBreadcrumb ?? children}
               </li>
             )}
           </ul>

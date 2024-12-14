@@ -18,9 +18,11 @@ export type SdkChatSummaryInputT = z.infer<typeof SdkChatSummaryInputV>;
 export const SdkCreateChatInputV = SdkChatV.pick({
   public: true,
   internal: true,
+  project: true,
 })
   .extend({
     creator: SdkTableRowWithIdV.optional(),
+    project: SdkTableRowWithIdV.optional(),
     organization: SdkTableRowWithIdV.optional(),
     summary: SdkChatSummaryInputV.optional(),
   });

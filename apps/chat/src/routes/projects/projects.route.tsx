@@ -1,7 +1,5 @@
 import { pipe } from 'fp-ts/lib/function';
-import {
-  WandSparklesIcon,
-} from 'lucide-react';
+import { FolderPlusIcon } from 'lucide-react';
 
 import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback, useForceRerender } from '@llm/commons-front';
@@ -49,7 +47,7 @@ export function ProjectsRoute() {
             loading={createState.isLoading}
             onClick={() => void onCreate()}
           >
-            {!createState.isLoading && <WandSparklesIcon className="mr-2" size={16} />}
+            {!createState.isLoading && <FolderPlusIcon className="mr-2" size={16} />}
             {t.buttons.create}
           </FormSpinnerCTA>
         )}

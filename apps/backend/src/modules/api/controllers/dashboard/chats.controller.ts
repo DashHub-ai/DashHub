@@ -50,7 +50,6 @@ export class ChatsController extends AuthorizedController {
       )
       .get(
         '/:id',
-        sdkSchemaValidator('query', SdKSearchChatsInputV),
         async context => pipe(
           context.req.param('id'),
           chatsService.asUser(context.var.jwt).get,

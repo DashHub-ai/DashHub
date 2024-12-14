@@ -13,6 +13,7 @@ import {
 import type {
   SdkCreateProjectInputT,
   SdkCreateProjectOutputT,
+  SdkProjectT,
   SdKSearchProjectsInputT,
   SdKSearchProjectsOutputT,
   SdkUpdateProjectInputT,
@@ -21,6 +22,12 @@ import type {
 
 export class ProjectsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/projects';
+
+  get = (id: SdkTableRowIdT) =>
+    this.fetch<SdkProjectT>({
+      url: this.endpoint(`/${id}`),
+      options: getPayload(),
+    });
 
   search = (data: SdKSearchProjectsInputT) =>
     this.fetch<SdKSearchProjectsOutputT>({

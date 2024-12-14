@@ -55,7 +55,10 @@ function LoggedInRouter() {
   return (
     <Switch key={workspace.organization?.id ?? '-'}>
       <Route path={sitemap.home} component={HomeRoute} />
-      <Route path={sitemap.projects.show.raw} component={ProjectRoute} />
+      <Route<SdkTableRowWithUuidT> path={sitemap.projects.show.raw}>
+        {params => <ProjectRoute id={+params.id} />}
+      </Route>
+
       <Route path={sitemap.projects.index} component={ProjectsRoute} />
       <Route path={sitemap.apps.editor.raw} component={AppsEditorRoute} />
       <Route path={sitemap.apps.index} component={AppsRoute} />

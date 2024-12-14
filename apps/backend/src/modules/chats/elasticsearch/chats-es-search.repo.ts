@@ -87,6 +87,7 @@ export class ChatsEsSearchRepo {
       creator: source.creator,
       public: source.public,
       internal: source.internal,
+      project: source.project,
       summary: {
         content: {
           generated: summary.content.generated,
