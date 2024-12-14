@@ -10,6 +10,7 @@ import {
   ForceRedirectRoute,
   HomeRoute,
   LoginRoute,
+  ProjectRoute,
   ProjectsRoute,
   SettingsRoute,
   useSitemap,
@@ -54,7 +55,8 @@ function LoggedInRouter() {
   return (
     <Switch key={workspace.organization?.id ?? '-'}>
       <Route path={sitemap.home} component={HomeRoute} />
-      <Route path={sitemap.projects} component={ProjectsRoute} />
+      <Route path={sitemap.projects.show.raw} component={ProjectRoute} />
+      <Route path={sitemap.projects.index} component={ProjectsRoute} />
       <Route path={sitemap.apps.editor.raw} component={AppsEditorRoute} />
       <Route path={sitemap.apps.index} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />

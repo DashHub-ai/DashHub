@@ -36,7 +36,7 @@ export function NavigationLinks() {
       </NavigationItem>
 
       <NavigationItem
-        path={sitemap.projects}
+        path={sitemap.projects.index}
         icon={<FolderKanbanIcon size={16} />}
         disabled={!hasOrganization}
       >

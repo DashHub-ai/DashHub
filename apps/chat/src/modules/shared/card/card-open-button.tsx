@@ -1,28 +1,24 @@
 import clsx from 'clsx';
 import { ExternalLinkIcon } from 'lucide-react';
+import { Link } from 'wouter';
 
 import { useI18n } from '~/i18n';
 
 type Props = {
+  href?: string;
   loading?: boolean;
-  onClick: VoidFunction;
+  onClick?: VoidFunction;
 };
 
-export function CardOpenButton({ onClick, loading }: Props) {
+export function CardOpenButton({ href, onClick, loading }: Props) {
   const t = useI18n().pack;
+  const className = clsx(
+    'uk-button uk-button-secondary uk-button-small',
+    loading && 'uk-disabled opacity-50',
+  );
 
-  return (
-    <a
-      href=""
-      className={clsx(
-        'uk-button uk-button-secondary uk-button-small',
-        loading && 'uk-disabled opacity-50',
-      )}
-      onClick={(e) => {
-        e.preventDefault();
-        onClick();
-      }}
-    >
+  const content = (
+    <>
       {loading && (
         <span
           className="mr-2 uk-icon uk-spinner"
@@ -32,6 +28,27 @@ export function CardOpenButton({ onClick, loading }: Props) {
       )}
       <ExternalLinkIcon size={16} className="mr-2" />
       {t.buttons.open}
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <a
+      href=""
+      className={className}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick?.();
+      }}
+    >
+      {content}
     </a>
   );
 }

@@ -116,6 +116,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         context: 'Preserve conversation history and maintain project context for continuous progress',
       },
     },
+    project: {
+      meta: {
+        title: 'Project',
+        description: 'Manage project',
+      },
+      title: 'Project',
+    },
     experts: {
       meta: {
         title: 'Experts',

@@ -118,6 +118,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         context: 'Zachowuj historię rozmów i kontekst projektu dla ciągłego postępu',
       },
     },
+    project: {
+      meta: {
+        title: 'Projekt',
+        description: 'Zarządzaj projektem',
+      },
+      title: 'Projekt',
+    },
     experts: {
       meta: {
         title: 'Eksperci',

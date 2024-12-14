@@ -1,5 +1,5 @@
 import { flow } from 'fp-ts/lib/function';
-import { ExternalLinkIcon, FolderIcon } from 'lucide-react';
+import { FolderIcon } from 'lucide-react';
 
 import type { SdkProjectT } from '@llm/sdk';
 
@@ -14,8 +14,10 @@ import {
   CardDescription,
   CardEditButton,
   CardFooter,
+  CardOpenButton,
   CardTitle,
 } from '~/modules/shared/card';
+import { useSitemap } from '~/routes';
 
 import { useProjectUpdateModal } from '../form';
 
@@ -27,6 +29,7 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCardProps) {
   const t = useI18n().pack;
+  const sitemap = useSitemap();
   const { sdks } = useSdkForLoggedIn();
   const { showAsOptional } = useProjectUpdateModal();
   const [onArchive, archiveStatus] = useArchiveWithNotifications(
@@ -54,10 +57,7 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCar
           {formatDate(project.updatedAt)}
         </div>
 
-        <a href="#" className="uk-button uk-button-secondary uk-button-small">
-          <ExternalLinkIcon size={16} className="mr-2" />
-          {t.buttons.open}
-        </a>
+        <CardOpenButton href={sitemap.projects.show.generate({ pathParams: { id: project.id } })} />
       </CardFooter>
 
       {!project.archived && (

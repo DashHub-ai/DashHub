@@ -6,7 +6,10 @@ import { defineSitemapRouteGenerator } from '@llm/ui';
 export function useSitemap() {
   const sitemap = {
     home: prefixWithBaseRoute('/'),
-    projects: prefixWithBaseRoute('/projects'),
+    projects: {
+      index: prefixWithBaseRoute('/projects'),
+      show: defineSitemapRouteGenerator(prefixWithBaseRoute)('/projects/:id'),
+    },
     apps: {
       index: prefixWithBaseRoute('/apps'),
       editor: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/:id'),
