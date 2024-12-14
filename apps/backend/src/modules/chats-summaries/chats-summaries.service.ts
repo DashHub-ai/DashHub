@@ -10,14 +10,13 @@ import {
   tapTaskEither,
   tapTaskEitherError,
 } from '@llm/commons';
-import { getLastUsedSdkMessagesAIModel } from '@llm/sdk';
 
 import { AIConnectorService } from '../ai-connector';
+import { AIModelsService } from '../ai-models';
 import { ChatsEsIndexRepo } from '../chats/elasticsearch';
 import { TableRowWithUuid, TableUuid } from '../database';
 import { LoggerService } from '../logger';
 import { MessagesService } from '../messages';
-import { MissingAIModelInChatError } from './chats-summaries.errors';
 import { ChatsSummariesRepo } from './chats-summaries.repo';
 
 @injectable()
@@ -26,8 +25,9 @@ export class ChatsSummariesService {
 
   constructor(
     @inject(ChatsSummariesRepo) private readonly repo: ChatsSummariesRepo,
-    @inject(ChatsEsIndexRepo) private readonly esIndexRepo: ChatsEsIndexRepo,
+    @inject(ChatsEsIndexRepo) private readonly chatsEsIndexRepo: ChatsEsIndexRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
+    @inject(AIModelsService) private readonly aiModelsService: AIModelsService,
     @inject(MessagesService) private readonly messagesService: MessagesService,
   ) {}
 
@@ -76,20 +76,15 @@ export class ChatsSummariesService {
     },
   ) => pipe(
     TE.Do,
-    TE.bind('chat', () => this.messagesService.searchByChatId(id)),
-    TE.bindW('aiModel', ({ chat }) => {
-      const aiModel = getLastUsedSdkMessagesAIModel(chat.items);
-
-      if (aiModel) {
-        return TE.right(aiModel);
-      }
-
-      return TE.left(new MissingAIModelInChatError(chat));
-    }),
-    TE.chainW(({ chat, aiModel }) => pipe(
+    TE.apSW('aiModel', pipe(
+      this.chatsEsIndexRepo.getDocument(id),
+      TE.chainW(({ organization }) => this.aiModelsService.getDefault(organization.id)),
+    )),
+    TE.apSW('messages', this.messagesService.searchByChatId(id)),
+    TE.chainW(({ messages, aiModel }) => pipe(
       this.aiConnectorService.executeInstructedPrompt({
         aiModel,
-        history: chat.items,
+        history: messages.items,
         message: prompt,
         schema,
       }),
@@ -123,6 +118,6 @@ export class ChatsSummariesService {
         content: summarize.description,
       },
     )),
-    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(() => this.chatsEsIndexRepo.findAndIndexDocumentById(id)),
   );
 }
