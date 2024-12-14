@@ -1,4 +1,4 @@
-import { ArchiveIcon, ExternalLinkIcon, Loader2Icon, MessageSquareIcon } from 'lucide-react';
+import { ArchiveIcon, ExternalLinkIcon, FolderIcon, Loader2Icon, MessageSquareIcon } from 'lucide-react';
 import { Link } from 'wouter';
 
 import { formatDate } from '@llm/commons';
@@ -9,9 +9,10 @@ import { useSitemap } from '~/routes';
 
 type ChatCardProps = {
   chat: SdkSearchChatItemT;
+  withProject?: boolean;
 };
 
-export function ChatCard({ chat }: ChatCardProps) {
+export function ChatCard({ chat, withProject = true }: ChatCardProps) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
   const { summary } = chat;
@@ -43,6 +44,18 @@ export function ChatCard({ chat }: ChatCardProps) {
             </CardDescription>
           </div>
         )}
+
+      {withProject && chat.project && (
+        <div className="flex items-center gap-1 my-2 text-sm">
+          <FolderIcon size={14} className="text-gray-500" />
+          <Link
+            href={sitemap.projects.show.generate({ pathParams: { id: chat.project.id } })}
+            className="text-gray-900 hover:underline"
+          >
+            {chat.project.name}
+          </Link>
+        </div>
+      )}
 
       <CardFooter>
         <div className="flex flex-col gap-2">

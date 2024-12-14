@@ -20,7 +20,7 @@ export function CardDescription({ children }: PropsWithChildren) {
   }, [children]);
 
   return (
-    <div>
+    <div className="flex flex-col flex-1">
       <p
         ref={ref}
         className={clsx(

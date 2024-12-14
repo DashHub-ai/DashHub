@@ -31,20 +31,19 @@ export class ChatsEsSearchRepo {
     TE.map(ChatsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdKSearchChatsInputT) =>
-    pipe(
-      this.indexRepo.search(
-        ChatsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
+  search = (dto: SdKSearchChatsInputT) => pipe(
+    this.indexRepo.search(
+      ChatsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
+    ),
+    TE.map(({ hits: { total, hits } }) => ({
+      items: pipe(
+        hits,
+        pluck('_source'),
+        A.map(item => ChatsEsSearchRepo.mapOutputHit(item as ChatsEsDocument)),
       ),
-      TE.map(({ hits: { total, hits } }) => ({
-        items: pipe(
-          hits,
-          pluck('_source'),
-          A.map(item => ChatsEsSearchRepo.mapOutputHit(item as ChatsEsDocument)),
-        ),
-        total: total.value,
-      })),
-    );
+      total: total.value,
+    })),
+  );
 
   private static createEsRequestSearchBody = (dto: SdKSearchChatsInputT) =>
     createPaginationOffsetSearchQuery(dto)
@@ -56,6 +55,7 @@ export class ChatsEsSearchRepo {
       phrase,
       ids,
       organizationIds,
+      projectsIds,
       archived,
     }: SdKSearchChatsInputT,
   ): esb.Query =>
@@ -63,6 +63,7 @@ export class ChatsEsSearchRepo {
       rejectFalsyItems([
         esb.termsQuery('internal', false),
         !!ids?.length && esb.termsQuery('id', ids),
+        !!projectsIds?.length && esb.termsQuery('project.id', projectsIds),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
           esb

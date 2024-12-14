@@ -12,7 +12,7 @@ export function CardTitle({ icon, children }: CardTitleProps) {
         {icon}
       </div>
       <h3
-        className="line-clamp-1 font-medium"
+        className="flex flex-row items-center gap-2 line-clamp-1 font-medium"
         {...typeof children === 'string' ? { title: children } : {}}
       >
         {children}

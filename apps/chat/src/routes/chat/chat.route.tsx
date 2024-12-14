@@ -1,6 +1,6 @@
 import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { Redirect } from 'wouter';
+import { Link, Redirect } from 'wouter';
 
 import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
@@ -18,7 +18,8 @@ type Props = {
 };
 
 export function ChatRoute({ id }: Props) {
-  const t = useI18n().pack.routes.chat;
+  const { pack } = useI18n();
+  const t = pack.routes.chat;
   const sitemap = useSitemap();
 
   const { sdks } = useSdkForLoggedIn();
@@ -51,7 +52,26 @@ export function ChatRoute({ id }: Props) {
     <PageWithNavigationLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <LayoutHeader>
+      <LayoutHeader
+        {...result.status === 'success' && result.data.chat.project && {
+          breadcrumbs: (
+            <>
+              <li>
+                <Link href={sitemap.projects.index}>
+                  {pack.routes.projects.title}
+                </Link>
+              </li>
+
+              <li>
+                <Link href={sitemap.projects.show.generate({ pathParams: { id: result.data.chat.project.id } })}>
+                  {result.data.chat.project.name}
+                </Link>
+              </li>
+            </>
+          ),
+          currentBreadcrumb: result.data.chat.summary.name.value || t.title,
+        }}
+      >
         {t.title}
       </LayoutHeader>
 

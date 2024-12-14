@@ -10,6 +10,7 @@ import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { RouteMetaTags } from '~/routes/shared';
 
 import { useSitemap } from '../use-sitemap';
+import { ProjectContent } from './project-content';
 
 type Props = {
   id: SdkTableRowIdT;
@@ -62,7 +63,7 @@ export function ProjectRoute({ id }: Props) {
         {(
           result.status === 'loading'
             ? <SpinnerContainer loading />
-            : <span>MIA MIA MIA</span>
+            : <ProjectContent project={result.data} />
         )}
       </section>
     </PageWithNavigationLayout>

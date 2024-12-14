@@ -124,6 +124,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Zarządzaj projektem',
       },
       title: 'Projekt',
+      chats: 'Czaty w projekcie',
     },
     experts: {
       meta: {
@@ -151,6 +152,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Strona główna',
       },
       title: 'Czaty',
+      hello: 'Cześć, jak możemy Ci pomóc?',
       tutorial: {
         title: 'Witaj w DashHub Chat!',
         ai: 'Potężny asystent AI gotowy pomóc w Twoich zadaniach i pytaniach',
@@ -185,7 +187,6 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   },
   chats: {
     start: {
-      hello: 'Cześć, jak możemy Ci pomóc?',
       placeholder: 'Wpisz swoją wiadomość tutaj...',
       addFile: 'Dodaj plik',
       selectProject: 'Wybierz projekt',

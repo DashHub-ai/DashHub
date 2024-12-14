@@ -49,6 +49,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
       value: {
         organization,
         creator,
+        project,
         summary = {
           content: { generated: true },
           name: { generated: true },
@@ -66,6 +67,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           ...value,
           organizationId: organization.id,
           creatorUserId: creator.id,
+          projectId: project?.id,
         },
       }),
       TE.tap(({ id }) => this.summariesRepo.create({

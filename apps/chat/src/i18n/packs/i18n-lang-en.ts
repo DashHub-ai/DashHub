@@ -122,6 +122,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Manage project',
       },
       title: 'Project',
+      chats: 'Chats in project',
     },
     experts: {
       meta: {
@@ -149,6 +150,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Home',
       },
       title: 'Chats',
+      hello: 'Hello, how can we help you?',
       tutorial: {
         title: 'Welcome to DashHub Chat!',
         ai: 'Powerful AI assistant ready to help with your tasks and questions',
@@ -183,7 +185,6 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   },
   chats: {
     start: {
-      hello: 'Hello, how can we help you?',
       placeholder: 'Type your message here...',
       addFile: 'Add file',
       selectProject: 'Select project',
