@@ -20,6 +20,7 @@ export type ChatsTable =
   & {
     creator_user_id: ColumnType<TableId, TableId, never>;
     organization_id: ColumnType<TableId, TableId, never>;
+    project_id: ColumnType<TableId, TableId, never> | null;
     public: boolean;
     internal: boolean;
   };
@@ -31,9 +32,10 @@ type ChatSummaryTableRowRelation = DropTableRowAccessTime<
 >;
 
 export type ChatTableRowWithRelations =
-  & Omit<ChatTableRow, 'organizationId' | 'creatorUserId'>
+  & Omit<ChatTableRow, 'organizationId' | 'creatorUserId' | 'projectId'>
   & {
     summary: ChatSummaryTableRowRelation;
     organization: TableRowWithIdName;
+    project: TableRowWithIdName | null;
     creator: UserTableRowBaseRelation;
   };

@@ -16,6 +16,7 @@ import * as addLastSummarizedMessage from './0014-add-last-summarized-message';
 import * as addAttachedAppIdToMessages from './0015-add-attached-app-id-to-messages';
 import * as addAppsCategories from './0016-add-apps-categories';
 import * as addInternalFlagToChats from './0017-add-internal-flag-to-chats';
+import * as addProjectsToChats from './0018-add-projects-to-chats';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -36,4 +37,5 @@ export const DB_MIGRATIONS = {
   '0015-add-attached-app-id-to-messages': addAttachedAppIdToMessages,
   '0016-add-apps-categories': addAppsCategories,
   '0017-add-internal-flag-to-chats': addInternalFlagToChats,
+  '0018-add-projects-to-chats': addProjectsToChats,
 };

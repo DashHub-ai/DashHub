@@ -34,6 +34,7 @@ const ChatsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         }),
         ...createArchivedRecordMappings(),
         organization: createIdNameObjectMapping(),
+        project: createIdNameObjectMapping(),
         creator: createIdObjectMapping(),
         public: { type: 'boolean' },
         internal: { type: 'boolean' },
