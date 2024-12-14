@@ -1,1 +1,1 @@
-export * from './start-chat-section';
+export * from './start-chat-form';

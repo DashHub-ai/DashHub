@@ -1,48 +1,34 @@
-import { clsx } from 'clsx';
-import { ArchiveIcon, ChevronDownIcon, ChevronUpIcon, ExternalLinkIcon, Loader2Icon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { ArchiveIcon, ExternalLinkIcon, FolderIcon, Loader2Icon, MessageSquareIcon } from 'lucide-react';
 import { Link } from 'wouter';
 
 import { formatDate } from '@llm/commons';
 import { isSdkAIGeneratingString, type SdkSearchChatItemT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+import { CardBase, CardDescription, CardFooter, CardTitle } from '~/modules/shared/card';
 import { useSitemap } from '~/routes';
 
 type ChatCardProps = {
   chat: SdkSearchChatItemT;
+  withProject?: boolean;
 };
 
-export function ChatCard({ chat }: ChatCardProps) {
+export function ChatCard({ chat, withProject = true }: ChatCardProps) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [hasOverflow, setHasOverflow] = useState(false);
-  const contentRef = useRef<HTMLParagraphElement>(null);
-
   const { summary } = chat;
 
-  useEffect(() => {
-    if (contentRef.current) {
-      const lineHeight = Number.parseInt(getComputedStyle(contentRef.current).lineHeight, 10);
-      const height = contentRef.current.scrollHeight;
-      setHasOverflow(height > lineHeight * 2);
-    }
-  }, [summary.content?.value]);
-
   return (
-    <div className="flex flex-col bg-white shadow-sm hover:shadow-md p-4 pb-2 border border-border/50 rounded-lg transition-shadow">
-      <div className="flex items-center gap-2 mb-2">
-        <h3 className="flex items-center gap-2 font-medium text-gray-900 truncate">
-          {isSdkAIGeneratingString(summary.name)
-            ? (
-                <>
-                  <Loader2Icon size={14} className="animate-spin" />
-                  {t.chat.generating.title}
-                </>
-              )
-            : summary.name?.value ?? 'Unnamed Chat'}
-        </h3>
-      </div>
+    <CardBase>
+      <CardTitle icon={<MessageSquareIcon size={16} />}>
+        {isSdkAIGeneratingString(summary.name)
+          ? (
+              <>
+                <Loader2Icon size={14} className="animate-spin" />
+                {t.chat.generating.title}
+              </>
+            )
+          : summary.name?.value ?? 'Unnamed Chat'}
+      </CardTitle>
 
       {isSdkAIGeneratingString(summary.content)
         ? (
@@ -53,38 +39,25 @@ export function ChatCard({ chat }: ChatCardProps) {
           )
         : summary.content?.value && (
           <div className="flex-1 mb-3">
-            <p
-              ref={contentRef}
-              className={clsx('text-gray-500 text-sm', !isExpanded && 'line-clamp-2')}
-            >
+            <CardDescription>
               {summary.content.value}
-            </p>
-
-            {hasOverflow && (
-              <button
-                type="button"
-                onClick={() => setIsExpanded(prev => !prev)}
-                className="flex items-center gap-1 hover:bg-gray-100 mt-1 -ml-2 px-2 py-0.5 rounded text-gray-900 text-xs"
-              >
-                {isExpanded
-                  ? (
-                      <>
-                        {t.chat.actions.expand.less}
-                        <ChevronUpIcon size={14} />
-                      </>
-                    )
-                  : (
-                      <>
-                        {t.chat.actions.expand.more}
-                        <ChevronDownIcon size={14} />
-                      </>
-                    )}
-              </button>
-            )}
+            </CardDescription>
           </div>
         )}
 
-      <div className="flex justify-between items-center mt-auto">
+      {withProject && chat.project && (
+        <div className="flex items-center gap-1 my-2 text-sm">
+          <FolderIcon size={14} className="text-gray-500" />
+          <Link
+            href={sitemap.projects.show.generate({ pathParams: { id: chat.project.id } })}
+            className="text-gray-900 hover:underline"
+          >
+            {chat.project.name}
+          </Link>
+        </div>
+      )}
+
+      <CardFooter>
         <div className="flex flex-col gap-2">
           <time className="text-gray-500 text-xs">
             {formatDate(chat.createdAt)}
@@ -108,7 +81,7 @@ export function ChatCard({ chat }: ChatCardProps) {
           <ExternalLinkIcon size={16} className="mr-2" />
           {t.buttons.open}
         </Link>
-      </div>
-    </div>
+      </CardFooter>
+    </CardBase>
   );
 }

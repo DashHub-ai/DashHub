@@ -118,6 +118,14 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         context: 'Zachowuj historię rozmów i kontekst projektu dla ciągłego postępu',
       },
     },
+    project: {
+      meta: {
+        title: 'Projekt',
+        description: 'Zarządzaj projektem',
+      },
+      title: 'Projekt',
+      chats: 'Czaty w projekcie',
+    },
     experts: {
       meta: {
         title: 'Eksperci',
@@ -144,6 +152,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Strona główna',
       },
       title: 'Czaty',
+      hello: 'Cześć, jak możemy Ci pomóc?',
       tutorial: {
         title: 'Witaj w DashHub Chat!',
         ai: 'Potężny asystent AI gotowy pomóc w Twoich zadaniach i pytaniach',
@@ -178,7 +187,6 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   },
   chats: {
     start: {
-      hello: 'Cześć, jak możemy Ci pomóc?',
       placeholder: 'Wpisz swoją wiadomość tutaj...',
       addFile: 'Dodaj plik',
       selectProject: 'Wybierz projekt',
@@ -326,6 +334,30 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     manageAppsCategories: {
       title: 'Zarządzaj kategoriami aplikacji',
+    },
+  },
+  projects: {
+    grid: {
+      placeholder: 'Brak projektów! Dodaj nowy projekt, aby zacząć',
+    },
+    form: {
+      title: {
+        edit: 'Edytuj projekt',
+        create: 'Utwórz projekt',
+      },
+      fields: {
+        name: {
+          label: 'Nazwa',
+          placeholder: 'Wpisz nazwę projektu',
+        },
+        description: {
+          label: 'Opis',
+          placeholder: 'Wpisz opis projektu',
+        },
+        organization: {
+          label: 'Wybierz organizację',
+        },
+      },
     },
   },
   experts: {

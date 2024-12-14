@@ -35,13 +35,13 @@ export function NavigationLinks() {
         {t.links.apps}
       </NavigationItem>
 
-      <StayTunedNavigationItem
-        path={sitemap.projects}
+      <NavigationItem
+        path={sitemap.projects.index}
         icon={<FolderKanbanIcon size={16} />}
         disabled={!hasOrganization}
       >
         {t.links.projects}
-      </StayTunedNavigationItem>
+      </NavigationItem>
 
       <StayTunedNavigationItem
         path={sitemap.experts}

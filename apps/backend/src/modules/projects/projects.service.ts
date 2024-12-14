@@ -33,6 +33,8 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsFirewall(jwt, this);
 
+  get = this.esSearchRepo.get;
+
   unarchive = (id: SdkTableRowIdT) => pipe(
     this.repo.unarchive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),

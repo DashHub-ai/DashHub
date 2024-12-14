@@ -19,6 +19,7 @@ export type SdkSearchChatItemT = z.infer<typeof SdkSearchChatItemV>;
 export const SdKSearchChatsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
+    projectsIds: SdkIdsArrayV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)

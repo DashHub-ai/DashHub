@@ -116,6 +116,14 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         context: 'Preserve conversation history and maintain project context for continuous progress',
       },
     },
+    project: {
+      meta: {
+        title: 'Project',
+        description: 'Manage project',
+      },
+      title: 'Project',
+      chats: 'Chats in project',
+    },
     experts: {
       meta: {
         title: 'Experts',
@@ -142,6 +150,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: 'Home',
       },
       title: 'Chats',
+      hello: 'Hello, how can we help you?',
       tutorial: {
         title: 'Welcome to DashHub Chat!',
         ai: 'Powerful AI assistant ready to help with your tasks and questions',
@@ -176,7 +185,6 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   },
   chats: {
     start: {
-      hello: 'Hello, how can we help you?',
       placeholder: 'Type your message here...',
       addFile: 'Add file',
       selectProject: 'Select project',
@@ -324,6 +332,30 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     manageAppsCategories: {
       title: 'Manage Apps Categories',
+    },
+  },
+  projects: {
+    grid: {
+      placeholder: 'No projects yet. Feel free to create one!',
+    },
+    form: {
+      title: {
+        create: 'Create project',
+        edit: 'Edit project',
+      },
+      fields: {
+        name: {
+          label: 'Name',
+          placeholder: 'Enter project name',
+        },
+        description: {
+          label: 'Description',
+          placeholder: 'Enter project description',
+        },
+        organization: {
+          label: 'Organization',
+        },
+      },
     },
   },
   experts: {

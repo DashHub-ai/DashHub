@@ -38,6 +38,15 @@ export class ProjectsController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<ProjectsSdk['search']>>(context),
         ),
       )
+      .get(
+        '/:id',
+        async context => pipe(
+          context.req.param('id'),
+          projectsService.asUser(context.var.jwt).get,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ProjectsSdk['get']>>(context),
+        ),
+      )
       .post(
         '/',
         sdkSchemaValidator('json', SdkCreateProjectInputV),

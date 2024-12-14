@@ -20,6 +20,7 @@ export type SdkChatSummaryT = z.infer<typeof SdkChatSummaryV>;
 export const SdkChatV = z.object({
   creator: SdkUserListItemV,
   organization: SdkIdNameUrlEntryV,
+  project: SdkIdNameUrlEntryV.nullable(),
   public: z.boolean(),
   internal: z.boolean(),
   summary: SdkChatSummaryV,

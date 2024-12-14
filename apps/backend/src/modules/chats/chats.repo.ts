@@ -49,6 +49,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
       value: {
         organization,
         creator,
+        project,
         summary = {
           content: { generated: true },
           name: { generated: true },
@@ -66,6 +67,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           ...value,
           organizationId: organization.id,
           creatorUserId: creator.id,
+          projectId: project?.id,
         },
       }),
       TE.tap(({ id }) => this.summariesRepo.create({
@@ -93,6 +95,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
             .innerJoin('organizations', 'organizations.id', 'organization_id')
             .innerJoin('users', 'users.id', 'creator_user_id')
             .innerJoin('chat_summaries', 'chat_summaries.chat_id', 'chats.id')
+            .leftJoin('projects', 'projects.id', 'project_id')
             .selectAll('chats')
             .select([
               'organizations.id as organization_id',
@@ -110,6 +113,9 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               'chat_summaries.name as summary_name',
               'chat_summaries.name_generated as summary_name_generated',
               'chat_summaries.name_generated_at as summary_name_generated_at',
+
+              'projects.id as project_id',
+              'projects.name as project_name',
             ])
             .limit(ids.length)
             .execute(),
@@ -132,9 +138,18 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           summary_name_generated: summaryNameGenerated,
           summary_name_generated_at: summaryNameGeneratedAt,
 
+          project_id: projectId,
+          project_name: projectName,
+
           ...item
         }): ChatTableRowWithRelations => ({
           ...camelcaseKeys(item),
+          project: projectId && projectName
+            ? {
+                id: projectId,
+                name: projectName,
+              }
+            : null,
           organization: {
             id: orgId,
             name: orgName,
