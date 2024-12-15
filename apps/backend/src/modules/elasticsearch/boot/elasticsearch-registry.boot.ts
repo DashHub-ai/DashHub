@@ -11,6 +11,7 @@ import { LoggerService } from '~/modules/logger';
 import { MessagesEsIndexRepo } from '~/modules/messages/elasticsearch/messages-es-index.repo';
 import { OrganizationsEsIndexRepo } from '~/modules/organizations/elasticsearch';
 import { OrganizationsS3BucketsEsIndexRepo } from '~/modules/organizations/s3-buckets/elasticsearch/organizations-s3-buckets-es-index.repo';
+import { ProjectsFilesEsIndexRepo } from '~/modules/projects-files/elasticsearch/projects-files-es-index.repo';
 import { ProjectsEsIndexRepo } from '~/modules/projects/elasticsearch/projects-es-index.repo';
 import { UsersEsIndexRepo } from '~/modules/users/elasticsearch/users-es-index.repo';
 
@@ -31,6 +32,7 @@ export class ElasticsearchRegistryBootService {
     @inject(ChatsEsIndexRepo) private readonly chatsEsIndexRepo: ChatsEsIndexRepo,
     @inject(MessagesEsIndexRepo) private readonly messagesEsIndexRepo: MessagesEsIndexRepo,
     @inject(AppsCategoriesEsIndexRepo) private readonly appsCategoriesEsIndexRepo: AppsCategoriesEsIndexRepo,
+    @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
   ) {}
 
   register = TE.fromIO(() => {
@@ -44,6 +46,7 @@ export class ElasticsearchRegistryBootService {
       this.chatsEsIndexRepo,
       this.messagesEsIndexRepo,
       this.appsCategoriesEsIndexRepo,
+      this.projectsFilesEsIndexRepo,
     ]);
 
     this.logger.info('Registered elasticsearch repos!');

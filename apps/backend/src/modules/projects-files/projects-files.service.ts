@@ -11,6 +11,7 @@ import type { TableId } from '../database';
 
 import { ProjectsRepo } from '../projects/projects.repo';
 import { S3Service, UploadFileAttrs } from '../s3';
+import { ProjectsFilesEsIndexRepo } from './elasticsearch';
 import { ProjectsFilesFirewall } from './projects-files.firewall';
 import { ProjectsFilesRepo } from './projects-files.repo';
 
@@ -20,6 +21,7 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
     @inject(S3Service) private readonly s3Service: S3Service,
     @inject(ProjectsRepo) private readonly projectsRepo: ProjectsRepo,
     @inject(ProjectsFilesRepo) private readonly projectsFilesRepo: ProjectsFilesRepo,
+    @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsFilesFirewall(jwt, this);
@@ -45,6 +47,7 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
         projectId,
         s3ResourceId: id,
       })),
+      tapTaskEitherTE(() => this.projectsFilesEsIndexRepo.reindexAllProjectFiles(projectId)),
     );
   };
 }

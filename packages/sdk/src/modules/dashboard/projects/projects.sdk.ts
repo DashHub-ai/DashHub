@@ -1,11 +1,9 @@
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
-  formDataPayload,
   getPayload,
   patchPayload,
   postPayload,
   putPayload,
-  type SdkInvalidFileFormatError,
   type SdkRecordAlreadyExistsError,
   type SdkRecordNotFoundError,
   type SdkTableRowIdT,
@@ -20,25 +18,14 @@ import type {
   SdKSearchProjectsOutputT,
   SdkUpdateProjectInputT,
   SdkUpdateProjectOutputT,
-  SdkUploadProjectFileInputT,
 } from './dto';
+
+import { ProjectsFilesSdk } from './projects-files.sdk';
 
 export class ProjectsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/projects';
 
-  uploadFile = ({ projectId, file }: SdkUploadProjectFileInputT) => {
-    const formData = new FormData();
-
-    formData.append('file', file);
-
-    return this.fetch<
-      SdkTableRowWithIdT,
-      SdkRecordNotFoundError | SdkRecordAlreadyExistsError | SdkInvalidFileFormatError
-    >({
-      url: this.endpoint(`/${projectId}/files`),
-      options: formDataPayload('POST')(formData),
-    });
-  };
+  readonly files = new ProjectsFilesSdk(this.config);
 
   get = (id: SdkTableRowIdT) =>
     this.fetch<SdkProjectT>({

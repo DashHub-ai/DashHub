@@ -1,6 +1,7 @@
 import type {
   NormalizeSelectTableRow,
   TableId,
+  TableRowWithIdName,
   TableWithArchivedAtColumn,
   TableWithDefaultColumns,
 } from '../database';
@@ -43,3 +44,8 @@ export type S3ResourcesImagesTable =
   };
 
 export type S3ResourcesBucketTableRow = NormalizeSelectTableRow<S3ResourcesBucketsTable>;
+
+export type S3ResourcesTableRowWithRelations = Omit<NormalizeSelectTableRow<S3ResourcesTable>, 'bucketId'> & {
+  bucket: TableRowWithIdName;
+  publicUrl: string;
+};
