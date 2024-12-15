@@ -8,4 +8,5 @@ export * from './messages';
 export * from './organizations';
 export * from './projects';
 export * from './s3-buckets';
+export * from './s3-files';
 export * from './users';

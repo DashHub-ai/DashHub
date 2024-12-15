@@ -9,7 +9,7 @@ import type {
   SdkTableRowWithUuidT,
 } from '@llm/sdk';
 
-import { PaginationFooter } from '../pagination';
+import { PaginationFooter, type PaginationFooterProps } from '../pagination';
 import { SpinnerContainer } from '../spinner-container';
 import { NoItemsPlaceholder } from './no-items-placeholder';
 
@@ -21,13 +21,14 @@ export type PaginatedListProps<
   withEmptyPlaceholder?: boolean;
   result?: SdkOffsetPaginationOutputT<I> | null;
   pagination: ControlledControlStateAttrs<P>;
+  footerProps?: Omit<PaginationFooterProps, 'result'>;
   children: (result: SdkOffsetPaginationOutputT<I>) => ReactNode;
 };
 
 export function PaginatedList<
   I extends SdkTableRowWithIdT | SdkTableRowWithUuidT,
   P extends SdkOffsetPaginationInputT,
->({ result, withEmptyPlaceholder = true, loading, pagination, children }: PaginatedListProps<I, P>) {
+>({ result, footerProps, withEmptyPlaceholder = true, loading, pagination, children }: PaginatedListProps<I, P>) {
   const { bind } = useControlStrict<SdkOffsetPaginationInputT>(
     pagination as unknown as ControlledControlStateAttrs<SdkOffsetPaginationInputT>,
   );
@@ -45,6 +46,7 @@ export function PaginatedList<
           {result.total > 0 && (
             <PaginationFooter
               result={result}
+              {...footerProps}
               {...bind.entire()}
             />
           )}

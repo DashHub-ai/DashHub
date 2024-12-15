@@ -291,6 +291,25 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           default: {
             label: 'Domyślny',
           },
+          ssl: {
+            label: 'SSL',
+          },
+          endpoint: {
+            label: 'Endpoint',
+            placeholder: 'Wpisz endpoint',
+          },
+          publicBaseUrl: {
+            label: 'Publiczny URL bazowy',
+            placeholder: 'Wpisz publiczny URL bazowy',
+          },
+          port: {
+            label: 'Port',
+            placeholder: 'Wpisz port',
+          },
+          bucketName: {
+            label: 'Nazwa kubełka w S3',
+            placeholder: 'Wpisz nazwę kubełka w S3',
+          },
         },
       },
     },

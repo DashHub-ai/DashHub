@@ -289,6 +289,25 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           default: {
             label: 'Default',
           },
+          ssl: {
+            label: 'SSL',
+          },
+          endpoint: {
+            label: 'Endpoint',
+            placeholder: 'Enter endpoint',
+          },
+          publicBaseUrl: {
+            label: 'Public base URL',
+            placeholder: 'Enter public base URL',
+          },
+          port: {
+            label: 'Port',
+            placeholder: 'Enter port',
+          },
+          bucketName: {
+            label: 'Bucket name in S3',
+            placeholder: 'Enter bucket name in S3',
+          },
         },
       },
     },

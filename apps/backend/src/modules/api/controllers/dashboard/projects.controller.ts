@@ -1,14 +1,18 @@
+import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import {
+  ofSdkSuccess,
   type ProjectsSdk,
   SdkCreateProjectInputV,
+  SdkSearchProjectFilesInputV,
   SdKSearchProjectsInputV,
   SdkUpdateProjectInputV,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
 import { ProjectsService } from '~/modules/projects';
+import { ProjectsFilesService } from '~/modules/projects-files';
 
 import {
   mapDbRecordAlreadyExistsToSdkError,
@@ -17,6 +21,7 @@ import {
   sdkSchemaValidator,
   serializeSdkResponseTE,
 } from '../../helpers';
+import { tryExtractSingleFile } from '../../helpers/try-extract-single-file';
 import { AuthorizedController } from '../shared/authorized.controller';
 
 @injectable()
@@ -24,10 +29,55 @@ export class ProjectsController extends AuthorizedController {
   constructor(
     @inject(ConfigService) configService: ConfigService,
     @inject(ProjectsService) projectsService: ProjectsService,
+    @inject(ProjectsFilesService) projectsFilesService: ProjectsFilesService,
   ) {
     super(configService);
 
     this.router
+      .post(
+        '/:projectId/files',
+        async (context) => {
+          return pipe(
+            tryExtractSingleFile(await context.req.parseBody()),
+            TE.chainW(({ buffer, mimeType, fileName }) =>
+              projectsFilesService.asUser(context.var.jwt).uploadFile({
+                projectId: Number(context.req.param('projectId')),
+                name: fileName,
+                buffer,
+                mimeType,
+              }),
+            ),
+            rejectUnsafeSdkErrors,
+            serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['upload']>>(context),
+          );
+        },
+      )
+      .get(
+        '/:projectId/files/search',
+        sdkSchemaValidator('query', SdkSearchProjectFilesInputV),
+        async context => pipe(
+          {
+            ...context.req.valid('query'),
+            projectId: Number(context.req.param('projectId')),
+          },
+          projectsFilesService.asUser(context.var.jwt).search,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['search']>>(context),
+        ),
+      )
+      .delete(
+        '/:projectId/files/:resourceId',
+        async context => pipe(
+          {
+            resourceId: Number(context.req.param('resourceId')),
+            projectId: Number(context.req.param('projectId')),
+          },
+          projectsFilesService.asUser(context.var.jwt).delete,
+          TE.map(ofSdkSuccess),
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['delete']>>(context),
+        ),
+      )
       .get(
         '/search',
         sdkSchemaValidator('query', SdKSearchProjectsInputV),

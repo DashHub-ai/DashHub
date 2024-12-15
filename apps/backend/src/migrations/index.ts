@@ -17,6 +17,9 @@ import * as addAttachedAppIdToMessages from './0015-add-attached-app-id-to-messa
 import * as addAppsCategories from './0016-add-apps-categories';
 import * as addInternalFlagToChats from './0017-add-internal-flag-to-chats';
 import * as addProjectsToChats from './0018-add-projects-to-chats';
+import * as extendResourcesBucketTable from './0019-extend-resources-bucket-table';
+import * as addProjectsFilesTable from './0020-add-projects-files-table';
+import * as dropUniqueNameFromS3Assets from './0021-drop-unique-name-from-s3-assets';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -38,4 +41,7 @@ export const DB_MIGRATIONS = {
   '0016-add-apps-categories': addAppsCategories,
   '0017-add-internal-flag-to-chats': addInternalFlagToChats,
   '0018-add-projects-to-chats': addProjectsToChats,
+  '0019-extend-resources-bucket-table': extendResourcesBucketTable,
+  '0020-add-projects-files-table': addProjectsFilesTable,
+  '0021-drop-unique-name-from-s3-assets': dropUniqueNameFromS3Assets,
 };

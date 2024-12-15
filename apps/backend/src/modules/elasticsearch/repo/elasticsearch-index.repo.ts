@@ -113,10 +113,11 @@ export function createElasticsearchIndexRepo<
      * Delete single document by id.
      *
      * @param id - The document id.
+     * @param reindexAttributes - The re-indexing attributes.
      * @returns The delete result.
      */
-    deleteDocument = (id: RelaxedId) =>
-      this.elasticsearchRepo.deleteDocument(aliasIndexName, String(id));
+    deleteDocument = (id: RelaxedId, reindexAttributes: EsIndexWaitAttributes = {}) =>
+      this.elasticsearchRepo.deleteDocument(aliasIndexName, String(id), reindexAttributes);
 
     /**
      * Delete documents by ids.

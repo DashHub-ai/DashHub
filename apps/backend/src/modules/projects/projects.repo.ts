@@ -12,6 +12,7 @@ import {
   DatabaseError,
   TableId,
   TransactionalAttrs,
+  tryGetFirstOrNotExists,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
@@ -59,6 +60,40 @@ export class ProjectsRepo extends createDatabaseRepo('projects') {
           },
         })),
       ),
+    );
+  };
+
+  getDefaultS3Bucket = ({ forwardTransaction, projectId }: TransactionalAttrs<{ projectId: TableId; }>) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(
+        async qb =>
+          qb
+            .selectFrom('projects')
+            .where('projects.id', '=', projectId)
+            .innerJoin(
+              subquery =>
+                subquery
+                  .selectFrom('s3_resources_buckets as buckets')
+                  .innerJoin(
+                    'organizations_s3_resources_buckets as org_buckets',
+                    'org_buckets.bucket_id',
+                    'buckets.id',
+                  )
+                  .where('org_buckets.default', '=', true)
+                  .selectAll('buckets')
+                  .select('org_buckets.organization_id')
+                  .as('bucket'),
+              join => join
+                .onRef('projects.organization_id', '=', 'bucket.organization_id'),
+            )
+            .selectAll('bucket')
+            .limit(1)
+            .execute(),
+      ),
+      DatabaseError.tryTask,
+      tryGetFirstOrNotExists,
     );
   };
 }

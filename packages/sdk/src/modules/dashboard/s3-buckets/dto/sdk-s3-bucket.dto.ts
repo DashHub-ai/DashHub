@@ -10,9 +10,14 @@ import {
 export const SdkS3BucketV = z.object({
   organization: SdkIdNameUrlEntryV,
   default: z.boolean(),
+  bucketName: z.string(),
   region: z.string(),
+  ssl: z.boolean(),
+  port: z.number(),
+  endpoint: z.string(),
   accessKeyId: z.string(),
   secretAccessKey: z.string(),
+  publicBaseUrl: z.string(),
 })
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)

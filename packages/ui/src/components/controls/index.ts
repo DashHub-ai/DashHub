@@ -1,4 +1,5 @@
 export * from './checkbox';
+export * from './file-input';
 export * from './hidden-required-input';
 export * from './input';
 export * from './input-with-icon';
