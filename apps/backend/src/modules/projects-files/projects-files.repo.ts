@@ -1,6 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
+import { identity, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import { createChunkAsyncIterator, isNil, mapAsyncIterator } from '@llm/commons';
@@ -11,12 +11,17 @@ import {
   AbstractDatabaseRepo,
   DatabaseConnectionRepo,
   DatabaseError,
+  DatabaseRecordNotExists,
   TableId,
   TransactionalAttrs,
-  tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
 } from '../database';
 import { S3ResourcesRepo } from '../s3/repo/s3-resources.repo';
+
+type ProjectResourceLookupAttrs = TransactionalAttrs<{
+  projectId: TableId;
+  resourceId: TableId;
+}>;
 
 @injectable()
 export class ProjectsFilesRepo extends AbstractDatabaseRepo {
@@ -51,31 +56,59 @@ export class ProjectsFilesRepo extends AbstractDatabaseRepo {
     );
   };
 
+  exists = (
+    {
+      forwardTransaction,
+      projectId,
+      resourceId,
+    }: ProjectResourceLookupAttrs,
+  ) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(
+        async qb =>
+          qb
+            .selectFrom('projects_files')
+            .where('project_id', '=', projectId)
+            .where('s3_resource_id', '=', resourceId)
+            .select(qb.fn.count('s3_resource_id').as('total'))
+            .executeTakeFirstOrThrow(),
+      ),
+      DatabaseError.tryTask,
+      TE.map(result => Number(result.total) > 0),
+    );
+  };
+
+  existsOrThrow = (attrs: ProjectResourceLookupAttrs) => pipe(
+    this.exists(attrs),
+    TE.chainW(
+      TE.fromPredicate(
+        identity,
+        () => new DatabaseRecordNotExists(attrs),
+      ),
+    ),
+  );
+
   delete = (
     {
       forwardTransaction,
       resourceId,
       projectId,
-    }: TransactionalAttrs<{
-      resourceId: TableId;
-      projectId: TableId;
-    }>,
+    }: ProjectResourceLookupAttrs,
   ) => {
-    const transaction = tryReuseOrCreateTransaction({ db: this.db, forwardTransaction });
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 
-    return transaction(trx => pipe(
-      DatabaseError.tryTask(async () =>
-        trx
+    return pipe(
+      transaction(
+        async qb => qb
           .deleteFrom('projects_files')
           .where('s3_resource_id', '=', resourceId)
           .where('project_id', '=', projectId)
           .execute(),
       ),
-      TE.chain(() => this.s3ResourcesRepo.delete({
-        forwardTransaction: trx,
-        id: resourceId,
-      })),
-    ));
+      DatabaseError.tryTask,
+    );
   };
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {

@@ -73,6 +73,24 @@ export class S3Service {
       })),
     );
   };
+
+  deleteFile = (
+    {
+      resourceId,
+    }: {
+      resourceId: TableId;
+    },
+  ) => pipe(
+    TE.Do,
+    TE.bind('resource', () => this.s3ResourcesRepo.findById({ id: resourceId })),
+    TE.bind('bucketAccess', ({ resource: { bucketId } }) => this.getBucketS3Access(bucketId)),
+    TE.chainW(({ resource, bucketAccess: { client, bucket } }) => S3UploadError.tryCatch(
+      () => client.removeObject(bucket.bucketName, resource.s3Key),
+    )),
+    TE.chainW(() => this.s3ResourcesRepo.delete({
+      id: resourceId,
+    })),
+  );
 }
 
 type UploadTE = TE.TaskEither<
