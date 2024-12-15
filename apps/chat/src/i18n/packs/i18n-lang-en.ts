@@ -362,6 +362,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       upload: 'Upload file',
       download: 'Download file',
       delete: 'Delete file',
+      emptyPlaceholder: 'No files yet. Feel free to upload one!',
     },
   },
   experts: {

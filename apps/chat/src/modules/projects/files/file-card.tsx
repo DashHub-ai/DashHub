@@ -1,14 +1,15 @@
 import { Download, FileText, Trash2 } from 'lucide-react';
 
+import type { SdkBaseS3FileT } from '@llm/sdk';
+
 import { useI18n } from '~/i18n';
 
 type FileCardProps = {
-  name: string;
+  file: SdkBaseS3FileT;
   onDelete: () => void;
-  onDownload: () => void;
 };
 
-export function FileCard({ name, onDelete, onDownload }: FileCardProps) {
+export function FileCard({ file, onDelete }: FileCardProps) {
   const t = useI18n().pack.projects.files;
 
   return (
@@ -16,18 +17,17 @@ export function FileCard({ name, onDelete, onDownload }: FileCardProps) {
       <FileText className="mr-3 w-4 h-4 text-gray-500" />
 
       <span className="flex-1 font-medium text-gray-700 text-sm truncate">
-        {name}
+        {file.name}
       </span>
 
       <div className="flex gap-1 transition-all">
-        <button
-          onClick={onDownload}
+        <a
           className="hover:bg-gray-100 p-1.5 rounded-md text-gray-500 hover:text-gray-900 transition-colors"
           title={t.download}
-          type="button"
+          href={file.publicUrl}
         >
           <Download className="w-4 h-4" />
-        </button>
+        </a>
 
         <button
           onClick={onDelete}

@@ -30,7 +30,7 @@ export class ProjectsFilesSdk extends AbstractNestedSdkWithAuth {
 
   search = ({ projectId, ...attrs }: SdkSearchProjectFilesInputT & { projectId: SdkTableRowIdT; }) =>
     this.fetch<SdKSearchProjectFilesOutputT>({
-      url: this.endpoint(`/${projectId}/search`),
+      url: this.endpoint(`/${projectId}/files/search`),
       query: attrs,
       options: getPayload(),
     });

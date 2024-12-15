@@ -10,6 +10,7 @@ import { SdkInvalidFileFormatError, SdkInvalidRequestError } from '@llm/sdk';
 export type ExtractedFile = {
   buffer: Buffer;
   mimeType: string;
+  fileName: string;
 };
 
 export function tryExtractSingleFile(body: unknown): TE.TaskEither<
@@ -31,6 +32,7 @@ export function tryExtractSingleFile(body: unknown): TE.TaskEither<
         async () => ({
           buffer: Buffer.from(await file.arrayBuffer()),
           mimeType: file.type,
+          fileName: file.name,
         }),
         () => new SdkInvalidFileFormatError({}),
       ),

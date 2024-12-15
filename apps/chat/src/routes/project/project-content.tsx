@@ -2,7 +2,7 @@ import type { SdkProjectT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
 import { ChatsContainer, StartChatForm } from '~/modules';
-import { FileList } from '~/modules/projects/files';
+import { FilesListContainer } from '~/modules/projects/files';
 
 type Props = {
   project: SdkProjectT;
@@ -25,8 +25,8 @@ export function ProjectContent({ project }: Props) {
         <ChatsContainer project={project} columns={2} />
       </div>
 
-      <div className="border-gray-200 pl-8 border-l w-96">
-        <FileList projectId={project.id} />
+      <div className="border-gray-200 pl-8 border-l w-[28rem]">
+        <FilesListContainer projectId={project.id} />
       </div>
     </section>
   );

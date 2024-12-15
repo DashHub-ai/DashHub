@@ -11,7 +11,7 @@ import type { TableId } from '../database';
 
 import { ProjectsRepo } from '../projects/projects.repo';
 import { S3Service, UploadFileAttrs } from '../s3';
-import { ProjectsFilesEsIndexRepo } from './elasticsearch';
+import { ProjectsFilesEsIndexRepo, ProjectsFilesEsSearchRepo } from './elasticsearch';
 import { ProjectsFilesFirewall } from './projects-files.firewall';
 import { ProjectsFilesRepo } from './projects-files.repo';
 
@@ -22,9 +22,12 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
     @inject(ProjectsRepo) private readonly projectsRepo: ProjectsRepo,
     @inject(ProjectsFilesRepo) private readonly projectsFilesRepo: ProjectsFilesRepo,
     @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
+    @inject(ProjectsFilesEsSearchRepo) private readonly esSearchRepo: ProjectsFilesEsSearchRepo,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsFilesFirewall(jwt, this);
+
+  search = this.esSearchRepo.search;
 
   uploadFile = (
     {

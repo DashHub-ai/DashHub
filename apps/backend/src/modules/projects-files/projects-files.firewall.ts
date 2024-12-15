@@ -14,6 +14,11 @@ export class ProjectsFilesFirewall extends AuthFirewallService {
     super(jwt);
   }
 
+  search = flow(
+    this.projectsFilesService.search,
+    this.tryTEIfUser.is.root,
+  );
+
   uploadFile = flow(
     this.projectsFilesService.uploadFile,
     this.tryTEIfUser.is.root,

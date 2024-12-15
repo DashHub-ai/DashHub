@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   type ProjectsSdk,
   SdkCreateProjectInputV,
+  SdkSearchProjectFilesInputV,
   SdKSearchProjectsInputV,
   SdkUpdateProjectInputV,
 } from '@llm/sdk';
@@ -37,17 +38,31 @@ export class ProjectsController extends AuthorizedController {
         async (context) => {
           return pipe(
             tryExtractSingleFile(await context.req.parseBody()),
-            TE.chainW(({ buffer, mimeType }) =>
+            TE.chainW(({ buffer, mimeType, fileName }) =>
               projectsFilesService.asUser(context.var.jwt).uploadFile({
-                projectId: Number(context.req.param().projectId),
+                projectId: Number(context.req.param('projectId')),
+                name: fileName,
                 buffer,
                 mimeType,
               }),
             ),
             rejectUnsafeSdkErrors,
-            serializeSdkResponseTE<ReturnType<ProjectsSdk['uploadFile']>>(context),
+            serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['upload']>>(context),
           );
         },
+      )
+      .get(
+        '/:projectId/files/search',
+        sdkSchemaValidator('query', SdkSearchProjectFilesInputV),
+        async context => pipe(
+          {
+            ...context.req.valid('query'),
+            projectId: Number(context.req.param('projectId')),
+          },
+          projectsFilesService.asUser(context.var.jwt).search,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['search']>>(context),
+        ),
       )
       .get(
         '/search',

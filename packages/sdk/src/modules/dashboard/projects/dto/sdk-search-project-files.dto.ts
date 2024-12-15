@@ -14,12 +14,12 @@ export const SdkSearchProjectFileItemV = SdkProjectFileV;
 
 export type SdkSearchProjectFileItemT = z.infer<typeof SdkSearchProjectFileItemV>;
 
-export const SdkSearchProjectsFilesInputV = SdkOffsetPaginationInputV
+export const SdkSearchProjectFilesInputV = SdkOffsetPaginationInputV
   .merge(SdkDefaultSortInputV)
   .merge(SdkIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdkSearchProjectFilesInputT = z.infer<typeof SdkSearchProjectsFilesInputV>;
+export type SdkSearchProjectFilesInputT = z.infer<typeof SdkSearchProjectFilesInputV>;
 
 export const SdKSearchProjectFilesOutputV = SdkOffsetPaginationOutputV(SdkSearchProjectFileItemV);
 
