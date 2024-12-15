@@ -56,12 +56,14 @@ export class ProjectsFilesEsSearchRepo {
 
   private static createEsRequestSearchFilters = (
     {
+      projectId,
       phrase,
       ids,
     }: InternalSearchProjectFilesInput,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        esb.termQuery('project.id', projectId),
         !!ids?.length && esb.termsQuery('id', ids),
         !!phrase && createPhraseFieldQuery()(phrase).boost(3),
       ]),
