@@ -21,6 +21,7 @@ export * from './reject-by-id';
 export * from './reject-falsy-items';
 export * from './run-task';
 export * from './safe-to-array';
+export * from './select-file';
 export * from './shallow-compare-array';
 export * from './tap-either';
 export * from './tap-option';

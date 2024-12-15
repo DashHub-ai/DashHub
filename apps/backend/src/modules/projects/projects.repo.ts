@@ -86,7 +86,7 @@ export class ProjectsRepo extends createDatabaseRepo('projects') {
                   .select('org_buckets.organization_id')
                   .as('bucket'),
               join => join
-                .onRef('projects.organization_id', '=', 'organization_id'),
+                .onRef('projects.organization_id', '=', 'bucket.organization_id'),
             )
             .selectAll('bucket')
             .limit(1)

@@ -74,6 +74,7 @@ export class OrganizationsS3BucketsRepo extends AbstractDatabaseRepo {
           port: value.port,
           ssl: value.ssl,
           bucketName: value.bucketName,
+          publicBaseUrl: value.publicBaseUrl,
         },
       }),
       TE.tap(() => {

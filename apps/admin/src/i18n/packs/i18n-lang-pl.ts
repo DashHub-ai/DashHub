@@ -298,6 +298,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
             label: 'Endpoint',
             placeholder: 'Wpisz endpoint',
           },
+          publicBaseUrl: {
+            label: 'Publiczny URL bazowy',
+            placeholder: 'Wpisz publiczny URL bazowy',
+          },
           port: {
             label: 'Port',
             placeholder: 'Wpisz port',

@@ -8,7 +8,7 @@ import { useI18n } from '~/i18n';
 type Value = Pick<
   SdkS3BucketT,
   'name' | 'region' | 'accessKeyId' | 'secretAccessKey' |
-  'default' | 'ssl' | 'endpoint' | 'port' | 'bucketName'
+  'default' | 'ssl' | 'endpoint' | 'port' | 'bucketName' | 'publicBaseUrl'
 >;
 
 type Props = ValidationErrorsListProps<Value>;
@@ -94,6 +94,19 @@ export const S3BucketSharedFormFields = controlled<Value, Props>(({ errors, cont
           placeholder={t.fields.endpoint.placeholder}
           required
           {...bind.path('endpoint')}
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.publicBaseUrl.label}
+        {...validation.extract('publicBaseUrl')}
+      >
+        <Input
+          name="publicBaseUrl"
+          placeholder={t.fields.publicBaseUrl.placeholder}
+          required
+          {...bind.path('publicBaseUrl')}
         />
       </FormField>
 

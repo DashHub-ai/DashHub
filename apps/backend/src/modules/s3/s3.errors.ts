@@ -8,7 +8,10 @@ export class S3UploadError extends TaggedError.ofLiteral<any>()('S3UploadError')
   static tryCatch<R>(task: Task<R>) {
     return TE.tryCatch(
       task,
-      (err: any) => new S3UploadError(err),
+      (err: any) => {
+        console.error(err);
+        return new S3UploadError(err);
+      },
     );
   }
 }

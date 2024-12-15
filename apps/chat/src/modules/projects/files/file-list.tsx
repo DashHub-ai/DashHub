@@ -1,8 +1,12 @@
-import { Plus } from 'lucide-react';
+import { PaperclipIcon } from 'lucide-react';
 
+import type { SdkTableRowIdT } from '@llm/sdk';
+
+import { FormSpinnerCTA } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 import { FileCard } from './file-card';
+import { useFileUpload } from './use-file-upload';
 
 const MOCK_FILES = [
   { id: '1', name: 'document.pdf' },
@@ -10,14 +14,13 @@ const MOCK_FILES = [
   { id: '3', name: 'report.docx' },
 ];
 
-export function FileList() {
-  const t = useI18n().pack.projects.files;
+type FileListProps = {
+  projectId: SdkTableRowIdT;
+};
 
-  const handleUpload = () => {
-    // TODO: Implement file upload
-    // eslint-disable-next-line no-console
-    console.log('Upload new file');
-  };
+export function FileList({ projectId }: FileListProps) {
+  const t = useI18n().pack.projects.files;
+  const [uploadFile, uploadState] = useFileUpload(projectId);
 
   const handleDelete = (id: string) => {
     // eslint-disable-next-line no-console
@@ -33,14 +36,15 @@ export function FileList() {
     <section>
       <div className="flex justify-between items-center mb-8">
         <h2 className="font-semibold text-gray-800 text-xl">Files</h2>
-        <button
+        <FormSpinnerCTA
           type="button"
-          onClick={handleUpload}
-          className="flex items-center gap-2 uk-button uk-button-primary"
+          loading={uploadState.isLoading}
+          onClick={() => void uploadFile()}
+          className="flex items-center uk-button-small"
         >
-          <Plus className="w-5 h-5" />
+          {!uploadState.isLoading && <PaperclipIcon size={16} className="mr-2" />}
           {t.upload}
-        </button>
+        </FormSpinnerCTA>
       </div>
 
       <div className="space-y-3">

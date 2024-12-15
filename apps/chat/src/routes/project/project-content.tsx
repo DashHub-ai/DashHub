@@ -26,7 +26,7 @@ export function ProjectContent({ project }: Props) {
       </div>
 
       <div className="border-gray-200 pl-8 border-l w-96">
-        <FileList />
+        <FileList projectId={project.id} />
       </div>
     </section>
   );

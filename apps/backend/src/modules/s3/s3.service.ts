@@ -45,7 +45,7 @@ export class S3Service {
       buffer,
       name,
       mimeType,
-      s3Dir = '/',
+      s3Dir = '',
     }: UploadFileAttrs,
   ): UploadTE => {
     const mimeTypeResult = tryDecodeMimeTypeExtension(mimeType);

@@ -296,6 +296,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
             label: 'Endpoint',
             placeholder: 'Enter endpoint',
           },
+          publicBaseUrl: {
+            label: 'Public base URL',
+            placeholder: 'Enter public base URL',
+          },
           port: {
             label: 'Port',
             placeholder: 'Enter port',

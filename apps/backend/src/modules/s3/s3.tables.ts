@@ -13,6 +13,7 @@ export type S3ResourcesBucketsTable =
     ssl: boolean;
     port: number;
     endpoint: string;
+    public_base_url: string;
     region: string;
     access_key_id: string;
     secret_access_key: string;

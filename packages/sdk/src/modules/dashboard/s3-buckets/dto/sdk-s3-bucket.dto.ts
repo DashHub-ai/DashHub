@@ -17,6 +17,7 @@ export const SdkS3BucketV = z.object({
   endpoint: z.string(),
   accessKeyId: z.string(),
   secretAccessKey: z.string(),
+  publicBaseUrl: z.string(),
 })
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)
