@@ -2,12 +2,13 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkS3BucketT } from '@llm/sdk';
 
-import { Checkbox, FormField, Input } from '@llm/ui';
+import { Checkbox, FormField, Input, NumericInput } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Value = Pick<
   SdkS3BucketT,
-  'name' | 'region' | 'accessKeyId' | 'secretAccessKey' | 'default'
+  'name' | 'region' | 'accessKeyId' | 'secretAccessKey' |
+  'default' | 'ssl' | 'endpoint' | 'port' | 'bucketName'
 >;
 
 type Props = ValidationErrorsListProps<Value>;
@@ -72,6 +73,45 @@ export const S3BucketSharedFormFields = controlled<Value, Props>(({ errors, cont
 
       <FormField
         className="uk-margin"
+        label={t.fields.port.label}
+        {...validation.extract('port')}
+      >
+        <NumericInput
+          name="access-key-id"
+          placeholder={t.fields.port.placeholder}
+          required
+          {...bind.path('port')}
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.endpoint.label}
+        {...validation.extract('endpoint')}
+      >
+        <Input
+          name="endpoint"
+          placeholder={t.fields.endpoint.placeholder}
+          required
+          {...bind.path('endpoint')}
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.bucketName.label}
+        {...validation.extract('bucketName')}
+      >
+        <Input
+          name="bucketName"
+          placeholder={t.fields.bucketName.placeholder}
+          required
+          {...bind.path('bucketName')}
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
         label={t.fields.settings.label}
       >
         <Checkbox
@@ -79,6 +119,13 @@ export const S3BucketSharedFormFields = controlled<Value, Props>(({ errors, cont
           className="block uk-text-small"
         >
           {t.fields.defaultForOrganization.label}
+        </Checkbox>
+
+        <Checkbox
+          {...bind.path('ssl')}
+          className="block uk-text-small"
+        >
+          {t.fields.ssl.label}
         </Checkbox>
       </FormField>
     </>

@@ -8,8 +8,10 @@ import type {
   TableWithDefaultColumns,
 } from '../database';
 
-export type ProjectsTable = TableWithDefaultColumns &
-  TableWithArchivedAtColumn & {
+export type ProjectsTable =
+  & TableWithDefaultColumns
+  & TableWithArchivedAtColumn
+  & {
     organization_id: ColumnType<TableId, TableId, never>;
     name: string;
     description: string | null;
