@@ -21,7 +21,7 @@ export function FilesListContainer({ projectId }: Props) {
     storeDataInUrl: false,
     schema: SdkSearchProjectFilesInputV,
     fallbackSearchParams: {
-      limit: 12,
+      limit: 10,
     },
     fetchResultsTask: filters => sdks.dashboard.projects.files.search({
       ...filters,
@@ -34,15 +34,13 @@ export function FilesListContainer({ projectId }: Props) {
     silentReload();
   };
 
-  const handleDelete = (id: SdkTableRowIdT) => {
-    // eslint-disable-next-line no-console
-    console.log('Delete file:', id);
-  };
-
   return (
     <section>
       <div className="flex justify-between items-center mb-8">
-        <h2 className="font-semibold text-gray-800 text-xl">Files</h2>
+        <h2 className="font-semibold text-gray-800 text-xl">
+          {t.title}
+        </h2>
+
         <FormSpinnerCTA
           type="button"
           loading={uploadState.isLoading}
@@ -63,6 +61,8 @@ export function FilesListContainer({ projectId }: Props) {
           footerProps={{
             withNthToNthOf: false,
             withPageSizeSelector: false,
+            withPageNumber: false,
+            centered: true,
           }}
         >
           {({ items, total }) => {
@@ -74,7 +74,8 @@ export function FilesListContainer({ projectId }: Props) {
               <FileCard
                 key={file.id}
                 file={file}
-                onDelete={() => handleDelete(file.id)}
+                projectId={projectId}
+                onAfterDelete={silentReload}
               />
             ));
           }}

@@ -3,6 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import {
+  ofSdkSuccess,
   type ProjectsSdk,
   SdkCreateProjectInputV,
   SdkSearchProjectFilesInputV,
@@ -62,6 +63,19 @@ export class ProjectsController extends AuthorizedController {
           projectsFilesService.asUser(context.var.jwt).search,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['search']>>(context),
+        ),
+      )
+      .delete(
+        '/:projectId/files/:resourceId',
+        async context => pipe(
+          {
+            resourceId: Number(context.req.param('resourceId')),
+            projectId: Number(context.req.param('projectId')),
+          },
+          projectsFilesService.asUser(context.var.jwt).delete,
+          TE.map(ofSdkSuccess),
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['delete']>>(context),
         ),
       )
       .get(

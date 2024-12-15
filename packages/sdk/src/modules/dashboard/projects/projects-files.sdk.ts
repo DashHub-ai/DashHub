@@ -1,10 +1,12 @@
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
+  deletePayload,
   formDataPayload,
   getPayload,
   type SdkInvalidFileFormatError,
   type SdkRecordAlreadyExistsError,
   type SdkRecordNotFoundError,
+  type SdkSuccessT,
   type SdkTableRowIdT,
   type SdkTableRowWithIdT,
 } from '~/shared';
@@ -33,5 +35,19 @@ export class ProjectsFilesSdk extends AbstractNestedSdkWithAuth {
       url: this.endpoint(`/${projectId}/files/search`),
       query: attrs,
       options: getPayload(),
+    });
+
+  delete = (
+    {
+      projectId,
+      resourceId,
+    }: {
+      projectId: SdkTableRowIdT;
+      resourceId: SdkTableRowIdT;
+    },
+  ) =>
+    this.fetch<SdkSuccessT, SdkRecordNotFoundError>({
+      url: this.endpoint(`/${projectId}/files/${resourceId}`),
+      options: deletePayload({}),
     });
 };

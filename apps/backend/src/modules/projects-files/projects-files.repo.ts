@@ -1,21 +1,32 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
 import { createChunkAsyncIterator, isNil, mapAsyncIterator } from '@llm/commons';
 
+import type { ProjectFileTableInsertRow, ProjectFileTableRowWithRelations } from './projects-files.tables';
+
 import {
   AbstractDatabaseRepo,
+  DatabaseConnectionRepo,
   DatabaseError,
   TableId,
   TransactionalAttrs,
+  tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
 } from '../database';
-import { ProjectFileTableInsertRow, ProjectFileTableRowWithRelations } from './projects-files.tables';
+import { S3ResourcesRepo } from '../s3/repo/s3-resources.repo';
 
 @injectable()
 export class ProjectsFilesRepo extends AbstractDatabaseRepo {
+  constructor(
+    @inject(DatabaseConnectionRepo) connectionRepo: DatabaseConnectionRepo,
+    @inject(S3ResourcesRepo) private readonly s3ResourcesRepo: S3ResourcesRepo,
+  ) {
+    super(connectionRepo);
+  }
+
   create = (
     {
       forwardTransaction,
@@ -38,6 +49,33 @@ export class ProjectsFilesRepo extends AbstractDatabaseRepo {
       ),
       DatabaseError.tryTask,
     );
+  };
+
+  delete = (
+    {
+      forwardTransaction,
+      resourceId,
+      projectId,
+    }: TransactionalAttrs<{
+      resourceId: TableId;
+      projectId: TableId;
+    }>,
+  ) => {
+    const transaction = tryReuseOrCreateTransaction({ db: this.db, forwardTransaction });
+
+    return transaction(trx => pipe(
+      DatabaseError.tryTask(async () =>
+        trx
+          .deleteFrom('projects_files')
+          .where('s3_resource_id', '=', resourceId)
+          .where('project_id', '=', projectId)
+          .execute(),
+      ),
+      TE.chain(() => this.s3ResourcesRepo.delete({
+        forwardTransaction: trx,
+        id: resourceId,
+      })),
+    ));
   };
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {

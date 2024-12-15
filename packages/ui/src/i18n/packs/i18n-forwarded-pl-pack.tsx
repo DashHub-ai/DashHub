@@ -103,6 +103,14 @@ export const I18N_FORWARDED_PL_PACK: typeof I18N_FORWARDED_EN_PACK = {
       },
       yesIAmSure: 'Tak, jestem pewny',
     },
+    deleteConfirm: {
+      title: 'Usuń',
+      message: {
+        single: 'Czy na pewno chcesz usunąć ten element?',
+        multiple: 'Czy na pewno chcesz usunąć te %{count} elementy?',
+      },
+      yesIAmSure: 'Tak, jestem pewny',
+    },
   },
   tabs: {
     archiveFilters: {

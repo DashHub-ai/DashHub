@@ -1,4 +1,5 @@
 import { controlled } from '@under-control/forms';
+import clsx from 'clsx';
 
 import type { SdkOffsetPaginationInputT, SdkOffsetPaginationOutputT } from '@llm/sdk';
 
@@ -13,6 +14,8 @@ export type PaginationFooterProps = {
   result: SdkOffsetPaginationOutputT<unknown>;
   withNthToNthOf?: boolean;
   withPageSizeSelector?: boolean;
+  withPageNumber?: boolean;
+  centered?: boolean;
 };
 
 export const PaginationFooter = controlled<SdkOffsetPaginationInputT, PaginationFooterProps>((
@@ -21,6 +24,8 @@ export const PaginationFooter = controlled<SdkOffsetPaginationInputT, Pagination
     result,
     withNthToNthOf = true,
     withPageSizeSelector = true,
+    withPageNumber = true,
+    centered = false,
   },
 ) => {
   const t = useForwardedI18n().pack.pagination;
@@ -37,11 +42,18 @@ export const PaginationFooter = controlled<SdkOffsetPaginationInputT, Pagination
         </div>
       )}
 
-      <div className="flex flex-none items-center space-x-8">
+      <div
+        className={clsx(
+          'flex flex-none items-center space-x-8',
+          centered && 'mx-auto',
+        )}
+      >
         {withPageSizeSelector && (
           <PaginationItemsPerPage {...bind.path('limit')} />
         )}
-        <PageNumber result={result} pagination={value} />
+        {withPageNumber && (
+          <PageNumber result={result} pagination={value} />
+        )}
         <PaginationArrows
           {...bind.entire()}
           result={result}

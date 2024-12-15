@@ -103,9 +103,11 @@ export function StartChatForm({ project, className }: Props) {
             {...bind.path('project')}
           />
 
-          <Checkbox {...bind.path('public')}>
-            {t.publicChat}
-          </Checkbox>
+          {!!project && (
+            <Checkbox {...bind.path('public')}>
+              {t.publicChat}
+            </Checkbox>
+          )}
 
           <div className="ml-auto">
             <FormSpinnerCTA

@@ -10,7 +10,7 @@ import type { WithAuthFirewall } from '../auth';
 import type { TableId } from '../database';
 
 import { ProjectsRepo } from '../projects/projects.repo';
-import { S3Service, UploadFileAttrs } from '../s3';
+import { S3ResourcesRepo, S3Service, UploadFileAttrs } from '../s3';
 import { ProjectsFilesEsIndexRepo, ProjectsFilesEsSearchRepo } from './elasticsearch';
 import { ProjectsFilesFirewall } from './projects-files.firewall';
 import { ProjectsFilesRepo } from './projects-files.repo';
@@ -19,6 +19,7 @@ import { ProjectsFilesRepo } from './projects-files.repo';
 export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirewall> {
   constructor(
     @inject(S3Service) private readonly s3Service: S3Service,
+    @inject(S3ResourcesRepo) private readonly s3ResourcesRepo: S3ResourcesRepo,
     @inject(ProjectsRepo) private readonly projectsRepo: ProjectsRepo,
     @inject(ProjectsFilesRepo) private readonly projectsFilesRepo: ProjectsFilesRepo,
     @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
@@ -28,6 +29,26 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
   asUser = (jwt: SdkJwtTokenT) => new ProjectsFilesFirewall(jwt, this);
 
   search = this.esSearchRepo.search;
+
+  delete = (
+    {
+      resourceId,
+      projectId,
+    }: {
+      resourceId: TableId;
+      projectId: TableId;
+    },
+  ) => pipe(
+    this.projectsFilesRepo.delete({
+      resourceId,
+      projectId,
+    }),
+    tapTaskEitherTE(() =>
+      this.projectsFilesEsIndexRepo.deleteDocument(resourceId, {
+        waitForRecordAvailability: true,
+      }),
+    ),
+  );
 
   uploadFile = (
     {

@@ -101,6 +101,14 @@ export const I18N_FORWARDED_EN_PACK = {
       },
       yesIAmSure: 'Yes, I am sure',
     },
+    deleteConfirm: {
+      title: 'Delete',
+      message: {
+        single: 'Are you sure you want to delete this item?',
+        multiple: 'Do you really want to delete these %{count} items?',
+      },
+      yesIAmSure: 'Yes, I am sure',
+    },
   },
   tabs: {
     archiveFilters: {
