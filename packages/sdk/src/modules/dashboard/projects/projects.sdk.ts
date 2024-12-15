@@ -5,6 +5,7 @@ import {
   patchPayload,
   postPayload,
   putPayload,
+  type SdkInvalidFileFormatError,
   type SdkRecordAlreadyExistsError,
   type SdkRecordNotFoundError,
   type SdkTableRowIdT,
@@ -32,7 +33,7 @@ export class ProjectsSdk extends AbstractNestedSdkWithAuth {
 
     return this.fetch<
       SdkTableRowWithIdT,
-      SdkRecordNotFoundError | SdkRecordAlreadyExistsError
+      SdkRecordNotFoundError | SdkRecordAlreadyExistsError | SdkInvalidFileFormatError
     >({
       url: this.endpoint(`/${projectId}/files`),
       options: formDataPayload('POST')(formData),

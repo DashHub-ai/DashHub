@@ -1,15 +1,10 @@
-import { Buffer } from 'node:buffer';
-
-import { either as E } from 'fp-ts';
+import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
-import { z } from 'zod';
 
-import { tryParseUsingZodSchema } from '@llm/commons';
 import {
   type ProjectsSdk,
   SdkCreateProjectInputV,
-  SdkInvalidRequestError,
   SdKSearchProjectsInputV,
   SdkUpdateProjectInputV,
 } from '@llm/sdk';
@@ -21,10 +16,10 @@ import {
   mapDbRecordAlreadyExistsToSdkError,
   mapDbRecordNotFoundToSdkError,
   rejectUnsafeSdkErrors,
-  respondWithTaggedError,
   sdkSchemaValidator,
   serializeSdkResponseTE,
 } from '../../helpers';
+import { tryExtractSingleFile } from '../../helpers/try-extract-single-file';
 import { AuthorizedController } from '../shared/authorized.controller';
 
 @injectable()
@@ -40,26 +35,15 @@ export class ProjectsController extends AuthorizedController {
       .post(
         '/:projectId/files',
         async (context) => {
-          const result = pipe(
-            await context.req.parseBody(),
-            tryParseUsingZodSchema(z.object({
-              file: z.instanceof(File),
-            })),
-          );
-
-          if (E.isLeft(result)) {
-            return pipe(
-              new SdkInvalidRequestError(result.left.context),
-              respondWithTaggedError(context),
-            );
-          }
-
           return pipe(
-            projectsFilesService.asUser(context.var.jwt).uploadFile({
-              projectId: Number(context.req.param().projectId),
-              buffer: Buffer.from(await result.right.file.arrayBuffer()),
-              fileName: result.right.file.name,
-            }),
+            tryExtractSingleFile(await context.req.parseBody()),
+            TE.chainW(({ buffer, mimeType }) =>
+              projectsFilesService.asUser(context.var.jwt).uploadFile({
+                projectId: Number(context.req.param().projectId),
+                buffer,
+                mimeType,
+              }),
+            ),
             rejectUnsafeSdkErrors,
             serializeSdkResponseTE<ReturnType<ProjectsSdk['uploadFile']>>(context),
           );

@@ -1,16 +1,15 @@
-import type { Buffer } from 'node:buffer';
-
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
+import type { PartialBy } from '@llm/commons';
 import type { SdkJwtTokenT } from '@llm/sdk';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableId } from '../database';
 
 import { ProjectsRepo } from '../projects/projects.repo';
-import { S3Service } from '../s3';
+import { S3Service, UploadFileAttrs } from '../s3';
 import { ProjectsFilesFirewall } from './projects-files.firewall';
 
 @injectable()
@@ -26,22 +25,19 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
     {
       bucketId,
       projectId,
-      buffer,
-      fileName,
-    }: {
-      bucketId?: TableId;
+      ...attrs
+    }: PartialBy<UploadFileAttrs, 'bucketId'> & {
       projectId: TableId;
-      buffer: Buffer | string;
-      fileName: string;
     },
-  ) => pipe(
-    bucketId
-      ? TE.of({ id: bucketId })
-      : this.projectsRepo.getDefaultS3Bucket({ projectId }),
-    TE.chainW(bucket => this.s3Service.uploadFile({
-      bucketId: bucket.id,
-      buffer,
-      fileName,
-    })),
-  );
+  ) => {
+    return pipe(
+      bucketId
+        ? TE.of({ id: bucketId })
+        : this.projectsRepo.getDefaultS3Bucket({ projectId }),
+      TE.chain(bucket => this.s3Service.uploadFile({
+        bucketId: bucket.id,
+        ...attrs,
+      })),
+    );
+  };
 }
