@@ -1,6 +1,6 @@
 import type { ColumnType } from 'kysely';
 
-import type { NormalizeSelectTableRow, TableId } from '../database';
+import type { NormalizeInsertTableRow, NormalizeSelectTableRow, TableId } from '../database';
 
 export type ProjectsFilesTable = {
   project_id: ColumnType<TableId, TableId, never>;
@@ -8,3 +8,5 @@ export type ProjectsFilesTable = {
 };
 
 export type ProjectsFilesTableRow = NormalizeSelectTableRow<ProjectsFilesTable>;
+
+export type ProjectsFilesTableInsertRow = NormalizeInsertTableRow<ProjectsFilesTable>;
