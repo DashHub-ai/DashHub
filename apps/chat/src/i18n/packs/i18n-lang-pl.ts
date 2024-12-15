@@ -359,6 +359,12 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         },
       },
     },
+    files: {
+      title: 'Pliki',
+      upload: 'Dodaj plik',
+      download: 'Pobierz',
+      delete: 'Usuń',
+    },
   },
   experts: {
     favorites: {
