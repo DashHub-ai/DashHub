@@ -244,6 +244,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           defaultForOrganization: {
             label: 'Domyślny dla organizacji',
           },
+          embedding: {
+            label: 'Embedding',
+          },
         },
       },
     },

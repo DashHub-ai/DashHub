@@ -70,6 +70,7 @@ export class ProjectsEmbeddingsEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       projectFileId: source.project_file_id,
+      aiModelId: source.ai_model_id,
       text: source.text,
       vector: source.vector,
       metadata: source.metadata,

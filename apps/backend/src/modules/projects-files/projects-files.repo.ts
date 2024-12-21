@@ -10,17 +10,42 @@ import {
   DatabaseError,
   TableId,
   TransactionalAttrs,
+  tryGetFirstOrNotExists,
   tryReuseTransactionOrSkip,
 } from '../database';
 
 @injectable()
 export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
+  getFileEmbeddingAIModelId = ({ forwardTransaction, id }: TransactionalAttrs<{ id: TableId; }>) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(
+        qb => qb
+          .selectFrom('projects_files')
+          .innerJoin('projects', 'projects.id', 'projects_files.project_id')
+          .innerJoin('ai_models', 'ai_models.organization_id', 'projects.organization_id')
+          .where(eb => eb
+            .and([
+              eb('projects_files.id', '=', id),
+              eb('ai_models.embedding', '=', true),
+            ]),
+          )
+          .select('ai_models.id')
+          .limit(1)
+          .execute(),
+      ),
+      DatabaseError.tryTask,
+      tryGetFirstOrNotExists,
+    );
+  };
+
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 
     return pipe(
       transaction(
-        async qb =>
+        qb =>
           qb
             .selectFrom('projects_files')
             .where('projects_files.id', 'in', ids)

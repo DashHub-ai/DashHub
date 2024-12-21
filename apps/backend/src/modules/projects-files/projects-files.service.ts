@@ -41,24 +41,26 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
     },
   ) => {
     return pipe(
-      bucketId
-        ? TE.of({ id: bucketId })
-        : this.projectsRepo.getDefaultS3Bucket({ projectId }),
-      TE.chain(bucket => this.s3Service.uploadFile({
+      TE.Do,
+      TE.bind('bucket', () =>
+        bucketId
+          ? TE.of({ id: bucketId })
+          : this.projectsRepo.getDefaultS3Bucket({ projectId })),
+      TE.bindW('s3File', ({ bucket }) => this.s3Service.uploadFile({
         bucketId: bucket.id,
         ...attrs,
       })),
-      tapTaskEitherTE(({ id }) => this.projectsFilesRepo.create({
+      TE.bindW('projectFile', ({ s3File }) => this.projectsFilesRepo.create({
         value: {
           projectId,
-          s3ResourceId: id,
+          s3ResourceId: s3File.id,
         },
       })),
       tapTaskEitherTE(() => this.projectsFilesEsIndexRepo.reindexAllProjectFiles(projectId)),
-      tapTaskEitherTE(() => this.projectsEmbeddingsService.generateFileEmbeddings({
+      tapTaskEitherTE(({ projectFile }) => this.projectsEmbeddingsService.generateFileEmbeddings({
         buffer: attrs.buffer,
         mimeType: attrs.mimeType,
-        projectFileId: projectId,
+        projectFileId: projectFile.id,
       })),
     );
   };

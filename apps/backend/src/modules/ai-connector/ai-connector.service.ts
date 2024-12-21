@@ -8,6 +8,7 @@ import { z } from 'zod';
 import type {
   SdkCreateMessageInputT,
   SdkMessageT,
+  SdkSearchAIModelItemT,
   SdkTableRowWithIdT,
 } from '@llm/sdk';
 
@@ -21,6 +22,34 @@ export class AIConnectorService {
   constructor(
     @inject(AIModelsService) private readonly aiModelsService: AIModelsService,
   ) {}
+
+  executeEmbeddingPrompt = (
+    {
+      aiModel,
+      input,
+    }: {
+      aiModel: SdkTableRowWithIdT;
+      input: string;
+    },
+  ) => pipe(
+    this.aiModelsService.get(aiModel.id),
+    TE.chainW(({ credentials: { apiKey, apiModel } }) => {
+      const ai = new OpenAI({
+        apiKey,
+      });
+
+      return OpenAIConnectionCreatorError.tryCatch(
+        async () => {
+          const result = await ai.embeddings.create({
+            input,
+            model: apiModel,
+          });
+
+          return result.data[0].embedding;
+        },
+      );
+    }),
+  );
 
   executeStreamPrompt = (
     {
@@ -57,20 +86,65 @@ export class AIConnectorService {
     }),
   );
 
+  executePrompt = (
+    {
+      aiModel,
+      history = [],
+      message,
+    }: {
+      aiModel: SdkTableRowWithIdT | SdkSearchAIModelItemT;
+      history?: SdkMessageT[];
+      message: string;
+    },
+  ) => pipe(
+    'credentials' in aiModel
+      ? TE.of(aiModel)
+      : this.aiModelsService.get(aiModel.id),
+    TE.chainW(({ credentials }) => {
+      const ai = new OpenAI({
+        apiKey: credentials.apiKey,
+      });
+
+      const client = Instructor({
+        client: ai,
+        mode: this.determineInstructorMode(credentials.apiModel),
+      });
+
+      return OpenAIConnectionCreatorError.tryCatch(
+        async () => {
+          const result = await client.chat.completions.create({
+            model: credentials.apiModel,
+            messages: [
+              ...this.normalizeMessagesToCompletion(history),
+              {
+                role: 'user',
+                content: message,
+              },
+            ],
+          });
+
+          return result.choices[0].message.content;
+        },
+      );
+    }),
+  );
+
   executeInstructedPrompt = <Z extends z.AnyZodObject>(
     {
       aiModel,
-      history,
+      history = [],
       message,
       schema,
     }: {
-      aiModel: SdkTableRowWithIdT;
-      history: SdkMessageT[];
+      aiModel: SdkTableRowWithIdT | SdkSearchAIModelItemT;
+      history?: SdkMessageT[];
       message: string;
       schema: Z;
     },
   ) => pipe(
-    this.aiModelsService.get(aiModel.id),
+    'credentials' in aiModel
+      ? TE.of(aiModel)
+      : this.aiModelsService.get(aiModel.id),
     TE.chainW(({ credentials }) => {
       const ai = new OpenAI({
         apiKey: credentials.apiKey,

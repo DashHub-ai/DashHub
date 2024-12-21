@@ -242,6 +242,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           defaultForOrganization: {
             label: 'Default for organization',
           },
+          embedding: {
+            label: 'Embedding',
+          },
         },
       },
     },

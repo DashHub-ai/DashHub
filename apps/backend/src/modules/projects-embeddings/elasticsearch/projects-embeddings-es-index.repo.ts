@@ -22,9 +22,8 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
       dynamic: false,
       properties: {
         ...createBaseDatedRecordMappings(),
-        summary: {
-          type: 'boolean',
-        },
+        summary: { type: 'boolean' },
+        text: { type: 'text' },
         vector: {
           type: 'dense_vector',
           dims: 1536,
@@ -54,6 +53,7 @@ export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsI
       TE.map(
         A.map(entity => ({
           ...snakecaseKeys(entity, { deep: true }),
+          vector: JSON.parse(entity.vector),
           _id: String(entity.id),
         })),
       ),
