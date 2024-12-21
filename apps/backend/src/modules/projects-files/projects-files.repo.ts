@@ -1,13 +1,12 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 
 import type { ProjectFileTableRowWithRelations } from './projects-files.tables';
 
 import {
   createDatabaseRepo,
-  DatabaseConnectionRepo,
   DatabaseError,
   TableId,
   TransactionalAttrs,
@@ -16,12 +15,6 @@ import {
 
 @injectable()
 export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
-  constructor(
-    @inject(DatabaseConnectionRepo) connectionRepo: DatabaseConnectionRepo,
-  ) {
-    super(connectionRepo);
-  }
-
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 

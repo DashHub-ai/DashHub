@@ -21,6 +21,7 @@ import * as extendResourcesBucketTable from './0019-extend-resources-bucket-tabl
 import * as addProjectsFilesTable from './0020-add-projects-files-table';
 import * as dropUniqueNameFromS3Assets from './0021-drop-unique-name-from-s3-assets';
 import * as addIdToProjectFilesTable from './0022-add-id-to-project-files-table';
+import * as addProjectsEmbeddingsTable from './0023-add-projects-embeddings-table';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -46,4 +47,5 @@ export const DB_MIGRATIONS = {
   '0020-add-projects-files-table': addProjectsFilesTable,
   '0021-drop-unique-name-from-s3-assets': dropUniqueNameFromS3Assets,
   '0022-add-id-to-project-files-table': addIdToProjectFilesTable,
+  '0023-add-projects-embeddings-table': addProjectsEmbeddingsTable,
 };
