@@ -9,6 +9,7 @@ import { type PartialBy, tapTaskEitherTE } from '@llm/commons';
 import type { WithAuthFirewall } from '../auth';
 import type { TableId } from '../database';
 
+import { ProjectsEmbeddingsService } from '../projects-embeddings/projects-embeddings.service';
 import { ProjectsRepo } from '../projects/projects.repo';
 import { S3Service, UploadFileAttrs } from '../s3';
 import { ProjectsFilesEsIndexRepo, ProjectsFilesEsSearchRepo } from './elasticsearch';
@@ -23,6 +24,7 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
     @inject(ProjectsFilesRepo) private readonly projectsFilesRepo: ProjectsFilesRepo,
     @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
     @inject(ProjectsFilesEsSearchRepo) private readonly esSearchRepo: ProjectsFilesEsSearchRepo,
+    @inject(ProjectsEmbeddingsService) private readonly projectsEmbeddingsService: ProjectsEmbeddingsService,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsFilesFirewall(jwt, this);
@@ -53,6 +55,11 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
         },
       })),
       tapTaskEitherTE(() => this.projectsFilesEsIndexRepo.reindexAllProjectFiles(projectId)),
+      tapTaskEitherTE(() => this.projectsEmbeddingsService.generateFileEmbeddings({
+        buffer: attrs.buffer,
+        mimeType: attrs.mimeType,
+        projectFileId: projectId,
+      })),
     );
   };
 
