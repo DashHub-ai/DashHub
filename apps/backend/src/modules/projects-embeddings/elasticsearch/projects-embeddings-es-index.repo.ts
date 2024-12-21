@@ -7,11 +7,12 @@ import { tryOrThrowTE } from '@llm/commons';
 import {
   createBaseDatedRecordMappings,
   createElasticsearchIndexRepo,
+  createIdObjectMapping,
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import type { ProjectEmbeddingsTableRow } from '../projects-embeddings.tables';
+import type { ProjectEmbeddingsTableRowWithRelations } from '../projects-embeddings.tables';
 
 import { ProjectsEmbeddingsRepo } from '../projects-embeddings.repo';
 
@@ -22,11 +23,14 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
       dynamic: false,
       properties: {
         ...createBaseDatedRecordMappings(),
+        project: createIdObjectMapping(),
         summary: { type: 'boolean' },
         text: { type: 'text' },
         vector: {
           type: 'dense_vector',
           dims: 1536,
+          index: true,
+          similarity: 'dot_product',
         },
       },
     },
@@ -36,7 +40,7 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ProjectsEmbeddingsEsDocument = EsDocument<ProjectEmbeddingsTableRow>;
+export type ProjectsEmbeddingsEsDocument = EsDocument<ProjectEmbeddingsTableRowWithRelations>;
 
 @injectable()
 export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsIndexRepo<ProjectsEmbeddingsEsDocument> {
@@ -49,7 +53,7 @@ export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsI
 
   protected async findEntities(ids: number[]): Promise<ProjectsEmbeddingsEsDocument[]> {
     return pipe(
-      this.embeddingsRepo.findByIds({ ids }),
+      this.embeddingsRepo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
           ...snakecaseKeys(entity, { deep: true }),

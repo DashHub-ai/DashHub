@@ -22,7 +22,7 @@ export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
     return pipe(
       transaction(
         qb => qb
-          .selectFrom('projects_files')
+          .selectFrom(this.table)
           .innerJoin('projects', 'projects.id', 'projects_files.project_id')
           .innerJoin('ai_models', 'ai_models.organization_id', 'projects.organization_id')
           .where(eb => eb

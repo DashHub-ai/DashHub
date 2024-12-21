@@ -17,6 +17,7 @@ import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../da
 import { AIConnectorService } from '../ai-connector';
 import { AppsService } from '../apps';
 import { WithAuthFirewall } from '../auth';
+import { ProjectsEmbeddingsService } from '../projects-embeddings';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
 import { createAttachAppAIMessage, createReplyAiMessagePrefix } from './helpers';
 import { MessagesFirewall } from './messages.firewall';
@@ -42,6 +43,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     @inject(MessagesEsSearchRepo) private readonly esSearchRepo: MessagesEsSearchRepo,
     @inject(MessagesEsIndexRepo) private readonly esIndexRepo: MessagesEsIndexRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
+    @inject(ProjectsEmbeddingsService) private readonly projectsEmbeddingsService: ProjectsEmbeddingsService,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new MessagesFirewall(jwt, this);
@@ -107,7 +109,17 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         );
       }),
     )),
-    TE.chainW(({ message, history, replyContext }) =>
+    TE.bindW('mappedContent', ({ replyContext, message }) => pipe(
+      replyContext
+        ? createReplyAiMessagePrefix(replyContext, message.content)
+        : message.content,
+
+      prefixedMessage => this.projectsEmbeddingsService.wrapWithEmbeddingContextPrompt({
+        message: prefixedMessage,
+        chat: { id: message.chatId },
+      }),
+    )),
+    TE.chainW(({ mappedContent, history, message }) =>
       pipe(
         this.aiConnectorService.executeStreamPrompt(
           {
@@ -115,9 +127,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             aiModel,
             history,
             message: {
-              content: replyContext
-                ? createReplyAiMessagePrefix(replyContext, message.content)
-                : message.content,
+              content: mappedContent,
             },
           },
         ),

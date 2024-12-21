@@ -4,6 +4,7 @@ import type {
   NormalizeInsertTableRow,
   NormalizeSelectTableRow,
   TableId,
+  TableRowWithId,
   TableWithDefaultColumns,
 } from '../database';
 
@@ -21,3 +22,7 @@ export type ProjectsEmbeddingsTable =
 export type ProjectEmbeddingsTableRow = NormalizeSelectTableRow<ProjectsEmbeddingsTable>;
 
 export type ProjectEmbeddingsInsertTableRow = NormalizeInsertTableRow<ProjectsEmbeddingsTable>;
+
+export type ProjectEmbeddingsTableRowWithRelations = ProjectEmbeddingsTableRow & {
+  project: TableRowWithId;
+};

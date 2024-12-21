@@ -12,7 +12,7 @@ import {
   createScoredSortFieldQuery,
 } from '~/modules/elasticsearch';
 
-import { ProjectEmbeddingsTableRow } from '../projects-embeddings.tables';
+import { ProjectEmbeddingsTableRowWithRelations } from '../projects-embeddings.tables';
 import {
   type ProjectsEmbeddingsEsDocument,
   ProjectsEmbeddingsEsIndexRepo,
@@ -20,6 +20,13 @@ import {
 
 type InternalSearchEmbeddingsInputT = SdkOffsetPaginationInputT & {
   ids: TableId[];
+};
+
+export type EsMatchingProjectEmbedding = Pick<ProjectEmbeddingsTableRowWithRelations, 'id' | 'text'>;
+
+type InternalSearchByEmbeddingInputT = {
+  embedding: number[];
+  projectId: TableId;
 };
 
 @injectable()
@@ -31,6 +38,29 @@ export class ProjectsEmbeddingsEsSearchRepo {
   get = flow(
     this.indexRepo.getDocument,
     TE.map(ProjectsEmbeddingsEsSearchRepo.mapOutputHit),
+  );
+
+  searchByEmbedding = ({ embedding, projectId }: InternalSearchByEmbeddingInputT) => pipe(
+    this.indexRepo.search(
+      esb
+        .requestBodySearch()
+        .source(['id', 'text'])
+        .query(
+          esb.termQuery('project.id', projectId),
+        )
+        .kNN(
+          esb.kNN('vector', 8, 100).queryVector(embedding),
+        )
+        .toJSON(),
+    ),
+    TE.map(({ hits: { hits } }) => pipe(
+      hits,
+      pluck('_source'),
+      A.map((item): EsMatchingProjectEmbedding => ({
+        id: item.id!,
+        text: item.text!,
+      })),
+    )),
   );
 
   search = (dto: InternalSearchEmbeddingsInputT) =>
@@ -64,7 +94,7 @@ export class ProjectsEmbeddingsEsSearchRepo {
       ]),
     );
 
-  private static mapOutputHit = (source: ProjectsEmbeddingsEsDocument): ProjectEmbeddingsTableRow =>
+  private static mapOutputHit = (source: ProjectsEmbeddingsEsDocument): ProjectEmbeddingsTableRowWithRelations =>
     ({
       id: source.id,
       createdAt: source.created_at,
@@ -75,5 +105,6 @@ export class ProjectsEmbeddingsEsSearchRepo {
       vector: source.vector,
       metadata: source.metadata,
       summary: source.summary,
+      project: source.project,
     });
 }

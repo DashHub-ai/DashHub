@@ -16,6 +16,7 @@ import {
   DatabaseError,
   TableUuid,
   TransactionalAttrs,
+  tryGetFirstOrNotExists,
   tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
@@ -81,6 +82,34 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
         },
       })),
     ));
+  };
+
+  getFileEmbeddingAIModelId = ({ forwardTransaction, id }: TransactionalAttrs<{ id: TableUuid; }>) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(
+        qb =>
+          qb
+            .selectFrom(this.table)
+            .innerJoin('organizations', 'organizations.id', 'organization_id')
+            .innerJoin('ai_models', 'ai_models.organization_id', 'organizations.id')
+            .where(eb => eb
+              .and([
+                eb('chats.id', '=', id),
+                eb('ai_models.embedding', '=', true),
+              ]),
+            )
+            .select([
+              'ai_models.id as id',
+              'project_id as projectId',
+            ])
+            .limit(1)
+            .execute(),
+      ),
+      DatabaseError.tryTask,
+      tryGetFirstOrNotExists,
+    );
   };
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableUuid[]; }>) => {
