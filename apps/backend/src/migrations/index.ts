@@ -20,6 +20,7 @@ import * as addProjectsToChats from './0018-add-projects-to-chats';
 import * as extendResourcesBucketTable from './0019-extend-resources-bucket-table';
 import * as addProjectsFilesTable from './0020-add-projects-files-table';
 import * as dropUniqueNameFromS3Assets from './0021-drop-unique-name-from-s3-assets';
+import * as addIdToProjectFilesTable from './0022-add-id-to-project-files-table';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -44,4 +45,5 @@ export const DB_MIGRATIONS = {
   '0019-extend-resources-bucket-table': extendResourcesBucketTable,
   '0020-add-projects-files-table': addProjectsFilesTable,
   '0021-drop-unique-name-from-s3-assets': dropUniqueNameFromS3Assets,
+  '0022-add-id-to-project-files-table': addIdToProjectFilesTable,
 };

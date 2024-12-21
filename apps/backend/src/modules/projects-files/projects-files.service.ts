@@ -47,14 +47,16 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
         ...attrs,
       })),
       tapTaskEitherTE(({ id }) => this.projectsFilesRepo.create({
-        projectId,
-        s3ResourceId: id,
+        value: {
+          projectId,
+          s3ResourceId: id,
+        },
       })),
       tapTaskEitherTE(() => this.projectsFilesEsIndexRepo.reindexAllProjectFiles(projectId)),
     );
   };
 
-  delete = (
+  deleteByProjectResource = (
     {
       resourceId,
       projectId,
@@ -63,15 +65,17 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
       projectId: TableId;
     },
   ) => pipe(
-    this.projectsFilesRepo.existsOrThrow({
-      resourceId,
-      projectId,
+    this.projectsFilesRepo.findOne({
+      where: [
+        ['s3ResourceId', '=', resourceId],
+        ['projectId', '=', projectId],
+      ],
     }),
     tapTaskEitherTE(() => this.s3Service.deleteFile({
       resourceId,
     })),
-    tapTaskEitherTE(() =>
-      this.projectsFilesEsIndexRepo.deleteDocument(resourceId, {
+    tapTaskEitherTE(({ id }) =>
+      this.projectsFilesEsIndexRepo.deleteDocument(id, {
         waitForRecordAvailability: true,
       }),
     ),

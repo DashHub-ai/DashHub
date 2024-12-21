@@ -4,11 +4,11 @@ import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
 import type { TableId } from '~/modules/database';
+import type { S3ResourcesTableRowWithRelations } from '~/modules/s3';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { CamelCaseToSnakeCaseObject, tryOrThrowTE } from '@llm/commons';
 import {
   createAutocompleteFieldAnalyzeSettings,
-  createBaseAutocompleteFieldMappings,
   createBaseDatedRecordMappings,
   createElasticsearchIndexRepo,
   createIdNameObjectMapping,
@@ -27,8 +27,8 @@ const ProjectsFilesAbstractEsIndexRepo = createElasticsearchIndexRepo({
       dynamic: false,
       properties: {
         ...createBaseDatedRecordMappings(),
-        ...createBaseAutocompleteFieldMappings(),
         project: createIdNameObjectMapping(),
+        resource: createIdNameObjectMapping(),
       },
     },
     settings: {
@@ -38,9 +38,13 @@ const ProjectsFilesAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ProjectFileEsDocument = Omit<EsDocument<ProjectFileTableRowWithRelations>, 's_3_key'> & {
-  s3_key: string;
-};
+export type ProjectFileEsDocument =
+  & Omit<EsDocument<ProjectFileTableRowWithRelations>, 'resource'>
+  & {
+    resource: Omit<CamelCaseToSnakeCaseObject<S3ResourcesTableRowWithRelations>, 's_3_key'> & {
+      s3_key: string;
+    };
+  };
 
 @injectable()
 export class ProjectsFilesEsIndexRepo extends ProjectsFilesAbstractEsIndexRepo<ProjectFileEsDocument> {
@@ -54,7 +58,9 @@ export class ProjectsFilesEsIndexRepo extends ProjectsFilesAbstractEsIndexRepo<P
   reindexAllProjectFiles = (projectId: TableId) => pipe(
     this.projectsFilesRepo.createIdsIterator({
       chunkSize: 100,
-      projectId,
+      where: [
+        ['projectId', '=', projectId],
+      ],
     }),
     this.findAndIndexDocumentsByStream,
   )();

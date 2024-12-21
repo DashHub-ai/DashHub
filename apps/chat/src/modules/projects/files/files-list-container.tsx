@@ -74,7 +74,6 @@ export function FilesListContainer({ projectId }: Props) {
               <FileCard
                 key={file.id}
                 file={file}
-                projectId={projectId}
                 onAfterDelete={silentReload}
               />
             ));

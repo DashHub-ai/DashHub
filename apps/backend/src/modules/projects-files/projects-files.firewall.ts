@@ -14,8 +14,8 @@ export class ProjectsFilesFirewall extends AuthFirewallService {
     super(jwt);
   }
 
-  delete = flow(
-    this.projectsFilesService.delete,
+  deleteByProjectResource = flow(
+    this.projectsFilesService.deleteByProjectResource,
     this.tryTEIfUser.is.root,
   );
 
