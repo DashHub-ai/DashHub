@@ -14,7 +14,7 @@ export function useFileUpload(projectId: SdkTableRowIdT) {
     pipe(
       selectFile('*/*'),
       TE.fromTaskOption(() => new Error('No file selected')),
-      TE.chainW(file => sdks.dashboard.projects.files.upload({
+      TE.chainW(file => sdks.dashboard.projectsFiles.upload({
         projectId,
         file,
       })),

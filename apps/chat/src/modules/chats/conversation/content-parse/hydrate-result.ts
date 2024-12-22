@@ -1,9 +1,12 @@
 import type { ReactNode } from 'react';
 
+export type HydrateInlinedComponents = Record<string, ReactNode>;
+
 export type HydrateResult = {
   content: string;
   prependToolbars: ReactNode[];
   appendToolbars: ReactNode[];
+  inlinedReactComponents?: HydrateInlinedComponents;
 };
 
 export type ContentHydrator = (content: string) => HydrateResult;
@@ -24,12 +27,21 @@ export function createHydratePipe(...hydrators: ContentHydrator[]): ContentHydra
             ...result.appendToolbars,
             ...nextResult.appendToolbars,
           ],
+          inlinedReactComponents: {
+            ...result.inlinedReactComponents,
+            ...nextResult.inlinedReactComponents,
+          },
         };
       },
       {
         content: initialContent,
         prependToolbars: [],
         appendToolbars: [],
+        inlinedReactComponents: {},
       },
     );
+}
+
+export function inlineReactComponentTag(key: string): string {
+  return `[$embed](react$${key})`;
 }

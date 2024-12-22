@@ -58,7 +58,10 @@ export const ChatMessageContent = memo(({ content, truncate, disabled, darkMode,
     <div className="text-sm">
       {!truncate && showToolbars && hydrationResult.prependToolbars}
 
-      <MessageMarkdown content={hydrationResult.content} />
+      <MessageMarkdown
+        content={hydrationResult.content}
+        inlinedReactComponents={hydrationResult.inlinedReactComponents}
+      />
 
       {!truncate && showToolbars && hydrationResult.appendToolbars}
 

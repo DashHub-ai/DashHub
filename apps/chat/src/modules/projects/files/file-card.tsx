@@ -20,7 +20,7 @@ export function FileCard({ file, onAfterDelete }: FileCardProps) {
   const { resource, project, description } = file;
   const [onDelete, deleteStatus] = useDeleteWithNotifications(
     pipe(
-      sdks.dashboard.projects.files.delete({
+      sdks.dashboard.projectsFiles.delete({
         projectId: project.id,
         resourceId: resource.id,
       }),

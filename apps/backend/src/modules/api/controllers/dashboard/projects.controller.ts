@@ -4,14 +4,18 @@ import { inject, injectable } from 'tsyringe';
 
 import {
   ofSdkSuccess,
+  ProjectsEmbeddingsSdk,
+  ProjectsFilesSdk,
   type ProjectsSdk,
   SdkCreateProjectInputV,
+  SdkSearchProjectEmbeddingsInputV,
   SdkSearchProjectFilesInputV,
   SdKSearchProjectsInputV,
   SdkUpdateProjectInputV,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
 import { ProjectsService } from '~/modules/projects';
+import { ProjectsEmbeddingsService } from '~/modules/projects-embeddings';
 import { ProjectsFilesService } from '~/modules/projects-files';
 
 import {
@@ -30,10 +34,31 @@ export class ProjectsController extends AuthorizedController {
     @inject(ConfigService) configService: ConfigService,
     @inject(ProjectsService) projectsService: ProjectsService,
     @inject(ProjectsFilesService) projectsFilesService: ProjectsFilesService,
+    @inject(ProjectsEmbeddingsService) projectsEmbeddingsService: ProjectsEmbeddingsService,
   ) {
     super(configService);
 
     this.router
+      .get(
+        '/embeddings/:embeddingId',
+        sdkSchemaValidator('query', SdkSearchProjectEmbeddingsInputV),
+        async context => pipe(
+          Number(context.req.param('embeddingId')),
+          projectsEmbeddingsService.asUser(context.var.jwt).get,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ProjectsEmbeddingsSdk['get']>>(context),
+        ),
+      )
+      .get(
+        '/embeddings/search',
+        sdkSchemaValidator('query', SdkSearchProjectEmbeddingsInputV),
+        async context => pipe(
+          context.req.valid('query'),
+          projectsEmbeddingsService.asUser(context.var.jwt).search,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ProjectsEmbeddingsSdk['search']>>(context),
+        ),
+      )
       .post(
         '/:projectId/files',
         async (context) => {
@@ -48,7 +73,7 @@ export class ProjectsController extends AuthorizedController {
               }),
             ),
             rejectUnsafeSdkErrors,
-            serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['upload']>>(context),
+            serializeSdkResponseTE<ReturnType<ProjectsFilesSdk['upload']>>(context),
           );
         },
       )
@@ -62,7 +87,7 @@ export class ProjectsController extends AuthorizedController {
           },
           projectsFilesService.asUser(context.var.jwt).search,
           rejectUnsafeSdkErrors,
-          serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['search']>>(context),
+          serializeSdkResponseTE<ReturnType<ProjectsFilesSdk['search']>>(context),
         ),
       )
       .delete(
@@ -75,7 +100,7 @@ export class ProjectsController extends AuthorizedController {
           projectsFilesService.asUser(context.var.jwt).deleteByProjectResource,
           TE.map(ofSdkSuccess),
           rejectUnsafeSdkErrors,
-          serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['delete']>>(context),
+          serializeSdkResponseTE<ReturnType<ProjectsFilesSdk['delete']>>(context),
         ),
       )
       .get(

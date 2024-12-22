@@ -11,7 +11,11 @@ import {
   type SdkTableRowWithIdT,
 } from '~/shared';
 
-import type { SdkSearchProjectFilesInputT, SdKSearchProjectFilesOutputT, SdkUploadProjectFileInputT } from './dto';
+import type {
+  SdkSearchProjectFilesInputT,
+  SdKSearchProjectFilesOutputT,
+  SdkUploadProjectFileInputT,
+} from './dto';
 
 export class ProjectsFilesSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/projects';

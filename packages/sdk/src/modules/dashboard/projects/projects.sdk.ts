@@ -20,12 +20,8 @@ import type {
   SdkUpdateProjectOutputT,
 } from './dto';
 
-import { ProjectsFilesSdk } from './projects-files.sdk';
-
 export class ProjectsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/projects';
-
-  readonly files = new ProjectsFilesSdk(this.config);
 
   get = (id: SdkTableRowIdT) =>
     this.fetch<SdkProjectT>({

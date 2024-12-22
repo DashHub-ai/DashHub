@@ -5,6 +5,7 @@ import type {
   NormalizeSelectTableRow,
   TableId,
   TableRowWithId,
+  TableRowWithIdName,
   TableWithDefaultColumns,
 } from '../database';
 
@@ -23,6 +24,9 @@ export type ProjectEmbeddingsTableRow = NormalizeSelectTableRow<ProjectsEmbeddin
 
 export type ProjectEmbeddingsInsertTableRow = NormalizeInsertTableRow<ProjectsEmbeddingsTable>;
 
-export type ProjectEmbeddingsTableRowWithRelations = ProjectEmbeddingsTableRow & {
-  project: TableRowWithId;
-};
+export type ProjectEmbeddingsTableRowWithRelations =
+  & Omit<ProjectEmbeddingsTableRow, 'projectFileId'>
+  & {
+    project: TableRowWithId;
+    projectFile: TableRowWithIdName;
+  };

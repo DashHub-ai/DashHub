@@ -30,9 +30,11 @@ export class ProjectsEmbeddingsRepo extends createDatabaseRepo('projects_embeddi
             .selectFrom(this.table)
             .where('projects_embeddings.id', 'in', ids)
             .innerJoin('projects_files', 'projects_files.id', 'project_file_id')
+            .innerJoin('s3_resources', 's3_resources.id', 'projects_files.s3_resource_id')
             .selectAll(this.table)
             .select([
               'projects_files.project_id as project_id',
+              's3_resources.name as project_file_name',
             ])
             .limit(ids.length)
             .execute(),
@@ -41,11 +43,19 @@ export class ProjectsEmbeddingsRepo extends createDatabaseRepo('projects_embeddi
       TE.map(
         A.map(({
           project_id: projectId,
+
+          project_file_id: projectFileId,
+          project_file_name: projectFileName,
+
           ...item
         }): ProjectEmbeddingsTableRowWithRelations => ({
           ...camelcaseKeys(item),
           project: {
             id: projectId,
+          },
+          projectFile: {
+            id: projectFileId,
+            name: projectFileName,
           },
         })),
       ),

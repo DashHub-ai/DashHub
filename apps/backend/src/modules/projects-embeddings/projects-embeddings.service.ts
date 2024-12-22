@@ -3,8 +3,11 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 import isValidUTF8 from 'utf-8-validate';
 
+import type { SdkJwtTokenT } from '@llm/sdk';
+
 import { isNil } from '@llm/commons';
 
+import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithUuid } from '../database';
 import type { UploadFilePayload } from '../s3';
 
@@ -18,6 +21,7 @@ import {
   ProjectsEmbeddingsEsSearchRepo,
 } from './elasticsearch';
 import { TextAIEmbeddingGenerator } from './generators';
+import { ProjectsEmbeddingsFirewall } from './projects-embeddings.firewall';
 import { ProjectsEmbeddingsRepo } from './projects-embeddings.repo';
 import { ProjectEmbeddingsInsertTableRow } from './projects-embeddings.tables';
 import { formatVector } from './utils';
@@ -29,7 +33,7 @@ type EmbeddingGeneratorAttrs = {
 };
 
 @injectable()
-export class ProjectsEmbeddingsService {
+export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbeddingsFirewall> {
   constructor(
     @inject(ProjectsEmbeddingsRepo) private readonly repo: ProjectsEmbeddingsRepo,
     @inject(ProjectsEmbeddingsEsIndexRepo) private readonly esIndexRepo: ProjectsEmbeddingsEsIndexRepo,
@@ -40,6 +44,12 @@ export class ProjectsEmbeddingsService {
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
+
+  asUser = (jwt: SdkJwtTokenT) => new ProjectsEmbeddingsFirewall(jwt, this);
+
+  get = this.esSearchRepo.get;
+
+  search = this.esSearchRepo.search;
 
   wrapWithEmbeddingContextPrompt = (
     {
@@ -62,7 +72,7 @@ export class ProjectsEmbeddingsService {
           aiModel,
           input: message,
         })),
-        TE.chainW(embedding => this.esSearchRepo.searchByEmbedding({
+        TE.chainW(embedding => this.esSearchRepo.matchByEmbedding({
           embedding,
           projectId,
         })),
@@ -136,16 +146,23 @@ export class ProjectsEmbeddingsService {
 }
 
 function createRelevantEmbeddingsPrompt(message: string, embeddings: EsMatchingProjectEmbedding[]) {
-  const fragments = embeddings.map(({ text }) => text).join('\n--\n');
+  const fragments = embeddings
+    .map(({ text, id }) => `#embedding:${id}\n${text}`)
+    .join('\n--\n');
 
   return [
     message,
-    '\n\n\n--\m\n',
+    '\n\n\n--\n',
     'Context (based on project files):',
     fragments,
     '\n--\n',
     'Please provide a response to the user\'s question utilizing the above context where applicable.'
-    + ' If the context contains relevant information, incorporate it into your answer.'
+    + ' When incorporating information from the context:'
+    + ' - Each reference to different context parts must be prefixed with its #embedding:<id>'
+    + ' - For direct quotes use: #embedding:<id> "quoted text"'
+    + ' - For paraphrasing use: #embedding:<id> explains that... or According to #embedding:<id>...'
+    + ' - When combining information from multiple sources, each source must be properly attributed'
+    + ' - Make sure to maintain proper #embedding:<id> prefixes even when referencing multiple sources in the same sentence'
     + ' If the context is not relevant, provide a general response.'
     + ' Note: The context is derived from the project files.',
   ].join('\n');
