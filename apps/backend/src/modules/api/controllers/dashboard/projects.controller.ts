@@ -39,6 +39,26 @@ export class ProjectsController extends AuthorizedController {
     super(configService);
 
     this.router
+      .get(
+        '/embeddings/:embeddingId',
+        sdkSchemaValidator('query', SdkSearchProjectEmbeddingsInputV),
+        async context => pipe(
+          Number(context.req.param('embeddingId')),
+          projectsEmbeddingsService.asUser(context.var.jwt).get,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ProjectsEmbeddingsSdk['get']>>(context),
+        ),
+      )
+      .get(
+        '/embeddings/search',
+        sdkSchemaValidator('query', SdkSearchProjectEmbeddingsInputV),
+        async context => pipe(
+          context.req.valid('query'),
+          projectsEmbeddingsService.asUser(context.var.jwt).search,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<ProjectsEmbeddingsSdk['search']>>(context),
+        ),
+      )
       .post(
         '/:projectId/files',
         async (context) => {
@@ -56,19 +76,6 @@ export class ProjectsController extends AuthorizedController {
             serializeSdkResponseTE<ReturnType<ProjectsFilesSdk['upload']>>(context),
           );
         },
-      )
-      .get(
-        '/:projectId/embeddings/search',
-        sdkSchemaValidator('query', SdkSearchProjectEmbeddingsInputV),
-        async context => pipe(
-          {
-            ...context.req.valid('query'),
-            projectsIds: [Number(context.req.param('projectId'))],
-          },
-          projectsEmbeddingsService.asUser(context.var.jwt).search,
-          rejectUnsafeSdkErrors,
-          serializeSdkResponseTE<ReturnType<ProjectsEmbeddingsSdk['search']>>(context),
-        ),
       )
       .get(
         '/:projectId/files/search',

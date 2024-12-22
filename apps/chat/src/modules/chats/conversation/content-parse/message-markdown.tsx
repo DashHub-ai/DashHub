@@ -5,9 +5,10 @@ import remarkGfm from 'remark-gfm';
 
 type Props = {
   content: string;
+  inlinedReactComponents?: Record<string, React.ReactNode>;
 };
 
-export const MessageMarkdown = memo(({ content }: Props) => {
+export const MessageMarkdown = memo(({ content, inlinedReactComponents = {} }: Props) => {
   return (
     <Markdown
       className={clsx(
@@ -17,6 +18,19 @@ export const MessageMarkdown = memo(({ content }: Props) => {
         'prose-hr:my-3',
       )}
       remarkPlugins={[remarkGfm]}
+      components={{
+        a: ({ children, ...props }) => {
+          if (typeof children === 'string' && children === '$embed') {
+            const key = props.href?.replace(/^react\$/, '');
+
+            if (key && inlinedReactComponents[key]) {
+              return inlinedReactComponents[key];
+            }
+          }
+
+          return <a {...props}>{children}</a>;
+        },
+      }}
     >
       {content}
     </Markdown>

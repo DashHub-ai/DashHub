@@ -14,6 +14,11 @@ export class ProjectsEmbeddingsFirewall extends AuthFirewallService {
     super(jwt);
   }
 
+  get = flow(
+    this.projectsEmbeddingsService.get,
+    this.tryTEIfUser.is.root,
+  );
+
   search = flow(
     this.projectsEmbeddingsService.search,
     this.tryTEIfUser.is.root,

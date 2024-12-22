@@ -47,6 +47,8 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsEmbeddingsFirewall(jwt, this);
 
+  get = this.esSearchRepo.get;
+
   search = this.esSearchRepo.search;
 
   wrapWithEmbeddingContextPrompt = (

@@ -20,6 +20,12 @@ export class ProjectsEmbeddingsEsSearchRepo {
     @inject(ProjectsEmbeddingsEsIndexRepo) private readonly indexRepo: ProjectsEmbeddingsEsIndexRepo,
   ) {}
 
+  get = (id: TableId) =>
+    pipe(
+      this.indexRepo.getDocument(id),
+      TE.map(ProjectsEmbeddingsEsSearchRepo.mapOutputHit),
+    );
+
   search = (dto: SdkSearchProjectEmbeddingsInputT) =>
     pipe(
       this.indexRepo.search(

@@ -30,9 +30,35 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         project_file: createIdObjectMapping(),
         summary: { type: 'boolean' },
         text: { type: 'text' },
+
+        // TODO: Find better way to handle unions.
         vector_1536: {
           type: 'dense_vector',
           dims: 1536,
+          index: true,
+          similarity: 'dot_product',
+        },
+        vector_1024: {
+          type: 'dense_vector',
+          dims: 1024,
+          index: true,
+          similarity: 'dot_product',
+        },
+        vector_768: {
+          type: 'dense_vector',
+          dims: 768,
+          index: true,
+          similarity: 'dot_product',
+        },
+        vector_512: {
+          type: 'dense_vector',
+          dims: 512,
+          index: true,
+          similarity: 'dot_product',
+        },
+        vector_256: {
+          type: 'dense_vector',
+          dims: 256,
           index: true,
           similarity: 'dot_product',
         },
