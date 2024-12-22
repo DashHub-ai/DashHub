@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react';
+import type { SdkTableRowIdT } from '@llm/sdk';
 
 import {
   ProjectEmbeddingChatBadge,
   type ProjectEmbeddingChatBadgeProps,
-  ProjectImageChatBadge,
+  ProjectImagesChatBadge,
 } from '~/modules/projects-embeddings';
 
 import {
@@ -16,7 +16,7 @@ export function hydrateWithProjectsEmbeddingsBadges(
   props: Omit<ProjectEmbeddingChatBadgeProps, 'id' | 'className'> = {},
 ): ContentHydrator {
   return (content: string) => {
-    const maybeImages: ReactNode[] = [];
+    const embeddingIds: SdkTableRowIdT[] = [];
     const inlinedReactComponents: HydrateInlinedComponents = {};
 
     const cleanContent = content.replace(/#embedding:(\d+)/g, (_, id) => {
@@ -28,21 +28,14 @@ export function hydrateWithProjectsEmbeddingsBadges(
         />
       );
 
-      maybeImages.push(
-        <ProjectImageChatBadge key={id} id={+id} />,
-      );
+      embeddingIds.push(+id);
 
       return inlineReactComponentTag(`embedding-${id}`);
     });
 
-    const appendToolbars = maybeImages.length > 0
+    const appendToolbars = embeddingIds.length > 0
       ? [
-          <div
-            key="images-container"
-            className="flex flex-row flex-wrap gap-4 empty:hidden my-4 mb-5"
-          >
-            {maybeImages}
-          </div>,
+          <ProjectImagesChatBadge key="project-images-chat-badge" ids={embeddingIds} />,
         ]
       : [];
 
