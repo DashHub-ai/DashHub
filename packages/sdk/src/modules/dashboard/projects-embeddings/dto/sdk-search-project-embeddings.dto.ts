@@ -2,6 +2,7 @@ import type { z } from 'zod';
 
 import {
   SdkDefaultSortInputV,
+  SdkIdsArrayV,
   SdkIdsFiltersInputV,
   SdkOffsetPaginationInputV,
   SdkOffsetPaginationOutputV,
@@ -14,6 +15,9 @@ export const SdkSearchProjectEmbeddingItemV = SdkProjectEmbeddingV;
 export type SdkSearchProjectEmbeddingItemT = z.infer<typeof SdkSearchProjectEmbeddingItemV>;
 
 export const SdkSearchProjectEmbeddingsInputV = SdkOffsetPaginationInputV
+  .extend({
+    projectsIds: SdkIdsArrayV.optional(),
+  })
   .merge(SdkDefaultSortInputV)
   .merge(SdkIdsFiltersInputV);
 

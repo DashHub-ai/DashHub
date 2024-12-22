@@ -27,8 +27,8 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
       properties: {
         ...createBaseDatedRecordMappings(),
         project: createIdObjectMapping(),
+        project_file: createIdObjectMapping(),
         summary: { type: 'boolean' },
-        project_file_id: { type: 'keyword' },
         text: { type: 'text' },
         vector_1536: {
           type: 'dense_vector',
@@ -61,7 +61,7 @@ export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsI
 
   deleteByProjectFileId = (projectFileId: TableId) =>
     this.deleteByQuery(
-      esb.termQuery('project_file_id', projectFileId),
+      esb.termQuery('projectFile.id', projectFileId),
       {
         waitForRecordAvailability: true,
       },

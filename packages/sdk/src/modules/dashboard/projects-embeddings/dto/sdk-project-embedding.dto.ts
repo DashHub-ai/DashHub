@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { SdkTableRowWithDatesV, SdkTableRowWithIdNameV, SdkTableRowWithIdV } from '~/shared';
 
 export const SdkProjectEmbeddingV = z.object({
-  file: SdkTableRowWithIdNameV,
+  projectFile: SdkTableRowWithIdNameV,
   text: z.string(),
 })
   .merge(SdkTableRowWithIdV)

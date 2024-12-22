@@ -3,8 +3,11 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 import isValidUTF8 from 'utf-8-validate';
 
+import type { SdkJwtTokenT } from '@llm/sdk';
+
 import { isNil } from '@llm/commons';
 
+import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithUuid } from '../database';
 import type { UploadFilePayload } from '../s3';
 
@@ -18,6 +21,7 @@ import {
   ProjectsEmbeddingsEsSearchRepo,
 } from './elasticsearch';
 import { TextAIEmbeddingGenerator } from './generators';
+import { ProjectsEmbeddingsFirewall } from './projects-embeddings.firewall';
 import { ProjectsEmbeddingsRepo } from './projects-embeddings.repo';
 import { ProjectEmbeddingsInsertTableRow } from './projects-embeddings.tables';
 import { formatVector } from './utils';
@@ -29,7 +33,7 @@ type EmbeddingGeneratorAttrs = {
 };
 
 @injectable()
-export class ProjectsEmbeddingsService {
+export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbeddingsFirewall> {
   constructor(
     @inject(ProjectsEmbeddingsRepo) private readonly repo: ProjectsEmbeddingsRepo,
     @inject(ProjectsEmbeddingsEsIndexRepo) private readonly esIndexRepo: ProjectsEmbeddingsEsIndexRepo,
@@ -40,6 +44,10 @@ export class ProjectsEmbeddingsService {
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
+
+  asUser = (jwt: SdkJwtTokenT) => new ProjectsEmbeddingsFirewall(jwt, this);
+
+  search = this.esSearchRepo.search;
 
   wrapWithEmbeddingContextPrompt = (
     {
@@ -62,7 +70,7 @@ export class ProjectsEmbeddingsService {
           aiModel,
           input: message,
         })),
-        TE.chainW(embedding => this.esSearchRepo.searchByEmbedding({
+        TE.chainW(embedding => this.esSearchRepo.matchByEmbedding({
           embedding,
           projectId,
         })),

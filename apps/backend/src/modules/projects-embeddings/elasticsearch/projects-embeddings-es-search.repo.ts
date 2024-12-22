@@ -3,19 +3,16 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
+import type { SdkSearchProjectEmbeddingItemT, SdkSearchProjectEmbeddingsInputT } from '@llm/sdk';
 import type { TableId } from '~/modules/database';
 
-import { pluck } from '@llm/commons';
+import { pluck, rejectFalsyItems } from '@llm/commons';
+import { createPaginationOffsetSearchQuery, createScoredSortFieldQuery } from '~/modules/elasticsearch';
 
 import { ProjectEmbeddingsTableRowWithRelations } from '../projects-embeddings.tables';
-import { ProjectsEmbeddingsEsIndexRepo } from './projects-embeddings-es-index.repo';
+import { type ProjectsEmbeddingsEsDocument, ProjectsEmbeddingsEsIndexRepo } from './projects-embeddings-es-index.repo';
 
 export type EsMatchingProjectEmbedding = Pick<ProjectEmbeddingsTableRowWithRelations, 'id' | 'text'>;
-
-type InternalSearchByEmbeddingInputT = {
-  embedding: number[];
-  projectId: TableId;
-};
 
 @injectable()
 export class ProjectsEmbeddingsEsSearchRepo {
@@ -23,7 +20,30 @@ export class ProjectsEmbeddingsEsSearchRepo {
     @inject(ProjectsEmbeddingsEsIndexRepo) private readonly indexRepo: ProjectsEmbeddingsEsIndexRepo,
   ) {}
 
-  searchByEmbedding = ({ embedding, projectId }: InternalSearchByEmbeddingInputT) => pipe(
+  search = (dto: SdkSearchProjectEmbeddingsInputT) =>
+    pipe(
+      this.indexRepo.search(
+        createPaginationOffsetSearchQuery(dto)
+          .query(ProjectsEmbeddingsEsSearchRepo.createEsRequestSearchFilters(dto))
+          .sorts(createScoredSortFieldQuery(dto.sort))
+          .toJSON(),
+      ),
+      TE.map(({ hits: { total, hits } }) => ({
+        items: pipe(
+          hits,
+          pluck('_source'),
+          A.map(item => ProjectsEmbeddingsEsSearchRepo.mapOutputHit(item as ProjectsEmbeddingsEsDocument)),
+        ),
+        total: total.value,
+      })),
+    );
+
+  matchByEmbedding = (
+    { embedding, projectId }: {
+      embedding: number[];
+      projectId: TableId;
+    },
+  ) => pipe(
     this.indexRepo.search(
       esb
         .requestBodySearch()
@@ -45,4 +65,26 @@ export class ProjectsEmbeddingsEsSearchRepo {
       })),
     )),
   );
+
+  private static mapOutputHit = (source: ProjectsEmbeddingsEsDocument): SdkSearchProjectEmbeddingItemT =>
+    ({
+      id: source.id,
+      createdAt: source.created_at,
+      updatedAt: source.updated_at,
+      text: source.text,
+      projectFile: source.project_file,
+    });
+
+  private static createEsRequestSearchFilters = (
+    {
+      ids,
+      projectsIds,
+    }: SdkSearchProjectEmbeddingsInputT,
+  ): esb.Query =>
+    esb.boolQuery().must(
+      rejectFalsyItems([
+        !!ids?.length && esb.termsQuery('id', ids),
+        !!projectsIds?.length && esb.termsQuery('project.id', projectsIds),
+      ]),
+    );
 }
