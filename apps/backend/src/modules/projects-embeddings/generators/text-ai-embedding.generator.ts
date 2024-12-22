@@ -8,8 +8,8 @@ import { AIModelsService } from '~/modules/ai-models';
 
 import {
   AIEmbeddingGenerateAttrs,
-  AIEmbeddingGenerateTE,
   AIEmbeddingGenerator,
+  AIEmbeddingGeneratorError,
   AIEmbeddingResult,
 } from './base';
 
@@ -25,7 +25,7 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
 
-  generate = ({ buffer, aiModel }: AIEmbeddingGenerateAttrs): AIEmbeddingGenerateTE => {
+  generate = ({ buffer, aiModel }: AIEmbeddingGenerateAttrs) => {
     const text = buffer.toString('utf-8');
     const chunks = splitTextIntoChunks({
       text,
@@ -39,6 +39,7 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
         ...chunks.map(chunk => this.generateChunkEmbedding(aiModel, chunk)),
       ]),
       TE.map(array => [...array]),
+      TE.mapLeft(error => new AIEmbeddingGeneratorError(error)),
     );
   };
 

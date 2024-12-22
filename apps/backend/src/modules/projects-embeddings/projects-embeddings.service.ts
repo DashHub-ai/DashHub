@@ -1,6 +1,7 @@
 import { nonEmptyArray as NEA, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
+import isValidUTF8 from 'utf-8-validate';
 
 import { isNil } from '@llm/commons';
 
@@ -85,16 +86,16 @@ export class ProjectsEmbeddingsService {
       )),
       TE.bindW('maybeEmbeddings', ({ aiModel }) => {
         const task = (() => {
-          switch (mimeType) {
-            case 'text/plain':
-              return this.textAIEmbeddingGenerator.generate({
-                aiModel,
-                buffer,
-              });
+          if (mimeType === 'text/plain'
+            || (mimeType === 'application/octet-stream' && typeof buffer !== 'string' && isValidUTF8(buffer))
+          ) {
+            return this.textAIEmbeddingGenerator.generate({
+              aiModel,
+              buffer,
+            });
+          }
 
-            default:
-              return TE.of([]);
-          };
+          return TE.of([]);
         })();
 
         return pipe(

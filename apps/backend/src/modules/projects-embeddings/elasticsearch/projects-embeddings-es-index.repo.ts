@@ -26,7 +26,7 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         project: createIdObjectMapping(),
         summary: { type: 'boolean' },
         text: { type: 'text' },
-        vector: {
+        vector_1536: {
           type: 'dense_vector',
           dims: 1536,
           index: true,
@@ -40,7 +40,11 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ProjectsEmbeddingsEsDocument = EsDocument<ProjectEmbeddingsTableRowWithRelations>;
+export type ProjectsEmbeddingsEsDocument =
+  & EsDocument<Omit<ProjectEmbeddingsTableRowWithRelations, 'vector'>>
+  & {
+    [K in `vector_${number}`]: number[];
+  };
 
 @injectable()
 export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsIndexRepo<ProjectsEmbeddingsEsDocument> {
@@ -55,11 +59,15 @@ export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsI
     return pipe(
       this.embeddingsRepo.findWithRelationsByIds({ ids }),
       TE.map(
-        A.map(entity => ({
-          ...snakecaseKeys(entity, { deep: true }),
-          vector: JSON.parse(entity.vector),
-          _id: String(entity.id),
-        })),
+        A.map((entity) => {
+          const parsedVector: number[] = JSON.parse(entity.vector);
+
+          return {
+            ...snakecaseKeys(entity, { deep: true }),
+            [`vector_${parsedVector.length}`]: parsedVector,
+            _id: String(entity.id),
+          };
+        }),
       ),
       tryOrThrowTE,
     )();
