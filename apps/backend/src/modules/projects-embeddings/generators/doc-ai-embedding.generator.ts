@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer';
-import { readFile, unlink, writeFile } from 'node:fs/promises';
+import { unlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -27,19 +27,14 @@ export class DocAIEmbeddingGenerator implements AIEmbeddingGenerator {
       async () => {
         const tmpId = v4();
         const tmpDoc = join(tmpdir(), `${tmpId}.doc`);
-        const tmpTxt = join(tmpdir(), `${tmpId}.txt`);
 
         try {
           await writeFile(tmpDoc, attrs.buffer);
-          await execa('abiword', ['--to=txt', tmpDoc]);
-
-          return await readFile(tmpTxt, 'utf8');
+          const { stdout } = await execa('antiword', [tmpDoc]);
+          return stdout;
         }
         finally {
-          await Promise.all([
-            unlink(tmpDoc).catch(() => {}),
-            unlink(tmpTxt).catch(() => {}),
-          ]);
+          await unlink(tmpDoc).catch(() => {});
         }
       },
       error => new AIEmbeddingGeneratorError(error),

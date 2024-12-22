@@ -23,9 +23,9 @@ import {
 import {
   DocAIEmbeddingGenerator,
   DocxAIEmbeddingGenerator,
-  GnumericAIEmbeddingGenerator,
   PdfAIEmbeddingGenerator,
   TextAIEmbeddingGenerator,
+  XlsAIEmbeddingGenerator,
 } from './generators';
 import { ProjectsEmbeddingsFirewall } from './projects-embeddings.firewall';
 import { ProjectsEmbeddingsRepo } from './projects-embeddings.repo';
@@ -49,11 +49,6 @@ const OFFICE_MIME_TYPES = new Set([
   'application/msword', // doc
 ]);
 
-const GNUMERIC_MIME_TYPES = new Set([
-  'application/vnd.ms-excel', // xls
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // xlsx
-]);
-
 @injectable()
 export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbeddingsFirewall> {
   constructor(
@@ -66,7 +61,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     @inject(DocxAIEmbeddingGenerator) private readonly docxAIEmbeddingGenerator: DocxAIEmbeddingGenerator,
     @inject(PdfAIEmbeddingGenerator) private readonly pdfAIEmbeddingGenerator: PdfAIEmbeddingGenerator,
     @inject(DocAIEmbeddingGenerator) private readonly docAIEmbeddingGenerator: DocAIEmbeddingGenerator,
-    @inject(GnumericAIEmbeddingGenerator) private readonly gnumericAIEmbeddingGenerator: GnumericAIEmbeddingGenerator,
+    @inject(XlsAIEmbeddingGenerator) private readonly xlsAIEmbeddingGenerator: XlsAIEmbeddingGenerator,
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
@@ -138,8 +133,8 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
             });
           }
 
-          if (GNUMERIC_MIME_TYPES.has(mimeType)) {
-            return this.gnumericAIEmbeddingGenerator.generate({
+          if (mimeType === 'application/vnd.ms-excel') {
+            return this.xlsAIEmbeddingGenerator.generate({
               fileName,
               aiModel,
               buffer,

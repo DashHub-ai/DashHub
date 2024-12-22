@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer';
-import { readFile, unlink, writeFile } from 'node:fs/promises';
+import { unlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { extname, join } from 'node:path';
+import { join } from 'node:path';
 
 import { execa } from 'execa';
 import { taskEither as TE } from 'fp-ts';
@@ -17,7 +17,7 @@ import {
 import { TextAIEmbeddingGenerator } from './text-ai-embedding.generator';
 
 @injectable()
-export class GnumericAIEmbeddingGenerator implements AIEmbeddingGenerator {
+export class XlsAIEmbeddingGenerator implements AIEmbeddingGenerator {
   constructor(
     @inject(TextAIEmbeddingGenerator) private readonly textEmbeddingGenerator: TextAIEmbeddingGenerator,
   ) {}
@@ -25,22 +25,15 @@ export class GnumericAIEmbeddingGenerator implements AIEmbeddingGenerator {
   generate = (attrs: AIEmbeddingGenerateAttrs) => pipe(
     TE.tryCatch(
       async () => {
-        const tmpId = v4();
-        const extension = extname(attrs.fileName).toLowerCase() || '.xls';
-        const tmpDoc = join(tmpdir(), `${tmpId}${extension}`);
-        const tmpCsv = join(tmpdir(), `${tmpId}.csv`);
+        const tmpDoc = join(tmpdir(), `${v4()}.xls`);
 
         try {
           await writeFile(tmpDoc, attrs.buffer);
-          await execa('ssconvert', [tmpDoc, tmpCsv]);
-
-          return await readFile(tmpCsv, 'utf8');
+          const { stdout } = await execa('xls2csv', ['-d', 'utf-8', tmpDoc]);
+          return stdout;
         }
         finally {
-          await Promise.all([
-            unlink(tmpDoc).catch(() => {}),
-            unlink(tmpCsv).catch(() => {}),
-          ]);
+          await unlink(tmpDoc).catch(() => {});
         }
       },
       error => new AIEmbeddingGeneratorError(error),
