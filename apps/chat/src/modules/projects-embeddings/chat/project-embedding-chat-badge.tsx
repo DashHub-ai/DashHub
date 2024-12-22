@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { CheckIcon, FileIcon } from 'lucide-react';
 import { memo } from 'react';
 
-import { AsyncTaskCache } from '@llm/commons';
+import { AsyncTaskCache, truncateText } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import {
   type ProjectsEmbeddingsSdk,
@@ -89,7 +89,7 @@ export const ProjectEmbeddingChatBadge = memo((
       <FileIcon size={12} />
       <span className="flex items-center gap-1">
         <span>
-          {value.status === 'success' ? value.data?.projectFile.name : '...'}
+          {value.status === 'success' ? truncateText(25, '...')(value.data?.projectFile.name) : '...'}
         </span>
         <span className="opacity-50">
           {`#${id}`}
