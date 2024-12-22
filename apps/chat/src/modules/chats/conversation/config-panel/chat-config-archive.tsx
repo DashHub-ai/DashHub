@@ -3,7 +3,7 @@ import { Trash2Icon } from 'lucide-react';
 import { memo } from 'react';
 import { useLocation } from 'wouter';
 
-import type { SdkTableRowWithUuidT } from '@llm/sdk';
+import type { SdkChatT } from '@llm/sdk';
 
 import { tapTaskEither } from '@llm/commons';
 import { useSdkForLoggedIn } from '@llm/sdk';
@@ -12,7 +12,7 @@ import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
 
 type Props = {
-  chat: SdkTableRowWithUuidT;
+  chat: SdkChatT;
 };
 
 export const ChatConfigArchive = memo(({ chat }: Props) => {
@@ -25,7 +25,13 @@ export const ChatConfigArchive = memo(({ chat }: Props) => {
     pipe(
       sdks.dashboard.chats.archive(chat.id),
       tapTaskEither(() => {
-        navigate(sitemap.home);
+        const url = (
+          chat.project
+            ? sitemap.projects.show.generate({ pathParams: chat.project })
+            : sitemap.home
+        );
+
+        navigate(url, { replace: true });
       }),
     ),
   );
