@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react';
 
 export function useLastNonNullValue<T>(value: T | null | undefined) {
-  const lastValueRef = useRef<T>();
+  const lastValueRef = useRef<T>(null);
 
   useLayoutEffect(() => {
     if (value !== null && value !== undefined) {

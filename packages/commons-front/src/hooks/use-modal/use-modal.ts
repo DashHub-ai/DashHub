@@ -41,7 +41,7 @@ export function useModal<Result = never, ShowProps = object>(
   config: ModalShowConfig<Result, ShowProps>,
 ): ShowModalHookResult<Result, ShowProps> {
   const modalsContext = useContext(ModalsContext);
-  const modalsContextRef = useRef<typeof modalsContext>();
+  const modalsContextRef = useRef<typeof modalsContext>(null);
   modalsContextRef.current = modalsContext;
 
   const [uuid, setUUID] = useState<string | null>(null);

@@ -1,4 +1,4 @@
-import type { ChangeEventHandler } from 'react';
+import type { ChangeEventHandler, ComponentProps } from 'react';
 
 import { controlled } from '@under-control/forms';
 
@@ -6,7 +6,7 @@ import type { Nullable } from '@llm/commons';
 import type { SdkTableRowWithIdNameT } from '@llm/sdk';
 
 type SelectGenericFileInputProps = Pick<
-  JSX.IntrinsicElements['input'],
+  ComponentProps<'input'>,
   'name' | 'required' | 'accept'
 >;
 

@@ -18,6 +18,10 @@
 - changed-files:
   - any-glob-to-any-file: ['apps/frontend/**/*']
 
+'app: chat':
+- changed-files:
+  - any-glob-to-any-file: ['apps/chat/**/*']
+
 'package: commons':
 - changed-files:
   - any-glob-to-any-file: ['packages/commons/**/*']

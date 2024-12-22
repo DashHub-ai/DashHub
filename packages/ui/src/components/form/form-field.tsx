@@ -41,11 +41,11 @@ export function FormField(
       return null;
     }
 
-    if ('className' in child.props) {
+    if ('className' in (child.props as any)) {
       // eslint-disable-next-line react/no-clone-element
       return cloneElement(child as any, {
         className: clsx(
-          child.props.className,
+          (child.props as any).className,
           errorsEnabled && errors.length > 0 && 'uk-form-danger',
         ),
       });

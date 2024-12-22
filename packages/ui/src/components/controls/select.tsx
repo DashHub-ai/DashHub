@@ -1,5 +1,3 @@
-/* eslint-disable ts/consistent-type-definitions, ts/no-namespace */
-
 import { type ControlBindProps, controlled } from '@under-control/forms';
 import clsx from 'clsx';
 import { CheckIcon } from 'lucide-react';
@@ -183,11 +181,3 @@ export const Select = controlled<SelectItem | null, SelectProps>((
     </div>
   );
 });
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'uk-select': any;
-    }
-  }
-}

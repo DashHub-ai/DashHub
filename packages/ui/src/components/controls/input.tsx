@@ -1,6 +1,8 @@
+import type { ComponentProps } from 'react';
+
 import clsx from 'clsx';
 
-export type InputProps = JSX.IntrinsicElements['input'];
+export type InputProps = ComponentProps<'input'>;
 
 export function Input({ className, ...props }: InputProps) {
   return (

@@ -14,7 +14,7 @@ export function useAsyncDebounce<A extends unknown[], R>(
   config: AsyncDebounceConfig & { disabled?: boolean; },
 ) {
   const safeCallback = useRefSafeCallback(fn);
-  const debounceRef = useRef<AsyncDebouncedCallback<A, R>>();
+  const debounceRef = useRef<AsyncDebouncedCallback<A, R>>(null);
 
   if (!!config.disabled || !config.delay) {
     return async (...args: A) => Promise.resolve(safeCallback(...args));

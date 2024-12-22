@@ -10,9 +10,10 @@ import { useChatConfigForm } from './use-chat-config-form';
 
 type Props = {
   defaultValue: SdkChatT;
+  contentClassName?: string;
 };
 
-export function ChatConfigPanel({ defaultValue }: Props) {
+export function ChatConfigPanel({ defaultValue, contentClassName }: Props) {
   const { pack } = useI18n();
   const t = pack.chat.config;
   const { bind, validator, value, submitState, isDirty, handleSubmitEvent } = useChatConfigForm({
@@ -23,6 +24,7 @@ export function ChatConfigPanel({ defaultValue }: Props) {
     <CollapsiblePanel
       storageKey="chat-config-panel-state"
       title={t.title}
+      contentClassName={contentClassName}
     >
       <form
         className="space-y-4"

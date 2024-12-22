@@ -1,5 +1,13 @@
 import clsx from 'clsx';
-import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  memo,
+  type RefObject,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { findItemById, type Nullable, rejectFalsyItems } from '@llm/commons';
 import { useAfterMount, useInterval } from '@llm/commons-front';
@@ -26,6 +34,7 @@ import { ChatInputToolbar, type ChatInputValue } from './input-toolbar';
 import { ChatMessage } from './messages/chat-message';
 
 type Props = {
+  ref?: RefObject<HTMLDivElement | null>;
   chat: SdkChatT;
   initialMessages?: SdKSearchMessagesOutputT;
   replyAfterMount?: {
@@ -37,7 +46,7 @@ type Props = {
   backdropSettings?: ChatBackdropSettings;
 };
 
-export const ChatConversationPanel = memo(({ chat, initialMessages, className, backdropSettings, replyAfterMount }: Props) => {
+export const ChatConversationPanel = memo(({ ref, chat, initialMessages, className, backdropSettings, replyAfterMount }: Props) => {
   const flickeringIndicator = useScrollFlickeringIndicator();
   const sentInitialMessageRef = useRef(false);
   const {
@@ -172,7 +181,10 @@ export const ChatConversationPanel = memo(({ chat, initialMessages, className, b
   }, [messages.replyObservable]);
 
   return (
-    <div className={clsx('relative flex flex-col flex-1', className)}>
+    <div
+      ref={ref}
+      className={clsx('relative flex flex-col flex-1', className)}
+    >
       <ChatBackground {...backdropSettings} />
 
       <div

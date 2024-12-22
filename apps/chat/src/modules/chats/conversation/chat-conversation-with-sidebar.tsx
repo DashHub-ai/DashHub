@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { memo } from 'react';
 
 import type {
@@ -13,14 +14,21 @@ type Props = {
   initialMessages: SdKSearchMessagesOutputT;
 };
 
-export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Props) => (
-  <div className="flex gap-6 mx-auto max-w-7xl">
-    <ChatConversationPanel
-      className="top-3 sticky h-[calc(100vh-200px)]"
-      chat={chat}
-      initialMessages={initialMessages}
-    />
+export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Props) => {
+  const heightClassName = 'h-[calc(100vh-190px)]';
 
-    <ChatConfigPanel defaultValue={chat} />
-  </div>
-));
+  return (
+    <div className="flex gap-6 mx-auto max-w-7xl">
+      <ChatConversationPanel
+        className={heightClassName}
+        chat={chat}
+        initialMessages={initialMessages}
+      />
+
+      <ChatConfigPanel
+        defaultValue={chat}
+        contentClassName={clsx(heightClassName, 'overflow-y-auto')}
+      />
+    </div>
+  );
+});

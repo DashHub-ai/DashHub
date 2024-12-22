@@ -5,7 +5,7 @@ import { useCallback, useRef } from 'react';
  * Useful for preventing closures from capturing cached scope variables (avoiding the stale closure problem).
  */
 export function useRefSafeCallback<A extends Array<unknown>, R>(fn: (...args: A) => R): typeof fn {
-  const callbackRef = useRef<typeof fn>();
+  const callbackRef = useRef<typeof fn>(null);
   callbackRef.current = fn;
 
   return useCallback(

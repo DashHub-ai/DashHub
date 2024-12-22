@@ -1,10 +1,12 @@
+import type { ComponentProps } from 'react';
+
 import { controlled } from '@under-control/forms';
 import clsx from 'clsx';
 import { SearchIcon } from 'lucide-react';
 
 import { useForwardedI18n } from '~/i18n';
 
-type Props = JSX.IntrinsicElements['div'];
+type Props = ComponentProps<'div'>;
 
 export const PaginationSearchToolbarItem = controlled<string, Props>((
   {

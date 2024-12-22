@@ -8,19 +8,23 @@ import { useLocalStorageObject } from '@llm/commons-front';
 
 type Props = {
   storageKey: string;
+  contentClassName?: string;
   title: string;
   icon?: ReactNode;
   children: ReactNode;
   defaultWidth?: string;
 };
 
-export function CollapsiblePanel({
-  storageKey,
-  title,
-  icon = <Cog size={16} />,
-  children,
-  defaultWidth = 'w-[450px]',
-}: Props) {
+export function CollapsiblePanel(
+  {
+    storageKey,
+    contentClassName,
+    title,
+    icon = <Cog size={16} />,
+    children,
+    defaultWidth = 'w-[450px]',
+  }: Props,
+) {
   const collapsedStorage = useLocalStorageObject(`${storageKey}-collapsed`, {
     schema: StrictBooleanV.catch(false),
     readBeforeMount: true,
@@ -29,12 +33,7 @@ export function CollapsiblePanel({
   const isCollapsed = !!collapsedStorage.getOrNull();
 
   return (
-    <div
-      className={clsx(
-        'relative border-gray-200 border-l transition-all duration-300',
-        isCollapsed ? 'w-12' : defaultWidth,
-      )}
-    >
+    <div className="relative">
       <button
         type="button"
         onClick={() => collapsedStorage.set(!isCollapsed)}
@@ -50,23 +49,31 @@ export function CollapsiblePanel({
         />
       </button>
 
-      <div className="p-4 pl-10">
-        <h2 className={clsx(
-          'font-semibold text-xl transition-opacity',
-          isCollapsed ? 'opacity-0' : 'opacity-100',
+      <div
+        className={clsx(
+          'border-gray-200 border-l transition-all duration-300',
+          isCollapsed ? 'w-12' : defaultWidth,
+          contentClassName,
+        )}
+      >
+        <div className="p-4 pl-10">
+          <h2 className={clsx(
+            'font-semibold text-xl transition-opacity',
+            isCollapsed ? 'opacity-0' : 'opacity-100',
+          )}
+          >
+            {title}
+          </h2>
+        </div>
+
+        <div className={clsx(
+          'transition-opacity duration-300',
+          isCollapsed ? 'opacity-0 hidden' : 'opacity-100',
         )}
         >
-          {title}
-        </h2>
-      </div>
-
-      <div className={clsx(
-        'transition-opacity duration-300',
-        isCollapsed ? 'opacity-0 hidden' : 'opacity-100',
-      )}
-      >
-        <div className="px-6 pb-4 pl-10">
-          {children}
+          <div className="px-6 pb-4 pl-10">
+            {children}
+          </div>
         </div>
       </div>
     </div>

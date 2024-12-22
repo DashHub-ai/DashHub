@@ -49,7 +49,10 @@ export function ChatRoute({ id }: Props) {
   }
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithNavigationLayout
+      withFooter={false}
+      contentClassName="pb-0"
+    >
       <RouteMetaTags meta={t.meta} />
 
       <LayoutHeader

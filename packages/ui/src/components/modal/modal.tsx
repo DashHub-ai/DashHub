@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { ComponentProps, PropsWithChildren, ReactNode } from 'react';
 
 import { clsx } from 'clsx';
 
@@ -15,7 +15,7 @@ export type ModalProps = PropsWithChildren & {
   footer?: ReactNode;
   isLeaving?: boolean;
   isOverflowVisible?: boolean;
-  formProps?: JSX.IntrinsicElements['form'];
+  formProps?: ComponentProps<'form'>;
   footerProps?: ModalFooterProps;
   onClose: VoidFunction;
 };

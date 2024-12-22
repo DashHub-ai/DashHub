@@ -25,7 +25,7 @@ type Props = {
   replyToMessage?: SdkRepeatedMessageItemT | null;
 
   disabled?: boolean;
-  inputRef?: React.RefObject<HTMLInputElement>;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 
   onSubmit: (message: ChatInputValue) => CanBePromise<any>;
   onSelectApp?: (app: SdkTableRowWithIdNameT) => void;

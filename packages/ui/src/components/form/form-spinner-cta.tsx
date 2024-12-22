@@ -1,6 +1,8 @@
+import type { ComponentProps } from 'react';
+
 import clsx from 'clsx';
 
-export type FormSpinnerCTAProps = JSX.IntrinsicElements['button'] & {
+export type FormSpinnerCTAProps = ComponentProps<'button'> & {
   loading: boolean;
 };
 

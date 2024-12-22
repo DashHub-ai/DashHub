@@ -1,6 +1,8 @@
+import type { ComponentProps } from 'react';
+
 import clsx from 'clsx';
 
-export type TextAreaProps = JSX.IntrinsicElements['textarea'];
+export type TextAreaProps = ComponentProps<'textarea'>;
 
 export function TextArea({ className, ...props }: TextAreaProps) {
   return (
