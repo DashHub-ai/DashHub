@@ -3,6 +3,7 @@ import Markdown from 'react-markdown';
 
 import type { SdkSearchProjectEmbeddingItemT } from '@llm/sdk';
 
+import { isImageFileUrl } from '@llm/commons';
 import { BalloonButton } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
@@ -12,19 +13,30 @@ type ProjectEmbeddingPreviewProps = {
 
 export function ProjectEmbeddingPreview({ embedding }: ProjectEmbeddingPreviewProps) {
   const { pack } = useI18n();
+  const { publicUrl } = embedding.projectFile.resource;
 
   return (
     <div className="flex flex-col gap-1.5 p-2">
       <div className="relative">
-        <div className="max-w-[320px] max-h-[150px] whitespace-break-spaces overflow-auto">
-          <strong>...</strong>
-          <Markdown>{embedding.text}</Markdown>
-          <strong>...</strong>
-        </div>
+        {isImageFileUrl(publicUrl)
+          ? (
+              <img
+                src={publicUrl}
+                alt={embedding.projectFile.name}
+                className="rounded-lg max-w-[320px] max-h-[320px] object-contain"
+              />
+            )
+          : (
+              <div className="max-w-[320px] max-h-[150px] whitespace-break-spaces overflow-auto">
+                <strong>...</strong>
+                <Markdown>{embedding.text}</Markdown>
+                <strong>...</strong>
+              </div>
+            )}
       </div>
 
       <div className="flex justify-center items-center gap-1.5">
-        <a href={embedding.projectFile.resource.publicUrl} target="_blank" rel="noreferrer">
+        <a href={publicUrl} target="_blank" rel="noreferrer">
           <BalloonButton as="span" className="font-semibold">
             <DownloadIcon size={12} />
             {pack.buttons.download}

@@ -42,7 +42,7 @@ export const ProjectImageChatBadge = memo(({ id }: ProjectImageChatBadgeProps) =
     <img
       src={publicUrl}
       alt={projectFile.name}
-      className="border-gray-200 shadow-sm border rounded-lg max-w-[100px] max-h-[100px] transition-transform cursor-pointer hover:scale-105 object-contain"
+      className="border-gray-200 shadow-sm border rounded-lg max-w-[150px] max-h-[150px] transition-transform cursor-pointer hover:scale-105 object-contain"
       onClick={onClick}
     />
   );

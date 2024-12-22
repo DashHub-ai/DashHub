@@ -41,7 +41,7 @@ export function hydrateWithProjectsEmbeddingsBadges(
             key="images-container"
             className="flex flex-row flex-wrap gap-4 empty:hidden my-4 mb-5"
           >
-            {maybeImages}
+            {maybeImages.slice(-1)[0]}
           </div>,
         ]
       : [];
