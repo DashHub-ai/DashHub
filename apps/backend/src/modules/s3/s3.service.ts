@@ -1,6 +1,6 @@
 import type { Buffer } from 'node:buffer';
 
-import path, { basename } from 'node:path';
+import path from 'node:path';
 
 import { either as E, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
@@ -67,7 +67,7 @@ export class S3Service {
         value: {
           bucketId,
           s3Key,
-          name: name ?? basename(s3Key),
+          name,
           type: 'other',
         },
       })),
@@ -108,6 +108,6 @@ export type UploadFileAttrs = {
   bucketId: TableId;
   buffer: UploadFilePayload;
   mimeType: string;
-  name?: string;
+  name: string;
   s3Dir?: string;
 };

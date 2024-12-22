@@ -25,7 +25,7 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
 
-  generate = ({ buffer, aiModel }: AIEmbeddingGenerateAttrs) => {
+  generate = ({ buffer, aiModel, fileName }: AIEmbeddingGenerateAttrs) => {
     const text = buffer.toString('utf-8');
     const chunks = splitTextIntoChunks({
       text,
@@ -35,15 +35,25 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
 
     return pipe(
       TE.sequenceArray([
-        this.generateSummaryEmbedding(aiModel, text),
-        ...chunks.map(chunk => this.generateChunkEmbedding(aiModel, chunk)),
+        this.generateSummaryEmbedding({ aiModel, text, fileName }),
+        ...chunks.map(chunk => this.generateChunkEmbedding({ aiModel, chunk, fileName })),
       ]),
       TE.map(array => [...array]),
       TE.mapLeft(error => new AIEmbeddingGeneratorError(error)),
     );
   };
 
-  private generateSummaryEmbedding = (aiModel: SdkSearchAIModelItemT, text: string) => pipe(
+  private generateSummaryEmbedding = (
+    {
+      aiModel,
+      text,
+      fileName,
+    }: {
+      aiModel: SdkSearchAIModelItemT;
+      text: string;
+      fileName: string;
+    },
+  ) => pipe(
     this.aiModelsService.getDefault(aiModel.organization.id),
     TE.chainW(summarizeAiModel => pipe(
       TE.Do,
@@ -53,7 +63,7 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
       })),
       TE.apS('embedding', this.aiConnectorService.executeEmbeddingPrompt({
         aiModel,
-        input: text,
+        input: `File: ${fileName}\n--\n${text}`,
       })),
     )),
     TE.map(({ embedding, summarized }): AIEmbeddingResult => ({
@@ -64,15 +74,25 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
     })),
   );
 
-  private generateChunkEmbedding = (aiModel: SdkSearchAIModelItemT, text: string) => pipe(
+  private generateChunkEmbedding = (
+    {
+      aiModel,
+      chunk,
+      fileName,
+    }: {
+      aiModel: SdkSearchAIModelItemT;
+      chunk: string;
+      fileName: string;
+    },
+  ) => pipe(
     TE.Do,
     TE.apS('embedding', this.aiConnectorService.executeEmbeddingPrompt({
       aiModel,
-      input: text,
+      input: `File: ${fileName}\n--\n${chunk}`,
     })),
     TE.map(({ embedding }): AIEmbeddingResult => ({
       metadata: {},
-      text,
+      text: chunk,
       vector: embedding,
       summary: false,
     })),

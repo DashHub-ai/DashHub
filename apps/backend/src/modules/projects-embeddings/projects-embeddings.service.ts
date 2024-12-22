@@ -20,13 +20,14 @@ import {
   ProjectsEmbeddingsEsIndexRepo,
   ProjectsEmbeddingsEsSearchRepo,
 } from './elasticsearch';
-import { TextAIEmbeddingGenerator } from './generators';
+import { DocxAIEmbeddingGenerator, TextAIEmbeddingGenerator } from './generators';
 import { ProjectsEmbeddingsFirewall } from './projects-embeddings.firewall';
 import { ProjectsEmbeddingsRepo } from './projects-embeddings.repo';
 import { ProjectEmbeddingsInsertTableRow } from './projects-embeddings.tables';
 import { formatVector } from './utils';
 
 type EmbeddingGeneratorAttrs = {
+  fileName: string;
   buffer: UploadFilePayload;
   mimeType: string;
   projectFileId: TableId;
@@ -41,6 +42,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     @inject(ProjectsFilesRepo) private readonly projectsFilesRepo: ProjectsFilesRepo,
     @inject(AIModelsService) private readonly aiModelsService: AIModelsService,
     @inject(TextAIEmbeddingGenerator) private readonly textAIEmbeddingGenerator: TextAIEmbeddingGenerator,
+    @inject(DocxAIEmbeddingGenerator) private readonly docxAIEmbeddingGenerator: DocxAIEmbeddingGenerator,
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
@@ -90,6 +92,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
 
   generateFileEmbeddings(
     {
+      fileName,
       buffer,
       mimeType,
       projectFileId,
@@ -103,10 +106,19 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
       )),
       TE.bindW('maybeEmbeddings', ({ aiModel }) => {
         const task = (() => {
+          if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+            return this.docxAIEmbeddingGenerator.generate({
+              fileName,
+              aiModel,
+              buffer,
+            });
+          }
+
           if (mimeType === 'text/plain'
             || (mimeType === 'application/octet-stream' && typeof buffer !== 'string' && isValidUTF8(buffer))
           ) {
             return this.textAIEmbeddingGenerator.generate({
+              fileName,
               aiModel,
               buffer,
             });

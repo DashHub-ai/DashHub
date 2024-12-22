@@ -7,6 +7,7 @@ import type { UploadFilePayload } from '~/modules/s3';
 import type { ProjectEmbeddingsInsertTableRow } from '../../projects-embeddings.tables';
 
 export type AIEmbeddingGenerateAttrs = {
+  fileName: string;
   buffer: UploadFilePayload;
   aiModel: SdkSearchAIModelItemT;
 };

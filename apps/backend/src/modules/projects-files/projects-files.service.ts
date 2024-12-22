@@ -60,6 +60,7 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
         buffer: attrs.buffer,
         mimeType: attrs.mimeType,
         projectFileId: projectFile.id,
+        fileName: attrs.name,
       })),
       tapTaskEitherTE(() => this.projectsFilesEsIndexRepo.reindexAllProjectFiles(projectId)),
       TE.map(({ projectFile }) => projectFile),
