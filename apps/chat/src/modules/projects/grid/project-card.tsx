@@ -6,7 +6,6 @@ import type { SdkProjectT } from '@llm/sdk';
 import { formatDate, runTask, tapTaskOption } from '@llm/commons';
 import { useSdkForLoggedIn } from '@llm/sdk';
 import { useArchiveWithNotifications } from '@llm/ui';
-import { useI18n } from '~/i18n';
 import {
   CardActions,
   CardArchiveButton,
@@ -28,13 +27,14 @@ type ProjectCardProps = {
 };
 
 export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCardProps) {
-  const t = useI18n().pack;
   const sitemap = useSitemap();
   const { sdks } = useSdkForLoggedIn();
   const { showAsOptional } = useProjectUpdateModal();
   const [onArchive, archiveStatus] = useArchiveWithNotifications(
     sdks.dashboard.projects.archive(project.id),
   );
+
+  const description = project.description?.trim();
 
   const handleEdit = flow(
     showAsOptional,
@@ -48,9 +48,13 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCar
         {project.name}
       </CardTitle>
 
-      <CardDescription>
-        {project.description?.trim() || t.placeholders.noDescription}
-      </CardDescription>
+      {description
+        ? (
+            <CardDescription>
+              {description}
+            </CardDescription>
+          )
+        : <div className="flex-1" />}
 
       <CardFooter>
         <div className="text-muted-foreground text-xs">
