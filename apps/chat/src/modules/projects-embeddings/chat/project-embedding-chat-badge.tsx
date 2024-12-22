@@ -10,6 +10,9 @@ import {
   type SdkTableRowIdT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useBalloon } from '@llm/ui';
+
+import { ProjectEmbeddingPreview } from './project-embedding-preview';
 
 const embeddingsChatsCache = new AsyncTaskCache<
   SdkTableRowIdT,
@@ -24,7 +27,6 @@ export type ProjectEmbeddingChatBadgeProps = {
   darkMode?: boolean;
   selected?: boolean;
   className?: string;
-  onClick?: () => void;
   disabled?: boolean;
 };
 
@@ -33,12 +35,12 @@ export const ProjectEmbeddingChatBadge = memo((
     id,
     darkMode,
     selected,
-    onClick,
     className,
     disabled,
   }: ProjectEmbeddingChatBadgeProps,
 ) => {
   const { sdks } = useSdkForLoggedIn();
+  const balloon = useBalloon<HTMLButtonElement>();
   const value = useAsyncValue(
     () => embeddingsChatsCache.get(id, sdks.dashboard.projectsEmbeddings),
     [id],
@@ -47,21 +49,39 @@ export const ProjectEmbeddingChatBadge = memo((
     },
   );
 
+  const onToggleBallon = () => {
+    if (value.status !== 'success') {
+      return;
+    }
+
+    if (balloon.toggled) {
+      balloon.hide();
+      return;
+    }
+
+    void balloon.show(
+      <ProjectEmbeddingPreview embedding={value.data} />,
+    );
+  };
+
+  const isOn = selected || balloon.toggled;
+
   return (
     <button
-      id={`embedding-${id}`}
       type="button"
-      onClick={onClick}
+      ref={balloon.targetRef}
+      onClick={onToggleBallon}
       disabled={disabled}
       className={clsx(
         'inline-flex relative items-center gap-1.5 shadow-sm px-1.5 py-0.5 border rounded-md font-semibold text-xs transition-all',
         {
-          'bg-gray-100 text-gray-900 border-gray-300 hover:bg-gray-200 hover:border-gray-400': !darkMode && !selected,
-          'bg-gray-700 text-white border-gray-500 hover:bg-gray-600': darkMode && !selected,
-          'bg-blue-50 border-blue-400 text-blue-800': selected && !darkMode,
-          'bg-blue-800 border-blue-600 text-white': selected && darkMode,
+          'bg-gray-100 text-gray-900 border-gray-300 hover:bg-gray-200 hover:border-gray-400': !darkMode && !isOn,
+          'bg-gray-700 text-white border-gray-500 hover:bg-gray-600': darkMode && !isOn,
+          'bg-blue-50 border-blue-400 text-blue-800': isOn && !darkMode,
+          'bg-blue-800 border-blue-600 text-white': isOn && darkMode,
           'opacity-50 cursor-not-allowed': disabled,
           'cursor-pointer hover:scale-[1.02]': !disabled,
+          'scale-[1.02]': isOn,
         },
         className,
       )}

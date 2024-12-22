@@ -46,6 +46,7 @@ export const I18N_FORWARDED_PL_PACK: typeof I18N_FORWARDED_EN_PACK = {
     close: 'Zamknij',
     add: 'Dodaj',
     confirm: 'Potwierdź',
+    download: 'Pobierz',
   },
   errors: {
     tagged: I18N_SDK_ERRORS_PL,

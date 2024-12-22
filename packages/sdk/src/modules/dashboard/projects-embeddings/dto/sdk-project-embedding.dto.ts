@@ -2,9 +2,16 @@ import { z } from 'zod';
 
 import { SdkTableRowWithDatesV, SdkTableRowWithIdNameV, SdkTableRowWithIdV } from '~/shared';
 
+import { SdkBaseS3ResourceV } from '../../s3-files';
+
 export const SdkProjectEmbeddingV = z.object({
-  projectFile: SdkTableRowWithIdNameV,
   text: z.string(),
+  projectFile: SdkTableRowWithIdNameV.extend({
+    resource: SdkBaseS3ResourceV.pick({
+      id: true,
+      publicUrl: true,
+    }),
+  }),
 })
   .merge(SdkTableRowWithIdV)
   .merge(SdkTableRowWithDatesV);

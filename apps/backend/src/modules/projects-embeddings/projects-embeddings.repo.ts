@@ -31,10 +31,15 @@ export class ProjectsEmbeddingsRepo extends createDatabaseRepo('projects_embeddi
             .where('projects_embeddings.id', 'in', ids)
             .innerJoin('projects_files', 'projects_files.id', 'project_file_id')
             .innerJoin('s3_resources', 's3_resources.id', 'projects_files.s3_resource_id')
+            .innerJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
             .selectAll(this.table)
             .select([
               'projects_files.project_id as project_id',
               's3_resources.name as project_file_name',
+
+              's3_resources.id as project_file_s3_resource_id',
+              's3_resources.s3_key as project_file_s3_resource_s3_key',
+              's3_resources_buckets.public_base_url as bucket_public_base_url',
             ])
             .limit(ids.length)
             .execute(),
@@ -47,6 +52,10 @@ export class ProjectsEmbeddingsRepo extends createDatabaseRepo('projects_embeddi
           project_file_id: projectFileId,
           project_file_name: projectFileName,
 
+          project_file_s3_resource_id: projectFileS3ResourceId,
+          project_file_s3_resource_s3_key: projectFileS3ResourceS3Key,
+          bucket_public_base_url: bucketBaseUrl,
+
           ...item
         }): ProjectEmbeddingsTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -56,6 +65,10 @@ export class ProjectsEmbeddingsRepo extends createDatabaseRepo('projects_embeddi
           projectFile: {
             id: projectFileId,
             name: projectFileName,
+            resource: {
+              id: projectFileS3ResourceId,
+              publicUrl: `${bucketBaseUrl}/${projectFileS3ResourceS3Key}`,
+            },
           },
         })),
       ),

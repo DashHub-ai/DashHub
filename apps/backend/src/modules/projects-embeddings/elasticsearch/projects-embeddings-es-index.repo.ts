@@ -27,7 +27,9 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
       properties: {
         ...createBaseDatedRecordMappings(),
         project: createIdObjectMapping(),
-        project_file: createIdObjectMapping(),
+        project_file: createIdObjectMapping({
+          resource: createIdObjectMapping(),
+        }),
         summary: { type: 'boolean' },
         text: { type: 'text' },
 
@@ -97,8 +99,8 @@ export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsI
     return pipe(
       this.embeddingsRepo.findWithRelationsByIds({ ids }),
       TE.map(
-        A.map((entity) => {
-          const parsedVector: number[] = JSON.parse(entity.vector);
+        A.map(({ vector, ...entity }) => {
+          const parsedVector: number[] = JSON.parse(vector);
 
           return {
             ...snakecaseKeys(entity, { deep: true }),

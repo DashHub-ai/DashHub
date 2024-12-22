@@ -12,3 +12,14 @@
     transform: translateY(0);
   }
 }
+
+@keyframes balloonIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-100% + 4px)) translateX(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-100%) translateX(-50%);
+  }
+}

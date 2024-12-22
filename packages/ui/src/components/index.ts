@@ -1,4 +1,5 @@
 export * from './alert';
+export * from './balloon';
 export * from './collapsible-panel';
 export * from './controls';
 export * from './ellipsis-dropdown';

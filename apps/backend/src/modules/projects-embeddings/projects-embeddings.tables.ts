@@ -8,6 +8,7 @@ import type {
   TableRowWithIdName,
   TableWithDefaultColumns,
 } from '../database';
+import type { S3ResourcesTableRowWithRelations } from '../s3';
 
 export type ProjectsEmbeddingsTable =
   & TableWithDefaultColumns
@@ -28,5 +29,7 @@ export type ProjectEmbeddingsTableRowWithRelations =
   & Omit<ProjectEmbeddingsTableRow, 'projectFileId'>
   & {
     project: TableRowWithId;
-    projectFile: TableRowWithIdName;
+    projectFile: TableRowWithIdName & {
+      resource: Pick<S3ResourcesTableRowWithRelations, 'id' | 'publicUrl'>;
+    };
   };

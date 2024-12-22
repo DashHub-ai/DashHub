@@ -1,3 +1,4 @@
+import camelcaseKeys from 'camelcase-keys';
 import esb from 'elastic-builder';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
@@ -78,7 +79,7 @@ export class ProjectsEmbeddingsEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       text: source.text,
-      projectFile: source.project_file,
+      projectFile: camelcaseKeys(source.project_file, { deep: true }),
     });
 
   private static createEsRequestSearchFilters = (

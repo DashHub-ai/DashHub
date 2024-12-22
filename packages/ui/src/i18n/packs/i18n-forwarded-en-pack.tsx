@@ -44,6 +44,7 @@ export const I18N_FORWARDED_EN_PACK = {
     add: 'Add',
     confirm: 'Confirm',
     resetFilters: 'Reset filters',
+    download: 'Download',
   },
   errors: {
     tagged: I18N_SDK_ERRORS_EN,

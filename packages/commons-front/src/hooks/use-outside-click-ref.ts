@@ -1,24 +1,30 @@
-import { type MutableRefObject, useRef } from 'react';
+import { type RefObject, useRef } from 'react';
 
 import { useWindowListener } from './use-window-listener';
 
 type OutsideClickWatcherAttrs = {
   disabled?: boolean;
   inShadowDOM?: boolean;
+  excludeNodes?: () => HTMLElement[];
 };
 
 export function useOutsideClickRef<T extends HTMLElement = HTMLElement>(
   callback: (event: MouseEvent) => void,
   attrs: OutsideClickWatcherAttrs = {},
-): MutableRefObject<T | null> {
+): RefObject<T | null> {
   const nodeRef = useRef<T>(null);
 
   useWindowListener(
     {
       click: (e) => {
         const { current: node } = nodeRef;
+        const { disabled, excludeNodes } = attrs;
 
-        if (!node || attrs.disabled) {
+        if (!node || disabled) {
+          return;
+        }
+
+        if (excludeNodes?.().some(node => e.target === node || node.contains(e.target as HTMLElement))) {
           return;
         }
 
