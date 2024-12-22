@@ -23,7 +23,7 @@ export function FilesListContainer({ projectId }: Props) {
     fallbackSearchParams: {
       limit: 10,
     },
-    fetchResultsTask: filters => sdks.dashboard.projects.files.search({
+    fetchResultsTask: filters => sdks.dashboard.projectsFiles.search({
       ...filters,
       projectId,
     }),

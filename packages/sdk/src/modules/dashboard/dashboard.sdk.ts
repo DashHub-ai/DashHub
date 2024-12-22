@@ -7,6 +7,8 @@ import { ChatsSdk } from './chats';
 import { ExpertsSdk } from './experts';
 import { OrganizationsSdk } from './organizations';
 import { ProjectsSdk } from './projects';
+import { ProjectsEmbeddingsSdk } from './projects-embeddings';
+import { ProjectsFilesSdk } from './projects-files';
 import { S3BucketsSdk } from './s3-buckets';
 import { UsersSdk } from './users';
 
@@ -16,6 +18,10 @@ export class DashboardSdk {
   public readonly users = new UsersSdk(this.config);
 
   public readonly projects = new ProjectsSdk(this.config);
+
+  public readonly projectsFiles = new ProjectsFilesSdk(this.config);
+
+  public readonly projectsEmbeddings = new ProjectsEmbeddingsSdk(this.config);
 
   public readonly apps = new AppsSdk(this.config);
 
