@@ -1,9 +1,8 @@
 import { Buffer } from 'node:buffer';
 
-import Docxtemplater from 'docxtemplater';
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import PizZip from 'pizzip';
+import { parseOfficeAsync } from 'officeparser';
 import { inject, injectable } from 'tsyringe';
 
 import {
@@ -22,15 +21,7 @@ export class DocxAIEmbeddingGenerator implements AIEmbeddingGenerator {
   generate = (attrs: AIEmbeddingGenerateAttrs) => {
     return pipe(
       TE.tryCatch(
-        async () => {
-          const zip = new PizZip(attrs.buffer);
-          const doc = new Docxtemplater(zip, {
-            paragraphLoop: true,
-            linebreaks: true,
-          });
-
-          return doc.getFullText();
-        },
+        async () => parseOfficeAsync(attrs.buffer),
         error => new AIEmbeddingGeneratorError(error),
       ),
       TE.chainW(text => this.textEmbeddingGenerator.generate({

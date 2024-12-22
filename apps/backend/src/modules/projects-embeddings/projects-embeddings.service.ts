@@ -20,7 +20,13 @@ import {
   ProjectsEmbeddingsEsIndexRepo,
   ProjectsEmbeddingsEsSearchRepo,
 } from './elasticsearch';
-import { DocxAIEmbeddingGenerator, TextAIEmbeddingGenerator } from './generators';
+import {
+  DocAIEmbeddingGenerator,
+  DocxAIEmbeddingGenerator,
+  GnumericAIEmbeddingGenerator,
+  PdfAIEmbeddingGenerator,
+  TextAIEmbeddingGenerator,
+} from './generators';
 import { ProjectsEmbeddingsFirewall } from './projects-embeddings.firewall';
 import { ProjectsEmbeddingsRepo } from './projects-embeddings.repo';
 import { ProjectEmbeddingsInsertTableRow } from './projects-embeddings.tables';
@@ -33,6 +39,21 @@ type EmbeddingGeneratorAttrs = {
   projectFileId: TableId;
 };
 
+const OFFICE_MIME_TYPES = new Set([
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // docx
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation', // pptx
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // xlsx
+  'application/vnd.oasis.opendocument.text', // odt
+  'application/vnd.oasis.opendocument.presentation', // odp
+  'application/vnd.oasis.opendocument.spreadsheet', // ods
+  'application/msword', // doc
+]);
+
+const GNUMERIC_MIME_TYPES = new Set([
+  'application/vnd.ms-excel', // xls
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // xlsx
+]);
+
 @injectable()
 export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbeddingsFirewall> {
   constructor(
@@ -43,6 +64,9 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     @inject(AIModelsService) private readonly aiModelsService: AIModelsService,
     @inject(TextAIEmbeddingGenerator) private readonly textAIEmbeddingGenerator: TextAIEmbeddingGenerator,
     @inject(DocxAIEmbeddingGenerator) private readonly docxAIEmbeddingGenerator: DocxAIEmbeddingGenerator,
+    @inject(PdfAIEmbeddingGenerator) private readonly pdfAIEmbeddingGenerator: PdfAIEmbeddingGenerator,
+    @inject(DocAIEmbeddingGenerator) private readonly docAIEmbeddingGenerator: DocAIEmbeddingGenerator,
+    @inject(GnumericAIEmbeddingGenerator) private readonly gnumericAIEmbeddingGenerator: GnumericAIEmbeddingGenerator,
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
@@ -106,7 +130,31 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
       )),
       TE.bindW('maybeEmbeddings', ({ aiModel }) => {
         const task = (() => {
-          if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+          if (mimeType === 'application/pdf') {
+            return this.pdfAIEmbeddingGenerator.generate({
+              fileName,
+              aiModel,
+              buffer,
+            });
+          }
+
+          if (GNUMERIC_MIME_TYPES.has(mimeType)) {
+            return this.gnumericAIEmbeddingGenerator.generate({
+              fileName,
+              aiModel,
+              buffer,
+            });
+          }
+
+          if (mimeType === 'application/msword') {
+            return this.docAIEmbeddingGenerator.generate({
+              fileName,
+              aiModel,
+              buffer,
+            });
+          }
+
+          if (OFFICE_MIME_TYPES.has(mimeType)) {
             return this.docxAIEmbeddingGenerator.generate({
               fileName,
               aiModel,

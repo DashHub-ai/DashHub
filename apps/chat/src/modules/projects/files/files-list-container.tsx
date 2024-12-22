@@ -21,7 +21,7 @@ export function FilesListContainer({ projectId }: Props) {
     storeDataInUrl: false,
     schema: SdkSearchProjectFilesInputV,
     fallbackSearchParams: {
-      limit: 10,
+      limit: 6,
     },
     fetchResultsTask: filters => sdks.dashboard.projectsFiles.search({
       ...filters,

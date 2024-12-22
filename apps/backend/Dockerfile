@@ -14,6 +14,8 @@ RUN jq 'del(.devDependencies)' package.json > temp.json && mv temp.json package.
 # Light image with compiled binary stuff
 FROM node:22-alpine3.20 AS runner
 
+RUN apk --no-cache add poppler-utils abiword gnumeric
+
 ENV TZ=Europe/Berlin
 ENV NODE_ENV=production
 ENV SERVER_HOST=0.0.0.0

@@ -22,6 +22,7 @@ export function rejectUnsafeSdkErrors<T, E extends TaggedError<string, any>>(tas
       const { stack, ...context } = error;
 
       logger.error(`Rejected unsafe SDK error - ${error.tag}!`, context);
+      console.error(error.context);
 
       if (stack) {
         console.error(stack);
