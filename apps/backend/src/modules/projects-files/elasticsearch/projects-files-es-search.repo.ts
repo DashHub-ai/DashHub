@@ -76,6 +76,7 @@ export class ProjectsFilesEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       project: source.project,
+      description: source.description,
       resource: camelcaseKeys(source.resource),
     });
 }

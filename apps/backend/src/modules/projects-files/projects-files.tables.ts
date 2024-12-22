@@ -25,4 +25,5 @@ export type ProjectFileTableRowWithRelations =
   & {
     resource: S3ResourcesTableRowWithRelations;
     project: TableRowWithIdName;
+    description: string | null;
   };

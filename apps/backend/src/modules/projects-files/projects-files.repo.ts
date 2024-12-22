@@ -52,6 +52,12 @@ export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
             .innerJoin('s3_resources', 's3_resources.id', 's3_resource_id')
             .innerJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
             .innerJoin('projects', 'projects.id', 'project_id')
+            .leftJoin(
+              'projects_embeddings',
+              eb => eb
+                .onRef('projects_embeddings.project_file_id', '=', 'projects_files.id')
+                .on('projects_embeddings.summary', '=', true),
+            )
             .selectAll('projects_files')
             .select([
               's3_resources.name as s3_resource_name',
@@ -66,6 +72,8 @@ export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
               's3_resources_buckets.id as bucket_id',
               's3_resources_buckets.name as bucket_name',
               's3_resources_buckets.public_base_url as bucket_public_base_url',
+
+              'projects_embeddings.text as description',
             ])
             .limit(ids.length)
             .execute(),
@@ -73,6 +81,8 @@ export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
       DatabaseError.tryTask,
       TE.map(
         A.map(({
+          description,
+
           project_id: projectId,
           project_name: projectName,
 
@@ -90,7 +100,7 @@ export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
           ...item
         }): ProjectFileTableRowWithRelations => ({
           ...camelcaseKeys(item),
-
+          description,
           resource: {
             id: s3ResourceId,
             createdAt: s3ResourceCreatedAt,

@@ -64,6 +64,7 @@ export function AIModelsTableContainer() {
       createModal.showAsOptional({
         defaultValue: {
           name: '',
+          embedding: false,
           credentials: {
             apiKey: '',
             apiModel: '',
