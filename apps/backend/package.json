@@ -27,6 +27,7 @@
     "@types/object-hash": "^3.0.6",
     "@types/pg": "^8.11.10",
     "@types/pg-cursor": "^2.7.2",
+    "@types/utf-8-validate": "^5.0.2",
     "async-await-queue": "^2.1.4",
     "croner": "^9.0.0",
     "dotenv": "^16.4.5",
@@ -44,6 +45,7 @@
     "rxjs": "^7.8.1",
     "tiny-glob": "^0.2.9",
     "tsyringe": "^4.8.0",
+    "utf-8-validate": "^6.0.5",
     "winston": "^3.16.0"
   }
 }

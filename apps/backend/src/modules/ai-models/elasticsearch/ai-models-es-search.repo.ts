@@ -35,6 +35,18 @@ export class AIModelsEsSearchRepo {
       TE.map(AIModelsEsSearchRepo.mapOutputHit),
     );
 
+  getDefaultEmbedding = (organizationId: TableId) => pipe(
+    this.search({
+      organizationIds: [organizationId],
+      archived: false,
+      embedding: true,
+      offset: 0,
+      limit: 1,
+      sort: 'id:desc',
+    }),
+    tryGetFirstPaginationHitOrNotExists,
+  );
+
   getDefault = (organizationId: TableId) => pipe(
     this.search({
       organizationIds: [organizationId],
@@ -106,5 +118,6 @@ export class AIModelsEsSearchRepo {
       credentials: camelcaseKeys(source.credentials),
       provider: source.provider,
       default: source.default,
+      embedding: source.embedding,
     });
 }

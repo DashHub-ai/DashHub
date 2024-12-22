@@ -1,3 +1,4 @@
+import camelcaseKeys from 'camelcase-keys';
 import esb from 'elastic-builder';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
@@ -72,12 +73,10 @@ export class ProjectsFilesEsSearchRepo {
   private static mapOutputHit = (source: ProjectFileEsDocument): SdkSearchProjectFileItemT =>
     ({
       id: source.id,
-      name: source.name,
       createdAt: source.created_at,
       updatedAt: source.updated_at,
-      bucket: source.bucket,
       project: source.project,
-      publicUrl: source.public_url,
-      type: source.type,
+      description: source.description,
+      resource: camelcaseKeys(source.resource),
     });
 }

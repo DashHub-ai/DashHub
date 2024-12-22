@@ -9,6 +9,7 @@ import { type PartialBy, tapTaskEitherTE } from '@llm/commons';
 import type { WithAuthFirewall } from '../auth';
 import type { TableId } from '../database';
 
+import { ProjectsEmbeddingsService } from '../projects-embeddings/projects-embeddings.service';
 import { ProjectsRepo } from '../projects/projects.repo';
 import { S3Service, UploadFileAttrs } from '../s3';
 import { ProjectsFilesEsIndexRepo, ProjectsFilesEsSearchRepo } from './elasticsearch';
@@ -23,6 +24,7 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
     @inject(ProjectsFilesRepo) private readonly projectsFilesRepo: ProjectsFilesRepo,
     @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
     @inject(ProjectsFilesEsSearchRepo) private readonly esSearchRepo: ProjectsFilesEsSearchRepo,
+    @inject(ProjectsEmbeddingsService) private readonly projectsEmbeddingsService: ProjectsEmbeddingsService,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsFilesFirewall(jwt, this);
@@ -39,22 +41,32 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
     },
   ) => {
     return pipe(
-      bucketId
-        ? TE.of({ id: bucketId })
-        : this.projectsRepo.getDefaultS3Bucket({ projectId }),
-      TE.chain(bucket => this.s3Service.uploadFile({
+      TE.Do,
+      TE.bind('bucket', () =>
+        bucketId
+          ? TE.of({ id: bucketId })
+          : this.projectsRepo.getDefaultS3Bucket({ projectId })),
+      TE.bindW('s3File', ({ bucket }) => this.s3Service.uploadFile({
         bucketId: bucket.id,
         ...attrs,
       })),
-      tapTaskEitherTE(({ id }) => this.projectsFilesRepo.create({
-        projectId,
-        s3ResourceId: id,
+      TE.bindW('projectFile', ({ s3File }) => this.projectsFilesRepo.create({
+        value: {
+          projectId,
+          s3ResourceId: s3File.id,
+        },
+      })),
+      tapTaskEitherTE(({ projectFile }) => this.projectsEmbeddingsService.generateFileEmbeddings({
+        buffer: attrs.buffer,
+        mimeType: attrs.mimeType,
+        projectFileId: projectFile.id,
       })),
       tapTaskEitherTE(() => this.projectsFilesEsIndexRepo.reindexAllProjectFiles(projectId)),
+      TE.map(({ projectFile }) => projectFile),
     );
   };
 
-  delete = (
+  deleteByProjectResource = (
     {
       resourceId,
       projectId,
@@ -63,15 +75,17 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
       projectId: TableId;
     },
   ) => pipe(
-    this.projectsFilesRepo.existsOrThrow({
-      resourceId,
-      projectId,
+    this.projectsFilesRepo.findOne({
+      where: [
+        ['s3ResourceId', '=', resourceId],
+        ['projectId', '=', projectId],
+      ],
     }),
     tapTaskEitherTE(() => this.s3Service.deleteFile({
       resourceId,
     })),
-    tapTaskEitherTE(() =>
-      this.projectsFilesEsIndexRepo.deleteDocument(resourceId, {
+    tapTaskEitherTE(({ id }) =>
+      this.projectsFilesEsIndexRepo.deleteDocument(id, {
         waitForRecordAvailability: true,
       }),
     ),

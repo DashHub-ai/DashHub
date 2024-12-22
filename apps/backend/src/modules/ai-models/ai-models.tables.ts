@@ -18,6 +18,7 @@ export type AIModelsTable = TableWithDefaultColumns &
     provider: SdkAIProviderT;
     credentials: SdkAICredentialsT;
     default: boolean;
+    embedding: boolean;
   };
 
 export type AIModelTableRow = NormalizeSelectTableRow<AIModelsTable>;

@@ -1,1 +1,1 @@
-export * from './sdk-base-s3-file.dto';
+export * from './sdk-base-s3-resource.dto';

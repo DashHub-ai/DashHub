@@ -21,6 +21,7 @@ export const SdKSearchAIModelsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
     default: StrictBooleanV.optional(),
+    embedding: StrictBooleanV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)

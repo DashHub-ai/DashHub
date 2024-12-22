@@ -72,7 +72,7 @@ export class ProjectsController extends AuthorizedController {
             resourceId: Number(context.req.param('resourceId')),
             projectId: Number(context.req.param('projectId')),
           },
-          projectsFilesService.asUser(context.var.jwt).delete,
+          projectsFilesService.asUser(context.var.jwt).deleteByProjectResource,
           TE.map(ofSdkSuccess),
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ProjectsSdk['files']['delete']>>(context),

@@ -102,9 +102,11 @@ type UploadTE = TE.TaskEither<
   TableRowWithId
 >;
 
+export type UploadFilePayload = Buffer | string;
+
 export type UploadFileAttrs = {
   bucketId: TableId;
-  buffer: Buffer | string;
+  buffer: UploadFilePayload;
   mimeType: string;
   name?: string;
   s3Dir?: string;

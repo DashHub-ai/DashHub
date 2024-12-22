@@ -1,113 +1,42 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { identity, pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { pipe } from 'fp-ts/lib/function';
+import { injectable } from 'tsyringe';
 
-import { createChunkAsyncIterator, isNil, mapAsyncIterator } from '@llm/commons';
-
-import type { ProjectFileTableInsertRow, ProjectFileTableRowWithRelations } from './projects-files.tables';
+import type { ProjectFileTableRowWithRelations } from './projects-files.tables';
 
 import {
-  AbstractDatabaseRepo,
-  DatabaseConnectionRepo,
+  createDatabaseRepo,
   DatabaseError,
-  DatabaseRecordNotExists,
   TableId,
   TransactionalAttrs,
+  tryGetFirstOrNotExists,
   tryReuseTransactionOrSkip,
 } from '../database';
-import { S3ResourcesRepo } from '../s3/repo/s3-resources.repo';
-
-type ProjectResourceLookupAttrs = TransactionalAttrs<{
-  projectId: TableId;
-  resourceId: TableId;
-}>;
 
 @injectable()
-export class ProjectsFilesRepo extends AbstractDatabaseRepo {
-  constructor(
-    @inject(DatabaseConnectionRepo) connectionRepo: DatabaseConnectionRepo,
-    @inject(S3ResourcesRepo) private readonly s3ResourcesRepo: S3ResourcesRepo,
-  ) {
-    super(connectionRepo);
-  }
-
-  create = (
-    {
-      forwardTransaction,
-      projectId,
-      s3ResourceId,
-    }: TransactionalAttrs<ProjectFileTableInsertRow>,
-  ) => {
+export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
+  getFileEmbeddingAIModelId = ({ forwardTransaction, id }: TransactionalAttrs<{ id: TableId; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 
     return pipe(
       transaction(
-        async qb =>
-          qb
-            .insertInto('projects_files')
-            .values({
-              project_id: projectId,
-              s3_resource_id: s3ResourceId,
-            })
-            .execute(),
-      ),
-      DatabaseError.tryTask,
-    );
-  };
-
-  exists = (
-    {
-      forwardTransaction,
-      projectId,
-      resourceId,
-    }: ProjectResourceLookupAttrs,
-  ) => {
-    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
-
-    return pipe(
-      transaction(
-        async qb =>
-          qb
-            .selectFrom('projects_files')
-            .where('project_id', '=', projectId)
-            .where('s3_resource_id', '=', resourceId)
-            .select(qb.fn.count('s3_resource_id').as('total'))
-            .executeTakeFirstOrThrow(),
-      ),
-      DatabaseError.tryTask,
-      TE.map(result => Number(result.total) > 0),
-    );
-  };
-
-  existsOrThrow = (attrs: ProjectResourceLookupAttrs) => pipe(
-    this.exists(attrs),
-    TE.chainW(
-      TE.fromPredicate(
-        identity,
-        () => new DatabaseRecordNotExists(attrs),
-      ),
-    ),
-  );
-
-  delete = (
-    {
-      forwardTransaction,
-      resourceId,
-      projectId,
-    }: ProjectResourceLookupAttrs,
-  ) => {
-    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
-
-    return pipe(
-      transaction(
-        async qb => qb
-          .deleteFrom('projects_files')
-          .where('s3_resource_id', '=', resourceId)
-          .where('project_id', '=', projectId)
+        qb => qb
+          .selectFrom(this.table)
+          .innerJoin('projects', 'projects.id', 'projects_files.project_id')
+          .innerJoin('ai_models', 'ai_models.organization_id', 'projects.organization_id')
+          .where(eb => eb
+            .and([
+              eb('projects_files.id', '=', id),
+              eb('ai_models.embedding', '=', true),
+            ]),
+          )
+          .select('ai_models.id')
+          .limit(1)
           .execute(),
       ),
       DatabaseError.tryTask,
+      tryGetFirstOrNotExists,
     );
   };
 
@@ -116,21 +45,35 @@ export class ProjectsFilesRepo extends AbstractDatabaseRepo {
 
     return pipe(
       transaction(
-        async qb =>
+        qb =>
           qb
             .selectFrom('projects_files')
-            .where('s3_resource_id', 'in', ids)
+            .where('projects_files.id', 'in', ids)
             .innerJoin('s3_resources', 's3_resources.id', 's3_resource_id')
             .innerJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
             .innerJoin('projects', 'projects.id', 'project_id')
-            .selectAll('s3_resources')
+            .leftJoin(
+              'projects_embeddings',
+              eb => eb
+                .onRef('projects_embeddings.project_file_id', '=', 'projects_files.id')
+                .on('projects_embeddings.summary', '=', true),
+            )
+            .selectAll('projects_files')
             .select([
+              's3_resources.name as s3_resource_name',
+              's3_resources.s3_key as s3_key',
+              's3_resources.type as s3_resource_type',
+              's3_resources.created_at as s3_resource_created_at',
+              's3_resources.updated_at as s3_resource_updated_at',
+
               'projects.id as project_id',
               'projects.name as project_name',
 
               's3_resources_buckets.id as bucket_id',
               's3_resources_buckets.name as bucket_name',
               's3_resources_buckets.public_base_url as bucket_public_base_url',
+
+              'projects_embeddings.text as description',
             ])
             .limit(ids.length)
             .execute(),
@@ -138,6 +81,8 @@ export class ProjectsFilesRepo extends AbstractDatabaseRepo {
       DatabaseError.tryTask,
       TE.map(
         A.map(({
+          description,
+
           project_id: projectId,
           project_name: projectName,
 
@@ -145,39 +90,37 @@ export class ProjectsFilesRepo extends AbstractDatabaseRepo {
           bucket_name: bucketName,
           bucket_public_base_url: bucketBaseUrl,
 
+          s3_resource_id: s3ResourceId,
+          s3_key: s3ResourceKey,
+          s3_resource_name: s3ResourceName,
+          s3_resource_type: s3ResourceType,
+          s3_resource_created_at: s3ResourceCreatedAt,
+          s3_resource_updated_at: s3ResourceUpdatedAt,
+
           ...item
         }): ProjectFileTableRowWithRelations => ({
           ...camelcaseKeys(item),
-
-          publicUrl: `${bucketBaseUrl}/${item.s3_key}`,
+          description,
+          resource: {
+            id: s3ResourceId,
+            createdAt: s3ResourceCreatedAt,
+            updatedAt: s3ResourceUpdatedAt,
+            s3Key: s3ResourceKey,
+            name: s3ResourceName,
+            type: s3ResourceType,
+            publicUrl: `${bucketBaseUrl}/${s3ResourceKey}`,
+            bucket: {
+              id: bucketId,
+              name: bucketName,
+            },
+          },
 
           project: {
             id: projectId,
             name: projectName,
           },
-
-          bucket: {
-            id: bucketId,
-            name: bucketName,
-          },
         })),
       ),
     );
   };
-
-  createIdsIterator = (
-    { chunkSize, projectId }: {
-      chunkSize: number;
-      projectId?: TableId;
-    },
-  ): AsyncIterableIterator<TableId[]> => pipe(
-    this.db
-      .selectFrom('projects_files')
-      .select('s3_resource_id')
-      .orderBy('s3_resource_id', 'asc')
-      .$if(!isNil(projectId), qb => qb.where('project_id', '=', projectId!))
-      .stream(chunkSize),
-    createChunkAsyncIterator(chunkSize),
-    mapAsyncIterator(A.map(item => item.s3_resource_id)),
-  );
 }

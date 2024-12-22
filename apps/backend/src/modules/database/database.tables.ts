@@ -21,6 +21,7 @@ import type {
 import type {
   ProjectsTable,
 } from '../projects';
+import type { ProjectsEmbeddingsTable } from '../projects-embeddings';
 import type { ProjectsFilesTable } from '../projects-files';
 import type {
   S3ResourcesBucketsTable,
@@ -56,6 +57,7 @@ export type DatabaseTables = {
   // Projects
   projects: ProjectsTable;
   projects_files: ProjectsFilesTable;
+  projects_embeddings: ProjectsEmbeddingsTable;
 
   // Apps
   apps: AppsTable;

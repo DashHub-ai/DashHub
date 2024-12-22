@@ -10,7 +10,7 @@ import { AIModelProviderSelect } from './ai-model-provider-select';
 
 type Value = Pick<
   SdkAIModelT,
-  'name' | 'provider' | 'description' | 'credentials' | 'default'
+  'name' | 'provider' | 'description' | 'credentials' | 'default' | 'embedding'
 >;
 
 type Props = ValidationErrorsListProps<Value>;
@@ -83,6 +83,13 @@ export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, contr
           className="block uk-text-small"
         >
           {t.fields.defaultForOrganization.label}
+        </Checkbox>
+
+        <Checkbox
+          {...bind.path('embedding')}
+          className="block uk-text-small"
+        >
+          {t.fields.embedding.label}
         </Checkbox>
       </FormField>
     </>

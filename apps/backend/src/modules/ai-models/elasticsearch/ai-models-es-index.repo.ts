@@ -32,6 +32,7 @@ const AIModelsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createArchivedRecordMappings(),
         organization: createIdNameObjectMapping(),
         default: { type: 'boolean' },
+        embedding: { type: 'boolean' },
       },
     },
     settings: {
