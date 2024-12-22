@@ -7,8 +7,8 @@ import { runTask, StrictBooleanV, tapTaskEither, tryOrThrowTE } from '@llm/commo
 import { useAsyncSetter } from '@llm/commons-front';
 import {
   SdkCreateMessageInputV,
+  type SdkTableRowWithIdNameT,
   SdkTableRowWithIdNameV,
-  type SdkTableRowWithIdT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
@@ -26,7 +26,7 @@ export const StartChatFormValueV = z
 export type StartChatFormValueT = z.infer<typeof StartChatFormValueV>;
 
 type FormProps = {
-  project?: SdkTableRowWithIdT;
+  project: SdkTableRowWithIdNameT | null;
 };
 
 export function useStartChatForm({ project }: FormProps) {
@@ -40,9 +40,9 @@ export function useStartChatForm({ project }: FormProps) {
   const showErrorNotification = useSaveErrorNotification();
   const onSubmit = (value: StartChatFormValueT) => pipe(
     assignWorkspaceOrganization({
+      project: value.project,
       public: value.public,
       internal: false,
-      project,
     }),
     sdks.dashboard.chats.create,
     tapTaskEither(
@@ -64,9 +64,9 @@ export function useStartChatForm({ project }: FormProps) {
   const form = useForm({
     resetAfterSubmit: false,
     defaultValue: {
+      project,
       content: '',
       aiModel: null as any,
-      project: null,
       public: false,
     },
     onSubmit,

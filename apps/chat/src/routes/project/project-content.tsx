@@ -14,7 +14,7 @@ export function ProjectContent({ project }: Props) {
   return (
     <section className="flex gap-8">
       <div className="flex-1">
-        <StartChatForm project={project} />
+        <StartChatForm forceProject={project} />
 
         <hr className="border-gray-200 mx-auto my-12 border-t max-w-2xl" />
 

@@ -3,26 +3,27 @@ import type { KeyboardEventHandler } from 'react';
 import clsx from 'clsx';
 import { PaperclipIcon, SendIcon } from 'lucide-react';
 
-import type { SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkTableRowWithIdNameT } from '@llm/sdk';
 
 import { StrictBooleanV } from '@llm/commons';
 import { useFocusAfterMount, useLocalStorageObject } from '@llm/commons-front';
-import { Checkbox, FormSpinnerCTA, Select } from '@llm/ui';
+import { Checkbox, FormSpinnerCTA } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';
+import { ProjectsSearchSelect } from '~/modules/projects';
 
 import { useStartChatForm } from './use-start-chat-form';
 
 type Props = {
-  project?: SdkTableRowWithIdT;
+  forceProject?: SdkTableRowWithIdNameT;
   className?: string;
 };
 
-export function StartChatForm({ project, className }: Props) {
+export function StartChatForm({ forceProject, className }: Props) {
   const t = useI18n().pack.chats.start;
   const focusInputRef = useFocusAfterMount<HTMLTextAreaElement>();
 
-  const { loading, form, submitting } = useStartChatForm({ project });
+  const { loading, form, submitting } = useStartChatForm({ project: forceProject || null });
   const { bind, handleSubmitEvent, value } = form;
 
   const submitOnEnterStorage = useLocalStorageObject('start-chat-input-toolbar-submit-on-enter', {
@@ -94,16 +95,16 @@ export function StartChatForm({ project, className }: Props) {
             {t.addFile}
           </button>
 
-          <Select
-            buttonClassName="border-gray-300 border rounded-md bg-white"
-            placeholderClassName="text-black"
-            placeholder={t.selectProject}
-            items={[]}
-            disabled
-            {...bind.path('project')}
-          />
+          {!forceProject && (
+            <ProjectsSearchSelect
+              buttonClassName="border-gray-300 border rounded-md bg-white"
+              placeholderClassName="text-black"
+              placeholder={t.selectProject}
+              {...bind.path('project')}
+            />
+          )}
 
-          {!!project && (
+          {!!forceProject && (
             <Checkbox {...bind.path('public')}>
               {t.publicChat}
             </Checkbox>

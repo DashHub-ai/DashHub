@@ -1,16 +1,16 @@
 import type { ComponentProps } from 'react';
 
-import type { SdKSearchAppsCategoriesInputT, SdkSearchAppsCategoriesOutputT } from '@llm/sdk';
+import type { SdKSearchProjectsInputT, SdKSearchProjectsOutputT } from '@llm/sdk';
 
 import { createSdkAutocomplete } from '@llm/ui';
 import { useWorkspaceOrganization } from '~/modules/workspace';
 
-const AppsCategoriesAbstractSearchSelect = createSdkAutocomplete<
-  SdkSearchAppsCategoriesOutputT,
-  SdKSearchAppsCategoriesInputT
+export const ProjectsAbstractSearchSelect = createSdkAutocomplete<
+  SdKSearchProjectsOutputT,
+  SdKSearchProjectsInputT
 >({
   fetchFn: ({ sdk: { sdks }, phrase, limit, filters }) =>
-    sdks.dashboard.appsCategories.search({
+    sdks.dashboard.projects.search({
       archived: false,
       sort: 'score:desc',
       offset: 0,
@@ -20,16 +20,16 @@ const AppsCategoriesAbstractSearchSelect = createSdkAutocomplete<
     }),
 });
 
-export function AppsCategoriesSearchSelect({ filters, ...props }: ComponentProps<typeof AppsCategoriesAbstractSearchSelect>) {
+export function ProjectsSearchSelect({ filters, ...props }: ComponentProps<typeof ProjectsAbstractSearchSelect>) {
   const { organization } = useWorkspaceOrganization();
 
   return (
-    <AppsCategoriesAbstractSearchSelect
+    <ProjectsAbstractSearchSelect
       {...props}
       filters={{
         ...filters,
         organizationIds: [organization!.id],
-      } as SdKSearchAppsCategoriesInputT}
+      } as SdKSearchProjectsInputT}
     />
   );
 }

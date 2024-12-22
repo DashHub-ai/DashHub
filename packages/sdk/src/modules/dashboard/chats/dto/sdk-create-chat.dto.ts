@@ -22,7 +22,7 @@ export const SdkCreateChatInputV = SdkChatV.pick({
 })
   .extend({
     creator: SdkTableRowWithIdV.optional(),
-    project: SdkTableRowWithIdV.optional(),
+    project: SdkTableRowWithIdV.optional().nullable(),
     organization: SdkTableRowWithIdV.optional(),
     summary: SdkChatSummaryInputV.optional(),
   });
