@@ -60,17 +60,23 @@ export class S3Service {
 
     return pipe(
       this.getBucketS3Access(bucketId),
-      TE.chainW(({ client, bucket }) => S3UploadError.tryCatch(
-        () => client.putObject(bucket.bucketName, s3Key, buffer),
+      TE.chainW(({ client, bucket }) => pipe(
+        S3UploadError.tryCatch(
+          () => client.putObject(bucket.bucketName, s3Key, buffer),
+        ),
+        TE.chainW(() => this.s3ResourcesRepo.create({
+          value: {
+            bucketId,
+            s3Key,
+            name,
+            type: 'other',
+          },
+        })),
+        TE.map(({ id }) => ({
+          id,
+          publicUrl: `${bucket.publicBaseUrl}/${s3Key}`,
+        })),
       )),
-      TE.chainW(() => this.s3ResourcesRepo.create({
-        value: {
-          bucketId,
-          s3Key,
-          name,
-          type: 'other',
-        },
-      })),
     );
   };
 
@@ -99,7 +105,9 @@ type UploadTE = TE.TaskEither<
   | DatabaseRecordNotExists
   | S3UploadError
   | SdkInvalidFileFormatError,
-  TableRowWithId
+  TableRowWithId & {
+    publicUrl: string;
+  }
 >;
 
 export type UploadFilePayload = Buffer | string;

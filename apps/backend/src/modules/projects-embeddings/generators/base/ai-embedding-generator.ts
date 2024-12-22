@@ -8,6 +8,7 @@ import type { ProjectEmbeddingsInsertTableRow } from '../../projects-embeddings.
 
 export type AIEmbeddingGenerateAttrs = {
   fileName: string;
+  fileUrl: string;
   buffer: UploadFilePayload;
   aiModel: SdkSearchAIModelItemT;
 };

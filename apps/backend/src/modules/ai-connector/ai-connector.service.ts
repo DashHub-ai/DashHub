@@ -94,7 +94,7 @@ export class AIConnectorService {
     }: {
       aiModel: SdkTableRowWithIdT | SdkSearchAIModelItemT;
       history?: SdkMessageT[];
-      message: string;
+      message: string | OpenAI.Chat.Completions.ChatCompletionMessageParam;
     },
   ) => pipe(
     'credentials' in aiModel
@@ -116,10 +116,12 @@ export class AIConnectorService {
             model: credentials.apiModel,
             messages: [
               ...this.normalizeMessagesToCompletion(history),
-              {
-                role: 'user',
-                content: message,
-              },
+              typeof message === 'string'
+                ? {
+                    role: 'user',
+                    content: message,
+                  }
+                : message,
             ],
           });
 

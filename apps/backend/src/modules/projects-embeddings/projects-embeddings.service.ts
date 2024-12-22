@@ -23,6 +23,7 @@ import {
 import {
   DocAIEmbeddingGenerator,
   DocxAIEmbeddingGenerator,
+  ImageAIEmbeddingGenerator,
   PdfAIEmbeddingGenerator,
   TextAIEmbeddingGenerator,
   XlsAIEmbeddingGenerator,
@@ -33,6 +34,7 @@ import { ProjectEmbeddingsInsertTableRow } from './projects-embeddings.tables';
 import { formatVector } from './utils';
 
 type EmbeddingGeneratorAttrs = {
+  fileUrl: string;
   fileName: string;
   buffer: UploadFilePayload;
   mimeType: string;
@@ -49,6 +51,13 @@ const OFFICE_MIME_TYPES = new Set([
   'application/msword', // doc
 ]);
 
+const SUPPORTED_IMAGES_MIME_TYPES = new Set([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+]);
+
 @injectable()
 export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbeddingsFirewall> {
   constructor(
@@ -62,6 +71,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     @inject(PdfAIEmbeddingGenerator) private readonly pdfAIEmbeddingGenerator: PdfAIEmbeddingGenerator,
     @inject(DocAIEmbeddingGenerator) private readonly docAIEmbeddingGenerator: DocAIEmbeddingGenerator,
     @inject(XlsAIEmbeddingGenerator) private readonly xlsAIEmbeddingGenerator: XlsAIEmbeddingGenerator,
+    @inject(ImageAIEmbeddingGenerator) private readonly imageAIEmbeddingGenerator: ImageAIEmbeddingGenerator,
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
@@ -112,6 +122,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
   generateFileEmbeddings(
     {
       fileName,
+      fileUrl,
       buffer,
       mimeType,
       projectFileId,
@@ -124,47 +135,38 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
         TE.chainW(aiModel => this.aiModelsService.get(aiModel.id)),
       )),
       TE.bindW('maybeEmbeddings', ({ aiModel }) => {
+        const attrs = {
+          fileName,
+          fileUrl,
+          aiModel,
+          buffer,
+        };
+
         const task = (() => {
+          if (SUPPORTED_IMAGES_MIME_TYPES.has(mimeType)) {
+            return this.imageAIEmbeddingGenerator.generate(attrs);
+          }
+
           if (mimeType === 'application/pdf') {
-            return this.pdfAIEmbeddingGenerator.generate({
-              fileName,
-              aiModel,
-              buffer,
-            });
+            return this.pdfAIEmbeddingGenerator.generate(attrs);
           }
 
           if (mimeType === 'application/vnd.ms-excel') {
-            return this.xlsAIEmbeddingGenerator.generate({
-              fileName,
-              aiModel,
-              buffer,
-            });
+            return this.xlsAIEmbeddingGenerator.generate(attrs);
           }
 
           if (mimeType === 'application/msword') {
-            return this.docAIEmbeddingGenerator.generate({
-              fileName,
-              aiModel,
-              buffer,
-            });
+            return this.docAIEmbeddingGenerator.generate(attrs);
           }
 
           if (OFFICE_MIME_TYPES.has(mimeType)) {
-            return this.docxAIEmbeddingGenerator.generate({
-              fileName,
-              aiModel,
-              buffer,
-            });
+            return this.docxAIEmbeddingGenerator.generate(attrs);
           }
 
           if (mimeType === 'text/plain'
             || (mimeType === 'application/octet-stream' && typeof buffer !== 'string' && isValidUTF8(buffer))
           ) {
-            return this.textAIEmbeddingGenerator.generate({
-              fileName,
-              aiModel,
-              buffer,
-            });
+            return this.textAIEmbeddingGenerator.generate(attrs);
           }
 
           return TE.of([]);

@@ -56,11 +56,12 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
           s3ResourceId: s3File.id,
         },
       })),
-      tapTaskEitherTE(({ projectFile }) => this.projectsEmbeddingsService.generateFileEmbeddings({
+      tapTaskEitherTE(({ projectFile, s3File }) => this.projectsEmbeddingsService.generateFileEmbeddings({
         buffer: attrs.buffer,
         mimeType: attrs.mimeType,
         projectFileId: projectFile.id,
         fileName: attrs.name,
+        fileUrl: s3File.publicUrl,
       })),
       tapTaskEitherTE(() => this.projectsFilesEsIndexRepo.reindexAllProjectFiles(projectId)),
       TE.map(({ projectFile }) => projectFile),
