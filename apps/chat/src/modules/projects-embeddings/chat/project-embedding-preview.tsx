@@ -17,22 +17,20 @@ export function ProjectEmbeddingPreview({ embedding }: ProjectEmbeddingPreviewPr
 
   return (
     <div className="flex flex-col gap-1.5 p-2">
-      <div className="relative">
-        {isImageFileUrl(publicUrl)
-          ? (
-              <img
-                src={publicUrl}
-                alt={embedding.projectFile.name}
-                className="rounded-lg max-w-[320px] max-h-[320px] object-contain"
-              />
-            )
-          : (
-              <div className="max-w-[320px] max-h-[150px] whitespace-break-spaces overflow-auto">
-                <strong>...</strong>
-                <Markdown>{embedding.text}</Markdown>
-                <strong>...</strong>
-              </div>
-            )}
+      <div className="relative flex flex-row items-center gap-4">
+        {isImageFileUrl(publicUrl) && (
+          <img
+            src={publicUrl}
+            alt={embedding.projectFile.name}
+            className="mx-auto mb-2 rounded-lg max-w-[120px] max-h-[120px] object-contain"
+          />
+        )}
+
+        <div className="max-w-[320px] max-h-[150px] whitespace-break-spaces overflow-auto">
+          <strong>...</strong>
+          <Markdown>{embedding.text}</Markdown>
+          <strong>...</strong>
+        </div>
       </div>
 
       <div className="flex justify-center items-center gap-1.5">

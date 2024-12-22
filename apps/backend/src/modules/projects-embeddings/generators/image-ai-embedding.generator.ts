@@ -36,7 +36,10 @@ export class ImageAIEmbeddingGenerator implements AIEmbeddingGenerator {
             content: [
               {
                 type: 'text',
-                text: 'Please provide a description of the image',
+                text:
+                  `Describe this image. Try to guess the language based on the file name: ${attrs.fileName}.`
+                  + `If you can't guess the language, just describe the image in English.`
+                  + `Add information that it some other documents may refer to this image. It\'s part of the project.`,
               },
               {
                 type: 'image_url',
