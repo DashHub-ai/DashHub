@@ -1,7 +1,10 @@
+import esb from 'elastic-builder';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
+
+import type { TableId } from '~/modules/database';
 
 import { tryOrThrowTE } from '@llm/commons';
 import {
@@ -25,6 +28,7 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings(),
         project: createIdObjectMapping(),
         summary: { type: 'boolean' },
+        project_file_id: { type: 'keyword' },
         text: { type: 'text' },
         vector_1536: {
           type: 'dense_vector',
@@ -54,6 +58,14 @@ export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsI
   ) {
     super(elasticsearchRepo);
   }
+
+  deleteByProjectFileId = (projectFileId: TableId) =>
+    this.deleteByQuery(
+      esb.termQuery('project_file_id', projectFileId),
+      {
+        waitForRecordAvailability: true,
+      },
+    );
 
   protected async findEntities(ids: number[]): Promise<ProjectsEmbeddingsEsDocument[]> {
     return pipe(

@@ -144,6 +144,36 @@ export class ElasticsearchRepo {
   }));
 
   /**
+   * Deletes documents from the specified index by query.
+   *
+   * @param indexName - The name of the index.
+   * @param query - The query to delete by.
+   * @returns The deleted documents.
+   */
+  deleteByQuery = (
+    indexName: string,
+    query: es.estypes.QueryDslQueryContainer,
+    { waitForRecordAvailability }: EsIndexWaitAttributes = {},
+  ) =>
+    pipe(
+      TaggedError.tryUnsafeTask(EsDeleteDocumentError, async () => {
+        const result = await this.client.deleteByQuery({
+          index: indexName,
+          body: {
+            query,
+          },
+        });
+
+        return result;
+      }),
+      TE.tap(() => (
+        waitForRecordAvailability
+          ? this.refreshIndex(indexName)
+          : TE.right(undefined)
+      )),
+    );
+
+  /**
    * Indexes a document in the specified index.
    *
    * @param indexName - The name of the index.

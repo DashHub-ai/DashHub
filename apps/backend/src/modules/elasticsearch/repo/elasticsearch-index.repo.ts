@@ -120,6 +120,16 @@ export function createElasticsearchIndexRepo<
       this.elasticsearchRepo.deleteDocument(aliasIndexName, String(id), reindexAttributes);
 
     /**
+     * Delete documents by query.
+     *
+     * @param query - The query.
+     * @param reindexAttributes - The re-indexing attributes.
+     * @returns The delete result.
+     */
+    deleteByQuery = (query: object, reindexAttributes: EsIndexWaitAttributes = {}) =>
+      this.elasticsearchRepo.deleteByQuery(aliasIndexName, query, reindexAttributes);
+
+    /**
      * Delete documents by ids.
      *
      * @param ids - The document ids.

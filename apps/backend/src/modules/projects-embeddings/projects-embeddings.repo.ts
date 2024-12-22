@@ -14,6 +14,12 @@ import { ProjectEmbeddingsTableRowWithRelations } from './projects-embeddings.ta
 
 @injectable()
 export class ProjectsEmbeddingsRepo extends createDatabaseRepo('projects_embeddings') {
+  deleteByProjectFileId = ({ forwardTransaction, projectFileId }: TransactionalAttrs<{ projectFileId: TableId; }>) =>
+    this.deleteAll({
+      forwardTransaction,
+      where: [['projectFileId', '=', projectFileId]],
+    });
+
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 

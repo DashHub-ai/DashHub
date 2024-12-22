@@ -85,6 +85,9 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
       resourceId,
     })),
     tapTaskEitherTE(({ id }) =>
+      this.projectsEmbeddingsService.deleteProjectFileEmbeddings(id),
+    ),
+    tapTaskEitherTE(({ id }) =>
       this.projectsFilesEsIndexRepo.deleteDocument(id, {
         waitForRecordAvailability: true,
       }),

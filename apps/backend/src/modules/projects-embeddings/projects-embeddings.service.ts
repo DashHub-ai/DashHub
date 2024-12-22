@@ -71,6 +71,13 @@ export class ProjectsEmbeddingsService {
     }),
   );
 
+  deleteProjectFileEmbeddings = (projectFileId: TableId) => pipe(
+    this.repo.deleteByProjectFileId({ projectFileId }),
+    TE.chainW(() =>
+      this.esIndexRepo.deleteByProjectFileId(projectFileId),
+    ),
+  );
+
   generateFileEmbeddings(
     {
       buffer,
