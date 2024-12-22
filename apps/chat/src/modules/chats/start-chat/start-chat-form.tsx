@@ -65,7 +65,7 @@ export function StartChatForm({ project, className }: Props) {
             buttonClassName="border-gray-300 border rounded-md h-7 text-xs"
             placeholderClassName="text-black text-xs"
             placeholder={t.selectModel}
-            className="w-36"
+            className="min-w-36"
             withSearch={false}
             disabled={loading}
             preload
