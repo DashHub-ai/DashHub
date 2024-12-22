@@ -136,16 +136,23 @@ export class ProjectsEmbeddingsService {
 }
 
 function createRelevantEmbeddingsPrompt(message: string, embeddings: EsMatchingProjectEmbedding[]) {
-  const fragments = embeddings.map(({ text }) => text).join('\n--\n');
+  const fragments = embeddings
+    .map(({ text, id }) => `#embedding:${id}\n${text}`)
+    .join('\n--\n');
 
   return [
     message,
-    '\n\n\n--\m\n',
+    '\n\n\n--\n',
     'Context (based on project files):',
     fragments,
     '\n--\n',
     'Please provide a response to the user\'s question utilizing the above context where applicable.'
-    + ' If the context contains relevant information, incorporate it into your answer.'
+    + ' When incorporating information from the context:'
+    + ' - Each reference to different context parts must be prefixed with its #embedding:<id>'
+    + ' - For direct quotes use: #embedding:<id> "quoted text"'
+    + ' - For paraphrasing use: #embedding:<id> explains that... or According to #embedding:<id>...'
+    + ' - When combining information from multiple sources, each source must be properly attributed'
+    + ' - Make sure to maintain proper #embedding:<id> prefixes even when referencing multiple sources in the same sentence'
     + ' If the context is not relevant, provide a general response.'
     + ' Note: The context is derived from the project files.',
   ].join('\n');
