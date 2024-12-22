@@ -14,7 +14,7 @@ import { useBalloon } from '@llm/ui';
 
 import { ProjectEmbeddingPreview } from './project-embedding-preview';
 
-const embeddingsChatsCache = new AsyncTaskCache<
+export const embeddingsChatsCache = new AsyncTaskCache<
   SdkTableRowIdT,
   ProjectsEmbeddingsSdk,
   SdkSearchProjectEmbeddingItemT

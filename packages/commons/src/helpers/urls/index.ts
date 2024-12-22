@@ -10,6 +10,7 @@ export * from './drop-search-params';
 export * from './encode-search-params';
 export * from './has-url-protocol';
 export * from './is-absolute-url';
+export * from './is-image-file-url';
 export * from './parameterize-path';
 export * from './parameterize-strict-path';
 export * from './with-hash';
