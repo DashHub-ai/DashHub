@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
@@ -19,8 +21,12 @@ export class ImageAIEmbeddingGenerator implements AIEmbeddingGenerator {
     @inject(AIModelsService) private readonly aiModelsService: AIModelsService,
   ) {}
 
-  generate = (attrs: AIEmbeddingGenerateAttrs) =>
-    pipe(
+  generate = (attrs: AIEmbeddingGenerateAttrs) => {
+    const base64Image = typeof attrs.buffer === 'string'
+      ? attrs.buffer
+      : Buffer.from(attrs.buffer).toString('base64');
+
+    return pipe(
       this.aiModelsService.getDefault(attrs.aiModel.organization.id),
       TE.chainW(ocrModel => pipe(
         this.aiConnectorService.executePrompt({
@@ -35,7 +41,7 @@ export class ImageAIEmbeddingGenerator implements AIEmbeddingGenerator {
               {
                 type: 'image_url',
                 image_url: {
-                  url: attrs.fileUrl,
+                  url: `data:image/jpeg;base64,${base64Image}`,
                 },
               },
             ],
@@ -47,4 +53,5 @@ export class ImageAIEmbeddingGenerator implements AIEmbeddingGenerator {
         buffer: result || '',
       })),
     );
+  };
 }
