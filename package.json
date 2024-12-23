@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.9.1",
-    "@commitlint/cli": "^19.5.0",
+    "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/ensure": "^19.5.0",
     "@commitlint/message": "^19.5.0",
