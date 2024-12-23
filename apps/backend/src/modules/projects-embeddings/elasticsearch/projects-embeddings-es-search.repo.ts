@@ -55,23 +55,18 @@ export class ProjectsEmbeddingsEsSearchRepo {
     },
   ) => pipe(
     this.indexRepo.search(
-      esb.requestBodySearch()
+      esb
+        .requestBodySearch()
         .source(['id', 'text', 'project_file'])
         .size(100)
-        .query(
-          esb.scriptScoreQuery()
-            .query(
-              esb
-                .boolQuery()
-                .filter(esb.termQuery('project.id', projectId)),
-            )
-            .script(
-              esb
-                .script('source', `cosineSimilarity(params.query_vector, '${`vector_${embedding.length}`}') + 1.0`)
-                .params({ query_vector: embedding }),
+        .kNN(
+          esb
+            .kNN(`vector_${embedding.length}`, 10, 200)
+            .queryVector(embedding)
+            .filter(
+              esb.termQuery('project.id', projectId),
             ),
         )
-        .minScore(1.0)
         .toJSON(),
     ),
     TE.map(({ hits: { hits } }) => pipe(
