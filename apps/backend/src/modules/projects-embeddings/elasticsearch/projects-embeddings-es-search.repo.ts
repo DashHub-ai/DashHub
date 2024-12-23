@@ -13,7 +13,10 @@ import { createPaginationOffsetSearchQuery, createScoredSortFieldQuery } from '~
 import { ProjectEmbeddingsTableRowWithRelations } from '../projects-embeddings.tables';
 import { type ProjectsEmbeddingsEsDocument, ProjectsEmbeddingsEsIndexRepo } from './projects-embeddings-es-index.repo';
 
-export type EsMatchingProjectEmbedding = Pick<ProjectEmbeddingsTableRowWithRelations, 'id' | 'text'>;
+export type EsMatchingProjectEmbedding = Pick<
+  ProjectEmbeddingsTableRowWithRelations,
+  'id' | 'text' | 'projectFile'
+>;
 
 @injectable()
 export class ProjectsEmbeddingsEsSearchRepo {
@@ -52,15 +55,23 @@ export class ProjectsEmbeddingsEsSearchRepo {
     },
   ) => pipe(
     this.indexRepo.search(
-      esb
-        .requestBodySearch()
-        .source(['id', 'text'])
+      esb.requestBodySearch()
+        .source(['id', 'text', 'project_file'])
+        .size(100)
         .query(
-          esb.termQuery('project.id', projectId),
+          esb.scriptScoreQuery()
+            .query(
+              esb
+                .boolQuery()
+                .filter(esb.termQuery('project.id', projectId)),
+            )
+            .script(
+              esb
+                .script('source', `cosineSimilarity(params.query_vector, '${`vector_${embedding.length}`}') + 1.0`)
+                .params({ query_vector: embedding }),
+            ),
         )
-        .kNN(
-          esb.kNN(`vector_${embedding.length}`, 8, 100).queryVector(embedding),
-        )
+        .minScore(1.0)
         .toJSON(),
     ),
     TE.map(({ hits: { hits } }) => pipe(
@@ -69,6 +80,7 @@ export class ProjectsEmbeddingsEsSearchRepo {
       A.map((item): EsMatchingProjectEmbedding => ({
         id: item.id!,
         text: item.text!,
+        projectFile: camelcaseKeys(item.project_file!, { deep: true }),
       })),
     )),
   );

@@ -16,7 +16,6 @@ import { AIModelsService } from '../ai-models';
 import { ChatsRepo } from '../chats/chats.repo';
 import { ProjectsFilesRepo } from '../projects-files/projects-files.repo';
 import {
-  type EsMatchingProjectEmbedding,
   ProjectsEmbeddingsEsIndexRepo,
   ProjectsEmbeddingsEsSearchRepo,
 } from './elasticsearch';
@@ -28,6 +27,7 @@ import {
   TextAIEmbeddingGenerator,
   XlsAIEmbeddingGenerator,
 } from './generators';
+import { createRelevantEmbeddingsPrompt } from './helpers';
 import { ProjectsEmbeddingsFirewall } from './projects-embeddings.firewall';
 import { ProjectsEmbeddingsRepo } from './projects-embeddings.repo';
 import { ProjectEmbeddingsInsertTableRow } from './projects-embeddings.tables';
@@ -200,27 +200,4 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
       }),
     );
   }
-}
-
-function createRelevantEmbeddingsPrompt(message: string, embeddings: EsMatchingProjectEmbedding[]) {
-  const fragments = embeddings
-    .map(({ text, id }) => `#embedding:${id}\n${text}`)
-    .join('\n--\n');
-
-  return [
-    message,
-    '\n\n\n--\n',
-    'Context (based on project files):',
-    fragments,
-    '\n--\n',
-    'Please provide a response to the user\'s question utilizing the above context where applicable.'
-    + ' When incorporating information from the context:'
-    + ' - Each reference to different context parts must be prefixed with its #embedding:<id>'
-    + ' - For direct quotes use: #embedding:<id> "quoted text"'
-    + ' - For paraphrasing use: #embedding:<id> explains that... or According to #embedding:<id>...'
-    + ' - When combining information from multiple sources, each source must be properly attributed'
-    + ' - Make sure to maintain proper #embedding:<id> prefixes even when referencing multiple sources in the same sentence'
-    + ' If the context is not relevant, provide a general response.'
-    + ' Note: The context is derived from the project files.',
-  ].join('\n');
 }
