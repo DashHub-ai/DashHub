@@ -45,6 +45,14 @@ export function createActionButtonsPrompt(): string {
     '❌ English buttons for Polish user',
     '❌ Polish buttons for English user',
     '',
+    '--- ACTION BUTTONS PLACEMENT ---',
+    'CRITICAL: Action buttons must ALWAYS be placed at the END of your response',
+    'NEVER place action buttons:',
+    '- In the middle of the text',
+    '- Inside lists or bullet points',
+    '- Inside tables or other formatting structures',
+    '- Mixed with regular text',
+    '',
     'Always use action buttons instead.',
   ]).join('\n');
 }
