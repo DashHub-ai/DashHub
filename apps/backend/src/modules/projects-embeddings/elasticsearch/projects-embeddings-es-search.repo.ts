@@ -59,14 +59,25 @@ export class ProjectsEmbeddingsEsSearchRepo {
         .requestBodySearch()
         .source(['id', 'text', 'project_file'])
         .size(100)
-        .kNN(
+        .kNN([
           esb
-            .kNN(`vector_${embedding.length}`, 10, 200)
+            .kNN(`vector_${embedding.length}`, 30, 200)
             .queryVector(embedding)
-            .filter(
+            .boost(1)
+            .filter([
+              esb.termQuery('summary', false),
               esb.termQuery('project.id', projectId),
-            ),
-        )
+            ]),
+
+          esb
+            .kNN(`vector_${embedding.length}`, 20, 200)
+            .queryVector(embedding)
+            .boost(3)
+            .filter([
+              esb.termQuery('summary', true),
+              esb.termQuery('project.id', projectId),
+            ]),
+        ])
         .toJSON(),
     ),
     TE.map(({ hits: { hits } }) => pipe(

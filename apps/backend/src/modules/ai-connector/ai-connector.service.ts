@@ -55,6 +55,7 @@ export class AIConnectorService {
     {
       aiModel,
       history,
+      context,
       message,
       signal,
     }: {
@@ -62,6 +63,7 @@ export class AIConnectorService {
       history: SdkMessageT[];
       message?: SdkCreateMessageInputT;
       signal?: AbortSignal;
+      context?: string;
     },
   ) => pipe(
     this.aiModelsService.get(aiModel.id),
@@ -75,6 +77,10 @@ export class AIConnectorService {
           stream: true,
           model: credentials.apiModel,
           messages: rejectFalsyItems([
+            !!context && {
+              role: 'system',
+              content: context,
+            },
             ...this.normalizeMessagesToCompletion(history),
             !!message?.content && {
               role: 'user',

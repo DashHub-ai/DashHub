@@ -24,17 +24,48 @@ export function createRelevantEmbeddingsPrompt(message: string, embeddings: EsMa
     'Context (based on project files):',
     fragmentsText,
     '\n--\n',
-    'Please respond in the same language as the user\'s message above. '
-    + 'Provide a response to the user\'s question utilizing ALL relevant context from above. '
-    + 'You must consider and analyze ALL provided file fragments, not just the first matching one.\n'
-    + 'When incorporating information from the context:\n'
-    + ' - Each reference to different context parts must be prefixed with its #embedding:<id>\n'
-    + ' - For direct quotes use: #embedding:<id> "quoted text"\n'
-    + ' - For paraphrasing use: #embedding:<id> explains that... or According to #embedding:<id>...\n'
-    + ' - When combining information from multiple sources, each source must be properly attributed\n'
-    + ' - Make sure to maintain proper #embedding:<id> prefixes even when referencing multiple sources in the same sentence\n'
-    + ' - You must analyze and reference ALL relevant fragments, not just the first one you find\n'
-    + 'If the context is not relevant, provide a general response.\n'
-    + 'Note: The context is grouped by project files for better understanding of the codebase structure.',
+    'Core Instructions:',
+    '1. Respond in the same language as the user\'s message',
+    '2. Consider and analyze ALL provided file fragments',
+    '3. Search through ALL file types, including source code, documents, images (.png, .jpg, etc), presentations, and any other files',
+    '4. MANDATORY: Always consider image files in your search - they may contain crucial diagrams, screenshots or visual documentation',
+    '5. MANDATORY: When discussing images, diagrams, screenshots, or visual content:',
+    '   - ONLY reference images using #embedding:<id> format - no direct file references allowed',
+    '   - Every image mention MUST be prefixed with #embedding:<id>',
+    '   - Format: #embedding:<id> describes image showing...',
+    '   - Never reference images without proper #embedding:<id>',
+    '   - Do NOT add any action buttons for viewing images - this is handled automatically',
+    '',
+    'List Guidelines:',
+    '- Never include empty or meaningless items in lists',
+    '- Each list item must contain meaningful content',
+    '- Remove or combine items that are too short or redundant',
+    '- Ensure each item adds unique value',
+    '',
+    'Reference Format:',
+    '- Direct quotes: #embedding:<id> "quoted text"',
+    '- Paraphrasing: #embedding:<id> explains that... or According to #embedding:<id>...',
+    '- Multiple sources: Maintain proper #embedding:<id> prefixes for each source',
+    '',
+    'Response Guidelines:',
+    '- Be concise and focused',
+    '- For file queries: Provide file name and one-sentence description unless more details requested',
+    '- If relevant file found: Suggest its potential usefulness',
+    '- If context not relevant: Provide general response',
+    '- When mentioning files, ALWAYS add relevant action buttons such as:',
+    '  * [action:Implementation|How is {feature} implemented in {filename}?]',
+    '  * [action:Dependencies|What other files does {filename} depend on?]',
+    '  * [action:Usage|Show me examples where {filename} is used]',
+    '  * [action:Related|Find files related to {filename}]',
+    '  * [action:Structure|Explain the structure of {filename}]',
+    '  * [action:Compare|How does {filename} compare to similar files?]',
+    '  * For code files:',
+    '    - [action:Functions|What are the main functions in {filename}?]',
+    '    - [action:Tests|Show me tests for {filename}]',
+    '  * For documentation:',
+    '    - [action:Summary|Give me a summary of {filename}]',
+    '    - [action:Examples|Show examples from {filename}]',
+    '',
+    'Note: Context is grouped by files for better codebase structure understanding.',
   ].join('\n');
 }
