@@ -12,11 +12,11 @@ import {
   AIEmbeddingGeneratorError,
   AIEmbeddingResult,
 } from './base';
-
-type SplitTextOptions = {
-  chunkSize?: number;
-  overlap?: number;
-};
+import {
+  describeEmbeddingType,
+  splitTextIntoChunks,
+  wrapEmbeddingWithInfo,
+} from './helpers';
 
 @injectable()
 export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
@@ -25,7 +25,7 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
 
-  generate = ({ buffer, aiModel, fileName }: AIEmbeddingGenerateAttrs) => {
+  generate = ({ buffer, aiModel, fileName, fileUrl }: AIEmbeddingGenerateAttrs) => {
     const text = buffer.toString('utf-8');
     const chunks = splitTextIntoChunks({
       text,
@@ -36,7 +36,12 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
     return pipe(
       TE.sequenceArray([
         this.generateSummaryEmbedding({ aiModel, text, fileName }),
-        ...chunks.map(chunk => this.generateChunkEmbedding({ aiModel, chunk, fileName })),
+        ...chunks.map(chunk => this.generateChunkEmbedding({
+          aiModel,
+          chunk,
+          fileName,
+          fileUrl,
+        })),
       ]),
       TE.map(array => [...array]),
       TE.mapLeft(error => new AIEmbeddingGeneratorError(error)),
@@ -83,17 +88,19 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
       aiModel,
       chunk,
       fileName,
+      fileUrl,
     }: {
       aiModel: SdkSearchAIModelItemT;
       chunk: string;
       fileName: string;
+      fileUrl: string;
     },
   ) => pipe(
     TE.Do,
     TE.apS('embedding', this.aiConnectorService.executeEmbeddingPrompt({
       aiModel,
       input: wrapEmbeddingWithInfo({
-        type: 'fragment',
+        type: describeEmbeddingType(fileUrl),
         embedding: chunk,
         fileName,
       }),
@@ -105,76 +112,4 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
       summary: false,
     })),
   );
-}
-
-function wrapEmbeddingWithInfo(
-  {
-    type,
-    embedding,
-    fileName,
-  }: {
-    type: string;
-    embedding: string;
-    fileName: string;
-  },
-): string {
-  return [
-    [
-      'Embedding info:',
-      `- File name: "${fileName}"`,
-      `- Type: ${type}`,
-      `- Name in the list of the files of the project: "${fileName}"`,
-      `- This file is the part of the project and may refer to the other project files.`,
-      `- This file may describe other files in project.`,
-    ].join('\n'),
-
-    'Fragment:',
-    embedding,
-  ].join('\n--\n');
-}
-
-function splitTextIntoChunks(
-  {
-    text,
-    chunkSize = 200,
-    overlap = 100,
-  }: { text: string; } & SplitTextOptions,
-): string[] {
-  const chunks: string[] = [];
-  let startIndex = 0;
-  const minChunkSize = Math.floor(chunkSize * 0.75); // Minimum chunk size is 75% of target size
-
-  while (startIndex < text.length) {
-    const remainingText = text.slice(startIndex);
-    const chunk = remainingText.slice(0, chunkSize);
-
-    // Find the last sentence boundary within our chunk size
-    let breakPoint = chunk.length;
-    if (startIndex + chunkSize < text.length) {
-      // Look for sentence boundaries (., !, ?, \n)
-      const sentenceEndings = [...chunk.matchAll(/[.!?\n]\s*/g)].map(m => m.index! + m[0].length);
-
-      // Find the last valid sentence boundary that results in a chunk larger than minChunkSize
-      for (let i = sentenceEndings.length - 1; i >= 0; i--) {
-        if (sentenceEndings[i] >= minChunkSize) {
-          breakPoint = sentenceEndings[i];
-          break;
-        }
-      }
-
-      // If no suitable sentence boundary found and chunk is bigger than minimum size,
-      // fall back to space boundary
-      if (breakPoint === chunk.length && chunk.length > minChunkSize) {
-        const lastSpace = chunk.lastIndexOf(' ', chunkSize);
-        if (lastSpace > minChunkSize) {
-          breakPoint = lastSpace + 1;
-        }
-      }
-    }
-
-    chunks.push(text.slice(startIndex, startIndex + breakPoint));
-    startIndex += Math.max(breakPoint - overlap, minChunkSize / 2); // Ensure we move forward by at least half the minimum chunk size
-  }
-
-  return chunks;
 }

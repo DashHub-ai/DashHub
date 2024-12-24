@@ -27,11 +27,17 @@ import {
   TextAIEmbeddingGenerator,
   XlsAIEmbeddingGenerator,
 } from './generators';
-import { createRelevantEmbeddingsPrompt } from './helpers';
+import { createRelevantEmbeddingsPrompt, formatVector } from './helpers';
+import {
+  isImageMimetype,
+  isLegacyExcelMimetype,
+  isLegacyWordMimetype,
+  isPDFMimeType,
+  isXmlOfficeMimetype,
+} from './mimetypes';
 import { ProjectsEmbeddingsFirewall } from './projects-embeddings.firewall';
 import { ProjectsEmbeddingsRepo } from './projects-embeddings.repo';
 import { ProjectEmbeddingsInsertTableRow } from './projects-embeddings.tables';
-import { formatVector } from './utils';
 
 type EmbeddingGeneratorAttrs = {
   fileUrl: string;
@@ -40,23 +46,6 @@ type EmbeddingGeneratorAttrs = {
   mimeType: string;
   projectFileId: TableId;
 };
-
-const OFFICE_MIME_TYPES = new Set([
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // docx
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation', // pptx
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // xlsx
-  'application/vnd.oasis.opendocument.text', // odt
-  'application/vnd.oasis.opendocument.presentation', // odp
-  'application/vnd.oasis.opendocument.spreadsheet', // ods
-  'application/msword', // doc
-]);
-
-const SUPPORTED_IMAGES_MIME_TYPES = new Set([
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-]);
 
 @injectable()
 export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbeddingsFirewall> {
@@ -143,23 +132,23 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
         };
 
         const task = (() => {
-          if (SUPPORTED_IMAGES_MIME_TYPES.has(mimeType)) {
+          if (isImageMimetype(mimeType)) {
             return this.imageAIEmbeddingGenerator.generate(attrs);
           }
 
-          if (mimeType === 'application/pdf') {
+          if (isPDFMimeType(mimeType)) {
             return this.pdfAIEmbeddingGenerator.generate(attrs);
           }
 
-          if (mimeType === 'application/vnd.ms-excel') {
+          if (isLegacyExcelMimetype(mimeType)) {
             return this.xlsAIEmbeddingGenerator.generate(attrs);
           }
 
-          if (mimeType === 'application/msword') {
+          if (isLegacyWordMimetype(mimeType)) {
             return this.docAIEmbeddingGenerator.generate(attrs);
           }
 
-          if (OFFICE_MIME_TYPES.has(mimeType)) {
+          if (isXmlOfficeMimetype(mimeType)) {
             return this.docxAIEmbeddingGenerator.generate(attrs);
           }
 
