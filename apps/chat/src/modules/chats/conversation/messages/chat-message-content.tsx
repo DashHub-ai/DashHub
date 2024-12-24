@@ -37,6 +37,7 @@ export const ChatMessageContent = memo(({ content, truncate, disabled, darkMode,
     observable.getSnapshot,
   );
 
+  const isStreaming = typeof content !== 'string';
   const sanitizedContent = useMemo(() => {
     const html = sanitizeHtml(stream.content);
 
@@ -63,7 +64,7 @@ export const ChatMessageContent = memo(({ content, truncate, disabled, darkMode,
         inlinedReactComponents={hydrationResult.inlinedReactComponents}
       />
 
-      {!truncate && showToolbars && hydrationResult.appendToolbars}
+      {!truncate && showToolbars && !isStreaming && hydrationResult.appendToolbars}
 
       {!stream.done && (
         <div className="flex gap-1 my-2">

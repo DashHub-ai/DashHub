@@ -193,6 +193,7 @@ export const ChatConversationPanel = memo(({ ref, chat, initialMessages, classNa
           'relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]',
           flickeringIndicator.visible ? 'opacity-100' : 'opacity-0', // Avoid scroll flickering on first render
         )}
+        onLoad={scrollConversation}
       >
         {groupedMessages.map(renderMessage)}
       </div>
