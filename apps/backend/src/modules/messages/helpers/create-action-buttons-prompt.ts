@@ -65,5 +65,11 @@ export function createActionButtonsPrompt(): string {
     '- Mixed with regular text',
     '',
     'Always use action buttons instead.',
+    '',
+    '--- EMOJI USAGE RULES ---',
+    'Never add standalone emojis at the end of your response',
+    'Do not use emojis as response indicators (like ✅ or ❌ at the end)',
+    'Only use emojis when they are part of examples or explanations',
+    'Never add "success" or "error" emojis to mark your entire response',
   ]).join('\n');
 }
