@@ -46,7 +46,7 @@ const MessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type MessagesEsDocument = Omit<EsDocument<MessageTableRowWithRelations>, 'files'>;
+export type MessagesEsDocument = EsDocument<MessageTableRowWithRelations>;
 
 @injectable()
 export class MessagesEsIndexRepo extends MessagesAbstractEsIndexRepo<MessagesEsDocument> {

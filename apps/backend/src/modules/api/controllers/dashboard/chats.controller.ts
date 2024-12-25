@@ -123,11 +123,15 @@ export class ChatsController extends AuthorizedController {
         '/:id/messages',
         async context => pipe(
           await context.req.parseBody(),
-          tryExtractFiles(SdkCreateMessageInputV),
+          tryExtractFiles(
+            SdkCreateMessageInputV.omit({
+              files: true,
+            }),
+          ),
           TE.chainW(({ content, files }) => messagesService.asUser(context.var.jwt).create({
+            files: [...files ?? []],
             message: {
               content,
-              files,
             },
             chat: {
               id: context.req.param('id'),

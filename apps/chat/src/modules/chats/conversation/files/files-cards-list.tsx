@@ -1,22 +1,23 @@
-import { controlled } from '@under-control/forms';
 import clsx from 'clsx';
+import { PaperclipIcon } from 'lucide-react';
 import { useMemo } from 'react';
 import { v4 } from 'uuid';
 
-import { without } from '@llm/commons';
-
-import { FileCard } from './file-card';
+import { FileCard, type FileCardFile, type FileCardProps } from './file-card';
 
 type Props = {
   className?: string;
+  items: FileCardFile[];
+  itemPropsFn?: (file: FileCardFile) => Omit<FileCardProps, 'file'>;
+  withListIcon?: boolean;
 };
 
-export const FilesCardsList = controlled<File[], Props>(({ className, control: { value, setValue } }) => {
+export function FilesCardsList({ className, itemPropsFn, items, withListIcon }: Props) {
   const mappedFiles = useMemo(() => {
     const fileNames = new Set<string>();
     const duplicateNames = new Set<string>();
 
-    value.forEach((file) => {
+    items.forEach((file) => {
       if (fileNames.has(file.name)) {
         duplicateNames.add(file.name);
       }
@@ -24,36 +25,34 @@ export const FilesCardsList = controlled<File[], Props>(({ className, control: {
       fileNames.add(file.name);
     });
 
-    return value.map(file => ({
+    return items.map(file => ({
       id: duplicateNames.has(file.name) ? v4() : file.name,
       file,
     }));
-  }, [value]);
+  }, [items]);
 
-  if (!value?.length) {
+  if (!mappedFiles) {
     return null;
   }
-
-  const handleRemove = (file: File) => {
-    setValue({
-      value: without([file])(value),
-    });
-  };
 
   return (
     <div
       className={clsx(
-        'flex flex-row gap-5',
+        'flex flex-row items-center gap-5',
         className,
       )}
     >
+      {withListIcon && (
+        <PaperclipIcon className="w-4 h-4 text-gray-500" />
+      )}
+
       {mappedFiles.map(({ file, id }) => (
         <FileCard
           key={id}
           file={file}
-          onRemove={() => handleRemove(file)}
+          {...itemPropsFn?.(file)}
         />
       ))}
     </div>
   );
-});
+}

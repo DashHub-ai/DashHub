@@ -20,7 +20,7 @@ export type ChatsTable =
   & {
     creator_user_id: ColumnType<TableId, TableId, never>;
     organization_id: ColumnType<TableId, TableId, never>;
-    project_id: ColumnType<TableId, TableId, never> | null;
+    project_id: TableId | null;
     public: boolean;
     internal: boolean;
   };

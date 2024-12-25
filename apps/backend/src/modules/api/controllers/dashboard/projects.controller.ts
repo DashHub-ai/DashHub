@@ -67,7 +67,7 @@ export class ProjectsController extends AuthorizedController {
             TE.chainW(({ buffer, mimeType, fileName }) =>
               projectsFilesService.asUser(context.var.jwt).uploadFile({
                 projectId: Number(context.req.param('projectId')),
-                name: fileName,
+                fileName,
                 buffer,
                 mimeType,
               }),

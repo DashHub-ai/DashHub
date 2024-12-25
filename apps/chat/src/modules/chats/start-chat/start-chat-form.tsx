@@ -13,7 +13,7 @@ import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';
 import { ProjectsSearchSelect } from '~/modules/projects';
 
-import { FilesCardsList, selectChatFile } from '../conversation';
+import { FilesCardsControlledList, selectChatFile } from '../conversation';
 import { useStartChatForm } from './use-start-chat-form';
 
 type Props = {
@@ -77,7 +77,7 @@ export function StartChatForm({ forceProject, className }: Props) {
             onKeyDown={handleKeyDown}
           />
 
-          <FilesCardsList
+          <FilesCardsControlledList
             {...bind.path('files')}
             className="mt-4 px-4"
           />

@@ -43,7 +43,7 @@ export class S3Service {
     {
       bucketId,
       buffer,
-      name,
+      fileName,
       mimeType,
       s3Dir = '',
     }: UploadFileAttrs,
@@ -68,7 +68,7 @@ export class S3Service {
           value: {
             bucketId,
             s3Key,
-            name,
+            name: fileName,
             type: 'other',
           },
         })),
@@ -116,6 +116,6 @@ export type UploadFileAttrs = {
   bucketId: TableId;
   buffer: UploadFilePayload;
   mimeType: string;
-  name: string;
+  fileName: string;
   s3Dir?: string;
 };

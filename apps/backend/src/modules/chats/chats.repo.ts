@@ -14,6 +14,7 @@ import {
   createUnarchiveRecordsQuery,
   DatabaseConnectionRepo,
   DatabaseError,
+  TableId,
   TableUuid,
   TransactionalAttrs,
   tryGetFirstOrNotExists,
@@ -43,6 +44,8 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
   unarchive = createUnarchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
 
   unarchiveRecords = createUnarchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
+
+  findById = this.baseRepo.findById;
 
   create = (
     {
@@ -202,6 +205,15 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
       ),
     );
   };
+
+  assignToProject = ({ forwardTransaction, id, projectId }: TransactionalAttrs<{ id: TableUuid; projectId: TableId; }>) =>
+    this.baseRepo.update({
+      forwardTransaction,
+      id,
+      value: {
+        projectId,
+      },
+    });
 
   update = ({ forwardTransaction, id, value }: TransactionalAttrs<{ id: TableUuid; value: SdkUpdateChatInputT; }>) => {
     const { summary } = value;
