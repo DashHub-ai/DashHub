@@ -68,6 +68,7 @@ export function useStartChatForm({ project }: FormProps) {
       content: '',
       aiModel: null as any,
       public: false,
+      files: [],
     },
     onSubmit,
     validation: {

@@ -1,17 +1,19 @@
 import type { KeyboardEventHandler } from 'react';
 
 import clsx from 'clsx';
+import { pipe } from 'fp-ts/function';
 import { PaperclipIcon, SendIcon } from 'lucide-react';
 
 import type { SdkTableRowWithIdNameT } from '@llm/sdk';
 
-import { StrictBooleanV } from '@llm/commons';
+import { StrictBooleanV, tapTaskOption } from '@llm/commons';
 import { useFocusAfterMount, useLocalStorageObject } from '@llm/commons-front';
 import { Checkbox, FormSpinnerCTA } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';
 import { ProjectsSearchSelect } from '~/modules/projects';
 
+import { FilesCardsList, selectChatFile } from '../conversation';
 import { useStartChatForm } from './use-start-chat-form';
 
 type Props = {
@@ -42,6 +44,13 @@ export function StartChatForm({ forceProject, className }: Props) {
     }
   };
 
+  const onAttachFile = pipe(
+    selectChatFile,
+    tapTaskOption((file) => {
+      bind.path('files').onChange([...value.files ?? [], file]);
+    }),
+  );
+
   return (
     <form
       className={clsx(
@@ -57,15 +66,22 @@ export function StartChatForm({ forceProject, className }: Props) {
           'transition-border duration-100',
         )}
       >
-        <textarea
-          ref={focusInputRef}
-          name="message"
-          className="mb-[50px] p-4 pb-0 w-full h-[120px] focus:outline-none resize-none"
-          placeholder={t.placeholder}
-          required
-          {...bind.path('content')}
-          onKeyDown={handleKeyDown}
-        />
+        <div className="mb-[65px]">
+          <textarea
+            ref={focusInputRef}
+            name="message"
+            className="p-4 pb-0 w-full h-[80px] focus:outline-none resize-none"
+            placeholder={t.placeholder}
+            required
+            {...bind.path('content')}
+            onKeyDown={handleKeyDown}
+          />
+
+          <FilesCardsList
+            {...bind.path('files')}
+            className="mt-4 px-4"
+          />
+        </div>
 
         <div className="bottom-4 left-3 absolute flex flex-row gap-4">
           <AIModelsSearchSelect
@@ -94,8 +110,8 @@ export function StartChatForm({ forceProject, className }: Props) {
         <div className="flex flex-wrap items-center gap-4">
           <button
             type="button"
-            className="border-gray-300 border pointer-events-none uk-button uk-button-default"
-            disabled
+            className="border-gray-300 border uk-button uk-button-default"
+            onClick={onAttachFile}
           >
             <PaperclipIcon size={16} className="mr-2" />
             {t.addFile}

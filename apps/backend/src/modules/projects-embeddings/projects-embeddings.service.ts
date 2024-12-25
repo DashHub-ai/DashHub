@@ -5,7 +5,14 @@ import isValidUTF8 from 'utf-8-validate';
 
 import type { SdkJwtTokenT } from '@llm/sdk';
 
-import { isNil } from '@llm/commons';
+import {
+  isImageMimetype,
+  isLegacyExcelMimetype,
+  isLegacyWordMimetype,
+  isNil,
+  isPDFMimeType,
+  isXmlOfficeMimetype,
+} from '@llm/commons';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithUuid } from '../database';
@@ -28,13 +35,6 @@ import {
   XlsAIEmbeddingGenerator,
 } from './generators';
 import { createRelevantEmbeddingsPrompt, formatVector } from './helpers';
-import {
-  isImageMimetype,
-  isLegacyExcelMimetype,
-  isLegacyWordMimetype,
-  isPDFMimeType,
-  isXmlOfficeMimetype,
-} from './mimetypes';
 import { ProjectsEmbeddingsFirewall } from './projects-embeddings.firewall';
 import { ProjectsEmbeddingsRepo } from './projects-embeddings.repo';
 import { ProjectEmbeddingsInsertTableRow } from './projects-embeddings.tables';
