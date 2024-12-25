@@ -50,18 +50,24 @@ export function StartChatForm({ forceProject, className }: Props) {
       )}
       onSubmit={handleSubmitEvent}
     >
-      <div className="relative z-10">
+      <div
+        className={clsx(
+          'relative z-10 bg-background shadow-sm border border-border rounded-lg overflow-hidden',
+          'focus-within:border-primary/50',
+          'transition-border duration-100',
+        )}
+      >
         <textarea
           ref={focusInputRef}
           name="message"
-          className="focus:border-primary bg-background shadow-sm p-4 pb-[45px] border border-border rounded-lg w-full min-h-[130px] focus:outline-none resize-none"
+          className="mb-[50px] p-4 pb-0 w-full h-[120px] focus:outline-none resize-none"
           placeholder={t.placeholder}
           required
           {...bind.path('content')}
           onKeyDown={handleKeyDown}
         />
 
-        <div className="bottom-3 left-3 absolute flex flex-row gap-4">
+        <div className="bottom-4 left-3 absolute flex flex-row gap-4">
           <AIModelsSearchSelect
             buttonClassName="border-gray-300 border rounded-md h-7 text-xs"
             placeholderClassName="text-black text-xs"
