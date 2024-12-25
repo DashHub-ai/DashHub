@@ -29,9 +29,9 @@ const MessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
           uuid: true,
         }),
         chat: createIdObjectMapping({}, 'keyword'),
-        repliedMessage: createIdObjectMapping({}, 'keyword'),
+        replied_message: createIdObjectMapping({}, 'keyword'),
         creator: createIdObjectMapping(),
-        aiModel: createIdObjectMapping(),
+        ai_model: createIdObjectMapping(),
         app: createIdObjectMapping(),
         content: {
           type: 'text',
@@ -46,7 +46,7 @@ const MessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type MessagesEsDocument = EsDocument<MessageTableRowWithRelations>;
+export type MessagesEsDocument = Omit<EsDocument<MessageTableRowWithRelations>, 'files'>;
 
 @injectable()
 export class MessagesEsIndexRepo extends MessagesAbstractEsIndexRepo<MessagesEsDocument> {

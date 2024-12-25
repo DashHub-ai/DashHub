@@ -4,6 +4,7 @@ import type { SdkMessageRoleT } from '@llm/sdk';
 import type {
   NormalizeSelectTableRow,
   TableId,
+  TableRowWithId,
   TableRowWithIdName,
   TableRowWithUuid,
   TableUuid,
@@ -11,6 +12,7 @@ import type {
   TableWithUuidColumn,
 } from '~/modules/database';
 
+import type { S3ResourcesTableRowWithRelations } from '../s3';
 import type { UserTableRowBaseRelation } from '../users';
 
 export type MessagesTable =
@@ -35,6 +37,12 @@ type RepliedMessageTableRelationRow =
     creator: UserTableRowBaseRelation | null;
   };
 
+export type MessageFileTableRelationRow =
+  & TableRowWithId
+  & {
+    resource: S3ResourcesTableRowWithRelations;
+  };
+
 export type MessageTableRowWithRelations =
   & Omit<MessageTableRow, 'chatId' | 'creatorUserId' | 'aiModelId' | 'repliedMessageId' | 'appId'>
   & {
@@ -43,4 +51,5 @@ export type MessageTableRowWithRelations =
     creator: UserTableRowBaseRelation | null;
     aiModel: TableRowWithIdName | null;
     app: TableRowWithIdName | null;
+    files: MessageFileTableRelationRow[];
   };

@@ -35,6 +35,7 @@ export function useOptimisticResponseCreator() {
       aiModel: null,
       repliedMessage: null,
       app: null,
+      files: [],
       creator: {
         id: token.sub,
         email: token.email,
@@ -46,6 +47,7 @@ export function useOptimisticResponseCreator() {
       observable: AIStreamObservable,
     ): OptimisticMessageOutputT => ({
       ...createBaseMessageFields(),
+      files: [],
       content: observable,
       role: 'assistant',
       aiModel,
@@ -56,6 +58,7 @@ export function useOptimisticResponseCreator() {
 
     app: (app: SdkTableRowWithIdNameT): OptimisticMessageOutputT => ({
       ...createBaseMessageFields(),
+      files: [],
       content: 'System message',
       role: 'assistant',
       creator: null,
