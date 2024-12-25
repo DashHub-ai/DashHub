@@ -72,7 +72,7 @@ export function jsonToFormData<
     }
 
     if (value instanceof File) {
-      formData.append('files[]', value);
+      formData.append('file', value);
     }
     else {
       let mappedValue = value;

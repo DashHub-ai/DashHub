@@ -54,6 +54,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       replyObservable,
       {
         aiModel,
+        files,
         content,
         replyToMessage,
       }: Overwrite<SdkCreateMessageInputT, {
@@ -65,6 +66,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       TE.bind('createdMessage', () => createMessage(
         chat.id,
         {
+          files,
           content,
           replyToMessage,
         },
