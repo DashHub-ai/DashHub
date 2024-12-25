@@ -3,4 +3,5 @@ export * from './reject-unsafe-sdk-errors';
 export * from './respond-with-tagged-error';
 export * from './sdk-hono-schema-validator';
 export * from './serialize-sdk-response-te';
+export * from './try-extract-files';
 export * from './try-extract-single-file';
