@@ -25,7 +25,6 @@ import type { ProjectsEmbeddingsTable } from '../projects-embeddings';
 import type { ProjectsFilesTable } from '../projects-files';
 import type {
   S3ResourcesBucketsTable,
-  S3ResourcesImagesTable,
   S3ResourcesTable,
 } from '../s3';
 import type { UsersTable } from '../users';
@@ -39,7 +38,6 @@ export type DatabaseTables = {
   // S3
   s3_resources: S3ResourcesTable;
   s3_resources_buckets: S3ResourcesBucketsTable;
-  s3_resources_images: S3ResourcesImagesTable;
 
   // Users
   users: UsersTable;
