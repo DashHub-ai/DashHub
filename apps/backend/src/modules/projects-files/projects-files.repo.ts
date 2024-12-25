@@ -97,6 +97,8 @@ export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
           s3_resource_created_at: s3ResourceCreatedAt,
           s3_resource_updated_at: s3ResourceUpdatedAt,
 
+          message_id: messageId,
+
           ...item
         }): ProjectFileTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -114,11 +116,15 @@ export class ProjectsFilesRepo extends createDatabaseRepo('projects_files') {
               name: bucketName,
             },
           },
-
           project: {
             id: projectId,
             name: projectName,
           },
+          message: messageId
+            ? {
+                id: messageId,
+              }
+            : null,
         })),
       ),
     );

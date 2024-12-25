@@ -29,6 +29,9 @@ const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
         organization: createIdNameObjectMapping(),
+        internal: {
+          type: 'keyword',
+        },
         description: {
           type: 'text',
           analyzer: 'folded_lowercase_analyzer',

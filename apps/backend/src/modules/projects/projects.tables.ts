@@ -15,6 +15,7 @@ export type ProjectsTable =
     organization_id: ColumnType<TableId, TableId, never>;
     name: string;
     description: string | null;
+    internal: boolean;
   };
 
 export type ProjectTableRow = NormalizeSelectTableRow<ProjectsTable>;

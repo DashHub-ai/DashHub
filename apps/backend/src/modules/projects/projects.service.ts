@@ -76,10 +76,11 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
 
   search = this.esSearchRepo.search;
 
-  create = ({ organization, ...values }: SdkCreateProjectInputT) => pipe(
+  create = ({ internal, organization, ...values }: SdkCreateProjectInputT & { internal?: boolean; }) => pipe(
     this.repo.create({
       value: {
         ...values,
+        internal: !!internal,
         organizationId: organization.id,
       },
     }),
