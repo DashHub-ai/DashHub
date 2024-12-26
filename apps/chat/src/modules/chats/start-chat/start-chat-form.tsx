@@ -66,11 +66,11 @@ export function StartChatForm({ forceProject, className }: Props) {
           'transition-border duration-100',
         )}
       >
-        <div className="mb-[65px]">
+        <div className="mb-[55px]">
           <textarea
             ref={focusInputRef}
             name="message"
-            className="p-4 pb-0 w-full h-[80px] focus:outline-none resize-none"
+            className="p-4 pb-0 w-full focus:outline-none resize-none"
             placeholder={t.placeholder}
             required
             {...bind.path('content')}
