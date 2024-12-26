@@ -68,8 +68,8 @@ export function ChatRoute({ id }: Props) {
               </li>
 
               <li>
-                <Link href={sitemap.projects.show.generate({ pathParams: { id: result.data.chat.project.id } })}>
-                  {result.data.chat.project.name}
+                <Link href={sitemap.projects.show.generate({ pathParams: { id: project.id } })}>
+                  {project.name}
                 </Link>
               </li>
             </>
