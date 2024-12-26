@@ -45,7 +45,7 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
           </div>
         )}
 
-      {withProject && chat.project && (
+      {withProject && chat.project && !chat.project.internal && (
         <div className="flex items-center gap-1 my-2 text-sm">
           <FolderIcon size={14} className="text-gray-500" />
           <Link

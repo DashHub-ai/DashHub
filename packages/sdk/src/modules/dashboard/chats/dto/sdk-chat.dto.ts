@@ -17,10 +17,18 @@ export const SdkChatSummaryV = z.strictObject({
 
 export type SdkChatSummaryT = z.infer<typeof SdkChatSummaryV>;
 
+export const SdkChatProjectV = z
+  .object({
+    internal: z.boolean(),
+  })
+  .and(SdkIdNameUrlEntryV);
+
+export type SdkChatProjectT = z.infer<typeof SdkChatProjectV>;
+
 export const SdkChatV = z.object({
   creator: SdkUserListItemV,
   organization: SdkIdNameUrlEntryV,
-  project: SdkIdNameUrlEntryV.nullable(),
+  project: SdkChatProjectV,
   public: z.boolean(),
   internal: z.boolean(),
   summary: SdkChatSummaryV,

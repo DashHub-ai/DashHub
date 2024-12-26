@@ -54,6 +54,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       replyObservable,
       {
         aiModel,
+        files,
         content,
         replyToMessage,
       }: Overwrite<SdkCreateMessageInputT, {
@@ -65,6 +66,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       TE.bind('createdMessage', () => createMessage(
         chat.id,
         {
+          files,
           content,
           replyToMessage,
         },
@@ -104,14 +106,14 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
     optimistic: ({
       before: replyObservable,
       result: { items, total },
-      args: [{ content, aiModel, replyToMessage }],
+      args: [{ content, aiModel, files, replyToMessage }],
     }) => ({
       replyObservable,
       total: total + 1,
       items: [
         ...items,
         {
-          ...createOptimisticResponse.user({ content }),
+          ...createOptimisticResponse.user({ content, files }),
           repliedMessage: replyToMessage || null,
         },
         createOptimisticResponse.bot(aiModel, replyObservable),

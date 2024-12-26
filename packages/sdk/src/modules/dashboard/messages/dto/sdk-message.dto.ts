@@ -7,6 +7,7 @@ import {
 } from '~/shared';
 
 import { SdkUserListItemV } from '../../users/dto/sdk-user-list-item.dto';
+import { SdkMessageFileV } from './sdk-message-file.dto';
 
 export const SdkMessageRoleV = z.enum(['user', 'assistant', 'system']);
 
@@ -30,6 +31,7 @@ export const SdkMessageV = z
     aiModel: SdkTableRowWithIdNameV.nullable(),
     app: SdkTableRowWithIdNameV.nullable(),
     repliedMessage: SdkRepliedMessageV.nullable(),
+    files: z.array(SdkMessageFileV),
   })
   .merge(SdkTableRowWithUuidV)
   .merge(SdkTableRowWithDatesV);

@@ -20,6 +20,10 @@ import {
   ProjectsEsIndexRepo,
 } from './projects-es-index.repo';
 
+type InternalSearchProjectsInputT = SdKSearchProjectsInputT & {
+  excludeInternal?: boolean;
+};
+
 @injectable()
 export class ProjectsEsSearchRepo {
   constructor(
@@ -31,7 +35,7 @@ export class ProjectsEsSearchRepo {
     TE.map(ProjectsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdKSearchProjectsInputT) =>
+  search = (dto: InternalSearchProjectsInputT) =>
     pipe(
       this.indexRepo.search(
         ProjectsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
@@ -53,11 +57,12 @@ export class ProjectsEsSearchRepo {
 
   private static createEsRequestSearchFilters = (
     {
+      excludeInternal = true,
       phrase,
       ids,
       organizationIds,
       archived,
-    }: SdKSearchProjectsInputT,
+    }: InternalSearchProjectsInputT,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
@@ -73,6 +78,7 @@ export class ProjectsEsSearchRepo {
             .minimumShouldMatch(1)
         ),
         !isNil(archived) && esb.termQuery('archived', archived),
+        excludeInternal && esb.termQuery('internal', false),
       ]),
     );
 

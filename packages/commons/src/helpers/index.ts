@@ -14,6 +14,7 @@ export * from './is-object-with-fake-id';
 export * from './is-object-with-id';
 export * from './is-ssr';
 export * from './iterators';
+export * from './mimetypes';
 export * from './observable';
 export * from './panic-error';
 export * from './pluck';

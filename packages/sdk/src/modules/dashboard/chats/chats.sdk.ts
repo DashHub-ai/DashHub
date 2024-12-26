@@ -2,6 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 import * as TE from 'fp-ts/lib/TaskEither';
 
 import type {
+  SdkInvalidFileFormatError,
   SdkRecordAlreadyExistsError,
   SdkRecordNotFoundError,
   SdkTableRowUuidT,
@@ -11,7 +12,9 @@ import type {
 import { decodeTextAsyncStream } from '@llm/commons';
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
+  formDataPayload,
   getPayload,
+  jsonToFormData,
   patchPayload,
   postPayload,
   putPayload,
@@ -101,9 +104,15 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
     });
 
   createMessage = (chatId: SdkTableRowUuidT, data: SdkCreateMessageInputT) =>
-    this.fetch<SdkTableRowWithUuidT>({
+    this.fetch<SdkTableRowWithUuidT, SdkInvalidFileFormatError>({
       url: this.endpoint(`/${chatId}/messages`),
-      options: postPayload(data),
+      options: pipe(
+        jsonToFormData({
+          ...data,
+          files: data.files ?? [],
+        }),
+        formDataPayload('POST'),
+      ),
     });
 
   attachApp = (chatId: SdkTableRowUuidT, data: SdkAttachAppInputT) =>

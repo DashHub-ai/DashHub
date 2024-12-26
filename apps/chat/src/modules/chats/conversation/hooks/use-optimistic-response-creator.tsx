@@ -4,6 +4,7 @@ import type { Overwrite } from '@llm/commons';
 
 import {
   type SdkCreateMessageInputT,
+  type SdkMessageFileT,
   type SdkMessageT,
   type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
@@ -28,13 +29,14 @@ export function useOptimisticResponseCreator() {
   });
 
   return {
-    user: (message: SdkCreateMessageInputT): OptimisticMessageOutputT => ({
+    user: ({ content, files }: SdkCreateMessageInputT): OptimisticMessageOutputT => ({
       ...createBaseMessageFields(),
-      content: message.content,
+      content,
       role: 'user',
       aiModel: null,
       repliedMessage: null,
       app: null,
+      files: (files ?? []).map(createOptimisticResponseFile),
       creator: {
         id: token.sub,
         email: token.email,
@@ -46,6 +48,7 @@ export function useOptimisticResponseCreator() {
       observable: AIStreamObservable,
     ): OptimisticMessageOutputT => ({
       ...createBaseMessageFields(),
+      files: [],
       content: observable,
       role: 'assistant',
       aiModel,
@@ -56,6 +59,7 @@ export function useOptimisticResponseCreator() {
 
     app: (app: SdkTableRowWithIdNameT): OptimisticMessageOutputT => ({
       ...createBaseMessageFields(),
+      files: [],
       content: 'System message',
       role: 'assistant',
       creator: null,
@@ -63,6 +67,24 @@ export function useOptimisticResponseCreator() {
       aiModel: null,
       app,
     }),
+  };
+}
+
+function createOptimisticResponseFile(file: File): SdkMessageFileT {
+  return {
+    id: Date.now() + Math.random(),
+    resource: {
+      bucket: {
+        id: -1,
+        name: 'temp',
+      },
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      id: -1,
+      name: file.name,
+      publicUrl: URL.createObjectURL(file),
+      type: 'other',
+    },
   };
 }
 

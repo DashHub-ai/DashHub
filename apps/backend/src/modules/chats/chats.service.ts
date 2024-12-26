@@ -12,7 +12,7 @@ import {
 } from '@llm/sdk';
 
 import { WithAuthFirewall } from '../auth';
-import { TableRowWithUuid } from '../database';
+import { TableId, TableRowWithUuid, TableUuid } from '../database';
 import { ChatsFirewall } from './chats.firewall';
 import { ChatsRepo } from './chats.repo';
 import { ChatsEsIndexRepo, ChatsEsSearchRepo } from './elasticsearch';
@@ -48,6 +48,11 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
 
   update = ({ id, ...value }: SdkUpdateChatInputT & TableRowWithUuid) => pipe(
     this.repo.update({ id, value }),
+    TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+  );
+
+  assignToProject = (id: TableUuid, projectId: TableId) => pipe(
+    this.repo.assignToProject({ id, projectId }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 }

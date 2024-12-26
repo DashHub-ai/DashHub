@@ -1,10 +1,10 @@
 import { useControl } from '@under-control/forms';
 import clsx from 'clsx';
 import { takeRight } from 'fp-ts/lib/Array';
+import { pipe } from 'fp-ts/lib/function';
 import { Bot, ReplyIcon, User } from 'lucide-react';
 
-import type { Overwrite } from '@llm/commons';
-
+import { type Overwrite, pluckTyped } from '@llm/commons';
 import {
   type SdkRepeatedMessageLike,
   type SdkSearchMessageItemT,
@@ -14,6 +14,7 @@ import { useI18n } from '~/i18n';
 
 import type { AIStreamObservable } from '../hooks';
 
+import { FilesCardsList } from '../files';
 import { ToolbarSmallActionButton } from './buttons';
 import { ChatMessageAIActions } from './chat-message-ai-actions';
 import { ChatMessageContent } from './chat-message-content';
@@ -44,7 +45,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
   });
 
   const repeats = takeRight(5)(message.repeats);
-  const { createdAt, role, content, creator } = (
+  const { createdAt, role, content, creator, files } = (
     currentVariant.value
       ? repeats[currentVariant.value - 1]
       : message
@@ -85,70 +86,90 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
 
       <div
         className={clsx(
-          'relative px-4 py-2 border rounded-2xl min-w-[30%] max-w-[70%]',
-          'before:absolute before:top-[12px] before:border-8 before:border-transparent before:border-t-8',
-          {
-            'bg-gray-100 before:border-gray-100 before:left-[-8px] border-gray-200 before:border-l-0 before:border-r-[12px]': isAI,
-            'bg-gray-700 text-white before:border-gray-700 before:right-[-8px] border-gray-600 before:border-r-0 before:border-l-[12px]': !isAI,
-            'cursor-default opacity-75': readOnly,
-          },
+          'flex flex-col gap-2 w-full',
+          isAI ? 'items-start' : 'items-end',
         )}
       >
-        {!isAI && message.repliedMessage && (
-          <ChatMessageRepliedMessage
-            message={message.repliedMessage}
-            darkMode
+        <div
+          className={clsx(
+            'relative px-4 py-2 border rounded-2xl min-w-[30%] max-w-[70%]',
+            'before:absolute before:top-[12px] before:border-8 before:border-transparent before:border-t-8',
+            {
+              'bg-gray-100 before:border-gray-100 before:left-[-8px] border-gray-200 before:border-l-0 before:border-r-[12px]': isAI,
+              'bg-gray-700 text-white before:border-gray-700 before:right-[-8px] border-gray-600 before:border-r-0 before:border-l-[12px]': !isAI,
+              'cursor-default opacity-75': readOnly,
+            },
+          )}
+        >
+          {!isAI && message.repliedMessage && (
+            <ChatMessageRepliedMessage
+              message={message.repliedMessage}
+              darkMode
+            />
+          )}
+
+          <ChatMessageContent
+            key={typeof content}
+            content={content}
+            disabled={!isLast}
+            darkMode={!isAI}
+            showToolbars={isAI}
+            onAction={onAction}
           />
-        )}
 
-        <ChatMessageContent
-          key={typeof content}
-          content={content}
-          disabled={!isLast}
-          darkMode={!isAI}
-          showToolbars={isAI}
-          onAction={onAction}
-        />
+          <div className="flex justify-between items-center gap-6 mt-1 text-xs">
+            <span className="opacity-50">
+              {new Date(createdAt).toLocaleTimeString()}
+            </span>
 
-        <div className="flex justify-between items-center gap-6 mt-1 text-xs">
-          <span className="opacity-50">
-            {new Date(createdAt).toLocaleTimeString()}
-          </span>
+            <div className="flex items-center gap-2">
+              <ToolbarSmallActionButton
+                title={t.actions.reply}
+                darkMode={!isAI}
+                onClick={() => onReply(message)}
+              >
+                <ReplyIcon
+                  size={14}
+                  className="opacity-50 hover:opacity-100"
+                />
+              </ToolbarSmallActionButton>
 
-          <div className="flex items-center gap-2">
-            <ToolbarSmallActionButton
-              title={t.actions.reply}
-              darkMode={!isAI}
-              onClick={() => onReply(message)}
-            >
-              <ReplyIcon
-                size={14}
-                className="opacity-50 hover:opacity-100"
-              />
-            </ToolbarSmallActionButton>
-
-            {isAI
-              ? (!readOnly && (
-                  <ChatMessageAIActions
-                    isLast={isLast}
-                    message={message}
-                    onRefreshResponse={() => onRefreshResponse(message)}
-                  />
-                ))
-              : (
-                  <div className="flex items-center gap-1 opacity-75 text-white">
-                    <User size={12} />
-                    <span>{isYou ? t.messages.you : creator?.email}</span>
-                  </div>
-                )}
+              {isAI
+                ? (!readOnly && (
+                    <ChatMessageAIActions
+                      isLast={isLast}
+                      message={message}
+                      onRefreshResponse={() => onRefreshResponse(message)}
+                    />
+                  ))
+                : (
+                    <div className="flex items-center gap-1 opacity-75 text-white">
+                      <User size={12} />
+                      <span>{isYou ? t.messages.you : creator?.email}</span>
+                    </div>
+                  )}
+            </div>
           </div>
+
+          {isAI && repeats.length > 0 && (
+            <ChatMessageVariants
+              {...currentVariant.bind.entire()}
+              total={repeats.length + 1}
+            />
+          )}
         </div>
 
-        {isAI && repeats.length > 0 && (
-          <ChatMessageVariants
-            {...currentVariant.bind.entire()}
-            total={repeats.length + 1}
-          />
+        {files.length > 0 && (
+          <div className="flex gap-2 mb-2">
+            <FilesCardsList
+              withListIcon
+              items={pipe(files, pluckTyped('resource'))}
+              itemPropsFn={() => ({
+                limitWidth: false,
+                withBackground: true,
+              })}
+            />
+          </div>
         )}
       </div>
     </div>

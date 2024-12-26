@@ -7,7 +7,7 @@ import type { SdkJwtTokenT } from '@llm/sdk';
 import { type PartialBy, tapTaskEitherTE } from '@llm/commons';
 
 import type { WithAuthFirewall } from '../auth';
-import type { TableId } from '../database';
+import type { TableId, TableUuid } from '../database';
 
 import { ProjectsEmbeddingsService } from '../projects-embeddings/projects-embeddings.service';
 import { ProjectsRepo } from '../projects/projects.repo';
@@ -35,9 +35,11 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
     {
       bucketId,
       projectId,
+      messageId,
       ...attrs
     }: PartialBy<UploadFileAttrs, 'bucketId'> & {
       projectId: TableId;
+      messageId?: TableUuid;
     },
   ) => {
     return pipe(
@@ -53,6 +55,7 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
       TE.bindW('projectFile', ({ s3File }) => this.projectsFilesRepo.create({
         value: {
           projectId,
+          messageId,
           s3ResourceId: s3File.id,
         },
       })),
@@ -60,7 +63,7 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
         buffer: attrs.buffer,
         mimeType: attrs.mimeType,
         projectFileId: projectFile.id,
-        fileName: attrs.name,
+        fileName: attrs.fileName,
         fileUrl: s3File.publicUrl,
       })),
       tapTaskEitherTE(() => this.projectsFilesEsIndexRepo.reindexAllProjectFiles(projectId)),

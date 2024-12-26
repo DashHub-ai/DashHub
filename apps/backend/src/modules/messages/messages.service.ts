@@ -12,12 +12,15 @@ import {
   type SdkRequestAIReplyInputT,
 } from '@llm/sdk';
 
+import type { ExtractedFile } from '../api/helpers';
 import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../database';
 
 import { AIConnectorService } from '../ai-connector';
 import { AppsService } from '../apps';
 import { WithAuthFirewall } from '../auth';
+import { ProjectsService } from '../projects';
 import { ProjectsEmbeddingsService } from '../projects-embeddings';
+import { ProjectsFilesService } from '../projects-files';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
 import { createActionButtonsPrompt, createAttachAppAIMessage, createReplyAiMessagePrefix } from './helpers';
 import { MessagesFirewall } from './messages.firewall';
@@ -25,8 +28,9 @@ import { MessagesRepo } from './messages.repo';
 
 export type CreateUserMessageInputT = {
   chat: TableRowWithUuid;
-  message: SdkCreateMessageInputT;
+  message: Omit<SdkCreateMessageInputT, 'files'>;
   creator: TableRowWithId;
+  files?: ExtractedFile[];
 };
 
 export type AttachAppInputT = {
@@ -44,6 +48,8 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     @inject(MessagesEsIndexRepo) private readonly esIndexRepo: MessagesEsIndexRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
     @inject(ProjectsEmbeddingsService) private readonly projectsEmbeddingsService: ProjectsEmbeddingsService,
+    @inject(ProjectsFilesService) private readonly projectsFilesService: ProjectsFilesService,
+    @inject(ProjectsService) private readonly projectsService: ProjectsService,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new MessagesFirewall(jwt, this);
@@ -52,7 +58,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
 
   searchByChatId = this.esSearchRepo.searchByChatId;
 
-  createUserMessage = ({ creator, chat, message }: CreateUserMessageInputT) =>
+  createUserMessage = ({ creator, chat, message, files }: CreateUserMessageInputT) =>
     pipe(
       this.repo.create({
         value: {
@@ -64,6 +70,23 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           repliedMessageId: message.replyToMessage?.id ?? null,
           role: 'user',
         },
+      }),
+      TE.tap(({ id }) => {
+        if (!files || files.length === 0) {
+          return TE.of(undefined);
+        }
+
+        return pipe(
+          this.projectsService.ensureChatHasProjectOrCreateInternal(chat.id),
+          TE.chainW(project => pipe(
+            files,
+            TE.traverseArray(file => this.projectsFilesService.uploadFile({
+              projectId: project.id,
+              messageId: id,
+              ...file,
+            })),
+          )),
+        );
       }),
       TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
     );

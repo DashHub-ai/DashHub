@@ -5,7 +5,6 @@ import { inject, injectable } from 'tsyringe';
 import type {
   SdkCreateProjectInputT,
   SdkJwtTokenT,
-  SdkTableRowIdT,
   SdkUpdateProjectInputT,
 } from '@llm/sdk';
 
@@ -17,8 +16,9 @@ import {
 } from '@llm/commons';
 
 import type { WithAuthFirewall } from '../auth';
-import type { TableId, TableRowWithId } from '../database';
+import type { TableId, TableRowWithId, TableUuid } from '../database';
 
+import { ChatsService } from '../chats/chats.service';
 import { ProjectsEsIndexRepo, ProjectsEsSearchRepo } from './elasticsearch';
 import { ProjectsFirewall } from './projects.firewall';
 import { ProjectsRepo } from './projects.repo';
@@ -29,23 +29,43 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     @inject(ProjectsRepo) private readonly repo: ProjectsRepo,
     @inject(ProjectsEsSearchRepo) private readonly esSearchRepo: ProjectsEsSearchRepo,
     @inject(ProjectsEsIndexRepo) private readonly esIndexRepo: ProjectsEsIndexRepo,
+    @inject(ChatsService) private readonly chatsService: ChatsService,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsFirewall(jwt, this);
 
   get = this.esSearchRepo.get;
 
-  unarchive = (id: SdkTableRowIdT) => pipe(
+  unarchive = (id: TableId) => pipe(
     this.repo.unarchive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  archive = (id: SdkTableRowIdT) => pipe(
+  archive = (id: TableId) => pipe(
     this.repo.archive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  archiveSeqByOrganizationId = (organizationId: SdkTableRowIdT) => TE.fromTask(
+  ensureChatHasProjectOrCreateInternal = (chatId: TableUuid) => pipe(
+    this.chatsService.get(chatId),
+    TE.chainW((chat) => {
+      if (chat.project) {
+        return TE.right(chat.project);
+      }
+
+      return pipe(
+        this.create({
+          internal: true,
+          organization: chat.organization,
+          name: `Unnamed Project - ${Date.now()}`,
+          description: null,
+        }),
+        TE.tap(project => this.chatsService.assignToProject(chatId, project.id)),
+      );
+    }),
+  );
+
+  archiveSeqByOrganizationId = (organizationId: TableId) => TE.fromTask(
     pipe(
       this.repo.createIdsIterator({
         where: [['organizationId', '=', organizationId]],
@@ -76,10 +96,11 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
 
   search = this.esSearchRepo.search;
 
-  create = ({ organization, ...values }: SdkCreateProjectInputT) => pipe(
+  create = ({ internal, organization, ...values }: SdkCreateProjectInputT & { internal?: boolean; }) => pipe(
     this.repo.create({
       value: {
         ...values,
+        internal: !!internal,
         organizationId: organization.id,
       },
     }),

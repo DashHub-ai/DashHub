@@ -1,4 +1,5 @@
 import { controlled } from '@under-control/forms';
+import clsx from 'clsx';
 
 import type { SdkTableRowWithIdNameT } from '@llm/sdk';
 
@@ -7,16 +8,17 @@ import { AppChatBadge } from '~/modules/apps/chat/app-chat-badge';
 type Props = {
   apps: SdkTableRowWithIdNameT[];
   disabled?: boolean;
+  className?: string;
 };
 
 export const ChatSelectApp = controlled<SdkTableRowWithIdNameT | null, Props>(
-  ({ apps, disabled, control: { value, setValue } }) => {
+  ({ apps, disabled, className, control: { value, setValue } }) => {
     if (!apps.length) {
       return null;
     }
 
     return (
-      <div className="flex flex-wrap items-center gap-2">
+      <div className={clsx('flex flex-wrap items-center gap-2', className)}>
         {apps.map((app) => {
           const isSelected = value?.id === app.id;
 

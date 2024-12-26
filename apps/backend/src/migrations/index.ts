@@ -23,6 +23,7 @@ import * as dropUniqueNameFromS3Assets from './0021-drop-unique-name-from-s3-ass
 import * as addIdToProjectFilesTable from './0022-add-id-to-project-files-table';
 import * as addProjectsEmbeddingsTable from './0023-add-projects-embeddings-table';
 import * as dropUnusedImagesTable from './0024-drop-unused-images-table';
+import * as addInternalProjectsFields from './0025-add-internal-projects-fields';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -50,4 +51,5 @@ export const DB_MIGRATIONS = {
   '0022-add-id-to-project-files-table': addIdToProjectFilesTable,
   '0023-add-projects-embeddings-table': addProjectsEmbeddingsTable,
   '0024-drop-unused-images-table': dropUnusedImagesTable,
+  '0025-add-internal-projects-fields': addInternalProjectsFields,
 };

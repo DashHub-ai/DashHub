@@ -4,9 +4,8 @@ import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
 import type { TableId } from '~/modules/database';
-import type { S3ResourcesTableRowWithRelations } from '~/modules/s3';
 
-import { CamelCaseToSnakeCaseObject, tryOrThrowTE } from '@llm/commons';
+import { tryOrThrowTE } from '@llm/commons';
 import {
   createAutocompleteFieldAnalyzeSettings,
   createBaseDatedRecordMappings,
@@ -38,13 +37,7 @@ const ProjectsFilesAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ProjectFileEsDocument =
-  & Omit<EsDocument<ProjectFileTableRowWithRelations>, 'resource'>
-  & {
-    resource: Omit<CamelCaseToSnakeCaseObject<S3ResourcesTableRowWithRelations>, 's_3_key'> & {
-      s3_key: string;
-    };
-  };
+export type ProjectFileEsDocument = EsDocument<ProjectFileTableRowWithRelations>;
 
 @injectable()
 export class ProjectsFilesEsIndexRepo extends ProjectsFilesAbstractEsIndexRepo<ProjectFileEsDocument> {

@@ -71,20 +71,23 @@ export function jsonToFormData<
       continue;
     }
 
-    if (typeof value === 'object') {
-      formData.append(
-        key,
-        JSON.stringify(value, (_, keyValue) => {
+    if (value instanceof File) {
+      formData.append('file', value);
+    }
+    else {
+      let mappedValue = value;
+
+      if (value !== null && (typeof value === 'object' || Array.isArray(value))) {
+        mappedValue = JSON.stringify(value, (_, keyValue) => {
           if (keyValue instanceof File) {
             return undefined;
           }
 
           return keyValue;
-        }),
-      );
-    }
-    else {
-      formData.append(key, value);
+        });
+      }
+
+      formData.append(key, mappedValue);
     }
   }
 

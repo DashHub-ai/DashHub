@@ -1,8 +1,12 @@
+import type { IsDigit } from './is-digit.type';
+
 export type CamelCaseToSnakeCase<S> = S extends `${infer T}${infer U}`
   ? `${T extends Capitalize<T>
     ? T extends '_'
       ? ''
-      : '_'
+      : IsDigit<T> extends true
+        ? ''
+        : '_'
     : ''}${Lowercase<T>}${CamelCaseToSnakeCase<U>}`
   : S;
 

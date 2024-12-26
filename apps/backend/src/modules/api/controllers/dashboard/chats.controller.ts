@@ -26,6 +26,7 @@ import {
   sdkSchemaValidator,
   serializeSdkResponseTE,
 } from '../../helpers';
+import { tryExtractFiles } from '../../helpers/try-extract-files';
 import { AuthorizedController } from '../shared/authorized.controller';
 
 @injectable()
@@ -120,15 +121,22 @@ export class ChatsController extends AuthorizedController {
       )
       .post(
         '/:id/messages',
-        sdkSchemaValidator('json', SdkCreateMessageInputV),
         async context => pipe(
-          context.req.valid('json'),
-          message => messagesService.asUser(context.var.jwt).create({
-            message,
+          await context.req.parseBody(),
+          tryExtractFiles(
+            SdkCreateMessageInputV.omit({
+              files: true,
+            }),
+          ),
+          TE.chainW(({ content, files }) => messagesService.asUser(context.var.jwt).create({
+            files: [...files ?? []],
+            message: {
+              content,
+            },
             chat: {
               id: context.req.param('id'),
             },
-          }),
+          })),
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ChatsSdk['createMessage']>>(context),
         ),

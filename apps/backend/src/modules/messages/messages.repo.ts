@@ -1,6 +1,8 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
+import { sql } from 'kysely';
+import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { injectable } from 'tsyringe';
 
 import {
@@ -46,6 +48,38 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
               'reply_users.id as reply_message_creator_user_id',
               'reply_users.email as reply_message_creator_email',
+
+              eb => eb
+                .selectFrom('projects_files')
+                .leftJoin('s3_resources', 's3_resources.id', 'projects_files.s3_resource_id')
+                .leftJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
+                .where('projects_files.message_id', '=', eb.ref('messages.id'))
+                .select(eb => [
+                  eb.fn.coalesce(
+                    jsonBuildObject({
+                      files: eb.fn.jsonAgg(
+                        jsonBuildObject({
+                          id: eb.ref('projects_files.id'),
+                          resource: jsonBuildObject({
+                            id: eb.ref('s3_resources.id').$notNull(),
+                            name: eb.ref('s3_resources.name').$notNull(),
+                            type: eb.ref('s3_resources.type').$notNull(),
+                            s3Key: eb.ref('s3_resources.s3_key').$notNull(),
+                            createdAt: eb.ref('s3_resources.created_at').$notNull(),
+                            updatedAt: eb.ref('s3_resources.updated_at').$notNull(),
+                            publicUrl: sql<string>`${eb.ref('s3_resources_buckets.public_base_url')} || '/' || ${eb.ref('s3_resources.s3_key')}`,
+                            bucket: jsonBuildObject({
+                              id: eb.ref('s3_resources_buckets.id').$notNull(),
+                              name: eb.ref('s3_resources_buckets.name').$notNull(),
+                            }),
+                          }),
+                        }),
+                      ),
+                    }),
+                    sql`'[]'`,
+                  ).as('files'),
+                ])
+                .as('files_json'),
             ])
             .selectAll('messages')
             .limit(ids.length)
@@ -71,6 +105,8 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
           app_id: appId,
           app_name: appName,
+
+          files_json: filesJson,
 
           ...item
         }): MessageTableRowWithRelations => ({
@@ -109,6 +145,7 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
                 name: appName,
               }
             : null,
+          files: filesJson?.files ?? [],
         })),
       ),
     );
