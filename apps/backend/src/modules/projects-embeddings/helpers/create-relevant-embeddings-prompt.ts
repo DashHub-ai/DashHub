@@ -44,6 +44,7 @@ export function createRelevantEmbeddingsPrompt(
     '8. MANDATORY: If files were attached to the chat or previous messages - treat them with highest priority',
     '9. MANDATORY: Always analyze attached files first before other context',
     '10. MANDATORY: For attached files, provide more detailed analysis unless user specifies otherwise',
+    '11. Prefer to analyze latest attached files first but consider all attached files in the context',
     '',
     'Text Format Rules:',
     '- ❌ WRONG: "In config.ts we see..."',
