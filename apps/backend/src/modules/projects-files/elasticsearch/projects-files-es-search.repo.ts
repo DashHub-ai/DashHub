@@ -12,6 +12,7 @@ import type {
 
 import { pluck, rejectFalsyItems } from '@llm/commons';
 import {
+  createMagicNullIdEsValue,
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
@@ -22,7 +23,10 @@ import {
   ProjectsFilesEsIndexRepo,
 } from './projects-files-es-index.repo';
 
-type InternalSearchProjectFilesInput = SdkSearchProjectFilesInputT & { projectId: SdkTableRowIdT; };
+type InternalSearchProjectFilesInput = SdkSearchProjectFilesInputT & {
+  projectId: SdkTableRowIdT;
+  ignoreAttachedToMessages?: boolean;
+};
 
 @injectable()
 export class ProjectsFilesEsSearchRepo {
@@ -60,6 +64,7 @@ export class ProjectsFilesEsSearchRepo {
       projectId,
       phrase,
       ids,
+      ignoreAttachedToMessages,
     }: InternalSearchProjectFilesInput,
   ): esb.Query =>
     esb.boolQuery().must(
@@ -67,6 +72,7 @@ export class ProjectsFilesEsSearchRepo {
         esb.termQuery('project.id', projectId),
         !!ids?.length && esb.termsQuery('id', ids),
         !!phrase && createPhraseFieldQuery()(phrase).boost(3),
+        ignoreAttachedToMessages && esb.termQuery('message.id', createMagicNullIdEsValue()),
       ]),
     );
 

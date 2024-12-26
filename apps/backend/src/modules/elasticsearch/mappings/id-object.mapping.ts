@@ -9,10 +9,10 @@ export function createIdObjectMapping(properties?: object, idType = 'integer') {
   };
 }
 
-export function createNullableIdObjectMapping(properties?: object) {
+export function createNullableIdObjectMapping(properties?: object, idType = 'integer') {
   return {
     properties: {
-      id: { type: 'integer', null_value: createMagicNullIdEsValue() },
+      id: { type: idType, null_value: createMagicNullIdEsValue() },
       ...properties,
     },
   };

@@ -95,6 +95,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
         TE.chainW(embedding => this.esSearchRepo.matchByEmbedding({
           embedding,
           projectId,
+          chatId: chat.id,
         })),
         TE.map(searchResults => createRelevantEmbeddingsPrompt(message, searchResults)),
       );

@@ -1,5 +1,6 @@
 import type { z } from 'zod';
 
+import { StrictBooleanV } from '@llm/commons';
 import {
   SdkDefaultSortInputV,
   SdkFilteredPhraseInputV,
@@ -15,6 +16,9 @@ export const SdkSearchProjectFileItemV = SdkProjectFileV;
 export type SdkSearchProjectFileItemT = z.infer<typeof SdkSearchProjectFileItemV>;
 
 export const SdkSearchProjectFilesInputV = SdkOffsetPaginationInputV
+  .extend({
+    ignoreAttachedToMessages: StrictBooleanV.default(true).optional(),
+  })
   .merge(SdkDefaultSortInputV)
   .merge(SdkIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);

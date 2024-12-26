@@ -5,10 +5,10 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type { SdkSearchProjectEmbeddingItemT, SdkSearchProjectEmbeddingsInputT } from '@llm/sdk';
-import type { TableId } from '~/modules/database';
+import type { TableId, TableUuid } from '~/modules/database';
 
 import { pluck, rejectFalsyItems } from '@llm/commons';
-import { createPaginationOffsetSearchQuery, createScoredSortFieldQuery } from '~/modules/elasticsearch';
+import { createMagicNullIdEsValue, createPaginationOffsetSearchQuery, createScoredSortFieldQuery } from '~/modules/elasticsearch';
 
 import { ProjectEmbeddingsTableRowWithRelations } from '../projects-embeddings.tables';
 import { type ProjectsEmbeddingsEsDocument, ProjectsEmbeddingsEsIndexRepo } from './projects-embeddings-es-index.repo';
@@ -49,47 +49,58 @@ export class ProjectsEmbeddingsEsSearchRepo {
     );
 
   matchByEmbedding = (
-    { embedding, projectId }: {
+    { embedding, projectId, chatId }: {
       embedding: number[];
       projectId: TableId;
+      chatId: TableUuid;
     },
-  ) => pipe(
-    this.indexRepo.search(
-      esb
-        .requestBodySearch()
-        .source(['id', 'text', 'project_file'])
-        .size(100)
-        .kNN([
-          esb
-            .kNN(`vector_${embedding.length}`, 30, 200)
-            .queryVector(embedding)
-            .boost(1)
-            .filter([
-              esb.termQuery('summary', false),
-              esb.termQuery('project.id', projectId),
-            ]),
+  ) => {
+    const sharedFilters = [
+      esb.termQuery('project.id', projectId),
+      esb.boolQuery().should([
+        esb.termQuery('project_file.chat.id', chatId),
+        esb.termQuery('project_file.chat.id', createMagicNullIdEsValue()),
+      ]),
+    ];
 
-          esb
-            .kNN(`vector_${embedding.length}`, 20, 200)
-            .queryVector(embedding)
-            .boost(3)
-            .filter([
-              esb.termQuery('summary', true),
-              esb.termQuery('project.id', projectId),
-            ]),
-        ])
-        .toJSON(),
-    ),
-    TE.map(({ hits: { hits } }) => pipe(
-      hits,
-      pluck('_source'),
-      A.map((item): EsMatchingProjectEmbedding => ({
-        id: item.id!,
-        text: item.text!,
-        projectFile: camelcaseKeys(item.project_file!, { deep: true }),
-      })),
-    )),
-  );
+    return pipe(
+      this.indexRepo.search(
+        esb
+          .requestBodySearch()
+          .source(['id', 'text', 'project_file'])
+          .size(100)
+          .kNN([
+            esb
+              .kNN(`vector_${embedding.length}`, 30, 200)
+              .queryVector(embedding)
+              .boost(1)
+              .filter([
+                esb.termQuery('summary', false),
+                ...sharedFilters,
+              ]),
+
+            esb
+              .kNN(`vector_${embedding.length}`, 20, 200)
+              .queryVector(embedding)
+              .boost(3)
+              .filter([
+                esb.termQuery('summary', true),
+                ...sharedFilters,
+              ]),
+          ])
+          .toJSON(),
+      ),
+      TE.map(({ hits: { hits } }) => pipe(
+        hits,
+        pluck('_source'),
+        A.map((item): EsMatchingProjectEmbedding => ({
+          id: item.id!,
+          text: item.text!,
+          projectFile: camelcaseKeys(item.project_file!, { deep: true }),
+        })),
+      )),
+    );
+  };
 
   private static mapOutputHit = (source: ProjectsEmbeddingsEsDocument): SdkSearchProjectEmbeddingItemT =>
     ({

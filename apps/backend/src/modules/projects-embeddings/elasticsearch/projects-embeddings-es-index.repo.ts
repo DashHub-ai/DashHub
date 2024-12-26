@@ -11,6 +11,7 @@ import {
   createBaseDatedRecordMappings,
   createElasticsearchIndexRepo,
   createIdObjectMapping,
+  createNullableIdObjectMapping,
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
@@ -28,6 +29,7 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings(),
         project: createIdObjectMapping(),
         project_file: createIdObjectMapping({
+          chat: createNullableIdObjectMapping({}, 'keyword'),
           resource: createIdObjectMapping(),
         }),
         summary: { type: 'boolean' },
@@ -99,12 +101,16 @@ export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsI
     return pipe(
       this.embeddingsRepo.findWithRelationsByIds({ ids }),
       TE.map(
-        A.map(({ vector, ...entity }) => {
+        A.map(({ vector, projectFile, ...entity }) => {
           const parsedVector: number[] = JSON.parse(vector);
 
           return {
             ...snakecaseKeys(entity, { deep: true }),
             [`vector_${parsedVector.length}`]: parsedVector,
+            project_file: {
+              ...snakecaseKeys(projectFile, { deep: true }),
+              chat: projectFile.chat ?? ({ id: null } as any),
+            },
             _id: String(entity.id),
           };
         }),

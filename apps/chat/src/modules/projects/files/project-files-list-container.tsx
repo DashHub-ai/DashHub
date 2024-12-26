@@ -25,6 +25,7 @@ export function ProjectFilesListContainer({ projectId }: Props) {
     },
     fetchResultsTask: filters => sdks.dashboard.projectsFiles.search({
       ...filters,
+      ignoreAttachedToMessages: true,
       projectId,
     }),
   });

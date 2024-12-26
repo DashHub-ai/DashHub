@@ -11,6 +11,7 @@ import {
   createBaseDatedRecordMappings,
   createElasticsearchIndexRepo,
   createIdNameObjectMapping,
+  createNullableIdObjectMapping,
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
@@ -26,6 +27,7 @@ const ProjectsFilesAbstractEsIndexRepo = createElasticsearchIndexRepo({
       dynamic: false,
       properties: {
         ...createBaseDatedRecordMappings(),
+        message: createNullableIdObjectMapping({}, 'keyword'),
         project: createIdNameObjectMapping(),
         resource: createIdNameObjectMapping(),
       },
@@ -64,6 +66,7 @@ export class ProjectsFilesEsIndexRepo extends ProjectsFilesAbstractEsIndexRepo<P
       TE.map(
         A.map((entity): ProjectFileEsDocument => ({
           ...snakecaseKeys(entity, { deep: true }),
+          message: entity.message ?? ({ id: null } as any),
           _id: String(entity.id),
         })),
       ),

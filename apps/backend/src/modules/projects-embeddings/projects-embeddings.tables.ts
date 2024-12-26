@@ -6,6 +6,7 @@ import type {
   TableId,
   TableRowWithId,
   TableRowWithIdName,
+  TableRowWithUuid,
   TableWithDefaultColumns,
 } from '../database';
 import type { S3ResourcesTableRowWithRelations } from '../s3';
@@ -30,6 +31,7 @@ export type ProjectEmbeddingsTableRowWithRelations =
   & {
     project: TableRowWithId;
     projectFile: TableRowWithIdName & {
+      chat: TableRowWithUuid | null;
       resource: Pick<S3ResourcesTableRowWithRelations, 'id' | 'publicUrl'>;
     };
   };
