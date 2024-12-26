@@ -22,6 +22,7 @@ export function createRelevantEmbeddingsPrompt(
     .join('\n\n==========\n\n');
 
   return [
+    'User prompt:',
     message,
     '\n\n\n--\n',
     'Context (based on project files):',
@@ -34,7 +35,7 @@ export function createRelevantEmbeddingsPrompt(
     '4. NO EXCEPTIONS - mention the source of the information from Context using #embedding:<id> format. Always do that.',
     '',
     'Core Instructions:',
-    '1. Respond in the same language as the user\'s message',
+    '1. Respond in the same language as the user\'s prompt',
     '2. If message contains #app mention: MAINTAIN THE APP\'S PERSONALITY AND TONE throughout the response',
     '3. If responding as an app: DO NOT describe files, instead keep acting as the app would',
     '4. Consider and analyze ALL provided file fragments',
