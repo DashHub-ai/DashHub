@@ -1,20 +1,20 @@
+import clsx from 'clsx';
 import { pipe } from 'fp-ts/lib/function';
 import { Download, Trash2 } from 'lucide-react';
 
-import { tapTaskEither } from '@llm/commons';
+import { isImageFileUrl, tapTaskEither } from '@llm/commons';
 import { type SdkSearchProjectFileItemT, useSdkForLoggedIn } from '@llm/sdk';
 import { useDeleteWithNotifications } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { CardDescription } from '~/modules/shared/card/card-description';
-
-import { FileTypeIcon } from './file-type-icon';
+import { getFileTypeAndColor } from '~/modules/shared/get-file-type-and-color';
 
 type FileCardProps = {
   file: SdkSearchProjectFileItemT;
   onAfterDelete: () => void;
 };
 
-export function FileCard({ file, onAfterDelete }: FileCardProps) {
+export function ProjectFileCard({ file, onAfterDelete }: FileCardProps) {
   const t = useI18n().pack.projects.files;
   const { sdks } = useSdkForLoggedIn();
   const { resource, project, description } = file;
@@ -28,17 +28,26 @@ export function FileCard({ file, onAfterDelete }: FileCardProps) {
     ),
   );
 
+  const { type, bgColor, icon: IconComponent } = getFileTypeAndColor(resource.name);
+  const isImage = isImageFileUrl(resource.name);
+
   return (
     <div className="flex flex-col border-gray-200 bg-white mb-2 p-3 border rounded-lg transition-all group">
-      <div className="flex items-center">
-        <FileTypeIcon
-          fileName={resource.name}
-          className="mr-3 w-5 h-5 text-gray-500"
-        />
+      <div className="flex items-center mb-2">
+        <div className="mr-3">
+          <div className={clsx('flex items-center p-1 rounded', bgColor)}>
+            <IconComponent className="w-5 h-5 text-white" />
+          </div>
+        </div>
 
-        <span className="flex-1 font-medium text-gray-700 text-sm truncate">
-          {resource.name}
-        </span>
+        <div className="flex-1 gap-0.5 min-w-0">
+          <div className="block font-medium text-gray-700 text-sm truncate">
+            {resource.name}
+          </div>
+          <div className="text-gray-500 text-xs">
+            {type}
+          </div>
+        </div>
 
         <div className="flex gap-1 transition-all">
           <a
@@ -61,11 +70,17 @@ export function FileCard({ file, onAfterDelete }: FileCardProps) {
         </div>
       </div>
 
-      {description && (
-        <CardDescription>
-          {description}
-        </CardDescription>
-      )}
+      <CardDescription>
+        {isImage
+          ? (
+              <img
+                src={resource.publicUrl}
+                alt={resource.name}
+                className="bg-gray-50 rounded-md w-full h-[128px] object-contain"
+              />
+            )
+          : description}
+      </CardDescription>
     </div>
   );
 }

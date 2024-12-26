@@ -4,15 +4,15 @@ import { SdkSearchProjectFilesInputV, type SdkTableRowIdT, useSdkForLoggedIn } f
 import { FormSpinnerCTA, PaginatedList, useDebouncedPaginatedSearch } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-import { FileCard } from './file-card';
-import { FilesPlaceholder } from './files-placeholder';
+import { ProjectFileCard } from './project-file-card';
+import { ProjectFilesPlaceholder } from './project-files-placeholder';
 import { useFileUpload } from './use-file-upload';
 
 type Props = {
   projectId: SdkTableRowIdT;
 };
 
-export function FilesListContainer({ projectId }: Props) {
+export function ProjectFilesListContainer({ projectId }: Props) {
   const t = useI18n().pack.projects.files;
   const [uploadFile, uploadState] = useFileUpload(projectId);
 
@@ -67,11 +67,11 @@ export function FilesListContainer({ projectId }: Props) {
         >
           {({ items, total }) => {
             if (!total) {
-              return <FilesPlaceholder />;
+              return <ProjectFilesPlaceholder />;
             }
 
             return items.map(file => (
-              <FileCard
+              <ProjectFileCard
                 key={file.id}
                 file={file}
                 onAfterDelete={silentReload}

@@ -1,2 +1,2 @@
-export * from './file-card';
-export * from './files-list-container';
+export * from './project-file-card';
+export * from './project-files-list-container';

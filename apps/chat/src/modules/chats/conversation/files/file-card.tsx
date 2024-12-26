@@ -1,21 +1,10 @@
 import clsx from 'clsx';
-import {
-  FileAxis3DIcon,
-  FileIcon,
-  FileSpreadsheetIcon,
-  FileTextIcon,
-  ImageIcon,
-  XIcon,
-} from 'lucide-react';
+import { XIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
-import {
-  isImageFileUrl,
-  isPDFFileUrl,
-  isSpreadsheetFileUrl,
-  isWordFileUrl,
-} from '@llm/commons';
+import { isImageFileUrl } from '@llm/commons';
 import { useI18n } from '~/i18n';
+import { getFileTypeAndColor } from '~/modules/shared';
 
 export type FileCardFile =
   | File
@@ -106,44 +95,4 @@ export function FileCard({ file, withBackground, limitWidth = true, onRemove }: 
           )}
     </div>
   );
-}
-
-function getFileTypeAndColor(url: string) {
-  if (isSpreadsheetFileUrl(url)) {
-    return {
-      type: 'Excel',
-      bgColor: 'bg-[#217346]',
-      icon: FileSpreadsheetIcon,
-    };
-  }
-
-  if (isWordFileUrl(url)) {
-    return {
-      type: 'Word',
-      bgColor: 'bg-[#2B579A]',
-      icon: FileTextIcon,
-    };
-  }
-
-  if (isPDFFileUrl(url)) {
-    return {
-      type: 'PDF',
-      bgColor: 'bg-[#D93F3F]',
-      icon: FileAxis3DIcon,
-    };
-  }
-
-  if (isImageFileUrl(url)) {
-    return {
-      type: 'Image',
-      bgColor: 'bg-purple-500',
-      icon: ImageIcon,
-    };
-  }
-
-  return {
-    type: 'TXT',
-    bgColor: 'bg-gray-400',
-    icon: FileIcon,
-  };
 }

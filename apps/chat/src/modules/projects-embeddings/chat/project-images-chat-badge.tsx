@@ -50,7 +50,8 @@ export const ProjectImagesChatBadge = memo(({ ids }: ProjectImagesChatBadgeProps
         key={projectFile.id}
         src={publicUrl}
         alt={projectFile.name}
-        className="border-gray-200 shadow-sm border rounded-lg max-w-[150px] max-h-[150px] transition-transform cursor-pointer hover:scale-105 object-contain"
+        loading="lazy"
+        className="border-gray-200 shadow-sm border rounded-lg h-[90px] transition-transform cursor-pointer hover:scale-105 object-contain"
         onClick={onClick}
       />,
     ];

@@ -149,11 +149,6 @@ export function ChatInputToolbar(
       )}
       >
         <div className="mb-[45px]">
-          <FilesCardsControlledList
-            {...bind.path('files')}
-            className="mt-3 mb-2 px-3"
-          />
-
           <textarea
             ref={inputRef as any}
             disabled={isTypingDisabled}
@@ -162,6 +157,11 @@ export function ChatInputToolbar(
             required
             onKeyDown={handleKeyDown}
             {...bind.path('content')}
+          />
+
+          <FilesCardsControlledList
+            {...bind.path('files')}
+            className="mt-3 px-3"
           />
 
           <ChatSelectApp
