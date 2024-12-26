@@ -12,6 +12,7 @@ const AIModelsSearchAbstractSelect = createSdkAutocomplete<
   fetchFn: ({ sdk: { sdks }, phrase, limit, filters }) =>
     sdks.dashboard.aiModels.search({
       archived: false,
+      embedding: false,
       sort: 'score:desc',
       offset: 0,
       limit,

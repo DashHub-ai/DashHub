@@ -86,6 +86,7 @@ export class AIModelsEsSearchRepo {
       ids,
       organizationIds,
       archived,
+      embedding,
     }: SdKSearchAIModelsInputT,
   ): esb.Query =>
     esb.boolQuery().must(
@@ -93,6 +94,7 @@ export class AIModelsEsSearchRepo {
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !isNil(isDefault) && esb.termQuery('default', isDefault),
+        !isNil(embedding) && esb.termQuery('embedding', embedding),
         !!phrase && (
           esb
             .boolQuery()

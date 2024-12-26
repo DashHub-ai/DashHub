@@ -61,7 +61,7 @@ export function StartChatForm({ forceProject, className }: Props) {
     >
       <div
         className={clsx(
-          'relative z-10 bg-background shadow-sm border border-border rounded-lg overflow-hidden',
+          'relative z-10 bg-background shadow-sm border border-border rounded-lg',
           'focus-within:border-primary/50',
           'transition-border duration-100',
         )}
@@ -70,7 +70,7 @@ export function StartChatForm({ forceProject, className }: Props) {
           <textarea
             ref={focusInputRef}
             name="message"
-            className="p-4 pb-0 w-full focus:outline-none resize-none"
+            className="p-4 pb-0 rounded-lg w-full focus:outline-none resize-none"
             placeholder={t.placeholder}
             required
             {...bind.path('content')}
