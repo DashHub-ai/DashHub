@@ -12,6 +12,11 @@ export function createAttachedFilesMessagePrefix(files: SdkMessageFileT[]) {
       'User attached these files to this message:',
       ...files.map(file => `- ${file.resource.name}`),
       '\n---\n',
+      'Rules for handling attached files:',
+      '- Please skip describing the content of these files if it is not necessary.',
+      '- If any app is attached, please let the application analyze the content of the files.',
+      '- Use attached app approach to analyze the content of the files.',
+      '- You can add your own comments to the content of the files.',
     ].join('\n');
   };
 }
