@@ -161,7 +161,7 @@ export function ChatInputToolbar(
 
           <FilesCardsControlledList
             {...bind.path('files')}
-            className="mt-3 px-3"
+            className="mt-3 mb-2 px-3"
           />
 
           <ChatSelectApp

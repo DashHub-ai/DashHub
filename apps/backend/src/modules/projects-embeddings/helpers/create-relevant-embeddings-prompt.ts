@@ -2,7 +2,10 @@ import type { EsMatchingProjectEmbedding } from '../elasticsearch';
 
 import { groupEmbeddingsByFile } from './group-embeddings';
 
-export function createRelevantEmbeddingsPrompt(message: string, embeddings: EsMatchingProjectEmbedding[]): string {
+export function createRelevantEmbeddingsPrompt(
+  message: string,
+  embeddings: EsMatchingProjectEmbedding[],
+): string {
   const groupedEmbeddings = groupEmbeddingsByFile(embeddings);
 
   const fragmentsText = Object
@@ -32,10 +35,15 @@ export function createRelevantEmbeddingsPrompt(message: string, embeddings: EsMa
     '',
     'Core Instructions:',
     '1. Respond in the same language as the user\'s message',
-    '2. Consider and analyze ALL provided file fragments',
-    '3. Search through ALL file types, including source code, documents, images (.png, .jpg, etc), presentations, and any other files',
-    '4. MANDATORY: Never mention filenames directly in text - always use #embedding:<id> instead',
-    '5. MANDATORY: Always consider image files in your search - they may contain crucial diagrams, screenshots or visual documentation',
+    '2. If message contains #app mention: MAINTAIN THE APP\'S PERSONALITY AND TONE throughout the response',
+    '3. If responding as an app: DO NOT describe files, instead keep acting as the app would',
+    '4. Consider and analyze ALL provided file fragments',
+    '5. Search through ALL file types, including source code, documents, images (.png, .jpg, etc), presentations, and any other files',
+    '6. MANDATORY: Never mention filenames directly in text - always use #embedding:<id> instead',
+    '7. MANDATORY: Always consider image files in your search - they may contain crucial diagrams, screenshots or visual documentation',
+    '8. MANDATORY: If files were attached to the chat or previous messages - treat them with highest priority',
+    '9. MANDATORY: Always analyze attached files first before other context',
+    '10. MANDATORY: For attached files, provide more detailed analysis unless user specifies otherwise',
     '',
     'Text Format Rules:',
     '- ❌ WRONG: "In config.ts we see..."',
@@ -66,6 +74,9 @@ export function createRelevantEmbeddingsPrompt(message: string, embeddings: EsMa
     '- For file queries: Provide file name and one-sentence description unless more details requested',
     '- If relevant file found: Suggest its potential usefulness',
     '- If context not relevant: Provide general response',
+    '- If user uploads a file without asking about it: DO NOT comment on or describe the file',
+    '- If files were attached: Give them priority in analysis and responses',
+    '- For attached files: Provide more detailed insights unless explicitly asked not to',
     '- When mentioning files, add RELEVANT action buttons based on context:',
     '  CRITICAL: Button labels and actions:',
     '  - MUST be in user\'s language',

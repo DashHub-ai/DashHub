@@ -4,7 +4,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
-import { findItemIndexById, mapAsyncIterator, tryOrThrowTE } from '@llm/commons';
+import { findItemIndexById, mapAsyncIterator, pluckTyped, tryOrThrowTE } from '@llm/commons';
 import {
   groupSdkAIMessagesByRepeats,
   type SdkCreateMessageInputT,
@@ -85,7 +85,31 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
               messageId: id,
               ...file,
             })),
+            TE.chainW(files => this.projectsFilesService.search({
+              sort: 'createdAt:desc',
+              limit: files.length,
+              projectId: project.id,
+              offset: 0,
+              ids: pipe([...files], pluckTyped('id')),
+            })),
           )),
+          TE.chainW(attachedFiles => this.repo.create({
+            value: {
+              chatId: chat.id,
+              metadata: {},
+              aiModelId: null,
+              creatorUserId: creator.id,
+              role: 'system',
+              content: [
+                'User attached to chat these files:',
+                ...attachedFiles.items.map(({ description, resource }) =>
+                  `- ${resource.name} - ${description}`,
+                ),
+                '---',
+                'If there is application attached to this chat, process these files with it.',
+              ].join('\n'),
+            },
+          })),
         );
       }),
       TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
