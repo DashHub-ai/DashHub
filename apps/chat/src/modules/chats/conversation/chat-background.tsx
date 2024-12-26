@@ -29,7 +29,7 @@ function ChatBackgroundComponent({ totalIcons = 30 }: ChatBackdropSettings) {
   }, [totalIcons]);
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute inset-0 w-full h-full overflow-x-hidden pointer-events-none">
       {icons.map(style => (
         <MessagesSquare
           key={style.id}

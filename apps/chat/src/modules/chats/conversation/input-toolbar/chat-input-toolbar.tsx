@@ -131,7 +131,10 @@ export function ChatInputToolbar(
   });
 
   return (
-    <form onSubmit={handleSubmitEvent}>
+    <form
+      className="mx-auto w-full 2xl:w-9/12 max-w-full"
+      onSubmit={handleSubmitEvent}
+    >
       {replyToMessage && (
         <ChatReplyMessage
           message={replyToMessage}
