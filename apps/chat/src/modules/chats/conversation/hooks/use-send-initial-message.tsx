@@ -8,7 +8,7 @@ import { SdkCreateMessageInputV, SdkTableRowWithIdNameV } from '@llm/sdk';
 
 const InitialChatMessageV = SdkCreateMessageInputV
   .omit({
-    replyToMessage: true,
+    replyToMessageId: true,
   })
   .extend({
     aiModel: SdkTableRowWithIdNameV,

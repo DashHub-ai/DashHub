@@ -4,7 +4,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
-import { findItemIndexById, mapAsyncIterator, pluckTyped, tryOrThrowTE } from '@llm/commons';
+import { findItemIndexById, mapAsyncIterator, tryOrThrowTE } from '@llm/commons';
 import {
   groupSdkAIMessagesByRepeats,
   type SdkCreateMessageInputT,
@@ -22,7 +22,7 @@ import { ProjectsService } from '../projects';
 import { ProjectsEmbeddingsService } from '../projects-embeddings';
 import { ProjectsFilesService } from '../projects-files';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
-import { createActionButtonsPrompt, createAttachAppAIMessage, createReplyAiMessagePrefix } from './helpers';
+import { createActionButtonsPrompt, createAttachAppAIMessage, createAttachedFilesMessagePrefix, createReplyAiMessagePrefix } from './helpers';
 import { MessagesFirewall } from './messages.firewall';
 import { MessagesRepo } from './messages.repo';
 
@@ -54,6 +54,8 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
 
   asUser = (jwt: SdkJwtTokenT) => new MessagesFirewall(jwt, this);
 
+  get = this.esSearchRepo.get;
+
   search = this.esSearchRepo.search;
 
   searchByChatId = this.esSearchRepo.searchByChatId;
@@ -67,7 +69,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           metadata: {},
           aiModelId: null,
           creatorUserId: creator.id,
-          repliedMessageId: message.replyToMessage?.id ?? null,
+          repliedMessageId: message.replyToMessageId ?? null,
           role: 'user',
         },
       }),
@@ -85,31 +87,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
               messageId: id,
               ...file,
             })),
-            TE.chainW(files => this.projectsFilesService.search({
-              sort: 'createdAt:desc',
-              limit: files.length,
-              projectId: project.id,
-              offset: 0,
-              ids: pipe([...files], pluckTyped('id')),
-            })),
           )),
-          TE.chainW(attachedFiles => this.repo.create({
-            value: {
-              chatId: chat.id,
-              metadata: {},
-              aiModelId: null,
-              creatorUserId: creator.id,
-              role: 'system',
-              content: [
-                'User attached to chat these files:',
-                ...attachedFiles.items.map(({ description, resource }) =>
-                  `- ${resource.name} - ${description}`,
-                ),
-                '---',
-                'If there is application attached to this chat, process these files with it.',
-              ].join('\n'),
-            },
-          })),
         );
       }),
       TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
@@ -137,16 +115,9 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     signal?: AbortSignal,
   ) => pipe(
     TE.Do,
-    TE.bind('message', () => this.repo.findById({ id })),
-    TE.bindW('replyContext', ({ message }) => {
-      if (!message.repliedMessageId) {
-        return TE.of(null);
-      }
-
-      return this.repo.findById({ id: message.repliedMessageId });
-    }),
+    TE.bind('message', () => this.get(id)),
     TE.bindW('history', ({ message }) => pipe(
-      this.searchByChatId(message.chatId),
+      this.searchByChatId(message.chat.id),
       TE.map(({ items }) => {
         const historyIndex = findItemIndexById(message.id)(items);
 
@@ -156,14 +127,16 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         );
       }),
     )),
-    TE.bindW('mappedContent', ({ replyContext, message }) => pipe(
-      replyContext
-        ? createReplyAiMessagePrefix(replyContext, message.content)
+    TE.bindW('mappedContent', ({ message }) => pipe(
+      message.repliedMessage
+        ? createReplyAiMessagePrefix(message.repliedMessage, message.content)
         : message.content,
+
+      createAttachedFilesMessagePrefix(message.files),
 
       prefixedMessage => this.projectsEmbeddingsService.wrapWithEmbeddingContextPrompt({
         message: prefixedMessage,
-        chat: { id: message.chatId },
+        chat: { id: message.chat.id },
       }),
     )),
     TE.chainW(({ mappedContent, history, message }) =>
@@ -188,7 +161,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         TE.map(stream => this.createAIResponseMessage(
           {
             repliedMessageId: message.id,
-            chatId: message.chatId,
+            chatId: message.chat.id,
             aiModelId: aiModel.id,
             stream,
           },

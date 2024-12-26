@@ -51,6 +51,7 @@ export function createRelevantEmbeddingsPrompt(
     '    - Use other embeddings only for additional context if relevant',
     '    - Always prioritize responses about attached files',
     '    - Make it clear which information comes from attached files vs other context',
+    '13. The ✅ or ❌ characters were using in the text are for illustrative purposes only. Do not use them in your responses (unless the user uses them first)',
     '',
     'Text Format Rules:',
     '- ❌ WRONG: "In config.ts we see..."',

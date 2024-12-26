@@ -34,6 +34,7 @@ export function useOptimisticResponseCreator() {
       content,
       role: 'user',
       aiModel: null,
+      chat: { id: v4() },
       repliedMessage: null,
       app: null,
       files: (files ?? []).map(createOptimisticResponseFile),
@@ -51,6 +52,7 @@ export function useOptimisticResponseCreator() {
       files: [],
       content: observable,
       role: 'assistant',
+      chat: { id: v4() },
       aiModel,
       creator: null,
       repliedMessage: null,
@@ -60,6 +62,7 @@ export function useOptimisticResponseCreator() {
     app: (app: SdkTableRowWithIdNameT): OptimisticMessageOutputT => ({
       ...createBaseMessageFields(),
       files: [],
+      chat: { id: v4() },
       content: 'System message',
       role: 'assistant',
       creator: null,

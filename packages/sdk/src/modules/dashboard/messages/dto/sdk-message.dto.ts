@@ -27,6 +27,7 @@ export const SdkMessageV = z
   .object({
     content: z.string(),
     role: SdkMessageRoleV,
+    chat: SdkTableRowWithUuidV,
     creator: SdkUserListItemV.nullable(),
     aiModel: SdkTableRowWithIdNameV.nullable(),
     app: SdkTableRowWithIdNameV.nullable(),

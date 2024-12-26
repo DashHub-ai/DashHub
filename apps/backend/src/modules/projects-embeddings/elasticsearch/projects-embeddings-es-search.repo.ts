@@ -67,7 +67,7 @@ export class ProjectsEmbeddingsEsSearchRepo {
       this.indexRepo.search(
         esb
           .requestBodySearch()
-          .source(['id', 'text', 'project_file'])
+          .source(['id', 'text', 'project_file', 'created_at'])
           .size(100)
           .kNN([
             esb

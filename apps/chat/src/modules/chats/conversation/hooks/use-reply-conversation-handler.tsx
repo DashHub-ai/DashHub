@@ -68,7 +68,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
         {
           files,
           content,
-          replyToMessage,
+          replyToMessageId: replyToMessage?.id,
         },
       )),
       TE.bindW('aiResponse', ({ createdMessage }) => pipe(

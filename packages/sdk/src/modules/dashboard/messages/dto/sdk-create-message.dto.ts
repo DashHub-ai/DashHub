@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import { SdkTableRowWithUuidV } from '~/shared';
+import { SdkTableRowUuidV } from '~/shared';
 
 export const SdkCreateMessageInputV = z.object({
   content: z.string(),
-  replyToMessage: SdkTableRowWithUuidV.optional().nullable(),
+  replyToMessageId: SdkTableRowUuidV.optional().nullable(),
   files: z.array(z.instanceof(File)).optional().nullable(),
 });
 
