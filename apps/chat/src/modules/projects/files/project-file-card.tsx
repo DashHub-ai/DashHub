@@ -70,7 +70,7 @@ export function ProjectFileCard({ file, onAfterDelete }: FileCardProps) {
         </div>
       </div>
 
-      <CardDescription>
+      <CardDescription limitHeight>
         {isImage
           ? (
               <img

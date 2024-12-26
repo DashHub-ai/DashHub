@@ -6,9 +6,10 @@ import { useI18n } from '~/i18n';
 
 type Props = PropsWithChildren & {
   className?: string;
+  limitHeight?: boolean;
 };
 
-export function CardDescription({ children, className }: Props) {
+export function CardDescription({ children, limitHeight, className }: Props) {
   const t = useI18n().pack;
   const ref = useRef<HTMLParagraphElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -34,7 +35,8 @@ export function CardDescription({ children, className }: Props) {
         ref={wrapperRef}
         className={clsx(
           'overflow-hidden',
-          !isExpanded && 'max-h-[2.6rem]',
+          !isExpanded && limitHeight && 'max-h-[2.6rem]',
+          hasOverflow && !isExpanded && 'after:absolute after:bottom-0 after:left-0 after:right-0 after:h-4 after:bg-gradient-to-t after:from-white after:to-transparent relative',
         )}
       >
         <p
