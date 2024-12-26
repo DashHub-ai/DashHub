@@ -66,7 +66,10 @@ export function FileCard({ file, withBackground, limitWidth = true, onRemove }: 
         <button
           title={pack.buttons.delete}
           type="button"
-          onClick={onRemove}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
           className="-top-2 -right-2 absolute bg-black p-1 rounded-full"
         >
           <XIcon className="w-3 h-3 text-white" />

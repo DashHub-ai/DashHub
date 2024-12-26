@@ -18,6 +18,10 @@ export const FilesCardsControlledList = controlled<FileCardFile[], Props>(({ cla
     });
   };
 
+  if (!value?.length) {
+    return null;
+  }
+
   return (
     <div
       className={clsx(
