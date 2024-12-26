@@ -48,6 +48,8 @@ export function ChatRoute({ id }: Props) {
     return <Redirect to={sitemap.home} replace />;
   }
 
+  const project = result.status === 'success' && result.data.chat.project;
+
   return (
     <PageWithNavigationLayout
       withFooter={false}
@@ -56,7 +58,7 @@ export function ChatRoute({ id }: Props) {
       <RouteMetaTags meta={t.meta} />
 
       <LayoutHeader
-        {...result.status === 'success' && result.data.chat.project && {
+        {...project && !project.internal && {
           breadcrumbs: (
             <>
               <li>

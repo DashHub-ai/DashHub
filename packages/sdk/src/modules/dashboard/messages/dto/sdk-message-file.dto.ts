@@ -9,4 +9,4 @@ export const SdkMessageFileV = z.object({
 })
   .merge(SdkTableRowWithIdV);
 
-export type SdkProjectFileT = z.infer<typeof SdkMessageFileV>;
+export type SdkMessageFileT = z.infer<typeof SdkMessageFileV>;

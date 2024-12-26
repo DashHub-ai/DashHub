@@ -41,16 +41,26 @@ export function FileCard({ file, withBackground, limitWidth = true, onRemove }: 
     return URL.createObjectURL(file);
   }, [file]);
 
+  const onDownload = () => {
+    if (fileUrl) {
+      window.open(fileUrl, '_blank');
+    }
+  };
+
   return (
     <div
       className={clsx(
-        'relative gap-2 p-3 border rounded-lg h-[57px] group',
+        'relative gap-2 border rounded-lg h-[57px] cursor-pointer group',
+        'hover:scale-105 transition-transform',
         withBackground && 'bg-gray-50',
         isImage
-          ? 'p-0 max-w-[128px]'
-          : 'bg-gray-50 border-gray-200 w-[200px]',
+          ? 'max-w-[128px]'
+          : 'p-3 bg-gray-50 border-gray-200 w-[200px]',
         !limitWidth && 'w-auto max-w-[400px]',
       )}
+      onClick={onDownload}
+      role="button"
+      title={pack.buttons.download}
     >
       {onRemove && (
         <button

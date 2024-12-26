@@ -106,7 +106,7 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
           app_id: appId,
           app_name: appName,
 
-          files_json,
+          files_json: filesJson,
 
           ...item
         }): MessageTableRowWithRelations => ({
@@ -145,7 +145,7 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
                 name: appName,
               }
             : null,
-          files: files_json?.files ?? [],
+          files: filesJson?.files ?? [],
         })),
       ),
     );

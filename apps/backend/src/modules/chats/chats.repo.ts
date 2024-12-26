@@ -148,6 +148,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
               'projects.id as project_id',
               'projects.name as project_name',
+              'projects.internal as project_internal',
             ])
             .limit(ids.length)
             .execute(),
@@ -172,6 +173,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
           project_id: projectId,
           project_name: projectName,
+          project_internal: projectInternal,
 
           ...item
         }): ChatTableRowWithRelations => ({
@@ -180,6 +182,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
             ? {
                 id: projectId,
                 name: projectName,
+                internal: !!projectInternal,
               }
             : null,
           organization: {

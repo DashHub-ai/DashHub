@@ -31,11 +31,15 @@ type ChatSummaryTableRowRelation = DropTableRowAccessTime<
   Omit<ChatSummaryTableRow, 'chatId' | 'lastSummarizedMessageId'>
 >;
 
+type ChatProjectTableRowRelation = TableRowWithIdName & {
+  internal: boolean;
+};
+
 export type ChatTableRowWithRelations =
   & Omit<ChatTableRow, 'organizationId' | 'creatorUserId' | 'projectId'>
   & {
     summary: ChatSummaryTableRowRelation;
     organization: TableRowWithIdName;
-    project: TableRowWithIdName | null;
+    project: ChatProjectTableRowRelation | null;
     creator: UserTableRowBaseRelation;
   };
