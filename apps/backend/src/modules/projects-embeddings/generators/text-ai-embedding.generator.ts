@@ -35,7 +35,11 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
 
     return pipe(
       TE.sequenceArray([
-        this.generateSummaryEmbedding({ aiModel, text, fileName }),
+        this.generateSummaryEmbedding({
+          text: text.slice(0, 30_000),
+          aiModel,
+          fileName,
+        }),
         ...chunks.map(chunk => this.generateChunkEmbedding({
           aiModel,
           chunk,
@@ -70,7 +74,7 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
         aiModel,
         input: wrapEmbeddingWithInfo({
           type: 'summary',
-          embedding: text.slice(0, 30_000),
+          embedding: text,
           fileName,
         }),
       })),
