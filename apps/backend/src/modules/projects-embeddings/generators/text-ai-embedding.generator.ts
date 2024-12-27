@@ -70,7 +70,7 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
         aiModel,
         input: wrapEmbeddingWithInfo({
           type: 'summary',
-          embedding: text,
+          embedding: text.slice(0, 30_000),
           fileName,
         }),
       })),
