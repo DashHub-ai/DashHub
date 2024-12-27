@@ -36,7 +36,7 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
     return pipe(
       TE.sequenceArray([
         this.generateSummaryEmbedding({
-          text: text.slice(0, 30_000),
+          text: text.slice(0, 5_000),
           aiModel,
           fileName,
         }),
