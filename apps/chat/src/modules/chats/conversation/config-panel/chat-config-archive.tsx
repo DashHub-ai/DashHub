@@ -26,7 +26,7 @@ export const ChatConfigArchive = memo(({ chat }: Props) => {
       sdks.dashboard.chats.archive(chat.id),
       tapTaskEither(() => {
         const url = (
-          chat.project
+          chat.project && !chat.project.internal
             ? sitemap.projects.show.generate({ pathParams: chat.project })
             : sitemap.home
         );
