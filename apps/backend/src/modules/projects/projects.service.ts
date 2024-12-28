@@ -16,7 +16,7 @@ import {
 } from '@llm/commons';
 
 import type { WithAuthFirewall } from '../auth';
-import type { TableId, TableRowWithId, TableUuid } from '../database';
+import type { TableId, TableRowWithId, TableRowWithUuid } from '../database';
 
 import { ChatsService } from '../chats/chats.service';
 import { ProjectsEsIndexRepo, ProjectsEsSearchRepo } from './elasticsearch';
@@ -46,8 +46,16 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  ensureChatHasProjectOrCreateInternal = (chatId: TableUuid) => pipe(
-    this.chatsService.get(chatId),
+  ensureChatHasProjectOrCreateInternal = (
+    {
+      creator,
+      chat,
+    }: {
+      creator: TableRowWithId;
+      chat: TableRowWithUuid;
+    },
+  ) => pipe(
+    this.chatsService.get(chat.id),
     TE.chainW((chat) => {
       if (chat.project) {
         return TE.right(chat.project);
@@ -59,8 +67,9 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
           organization: chat.organization,
           name: `Unnamed Project - ${Date.now()}`,
           description: null,
+          creator,
         }),
-        TE.tap(project => this.chatsService.assignToProject(chatId, project.id)),
+        TE.tap(project => this.chatsService.assignToProject(chat.id, project.id)),
       );
     }),
   );
@@ -96,10 +105,21 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
 
   search = this.esSearchRepo.search;
 
-  create = ({ internal, organization, ...values }: SdkCreateProjectInputT & { internal?: boolean; }) => pipe(
+  create = (
+    {
+      creator,
+      internal,
+      organization,
+      ...values
+    }: SdkCreateProjectInputT & {
+      internal?: boolean;
+      creator: TableRowWithId;
+    },
+  ) => pipe(
     this.repo.create({
       value: {
         ...values,
+        creatorUserId: creator.id,
         internal: !!internal,
         organizationId: organization.id,
       },

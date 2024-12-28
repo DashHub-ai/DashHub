@@ -16,7 +16,7 @@ export const ChatAttachedApp = memo(({ app }: ChatAttachedAppProps) => {
         <Bot className="w-5 h-5 text-gray-600" />
       </div>
 
-      <div className="relative before:top-[12px] before:left-[-8px] before:absolute border-gray-200 before:border-8 before:border-gray-100 bg-gray-100 px-4 py-2 border before:border-transparent before:border-t-8 before:border-r-[12px] before:border-l-0 rounded-2xl">
+      <div className="relative before:top-[12px] before:left-[-8px] before:absolute border-gray-200 before:border-8 before:border-gray-100 bg-gray-100 px-4 py-2 border before:border-transparent before:border-t-8 before:border-r-[12px] before:border-l-0 rounded-xl">
         <div className="flex items-center gap-2 text-gray-600 text-sm">
           <span>Attached app:</span>
           <AppChatBadge id={app.id} />

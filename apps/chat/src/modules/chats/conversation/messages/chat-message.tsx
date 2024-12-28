@@ -92,7 +92,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
       >
         <div
           className={clsx(
-            'relative px-4 py-2 border rounded-2xl min-w-[30%] max-w-[70%]',
+            'relative px-4 py-2 border rounded-xl min-w-[30%] max-w-[70%]',
             'before:absolute before:top-[12px] before:border-8 before:border-transparent before:border-t-8',
             {
               'bg-gray-100 before:border-gray-100 before:left-[-8px] border-gray-200 before:border-l-0 before:border-r-[12px]': isAI,

@@ -5,6 +5,11 @@ import { addArchivedAtColumns, addIdColumn, addTimestampColumns } from './utils'
 export async function up(db: Kysely<any>): Promise<void> {
   // Create projects_policies table
   await db.schema
+    .createType('project_access_level')
+    .asEnum(['read', 'write', 'admin'])
+    .execute();
+
+  await db.schema
     .createTable('projects_policies')
     .$call(addIdColumn)
     .$call(addTimestampColumns)
@@ -12,12 +17,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('project_id', 'integer', col => col.notNull().references('projects.id').onDelete('restrict'))
     .addColumn('user_id', 'integer', col => col.references('users.id').onDelete('restrict'))
     .addColumn('group_id', 'integer', col => col.references('users_groups.id').onDelete('restrict'))
-    .addColumn('read', 'boolean', col => col.notNull().defaultTo(false))
-    .addColumn('write', 'boolean', col => col.notNull().defaultTo(false))
-    .addCheckConstraint(
-      'user_xor_group_check',
-      sql`COALESCE((user_id IS NOT NULL)::int, 0) + COALESCE((group_id IS NOT NULL)::int, 0) >= 1`,
-    )
+    .addColumn('level', sql`project_access_level`, col => col.notNull())
     .addUniqueConstraint('project_id_user_id_group_id_unique', ['project_id', 'user_id', 'group_id'])
     .execute();
 
