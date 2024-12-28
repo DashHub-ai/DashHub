@@ -14,3 +14,8 @@ export type UsersGroupsTable =
     creator_user_id: ColumnType<TableId, TableId, never>;
     organization_id: ColumnType<TableId, TableId, never>;
   };
+
+export type UsersGroupsUsersTable = {
+  user_id: ColumnType<TableId, TableId, never>;
+  group_id: ColumnType<TableId, TableId, never>;
+};

@@ -29,7 +29,7 @@ import type {
   S3ResourcesTable,
 } from '../s3';
 import type { UsersTable } from '../users';
-import type { UsersGroupsTable } from '../users-groups';
+import type { UsersGroupsTable, UsersGroupsUsersTable } from '../users-groups';
 import type {
   TableWithArchivedAtColumn,
   TableWithIdColumn,
@@ -44,6 +44,7 @@ export type DatabaseTables = {
   // Users
   users: UsersTable;
   users_groups: UsersGroupsTable;
+  users_groups_users: UsersGroupsUsersTable;
 
   // Auth
   auth_emails: AuthEmailsTable;

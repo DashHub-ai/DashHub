@@ -1,5 +1,7 @@
 import { array as A, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
+import { sql } from 'kysely';
+import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { injectable } from 'tsyringe';
 
 import {
@@ -37,6 +39,25 @@ export class ProjectsPoliciesRepo extends createDatabaseRepo('projects_policies'
 
               'projects.id as project_id',
               'projects.name as project_name',
+
+              eb => eb
+                .selectFrom('users_groups_users')
+                .where('users_groups_users.group_id', '=', eb.ref('users_groups.id'))
+                .innerJoin('users as group_users', 'group_users.id', 'users_groups_users.user_id')
+                .select(eb => [
+                  eb.fn.coalesce(
+                    eb.fn.jsonAgg(
+                      jsonBuildObject({
+                        id: eb.ref('group_users.id').$notNull(),
+                        email: eb.ref('group_users.email').$notNull(),
+                      }),
+                    ),
+                    sql`'[]'`,
+                  )
+                    .$notNull()
+                    .as('users'),
+                ])
+                .as('users'),
             ])
             .limit(ids.length)
             .execute(),
@@ -52,6 +73,8 @@ export class ProjectsPoliciesRepo extends createDatabaseRepo('projects_policies'
 
           group_id: groupId,
           group_name: groupName,
+
+          users,
 
           ...item
         }): O.Option<ProjectPolicyTableRowWithRelations> => {
@@ -71,7 +94,11 @@ export class ProjectsPoliciesRepo extends createDatabaseRepo('projects_policies'
           if (groupId) {
             return O.some({
               ...record,
-              group: { id: groupId, name: groupName!, users: [] },
+              group: {
+                id: groupId,
+                name: groupName!,
+                users: users ?? [],
+              },
             });
           }
 
