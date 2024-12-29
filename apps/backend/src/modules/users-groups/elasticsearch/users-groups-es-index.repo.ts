@@ -15,12 +15,12 @@ import {
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import type { ProjectTableRowWithRelations } from '../projects.tables';
+import type { UsersGroupTableRowWithRelations } from '../users-groups.tables';
 
-import { ProjectsRepo } from '../projects.repo';
+import { UsersGroupsRepo } from '../repo/users-groups.repo';
 
-const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
-  indexName: 'dashboard-projects',
+const UsersGroupsAbstractEsIndexRepo = createElasticsearchIndexRepo({
+  indexName: 'dashboard-users-groups',
   schema: {
     mappings: {
       dynamic: false,
@@ -29,13 +29,6 @@ const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
         organization: createIdNameObjectMapping(),
-        internal: {
-          type: 'keyword',
-        },
-        description: {
-          type: 'text',
-          analyzer: 'folded_lowercase_analyzer',
-        },
       },
     },
     settings: {
@@ -45,20 +38,20 @@ const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ProjectsEsDocument = EsDocument<ProjectTableRowWithRelations>;
+export type UsersGroupsEsDocument = EsDocument<UsersGroupTableRowWithRelations>;
 
 @injectable()
-export class ProjectsEsIndexRepo extends ProjectsAbstractEsIndexRepo<ProjectsEsDocument> {
+export class UsersGroupsEsIndexRepo extends UsersGroupsAbstractEsIndexRepo<UsersGroupsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
-    @inject(ProjectsRepo) private readonly projectsRepo: ProjectsRepo,
+    @inject(UsersGroupsRepo) private readonly usersGroupsRepo: UsersGroupsRepo,
   ) {
     super(elasticsearchRepo);
   }
 
-  protected async findEntities(ids: number[]): Promise<ProjectsEsDocument[]> {
+  protected async findEntities(ids: number[]): Promise<UsersGroupsEsDocument[]> {
     return pipe(
-      this.projectsRepo.findWithRelationsByIds({ ids }),
+      this.usersGroupsRepo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
           ...snakecaseKeys(entity, { deep: true }),
@@ -70,7 +63,7 @@ export class ProjectsEsIndexRepo extends ProjectsAbstractEsIndexRepo<ProjectsEsD
   }
 
   protected createAllEntitiesIdsIterator = () =>
-    this.projectsRepo.createIdsIterator({
+    this.usersGroupsRepo.createIdsIterator({
       chunkSize: 100,
     });
 }

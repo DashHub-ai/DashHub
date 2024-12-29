@@ -15,6 +15,7 @@ import { ProjectsEmbeddingsEsIndexRepo } from '~/modules/projects-embeddings/ela
 import { ProjectsFilesEsIndexRepo } from '~/modules/projects-files/elasticsearch/projects-files-es-index.repo';
 import { ProjectsPoliciesEsIndexRepo } from '~/modules/projects-policies/elasticsearch/projects-policies-es-index.repo';
 import { ProjectsEsIndexRepo } from '~/modules/projects/elasticsearch/projects-es-index.repo';
+import { UsersGroupsEsIndexRepo } from '~/modules/users-groups/elasticsearch/users-groups-es-index.repo';
 import { UsersEsIndexRepo } from '~/modules/users/elasticsearch/users-es-index.repo';
 
 import { ElasticsearchIndicesRegistryRepo } from '../repo/elasticsearch-indices-registry.repo';
@@ -26,6 +27,7 @@ export class ElasticsearchRegistryBootService {
   constructor(
     @inject(ElasticsearchIndicesRegistryRepo) private readonly indicesRegistryRepo: ElasticsearchIndicesRegistryRepo,
     @inject(UsersEsIndexRepo) private readonly usersEsIndexRepo: UsersEsIndexRepo,
+    @inject(UsersGroupsEsIndexRepo) private readonly usersGroupsEsIndexRepo: UsersGroupsEsIndexRepo,
     @inject(OrganizationsEsIndexRepo) private readonly organizationsEsIndexRepo: OrganizationsEsIndexRepo,
     @inject(ProjectsEsIndexRepo) private readonly projectsEsIndexRepo: ProjectsEsIndexRepo,
     @inject(AppsEsIndexRepo) private readonly appsEsIndexRepo: AppsEsIndexRepo,
@@ -42,6 +44,7 @@ export class ElasticsearchRegistryBootService {
   register = TE.fromIO(() => {
     this.indicesRegistryRepo.registerIndexRepos([
       this.usersEsIndexRepo,
+      this.usersGroupsEsIndexRepo,
       this.organizationsEsIndexRepo,
       this.projectsEsIndexRepo,
       this.appsEsIndexRepo,
