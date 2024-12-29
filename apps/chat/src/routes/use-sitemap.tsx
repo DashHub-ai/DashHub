@@ -18,6 +18,9 @@ export function useSitemap() {
     login: prefixWithBaseRoute('/login'),
     settings: prefixWithBaseRoute('/settings'),
     chat: defineSitemapRouteGenerator(prefixWithBaseRoute)('/chat/:id'),
+    management: {
+      index: prefixWithBaseRoute('/management/groups'),
+    },
     forceRedirect: {
       raw: prefixWithBaseRoute('/force-redirect'),
       generate: (targetUrl: string) => pipe(

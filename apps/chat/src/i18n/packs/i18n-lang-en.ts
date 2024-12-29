@@ -5,10 +5,11 @@ import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
 export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   navigation: {
     links: {
-      home: 'Home',
+      home: 'Chats',
       projects: 'Projects',
       apps: 'Apps',
       experts: 'Experts',
+      management: 'Management',
     },
     loggedIn: {
       logout: 'Logout',
@@ -177,6 +178,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         dashboard: 'Organization must be selected to access dashboard features',
         rootOnly: 'This step is only required for root users - regular users are automatically assigned to their organization',
       },
+    },
+    management: {
+      meta: {
+        title: 'Management',
+        description: 'Management',
+      },
+      title: 'Management',
     },
   },
   workspace: {

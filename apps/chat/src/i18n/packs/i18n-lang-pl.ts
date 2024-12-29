@@ -7,10 +7,11 @@ import type { I18nLangPack } from './i18n-packs';
 export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   navigation: {
     links: {
-      home: 'Strona główna',
+      home: 'Czaty',
       projects: 'Projekty',
-      apps: 'Aplikacje',
+      apps: 'Appki',
       experts: 'Eksperci',
+      management: 'Administracja',
     },
     loggedIn: {
       logout: 'Wyloguj się',
@@ -179,6 +180,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         dashboard: 'Wybór organizacji jest wymagany do korzystania z funkcji panelu',
         rootOnly: 'Ten krok jest wymagany tylko dla użytkowników root - zwykli użytkownicy są automatycznie przypisani do swojej organizacji',
       },
+    },
+    management: {
+      meta: {
+        title: 'Administracja',
+        description: 'Zarządzaj ustawieniami organizacji',
+      },
+      title: 'Administracja',
     },
   },
   workspace: {

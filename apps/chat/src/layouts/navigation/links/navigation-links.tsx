@@ -1,7 +1,8 @@
 import {
   FolderKanbanIcon,
   GraduationCapIcon,
-  HomeIcon,
+  MessageSquareTextIcon,
+  SettingsIcon,
   WandSparklesIcon,
 } from 'lucide-react';
 
@@ -21,7 +22,7 @@ export function NavigationLinks() {
     <ul className="flex items-center gap-4 ml-5">
       <NavigationItem
         path={sitemap.home}
-        icon={<HomeIcon size={16} />}
+        icon={<MessageSquareTextIcon size={16} />}
         disabled={!hasOrganization}
       >
         {t.links.home}
@@ -50,6 +51,14 @@ export function NavigationLinks() {
       >
         {t.links.experts}
       </StayTunedNavigationItem>
+
+      <NavigationItem
+        path={sitemap.management.index}
+        icon={<SettingsIcon size={16} />}
+        disabled={!hasOrganization}
+      >
+        {t.links.management}
+      </NavigationItem>
     </ul>
   );
 }
