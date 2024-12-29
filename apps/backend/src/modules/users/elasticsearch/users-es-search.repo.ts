@@ -6,7 +6,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type {
   SdkSearchUserItemT,
-  SdKSearchUsersInputT,
+  SdkSearchUsersInputT,
 } from '@llm/sdk';
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
@@ -27,7 +27,7 @@ export class UsersEsSearchRepo {
     @inject(UsersEsIndexRepo) private readonly indexRepo: UsersEsIndexRepo,
   ) {}
 
-  search = (dto: SdKSearchUsersInputT) =>
+  search = (dto: SdkSearchUsersInputT) =>
     pipe(
       this.indexRepo.search(
         UsersEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
@@ -42,7 +42,7 @@ export class UsersEsSearchRepo {
       })),
     );
 
-  private static createEsRequestSearchBody = (dto: SdKSearchUsersInputT) =>
+  private static createEsRequestSearchBody = (dto: SdkSearchUsersInputT) =>
     createPaginationOffsetSearchQuery(dto)
       .query(UsersEsSearchRepo.createEsRequestSearchFilters(dto))
       .sorts(createScoredSortFieldQuery(dto.sort));
@@ -53,7 +53,7 @@ export class UsersEsSearchRepo {
       ids,
       organizationIds,
       archived,
-    }: SdKSearchUsersInputT,
+    }: SdkSearchUsersInputT,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([

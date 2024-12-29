@@ -17,7 +17,7 @@ export const SdkSearchUsersGroupItemV = SdkUsersGroupV;
 
 export type SdkSearchUsersGroupItemT = z.infer<typeof SdkSearchUsersGroupItemV>;
 
-export const SdKSearchUsersGroupsInputV = SdkOffsetPaginationInputV
+export const SdkSearchUsersGroupsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
   })
@@ -27,8 +27,8 @@ export const SdKSearchUsersGroupsInputV = SdkOffsetPaginationInputV
   .merge(SdkExcludeIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchUsersGroupsInputT = z.infer<typeof SdKSearchUsersGroupsInputV>;
+export type SdkSearchUsersGroupsInputT = z.infer<typeof SdkSearchUsersGroupsInputV>;
 
-export const SdKSearchUsersGroupsOutputV = SdkOffsetPaginationOutputV(SdkSearchUsersGroupItemV);
+export const SdkSearchUsersGroupsOutputV = SdkOffsetPaginationOutputV(SdkSearchUsersGroupItemV);
 
-export type SdkSearchUsersGroupsOutputT = z.infer<typeof SdKSearchUsersGroupsOutputV>;
+export type SdkSearchUsersGroupsOutputT = z.infer<typeof SdkSearchUsersGroupsOutputV>;

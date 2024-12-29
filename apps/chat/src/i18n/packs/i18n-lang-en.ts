@@ -445,6 +445,26 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       },
     },
   },
+  usersGroups: {
+    form: {
+      title: {
+        create: 'Create users group',
+        edit: 'Edit users group',
+      },
+      fields: {
+        name: {
+          label: 'Name',
+          placeholder: 'Enter users group name',
+        },
+        users: {
+          label: 'Users',
+        },
+      },
+    },
+    table: {
+      totalUsers: 'Total users',
+    },
+  },
   footer: {
     copyright: 'Open Source AI Platform',
     madeWith: 'Made with',

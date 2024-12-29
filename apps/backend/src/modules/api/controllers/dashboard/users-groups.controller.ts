@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import {
   SdkCreateUsersGroupInputV,
-  SdKSearchUsersGroupsInputV,
+  SdkSearchUsersGroupsInputV,
   SdkUpdateUsersGroupInputV,
   type UsersGroupsSdk,
 } from '@llm/sdk';
@@ -30,7 +30,7 @@ export class UsersGroupsController extends AuthorizedController {
     this.router
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchUsersGroupsInputV),
+        sdkSchemaValidator('query', SdkSearchUsersGroupsInputV),
         async context => pipe(
           context.req.valid('query'),
           groupsService.asUser(context.var.jwt).search,

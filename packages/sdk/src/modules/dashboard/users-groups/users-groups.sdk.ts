@@ -13,7 +13,7 @@ import {
 import type {
   SdkCreateUsersGroupInputT,
   SdkCreateUsersGroupOutputT,
-  SdKSearchUsersGroupsInputT,
+  SdkSearchUsersGroupsInputT,
   SdkSearchUsersGroupsOutputT,
   SdkUpdateUsersGroupInputT,
   SdkUpdateUsersGroupOutputT,
@@ -22,7 +22,7 @@ import type {
 export class UsersGroupsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/users/groups';
 
-  search = (data: SdKSearchUsersGroupsInputT) =>
+  search = (data: SdkSearchUsersGroupsInputT) =>
     this.fetch<SdkSearchUsersGroupsOutputT>({
       url: this.endpoint('/search'),
       query: data,

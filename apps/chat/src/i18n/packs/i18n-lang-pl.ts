@@ -41,17 +41,17 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   table: {
     columns: {
       id: 'ID',
-      name: 'Name',
-      description: 'Description',
+      name: 'Nazwa',
+      description: 'Opis',
       email: 'E-Mail',
-      archived: 'Archived',
-      active: 'Active',
-      auth: 'Authentication',
-      organization: 'Organization',
-      parentCategory: 'Parent category',
-      createdAt: 'Created at',
-      updatedAt: 'Updated at',
-      actions: 'Actions',
+      archived: 'Zarchiwizowane',
+      active: 'Aktywne',
+      auth: 'Uwierzytelnianie',
+      organization: 'Organizacja',
+      parentCategory: 'Kategoria nadrzędna',
+      createdAt: 'Data utworzenia',
+      updatedAt: 'Data aktualizacji',
+      actions: 'Akcje',
       role: 'Rola',
     },
   },
@@ -445,6 +445,26 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         email: 'E-Mail',
         password: 'Hasło',
       },
+    },
+  },
+  usersGroups: {
+    form: {
+      title: {
+        create: 'Utwórz grupę użytkowników',
+        edit: 'Edytuj grupę użytkowników',
+      },
+      fields: {
+        name: {
+          label: 'Nazwa',
+          placeholder: 'Wprowadź nazwę grupy',
+        },
+        users: {
+          label: 'Użytkownicy',
+        },
+      },
+    },
+    table: {
+      totalUsers: 'Użytkowników',
     },
   },
   footer: {

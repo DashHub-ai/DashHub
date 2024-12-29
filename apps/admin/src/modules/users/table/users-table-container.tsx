@@ -4,7 +4,7 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { genRandomPassword, tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
-import { SdkIdNameUrlEntryV, SdKSearchUsersInputV, serializeSdkIdNameUrlEntry, useSdkForLoggedIn } from '@llm/sdk';
+import { SdkIdNameUrlEntryV, SdkSearchUsersInputV, serializeSdkIdNameUrlEntry, useSdkForLoggedIn } from '@llm/sdk';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -20,7 +20,7 @@ import { OrganizationsSearchSelect } from '~/modules/organizations';
 import { useUserCreateModal } from '../form';
 import { UsersTableRow } from './users-table-row';
 
-const SearchUsersUrlFiltersV = SdKSearchUsersInputV
+const SearchUsersUrlFiltersV = SdkSearchUsersInputV
   .omit({
     organizationIds: true,
   })

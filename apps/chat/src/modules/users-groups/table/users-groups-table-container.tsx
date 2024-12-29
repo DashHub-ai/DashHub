@@ -1,8 +1,8 @@
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import { genRandomPassword, tapTaskOption } from '@llm/commons';
+import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
-import { SdkSearchUsersInputV, useSdkForLoggedIn } from '@llm/sdk';
+import { SdkSearchUsersGroupsInputV, useSdkForLoggedIn } from '@llm/sdk';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -15,45 +15,30 @@ import {
 import { useI18n } from '~/i18n';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
-import { useUserCreateModal } from '../form';
-import { UsersTableRow } from './users-table-row';
+import { useUsersGroupCreateModal } from '../form';
+import { UsersGroupTableRow } from './users-groups-table-row';
 
-export function UsersTableContainer() {
+export function UsersGroupsTableContainer() {
   const { pack } = useI18n();
   const t = pack.table.columns;
 
   const { sdks } = useSdkForLoggedIn();
-  const { organization, assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
+  const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
 
   const { loading, pagination, result, reset, reload } = useDebouncedPaginatedSearch({
-    schema: SdkSearchUsersInputV,
+    schema: SdkSearchUsersGroupsInputV,
     fallbackSearchParams: {},
     storeDataInUrl: false,
-    fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.users.search),
+    fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.usersGroups.search),
   });
 
-  const createModal = useUserCreateModal();
+  const createModal = useUsersGroupCreateModal();
   const [onCreate, createState] = useAsyncCallback(
     pipe(
       createModal.showAsOptional({
         defaultValue: {
-          email: '',
-          role: 'user',
-          active: true,
-          archiveProtection: false,
-          organization: {
-            item: organization,
-            role: 'member',
-          },
-          auth: {
-            email: {
-              enabled: true,
-            },
-            password: {
-              enabled: true,
-              value: genRandomPassword(),
-            },
-          },
+          name: '',
+          users: [],
         },
       }),
       tapTaskOption(reset),
@@ -88,17 +73,16 @@ export function UsersTableContainer() {
         result={result}
         columns={[
           { id: 'id', name: t.id, className: 'uk-table-shrink' },
-          { id: 'email', name: t.email, className: 'uk-table-expand' },
-          { id: 'role', name: t.role, className: 'w-[150px]' },
-          { id: 'active', name: t.active, className: 'w-[150px]' },
-          { id: 'auth', name: t.auth, className: 'w-[150px]' },
+          { id: 'name', name: t.email, className: 'uk-table-expand' },
+          { id: 'users', name: pack.usersGroups.table.totalUsers, className: 'uk-table-expand' },
           { id: 'archived', name: t.archived, className: 'w-[150px]' },
           { id: 'updatedAt', name: t.updatedAt, className: 'w-[200px]' },
+          { id: 'createdAt', name: t.updatedAt, className: 'w-[200px]' },
           { id: 'actions', className: 'uk-table-shrink' },
         ]}
       >
         {({ item }) => (
-          <UsersTableRow
+          <UsersGroupTableRow
             key={item.id}
             item={item}
             onUpdated={reload}
