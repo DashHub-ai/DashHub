@@ -22,7 +22,7 @@ export function ProjectsRoute() {
       createModal.showAsOptional({
         defaultValue: {
           name: '',
-          description: '',
+          summary: { content: { generated: true, value: null } },
         },
       }),
       tapTaskOption(forceRerender),

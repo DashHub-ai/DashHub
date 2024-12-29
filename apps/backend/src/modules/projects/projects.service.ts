@@ -66,6 +66,12 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
           internal: true,
           organization: chat.organization,
           name: `Unnamed Project - ${Date.now()}`,
+          summary: {
+            content: {
+              value: '',
+              generated: false,
+            },
+          },
           creator,
         }),
         TE.tap(project => this.chatsService.assignToProject(chat.id, project.id)),
