@@ -5,7 +5,9 @@ import type { SdkUsersGroupT } from '@llm/sdk';
 import { FormField, Input } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-type Value = Pick<SdkUsersGroupT, 'name'>;
+import { GroupUsersSelectTable } from './group-users-select-table';
+
+type Value = Pick<SdkUsersGroupT, 'name' | 'users'>;
 
 type Props = ValidationErrorsListProps<Value>;
 
@@ -14,17 +16,21 @@ export const UsersGroupSharedFormFields = controlled<Value, Props>(({ errors, co
   const validation = useFormValidatorMessages({ errors });
 
   return (
-    <FormField
-      className="uk-margin"
-      label={t.fields.name.label}
-      {...validation.extract('name')}
-    >
-      <Input
-        name="name"
-        placeholder={t.fields.name.placeholder}
-        required
-        {...bind.path('name')}
-      />
-    </FormField>
+    <>
+      <FormField
+        className="uk-margin"
+        label={t.fields.name.label}
+        {...validation.extract('name')}
+      >
+        <Input
+          name="name"
+          placeholder={t.fields.name.placeholder}
+          required
+          {...bind.path('name')}
+        />
+      </FormField>
+
+      <GroupUsersSelectTable {...bind.path('users')} />
+    </>
   );
 });

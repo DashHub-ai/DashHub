@@ -1,5 +1,3 @@
-import type { SdkCreateUsersGroupInputT } from '@llm/sdk';
-
 import {
   CancelButton,
   CreateButton,
@@ -10,13 +8,15 @@ import {
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
+import type { CreateUsersGroupValue } from './types';
+
 import { UsersGroupSharedFormFields } from '../shared';
 import { useUsersGroupCreateForm } from './use-users-group-create-form';
 
 export type UsersGroupCreateFormModalProps =
   & Omit<ModalProps, 'children' | 'header' | 'formProps'>
   & {
-    defaultValue: SdkCreateUsersGroupInputT;
+    defaultValue: CreateUsersGroupValue;
     onAfterSubmit?: VoidFunction;
   };
 

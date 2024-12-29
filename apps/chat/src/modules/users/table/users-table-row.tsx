@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { pipe } from 'fp-ts/lib/function';
 import { KeyRoundIcon, MailIcon } from 'lucide-react';
 
@@ -9,12 +11,13 @@ import { OrganizationUserRoleBadge } from '~/modules/organizations';
 
 import { useUserUpdateModal } from '../form';
 
-type Props = {
+export type UsersTableRowProps = {
   item: SdkSearchUserItemT;
+  ctaButton?: ReactNode;
   onUpdated: VoidFunction;
 };
 
-export function UsersTableRow({ item, onUpdated }: Props) {
+export function UsersTableRow({ item, ctaButton, onUpdated }: UsersTableRowProps) {
   const { pack } = useI18n();
   const t = pack.users;
 
@@ -53,28 +56,30 @@ export function UsersTableRow({ item, onUpdated }: Props) {
       <td><ArchivedBadge archived={item.archived} /></td>
       <td>{formatDate(item.updatedAt)}</td>
       <td>
-        <EllipsisCrudDropdownButton
-          {...!item.archived && {
-            onUpdate: pipe(
-              updateModal.showAsOptional({
-                user: item,
-              }),
-              tapTaskOption(onUpdated),
-            ),
-            ...!item.archiveProtection && {
-              onArchive: pipe(
-                sdks.dashboard.users.archive(item.id),
+        {ctaButton || (
+          <EllipsisCrudDropdownButton
+            {...!item.archived && {
+              onUpdate: pipe(
+                updateModal.showAsOptional({
+                  user: item,
+                }),
+                tapTaskOption(onUpdated),
+              ),
+              ...!item.archiveProtection && {
+                onArchive: pipe(
+                  sdks.dashboard.users.archive(item.id),
+                  tapTaskEither(onUpdated),
+                ),
+              },
+            }}
+            {...item.archived && {
+              onUnarchive: pipe(
+                sdks.dashboard.users.unarchive(item.id),
                 tapTaskEither(onUpdated),
               ),
-            },
-          }}
-          {...item.archived && {
-            onUnarchive: pipe(
-              sdks.dashboard.users.unarchive(item.id),
-              tapTaskEither(onUpdated),
-            ),
-          }}
-        />
+            }}
+          />
+        )}
       </td>
     </tr>
   );

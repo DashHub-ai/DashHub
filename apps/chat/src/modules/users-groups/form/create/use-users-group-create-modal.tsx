@@ -1,7 +1,7 @@
-import type { SdkCreateUsersGroupInputT } from '@llm/sdk';
-
 import { useAnimatedModal } from '@llm/commons-front';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+
+import type { CreateUsersGroupValue } from './types';
 
 import {
   UsersGroupCreateFormModal,
@@ -11,7 +11,7 @@ import {
 type UsersGroupShowModalProps =
   & Pick<UsersGroupCreateFormModalProps, 'onAfterSubmit'>
   & {
-    defaultValue: Omit<SdkCreateUsersGroupInputT, 'organization'>;
+    defaultValue: Omit<CreateUsersGroupValue, 'organization'>;
   };
 
 export function useUsersGroupCreateModal() {

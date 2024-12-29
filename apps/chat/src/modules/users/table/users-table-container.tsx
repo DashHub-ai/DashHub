@@ -2,7 +2,7 @@ import { flow, pipe } from 'fp-ts/lib/function';
 
 import { genRandomPassword, tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
-import { SdkSearchUsersInputV, useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkSearchUserItemT, SdkSearchUsersInputV, useSdkForLoggedIn } from '@llm/sdk';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -16,9 +16,13 @@ import { useI18n } from '~/i18n';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import { useUserCreateModal } from '../form';
-import { UsersTableRow } from './users-table-row';
+import { UsersTableRow, type UsersTableRowProps } from './users-table-row';
 
-export function UsersTableContainer() {
+type Props = {
+  itemPropsFn?: (item: SdkSearchUserItemT) => Omit<UsersTableRowProps, 'item' | 'onUpdated'>;
+};
+
+export function UsersTableContainer({ itemPropsFn }: Props) {
   const { pack } = useI18n();
   const t = pack.table.columns;
 
@@ -102,6 +106,7 @@ export function UsersTableContainer() {
             key={item.id}
             item={item}
             onUpdated={reload}
+            {...itemPropsFn?.(item)}
           />
         )}
       </PaginatedTable>

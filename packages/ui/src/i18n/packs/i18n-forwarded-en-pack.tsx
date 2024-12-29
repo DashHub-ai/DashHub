@@ -45,6 +45,8 @@ export const I18N_FORWARDED_EN_PACK = {
     confirm: 'Confirm',
     resetFilters: 'Reset filters',
     download: 'Download',
+    select: 'Select',
+    selected: 'Selected',
     expand: {
       more: 'More',
       less: 'Less',

@@ -293,8 +293,6 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     chooseAppModal: {
       title: 'Wybierz aplikację',
-      select: 'Wybierz',
-      selected: 'Wybrano',
     },
   },
   appsCreator: {
@@ -445,6 +443,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         email: 'E-Mail',
         password: 'Hasło',
       },
+    },
+    chooseUsersModal: {
+      title: 'Wybierz użytkowników',
     },
   },
   usersGroups: {

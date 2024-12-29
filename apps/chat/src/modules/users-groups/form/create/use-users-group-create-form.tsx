@@ -2,12 +2,14 @@ import { type FormHookAttrs, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
-import { type SdkCreateUsersGroupInputT, useSdkForLoggedIn } from '@llm/sdk';
+import { useSdkForLoggedIn } from '@llm/sdk';
 import { usePredefinedFormValidators, useSaveTaskEitherNotification } from '@llm/ui';
+
+import type { CreateUsersGroupValue } from './types';
 
 type CreateUsersGroupFormHookAttrs =
   & Omit<
-    FormHookAttrs<SdkCreateUsersGroupInputT>,
+    FormHookAttrs<CreateUsersGroupValue>,
     'validation' | 'onSubmit'
   >
   & {
@@ -21,7 +23,7 @@ export function useUsersGroupCreateForm(
   }: CreateUsersGroupFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { required, requiredListItem } = usePredefinedFormValidators<SdkCreateUsersGroupInputT>();
+  const { required, requiredListItem } = usePredefinedFormValidators<CreateUsersGroupValue>();
   const saveNotifications = useSaveTaskEitherNotification();
 
   return useForm({

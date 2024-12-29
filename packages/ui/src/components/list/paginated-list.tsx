@@ -17,7 +17,7 @@ export type PaginatedListProps<
   I extends SdkTableRowWithIdT | SdkTableRowWithUuidT,
   P extends SdkOffsetPaginationInputT,
 > = {
-  loading: boolean;
+  loading?: boolean;
   withEmptyPlaceholder?: boolean;
   result?: SdkOffsetPaginationOutputT<I> | null;
   pagination: ControlledControlStateAttrs<P>;

@@ -291,8 +291,6 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     chooseAppModal: {
       title: 'Choose App',
-      select: 'Select',
-      selected: 'Selected',
     },
   },
   appsCreator: {
@@ -443,6 +441,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         password: 'Password',
         email: 'Email',
       },
+    },
+    chooseUsersModal: {
+      title: 'Choose users',
     },
   },
   usersGroups: {
