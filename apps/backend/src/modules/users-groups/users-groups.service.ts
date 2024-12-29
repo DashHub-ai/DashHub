@@ -74,20 +74,12 @@ export class UsersGroupsService implements WithAuthFirewall<UsersGroupsFirewall>
     );
 
   create = (
-    {
-      creator,
-      organization,
-      ...values
-    }: SdkCreateUsersGroupInputT & {
+    value: SdkCreateUsersGroupInputT & {
       creator: TableRowWithId;
     },
   ) => pipe(
     this.repo.create({
-      value: {
-        ...values,
-        creatorUserId: creator.id,
-        organizationId: organization.id,
-      },
+      value,
     }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );

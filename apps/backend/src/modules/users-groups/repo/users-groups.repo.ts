@@ -2,31 +2,46 @@ import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { jsonBuildObject } from 'kysely/helpers/postgres';
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
+
+import type { SdkCreateUsersGroupInputT, SdkUpdateUsersGroupInputT } from '@llm/sdk';
 
 import type { UsersGroupTableRowWithRelations } from '../users-groups.tables';
 
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
-  createDatabaseRepo,
+  createProtectedDatabaseRepo,
   createUnarchiveRecordQuery,
   createUnarchiveRecordsQuery,
+  DatabaseConnectionRepo,
   DatabaseError,
   type TableId,
+  type TableRowWithId,
   type TransactionalAttrs,
+  tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
 } from '../../database';
+import { UsersGroupsUsersRepo } from './users-groups-users.repo';
 
 @injectable()
-export class UsersGroupsRepo extends createDatabaseRepo('users_groups') {
-  archive = createArchiveRecordQuery(this.queryFactoryAttrs);
+export class UsersGroupsRepo extends createProtectedDatabaseRepo('users_groups') {
+  constructor(
+    @inject(DatabaseConnectionRepo) connectionRepo: DatabaseConnectionRepo,
+    @inject(UsersGroupsUsersRepo) private readonly usersGroupsUsersRepo: UsersGroupsUsersRepo,
+  ) {
+    super(connectionRepo);
+  }
 
-  archiveRecords = createArchiveRecordsQuery(this.queryFactoryAttrs);
+  createIdsIterator = this.baseRepo.createIdsIterator;
 
-  unarchive = createUnarchiveRecordQuery(this.queryFactoryAttrs);
+  archive = createArchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
 
-  unarchiveRecords = createUnarchiveRecordsQuery(this.queryFactoryAttrs);
+  archiveRecords = createArchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
+
+  unarchive = createUnarchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
+
+  unarchiveRecords = createUnarchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
@@ -92,5 +107,74 @@ export class UsersGroupsRepo extends createDatabaseRepo('users_groups') {
         })),
       ),
     );
+  };
+
+  create = (
+    {
+      forwardTransaction,
+      value: {
+        users,
+        creator,
+        organization,
+        ...attrs
+      },
+    }: TransactionalAttrs<{
+      value: SdkCreateUsersGroupInputT & {
+        creator: TableRowWithId;
+      };
+    }>,
+  ) => {
+    const transaction = tryReuseOrCreateTransaction({
+      db: this.db,
+      forwardTransaction,
+    });
+
+    return transaction(trx => pipe(
+      this.baseRepo.create({
+        value: {
+          ...attrs,
+          creatorUserId: creator.id,
+          organizationId: organization.id,
+        },
+        forwardTransaction: trx,
+      }),
+      TE.tap(group => this.usersGroupsUsersRepo.updateGroupUsers({
+        forwardTransaction: trx,
+        group,
+        users,
+      })),
+    ));
+  };
+
+  update = (
+    {
+      forwardTransaction,
+      id,
+      value: {
+        users,
+        ...attrs
+      },
+    }: TransactionalAttrs<{
+      id: TableId;
+      value: SdkUpdateUsersGroupInputT;
+    }>,
+  ) => {
+    const transaction = tryReuseOrCreateTransaction({
+      db: this.db,
+      forwardTransaction,
+    });
+
+    return transaction(trx => pipe(
+      this.baseRepo.update({
+        id,
+        value: attrs,
+        forwardTransaction: trx,
+      }),
+      TE.tap(group => this.usersGroupsUsersRepo.updateGroupUsers({
+        forwardTransaction: trx,
+        group,
+        users,
+      })),
+    ));
   };
 }
