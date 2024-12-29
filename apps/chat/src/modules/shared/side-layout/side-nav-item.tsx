@@ -17,7 +17,7 @@ export function SideNavItem({ icon, isActive: isActiveProp, onClick, href, child
   const className = clsx(
     'flex items-center gap-3 px-3 py-2 rounded-md w-full text-sm transition-colors',
     isActive
-      ? 'bg-primary text-white'
+      ? 'bg-primary/5 text-primary font-semibold'
       : 'text-muted-foreground hover:bg-gray-100',
   );
 
