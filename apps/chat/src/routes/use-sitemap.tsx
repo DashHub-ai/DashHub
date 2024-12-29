@@ -36,6 +36,6 @@ export function useSitemap() {
   return sitemap;
 };
 
-function prefixWithBaseRoute(path: string) {
-  return concatUrls(import.meta.env.BASE_URL ?? '/', path);
+export function prefixWithBaseRoute(path?: string) {
+  return concatUrls(import.meta.env.BASE_URL ?? '/', path ?? '');
 }

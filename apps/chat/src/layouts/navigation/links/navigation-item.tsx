@@ -3,6 +3,8 @@ import type { PropsWithChildren, ReactNode } from 'react';
 import clsx from 'clsx';
 import { Link, useLocation } from 'wouter';
 
+import { prefixWithBaseRoute } from '~/routes/use-sitemap';
+
 export type NavigationItemProps = PropsWithChildren & {
   path: string;
   icon: ReactNode;
@@ -12,9 +14,9 @@ export type NavigationItemProps = PropsWithChildren & {
 export function NavigationItem({ path, icon, children, disabled }: NavigationItemProps) {
   const [location] = useLocation();
   const isActive = (
-    path !== '/'
-      ? location.startsWith(path)
-      : location === path
+    path === prefixWithBaseRoute('/')
+      ? location === path
+      : location.startsWith(path)
   );
 
   return (
