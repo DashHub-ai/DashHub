@@ -48,8 +48,11 @@ export function tryReadEnvOrPanic() {
     JWT_SECRET,
     JWT_EXPIRES_IN,
 
-    // Chats summaries
+    // Chats
     CHATS_SUMMARIES_CRON,
+
+    // Projects
+    PROJECTS_SUMMARIES_CRON,
   } = {
     ...envFile.parsed,
     ...process.env,
@@ -89,6 +92,9 @@ export function tryReadEnvOrPanic() {
     },
     chatsSummaries: {
       cron: CHATS_SUMMARIES_CRON,
+    },
+    projectsSummaries: {
+      cron: PROJECTS_SUMMARIES_CRON,
     },
     users: {
       root: {

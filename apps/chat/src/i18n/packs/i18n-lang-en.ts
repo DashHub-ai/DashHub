@@ -375,6 +375,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         description: {
           label: 'Description',
           placeholder: 'Enter project description',
+          generated: 'Auto-generate',
         },
         organization: {
           label: 'Organization',

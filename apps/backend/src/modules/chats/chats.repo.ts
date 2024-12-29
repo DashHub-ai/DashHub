@@ -137,11 +137,9 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               'users.email as creator_email',
 
               'chat_summaries.id as summary_id',
-
               'chat_summaries.content as summary_content',
               'chat_summaries.content_generated as summary_content_generated',
               'chat_summaries.content_generated_at as summary_content_generated_at',
-
               'chat_summaries.name as summary_name',
               'chat_summaries.name_generated as summary_name_generated',
               'chat_summaries.name_generated_at as summary_name_generated_at',

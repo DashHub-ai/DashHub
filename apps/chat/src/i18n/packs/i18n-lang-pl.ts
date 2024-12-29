@@ -377,6 +377,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: {
           label: 'Opis',
           placeholder: 'Wpisz opis projektu',
+          generated: 'Automatycznie generuj',
         },
         organization: {
           label: 'Wybierz organizację',

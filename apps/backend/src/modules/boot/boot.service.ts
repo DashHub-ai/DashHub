@@ -13,6 +13,7 @@ import {
   ElasticsearchRegistryBootService,
 } from '../elasticsearch/boot';
 import { LoggerService } from '../logger';
+import { ProjectSummariesCronJob } from '../projects-summaries';
 import { UsersBootService } from '../users';
 
 @injectable()
@@ -32,6 +33,7 @@ export class BootService {
     // Cron jobs
     @inject(ElasticsearchAutoReindexJob) private readonly elasticsearchReindexJob: ElasticsearchAutoReindexJob,
     @inject(ChatSummariesCronJob) private readonly chatSummariesCronJob: ChatSummariesCronJob,
+    @inject(ProjectSummariesCronJob) private readonly projectSummariesCronJob: ProjectSummariesCronJob,
   ) {}
 
   /**
@@ -70,6 +72,7 @@ export class BootService {
   private registerCronJobs = () => {
     this.elasticsearchReindexJob.registerCronJob();
     this.chatSummariesCronJob.registerCronJob();
+    this.projectSummariesCronJob.registerCronJob();
 
     this.logger.info('Registered cron jobs!');
   };

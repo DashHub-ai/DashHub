@@ -1,16 +1,22 @@
 import { z } from 'zod';
 
-import { NonEmptyOrNullStringV } from '@llm/commons';
 import {
+  SdkAIGeneratedStringV,
   SdkIdNameUrlEntryV,
   SdkTableRowWithArchivedV,
   SdkTableRowWithDatesV,
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
+export const SdkProjectSummaryV = z.strictObject({
+  content: SdkAIGeneratedStringV,
+});
+
+export type SdkProjectSummaryT = z.infer<typeof SdkProjectSummaryV>;
+
 export const SdkProjectV = z.object({
   organization: SdkIdNameUrlEntryV,
-  description: NonEmptyOrNullStringV,
+  summary: SdkProjectSummaryV,
 })
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)
