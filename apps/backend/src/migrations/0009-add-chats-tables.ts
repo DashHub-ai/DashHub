@@ -1,7 +1,11 @@
 import { type Kysely, sql } from 'kysely';
 
-import { addArchivedAtColumns, addIdColumn, addTimestampColumns } from './utils';
-import { addUuidColumn } from './utils/add-uuid';
+import {
+  addArchivedAtColumns,
+  addIdColumn,
+  addTimestampColumns,
+  addUuidColumn,
+} from './utils';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
