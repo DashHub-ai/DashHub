@@ -90,9 +90,12 @@ export class ProjectsSummariesService {
         }),
         message: [
           'Create a concise project description based on the conversations and topics discussed in this project.',
-          'Focus on what this project is about, its main goals, and key technical aspects.',
-          'Use the same language as that one used in the conversations.',
-          'Max. 2 short sentences, keep it short. You can use emojis.',
+          'Requirements:',
+          '- Focus on what this project is about, its main goals, and key technical aspects.',
+          '- Use the same language as that one used in the conversations.',
+          '- Max. 2 short sentences, keep it as short as possible.',
+          '- You can use emojis.',
+          '- Do not include requirements in generated description.',
           '\n--\n',
           'Project conversations:',
           ...chatsSummaries.flatMap(({ content, name }) => {
