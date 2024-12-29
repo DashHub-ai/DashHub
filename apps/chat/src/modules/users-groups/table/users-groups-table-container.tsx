@@ -51,7 +51,11 @@ export function UsersGroupsTableContainer() {
         suffix={(
           <>
             <ArchiveFilterTabs {...pagination.bind.path('archived')} />
-            <CreateButton loading={createState.isLoading} onClick={onCreate} />
+            <CreateButton
+              className="uk-button-small"
+              loading={createState.isLoading}
+              onClick={onCreate}
+            />
           </>
         )}
       >
