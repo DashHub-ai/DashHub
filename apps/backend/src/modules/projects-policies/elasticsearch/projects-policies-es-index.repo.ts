@@ -23,6 +23,7 @@ const ProjectsPoliciesAbstractEsIndexRepo = createElasticsearchIndexRepo({
       dynamic: false,
       properties: {
         ...createBaseDatedRecordMappings(),
+        access_level: { type: 'keyword' },
         project: createIdObjectMapping(),
         user: createIdObjectMapping(),
         group: createIdObjectMapping({

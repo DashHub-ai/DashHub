@@ -40,6 +40,7 @@ export class ProjectsPoliciesEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       project: source.project,
+      accessLevel: source.access_level,
       user: null,
       group: null,
     };

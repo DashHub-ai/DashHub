@@ -7,10 +7,12 @@ import {
 } from '~/shared';
 
 import { SdkUserListItemV } from '../../users/dto';
+import { SdkProjectAccessLevelV } from './sdk-project-access-level.dto';
 
 export const SdkProjectPolicyV = z
   .object({
     project: SdkTableRowWithIdNameV,
+    accessLevel: SdkProjectAccessLevelV,
   })
   .merge(SdkTableRowWithIdV)
   .merge(SdkTableRowWithDatesV)
