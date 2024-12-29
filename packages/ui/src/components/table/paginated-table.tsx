@@ -14,23 +14,27 @@ type Props<
   P extends SdkOffsetPaginationInputT,
 > =
   & Omit<TableProps<I>, 'items'>
-  & Omit<PaginatedListProps<I, P>, 'children'>;
+  & Omit<PaginatedListProps<I, P>, 'children'>
+  & {
+    spaced?: boolean;
+  };
 
 export function PaginatedTable<
   I extends SdkTableRowWithIdT | SdkTableRowWithUuidT,
   P extends SdkOffsetPaginationInputT,
->({ result, loading, pagination, className, ...props }: Props<I, P>) {
+>({ result, loading = false, pagination, className, footerProps, spaced = true, ...props }: Props<I, P>) {
   return (
     <PaginatedList
       result={result}
       loading={loading}
       pagination={pagination}
       withEmptyPlaceholder={false}
+      footerProps={footerProps}
     >
       {({ items }) => (
         <Table
           items={items}
-          className={clsx(className, 'mt-6')}
+          className={clsx(className, spaced && 'mt-6')}
           {...props}
         />
       )}

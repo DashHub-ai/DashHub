@@ -13,7 +13,7 @@ import {
 import type {
   SdkCreateUserInputT,
   SdkCreateUserOutputT,
-  SdKSearchUsersInputT,
+  SdkSearchUsersInputT,
   SdKSearchUsersOutputT,
   SdkUpdateUserInputT,
   SdkUpdateUserOutputT,
@@ -40,7 +40,7 @@ export class UsersSdk extends AbstractNestedSdkWithAuth {
       options: patchPayload({}),
     });
 
-  search = (data: SdKSearchUsersInputT) =>
+  search = (data: SdkSearchUsersInputT) =>
     this.fetch<SdKSearchUsersOutputT>({
       url: this.endpoint('/search'),
       query: data,

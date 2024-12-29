@@ -7,8 +7,8 @@ import { useMemo } from 'react';
 
 import type { SdkUpdateUserAuthMethodsT } from '@llm/sdk';
 
+import { genRandomPassword } from '@llm/commons';
 import { Checkbox, FormField, Input } from '@llm/ui';
-import { genRandomPassword } from '~/helpers';
 import { useI18n } from '~/i18n';
 
 type Props = ValidationErrorsListProps<SdkUpdateUserAuthMethodsT>;

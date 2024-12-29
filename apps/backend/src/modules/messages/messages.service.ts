@@ -79,7 +79,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         }
 
         return pipe(
-          this.projectsService.ensureChatHasProjectOrCreateInternal(chat.id),
+          this.projectsService.ensureChatHasProjectOrCreateInternal({ creator, chat }),
           TE.chainW(project => pipe(
             files,
             TE.traverseArray(file => this.projectsFilesService.uploadFile({

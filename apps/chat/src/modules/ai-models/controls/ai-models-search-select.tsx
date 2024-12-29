@@ -22,15 +22,12 @@ const AIModelsSearchAbstractSelect = createSdkAutocomplete<
 });
 
 export function AIModelsSearchSelect({ filters, ...props }: ComponentProps<typeof AIModelsSearchAbstractSelect>) {
-  const { organization } = useWorkspaceOrganization();
+  const { assignWorkspaceToFilters } = useWorkspaceOrganization();
 
   return (
     <AIModelsSearchAbstractSelect
       {...props}
-      filters={{
-        ...filters,
-        organizationIds: [organization!.id],
-      } as SdKSearchAIModelsInputT}
+      filters={assignWorkspaceToFilters(filters as SdKSearchAIModelsInputT)}
     />
   );
 }

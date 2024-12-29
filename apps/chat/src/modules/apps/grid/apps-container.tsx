@@ -1,6 +1,7 @@
 import type { ControlHookResult } from '@under-control/forms';
 
 import { clsx } from 'clsx';
+import { flow } from 'fp-ts/lib/function';
 import { type ReactNode, useMemo } from 'react';
 
 import { useLastNonNullValue, useUpdateEffect } from '@llm/commons-front';
@@ -33,7 +34,7 @@ type Props = {
 
 export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
   const favorites = useFavoriteApps();
-  const { organization } = useWorkspaceOrganizationOrThrow();
+  const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
@@ -46,10 +47,7 @@ export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
         ids: [...favorites.ids],
       },
     },
-    fetchResultsTask: filters => sdks.dashboard.apps.search({
-      ...filters,
-      organizationIds: [organization.id],
-    }),
+    fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.apps.search),
   });
 
   const categoriesTree = useLastNonNullValue(result?.aggs?.categories);

@@ -1,16 +1,24 @@
 import deepmerge from 'deepmerge';
 
+import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+
 import { I18N_FORWARDED_PL_PACK } from '@llm/ui';
 
 import type { I18nLangPack } from './i18n-packs';
 
+const I18N_USER_ORGANIZATION_ROLES_PL: Record<SdkOrganizationUserRoleT, string> = {
+  owner: 'Właściciel',
+  member: 'Pracownik',
+};
+
 export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   navigation: {
     links: {
-      home: 'Strona główna',
+      home: 'Czaty',
       projects: 'Projekty',
-      apps: 'Aplikacje',
+      apps: 'Appki',
       experts: 'Eksperci',
+      management: 'Administracja',
     },
     loggedIn: {
       logout: 'Wyloguj się',
@@ -33,17 +41,18 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   table: {
     columns: {
       id: 'ID',
-      name: 'Name',
-      description: 'Description',
+      name: 'Nazwa',
+      description: 'Opis',
       email: 'E-Mail',
-      archived: 'Archived',
-      active: 'Active',
-      auth: 'Authentication',
-      organization: 'Organization',
-      parentCategory: 'Parent category',
-      createdAt: 'Created at',
-      updatedAt: 'Updated at',
-      actions: 'Actions',
+      archived: 'Zarchiwizowane',
+      active: 'Aktywne',
+      auth: 'Uwierzytelnianie',
+      organization: 'Organizacja',
+      parentCategory: 'Kategoria nadrzędna',
+      createdAt: 'Data utworzenia',
+      updatedAt: 'Data aktualizacji',
+      actions: 'Akcje',
+      role: 'Rola',
     },
   },
   routes: {
@@ -180,6 +189,21 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         rootOnly: 'Ten krok jest wymagany tylko dla użytkowników root - zwykli użytkownicy są automatycznie przypisani do swojej organizacji',
       },
     },
+    management: {
+      meta: {
+        title: 'Administracja',
+        description: 'Zarządzaj ustawieniami organizacji',
+      },
+      title: 'Administracja',
+      pages: {
+        users: {
+          title: 'Użytkownicy',
+        },
+        usersGroups: {
+          title: 'Grupy użytkowników',
+        },
+      },
+    },
   },
   workspace: {
     selectOrganization: 'Wybierz organizację',
@@ -269,8 +293,6 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     chooseAppModal: {
       title: 'Wybierz aplikację',
-      select: 'Wybierz',
-      selected: 'Wybrano',
     },
   },
   appsCreator: {
@@ -373,6 +395,77 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     favorites: {
       add: 'Dodaj do ulubionych',
       remove: 'Usuń z ulubionych',
+    },
+  },
+  organizations: {
+    userRoles: I18N_USER_ORGANIZATION_ROLES_PL,
+  },
+  users: {
+    form: {
+      title: {
+        create: 'Utwórz użytkownika',
+        edit: 'Edytuj użytkownika',
+      },
+      fields: {
+        email: {
+          label: 'E-Mail',
+          placeholder: 'Wprowadź adres e-mail',
+        },
+        flags: {
+          label: 'Flagi',
+        },
+        active: {
+          label: 'Aktywny',
+        },
+        organization: {
+          role: {
+            label: 'Rola w organizacji',
+          },
+        },
+        auth: {
+          label: 'Uwierzytelnianie',
+          email: {
+            label: 'Email',
+            placeholder: 'Wprowadź adres email',
+          },
+          password: {
+            label: 'Hasło',
+            placeholder: 'Wprowadź hasło',
+          },
+          resetPassword: {
+            label: 'Zresetuj hasło',
+          },
+        },
+      },
+    },
+    row: {
+      authMethod: {
+        email: 'E-Mail',
+        password: 'Hasło',
+      },
+    },
+    chooseUsersModal: {
+      title: 'Wybierz użytkowników',
+    },
+  },
+  usersGroups: {
+    form: {
+      title: {
+        create: 'Utwórz grupę użytkowników',
+        edit: 'Edytuj grupę użytkowników',
+      },
+      fields: {
+        name: {
+          label: 'Nazwa',
+          placeholder: 'Wprowadź nazwę grupy',
+        },
+        users: {
+          label: 'Użytkownicy',
+        },
+      },
+    },
+    table: {
+      totalUsers: 'Użytkowników',
     },
   },
   footer: {

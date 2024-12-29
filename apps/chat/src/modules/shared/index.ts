@@ -1,4 +1,3 @@
-export * from './card';
 export * from './fake-lazy-dynamic-icons';
 export * from './get-file-type-and-color';
 export * from './ghost-placeholder';

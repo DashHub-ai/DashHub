@@ -3,7 +3,7 @@ import { useForwardedI18n } from '~/i18n';
 
 type Props = Omit<FormSpinnerCTAProps, 'children'>;
 
-export function DeleteButton({ className, ...props }: Props) {
+export function DeleteButton(props: Props) {
   const { pack } = useForwardedI18n();
 
   return (

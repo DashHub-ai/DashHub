@@ -1,14 +1,22 @@
 import deepmerge from 'deepmerge';
 
+import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+
 import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
+
+const I18N_USER_ORGANIZATION_ROLES_EN: Record<SdkOrganizationUserRoleT, string> = {
+  owner: 'Owner',
+  member: 'Member',
+};
 
 export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   navigation: {
     links: {
-      home: 'Home',
+      home: 'Chats',
       projects: 'Projects',
       apps: 'Apps',
       experts: 'Experts',
+      management: 'Management',
     },
     loggedIn: {
       logout: 'Logout',
@@ -42,6 +50,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       createdAt: 'Created at',
       updatedAt: 'Updated at',
       actions: 'Actions',
+      role: 'Role',
     },
   },
   routes: {
@@ -178,6 +187,21 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         rootOnly: 'This step is only required for root users - regular users are automatically assigned to their organization',
       },
     },
+    management: {
+      meta: {
+        title: 'Management',
+        description: 'Management',
+      },
+      title: 'Management',
+      pages: {
+        users: {
+          title: 'Users',
+        },
+        usersGroups: {
+          title: 'Users Groups',
+        },
+      },
+    },
   },
   workspace: {
     selectOrganization: 'Select organization',
@@ -267,8 +291,6 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     chooseAppModal: {
       title: 'Choose App',
-      select: 'Select',
-      selected: 'Selected',
     },
   },
   appsCreator: {
@@ -371,6 +393,77 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     favorites: {
       add: 'Add to favorites',
       remove: 'Remove from favorites',
+    },
+  },
+  organizations: {
+    userRoles: I18N_USER_ORGANIZATION_ROLES_EN,
+  },
+  users: {
+    form: {
+      title: {
+        create: 'Create user',
+        edit: 'Edit user',
+      },
+      fields: {
+        email: {
+          label: 'E-Mail',
+          placeholder: 'Enter e-mail address',
+        },
+        flags: {
+          label: 'Flags',
+        },
+        active: {
+          label: 'Active',
+        },
+        organization: {
+          role: {
+            label: 'Role in organization',
+          },
+        },
+        auth: {
+          label: 'Authentication',
+          email: {
+            label: 'Email',
+            placeholder: 'Enter email address',
+          },
+          password: {
+            label: 'Password',
+            placeholder: 'Enter password',
+          },
+          resetPassword: {
+            label: 'Reset password',
+          },
+        },
+      },
+    },
+    row: {
+      authMethod: {
+        password: 'Password',
+        email: 'Email',
+      },
+    },
+    chooseUsersModal: {
+      title: 'Choose users',
+    },
+  },
+  usersGroups: {
+    form: {
+      title: {
+        create: 'Create users group',
+        edit: 'Edit users group',
+      },
+      fields: {
+        name: {
+          label: 'Name',
+          placeholder: 'Enter users group name',
+        },
+        users: {
+          label: 'Users',
+        },
+      },
+    },
+    table: {
+      totalUsers: 'Total users',
     },
   },
   footer: {

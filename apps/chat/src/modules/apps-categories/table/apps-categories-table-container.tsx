@@ -1,4 +1,4 @@
-import { pipe } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 
 import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
@@ -24,7 +24,7 @@ import { AppsCategoriesTableRow } from './apps-categories-table-row';
 
 export function AppsCategoriesTableContainer() {
   const { pack } = useI18n();
-  const { organization } = useWorkspaceOrganizationOrThrow();
+  const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
 
   const t = pack.table.columns;
 
@@ -33,10 +33,7 @@ export function AppsCategoriesTableContainer() {
     storeDataInUrl: false,
     schema: SdKSearchAppsInputV,
     fallbackSearchParams: {},
-    fetchResultsTask: filters => sdks.dashboard.appsCategories.search({
-      ...filters,
-      organizationIds: [organization.id],
-    }),
+    fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.appsCategories.search),
   });
 
   const createModal = useAppCategoryCreateModal();

@@ -24,6 +24,8 @@ import * as addIdToProjectFilesTable from './0022-add-id-to-project-files-table'
 import * as addProjectsEmbeddingsTable from './0023-add-projects-embeddings-table';
 import * as dropUnusedImagesTable from './0024-drop-unused-images-table';
 import * as addInternalProjectsFields from './0025-add-internal-projects-fields';
+import * as addUsersGroupTable from './0026-add-users-groups-table';
+import * as addProjectsPoliciesTable from './0027-add-projects-policies';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -52,4 +54,6 @@ export const DB_MIGRATIONS = {
   '0023-add-projects-embeddings-table': addProjectsEmbeddingsTable,
   '0024-drop-unused-images-table': dropUnusedImagesTable,
   '0025-add-internal-projects-fields': addInternalProjectsFields,
+  '0026-add-users-groups-table': addUsersGroupTable,
+  '0027-add-projects-policies': addProjectsPoliciesTable,
 };

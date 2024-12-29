@@ -11,7 +11,11 @@ export type NavigationItemProps = PropsWithChildren & {
 
 export function NavigationItem({ path, icon, children, disabled }: NavigationItemProps) {
   const [location] = useLocation();
-  const isActive = location === path;
+  const isActive = (
+    path !== '/'
+      ? location.startsWith(path)
+      : location === path
+  );
 
   return (
     <li>

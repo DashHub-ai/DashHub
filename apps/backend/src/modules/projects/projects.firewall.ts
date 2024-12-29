@@ -1,6 +1,6 @@
-import { flow } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type { SdkCreateProjectInputT, SdkJwtTokenT } from '@llm/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
@@ -34,8 +34,11 @@ export class ProjectsFirewall extends AuthFirewallService {
     this.tryTEIfUser.is.root,
   );
 
-  create = flow(
-    this.projectsService.create,
+  create = (dto: SdkCreateProjectInputT) => pipe(
+    this.projectsService.create({
+      ...dto,
+      creator: this.userIdRow,
+    }),
     this.tryTEIfUser.is.root,
   );
 

@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import { flow } from 'fp-ts/lib/function';
+
 import {
   SdKSearchProjectsInputV,
   useSdkForLoggedIn,
@@ -22,7 +24,7 @@ type Props = {
 };
 
 export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
-  const { organization } = useWorkspaceOrganizationOrThrow();
+  const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
@@ -31,10 +33,7 @@ export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
     fallbackSearchParams: {
       limit: 12,
     },
-    fetchResultsTask: filters => sdks.dashboard.projects.search({
-      ...filters,
-      organizationIds: [organization.id],
-    }),
+    fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.projects.search),
   });
 
   return (

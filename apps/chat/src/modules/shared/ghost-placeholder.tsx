@@ -1,10 +1,22 @@
 import type { PropsWithChildren } from 'react';
 
+import clsx from 'clsx';
 import { GhostIcon } from 'lucide-react';
 
-export function GhostPlaceholder({ children }: PropsWithChildren) {
+type Props = PropsWithChildren & {
+  spaced?: boolean;
+  className?: string;
+};
+
+export function GhostPlaceholder({ children, className, spaced = true }: Props) {
   return (
-    <div className="flex flex-col justify-center items-center p-12 text-gray-300">
+    <div
+      className={clsx(
+        'flex flex-col justify-center items-center text-gray-300',
+        spaced && 'p-12',
+        className,
+      )}
+    >
       <div className="mb-4">
         <GhostIcon size={48} />
       </div>

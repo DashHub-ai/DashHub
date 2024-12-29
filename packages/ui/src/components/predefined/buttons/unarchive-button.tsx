@@ -3,7 +3,7 @@ import { useForwardedI18n } from '~/i18n';
 
 type Props = Omit<FormSpinnerCTAProps, 'children'>;
 
-export function UnarchiveButton({ className, ...props }: Props) {
+export function UnarchiveButton(props: Props) {
   const { pack } = useForwardedI18n();
 
   return (

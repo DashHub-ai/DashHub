@@ -8,6 +8,7 @@ import { ChatsController } from './chats.controller';
 import { OrganizationsController } from './organizations.controller';
 import { ProjectsController } from './projects.controller';
 import { S3BucketsController } from './s3-buckets.controller';
+import { UsersGroupsController } from './users-groups.controller';
 import { UsersController } from './users.controller';
 
 @injectable()
@@ -15,6 +16,7 @@ export class DashboardController extends BaseController {
   constructor(
     @inject(OrganizationsController) organizations: OrganizationsController,
     @inject(UsersController) users: UsersController,
+    @inject(UsersGroupsController) usersGroups: UsersGroupsController,
     @inject(ProjectsController) projects: ProjectsController,
     @inject(AppsController) apps: AppsController,
     @inject(AppsCategoriesController) appsCategories: AppsCategoriesController,
@@ -26,6 +28,7 @@ export class DashboardController extends BaseController {
 
     this.router
       .route('/organizations', organizations.router)
+      .route('/users/groups', usersGroups.router)
       .route('/users', users.router)
       .route('/projects', projects.router)
       .route('/apps/categories', appsCategories.router)

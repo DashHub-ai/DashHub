@@ -7,6 +7,7 @@ export * from './find-item-by-id';
 export * from './find-item-index-by-id';
 export * from './format';
 export * from './gen-random-between-inclusive';
+export * from './gen-random-password';
 export * from './get-first-obj-key-value';
 export * from './invert';
 export * from './is-nil';

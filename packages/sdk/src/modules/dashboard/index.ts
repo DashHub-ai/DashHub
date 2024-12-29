@@ -9,6 +9,8 @@ export * from './organizations';
 export * from './projects';
 export * from './projects-embeddings';
 export * from './projects-files';
+export * from './projects-policies';
 export * from './s3-buckets';
 export * from './s3-files';
 export * from './users';
+export * from './users-groups';

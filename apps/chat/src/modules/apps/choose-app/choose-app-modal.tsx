@@ -1,7 +1,9 @@
+import { suppressEvent } from '@under-control/forms';
+
 import type { SdkAppT, SdkTableRowWithIdT } from '@llm/sdk';
 
 import { findItemById } from '@llm/commons';
-import { Modal, type ModalProps, ModalTitle } from '@llm/ui';
+import { Modal, type ModalProps, ModalTitle, SelectRecordButton } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 import { AppsContainer } from '../grid';
@@ -22,31 +24,18 @@ export function ChooseAppModal({
   const t = useI18n().pack.apps.chooseAppModal;
 
   const renderAppCTA = (app: SdkAppT) => {
-    if (findItemById(app.id)(selectedApps || [])) {
-      return (
-        <a
-          href=""
-          className="opacity-50 pointer-events-none uk-button uk-button-secondary uk-button-small uk-disabled"
-          onClick={(e) => {
-            e.preventDefault();
-          }}
-        >
-          {t.selected}
-        </a>
-      );
-    }
+    const installed = !!findItemById(app.id)(selectedApps || []);
 
     return (
-      <a
-        href=""
-        className="uk-button uk-button-secondary uk-button-small"
+      <SelectRecordButton
+        className="uk-button-small"
+        disabled={installed}
+        selected={installed}
         onClick={(e) => {
-          e.preventDefault();
+          suppressEvent(e);
           onSelect?.(app);
         }}
-      >
-        {t.select}
-      </a>
+      />
     );
   };
 

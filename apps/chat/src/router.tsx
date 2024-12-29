@@ -10,9 +10,12 @@ import {
   ForceRedirectRoute,
   HomeRoute,
   LoginRoute,
+  ManagementRoute,
   ProjectRoute,
   ProjectsRoute,
   SettingsRoute,
+  UsersGroupsManagementRoute,
+  UsersManagementRoute,
   useSitemap,
 } from '~/routes';
 
@@ -64,6 +67,9 @@ function LoggedInRouter() {
       <Route path={sitemap.apps.index} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
       <Route path={sitemap.settings} component={SettingsRoute} />
+      <Route path={sitemap.management.users} component={UsersManagementRoute} />
+      <Route path={sitemap.management.usersGroups} component={UsersGroupsManagementRoute} />
+      <Route path={sitemap.management.index} component={ManagementRoute} />
       <Route path={sitemap.forceRedirect.raw} component={ForceRedirectRoute} />
 
       <Route<SdkTableRowWithUuidT> path={sitemap.chat.raw}>

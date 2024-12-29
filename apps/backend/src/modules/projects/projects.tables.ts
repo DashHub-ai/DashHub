@@ -13,6 +13,7 @@ export type ProjectsTable =
   & TableWithArchivedAtColumn
   & {
     organization_id: ColumnType<TableId, TableId, never>;
+    creator_user_id: ColumnType<TableId, TableId, never>;
     name: string;
     description: string | null;
     internal: boolean;

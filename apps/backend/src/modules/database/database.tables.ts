@@ -23,11 +23,13 @@ import type {
 } from '../projects';
 import type { ProjectsEmbeddingsTable } from '../projects-embeddings';
 import type { ProjectsFilesTable } from '../projects-files';
+import type { ProjectsPoliciesTable } from '../projects-policies';
 import type {
   S3ResourcesBucketsTable,
   S3ResourcesTable,
 } from '../s3';
 import type { UsersTable } from '../users';
+import type { UsersGroupsTable, UsersGroupsUsersTable } from '../users-groups';
 import type {
   TableWithArchivedAtColumn,
   TableWithIdColumn,
@@ -41,6 +43,8 @@ export type DatabaseTables = {
 
   // Users
   users: UsersTable;
+  users_groups: UsersGroupsTable;
+  users_groups_users: UsersGroupsUsersTable;
 
   // Auth
   auth_emails: AuthEmailsTable;
@@ -56,6 +60,7 @@ export type DatabaseTables = {
   projects: ProjectsTable;
   projects_files: ProjectsFilesTable;
   projects_embeddings: ProjectsEmbeddingsTable;
+  projects_policies: ProjectsPoliciesTable;
 
   // Apps
   apps: AppsTable;

@@ -21,15 +21,12 @@ export const ProjectsAbstractSearchSelect = createSdkAutocomplete<
 });
 
 export function ProjectsSearchSelect({ filters, ...props }: ComponentProps<typeof ProjectsAbstractSearchSelect>) {
-  const { organization } = useWorkspaceOrganization();
+  const { assignWorkspaceToFilters } = useWorkspaceOrganization();
 
   return (
     <ProjectsAbstractSearchSelect
       {...props}
-      filters={{
-        ...filters,
-        organizationIds: [organization!.id],
-      } as SdKSearchProjectsInputT}
+      filters={assignWorkspaceToFilters(filters as SdKSearchProjectsInputT)}
     />
   );
 }

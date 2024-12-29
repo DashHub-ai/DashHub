@@ -51,14 +51,14 @@ export type ProjectsEsDocument = EsDocument<ProjectTableRowWithRelations>;
 export class ProjectsEsIndexRepo extends ProjectsAbstractEsIndexRepo<ProjectsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
-    @inject(ProjectsRepo) private readonly organizationsRepo: ProjectsRepo,
+    @inject(ProjectsRepo) private readonly projectsRepo: ProjectsRepo,
   ) {
     super(elasticsearchRepo);
   }
 
   protected async findEntities(ids: number[]): Promise<ProjectsEsDocument[]> {
     return pipe(
-      this.organizationsRepo.findWithRelationsByIds({ ids }),
+      this.projectsRepo.findWithRelationsByIds({ ids }),
       TE.map(
         A.map(entity => ({
           ...snakecaseKeys(entity, { deep: true }),
@@ -70,7 +70,7 @@ export class ProjectsEsIndexRepo extends ProjectsAbstractEsIndexRepo<ProjectsEsD
   }
 
   protected createAllEntitiesIdsIterator = () =>
-    this.organizationsRepo.createIdsIterator({
+    this.projectsRepo.createIdsIterator({
       chunkSize: 100,
     });
 }
