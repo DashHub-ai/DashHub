@@ -3,34 +3,32 @@ import {
   useFormValidatorMessages,
   type ValidationErrorsListProps,
 } from '@under-control/forms';
-import { useMemo } from 'react';
 
-import type { SdkUpdateUserAuthMethodsT } from '@llm/sdk';
+import type { SdkCreateUserAuthMethodsT } from '@llm/sdk';
 
 import { genRandomPassword } from '@llm/commons';
 import { Checkbox, FormField, Input } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-type Props = ValidationErrorsListProps<SdkUpdateUserAuthMethodsT>;
+type Props = ValidationErrorsListProps<SdkCreateUserAuthMethodsT>;
 
-export const UserUpdateAuthMethodsFormField = controlled<SdkUpdateUserAuthMethodsT, Props>(({
+export const UserCreateAuthMethodsFormField = controlled<SdkCreateUserAuthMethodsT, Props>(({
   errors,
   control: { bind, value, setValue },
 }) => {
-  const t = useI18n().pack.modules.users.form;
+  const t = useI18n().pack.users.form;
   const validation = useFormValidatorMessages({ errors });
 
-  const hasInitiallyEnabledPassword = useMemo(() => value.password.enabled, []);
-
-  const isResetPassword = 'value' in value.password;
-  const onResetPassword = (resetPassword: boolean) => {
+  const onTogglePassword = (passwordEnabled: boolean) => {
     setValue({
       merge: true,
       value: {
-        password: {
-          enabled: true,
-          ...resetPassword ? { value: '' } : {},
-        },
+        password: passwordEnabled
+          ? {
+              enabled: true,
+              value: genRandomPassword(),
+            }
+          : { enabled: false },
       },
     });
   };
@@ -51,33 +49,14 @@ export const UserUpdateAuthMethodsFormField = controlled<SdkUpdateUserAuthMethod
 
         <Checkbox
           className="block uk-text-small"
-          {...bind.path('password.enabled', {
-            relatedInputs: ({ newGlobalValue, newControlValue }) => ({
-              ...newGlobalValue,
-              password: {
-                enabled: newControlValue,
-                ...!hasInitiallyEnabledPassword && {
-                  value: genRandomPassword(),
-                },
-              },
-            }),
-          })}
+          value={value.password.enabled}
+          onChange={onTogglePassword}
         >
           {t.fields.auth.password.label}
         </Checkbox>
-
-        {hasInitiallyEnabledPassword && (
-          <Checkbox
-            className="block uk-text-small"
-            value={isResetPassword}
-            onChange={onResetPassword}
-          >
-            {t.fields.auth.resetPassword.label}
-          </Checkbox>
-        )}
       </FormField>
 
-      {(isResetPassword || (!hasInitiallyEnabledPassword && value.password.enabled)) && (
+      {value.password.enabled && (
         <FormField
           className="uk-margin"
           label={t.fields.auth.password.label}

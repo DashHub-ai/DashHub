@@ -17,7 +17,7 @@ export const UserUpdateAuthMethodsFormField = controlled<SdkUpdateUserAuthMethod
   errors,
   control: { bind, value, setValue },
 }) => {
-  const t = useI18n().pack.modules.users.form;
+  const t = useI18n().pack.users.form;
   const validation = useFormValidatorMessages({ errors });
 
   const hasInitiallyEnabledPassword = useMemo(() => value.password.enabled, []);

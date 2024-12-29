@@ -1,6 +1,8 @@
 export * from './alert';
 export * from './balloon';
+export * from './card';
 export * from './collapsible-panel';
+export * from './content-card';
 export * from './controls';
 export * from './ellipsis-dropdown';
 export * from './form';
@@ -9,6 +11,7 @@ export * from './modal';
 export * from './notifications';
 export * from './pagination';
 export * from './predefined';
+export * from './side-layout';
 export * from './skeleton';
 export * from './spinner-container';
 export * from './table';

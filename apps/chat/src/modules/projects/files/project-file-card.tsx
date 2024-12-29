@@ -4,9 +4,8 @@ import { Download, Trash2 } from 'lucide-react';
 
 import { isImageFileUrl, tapTaskEither } from '@llm/commons';
 import { type SdkSearchProjectFileItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { useDeleteWithNotifications } from '@llm/ui';
+import { CardDescription, useDeleteWithNotifications } from '@llm/ui';
 import { useI18n } from '~/i18n';
-import { CardDescription } from '~/modules/shared/card/card-description';
 import { getFileTypeAndColor } from '~/modules/shared/get-file-type-and-color';
 
 type FileCardProps = {

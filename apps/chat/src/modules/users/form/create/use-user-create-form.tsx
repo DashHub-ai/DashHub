@@ -1,38 +1,38 @@
 import { type FormHookAttrs, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
-import { runTask, tapTaskEither } from '@llm/commons';
+import { isObjectWithFakeID, runTask, tapTaskEither } from '@llm/commons';
 import { useSdkForLoggedIn } from '@llm/sdk';
 import { usePredefinedFormValidators, useSaveTaskEitherNotification } from '@llm/ui';
 
-import type { UpdateUserFormValue } from './types';
+import type { CreateUserFormValue } from './types';
 
 import { useUseAuthFormValidator } from '../shared';
 
-type UpdateUserFormHookAttrs =
+type CreateUserFormHookAttrs =
   & Omit<
-    FormHookAttrs<UpdateUserFormValue>,
+    FormHookAttrs<CreateUserFormValue>,
     'validation' | 'onSubmit'
   >
   & {
     onAfterSubmit?: VoidFunction;
   };
 
-export function useUserUpdateForm(
+export function useUserCreateForm(
   {
     onAfterSubmit,
     ...props
-  }: UpdateUserFormHookAttrs,
+  }: CreateUserFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { emailFormatValidator } = usePredefinedFormValidators<UpdateUserFormValue>();
+  const { emailFormatValidator, requiredPathByPred } = usePredefinedFormValidators<CreateUserFormValue>();
   const saveNotifications = useSaveTaskEitherNotification();
-  const authValidator = useUseAuthFormValidator<UpdateUserFormValue>();
+  const authValidator = useUseAuthFormValidator<CreateUserFormValue>();
 
   return useForm({
     resetAfterSubmit: false,
     onSubmit: flow(
-      sdks.dashboard.users.update,
+      sdks.dashboard.users.create,
       saveNotifications,
       tapTaskEither(() => onAfterSubmit?.()),
       runTask,
@@ -42,6 +42,10 @@ export function useUserUpdateForm(
       validators: () => [
         emailFormatValidator('email'),
         authValidator('auth'),
+        requiredPathByPred(
+          'organization',
+          ({ globalValue, value }) => globalValue.role === 'user' && (!value?.item || isObjectWithFakeID(value.item)),
+        ),
       ],
     },
     ...props,

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import { PencilIcon, TrashIcon } from 'lucide-react';
 
-import { useI18n } from '~/i18n';
+import { useForwardedI18n } from '~/i18n';
 
 type CardButtonProps = {
   icon?: ReactNode;
@@ -43,7 +43,7 @@ export function CardActionButton({
 }
 
 export function CardEditButton({ onClick }: { onClick: () => void; }) {
-  const t = useI18n().pack;
+  const t = useForwardedI18n().pack;
 
   return (
     <CardActionButton
@@ -56,7 +56,7 @@ export function CardEditButton({ onClick }: { onClick: () => void; }) {
 }
 
 export function CardArchiveButton({ onClick, loading }: { onClick: () => void; loading?: boolean; }) {
-  const t = useI18n().pack;
+  const t = useForwardedI18n().pack;
 
   return (
     <CardActionButton

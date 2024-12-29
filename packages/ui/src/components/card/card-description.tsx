@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { type PropsWithChildren, useEffect, useRef, useState } from 'react';
 
-import { useI18n } from '~/i18n';
+import { useForwardedI18n } from '~/i18n';
 
 type Props = PropsWithChildren & {
   className?: string;
@@ -10,7 +10,7 @@ type Props = PropsWithChildren & {
 };
 
 export function CardDescription({ children, limitHeight, className }: Props) {
-  const t = useI18n().pack;
+  const t = useForwardedI18n().pack;
   const ref = useRef<HTMLParagraphElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -60,13 +60,13 @@ export function CardDescription({ children, limitHeight, className }: Props) {
             {isExpanded
               ? (
                   <>
-                    {t.chat.actions.expand.less}
+                    {t.buttons.expand.less}
                     <ChevronUpIcon size={14} />
                   </>
                 )
               : (
                   <>
-                    {t.chat.actions.expand.more}
+                    {t.buttons.expand.more}
                     <ChevronDownIcon size={14} />
                   </>
                 )}

@@ -2,9 +2,9 @@ import type { PropsWithChildren } from 'react';
 
 import { UserCircleIcon, UsersIcon } from 'lucide-react';
 
+import { SideLayout, SideNav, SideNavItem } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
-import { SideLayout, SideNav, SideNavItem } from '~/modules';
 import { RouteMetaTags, useSitemap } from '~/routes';
 
 type Props = PropsWithChildren & {

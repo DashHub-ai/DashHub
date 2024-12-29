@@ -1,4 +1,4 @@
-import { genRandomBetweenInclusive } from '@llm/commons';
+import { genRandomBetweenInclusive } from './gen-random-between-inclusive';
 
 const RANDOM_PASSWORD_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
 

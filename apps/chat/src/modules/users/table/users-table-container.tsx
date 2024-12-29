@@ -1,10 +1,8 @@
-import type { z } from 'zod';
-
-import { pipe } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 
 import { genRandomPassword, tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
-import { SdkIdNameUrlEntryV, SdKSearchUsersInputV, serializeSdkIdNameUrlEntry, useSdkForLoggedIn } from '@llm/sdk';
+import { SdKSearchUsersInputV, useSdkForLoggedIn } from '@llm/sdk';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -15,41 +13,23 @@ import {
   useDebouncedPaginatedSearch,
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
-import { OrganizationsSearchSelect } from '~/modules/organizations';
+import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import { useUserCreateModal } from '../form';
 import { UsersTableRow } from './users-table-row';
-
-const SearchUsersUrlFiltersV = SdKSearchUsersInputV
-  .omit({
-    organizationIds: true,
-  })
-  .extend({
-    organization: SdkIdNameUrlEntryV.optional().nullable(),
-  });
-
-export type SearchUsersRouteUrlFiltersT = z.input<typeof SearchUsersUrlFiltersV>;
 
 export function UsersTableContainer() {
   const { pack } = useI18n();
   const t = pack.table.columns;
 
   const { sdks } = useSdkForLoggedIn();
+  const { organization, assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
+
   const { loading, pagination, result, reset, reload } = useDebouncedPaginatedSearch({
-    schema: SearchUsersUrlFiltersV,
+    schema: SdKSearchUsersInputV,
     fallbackSearchParams: {},
-    serializeSearchParams: ({ organization, ...filters }) => ({
-      ...filters,
-      ...organization && {
-        organization: serializeSdkIdNameUrlEntry(organization),
-      },
-    }),
-    fetchResultsTask: ({ organization, ...filters }) => sdks.dashboard.users.search({
-      ...filters,
-      ...organization && {
-        organizationIds: [organization.id],
-      },
-    }),
+    storeDataInUrl: false,
+    fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.users.search),
   });
 
   const createModal = useUserCreateModal();
@@ -58,9 +38,13 @@ export function UsersTableContainer() {
       createModal.showAsOptional({
         defaultValue: {
           email: '',
-          role: 'root',
+          role: 'user',
           active: true,
           archiveProtection: false,
+          organization: {
+            item: organization,
+            role: 'member',
+          },
           auth: {
             email: {
               enabled: true,
@@ -95,11 +79,6 @@ export function UsersTableContainer() {
           })}
         />
 
-        <OrganizationsSearchSelect
-          prefix={pack.modules.organizations.prefix.organization}
-          {...pagination.bind.path('organization')}
-        />
-
         <ResetFiltersButton onClick={reset} />
       </PaginationToolbar>
 
@@ -110,7 +89,6 @@ export function UsersTableContainer() {
         columns={[
           { id: 'id', name: t.id, className: 'uk-table-shrink' },
           { id: 'email', name: t.email, className: 'uk-table-expand' },
-          { id: 'organization', name: t.organization, className: 'uk-table-expand' },
           { id: 'active', name: t.active, className: 'w-[150px]' },
           { id: 'auth', name: t.auth, className: 'w-[150px]' },
           { id: 'archived', name: t.archived, className: 'w-[150px]' },

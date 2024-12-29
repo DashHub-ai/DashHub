@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { ExternalLinkIcon } from 'lucide-react';
 import { Link } from 'wouter';
 
-import { useI18n } from '~/i18n';
+import { useForwardedI18n } from '~/i18n';
 
 type Props = {
   href?: string;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export function CardOpenButton({ href, onClick, loading }: Props) {
-  const t = useI18n().pack;
+  const t = useForwardedI18n().pack;
   const className = clsx(
     'uk-button uk-button-secondary uk-button-small',
     loading && 'uk-disabled opacity-50',

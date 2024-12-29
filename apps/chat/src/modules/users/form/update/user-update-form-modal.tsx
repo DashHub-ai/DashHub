@@ -33,7 +33,7 @@ export function UserUpdateFormModal(
     ...props
   }: UserUpdateFormModalProps,
 ) {
-  const t = useI18n().pack.modules.users.form;
+  const t = useI18n().pack.users.form;
 
   const defaultValue = useMemo<UpdateUserFormValue>(() => {
     const attrs = {
@@ -58,7 +58,7 @@ export function UserUpdateFormModal(
     );
   }, [user]);
 
-  const { handleSubmitEvent, validator, submitState, bind } = useUserUpdateForm({
+  const { handleSubmitEvent, validator, submitState, bind, value } = useUserUpdateForm({
     defaultValue,
     onAfterSubmit,
   });
@@ -82,13 +82,13 @@ export function UserUpdateFormModal(
         </>
       )}
     >
-      {user.role === 'user' && (
+      {value.role === 'user' && (
         <UserOrganizationSettingsFormField
-          organization={user.organization}
           {...validator.errors.extract('organization', { nested: true })}
           {...bind.path('organization')}
         />
       )}
+
       <UserSharedFormFields
         errors={validator.errors.all as unknown as any}
         {...bind.merged()}

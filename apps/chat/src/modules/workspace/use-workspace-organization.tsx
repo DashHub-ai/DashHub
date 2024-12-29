@@ -1,4 +1,4 @@
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
 
 import { useWorkspace } from './workspace-context';
 
@@ -22,6 +22,12 @@ export function useWorkspaceOrganization() {
       ...obj,
       ...organization && { organization },
     }),
+    assignWorkspaceToFilters: <D extends { organizationIds?: SdkTableRowIdT[]; }>(obj: D) => ({
+      ...obj,
+      ...organization && {
+        organizationIds: [organization.id],
+      },
+    }),
   };
 }
 
@@ -36,7 +42,11 @@ export function useWorkspaceOrganizationOrThrow() {
     organization,
     assignWorkspaceOrganization: <D extends object>(obj: D) => ({
       ...obj,
-      ...organization && { organization },
+      organization,
+    }),
+    assignWorkspaceToFilters: <D extends { organizationIds?: SdkTableRowIdT[]; }>(obj: D) => ({
+      ...obj,
+      organizationIds: [organization.id],
     }),
   };
 }

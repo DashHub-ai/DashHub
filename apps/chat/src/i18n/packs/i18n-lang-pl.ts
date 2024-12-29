@@ -1,8 +1,15 @@
 import deepmerge from 'deepmerge';
 
+import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+
 import { I18N_FORWARDED_PL_PACK } from '@llm/ui';
 
 import type { I18nLangPack } from './i18n-packs';
+
+const I18N_USER_ORGANIZATION_ROLES_PL: Record<SdkOrganizationUserRoleT, string> = {
+  owner: 'Owner',
+  member: 'Member',
+};
 
 export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   navigation: {
@@ -389,6 +396,54 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     favorites: {
       add: 'Dodaj do ulubionych',
       remove: 'Usuń z ulubionych',
+    },
+  },
+  organizations: {
+    userRoles: I18N_USER_ORGANIZATION_ROLES_PL,
+  },
+  users: {
+    form: {
+      title: {
+        create: 'Utwórz użytkownika',
+        edit: 'Edytuj użytkownika',
+      },
+      fields: {
+        email: {
+          label: 'E-Mail',
+          placeholder: 'Wprowadź adres e-mail',
+        },
+        flags: {
+          label: 'Flagi',
+        },
+        active: {
+          label: 'Aktywny',
+        },
+        organization: {
+          role: {
+            label: 'Rola w organizacji',
+          },
+        },
+        auth: {
+          label: 'Uwierzytelnianie',
+          email: {
+            label: 'Email',
+            placeholder: 'Wprowadź adres email',
+          },
+          password: {
+            label: 'Hasło',
+            placeholder: 'Wprowadź hasło',
+          },
+          resetPassword: {
+            label: 'Zresetuj hasło',
+          },
+        },
+      },
+    },
+    row: {
+      authMethod: {
+        email: 'E-Mail',
+        password: 'Hasło',
+      },
     },
   },
   footer: {

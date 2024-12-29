@@ -1,6 +1,13 @@
 import deepmerge from 'deepmerge';
 
+import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+
 import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
+
+const I18N_USER_ORGANIZATION_ROLES_EN: Record<SdkOrganizationUserRoleT, string> = {
+  owner: 'Właściciel',
+  member: 'Użytkownik',
+};
 
 export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   navigation: {
@@ -387,6 +394,54 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     favorites: {
       add: 'Add to favorites',
       remove: 'Remove from favorites',
+    },
+  },
+  organizations: {
+    userRoles: I18N_USER_ORGANIZATION_ROLES_EN,
+  },
+  users: {
+    form: {
+      title: {
+        create: 'Create user',
+        edit: 'Edit user',
+      },
+      fields: {
+        email: {
+          label: 'E-Mail',
+          placeholder: 'Enter e-mail address',
+        },
+        flags: {
+          label: 'Flags',
+        },
+        active: {
+          label: 'Active',
+        },
+        organization: {
+          role: {
+            label: 'Role in organization',
+          },
+        },
+        auth: {
+          label: 'Authentication',
+          email: {
+            label: 'Email',
+            placeholder: 'Enter email address',
+          },
+          password: {
+            label: 'Password',
+            placeholder: 'Enter password',
+          },
+          resetPassword: {
+            label: 'Reset password',
+          },
+        },
+      },
+    },
+    row: {
+      authMethod: {
+        password: 'Password',
+        email: 'Email',
+      },
     },
   },
   footer: {

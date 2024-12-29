@@ -1,9 +1,9 @@
 import { BellRing, Bot, Database, Shield, Trash2, UserCircle } from 'lucide-react';
 import { useState } from 'react';
 
+import { SideLayout, SideNav, SideNavItem } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
-import { SideLayout, SideNav, SideNavItem } from '~/modules/shared';
 import { RouteMetaTags } from '~/routes/shared';
 
 type SectionId = 'account' | 'security' | 'notifications' | 'data';
