@@ -8,6 +8,7 @@
     "db:migrate": "node dist/run-migrations.cli.mjs",
     "es:reindex:all": "node dist/run-reindex-all.cli.mjs",
     "chats:summarize:all": "node dist/run-summarize-chats.cli.mjs",
+    "projects:summarize:all": "node dist/run-summarize-projects.cli.mjs",
     "dev": "npm run clean && concurrently --kill-others \"vite build --watch --mode production\" \"npm run build:wait && nodemon --stack-trace-limit=1000 --enable-source-maps ./dist/index.mjs\"",
     "lint": "eslint . --config ./eslint.config.mjs",
     "clean": "rm -rf ./dist 2>/dev/null",

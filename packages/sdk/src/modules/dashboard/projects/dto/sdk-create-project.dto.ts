@@ -1,17 +1,30 @@
-import type { z } from 'zod';
+import { z } from 'zod';
 
-import { SdkTableRowWithIdV, ZodOmitArchivedFields, ZodOmitDateFields } from '~/shared';
+import {
+  SdkAIGeneratedStringInputV,
+  SdkTableRowWithIdV,
+  ZodOmitArchivedFields,
+  ZodOmitDateFields,
+} from '~/shared';
 
 import { SdkProjectV } from './sdk-project.dto';
+
+export const SdkProjectSummaryInputV = z.object({
+  content: SdkAIGeneratedStringInputV,
+});
+
+export type SdkProjectSummaryInputT = z.infer<typeof SdkProjectSummaryInputV>;
 
 export const SdkCreateProjectInputV = SdkProjectV.omit({
   ...ZodOmitDateFields,
   ...ZodOmitArchivedFields,
   id: true,
   organization: true,
+  summary: true,
 })
   .extend({
     organization: SdkTableRowWithIdV,
+    summary: SdkProjectSummaryInputV,
   });
 
 export type SdkCreateProjectInputT = z.infer<typeof SdkCreateProjectInputV>;

@@ -13,6 +13,7 @@
     "db:migrate": "yarn workspace @llm/backend db:migrate",
     "es:reindex:all": "yarn workspace @llm/backend es:reindex:all",
     "chats:summarize:all": "yarn workspace @llm/backend chats:summarize:all",
+    "projects:summarize:all": "yarn workspace @llm/backend projects:summarize:all",
     "clean": "find . -type f -name 'vite.config.*.timestamp-*' -ls -delete 1> /dev/null 2>& 1",
     "build": "NODE_ENV=production turbo run build --cache-dir=.turbo",
     "check:types": "turbo check:types --parallel",

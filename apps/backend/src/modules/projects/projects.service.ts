@@ -66,7 +66,6 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
           internal: true,
           organization: chat.organization,
           name: `Unnamed Project - ${Date.now()}`,
-          description: null,
           creator,
         }),
         TE.tap(project => this.chatsService.assignToProject(chat.id, project.id)),
@@ -119,9 +118,9 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     this.repo.create({
       value: {
         ...values,
-        creatorUserId: creator.id,
+        creator,
+        organization,
         internal: !!internal,
-        organizationId: organization.id,
       },
     }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),

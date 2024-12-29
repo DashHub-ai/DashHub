@@ -34,7 +34,7 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCar
     sdks.dashboard.projects.archive(project.id),
   );
 
-  const description = project.description?.trim();
+  const description = project.summary.content.value?.trim();
 
   const handleEdit = flow(
     showAsOptional,

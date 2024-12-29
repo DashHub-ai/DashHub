@@ -20,6 +20,15 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('project_id', 'integer', col => col.notNull().references('projects.id').onDelete('restrict'))
     .addColumn('last_summarized_message_id', 'uuid', col => col.references('messages.id').onDelete('restrict'))
     .execute();
+
+  await db
+    .insertInto('projects_summaries')
+    .columns(['project_id'])
+    .expression(
+      db.selectFrom('projects')
+        .select(['id as project_id']),
+    )
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {

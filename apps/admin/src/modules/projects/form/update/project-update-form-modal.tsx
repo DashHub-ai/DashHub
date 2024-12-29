@@ -32,7 +32,16 @@ export function ProjectUpdateFormModal(
 ) {
   const t = useI18n().pack.modules.projects.form;
   const { handleSubmitEvent, validator, submitState, bind } = useProjectUpdateForm({
-    defaultValue: project,
+    defaultValue: {
+      ...project,
+      summary: {
+        content: (
+          project.summary.content.generated
+            ? { generated: true, value: null }
+            : { generated: false, value: project.summary.content.value! }
+        ),
+      },
+    },
     onAfterSubmit,
   });
 

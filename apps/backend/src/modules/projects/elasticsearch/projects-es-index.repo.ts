@@ -3,8 +3,9 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { Overwrite, tryOrThrowTE } from '@llm/commons';
 import {
+  createAIGeneratedFieldMappings,
   createArchivedRecordMappings,
   createAutocompleteFieldAnalyzeSettings,
   createBaseAutocompleteFieldMappings,
@@ -12,6 +13,7 @@ import {
   createElasticsearchIndexRepo,
   createIdNameObjectMapping,
   ElasticsearchRepo,
+  EsAIGeneratedField,
   type EsDocument,
 } from '~/modules/elasticsearch';
 
@@ -32,9 +34,10 @@ const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         internal: {
           type: 'keyword',
         },
-        description: {
-          type: 'text',
-          analyzer: 'folded_lowercase_analyzer',
+        summary: {
+          properties: {
+            content: createAIGeneratedFieldMappings(),
+          },
         },
       },
     },
@@ -45,7 +48,11 @@ const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ProjectsEsDocument = EsDocument<ProjectTableRowWithRelations>;
+export type ProjectsEsDocument = EsDocument<Overwrite<ProjectTableRowWithRelations, {
+  summary: {
+    content: EsAIGeneratedField;
+  };
+}>>;
 
 @injectable()
 export class ProjectsEsIndexRepo extends ProjectsAbstractEsIndexRepo<ProjectsEsDocument> {
@@ -60,9 +67,16 @@ export class ProjectsEsIndexRepo extends ProjectsAbstractEsIndexRepo<ProjectsEsD
     return pipe(
       this.projectsRepo.findWithRelationsByIds({ ids }),
       TE.map(
-        A.map(entity => ({
+        A.map(({ summary, ...entity }) => ({
           ...snakecaseKeys(entity, { deep: true }),
           _id: String(entity.id),
+          summary: {
+            content: {
+              value: summary.content,
+              generated: summary.contentGenerated,
+              generated_at: summary.contentGeneratedAt,
+            },
+          },
         })),
       ),
       tryOrThrowTE,

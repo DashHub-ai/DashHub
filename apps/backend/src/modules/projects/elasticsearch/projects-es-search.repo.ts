@@ -82,14 +82,20 @@ export class ProjectsEsSearchRepo {
       ]),
     );
 
-  private static mapOutputHit = (source: ProjectsEsDocument): SdkSearchProjectItemT =>
+  private static mapOutputHit = ({ summary, ...source }: ProjectsEsDocument): SdkSearchProjectItemT =>
     ({
       id: source.id,
       name: source.name,
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       archived: source.archived,
-      description: source.description,
       organization: source.organization,
+      summary: {
+        content: {
+          generated: summary.content.generated,
+          value: summary.content.value,
+          generatedAt: summary.content.generated_at,
+        },
+      },
     });
 }

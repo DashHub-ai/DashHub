@@ -1,32 +1,125 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
+
+import type { SdkCreateProjectInputT, SdkUpdateProjectInputT } from '@llm/sdk';
 
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
-  createDatabaseRepo,
+  createProtectedDatabaseRepo,
   createUnarchiveRecordQuery,
   createUnarchiveRecordsQuery,
+  DatabaseConnectionRepo,
   DatabaseError,
   TableId,
+  TableRowWithId,
   TransactionalAttrs,
   tryGetFirstOrNotExists,
+  tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
+import { ProjectsSummariesRepo } from '../projects-summaries/projects-summaries.repo';
 import { ProjectTableRowWithRelations } from './projects.tables';
 
 @injectable()
-export class ProjectsRepo extends createDatabaseRepo('projects') {
-  archive = createArchiveRecordQuery(this.queryFactoryAttrs);
+export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
+  constructor(
+    @inject(DatabaseConnectionRepo) connectionRepo: DatabaseConnectionRepo,
+    @inject(ProjectsSummariesRepo) private readonly summariesRepo: ProjectsSummariesRepo,
+  ) {
+    super(connectionRepo);
+  }
 
-  archiveRecords = createArchiveRecordsQuery(this.queryFactoryAttrs);
+  createIdsIterator = this.baseRepo.createIdsIterator;
 
-  unarchive = createUnarchiveRecordQuery(this.queryFactoryAttrs);
+  archive = createArchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
 
-  unarchiveRecords = createUnarchiveRecordsQuery(this.queryFactoryAttrs);
+  archiveRecords = createArchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
+
+  unarchive = createUnarchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
+
+  unarchiveRecords = createUnarchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
+
+  create = (
+    {
+      forwardTransaction,
+      value: {
+        organization,
+        name,
+        creator,
+        internal,
+        summary = {
+          content: { generated: true },
+        },
+      },
+    }: TransactionalAttrs<{
+      value: SdkCreateProjectInputT & {
+        internal?: boolean;
+        creator: TableRowWithId;
+      };
+    }>,
+  ) => {
+    const transaction = tryReuseOrCreateTransaction({ db: this.db, forwardTransaction });
+
+    return transaction(trx => pipe(
+      this.baseRepo.create({
+        forwardTransaction: trx,
+        value: {
+          name,
+          creatorUserId: creator.id,
+          internal: !!internal,
+          organizationId: organization.id,
+        },
+      }),
+      TE.tap(({ id }) => this.summariesRepo.create({
+        forwardTransaction: trx,
+        value: {
+          projectId: id,
+          contentGenerated: summary.content?.generated ?? true,
+          content: summary.content?.value,
+        },
+      })),
+    ));
+  };
+
+  update = (
+    {
+      id,
+      forwardTransaction,
+      value: {
+        name,
+        internal,
+        summary = {
+          content: { generated: true },
+        },
+      },
+    }: TableRowWithId & TransactionalAttrs<{
+      value: SdkUpdateProjectInputT & {
+        internal?: boolean;
+      };
+    }>,
+  ) => {
+    const transaction = tryReuseOrCreateTransaction({ db: this.db, forwardTransaction });
+
+    return transaction(trx => pipe(
+      this.baseRepo.update({
+        id,
+        forwardTransaction: trx,
+        value: {
+          name,
+          internal: !!internal,
+        },
+      }),
+      TE.tap(({ id }) => this.summariesRepo.updateByProjectId({
+        forwardTransaction: trx,
+        id,
+        value: summary,
+      })),
+    ));
+  };
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
@@ -39,9 +132,15 @@ export class ProjectsRepo extends createDatabaseRepo('projects') {
             .where('projects.id', 'in', ids)
             .innerJoin('organizations', 'organizations.id', 'organization_id')
             .selectAll('projects')
+            .innerJoin('projects_summaries', 'projects_summaries.project_id', 'projects.id')
             .select([
               'organizations.id as organization_id',
               'organizations.name as organization_name',
+
+              'projects_summaries.id as summary_id',
+              'projects_summaries.content as summary_content',
+              'projects_summaries.content_generated as summary_content_generated',
+              'projects_summaries.content_generated_at as summary_content_generated_at',
             ])
             .limit(ids.length)
             .execute(),
@@ -51,12 +150,24 @@ export class ProjectsRepo extends createDatabaseRepo('projects') {
         A.map(({
           organization_id: orgId,
           organization_name: orgName,
+
+          summary_id: summaryId,
+          summary_content: summaryContent,
+          summary_content_generated: summaryContentGenerated,
+          summary_content_generated_at: summaryContentGeneratedAt,
+
           ...item
         }): ProjectTableRowWithRelations => ({
           ...camelcaseKeys(item),
           organization: {
             id: orgId,
             name: orgName,
+          },
+          summary: {
+            id: summaryId,
+            content: summaryContent,
+            contentGenerated: summaryContentGenerated,
+            contentGeneratedAt: summaryContentGeneratedAt,
           },
         })),
       ),

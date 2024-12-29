@@ -64,7 +64,9 @@ export function ProjectsTableContainer() {
       createModal.showAsOptional({
         defaultValue: {
           name: '',
-          description: null,
+          summary: {
+            content: { generated: true, value: null },
+          },
           organization: createFakeSelectItem(),
         },
       }),
