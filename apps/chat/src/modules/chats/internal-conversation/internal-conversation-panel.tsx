@@ -58,6 +58,10 @@ export const InternalConversationPanel = memo(({ className, initialMessage, init
         content: initialMessage,
         aiModel,
       }}
+      inputToolbarProps={{
+        expanded: true,
+        rounded: true,
+      }}
     />
   );
 });

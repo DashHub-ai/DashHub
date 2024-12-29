@@ -53,7 +53,7 @@ export function AppCreateFormStep1({ onNext, loading }: Props) {
         />
       )}
 
-      <div>
+      <div className="mt-5">
         <FormSpinnerCTA
           type="button"
           loading={summarizeState.isLoading}

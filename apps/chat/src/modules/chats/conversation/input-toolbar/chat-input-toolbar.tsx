@@ -20,8 +20,11 @@ import { ChatSelectApp } from './chat-select-app';
 
 export type ChatInputValue = Omit<SdkCreateMessageInputT, 'replyToMessage'>;
 
-type Props = {
+export type ChatInputToolbarProps = {
   apps: Array<SdkTableRowWithIdNameT>;
+
+  expanded?: boolean;
+  rounded?: boolean;
 
   replying: boolean;
   replyToMessage?: SdkRepeatedMessageItemT | null;
@@ -38,6 +41,8 @@ type Props = {
 
 export function ChatInputToolbar(
   {
+    expanded,
+    rounded,
     disabled,
     replying,
     replyToMessage,
@@ -47,7 +52,7 @@ export function ChatInputToolbar(
     onCancelReplyToMessage,
     onSelectApp,
     apps,
-  }: Props,
+  }: ChatInputToolbarProps,
 ) {
   const t = useI18n().pack.chat;
 
@@ -132,7 +137,10 @@ export function ChatInputToolbar(
 
   return (
     <form
-      className="mx-auto w-full 2xl:w-9/12 max-w-full"
+      className={clsx(
+        'mx-auto w-full max-w-full',
+        !expanded && '2xl:w-9/12',
+      )}
       onSubmit={handleSubmitEvent}
     >
       {replyToMessage && (
@@ -142,11 +150,14 @@ export function ChatInputToolbar(
         />
       )}
 
-      <div className={clsx(
-        'relative z-10 border-x bg-background shadow-sm border-t border-border rounded-t-lg rounded-x-lg overflow-hidden',
-        'focus-within:border-primary/50',
-        'transition-border duration-100',
-      )}
+      <div
+        className={clsx(
+          'relative z-10 bg-background shadow-sm border-t border-border overflow-hidden',
+          'focus-within:border-primary/50',
+          'transition-border duration-100',
+          rounded && 'rounded-lg border',
+          !rounded && 'rounded-t-lg rounded-x-lg border-x border-t',
+        )}
       >
         <div className="mb-[45px]">
           <textarea

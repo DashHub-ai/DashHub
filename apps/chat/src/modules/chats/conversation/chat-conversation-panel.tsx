@@ -30,7 +30,11 @@ import {
   useScrollFlickeringIndicator,
   useSendInitialMessage,
 } from './hooks';
-import { ChatInputToolbar, type ChatInputValue } from './input-toolbar';
+import {
+  ChatInputToolbar,
+  type ChatInputToolbarProps,
+  type ChatInputValue,
+} from './input-toolbar';
 import { ChatMessage } from './messages/chat-message';
 
 type Props = {
@@ -43,10 +47,21 @@ type Props = {
     aiModel: SdkTableRowWithIdNameT;
   };
   className?: string;
+  inputToolbarProps?: Pick<ChatInputToolbarProps, 'expanded' | 'rounded'>;
   backdropSettings?: ChatBackdropSettings;
 };
 
-export const ChatConversationPanel = memo(({ ref, chat, initialMessages, className, backdropSettings, replyAfterMount }: Props) => {
+export const ChatConversationPanel = memo((
+  {
+    ref,
+    chat,
+    inputToolbarProps,
+    initialMessages,
+    className,
+    backdropSettings,
+    replyAfterMount,
+  }: Props,
+) => {
   const flickeringIndicator = useScrollFlickeringIndicator();
   const sentInitialMessageRef = useRef(false);
   const {
@@ -204,6 +219,7 @@ export const ChatConversationPanel = memo(({ ref, chat, initialMessages, classNa
 
       {!chat.archived && (
         <ChatInputToolbar
+          {...inputToolbarProps}
           apps={apps}
           replyToMessage={replyToMessage}
           replying={replying}
