@@ -11,11 +11,14 @@ import { ProjectsEmbeddingsSdk } from './projects-embeddings';
 import { ProjectsFilesSdk } from './projects-files';
 import { S3BucketsSdk } from './s3-buckets';
 import { UsersSdk } from './users';
+import { UsersGroupsSdk } from './users-groups';
 
 export class DashboardSdk {
   public readonly organizations = new OrganizationsSdk(this.config);
 
   public readonly users = new UsersSdk(this.config);
+
+  public readonly usersGroups = new UsersGroupsSdk(this.config);
 
   public readonly projects = new ProjectsSdk(this.config);
 

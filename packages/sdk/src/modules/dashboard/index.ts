@@ -13,3 +13,4 @@ export * from './projects-policies';
 export * from './s3-buckets';
 export * from './s3-files';
 export * from './users';
+export * from './users-groups';
