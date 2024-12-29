@@ -187,6 +187,14 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         description: 'Zarządzaj ustawieniami organizacji',
       },
       title: 'Administracja',
+      pages: {
+        users: {
+          title: 'Użytkownicy',
+        },
+        usersGroups: {
+          title: 'Grupy użytkowników',
+        },
+      },
     },
   },
   workspace: {

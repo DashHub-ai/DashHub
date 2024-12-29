@@ -1,16 +1,9 @@
-import { useI18n } from '~/i18n';
-import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
-import { RouteMetaTags } from '~/routes';
+import { Redirect } from 'wouter';
+
+import { useSitemap } from '../use-sitemap';
 
 export function ManagementRoute() {
-  const t = useI18n().pack.routes.management;
-  return (
-    <PageWithNavigationLayout>
-      <RouteMetaTags meta={t.meta} />
+  const sitemap = useSitemap();
 
-      <LayoutHeader>
-        {t.title}
-      </LayoutHeader>
-    </PageWithNavigationLayout>
-  );
+  return <Redirect to={sitemap.management.users} replace />;
 }
