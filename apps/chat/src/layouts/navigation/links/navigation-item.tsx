@@ -3,6 +3,7 @@ import type { PropsWithChildren, ReactNode } from 'react';
 import clsx from 'clsx';
 import { Link, useLocation } from 'wouter';
 
+import { dropLastSlash } from '@llm/commons';
 import { prefixWithBaseRoute } from '~/routes/use-sitemap';
 
 export type NavigationItemProps = PropsWithChildren & {
@@ -15,7 +16,7 @@ export function NavigationItem({ path, icon, children, disabled }: NavigationIte
   const [location] = useLocation();
   const isActive = (
     path === prefixWithBaseRoute('/')
-      ? location === path
+      ? dropLastSlash(location) === dropLastSlash(path)
       : location.startsWith(path)
   );
 
