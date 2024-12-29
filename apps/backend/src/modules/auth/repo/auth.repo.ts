@@ -49,7 +49,7 @@ export class AuthRepo {
         },
       ),
       TE.chainW(() => {
-        if (!email) {
+        if (!email.enabled) {
           return TE.of(undefined);
         }
 

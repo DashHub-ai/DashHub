@@ -5,8 +5,8 @@ import type { SdkOrganizationUserRoleT } from '@llm/sdk';
 import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
 
 const I18N_USER_ORGANIZATION_ROLES_EN: Record<SdkOrganizationUserRoleT, string> = {
-  owner: 'Właściciel',
-  member: 'Użytkownik',
+  owner: 'Owner',
+  member: 'Member',
 };
 
 export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {

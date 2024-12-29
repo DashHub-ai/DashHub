@@ -7,8 +7,8 @@ import { I18N_FORWARDED_PL_PACK } from '@llm/ui';
 import type { I18nLangPack } from './i18n-packs';
 
 const I18N_USER_ORGANIZATION_ROLES_PL: Record<SdkOrganizationUserRoleT, string> = {
-  owner: 'Owner',
-  member: 'Member',
+  owner: 'Właściciel',
+  member: 'Pracownik',
 };
 
 export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
