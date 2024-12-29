@@ -5,6 +5,7 @@ import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchUserItemT, useSdkForLoggedIn } from '@llm/sdk';
 import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { OrganizationUserRoleBadge } from '~/modules/organizations';
 
 import { useUserUpdateModal } from '../form';
 
@@ -14,16 +15,23 @@ type Props = {
 };
 
 export function UsersTableRow({ item, onUpdated }: Props) {
-  const t = useI18n().pack.users;
+  const { pack } = useI18n();
+  const t = pack.users;
+
   const { sdks } = useSdkForLoggedIn();
   const { auth } = item;
 
   const updateModal = useUserUpdateModal();
 
+  if (item.role !== 'user') {
+    return null;
+  }
+
   return (
     <tr>
       <td>{item.id}</td>
       <td>{item.email}</td>
+      <td><OrganizationUserRoleBadge value={item.organization.role} /></td>
       <td>
         <BooleanBadge value={item.active} />
       </td>
@@ -43,7 +51,6 @@ export function UsersTableRow({ item, onUpdated }: Props) {
         </div>
       </td>
       <td><ArchivedBadge archived={item.archived} /></td>
-      <td>{formatDate(item.createdAt)}</td>
       <td>{formatDate(item.updatedAt)}</td>
       <td>
         <EllipsisCrudDropdownButton

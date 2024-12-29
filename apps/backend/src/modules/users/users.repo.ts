@@ -103,6 +103,19 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           ...value.auth,
         }),
       )),
+      TE.tap(({ id }) => {
+        if (value.role !== 'user') {
+          return TE.of(undefined);
+        }
+
+        return this.organizationsUsersRepo.updateUserOrganizationRole({
+          forwardTransaction: trx,
+          value: {
+            userId: id,
+            role: value.organization.role,
+          },
+        });
+      }),
     ));
   };
 

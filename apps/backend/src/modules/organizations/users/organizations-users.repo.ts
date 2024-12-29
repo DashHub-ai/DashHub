@@ -1,8 +1,10 @@
 import { flow, pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
 
+import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+
 import { mapAsyncIterator, pluck } from '@llm/commons';
-import { createDatabaseRepo, TableId } from '~/modules/database';
+import { createDatabaseRepo, type TableId, type TransactionalAttrs } from '~/modules/database';
 
 type OrganizationUsersIteratorAttrs = {
   organizationId: TableId;
@@ -30,6 +32,27 @@ export class OrganizationsUsersRepo extends createDatabaseRepo('organizations_us
         chunkSize,
       }),
     );
+
+  updateUserOrganizationRole = (
+    {
+      value,
+      forwardTransaction,
+    }: TransactionalAttrs<{
+      value: {
+        userId: TableId;
+        role: SdkOrganizationUserRoleT;
+      };
+    }>,
+  ) =>
+    this.updateAll({
+      forwardTransaction,
+      value: {
+        role: value.role,
+      },
+      where: [
+        ['userId', '=', value.userId],
+      ],
+    });
 
   createOrganizationUsersIdsIterator = flow(
     this.createOrganizationUsersIterator,
