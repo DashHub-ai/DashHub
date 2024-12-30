@@ -38,7 +38,7 @@
     "jwt-simple": "^0.5.6",
     "kysely": "^0.27.5",
     "mime-types": "^2.1.35",
-    "minio": "^8.0.2",
+    "minio": "^8.0.3",
     "object-hash": "^3.0.0",
     "officeparser": "^5.1.1",
     "openai": "^4.73.0",
