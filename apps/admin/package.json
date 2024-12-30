@@ -18,7 +18,7 @@
     "postcss-combine-duplicated-selectors": "^10.0.3",
     "postcss-sort-media-queries": "^5.2.0",
     "react-helmet-async": "^2.0.5",
-    "tailwindcss": "^3.4.15",
+    "tailwindcss": "^3.4.17",
     "uikit": "^3.21.16",
     "wouter": "^3.3.5"
   }
