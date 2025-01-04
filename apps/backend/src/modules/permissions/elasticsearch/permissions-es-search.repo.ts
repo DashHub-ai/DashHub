@@ -68,7 +68,6 @@ export class PermissionsEsSearchRepo {
       return {
         ...record,
         target: {
-          group: null,
           user: source.user,
         },
       };
@@ -78,7 +77,6 @@ export class PermissionsEsSearchRepo {
       ...record,
       target: {
         group: source.group!,
-        user: null,
       },
     };
   };
