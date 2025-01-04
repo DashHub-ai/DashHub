@@ -14,6 +14,7 @@ import {
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
+import { createPermissionsRowEntryMapping } from '~/modules/permissions/record-protection';
 
 import type { AppTableRowWithRelations } from '../apps.tables';
 
@@ -28,6 +29,7 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings(),
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
+        permissions: createPermissionsRowEntryMapping(),
         organization: createIdNameObjectMapping(),
         category: createIdNameObjectMapping(),
         description: {

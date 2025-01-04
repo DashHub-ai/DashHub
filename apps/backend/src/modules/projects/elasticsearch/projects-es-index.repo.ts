@@ -16,6 +16,7 @@ import {
   EsAIGeneratedField,
   type EsDocument,
 } from '~/modules/elasticsearch';
+import { createPermissionsRowEntryMapping } from '~/modules/permissions/record-protection';
 
 import type { ProjectTableRowWithRelations } from '../projects.tables';
 
@@ -30,6 +31,7 @@ const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings(),
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
+        permissions: createPermissionsRowEntryMapping(),
         organization: createIdNameObjectMapping(),
         internal: {
           type: 'keyword',

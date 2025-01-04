@@ -18,6 +18,7 @@ import {
   EsAIGeneratedField,
   type EsDocument,
 } from '~/modules/elasticsearch';
+import { createPermissionsRowEntryMapping } from '~/modules/permissions/record-protection';
 
 import type { ChatTableRowWithRelations } from '../chats.tables';
 
@@ -33,6 +34,7 @@ const ChatsAbstractEsIndexRepo = createElasticsearchIndexRepo({
           uuid: true,
         }),
         ...createArchivedRecordMappings(),
+        permissions: createPermissionsRowEntryMapping(),
         organization: createIdNameObjectMapping(),
         project: createIdNameObjectMapping(),
         creator: createIdObjectMapping(),

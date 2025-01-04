@@ -1,6 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
+import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { inject, injectable } from 'tsyringe';
 
 import type { RequiredBy } from '@llm/commons';
@@ -147,6 +148,23 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               'projects.id as project_id',
               'projects.name as project_name',
               'projects.internal as project_internal',
+
+              eb => eb
+                .selectFrom('permissions')
+                .where('permissions.chat_id', '=', eb.ref('chats.id'))
+                .select(neb => [
+                  neb.fn.jsonAgg(
+                    jsonBuildObject({
+                      id: neb.ref('permissions.id').$notNull(),
+                      access_level: neb.ref('permissions.access_level').$notNull(),
+                      group_id: neb.ref('permissions.group_id'),
+                      user_id: neb.ref('permissions.user_id'),
+                    }),
+                  )
+                    .$notNull()
+                    .as('permissions_json'),
+                ])
+                .as('permissions_json'),
             ])
             .limit(ids.length)
             .execute(),
@@ -173,6 +191,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           project_name: projectName,
           project_internal: projectInternal,
 
+          permissions_json: permissions,
           ...item
         }): ChatTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -202,6 +221,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
             nameGenerated: summaryNameGenerated,
             nameGeneratedAt: summaryNameGeneratedAt,
           },
+          permissions: (permissions || []).map(obj => camelcaseKeys(obj)),
         })),
       ),
     );

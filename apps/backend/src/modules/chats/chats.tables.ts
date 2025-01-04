@@ -11,6 +11,7 @@ import type {
 } from '~/modules/database';
 
 import type { ChatSummaryTableRow } from '../chats-summaries';
+import type { PermissionsTableRowRelation } from '../permissions';
 import type { UserTableRowBaseRelation } from '../users';
 
 export type ChatsTable =
@@ -36,6 +37,7 @@ type ChatProjectTableRowRelation = TableRowWithIdName & {
 
 export type ChatTableRowWithRelations =
   & Omit<ChatTableRow, 'organizationId' | 'creatorUserId' | 'projectId'>
+  & PermissionsTableRowRelation
   & {
     summary: ChatSummaryTableRowRelation;
     organization: TableRowWithIdName;

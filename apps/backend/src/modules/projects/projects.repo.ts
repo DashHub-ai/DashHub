@@ -1,6 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
+import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateProjectInputT, SdkUpdateProjectInputT } from '@llm/sdk';
@@ -141,6 +142,23 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
               'projects_summaries.content as summary_content',
               'projects_summaries.content_generated as summary_content_generated',
               'projects_summaries.content_generated_at as summary_content_generated_at',
+
+              eb => eb
+                .selectFrom('permissions')
+                .where('permissions.project_id', '=', eb.ref('projects.id'))
+                .select(neb => [
+                  neb.fn.jsonAgg(
+                    jsonBuildObject({
+                      id: neb.ref('permissions.id').$notNull(),
+                      access_level: neb.ref('permissions.access_level').$notNull(),
+                      group_id: neb.ref('permissions.group_id'),
+                      user_id: neb.ref('permissions.user_id'),
+                    }),
+                  )
+                    .$notNull()
+                    .as('permissions_json'),
+                ])
+                .as('permissions_json'),
             ])
             .limit(ids.length)
             .execute(),
@@ -156,6 +174,7 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
           summary_content_generated: summaryContentGenerated,
           summary_content_generated_at: summaryContentGeneratedAt,
 
+          permissions_json: permissions,
           ...item
         }): ProjectTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -169,6 +188,7 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
             contentGenerated: summaryContentGenerated,
             contentGeneratedAt: summaryContentGeneratedAt,
           },
+          permissions: (permissions || []).map(obj => camelcaseKeys(obj)),
         })),
       ),
     );
