@@ -42,25 +42,29 @@ export class PermissionsEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       accessLevel: source.access_level,
-
-      project: source.project,
-      app: source.app,
-      chat: source.chat,
-
-      user: null,
-      group: null,
+      resource: {
+        project: source.project,
+        app: source.app,
+        chat: source.chat,
+      },
     };
 
     if (source.user) {
       return {
         ...record,
-        user: source.user,
+        target: {
+          group: null,
+          user: source.user,
+        },
       };
     }
 
     return {
       ...record,
-      group: source.group!,
+      target: {
+        group: source.group!,
+        user: null,
+      },
     };
   };
 }
