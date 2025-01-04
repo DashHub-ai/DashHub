@@ -86,7 +86,6 @@ export class ChatsEsSearchRepo {
       archived: source.archived,
       organization: source.organization,
       creator: source.creator,
-      public: source.public,
       internal: source.internal,
       project: source.project,
       summary: {

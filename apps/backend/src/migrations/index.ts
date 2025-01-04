@@ -29,6 +29,7 @@ import * as addProjectsPoliciesTable from './0027-add-projects-policies';
 import * as addProjectsSummaries from './0028-add-projects-summarizes';
 import * as dropProjectPolicies from './0029-drop-project-policies';
 import * as addPermissionsTable from './0030-add-permissions-table';
+import * as dropPublicFlagInChats from './0031-drop-public-flag-in-chats';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -62,4 +63,5 @@ export const DB_MIGRATIONS = {
   '0028-add-projects-summarizes': addProjectsSummaries,
   '0029-drop-project-policies': dropProjectPolicies,
   '0030-add-permissions-table': addPermissionsTable,
+  '0031-drop-public-flag-in-chats': dropPublicFlagInChats,
 };

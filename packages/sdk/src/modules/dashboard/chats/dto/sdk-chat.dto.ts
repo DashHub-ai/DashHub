@@ -29,7 +29,6 @@ export const SdkChatV = z.object({
   creator: SdkUserListItemV,
   organization: SdkIdNameUrlEntryV,
   project: SdkChatProjectV.nullable(),
-  public: z.boolean(),
   internal: z.boolean(),
   summary: SdkChatSummaryV,
 })

@@ -36,7 +36,6 @@ const ChatsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         organization: createIdNameObjectMapping(),
         project: createIdNameObjectMapping(),
         creator: createIdObjectMapping(),
-        public: { type: 'boolean' },
         internal: { type: 'boolean' },
         summary: {
           properties: {

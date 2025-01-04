@@ -13,11 +13,9 @@ import { SdkPermissionResourceV } from './sdk-permission-resource.dto';
 export const SdkPermissionTargetV = z.union([
   z.object({
     user: SdkUserListItemV,
-    group: z.null(),
   }),
   z.object({
     group: SdkTableRowWithIdNameV,
-    user: z.null(),
   }),
 ]);
 
