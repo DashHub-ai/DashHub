@@ -3,6 +3,7 @@ import type { ColumnType } from 'kysely';
 import type { SdkPermissionAccessLevelT } from '@llm/sdk';
 
 import type {
+  NormalizeInsertTableRow,
   NormalizeSelectTableRow,
   TableId,
   TableRowWithId,
@@ -16,14 +17,17 @@ import type { UserTableRowBaseRelation } from '../users';
 export type PermissionsTable =
   & TableWithDefaultColumns
   & {
-    project_id: ColumnType<TableId | null, TableId | null, never>;
-    app_id: ColumnType<TableId | null, TableId | null, never>;
-    chat_id: ColumnType<TableUuid | null, TableUuid | null, never>;
-
     user_id: ColumnType<TableId | null, TableId | null, never>;
     group_id: ColumnType<TableId | null, TableId | null, never>;
     access_level: SdkPermissionAccessLevelT;
+
+    // Resource types
+    project_id: ColumnType<TableId | null, TableId | null, never>;
+    app_id: ColumnType<TableId | null, TableId | null, never>;
+    chat_id: ColumnType<TableUuid | null, TableUuid | null, never>;
   };
+
+export type PermissionInsertTableRow = NormalizeInsertTableRow<PermissionsTable>;
 
 export type PermissionTableRow = NormalizeSelectTableRow<PermissionsTable>;
 

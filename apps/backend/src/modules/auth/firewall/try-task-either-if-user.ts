@@ -45,7 +45,7 @@ export function tryTaskEitherIfUser(token: SdkJwtTokenT) {
           TE.chainW(
             result =>
               (result ? task : ofSdkUnauthorizedErrorTE()) as TE.TaskEither<
-              E | E2 | SdkUnauthorizedError,
+                E | E2 | SdkUnauthorizedError,
                 A
               >,
           ),
