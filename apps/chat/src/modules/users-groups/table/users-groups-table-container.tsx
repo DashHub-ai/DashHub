@@ -72,6 +72,7 @@ export function UsersGroupsTableContainer() {
       </PaginationToolbar>
 
       <PaginatedTable
+        className="bg-white"
         loading={loading}
         pagination={pagination.bind.entire()}
         result={result}

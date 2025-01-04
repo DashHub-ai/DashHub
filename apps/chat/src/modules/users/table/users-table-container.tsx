@@ -91,6 +91,7 @@ export function UsersTableContainer({ itemPropsFn }: Props) {
       </PaginationToolbar>
 
       <PaginatedTable
+        className="bg-white"
         loading={loading}
         pagination={pagination.bind.entire()}
         result={result}
