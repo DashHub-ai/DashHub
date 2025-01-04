@@ -1,20 +1,28 @@
 import camelcaseKeys from 'camelcase-keys';
-import { array as A, option as O, taskEither as TE } from 'fp-ts';
+import { array as A, nonEmptyArray as NEA, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { injectable } from 'tsyringe';
 
+import type {
+  SdkPermissionResourceT,
+  SdkPermissionResourceTypeT,
+  SdkUpsertResourcePermissionsInputT,
+} from '@llm/sdk';
+
+import type { PermissionInsertTableRow, PermissionTableRowWithRelations } from './permissions.tables';
+
 import {
-  createDatabaseRepo,
+  createProtectedDatabaseRepo,
   DatabaseError,
   type TableId,
   type TransactionalAttrs,
+  tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
 } from '../database';
-import { PermissionTableRowWithRelations } from './permissions.tables';
 
 @injectable()
-export class PermissionsRepo extends createDatabaseRepo('permissions') {
+export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') {
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 
@@ -112,4 +120,109 @@ export class PermissionsRepo extends createDatabaseRepo('permissions') {
       ),
     );
   };
+
+  upsert = (
+    {
+      forwardTransaction,
+      value: {
+        permissions,
+        resource,
+      },
+    }: TransactionalAttrs<{
+      value: {
+        permissions: SdkUpsertResourcePermissionsInputT;
+        resource: SdkPermissionResourceT;
+      };
+    }>,
+  ) => {
+    const transaction = tryReuseOrCreateTransaction({ db: this.db, forwardTransaction });
+
+    return transaction(trx => pipe(
+      this.deleteAllResourcePermissions({
+        forwardTransaction: trx,
+        resource,
+      }),
+      TE.tap(() => {
+        const maybeNonEmptyPermissions = NEA.fromArray(permissions);
+
+        if (O.isNone(maybeNonEmptyPermissions)) {
+          return TE.of(undefined);
+        }
+
+        const insertRows = pipe(
+          maybeNonEmptyPermissions.value,
+          NEA.map((permission): PermissionInsertTableRow => ({
+            accessLevel: permission.accessLevel,
+            projectId: resource.type === 'project' ? resource.id : null,
+            appId: resource.type === 'app' ? resource.id : null,
+            chatId: resource.type === 'chat' ? resource.id : null,
+          })),
+        );
+
+        return this.baseRepo.createBulk({
+          forwardTransaction: trx,
+          values: insertRows,
+        });
+      }),
+    ));
+  };
+
+  deleteAllResourcePermissions = (
+    {
+      forwardTransaction,
+      resource,
+    }: TransactionalAttrs<{
+      resource: SdkPermissionResourceT;
+    }>,
+  ) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(async (qb) => {
+        return qb
+          .deleteFrom(this.table)
+          .where(mapResourceTypeToColumn(resource.type), '=', resource.id)
+          .returning('id')
+          .execute();
+      }),
+      DatabaseError.tryTask,
+    );
+  };
+
+  createIdsIterator = this.baseRepo.createIdsIterator;
+
+  createResourceIdsIterator = (
+    {
+      resource,
+      chunkSize = 100,
+    }: {
+      resource: SdkPermissionResourceT;
+      chunkSize?: number;
+    },
+  ) =>
+    this.createIdsIterator({
+      chunkSize,
+      where: [
+        [`${resource.type}Id`, '=', resource.id],
+      ],
+    });
+}
+
+function mapResourceTypeToColumn(type: SdkPermissionResourceTypeT) {
+  switch (type) {
+    case 'project':
+      return 'project_id';
+
+    case 'app':
+      return 'app_id';
+
+    case 'chat':
+      return 'chat_id';
+
+    default: {
+      const _: never = type;
+
+      throw new Error('Unknown resource type!');
+    }
+  }
 }

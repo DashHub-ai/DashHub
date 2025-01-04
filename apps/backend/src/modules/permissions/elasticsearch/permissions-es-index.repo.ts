@@ -3,6 +3,8 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
+import type { SdkPermissionResourceT } from '@llm/sdk';
+
 import { tryOrThrowTE } from '@llm/commons';
 import {
   createBaseDatedRecordMappings,
@@ -56,6 +58,11 @@ export class PermissionsEsIndexRepo extends PermissionsAbstractEsIndexRepo<Permi
   ) {
     super(elasticsearchRepo);
   }
+
+  reindexByResource = (resource: SdkPermissionResourceT) => pipe(
+    this.policiesRepo.createResourceIdsIterator({ resource }),
+    this.findAndIndexDocumentsByStream,
+  )();
 
   protected async findEntities(ids: number[]): Promise<PermissionsEsDocument[]> {
     return pipe(

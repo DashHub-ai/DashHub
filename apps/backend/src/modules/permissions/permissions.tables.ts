@@ -3,6 +3,7 @@ import type { ColumnType } from 'kysely';
 import type { SdkPermissionAccessLevelT } from '@llm/sdk';
 
 import type {
+  NormalizeInsertTableRow,
   NormalizeSelectTableRow,
   TableId,
   TableRowWithId,
@@ -25,6 +26,8 @@ export type PermissionsTable =
     app_id: ColumnType<TableId | null, TableId | null, never>;
     chat_id: ColumnType<TableUuid | null, TableUuid | null, never>;
   };
+
+export type PermissionInsertTableRow = NormalizeInsertTableRow<PermissionsTable>;
 
 export type PermissionTableRow = NormalizeSelectTableRow<PermissionsTable>;
 
@@ -51,5 +54,3 @@ export type PermissionTableRowWithRelations =
       group: null;
     }
   );
-
-export type PermissionResourceType = 'chat' | 'project' | 'app';

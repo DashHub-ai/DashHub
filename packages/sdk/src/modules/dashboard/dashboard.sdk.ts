@@ -6,6 +6,7 @@ import { AppsCategoriesSdk } from './apps-categories';
 import { ChatsSdk } from './chats';
 import { ExpertsSdk } from './experts';
 import { OrganizationsSdk } from './organizations';
+import { PermissionsSdk } from './permissions';
 import { ProjectsSdk } from './projects';
 import { ProjectsEmbeddingsSdk } from './projects-embeddings';
 import { ProjectsFilesSdk } from './projects-files';
@@ -37,6 +38,8 @@ export class DashboardSdk {
   public readonly s3Buckets = new S3BucketsSdk(this.config);
 
   public readonly aiModels = new AIModelsSdk(this.config);
+
+  public readonly permissions = new PermissionsSdk(this.config);
 
   constructor(private readonly config: AbstractNestedSdkWithAuthConfig) {}
 }

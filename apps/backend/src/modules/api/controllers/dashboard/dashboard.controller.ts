@@ -6,6 +6,7 @@ import { AppsCategoriesController } from './apps-categories.controller';
 import { AppsController } from './apps.controller';
 import { ChatsController } from './chats.controller';
 import { OrganizationsController } from './organizations.controller';
+import { PermissionsController } from './permissions.controller';
 import { ProjectsController } from './projects.controller';
 import { S3BucketsController } from './s3-buckets.controller';
 import { UsersGroupsController } from './users-groups.controller';
@@ -23,6 +24,7 @@ export class DashboardController extends BaseController {
     @inject(S3BucketsController) s3Buckets: S3BucketsController,
     @inject(ChatsController) chats: ChatsController,
     @inject(AIModelsController) aiModels: AIModelsController,
+    @inject(PermissionsController) permissions: PermissionsController,
   ) {
     super();
 
@@ -35,6 +37,7 @@ export class DashboardController extends BaseController {
       .route('/apps', apps.router)
       .route('/s3-buckets', s3Buckets.router)
       .route('/chats', chats.router)
-      .route('/ai-models', aiModels.router);
+      .route('/ai-models', aiModels.router)
+      .route('/permissions', permissions.router);
   }
 }

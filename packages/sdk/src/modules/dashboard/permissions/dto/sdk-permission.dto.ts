@@ -4,19 +4,11 @@ import {
   SdkTableRowWithDatesV,
   SdkTableRowWithIdNameV,
   SdkTableRowWithIdV,
-  SdkTableRowWithUuidV,
 } from '~/shared';
 
 import { SdkUserListItemV } from '../../users/dto';
 import { SdkPermissionAccessLevelV } from './sdk-permission-level.dto';
-
-export const SdkPermissionResourceV = z.object({
-  chat: SdkTableRowWithUuidV.nullable(),
-  project: SdkTableRowWithIdV.nullable(),
-  app: SdkTableRowWithIdV.nullable(),
-});
-
-export type SdkPermissionResourceT = z.infer<typeof SdkPermissionResourceV>;
+import { SdkPermissionResourceV } from './sdk-permission-resource.dto';
 
 export const SdkPermissionTargetV = z.union([
   z.object({
