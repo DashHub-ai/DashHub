@@ -12,19 +12,23 @@ import {
   type EsDocument,
 } from '~/modules/elasticsearch';
 
-import type { ProjectPolicyTableRowWithRelations } from '../projects-policies.tables';
+import type { PermissionTableRowWithRelations } from '../permissions.tables';
 
-import { ProjectsPoliciesRepo } from '../projects-policies.repo';
+import { PermissionsRepo } from '../permissions.repo';
 
-const ProjectsPoliciesAbstractEsIndexRepo = createElasticsearchIndexRepo({
-  indexName: 'dashboard-projects-policies',
+const PermissionsAbstractEsIndexRepo = createElasticsearchIndexRepo({
+  indexName: 'dashboard-permissions',
   schema: {
     mappings: {
       dynamic: false,
       properties: {
         ...createBaseDatedRecordMappings(),
         access_level: { type: 'keyword' },
+
         project: createIdObjectMapping(),
+        app: createIdObjectMapping(),
+        chat: createIdObjectMapping({}, 'keyword'),
+
         user: createIdObjectMapping(),
         group: createIdObjectMapping({
           users: {
@@ -42,18 +46,18 @@ const ProjectsPoliciesAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ProjectsPoliciesEsDocument = EsDocument<ProjectPolicyTableRowWithRelations>;
+export type PermissionsEsDocument = EsDocument<PermissionTableRowWithRelations>;
 
 @injectable()
-export class ProjectsPoliciesEsIndexRepo extends ProjectsPoliciesAbstractEsIndexRepo<ProjectsPoliciesEsDocument> {
+export class PermissionsEsIndexRepo extends PermissionsAbstractEsIndexRepo<PermissionsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
-    @inject(ProjectsPoliciesRepo) private readonly policiesRepo: ProjectsPoliciesRepo,
+    @inject(PermissionsRepo) private readonly policiesRepo: PermissionsRepo,
   ) {
     super(elasticsearchRepo);
   }
 
-  protected async findEntities(ids: number[]): Promise<ProjectsPoliciesEsDocument[]> {
+  protected async findEntities(ids: number[]): Promise<PermissionsEsDocument[]> {
     return pipe(
       this.policiesRepo.findWithRelationsByIds({ ids }),
       TE.map(

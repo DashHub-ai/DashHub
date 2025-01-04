@@ -3,44 +3,50 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkProjectPolicyT } from '@llm/sdk';
-import type { TableId } from '~/modules/database';
+import type { SdkPermissionT } from '@llm/sdk';
+import type { TableId, TableUuid } from '~/modules/database';
 
 import { tryGetFirstRawResponseHitOrNotExists } from '~/modules/elasticsearch/helpers';
 
+import type { PermissionResourceType } from '../permissions.tables';
+
 import {
-  type ProjectsPoliciesEsDocument,
-  ProjectsPoliciesEsIndexRepo,
-} from './projects-policies-es-index.repo';
+  type PermissionsEsDocument,
+  PermissionsEsIndexRepo,
+} from './permissions-es-index.repo';
 
 @injectable()
-export class ProjectsPoliciesEsSearchRepo {
+export class PermissionsEsSearchRepo {
   constructor(
-    @inject(ProjectsPoliciesEsIndexRepo) private readonly indexRepo: ProjectsPoliciesEsIndexRepo,
+    @inject(PermissionsEsIndexRepo) private readonly indexRepo: PermissionsEsIndexRepo,
   ) {}
 
-  getByProjectId = (projectId: TableId) => pipe(
+  getByResourceId = (type: PermissionResourceType, id: TableId | TableUuid) => pipe(
     this.indexRepo.search(
       esb
         .requestBodySearch()
         .query(
           esb
             .boolQuery()
-            .must(esb.termQuery('project.id', projectId)),
+            .must(esb.termQuery(`${type}.id`, id)),
         )
         .toJSON(),
     ),
     tryGetFirstRawResponseHitOrNotExists,
-    TE.map(doc => ProjectsPoliciesEsSearchRepo.mapOutputHit(doc._source as ProjectsPoliciesEsDocument)),
+    TE.map(doc => PermissionsEsSearchRepo.mapOutputHit(doc._source as PermissionsEsDocument)),
   );
 
-  private static mapOutputHit = (source: ProjectsPoliciesEsDocument): SdkProjectPolicyT => {
+  private static mapOutputHit = (source: PermissionsEsDocument): SdkPermissionT => {
     const record = {
       id: source.id,
       createdAt: source.created_at,
       updatedAt: source.updated_at,
-      project: source.project,
       accessLevel: source.access_level,
+
+      project: source.project,
+      app: source.app,
+      chat: source.chat,
+
       user: null,
       group: null,
     };

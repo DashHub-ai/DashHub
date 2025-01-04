@@ -1,3 +1,4 @@
+import camelcaseKeys from 'camelcase-keys';
 import { array as A, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { jsonBuildObject } from 'kysely/helpers/postgres';
@@ -10,10 +11,10 @@ import {
   type TransactionalAttrs,
   tryReuseTransactionOrSkip,
 } from '../database';
-import { ProjectPolicyTableRowWithRelations } from './projects-policies.tables';
+import { PermissionTableRowWithRelations } from './permissions.tables';
 
 @injectable()
-export class ProjectsPoliciesRepo extends createDatabaseRepo('projects_policies') {
+export class PermissionsRepo extends createDatabaseRepo('permissions') {
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 
@@ -22,22 +23,24 @@ export class ProjectsPoliciesRepo extends createDatabaseRepo('projects_policies'
         async qb =>
           qb
             .selectFrom(this.table)
-            .where('projects_policies.id', 'in', ids)
-            .innerJoin('projects', 'projects.id', 'project_id')
-
+            .where('permissions.id', 'in', ids)
             .leftJoin('users', 'users.id', 'user_id')
             .leftJoin('users_groups', 'users_groups.id', 'group_id')
-
-            .selectAll('projects_policies')
             .select([
+              'permissions.id',
+
+              'permissions.project_id',
+              'permissions.app_id',
+              'permissions.chat_id',
+
+              'permissions.created_at',
+              'permissions.updated_at',
+              'permissions.access_level',
+
               'user_id as user_id',
               'users.email as user_email',
-
               'group_id as group_id',
               'users_groups.name as group_name',
-
-              'projects.id as project_id',
-              'projects.name as project_name',
 
               eb => eb
                 .selectFrom('users_groups_users')
@@ -61,30 +64,29 @@ export class ProjectsPoliciesRepo extends createDatabaseRepo('projects_policies'
       DatabaseError.tryTask,
       TE.map(
         A.filterMap(({
-          project_id: projectId,
-          project_name: projectName,
-
           user_id: userId,
           user_email: userEmail,
-
           group_id: groupId,
           group_name: groupName,
 
-          users,
+          project_id: projectId,
+          app_id: appId,
+          chat_id: chatId,
 
+          users,
           ...item
-        }): O.Option<ProjectPolicyTableRowWithRelations> => {
+        }): O.Option<PermissionTableRowWithRelations> => {
+          if (!projectId && !appId && !chatId) {
+            return O.none;
+          }
+
           const record = {
-            id: item.id,
-            createdAt: item.created_at,
-            updatedAt: item.updated_at,
-            accessLevel: item.access_level,
+            ...camelcaseKeys(item),
+            project: projectId ? { id: projectId } : null,
+            app: appId ? { id: appId } : null,
+            chat: chatId ? { id: chatId } : null,
             group: null,
             user: null,
-            project: {
-              id: projectId,
-              name: projectName,
-            },
           };
 
           if (groupId) {

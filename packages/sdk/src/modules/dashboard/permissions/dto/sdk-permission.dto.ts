@@ -4,15 +4,18 @@ import {
   SdkTableRowWithDatesV,
   SdkTableRowWithIdNameV,
   SdkTableRowWithIdV,
+  SdkTableRowWithUuidV,
 } from '~/shared';
 
 import { SdkUserListItemV } from '../../users/dto';
-import { SdkProjectAccessLevelV } from './sdk-project-access-level.dto';
+import { SdkPermissionAccessLevelV } from './sdk-permission-level.dto';
 
-export const SdkProjectPolicyV = z
+export const SdkPermissionV = z
   .object({
-    project: SdkTableRowWithIdNameV,
-    accessLevel: SdkProjectAccessLevelV,
+    chat: SdkTableRowWithUuidV.nullable(),
+    project: SdkTableRowWithIdV.nullable(),
+    app: SdkTableRowWithIdV.nullable(),
+    accessLevel: SdkPermissionAccessLevelV,
   })
   .merge(SdkTableRowWithIdV)
   .merge(SdkTableRowWithDatesV)
@@ -29,4 +32,4 @@ export const SdkProjectPolicyV = z
     ]),
   );
 
-export type SdkProjectPolicyT = z.infer<typeof SdkProjectPolicyV>;
+export type SdkPermissionT = z.infer<typeof SdkPermissionV>;
