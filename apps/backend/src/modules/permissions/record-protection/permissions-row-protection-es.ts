@@ -3,10 +3,14 @@ import { createIdObjectMapping } from '~/modules/elasticsearch/mappings/id-objec
 export function createPermissionsRowEntryMapping() {
   return {
     type: 'nested',
-    ...createIdObjectMapping({
-      group_id: { type: 'integer' },
-      user_id: { type: 'integer' },
+    properties: {
       access_level: { type: 'keyword' },
-    }),
+      target: {
+        properties: {
+          user: createIdObjectMapping(),
+          group: createIdObjectMapping(),
+        },
+      },
+    },
   };
 }

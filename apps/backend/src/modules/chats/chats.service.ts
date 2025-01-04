@@ -13,6 +13,7 @@ import {
 
 import { WithAuthFirewall } from '../auth';
 import { TableId, TableRowWithUuid, TableUuid } from '../database';
+import { PermissionsRepo } from '../permissions';
 import { ChatsFirewall } from './chats.firewall';
 import { ChatsRepo } from './chats.repo';
 import { ChatsEsIndexRepo, ChatsEsSearchRepo } from './elasticsearch';
@@ -23,6 +24,7 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
     @inject(ChatsRepo) private readonly repo: ChatsRepo,
     @inject(ChatsEsSearchRepo) private readonly esSearchRepo: ChatsEsSearchRepo,
     @inject(ChatsEsIndexRepo) private readonly esIndexRepo: ChatsEsIndexRepo,
+    @inject(PermissionsRepo) private readonly permissionsService: PermissionsRepo,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new ChatsFirewall(jwt, this);
@@ -41,13 +43,37 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  create = (value: RequiredBy<SdkCreateChatInputT, 'organization' | 'creator'>) => pipe(
+  create = ({ permissions, ...value }: RequiredBy<SdkCreateChatInputT, 'organization' | 'creator'>) => pipe(
     this.repo.create({ value }),
+    TE.tap(({ id }) => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'chat', id },
+          permissions,
+        },
+      });
+    }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, ...value }: SdkUpdateChatInputT & TableRowWithUuid) => pipe(
+  update = ({ id, permissions, ...value }: SdkUpdateChatInputT & TableRowWithUuid) => pipe(
     this.repo.update({ id, value }),
+    TE.tap(({ id }) => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'chat', id },
+          permissions,
+        },
+      });
+    }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 

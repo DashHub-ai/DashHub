@@ -1,14 +1,5 @@
-import type { SdkPermissionAccessLevelT } from '@llm/sdk';
-
-import type { TableId } from '../../database';
-
-export type PermissionTableRowEntry = {
-  id: TableId;
-  groupId: TableId | null;
-  userId: TableId | null;
-  accessLevel: SdkPermissionAccessLevelT;
-};
+import type { SdkPermissionsT } from '@llm/sdk';
 
 export type PermissionsTableRowRelation = {
-  permissions: PermissionTableRowEntry[];
+  permissions: SdkPermissionsT;
 };

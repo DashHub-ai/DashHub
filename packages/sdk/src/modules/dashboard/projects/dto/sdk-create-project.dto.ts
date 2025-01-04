@@ -7,6 +7,7 @@ import {
   ZodOmitDateFields,
 } from '~/shared';
 
+import { SdkUpsertTableRowWithPermissionsInputV } from '../../permissions/dto/sdk-upsert-table-row-with-permissions.dto';
 import { SdkProjectV } from './sdk-project.dto';
 
 export const SdkProjectSummaryInputV = z.object({
@@ -22,6 +23,7 @@ export const SdkCreateProjectInputV = SdkProjectV.omit({
   organization: true,
   summary: true,
 })
+  .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({
     organization: SdkTableRowWithIdV,
     summary: SdkProjectSummaryInputV,

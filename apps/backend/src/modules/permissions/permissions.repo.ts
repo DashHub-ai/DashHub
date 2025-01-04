@@ -1,3 +1,5 @@
+import type { ExpressionBuilder } from 'kysely';
+
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, nonEmptyArray as NEA, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
@@ -7,7 +9,7 @@ import { injectable } from 'tsyringe';
 import type {
   SdkPermissionResourceT,
   SdkPermissionResourceTypeT,
-  SdkUpsertResourcePermissionsInputT,
+  SdkUpsertPermissionsT,
 } from '@llm/sdk';
 
 import type { PermissionInsertTableRow, PermissionTableRowWithRelations } from './permissions.tables';
@@ -20,9 +22,31 @@ import {
   tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
 } from '../database';
+import { PermissionsTableRowRawAggRelation } from './record-protection';
 
 @injectable()
 export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') {
+  static createPermissionAggQuery = <Q extends ExpressionBuilder<any, any>>(qb: Q) =>
+    qb
+      .selectFrom('permissions')
+      .leftJoin('users_groups', 'users_groups.id', 'permissions.group_id')
+      .leftJoin('users', 'users.id', 'permissions.user_id')
+      .select(neb => [
+        neb.fn.jsonAgg(
+          jsonBuildObject({
+            access_level: neb.ref('permissions.access_level'),
+
+            group_id: neb.ref('permissions.group_id'),
+            group_name: neb.ref('users_groups.name'),
+
+            user_id: neb.ref('permissions.user_id'),
+            user_email: neb.ref('users.email'),
+          }),
+        )
+          .$castTo<PermissionsTableRowRawAggRelation[]>()
+          .as('permissions_json'),
+      ]);
+
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 
@@ -130,7 +154,7 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
       },
     }: TransactionalAttrs<{
       value: {
-        permissions: SdkUpsertResourcePermissionsInputT;
+        permissions: SdkUpsertPermissionsT;
         resource: SdkPermissionResourceT;
       };
     }>,

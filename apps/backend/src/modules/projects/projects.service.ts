@@ -19,6 +19,7 @@ import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId, TableRowWithUuid } from '../database';
 
 import { ChatsService } from '../chats/chats.service';
+import { PermissionsService } from '../permissions';
 import { ProjectsEsIndexRepo, ProjectsEsSearchRepo } from './elasticsearch';
 import { ProjectsFirewall } from './projects.firewall';
 import { ProjectsRepo } from './projects.repo';
@@ -30,6 +31,7 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     @inject(ProjectsEsSearchRepo) private readonly esSearchRepo: ProjectsEsSearchRepo,
     @inject(ProjectsEsIndexRepo) private readonly esIndexRepo: ProjectsEsIndexRepo,
     @inject(ChatsService) private readonly chatsService: ChatsService,
+    @inject(PermissionsService) private readonly permissionsService: PermissionsService,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsFirewall(jwt, this);
@@ -115,6 +117,7 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
       creator,
       internal,
       organization,
+      permissions,
       ...values
     }: SdkCreateProjectInputT & {
       internal?: boolean;
@@ -129,11 +132,35 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
         internal: !!internal,
       },
     }),
+    TE.tap(({ id }) => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'project', id },
+          permissions,
+        },
+      });
+    }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, ...value }: SdkUpdateProjectInputT & TableRowWithId) => pipe(
+  update = ({ id, permissions, ...value }: SdkUpdateProjectInputT & TableRowWithId) => pipe(
     this.repo.update({ id, value }),
+    TE.tap(() => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'project', id },
+          permissions,
+        },
+      });
+    }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 }

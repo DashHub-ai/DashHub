@@ -6,6 +6,7 @@ import {
   SdkTableRowWithUuidV,
 } from '~/shared';
 
+import { SdkUpsertTableRowWithPermissionsInputV } from '../../permissions/dto/sdk-upsert-table-row-with-permissions.dto';
 import { SdkChatV } from './sdk-chat.dto';
 
 export const SdkChatSummaryInputV = z.object({
@@ -19,6 +20,7 @@ export const SdkCreateChatInputV = SdkChatV.pick({
   internal: true,
   project: true,
 })
+  .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({
     public: z.boolean(),
     creator: SdkTableRowWithIdV.optional(),

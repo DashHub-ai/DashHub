@@ -1,7 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { inject, injectable } from 'tsyringe';
 
 import type { RequiredBy } from '@llm/commons';
@@ -26,6 +25,7 @@ import {
 import type { ChatTableRowWithRelations } from './chats.tables';
 
 import { ChatsSummariesRepo } from '../chats-summaries/chats-summaries.repo';
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
 
 @injectable()
 export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
@@ -149,22 +149,11 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               'projects.name as project_name',
               'projects.internal as project_internal',
 
-              eb => eb
-                .selectFrom('permissions')
-                .where('permissions.chat_id', '=', eb.ref('chats.id'))
-                .select(neb => [
-                  neb.fn.jsonAgg(
-                    jsonBuildObject({
-                      id: neb.ref('permissions.id').$notNull(),
-                      access_level: neb.ref('permissions.access_level').$notNull(),
-                      group_id: neb.ref('permissions.group_id'),
-                      user_id: neb.ref('permissions.user_id'),
-                    }),
-                  )
-                    .$notNull()
-                    .as('permissions_json'),
-                ])
-                .as('permissions_json'),
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.chat_id', '=', eb.ref('chats.id'))
+                  .as('permissions_json'),
             ])
             .limit(ids.length)
             .execute(),
@@ -221,7 +210,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
             nameGenerated: summaryNameGenerated,
             nameGeneratedAt: summaryNameGeneratedAt,
           },
-          permissions: (permissions || []).map(obj => camelcaseKeys(obj)),
+          permissions: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
         })),
       ),
     );

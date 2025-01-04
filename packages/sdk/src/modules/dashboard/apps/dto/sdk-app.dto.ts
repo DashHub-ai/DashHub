@@ -8,12 +8,15 @@ import {
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
+import { SdkTableRowWithPermissionsV } from '../../permissions/dto/sdk-table-row-with-permissions.dto';
+
 export const SdkAppV = z.strictObject({
   organization: SdkIdNameUrlEntryV,
   chatContext: z.string(),
   description: NonEmptyOrNullStringV,
   category: SdkTableRowWithIdNameV,
 })
+  .merge(SdkTableRowWithPermissionsV)
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)
   .merge(SdkTableRowWithArchivedV);

@@ -1,7 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateProjectInputT, SdkUpdateProjectInputT } from '@llm/sdk';
@@ -22,6 +21,7 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
 import { ProjectsSummariesRepo } from '../projects-summaries/projects-summaries.repo';
 import { ProjectTableRowWithRelations } from './projects.tables';
 
@@ -143,22 +143,11 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
               'projects_summaries.content_generated as summary_content_generated',
               'projects_summaries.content_generated_at as summary_content_generated_at',
 
-              eb => eb
-                .selectFrom('permissions')
-                .where('permissions.project_id', '=', eb.ref('projects.id'))
-                .select(neb => [
-                  neb.fn.jsonAgg(
-                    jsonBuildObject({
-                      id: neb.ref('permissions.id').$notNull(),
-                      access_level: neb.ref('permissions.access_level').$notNull(),
-                      group_id: neb.ref('permissions.group_id'),
-                      user_id: neb.ref('permissions.user_id'),
-                    }),
-                  )
-                    .$notNull()
-                    .as('permissions_json'),
-                ])
-                .as('permissions_json'),
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.project_id', '=', eb.ref('projects.id'))
+                  .as('permissions_json'),
             ])
             .limit(ids.length)
             .execute(),
@@ -188,7 +177,7 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
             contentGenerated: summaryContentGenerated,
             contentGeneratedAt: summaryContentGeneratedAt,
           },
-          permissions: (permissions || []).map(obj => camelcaseKeys(obj)),
+          permissions: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
         })),
       ),
     );

@@ -21,6 +21,7 @@ import { ChatsSummariesService } from '~/modules/chats-summaries';
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
 
+import { PermissionsService } from '../permissions';
 import { AppsFirewall } from './apps.firewall';
 import { AppsRepo } from './apps.repo';
 import { AppsEsIndexRepo, AppsEsSearchRepo } from './elasticsearch';
@@ -61,6 +62,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     @inject(AppsRepo) private readonly repo: AppsRepo,
     @inject(AppsEsSearchRepo) private readonly esSearchRepo: AppsEsSearchRepo,
     @inject(AppsEsIndexRepo) private readonly esIndexRepo: AppsEsIndexRepo,
+    @inject(PermissionsService) private readonly permissionsService: PermissionsService,
     @inject(delay(() => ChatsSummariesService)) private readonly chatsSummariesService: Readonly<ChatsSummariesService>,
   ) {}
 
@@ -116,7 +118,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
 
   search = this.esSearchRepo.search;
 
-  create = ({ organization, category, ...values }: SdkCreateAppInputT) => pipe(
+  create = ({ organization, category, permissions, ...values }: SdkCreateAppInputT) => pipe(
     this.repo.create({
       value: {
         ...values,
@@ -124,16 +126,40 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
         categoryId: category.id,
       },
     }),
+    TE.tap(({ id }) => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'app', id },
+          permissions,
+        },
+      });
+    }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, category, ...value }: SdkUpdateAppInputT & TableRowWithId) => pipe(
+  update = ({ id, category, permissions, ...value }: SdkUpdateAppInputT & TableRowWithId) => pipe(
     this.repo.update({
       id,
       value: {
         ...value,
         categoryId: category.id,
       },
+    }),
+    TE.tap(() => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'app', id },
+          permissions,
+        },
+      });
     }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );

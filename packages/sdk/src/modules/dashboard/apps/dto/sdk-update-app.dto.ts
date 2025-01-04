@@ -2,6 +2,7 @@ import type { z } from 'zod';
 
 import { SdkTableRowWithIdV, ZodOmitArchivedFields, ZodOmitDateFields } from '~/shared';
 
+import { SdkUpsertTableRowWithPermissionsInputV } from '../../permissions/dto/sdk-upsert-table-row-with-permissions.dto';
 import { SdkAppV } from './sdk-app.dto';
 
 export const SdkUpdateAppInputV = SdkAppV
@@ -12,6 +13,7 @@ export const SdkUpdateAppInputV = SdkAppV
     organization: true,
     category: true,
   })
+  .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({
     category: SdkTableRowWithIdV,
   });

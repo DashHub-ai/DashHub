@@ -1,7 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { injectable } from 'tsyringe';
 
 import {
@@ -16,6 +15,7 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
 import { AppTableRowWithRelations } from './apps.tables';
 
 @injectable()
@@ -47,22 +47,11 @@ export class AppsRepo extends createDatabaseRepo('apps') {
               'apps_categories.id as category_id',
               'apps_categories.name as category_name',
 
-              eb => eb
-                .selectFrom('permissions')
-                .where('permissions.app_id', '=', eb.ref('apps.id'))
-                .select(neb => [
-                  neb.fn.jsonAgg(
-                    jsonBuildObject({
-                      id: neb.ref('permissions.id').$notNull(),
-                      access_level: neb.ref('permissions.access_level').$notNull(),
-                      group_id: neb.ref('permissions.group_id'),
-                      user_id: neb.ref('permissions.user_id'),
-                    }),
-                  )
-                    .$notNull()
-                    .as('permissions_json'),
-                ])
-                .as('permissions_json'),
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.app_id', '=', eb.ref('apps.id'))
+                  .as('permissions_json'),
             ])
             .limit(ids.length)
             .execute(),
@@ -85,7 +74,7 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             id: item.category_id,
             name: item.category_name,
           },
-          permissions: (permissions || []).map(obj => camelcaseKeys(obj)),
+          permissions: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
         })),
       ),
     );
