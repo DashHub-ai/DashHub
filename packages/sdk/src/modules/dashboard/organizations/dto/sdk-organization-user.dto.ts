@@ -6,7 +6,7 @@ import {
   SdkTableRowWithIdV,
 } from '~/shared';
 
-export const SdkOrganizationUserRoleV = z.enum(['owner', 'member']);
+export const SdkOrganizationUserRoleV = z.enum(['owner', 'tech', 'member']);
 
 export type SdkOrganizationUserRoleT = z.infer<typeof SdkOrganizationUserRoleV>;
 

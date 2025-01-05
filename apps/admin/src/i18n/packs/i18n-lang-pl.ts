@@ -17,7 +17,8 @@ const I18N_USER_ROLES_PL: Record<SdkUserRoleT, string> = {
 
 const I18N_USER_ORGANIZATION_ROLES_PL: Record<SdkOrganizationUserRoleT, string> = {
   owner: 'Właściciel',
-  member: 'Pracownik',
+  tech: 'Użytkownik techniczny',
+  member: 'Użytkownik',
 };
 
 export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
