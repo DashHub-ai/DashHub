@@ -13,7 +13,7 @@ import {
 
 import { WithAuthFirewall } from '../auth';
 import { TableId, TableRowWithUuid, TableUuid } from '../database';
-import { PermissionsRepo } from '../permissions';
+import { PermissionsService } from '../permissions';
 import { ChatsFirewall } from './chats.firewall';
 import { ChatsRepo } from './chats.repo';
 import { ChatsEsIndexRepo, ChatsEsSearchRepo } from './elasticsearch';
@@ -24,10 +24,10 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
     @inject(ChatsRepo) private readonly repo: ChatsRepo,
     @inject(ChatsEsSearchRepo) private readonly esSearchRepo: ChatsEsSearchRepo,
     @inject(ChatsEsIndexRepo) private readonly esIndexRepo: ChatsEsIndexRepo,
-    @inject(PermissionsRepo) private readonly permissionsService: PermissionsRepo,
+    @inject(PermissionsService) private readonly permissionsService: PermissionsService,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new ChatsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new ChatsFirewall(jwt, this, this.permissionsService);
 
   get = this.esSearchRepo.get;
 

@@ -1,5 +1,5 @@
 export * from './async-debounce';
-export * from './cache-async-task';
+export * from './cache';
 export * from './clamp';
 export * from './date';
 export * from './delay-task-either';
@@ -27,6 +27,7 @@ export * from './select-file';
 export * from './shallow-compare-array';
 export * from './tap-either';
 export * from './tap-option';
+export * from './tap-task';
 export * from './tap-task-either';
 export * from './tap-task-either-error';
 export * from './tap-task-either-error-te';

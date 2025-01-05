@@ -1,9 +1,14 @@
-import { flow } from 'fp-ts/lib/function';
+import { taskEither as TE } from 'fp-ts';
+import { flow, pipe } from 'fp-ts/lib/function';
+
+import type { PermissionsService } from '~/modules/permissions';
 
 import {
+  dropPaginationSdkPermissionsKeys,
   ofSdkUnauthorizedErrorTE,
   type SdkCreateChatInputT,
   type SdkJwtTokenT,
+  type SdkSearchChatsInputT,
   type SdkUnauthorizedError,
 } from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
@@ -16,6 +21,7 @@ export class ChatsFirewall extends AuthFirewallService {
   constructor(
     jwt: SdkJwtTokenT,
     private readonly chatsService: ChatsService,
+    private readonly permissionsService: PermissionsService,
   ) {
     super(jwt);
   }
@@ -26,10 +32,14 @@ export class ChatsFirewall extends AuthFirewallService {
     this.tryTEIfUser.is.root,
   );
 
-  // TODO: Add belongs checks
-  search = flow(
-    this.chatsService.search,
-    this.tryTEIfUser.is.root,
+  search = (filters: SdkSearchChatsInputT) => pipe(
+    filters,
+    this.permissionsService.enforceSatisfyPermissionsFilters({
+      accessLevel: 'read',
+      userId: this.userId,
+    }),
+    TE.chainW(this.chatsService.search),
+    TE.map(dropPaginationSdkPermissionsKeys),
   );
 
   // TODO: Add belongs checks

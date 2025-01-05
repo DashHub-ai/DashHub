@@ -1,16 +1,6 @@
 import esb from 'elastic-builder';
 
-import type { SdkPermissionAccessLevelT, SdkTableRowIdT } from '@llm/sdk';
-
-type UserAccessPermissionsDescriptor = {
-  accessLevel: SdkPermissionAccessLevelT;
-  userId: SdkTableRowIdT;
-  groupsIds: SdkTableRowIdT[];
-};
-
-export type WithPermissionsInternalFilters<O = unknown> = O & {
-  satisfyPermissions?: UserAccessPermissionsDescriptor;
-};
+import type { UserAccessPermissionsDescriptor } from './permissions-row-protection-filters.types';
 
 export function createEsPermissionsFilters(descriptor: UserAccessPermissionsDescriptor): esb.BoolQuery {
   const { userId, groupsIds, accessLevel } = descriptor;
@@ -20,8 +10,10 @@ export function createEsPermissionsFilters(descriptor: UserAccessPermissionsDesc
     : [accessLevel]; // if requesting write, only allow write
 
   return esb.boolQuery().should([
-    // Case 1: No permissions field means public access
-    esb.boolQuery().mustNot(esb.existsQuery('permissions')),
+    // Case 1: Empty permissions array means public access
+    esb.boolQuery().mustNot(
+      esb.nestedQuery(esb.matchAllQuery(), 'permissions'),
+    ),
 
     // Case 2: Check nested permissions
     esb.nestedQuery(

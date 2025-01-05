@@ -4,7 +4,7 @@ import { injectable } from 'tsyringe';
 
 import type { SdkTableRowIdT } from '@llm/sdk';
 
-import { pluckTyped } from '@llm/commons';
+import { pluckTyped, tapTask, Time, wrapWithCache } from '@llm/commons';
 import {
   AbstractDatabaseRepo,
   DatabaseError,
@@ -55,25 +55,32 @@ export class UsersGroupsUsersRepo extends AbstractDatabaseRepo {
         };
       },
       DatabaseError.tryTask,
+      tapTask(this.getAllUsersGroupsIds.clear),
     ));
   };
 
-  getAllUsersGroupsIds = ({ forwardTransaction, userId }: TransactionalAttrs<{ userId: SdkTableRowIdT; }>) => {
-    const transaction = tryReuseTransactionOrSkip({
-      db: this.db,
-      forwardTransaction,
-    });
+  getAllUsersGroupsIds = wrapWithCache(
+    ({ forwardTransaction, userId }: TransactionalAttrs<{ userId: SdkTableRowIdT; }>) => {
+      const transaction = tryReuseTransactionOrSkip({
+        db: this.db,
+        forwardTransaction,
+      });
 
-    return pipe(
-      transaction(
-        async qb => qb
-          .selectFrom('users_groups_users')
-          .where('user_id', '=', userId)
-          .select('group_id as id')
-          .execute(),
-      ),
-      DatabaseError.tryTask,
-      TE.map(pluckTyped('id')),
-    );
-  };
+      return pipe(
+        transaction(
+          async qb => qb
+            .selectFrom('users_groups_users')
+            .where('user_id', '=', userId)
+            .select('group_id as id')
+            .execute(),
+        ),
+        DatabaseError.tryTask,
+        TE.map(pluckTyped('id')),
+      );
+    },
+    {
+      getKey: ({ userId }) => userId,
+      ttlMs: Time.toMilliseconds.hours(3),
+    },
+  );
 }

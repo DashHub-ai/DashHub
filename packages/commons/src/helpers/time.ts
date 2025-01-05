@@ -1,6 +1,7 @@
 export const Time = {
   toMilliseconds: {
     minutes: (count: number) => count * 60 * 1000,
+    hours: (count: number) => count * 3600 * 1000,
   },
 
   toSeconds: {

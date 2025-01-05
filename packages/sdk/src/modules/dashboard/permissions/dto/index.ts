@@ -1,3 +1,4 @@
+export * from './drop-sdk-permissions-key';
 export * from './sdk-permission.dto';
 export * from './sdk-permission-level.dto';
 export * from './sdk-permission-resource.dto';
