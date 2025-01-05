@@ -26,7 +26,7 @@ export const SdKSearchChatsInputV = SdkOffsetPaginationInputV
   .merge(SdkUuidsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchChatsInputT = z.infer<typeof SdKSearchChatsInputV>;
+export type SdkSearchChatsInputT = z.infer<typeof SdKSearchChatsInputV>;
 
 export const SdKSearchChatsOutputV = SdkOffsetPaginationOutputV(SdkSearchChatItemV);
 

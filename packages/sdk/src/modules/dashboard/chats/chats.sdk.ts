@@ -31,7 +31,7 @@ import type {
   SdkChatT,
   SdkCreateChatInputT,
   SdkCreateChatOutputT,
-  SdKSearchChatsInputT,
+  SdkSearchChatsInputT,
   SdKSearchChatsOutputT,
   SdkUpdateChatInputT,
   SdkUpdateChatOutputT,
@@ -53,7 +53,7 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
       options: getPayload(),
     });
 
-  search = (data: SdKSearchChatsInputT) =>
+  search = (data: SdkSearchChatsInputT) =>
     this.fetch<SdKSearchChatsOutputT>({
       url: this.endpoint('/search'),
       query: data,
