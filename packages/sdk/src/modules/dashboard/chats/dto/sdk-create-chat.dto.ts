@@ -22,7 +22,6 @@ export const SdkCreateChatInputV = SdkChatV.pick({
 })
   .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({
-    public: z.boolean(),
     creator: SdkTableRowWithIdV.optional(),
     project: SdkTableRowWithIdV.optional().nullable(),
     organization: SdkTableRowWithIdV.optional(),
