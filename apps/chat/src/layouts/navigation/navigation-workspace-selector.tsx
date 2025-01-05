@@ -6,7 +6,11 @@ import { useI18n } from '~/i18n';
 import { OrganizationsSearchSelect, useWorkspace } from '~/modules';
 import { useSitemap } from '~/routes';
 
-export function NavigationWorkspaceSelector() {
+type Props = {
+  className?: string;
+};
+
+export function NavigationWorkspaceSelector({ className }: Props) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
   const [, navigate] = useLocation();
@@ -19,6 +23,7 @@ export function NavigationWorkspaceSelector() {
 
   return (
     <OrganizationsSearchSelect
+      className={className}
       prefix={t.workspace.organization}
       placeholder={t.workspace.selectOrganization}
       value={organization}

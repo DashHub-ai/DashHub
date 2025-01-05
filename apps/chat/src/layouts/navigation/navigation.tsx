@@ -1,5 +1,6 @@
 import { Link } from 'wouter';
 
+import { useSdkForLoggedIn } from '@llm/sdk';
 import { useSitemap } from '~/routes';
 
 import { NavigationLinks } from './links';
@@ -8,12 +9,15 @@ import { NavigationWorkspaceSelector } from './navigation-workspace-selector';
 
 export function Navigation() {
   const sitemap = useSitemap();
+  const { guard } = useSdkForLoggedIn();
+
+  const showWorkspaceSelector = guard.is.root;
 
   return (
     <header className="relative z-50 bg-white border-b border-border w-full">
       <div className="mx-auto px-4 container">
         <nav className="flex justify-between items-center h-16">
-          <div className="flex flex-1 items-center gap-8">
+          <div className="flex flex-1 items-center gap-12">
             <Link
               className="font-semibold text-lg"
               to={sitemap.home}
@@ -21,7 +25,10 @@ export function Navigation() {
               DashHub
             </Link>
 
-            <NavigationWorkspaceSelector />
+            {showWorkspaceSelector && (
+              <NavigationWorkspaceSelector />
+            )}
+
             <NavigationLinks />
           </div>
 

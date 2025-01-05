@@ -66,7 +66,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     @inject(delay(() => ChatsSummariesService)) private readonly chatsSummariesService: Readonly<ChatsSummariesService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new AppsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new AppsFirewall(jwt, this, this.permissionsService);
 
   get = this.esSearchRepo.get;
 

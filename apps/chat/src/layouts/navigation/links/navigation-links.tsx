@@ -19,7 +19,7 @@ export function NavigationLinks() {
   const hasOrganization = useHasWorkspaceOrganization();
 
   return (
-    <ul className="flex items-center gap-4 ml-5">
+    <ul className="flex items-center gap-4">
       <NavigationItem
         path={sitemap.home}
         icon={<MessageSquareTextIcon size={16} />}

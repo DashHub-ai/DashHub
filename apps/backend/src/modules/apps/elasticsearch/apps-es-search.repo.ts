@@ -17,12 +17,18 @@ import {
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
 } from '~/modules/elasticsearch';
-import { mapRawEsDocToSdkPermissions } from '~/modules/permissions/record-protection';
+import {
+  createEsPermissionsFilters,
+  mapRawEsDocToSdkPermissions,
+  type WithPermissionsInternalFilters,
+} from '~/modules/permissions/record-protection';
 
 import {
   type AppsEsDocument,
   AppsEsIndexRepo,
 } from './apps-es-index.repo';
+
+export type EsAppsInternalFilters = WithPermissionsInternalFilters<SdKSearchAppsInputT>;
 
 @injectable()
 export class AppsEsSearchRepo {
@@ -67,10 +73,12 @@ export class AppsEsSearchRepo {
       organizationIds,
       categoriesIds,
       archived,
-    }: SdKSearchAppsInputT,
+      satisfyPermissions,
+    }: EsAppsInternalFilters,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
@@ -88,7 +96,7 @@ export class AppsEsSearchRepo {
       ]),
     );
 
-  private static createEsRequestSearchBody = (dto: SdKSearchAppsInputT) =>
+  private static createEsRequestSearchBody = (dto: EsAppsInternalFilters) =>
     createPaginationOffsetSearchQuery(dto)
       .query(AppsEsSearchRepo.createEsRequestSearchFilters(dto))
       .aggs([
