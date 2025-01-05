@@ -2,6 +2,15 @@ import { createIdObjectMapping } from '~/modules/elasticsearch/mappings/id-objec
 
 export function createPermissionsRowEntryMapping() {
   return {
+    properties: {
+      inherited: createPermissionsListMappings(),
+      current: createPermissionsListMappings(),
+    },
+  };
+}
+
+function createPermissionsListMappings() {
+  return {
     type: 'nested',
     properties: {
       access_level: { type: 'keyword' },

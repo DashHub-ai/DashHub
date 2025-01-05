@@ -152,6 +152,13 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               eb =>
                 PermissionsRepo
                   .createPermissionAggQuery(eb)
+                  .where('permissions.project_id', 'is not', null)
+                  .where('permissions.project_id', '=', eb.ref('projects.id'))
+                  .as('project_permissions_json'),
+
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
                   .where('permissions.chat_id', '=', eb.ref('chats.id'))
                   .as('permissions_json'),
             ])
@@ -180,7 +187,9 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           project_name: projectName,
           project_internal: projectInternal,
 
+          project_permissions_json: projectPermissions,
           permissions_json: permissions,
+
           ...item
         }): ChatTableRowWithRelations => {
           const creator = {
@@ -213,16 +222,19 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               nameGenerated: summaryNameGenerated,
               nameGeneratedAt: summaryNameGeneratedAt,
             },
-            permissions: rejectFalsyItems([
-              // If it's global record, and this access level is added, then it'll be no longer global.
-              !!permissions?.length && {
-                accessLevel: 'write',
-                target: {
-                  user: creator,
+            permissions: {
+              inherited: (projectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
+              current: rejectFalsyItems([
+                // If it's global record, and this access level is added, then it'll be no longer global.
+                !!permissions?.length && {
+                  accessLevel: 'write',
+                  target: {
+                    user: creator,
+                  },
                 },
-              },
-              ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
-            ]),
+                ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+              ]),
+            },
           };
         }),
       ),

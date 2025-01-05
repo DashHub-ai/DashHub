@@ -192,16 +192,19 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
               contentGenerated: summaryContentGenerated,
               contentGeneratedAt: summaryContentGeneratedAt,
             },
-            permissions: rejectFalsyItems([
-              // If it's global record, and this access level is added, then it'll be no longer global.
-              !!permissions?.length && {
-                accessLevel: 'write',
-                target: {
-                  user: creator,
+            permissions: {
+              inherited: [],
+              current: rejectFalsyItems([
+                // If it's global record, and this access level is added, then it'll be no longer global.
+                !!permissions?.length && {
+                  accessLevel: 'write',
+                  target: {
+                    user: creator,
+                  },
                 },
-              },
-              ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
-            ]),
+                ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+              ]),
+            },
           };
         }),
       ),

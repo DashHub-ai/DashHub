@@ -74,7 +74,10 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             id: item.category_id,
             name: item.category_name,
           },
-          permissions: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+          permissions: {
+            inherited: [],
+            current: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+          },
         })),
       ),
     );

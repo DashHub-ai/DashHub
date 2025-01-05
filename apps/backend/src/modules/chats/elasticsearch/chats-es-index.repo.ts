@@ -18,7 +18,7 @@ import {
   EsAIGeneratedField,
   type EsDocument,
 } from '~/modules/elasticsearch';
-import { createPermissionsRowEntryMapping } from '~/modules/permissions/record-protection';
+import { createPermissionsRowEntryMapping, type EsPermissionsDocument } from '~/modules/permissions/record-protection';
 
 import type { ChatTableRowWithRelations } from '../chats.tables';
 
@@ -56,12 +56,16 @@ const ChatsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ChatsEsDocument = EsDocument<Overwrite<ChatTableRowWithRelations, {
-  summary: {
-    name: EsAIGeneratedField;
-    content: EsAIGeneratedField;
-  };
-}>>;
+export type ChatsEsDocument = EsDocument<Overwrite<
+  ChatTableRowWithRelations,
+  {
+    permissions: EsPermissionsDocument;
+    summary: {
+      name: EsAIGeneratedField;
+      content: EsAIGeneratedField;
+    };
+  }
+>>;
 
 @injectable()
 export class ChatsEsIndexRepo extends ChatsAbstractEsIndexRepo<ChatsEsDocument> {

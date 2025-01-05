@@ -16,7 +16,7 @@ import {
   EsAIGeneratedField,
   type EsDocument,
 } from '~/modules/elasticsearch';
-import { createPermissionsRowEntryMapping } from '~/modules/permissions/record-protection';
+import { createPermissionsRowEntryMapping, EsPermissionsDocument } from '~/modules/permissions/record-protection';
 
 import type { ProjectTableRowWithRelations } from '../projects.tables';
 
@@ -50,11 +50,15 @@ const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type ProjectsEsDocument = EsDocument<Overwrite<ProjectTableRowWithRelations, {
-  summary: {
-    content: EsAIGeneratedField;
-  };
-}>>;
+export type ProjectsEsDocument = EsDocument<Overwrite<
+  ProjectTableRowWithRelations,
+  {
+    permissions: EsPermissionsDocument;
+    summary: {
+      content: EsAIGeneratedField;
+    };
+  }
+>>;
 
 @injectable()
 export class ProjectsEsIndexRepo extends ProjectsAbstractEsIndexRepo<ProjectsEsDocument> {
