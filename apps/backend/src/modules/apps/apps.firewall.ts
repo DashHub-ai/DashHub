@@ -1,7 +1,7 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import { dropPaginationSdkPermissionsKeys, type SdkJwtTokenT } from '@llm/sdk';
+import { dropSdkPaginationPermissionsKeysIfNotCreator, type SdkJwtTokenT } from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { PermissionsService } from '../permissions';
@@ -49,11 +49,8 @@ export class AppsFirewall extends AuthFirewallService {
 
   search = (filters: EsAppsInternalFilters) => pipe(
     filters,
-    this.permissionsService.enforceSatisfyPermissionsFilters({
-      accessLevel: 'read',
-      userId: this.userId,
-    }),
+    this.permissionsService.asUser(this.jwt).enforceSatisfyPermissionsFilters('read'),
     TE.chainW(this.appsService.search),
-    TE.map(dropPaginationSdkPermissionsKeys),
+    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
   );
 }

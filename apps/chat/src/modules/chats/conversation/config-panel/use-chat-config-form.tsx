@@ -28,6 +28,7 @@ export function useChatConfigForm(
     onSubmit: flow(
       value => sdks.dashboard.chats.update({
         ...value,
+        permissions: value.permissions?.current,
         summary: {
           name: value.summary.name.generated
             ? { generated: true, value: null }

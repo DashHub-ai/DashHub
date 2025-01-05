@@ -3,19 +3,32 @@ import { pipe } from 'fp-ts/lib/function';
 import {
   mapSdkOffsetPaginationItems,
   type SdkOffsetPaginationOutputT,
+  type SdkTableRowIdT,
+  type SdkTableRowWithIdT,
 } from '~/shared';
 
-export function dropSdkPermissionsKey<T extends { permissions?: unknown; }>(obj: T): Omit<T, 'permissions'> {
-  const { permissions, ...rest } = obj;
-  return rest;
+type PermissionRecord = {
+  permissions?: unknown;
+  creator?: SdkTableRowWithIdT;
+};
+
+export function dropSdkPermissionsKeyIfNotCreator(userId: SdkTableRowIdT) {
+  return <T extends PermissionRecord>(obj: T): Omit<T, 'permissions'> => {
+    if (obj.creator?.id === userId) {
+      return obj;
+    }
+
+    const { permissions, ...rest } = obj;
+    return rest;
+  };
 }
 
-export function dropPaginationSdkPermissionsKeys<
-  T,
-  P extends SdkOffsetPaginationOutputT<T & { permissions?: unknown; }>,
->(pagination: P) {
-  return pipe(
+export function dropSdkPaginationPermissionsKeysIfNotCreator(userId: SdkTableRowIdT) {
+  return <
+    T extends PermissionRecord,
+    P extends SdkOffsetPaginationOutputT<T>,
+  >(pagination: P) => pipe(
     pagination,
-    mapSdkOffsetPaginationItems(dropSdkPermissionsKey),
+    mapSdkOffsetPaginationItems(dropSdkPermissionsKeyIfNotCreator(userId)),
   );
 }

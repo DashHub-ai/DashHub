@@ -4,16 +4,18 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import type { PermissionsService } from '~/modules/permissions';
 
 import {
-  dropPaginationSdkPermissionsKeys,
+  dropSdkPaginationPermissionsKeysIfNotCreator,
+  dropSdkPermissionsKeyIfNotCreator,
   ofSdkUnauthorizedErrorTE,
   type SdkCreateChatInputT,
   type SdkJwtTokenT,
   type SdkSearchChatsInputT,
   type SdkUnauthorizedError,
+  type SdkUpdateChatInputT,
 } from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
-import type { DatabaseTE, TableRowWithUuid, TransactionError } from '../database';
+import type { DatabaseTE, TableRowWithUuid, TableUuid, TransactionError } from '../database';
 import type { EsDocumentNotFoundError, EsIndexingError, EsInternalError } from '../elasticsearch';
 import type { ChatsService } from './chats.service';
 
@@ -28,38 +30,49 @@ export class ChatsFirewall extends AuthFirewallService {
 
   get = flow(
     this.chatsService.get,
-    this.permissionsService.chainValidateResultOrRaiseUnauthorized({
-      accessLevel: 'read',
-      userId: this.userId,
-    }),
+    this.permissionsService
+      .asUser(this.jwt)
+      .chainValidateResultOrRaiseUnauthorized('read'),
+    TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
   );
 
-  // TODO: Add belongs checks
-  unarchive = flow(
-    this.chatsService.unarchive,
-    this.tryTEIfUser.is.root,
+  unarchive = (id: TableUuid) => pipe(
+    this.permissionsService
+      .asUser(this.jwt)
+      .findRecordAndCheckPermissions({
+        accessLevel: 'write',
+        findRecord: this.chatsService.get(id),
+      }),
+    TE.chainW(() => this.chatsService.unarchive(id)),
   );
 
-  // TODO: Add belongs checks
-  archive = flow(
-    this.chatsService.archive,
-    this.tryTEIfUser.is.root,
+  archive = (id: TableUuid) => pipe(
+    this.permissionsService
+      .asUser(this.jwt)
+      .findRecordAndCheckPermissions({
+        accessLevel: 'write',
+        findRecord: this.chatsService.get(id),
+      }),
+    TE.chainW(() => this.chatsService.archive(id)),
   );
 
-  // TODO: Add belongs checks
-  update = flow(
-    this.chatsService.update,
-    this.tryTEIfUser.is.root,
+  update = (attrs: SdkUpdateChatInputT & TableRowWithUuid) => pipe(
+    this.permissionsService
+      .asUser(this.jwt)
+      .findRecordAndCheckPermissions({
+        accessLevel: 'write',
+        findRecord: this.chatsService.get(attrs.id),
+      }),
+    TE.chainW(() => this.chatsService.update(attrs)),
   );
 
   search = (filters: SdkSearchChatsInputT) => pipe(
     filters,
-    this.permissionsService.enforceSatisfyPermissionsFilters({
-      accessLevel: 'read',
-      userId: this.userId,
-    }),
+    this.permissionsService
+      .asUser(this.jwt)
+      .enforceSatisfyPermissionsFilters('read'),
     TE.chainW(this.chatsService.search),
-    TE.map(dropPaginationSdkPermissionsKeys),
+    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
   );
 
   create = ({ creator, organization, ...chat }: SdkCreateChatInputT): DatabaseTE<
