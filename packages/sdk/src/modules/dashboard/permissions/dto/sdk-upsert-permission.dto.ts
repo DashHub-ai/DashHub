@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 import { SdkPermissionAccessLevelV } from './sdk-permission-level.dto';
-import { SdkPermissionTargetV } from './sdk-permission-target.dto';
+import { SdkUpsertPermissionTargetV } from './sdk-permission-target.dto';
 
 export const SdkUpsertPermissionV = z.object({
   accessLevel: SdkPermissionAccessLevelV,
-  target: SdkPermissionTargetV,
+  target: SdkUpsertPermissionTargetV,
 });
 
 export type SdkUpsertPermissionT = z.infer<typeof SdkUpsertPermissionV>;

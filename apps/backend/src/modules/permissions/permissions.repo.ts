@@ -175,8 +175,15 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
 
         const insertRows = pipe(
           maybeNonEmptyPermissions.value,
-          NEA.map((permission): PermissionInsertTableRow => ({
-            accessLevel: permission.accessLevel,
+          NEA.map(({ accessLevel, target }): PermissionInsertTableRow => ({
+            accessLevel,
+
+            // Target
+            ...'user' in target
+              ? { userId: target.user.id }
+              : { groupId: target.group.id },
+
+            // Resources
             projectId: resource.type === 'project' ? resource.id : null,
             appId: resource.type === 'app' ? resource.id : null,
             chatId: resource.type === 'chat' ? resource.id : null,
