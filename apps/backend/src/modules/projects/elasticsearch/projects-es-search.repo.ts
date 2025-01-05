@@ -14,6 +14,7 @@ import {
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
 } from '~/modules/elasticsearch';
+import { mapRawEsDocToSdkPermissions } from '~/modules/permissions/record-protection';
 
 import {
   type ProjectsEsDocument,
@@ -90,6 +91,7 @@ export class ProjectsEsSearchRepo {
       updatedAt: source.updated_at,
       archived: source.archived,
       organization: source.organization,
+      permissions: mapRawEsDocToSdkPermissions(source.permissions),
       summary: {
         content: {
           generated: summary.content.generated,
