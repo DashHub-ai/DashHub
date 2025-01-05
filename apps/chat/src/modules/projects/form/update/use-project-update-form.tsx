@@ -1,17 +1,22 @@
-import { type FormHookAttrs, useForm } from '@under-control/forms';
+import { type FormHookAttrs, type Overwrite, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import {
+  type SdkPermissionT,
   type SdkTableRowWithIdT,
   type SdkUpdateProjectInputT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { usePredefinedFormValidators, useSaveTaskEitherNotification } from '@llm/ui';
 
+type UpdateProjectFormValue = Overwrite<SdkUpdateProjectInputT & SdkTableRowWithIdT, {
+  permissions?: SdkPermissionT[] | null;
+}>;
+
 type UpdateProjectFormHookAttrs =
   & Omit<
-    FormHookAttrs<SdkUpdateProjectInputT & SdkTableRowWithIdT>,
+    FormHookAttrs<UpdateProjectFormValue>,
     'validation' | 'onSubmit'
   >
   & {
@@ -25,7 +30,7 @@ export function useProjectUpdateForm(
   }: UpdateProjectFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { required } = usePredefinedFormValidators<SdkUpdateProjectInputT & SdkTableRowWithIdT>();
+  const { required } = usePredefinedFormValidators<UpdateProjectFormValue>();
   const saveNotifications = useSaveTaskEitherNotification();
 
   return useForm({

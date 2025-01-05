@@ -9,15 +9,18 @@ import { ChatConfigUnarchive } from './chat-config-unarchive';
 import { useChatConfigForm } from './use-chat-config-form';
 
 type Props = {
-  defaultValue: SdkChatT;
+  chat: SdkChatT;
   contentClassName?: string;
 };
 
-export function ChatConfigPanel({ defaultValue, contentClassName }: Props) {
+export function ChatConfigPanel({ chat, contentClassName }: Props) {
   const { pack } = useI18n();
   const t = pack.chat.config;
   const { bind, validator, value, submitState, isDirty, handleSubmitEvent } = useChatConfigForm({
-    defaultValue,
+    defaultValue: {
+      ...chat,
+      permissions: chat.permissions?.current,
+    },
   });
 
   return (
@@ -43,12 +46,12 @@ export function ChatConfigPanel({ defaultValue, contentClassName }: Props) {
               <Input
                 {...bind.path('summary.name.value', { input: value => value ?? '' })}
                 placeholder={t.namePlaceholder}
-                disabled={value.summary.name.generated || defaultValue.archived}
+                disabled={value.summary.name.generated || chat.archived}
               />
 
               <Checkbox
                 className="block pt-2 uk-text-small"
-                disabled={defaultValue.archived}
+                disabled={chat.archived}
                 {...bind.path('summary.name.generated', {
                   relatedInputs: ({ newGlobalValue }) => ({
                     ...newGlobalValue,
@@ -76,12 +79,12 @@ export function ChatConfigPanel({ defaultValue, contentClassName }: Props) {
                 {...bind.path('summary.content.value', { input: value => value ?? '' })}
                 placeholder={t.descriptionPlaceholder}
                 className="min-h-[100px]"
-                disabled={value.summary.content.generated || defaultValue.archived}
+                disabled={value.summary.content.generated || chat.archived}
               />
 
               <Checkbox
                 className="block pt-2 uk-text-small"
-                disabled={defaultValue.archived}
+                disabled={chat.archived}
                 {...bind.path('summary.content.generated', {
                   relatedInputs: ({ newGlobalValue }) => ({
                     ...newGlobalValue,
@@ -103,7 +106,7 @@ export function ChatConfigPanel({ defaultValue, contentClassName }: Props) {
 
         <FormAlertBoxes result={submitState.result} />
 
-        {!defaultValue.archived && (
+        {!chat.archived && (
           <div className="flex flex-row justify-end mt-4 pt-4 border-t">
             <SaveButton
               disabled={!isDirty}
@@ -115,9 +118,9 @@ export function ChatConfigPanel({ defaultValue, contentClassName }: Props) {
       </form>
 
       {(
-        defaultValue.archived
-          ? <ChatConfigUnarchive chat={defaultValue} />
-          : <ChatConfigArchive chat={defaultValue} />
+        chat.archived
+          ? <ChatConfigUnarchive chat={chat} />
+          : <ChatConfigArchive chat={chat} />
       )}
     </CollapsiblePanel>
   );

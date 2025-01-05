@@ -26,7 +26,7 @@ export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Prop
       />
 
       <ChatConfigPanel
-        defaultValue={chat}
+        chat={chat}
         contentClassName={clsx(heightClassName, 'overflow-y-auto')}
       />
     </div>
