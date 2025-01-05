@@ -51,13 +51,7 @@ export function ProjectRoute({ id }: Props) {
             ? result.data.name
             : <Skeleton className="w-32 h-[16px]" variant="dark" as="span" />
         )}
-      >
-        {(
-          result.status === 'success'
-            ? result.data.name
-            : <Skeleton className="w-48 h-[35px]" variant="dark" />
-        )}
-      </LayoutHeader>
+      />
 
       <section>
         {(

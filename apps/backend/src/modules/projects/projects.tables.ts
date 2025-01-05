@@ -10,6 +10,7 @@ import type {
 } from '../database';
 import type { PermissionsTableRowRelation } from '../permissions';
 import type { ProjectSummaryTableRow } from '../projects-summaries';
+import type { UserTableRowBaseRelation } from '../users';
 
 export type ProjectsTable =
   & TableWithDefaultColumns
@@ -28,9 +29,10 @@ type ProjectSummaryTableRowRelation = DropTableRowAccessTime<
 >;
 
 export type ProjectTableRowWithRelations =
-  & Omit<ProjectTableRow, 'organizationId'>
+  & Omit<ProjectTableRow, 'organizationId' | 'creatorUserId'>
   & PermissionsTableRowRelation
   & {
     organization: TableRowWithIdName;
     summary: ProjectSummaryTableRowRelation;
+    creator: UserTableRowBaseRelation;
   };

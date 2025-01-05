@@ -2,8 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { RequiredBy } from '@llm/commons';
-
+import { asyncIteratorToVoidPromise, type RequiredBy, runTaskAsVoid, tapAsyncIterator, tryOrThrowTE } from '@llm/commons';
 import {
   SdkCreateChatInputT,
   SdkJwtTokenT,
@@ -76,6 +75,35 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
     }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
+
+  archiveSeqByProjectId = (projectId: TableId) => TE.fromTask(
+    pipe(
+      this.repo.createIdsIterator({
+        where: [['projectId', '=', projectId]],
+        chunkSize: 100,
+      }),
+      this.archiveSeqStream,
+    ),
+  );
+
+  archiveSeqStream = (stream: AsyncIterableIterator<TableUuid[]>) => async () =>
+    pipe(
+      stream,
+      tapAsyncIterator<TableUuid[], void>(async ids =>
+        pipe(
+          this.repo.archiveRecords({
+            where: [
+              ['id', 'in', ids],
+              ['archived', '=', false],
+            ],
+          }),
+          TE.tap(() => this.esIndexRepo.findAndIndexDocumentsByIds(ids)),
+          tryOrThrowTE,
+          runTaskAsVoid,
+        ),
+      ),
+      asyncIteratorToVoidPromise,
+    );
 
   assignToProject = (id: TableUuid, projectId: TableId) => pipe(
     this.repo.assignToProject({ id, projectId }),

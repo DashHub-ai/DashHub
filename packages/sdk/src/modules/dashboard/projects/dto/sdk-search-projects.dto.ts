@@ -25,7 +25,7 @@ export const SdKSearchProjectsInputV = SdkOffsetPaginationInputV
   .merge(SdkIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchProjectsInputT = z.infer<typeof SdKSearchProjectsInputV>;
+export type SdkSearchProjectsInputT = z.infer<typeof SdKSearchProjectsInputV>;
 
 export const SdKSearchProjectsOutputV = SdkOffsetPaginationOutputV(SdkSearchProjectItemV);
 

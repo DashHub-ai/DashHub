@@ -132,6 +132,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         title: 'Projekt',
         description: 'Zarządzaj projektem',
       },
+      hello: 'Cześć, jak możemy Ci pomóc?',
       title: 'Projekt',
       chats: 'Czaty w projekcie',
     },

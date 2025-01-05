@@ -130,6 +130,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         title: 'Project',
         description: 'Manage project',
       },
+      hello: 'Hello, how can we help you?',
       title: 'Project',
       chats: 'Chats in project',
     },

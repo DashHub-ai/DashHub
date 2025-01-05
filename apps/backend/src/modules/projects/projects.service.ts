@@ -34,7 +34,7 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     @inject(PermissionsService) private readonly permissionsService: PermissionsService,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new ProjectsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new ProjectsFirewall(jwt, this, this.permissionsService);
 
   get = this.esSearchRepo.get;
 
@@ -46,6 +46,7 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
   archive = (id: TableId) => pipe(
     this.repo.archive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(() => this.chatsService.archiveSeqByProjectId(id)),
   );
 
   ensureChatHasProjectOrCreateInternal = (

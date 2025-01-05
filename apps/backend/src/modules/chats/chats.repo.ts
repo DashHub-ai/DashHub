@@ -3,9 +3,9 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { RequiredBy } from '@llm/commons';
+import type { SdkCreateChatInputT, SdkUpdateChatInputT } from '@llm/sdk';
 
-import { SdkCreateChatInputT, SdkUpdateChatInputT } from '@llm/sdk';
+import { rejectFalsyItems, type RequiredBy } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -182,36 +182,49 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
           permissions_json: permissions,
           ...item
-        }): ChatTableRowWithRelations => ({
-          ...camelcaseKeys(item),
-          project: projectId && projectName
-            ? {
-                id: projectId,
-                name: projectName,
-                internal: !!projectInternal,
-              }
-            : null,
-          organization: {
-            id: orgId,
-            name: orgName,
-          },
-          creator: {
+        }): ChatTableRowWithRelations => {
+          const creator = {
             id: creatorUserId,
             email: creatorEmail,
-          },
-          summary: {
-            id: summaryId,
+          };
 
-            content: summaryContent,
-            contentGenerated: summaryContentGenerated,
-            contentGeneratedAt: summaryContentGeneratedAt,
+          return {
+            ...camelcaseKeys(item),
+            project: projectId && projectName
+              ? {
+                  id: projectId,
+                  name: projectName,
+                  internal: !!projectInternal,
+                }
+              : null,
+            organization: {
+              id: orgId,
+              name: orgName,
+            },
+            creator,
+            summary: {
+              id: summaryId,
 
-            name: summaryName,
-            nameGenerated: summaryNameGenerated,
-            nameGeneratedAt: summaryNameGeneratedAt,
-          },
-          permissions: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
-        })),
+              content: summaryContent,
+              contentGenerated: summaryContentGenerated,
+              contentGeneratedAt: summaryContentGeneratedAt,
+
+              name: summaryName,
+              nameGenerated: summaryNameGenerated,
+              nameGeneratedAt: summaryNameGeneratedAt,
+            },
+            permissions: rejectFalsyItems([
+              // If it's global record, and this access level is added, then it'll be no longer global.
+              !!permissions?.length && {
+                accessLevel: 'write',
+                target: {
+                  user: creator,
+                },
+              },
+              ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+            ]),
+          };
+        }),
       ),
     );
   };

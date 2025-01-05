@@ -19,6 +19,7 @@ export type SdkChatSummaryInputT = z.infer<typeof SdkChatSummaryInputV>;
 export const SdkCreateChatInputV = SdkChatV.pick({
   internal: true,
   project: true,
+  permissions: true,
 })
   .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({

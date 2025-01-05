@@ -14,7 +14,7 @@ import type {
   SdkCreateProjectInputT,
   SdkCreateProjectOutputT,
   SdkProjectT,
-  SdKSearchProjectsInputT,
+  SdkSearchProjectsInputT,
   SdKSearchProjectsOutputT,
   SdkUpdateProjectInputT,
   SdkUpdateProjectOutputT,
@@ -29,7 +29,7 @@ export class ProjectsSdk extends AbstractNestedSdkWithAuth {
       options: getPayload(),
     });
 
-  search = (data: SdKSearchProjectsInputT) =>
+  search = (data: SdkSearchProjectsInputT) =>
     this.fetch<SdKSearchProjectsOutputT>({
       url: this.endpoint('/search'),
       query: data,
