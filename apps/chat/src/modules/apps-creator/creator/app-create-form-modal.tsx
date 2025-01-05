@@ -40,7 +40,7 @@ export function AppCreateFormModal({
             onSubmit: handleSubmitEvent,
           }
         : {
-            className: 'w-[700px]',
+            className: 'w-[900px]',
           }}
       footer={null}
       header={(

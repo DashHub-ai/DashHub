@@ -8,6 +8,7 @@ import {
   ofSdkUnauthorizedErrorTE,
   type SdkAccessLevelGuards,
   type SdkJwtTokenT,
+  type SdkOrganizationUserRoleT,
   type SdkUnauthorizedError,
   type SdkUserRoleT,
 } from '@llm/sdk';
@@ -67,10 +68,36 @@ export function tryTaskEitherIfUser(token: SdkJwtTokenT) {
           satisfies(() => token.role === type),
         );
 
+  const isOfOrganizationRole
+    = (type: SdkOrganizationUserRoleT) =>
+      <A, E>(task: TE.TaskEither<E, A>) =>
+        pipe(
+          task,
+          satisfies(() => token.role === 'user' && token.organization.role === type),
+        );
+
+  const oneOfOrganizationRole
+    = (...types: SdkOrganizationUserRoleT[]) =>
+      <A, E>(task: TE.TaskEither<E, A>) =>
+        pipe(
+          task,
+          satisfies(() => token.role === 'user' && types.includes(token.organization.role)),
+        );
+
   const is = {
-    root: isOfRole('root'),
-    user: isOfRole('user'),
-  } satisfies Record<SdkUserRoleT, Function>;
+    // General roles
+    ...{
+      root: isOfRole('root'),
+      user: isOfRole('user'),
+    } satisfies Record<SdkUserRoleT, Function>,
+
+    // Organization roles
+    organization: {
+      owner: isOfOrganizationRole('owner'),
+      member: isOfOrganizationRole('member'),
+      tech: isOfOrganizationRole('tech'),
+    } satisfies Record<SdkOrganizationUserRoleT, Function>,
+  };
 
   return {
     is,
@@ -79,6 +106,8 @@ export function tryTaskEitherIfUser(token: SdkJwtTokenT) {
     satisfiesTE,
     oneOfRole,
     isOfRole,
+    isOfOrganizationRole,
+    oneOfOrganizationRole,
   };
 }
 

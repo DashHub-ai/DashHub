@@ -8,9 +8,9 @@ export function checkPermissionsMatch(
 ): boolean {
   const { permissions } = row;
 
-  // If no permissions are set, it means public access
+  // If no permissions are set, it means public access can only read.
   if (!permissions) {
-    return true;
+    return descriptor.accessLevel === 'read';
   }
 
   // Check both inherited and current permissions
@@ -28,7 +28,7 @@ function checkPermissionsKindMatch(
 
   // If no permissions are set for this kind, it means public access
   if (!permissions || permissions.length === 0) {
-    return true;
+    return accessLevel === 'read';
   }
 
   const accessLevels = accessLevel === 'read'

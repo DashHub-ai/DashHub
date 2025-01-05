@@ -1,5 +1,7 @@
 import esb from 'elastic-builder';
 
+import { rejectFalsyItems } from '@llm/commons';
+
 import type { UserAccessPermissionsDescriptor } from './permissions-row-protection-filters.types';
 
 export function createEsPermissionsFilters(descriptor: UserAccessPermissionsDescriptor): esb.BoolQuery {
@@ -12,14 +14,15 @@ export function createEsPermissionsFilters(descriptor: UserAccessPermissionsDesc
 function createNestedPermissionsEsFilters(kind: 'current' | 'inherited', descriptor: UserAccessPermissionsDescriptor): esb.BoolQuery {
   const { userId, groupsIds, accessLevel } = descriptor;
 
-  const accessLevels = accessLevel === 'read'
+  const isReadOnly = accessLevel === 'read';
+  const accessLevels = isReadOnly
     ? ['read', 'write'] // if requesting read, allow both read and write
     : [accessLevel]; // if requesting write, only allow write
 
   return esb.boolQuery().filter([
-    esb.boolQuery().should([
-      // Case 1: Empty permissions array means public access
-      esb.boolQuery().mustNot(
+    esb.boolQuery().should(rejectFalsyItems([
+      // Case 1: Empty permissions array means public access, but only for read
+      isReadOnly && esb.boolQuery().mustNot(
         esb.nestedQuery(esb.matchAllQuery(), `permissions.${kind}`),
       ),
 
@@ -42,6 +45,6 @@ function createNestedPermissionsEsFilters(kind: 'current' | 'inherited', descrip
         ]),
         `permissions.${kind}`,
       ),
-    ]).minimumShouldMatch(1),
+    ])).minimumShouldMatch(1),
   ]);
 }

@@ -18,3 +18,7 @@ export const SdkOrganizationUserV = z.object({
   .merge(SdkTableRowWithDatesV);
 
 export type SdkOrganizationUserT = z.infer<typeof SdkOrganizationUserV>;
+
+export function isTechOrOwnerUserOrganizationRole(role: SdkOrganizationUserRoleT): boolean {
+  return role === 'tech' || role === 'owner';
+}

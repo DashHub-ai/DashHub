@@ -4,6 +4,7 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import {
   dropSdkPaginationPermissionsKeysIfNotCreator,
   dropSdkPermissionsKeyIfNotCreator,
+  type SdkCreateAppInputT,
   type SdkJwtTokenT,
   type SdkUpdateAppInputT,
 } from '@llm/sdk';
@@ -25,56 +26,51 @@ export class AppsFirewall extends AuthFirewallService {
 
   get = flow(
     this.appsService.get,
-    this.permissionsService
-      .asUser(this.jwt)
-      .chainValidateResultOrRaiseUnauthorized('read'),
+    this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
     TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
-  );
-
-  unarchive = (id: TableId) => pipe(
-    this.permissionsService
-      .asUser(this.jwt)
-      .findRecordAndCheckPermissions({
-        accessLevel: 'write',
-        findRecord: this.appsService.get(id),
-      }),
-    TE.chainW(() => this.appsService.unarchive(id)),
-  );
-
-  archive = (id: TableId) => pipe(
-    this.permissionsService
-      .asUser(this.jwt)
-      .findRecordAndCheckPermissions({
-        accessLevel: 'write',
-        findRecord: this.appsService.get(id),
-      }),
-    TE.chainW(() => this.appsService.archive(id)),
-  );
-
-  update = (attrs: SdkUpdateAppInputT & TableRowWithId) => pipe(
-    this.permissionsService
-      .asUser(this.jwt)
-      .findRecordAndCheckPermissions({
-        accessLevel: 'write',
-        findRecord: this.appsService.get(attrs.id),
-      }),
-    TE.chainW(() => this.appsService.update(attrs)),
   );
 
   search = (filters: EsAppsInternalFilters) => pipe(
     filters,
-    this.permissionsService.asUser(this.jwt).enforceSatisfyPermissionsFilters('read'),
+    this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
+    TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.appsService.search),
     TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
   );
 
-  create = flow(
-    this.appsService.create,
-    this.tryTEIfUser.is.root,
+  unarchive = (id: TableId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+      accessLevel: 'write',
+      findRecord: this.appsService.get(id),
+    }),
+    TE.chainW(() => this.appsService.unarchive(id)),
+  );
+
+  archive = (id: TableId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+      accessLevel: 'write',
+      findRecord: this.appsService.get(id),
+    }),
+    TE.chainW(() => this.appsService.archive(id)),
+  );
+
+  update = (attrs: SdkUpdateAppInputT & TableRowWithId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+      accessLevel: 'write',
+      findRecord: this.appsService.get(attrs.id),
+    }),
+    TE.chainW(() => this.appsService.update(attrs)),
+  );
+
+  create = (dto: SdkCreateAppInputT) => pipe(
+    this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto),
+    TE.fromEither,
+    TE.chainW(this.appsService.create),
+    this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 
   summarizeChatToApp = flow(
     this.appsService.summarizeChatToApp,
-    this.tryTEIfUser.is.root,
+    this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 }
