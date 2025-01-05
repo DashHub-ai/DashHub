@@ -10,6 +10,9 @@ export const SdkPermissionV = z.object({
 
 export type SdkPermissionT = z.infer<typeof SdkPermissionV>;
 
-export const SdkPermissionsV = z.array(SdkPermissionV);
+export const SdkPermissionsV = z.object({
+  inherited: z.array(SdkPermissionV),
+  current: z.array(SdkPermissionV),
+});
 
 export type SdkPermissionsT = z.infer<typeof SdkPermissionsV>;

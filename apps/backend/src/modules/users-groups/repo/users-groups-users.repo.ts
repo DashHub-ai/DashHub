@@ -74,7 +74,7 @@ export class UsersGroupsUsersRepo extends AbstractDatabaseRepo {
             .select('group_id as id')
             .execute(),
         ),
-        DatabaseError.tryTask,
+        DatabaseError.tryNonErrorMappedTask,
         TE.map(pluckTyped('id')),
       );
     },

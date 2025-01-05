@@ -1,8 +1,8 @@
-import type { SdkPermissionsT } from '@llm/sdk';
+import type { SdkPermissionT } from '@llm/sdk';
 
 export type PermissionsTableRowRelation = {
   permissions: {
-    inherited: SdkPermissionsT;
-    current: SdkPermissionsT;
+    inherited: SdkPermissionT[];
+    current: SdkPermissionT[];
   };
 };

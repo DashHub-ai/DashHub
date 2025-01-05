@@ -1,14 +1,23 @@
-import { taskEither as TE } from 'fp-ts';
+import { either as E, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkPermissionAccessLevelT } from '@llm/sdk';
+import {
+  ofSdkUnauthorizedErrorE,
+  type SdkPermissionAccessLevelT,
+  type SdkTableRowWithPermissionsT,
+  type SdkUnauthorizedError,
+} from '@llm/sdk';
 
-import type { TableId } from '../database';
-import type { WithPermissionsInternalFilters } from './record-protection';
+import type { DatabaseError, TableId } from '../database';
 
 import { UsersGroupsRepo } from '../users-groups';
 import { PermissionsRepo } from './permissions.repo';
+import {
+  checkPermissionsMatch,
+  type UserAccessPermissionsDescriptor,
+  type WithPermissionsInternalFilters,
+} from './record-protection';
 
 @injectable()
 export class PermissionsService {
@@ -19,23 +28,45 @@ export class PermissionsService {
 
   upsert = this.repo.upsert;
 
-  enforceSatisfyPermissionsFilters = (
-    {
-      accessLevel,
-      userId,
-    }: {
-      accessLevel: SdkPermissionAccessLevelT;
-      userId: TableId;
-    },
-  ) => <F>(filters: F) => pipe(
-    this.usersGroupsRepo.getAllUsersGroupsIds({ userId }),
-    TE.map((groupsIds): WithPermissionsInternalFilters<F> => ({
+  chainValidateResultOrRaiseUnauthorized = (attrs: PermissionsFiltersGetterAttrs) =>
+    <E, R extends SdkTableRowWithPermissionsT>(result: TE.TaskEither<E, R>) => pipe(
+      result,
+      TE.chainW((data: R) =>
+        this.validateResultOrRaiseUnauthorized(attrs)(data),
+      ),
+    );
+
+  validateResultOrRaiseUnauthorized = (attrs: PermissionsFiltersGetterAttrs) =>
+    <E, R extends SdkTableRowWithPermissionsT>(result: R): TE.TaskEither<E | SdkUnauthorizedError | DatabaseError, R> => pipe(
+      this.finUserAccessPermissionsDescriptor(attrs),
+      TE.chainEitherKW((descriptor) => {
+        if (!checkPermissionsMatch(descriptor, result)) {
+          return ofSdkUnauthorizedErrorE();
+        }
+
+        return E.right(result);
+      }),
+    );
+
+  enforceSatisfyPermissionsFilters = (attrs: PermissionsFiltersGetterAttrs) => <F>(filters: F) => pipe(
+    this.finUserAccessPermissionsDescriptor(attrs),
+    TE.map((satisfyPermissions): WithPermissionsInternalFilters<F> => ({
       ...filters,
-      satisfyPermissions: {
-        accessLevel,
-        groupsIds,
-        userId,
-      },
+      satisfyPermissions,
+    })),
+  );
+
+  private finUserAccessPermissionsDescriptor = ({ accessLevel, userId }: PermissionsFiltersGetterAttrs) => pipe(
+    this.usersGroupsRepo.getAllUsersGroupsIds({ userId }),
+    TE.map((groupsIds): UserAccessPermissionsDescriptor => ({
+      accessLevel,
+      groupsIds,
+      userId,
     })),
   );
 }
+
+type PermissionsFiltersGetterAttrs = {
+  accessLevel: SdkPermissionAccessLevelT;
+  userId: TableId;
+};

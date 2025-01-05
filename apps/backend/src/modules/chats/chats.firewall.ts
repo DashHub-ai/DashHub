@@ -26,20 +26,12 @@ export class ChatsFirewall extends AuthFirewallService {
     super(jwt);
   }
 
-  // TODO: Add belongs checks
   get = flow(
     this.chatsService.get,
-    this.tryTEIfUser.is.root,
-  );
-
-  search = (filters: SdkSearchChatsInputT) => pipe(
-    filters,
-    this.permissionsService.enforceSatisfyPermissionsFilters({
+    this.permissionsService.chainValidateResultOrRaiseUnauthorized({
       accessLevel: 'read',
       userId: this.userId,
     }),
-    TE.chainW(this.chatsService.search),
-    TE.map(dropPaginationSdkPermissionsKeys),
   );
 
   // TODO: Add belongs checks
@@ -58,6 +50,16 @@ export class ChatsFirewall extends AuthFirewallService {
   update = flow(
     this.chatsService.update,
     this.tryTEIfUser.is.root,
+  );
+
+  search = (filters: SdkSearchChatsInputT) => pipe(
+    filters,
+    this.permissionsService.enforceSatisfyPermissionsFilters({
+      accessLevel: 'read',
+      userId: this.userId,
+    }),
+    TE.chainW(this.chatsService.search),
+    TE.map(dropPaginationSdkPermissionsKeys),
   );
 
   create = ({ creator, organization, ...chat }: SdkCreateChatInputT): DatabaseTE<
