@@ -1,9 +1,15 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import { dropSdkPaginationPermissionsKeysIfNotCreator, type SdkJwtTokenT } from '@llm/sdk';
+import {
+  dropSdkPaginationPermissionsKeysIfNotCreator,
+  dropSdkPermissionsKeyIfNotCreator,
+  type SdkJwtTokenT,
+  type SdkUpdateAppInputT,
+} from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
+import type { TableId, TableRowWithId } from '../database';
 import type { PermissionsService } from '../permissions';
 import type { AppsService } from './apps.service';
 import type { EsAppsInternalFilters } from './elasticsearch';
@@ -17,34 +23,42 @@ export class AppsFirewall extends AuthFirewallService {
     super(jwt);
   }
 
-  unarchive = flow(
-    this.appsService.unarchive,
-    this.tryTEIfUser.is.root,
-  );
-
-  archive = flow(
-    this.appsService.archive,
-    this.tryTEIfUser.is.root,
-  );
-
-  update = flow(
-    this.appsService.update,
-    this.tryTEIfUser.is.root,
-  );
-
-  create = flow(
-    this.appsService.create,
-    this.tryTEIfUser.is.root,
-  );
-
   get = flow(
     this.appsService.get,
-    this.tryTEIfUser.is.root,
+    this.permissionsService
+      .asUser(this.jwt)
+      .chainValidateResultOrRaiseUnauthorized('read'),
+    TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
   );
 
-  summarizeChatToApp = flow(
-    this.appsService.summarizeChatToApp,
-    this.tryTEIfUser.is.root,
+  unarchive = (id: TableId) => pipe(
+    this.permissionsService
+      .asUser(this.jwt)
+      .findRecordAndCheckPermissions({
+        accessLevel: 'write',
+        findRecord: this.appsService.get(id),
+      }),
+    TE.chainW(() => this.appsService.unarchive(id)),
+  );
+
+  archive = (id: TableId) => pipe(
+    this.permissionsService
+      .asUser(this.jwt)
+      .findRecordAndCheckPermissions({
+        accessLevel: 'write',
+        findRecord: this.appsService.get(id),
+      }),
+    TE.chainW(() => this.appsService.archive(id)),
+  );
+
+  update = (attrs: SdkUpdateAppInputT & TableRowWithId) => pipe(
+    this.permissionsService
+      .asUser(this.jwt)
+      .findRecordAndCheckPermissions({
+        accessLevel: 'write',
+        findRecord: this.appsService.get(attrs.id),
+      }),
+    TE.chainW(() => this.appsService.update(attrs)),
   );
 
   search = (filters: EsAppsInternalFilters) => pipe(
@@ -52,5 +66,15 @@ export class AppsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforceSatisfyPermissionsFilters('read'),
     TE.chainW(this.appsService.search),
     TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
+  );
+
+  create = flow(
+    this.appsService.create,
+    this.tryTEIfUser.is.root,
+  );
+
+  summarizeChatToApp = flow(
+    this.appsService.summarizeChatToApp,
+    this.tryTEIfUser.is.root,
   );
 }
