@@ -7,10 +7,10 @@ import {
   isSdkRecordWithPermissions,
   isTechOrOwnerUserSdkOrganizationRole,
   ofSdkUnauthorizedErrorE,
+  ofSdkUnauthorizedErrorTE,
   type SdkIdsArrayT,
   type SdkJwtTokenT,
   type SdkPermissionAccessLevelT,
-  type SdkTableRowWithPermissionsT,
   type SdkUnauthorizedError,
   type WithSdkCreator,
   type WithSdkOrganization,
@@ -46,24 +46,34 @@ export class PermissionsFirewall extends AuthFirewallService {
    *   this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
    * );
    */
-  chainValidateResultOrRaiseUnauthorized = <E, R extends SdkTableRowWithPermissionsT>(result: TE.TaskEither<E, R>) => pipe(
+  chainValidateResultOrRaiseUnauthorized = <E, R>(result: TE.TaskEither<E, R>) => pipe(
     result,
     TE.chainW((data: R): TE.TaskEither<E | SdkUnauthorizedError | DatabaseError, R> => {
       if (this.shouldAllowUsingTechOrOwnerAccess(data)) {
         return TE.right(data);
       }
 
-      // For regular users check ACLs
-      return pipe(
-        this.findUserAccessPermissionsDescriptor('read'),
-        TE.chainEitherKW((descriptor) => {
-          if (!checkPermissionsMatch(descriptor, data)) {
-            return ofSdkUnauthorizedErrorE();
-          }
+      // Check if record is organization scoped, if so check organization match.
+      // If it doesn't match, raise unauthorized error.
+      if (isSdkRecordWithOrganization(data) && E.isLeft(this.validateOrganizationOrRaiseUnauthorized(data))) {
+        return ofSdkUnauthorizedErrorTE();
+      }
 
-          return E.right(data);
-        }),
-      );
+      // For regular users check ACLs
+      if (isSdkRecordWithPermissions(data)) {
+        return pipe(
+          this.findUserAccessPermissionsDescriptor('read'),
+          TE.chainEitherKW((descriptor) => {
+            if (!checkPermissionsMatch(descriptor, data)) {
+              return ofSdkUnauthorizedErrorE();
+            }
+
+            return E.right(data);
+          }),
+        );
+      }
+
+      return ofSdkUnauthorizedErrorTE();
     }),
   );
 
@@ -323,6 +333,30 @@ export class PermissionsFirewall extends AuthFirewallService {
         return ofSdkUnauthorizedErrorE();
       }
     }
+  };
+
+  /**
+   * Validates if a record belongs to the user's organization.
+   * Root users are allowed to access any organization.
+   * Regular users can only access records within their organization.
+   *
+   * @example
+   * const result = this.permissionsService
+   *   .asUser(this.jwt)
+   *   .chainValidateOrganizationOrRaiseUnauthorized(record);
+   */
+  protected validateOrganizationOrRaiseUnauthorized = <R extends WithSdkOrganization>(data: R): E.Either<SdkUnauthorizedError, R> => {
+    const { jwt } = this;
+
+    if (jwt.role === 'root') {
+      return E.right(data);
+    }
+
+    if (data.organization.id === jwt.organization.id) {
+      return E.right(data);
+    }
+
+    return ofSdkUnauthorizedErrorE();
   };
 
   /**

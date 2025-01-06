@@ -4,12 +4,14 @@ import type { SdkJwtTokenT } from '@llm/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
+import type { PermissionsService } from '../permissions';
 import type { AppsCategoriesService } from './apps-categories.service';
 
 export class AppsCategoriesFirewall extends AuthFirewallService {
   constructor(
     jwt: SdkJwtTokenT,
     private readonly appsCategoriesService: AppsCategoriesService,
+    private readonly permissionsService: Readonly<PermissionsService>,
   ) {
     super(jwt);
   }
@@ -41,6 +43,6 @@ export class AppsCategoriesFirewall extends AuthFirewallService {
 
   get = flow(
     this.appsCategoriesService.get,
-    this.tryTEIfUser.is.root,
+    this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
   );
 }

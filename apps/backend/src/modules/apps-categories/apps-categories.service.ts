@@ -1,6 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import type {
   SdkCreateAppCategoryInputT,
@@ -19,6 +19,7 @@ import {
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
 
+import { PermissionsService } from '../permissions';
 import { AppsCategoriesFirewall } from './apps-categories.firewall';
 import { AppsCategoriesRepo } from './apps-categories.repo';
 import { AppsCategoriesEsIndexRepo, AppsCategoriesEsSearchRepo } from './elasticsearch';
@@ -29,9 +30,10 @@ export class AppsCategoriesService implements WithAuthFirewall<AppsCategoriesFir
     @inject(AppsCategoriesRepo) private readonly repo: AppsCategoriesRepo,
     @inject(AppsCategoriesEsSearchRepo) private readonly esSearchRepo: AppsCategoriesEsSearchRepo,
     @inject(AppsCategoriesEsIndexRepo) private readonly esIndexRepo: AppsCategoriesEsIndexRepo,
+    @inject(delay(() => PermissionsService)) private readonly permissionsService: PermissionsService,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new AppsCategoriesFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new AppsCategoriesFirewall(jwt, this, this.permissionsService);
 
   get = this.esSearchRepo.get;
 
