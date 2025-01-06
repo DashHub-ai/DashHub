@@ -63,6 +63,7 @@ export class ChatsEsSearchRepo {
       ids,
       organizationIds,
       projectsIds,
+      creatorIds,
       archived,
       satisfyPermissions,
     }: EsChatsInternalFilters,
@@ -73,6 +74,7 @@ export class ChatsEsSearchRepo {
         !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!projectsIds?.length && esb.termsQuery('project.id', projectsIds),
+        !!creatorIds?.length && esb.termsQuery('creator.id', creatorIds),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
           esb

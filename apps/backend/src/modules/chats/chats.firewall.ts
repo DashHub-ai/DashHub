@@ -14,6 +14,7 @@ import {
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { TableRowWithUuid, TableUuid } from '../database';
+import type { ProjectsService } from '../projects';
 import type { ChatsService } from './chats.service';
 
 export class ChatsFirewall extends AuthFirewallService {
@@ -21,6 +22,7 @@ export class ChatsFirewall extends AuthFirewallService {
     jwt: SdkJwtTokenT,
     private readonly chatsService: ChatsService,
     private readonly permissionsService: PermissionsService,
+    private readonly projectsService: Readonly<ProjectsService>,
   ) {
     super(jwt);
   }
@@ -64,8 +66,14 @@ export class ChatsFirewall extends AuthFirewallService {
   );
 
   create = (dto: SdkCreateChatInputT) => pipe(
-    this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto),
-    TE.fromEither,
-    TE.chainW(this.chatsService.create),
+    TE.Do,
+    TE.chainW(() => dto.project
+      ? this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+        accessLevel: 'write',
+        findRecord: this.projectsService.get(dto.project.id),
+      })
+      : TE.of(undefined)),
+    TE.chainEitherKW(() => this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto)),
+    TE.chainW(mappedDto => this.chatsService.create(mappedDto)),
   );
 }

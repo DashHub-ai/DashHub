@@ -20,6 +20,7 @@ export const SdkSearchChatsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
     projectsIds: SdkIdsArrayV.optional(),
+    creatorIds: SdkIdsArrayV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)

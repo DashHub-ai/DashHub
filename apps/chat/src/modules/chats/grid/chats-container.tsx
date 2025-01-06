@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
 import {
+  type SdkSearchChatsInputT,
   SdkSearchChatsInputV,
   type SdkTableRowWithIdT,
   useSdkForLoggedIn,
@@ -27,9 +28,10 @@ const GRID_COLUMNS_CLASSES = {
 type Props = {
   project?: SdkTableRowWithIdT;
   columns?: keyof typeof GRID_COLUMNS_CLASSES;
+  filters?: Partial<SdkSearchChatsInputT>;
 };
 
-export function ChatsContainer({ project, columns = 2 }: Props) {
+export function ChatsContainer({ filters: forwardedFilters, project, columns = 2 }: Props) {
   const { organization } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
@@ -40,6 +42,7 @@ export function ChatsContainer({ project, columns = 2 }: Props) {
       limit: 12,
     },
     fetchResultsTask: filters => sdks.dashboard.chats.search({
+      ...forwardedFilters,
       ...filters,
       organizationIds: [organization.id],
       ...project && {

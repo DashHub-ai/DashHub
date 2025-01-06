@@ -1,6 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import { asyncIteratorToVoidPromise, type RequiredBy, runTaskAsVoid, tapAsyncIterator, tryOrThrowTE } from '@llm/commons';
 import {
@@ -13,6 +13,7 @@ import {
 import { WithAuthFirewall } from '../auth';
 import { TableId, TableRowWithUuid, TableUuid } from '../database';
 import { PermissionsService } from '../permissions';
+import { ProjectsService } from '../projects';
 import { ChatsFirewall } from './chats.firewall';
 import { ChatsRepo } from './chats.repo';
 import { ChatsEsIndexRepo, ChatsEsSearchRepo } from './elasticsearch';
@@ -24,9 +25,10 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
     @inject(ChatsEsSearchRepo) private readonly esSearchRepo: ChatsEsSearchRepo,
     @inject(ChatsEsIndexRepo) private readonly esIndexRepo: ChatsEsIndexRepo,
     @inject(PermissionsService) private readonly permissionsService: PermissionsService,
+    @inject(delay(() => ProjectsService)) private readonly projectsService: Readonly<ProjectsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new ChatsFirewall(jwt, this, this.permissionsService);
+  asUser = (jwt: SdkJwtTokenT) => new ChatsFirewall(jwt, this, this.permissionsService, this.projectsService);
 
   get = this.esSearchRepo.get;
 

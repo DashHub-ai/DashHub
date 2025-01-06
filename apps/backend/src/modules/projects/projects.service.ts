@@ -1,6 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import type {
   SdkCreateProjectInputT,
@@ -30,8 +30,8 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     @inject(ProjectsRepo) private readonly repo: ProjectsRepo,
     @inject(ProjectsEsSearchRepo) private readonly esSearchRepo: ProjectsEsSearchRepo,
     @inject(ProjectsEsIndexRepo) private readonly esIndexRepo: ProjectsEsIndexRepo,
-    @inject(ChatsService) private readonly chatsService: ChatsService,
     @inject(PermissionsService) private readonly permissionsService: PermissionsService,
+    @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsFirewall(jwt, this, this.permissionsService);
