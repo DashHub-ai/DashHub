@@ -16,7 +16,7 @@ export const SdkSearchS3BucketItemV = SdkS3BucketV;
 
 export type SdkSearchS3BucketItemT = z.infer<typeof SdkSearchS3BucketItemV>;
 
-export const SdKSearchS3BucketsInputV = SdkOffsetPaginationInputV
+export const SdkSearchS3BucketsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
   })
@@ -25,8 +25,8 @@ export const SdKSearchS3BucketsInputV = SdkOffsetPaginationInputV
   .merge(SdkIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchS3BucketsInputT = z.infer<typeof SdKSearchS3BucketsInputV>;
+export type SdkSearchS3BucketsInputT = z.infer<typeof SdkSearchS3BucketsInputV>;
 
-export const SdKSearchS3BucketsOutputV = SdkOffsetPaginationOutputV(SdkSearchS3BucketItemV);
+export const SdkSearchS3BucketsOutputV = SdkOffsetPaginationOutputV(SdkSearchS3BucketItemV);
 
-export type SdKSearchS3BucketsOutputT = z.infer<typeof SdKSearchS3BucketsOutputV>;
+export type SdkSearchS3BucketsOutputT = z.infer<typeof SdkSearchS3BucketsOutputV>;

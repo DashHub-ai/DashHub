@@ -8,7 +8,7 @@ import {
   type SdkChatT,
   type SdkCreateMessageInputT,
   type SdkRepliedMessageT,
-  type SdKSearchMessagesOutputT,
+  type SdkSearchMessagesOutputT,
   type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
@@ -22,10 +22,10 @@ import {
 
 type Attrs = {
   chat: SdkChatT;
-  initialMessages: SdKSearchMessagesOutputT;
+  initialMessages: SdkSearchMessagesOutputT;
 };
 
-type OptimisticSearchMessagesOutputT = Overwrite<SdKSearchMessagesOutputT, {
+type OptimisticSearchMessagesOutputT = Overwrite<SdkSearchMessagesOutputT, {
   items: OptimisticMessageOutputT[];
   replyObservable: AIStreamObservable | null;
 }>;

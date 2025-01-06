@@ -13,8 +13,8 @@ import {
 import type {
   SdkCreateOrganizationInputT,
   SdkCreateOrganizationOutputT,
-  SdKSearchOrganizationsInputT,
-  SdKSearchOrganizationsOutputT,
+  SdkSearchOrganizationsInputT,
+  SdkSearchOrganizationsOutputT,
   SdkUpdateOrganizationInputT,
   SdkUpdateOrganizationOutputT,
 } from './dto';
@@ -22,8 +22,8 @@ import type {
 export class OrganizationsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/organizations';
 
-  search = (data: SdKSearchOrganizationsInputT) =>
-    this.fetch<SdKSearchOrganizationsOutputT>({
+  search = (data: SdkSearchOrganizationsInputT) =>
+    this.fetch<SdkSearchOrganizationsOutputT>({
       url: this.endpoint('/search'),
       query: data,
       options: getPayload(),

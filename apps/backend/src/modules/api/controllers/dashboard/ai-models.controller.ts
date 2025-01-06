@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   type AIModelsSdk,
   SdkCreateAIModelInputV,
-  SdKSearchAIModelsInputV,
+  SdkSearchAIModelsInputV,
   SdkUpdateAIModelInputV,
 } from '@llm/sdk';
 import { AIModelsService } from '~/modules/ai-models';
@@ -38,7 +38,7 @@ export class AIModelsController extends AuthorizedController {
       ))
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchAIModelsInputV),
+        sdkSchemaValidator('query', SdkSearchAIModelsInputV),
         async context => pipe(
           context.req.valid('query'),
           aiModelsService.asUser(context.var.jwt).search,

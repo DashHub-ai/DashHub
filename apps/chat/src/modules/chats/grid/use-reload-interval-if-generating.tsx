@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 
 import { useInterval } from '@llm/commons-front';
-import { isSdkAIGeneratingString, type SdKSearchChatsOutputT } from '@llm/sdk';
+import { isSdkAIGeneratingString, type SdkSearchChatsOutputT } from '@llm/sdk';
 
 export function useReloadIntervalIfGenerating(
   reload: VoidFunction,
-  pagination: SdKSearchChatsOutputT | null,
+  pagination: SdkSearchChatsOutputT | null,
 ) {
   const isGenerating = useMemo(() => {
     if (!pagination) {

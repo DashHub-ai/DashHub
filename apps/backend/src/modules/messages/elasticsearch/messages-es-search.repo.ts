@@ -6,7 +6,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type {
   SdkSearchMessageItemT,
-  SdKSearchMessagesInputT,
+  SdkSearchMessagesInputT,
 } from '@llm/sdk';
 
 import { pluck, rejectFalsyItems } from '@llm/commons';
@@ -35,7 +35,7 @@ export class MessagesEsSearchRepo {
 
   searchByChatId = (
     chatId: TableUuid,
-    dto: Omit<SdKSearchMessagesInputT, 'chatIds'> = {
+    dto: Omit<SdkSearchMessagesInputT, 'chatIds'> = {
       offset: 0,
       limit: 200,
       sort: 'createdAt:desc',
@@ -46,7 +46,7 @@ export class MessagesEsSearchRepo {
       chatIds: [chatId],
     });
 
-  search = (dto: SdKSearchMessagesInputT) =>
+  search = (dto: SdkSearchMessagesInputT) =>
     pipe(
       this.indexRepo.search(
         MessagesEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
@@ -61,7 +61,7 @@ export class MessagesEsSearchRepo {
       })),
     );
 
-  private static createEsRequestSearchBody = (dto: SdKSearchMessagesInputT) =>
+  private static createEsRequestSearchBody = (dto: SdkSearchMessagesInputT) =>
     createPaginationOffsetSearchQuery(dto)
       .query(MessagesEsSearchRepo.createEsRequestSearchFilters(dto))
       .sorts(createScoredSortFieldQuery(dto.sort));
@@ -71,7 +71,7 @@ export class MessagesEsSearchRepo {
       phrase,
       ids,
       chatIds,
-    }: SdKSearchMessagesInputT,
+    }: SdkSearchMessagesInputT,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([

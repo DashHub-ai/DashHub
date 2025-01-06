@@ -1,6 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import type {
   SdkCreateAIModelInputT,
@@ -19,6 +19,7 @@ import {
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
 
+import { PermissionsService } from '../permissions';
 import { AIModelsFirewall } from './ai-models.firewall';
 import { AIModelsRepo } from './ai-models.repo';
 import { AIModelsEsIndexRepo, AIModelsEsSearchRepo } from './elasticsearch';
@@ -29,9 +30,10 @@ export class AIModelsService implements WithAuthFirewall<AIModelsFirewall> {
     @inject(AIModelsRepo) private readonly repo: AIModelsRepo,
     @inject(AIModelsEsSearchRepo) private readonly esSearchRepo: AIModelsEsSearchRepo,
     @inject(AIModelsEsIndexRepo) private readonly esIndexRepo: AIModelsEsIndexRepo,
+    @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new AIModelsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new AIModelsFirewall(jwt, this, this.permissionsService);
 
   archiveSeqByOrganizationId = (organizationId: SdkTableRowIdT) => TE.fromTask(
     pipe(

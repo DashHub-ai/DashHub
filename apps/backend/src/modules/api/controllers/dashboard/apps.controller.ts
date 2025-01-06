@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   type AppsSdk,
   SdkCreateAppInputV,
-  SdKSearchAppsInputV,
+  SdkSearchAppsInputV,
   SdkUpdateAppInputV,
 } from '@llm/sdk';
 import { AppsService } from '~/modules/apps';
@@ -39,7 +39,7 @@ export class AppsController extends AuthorizedController {
       ))
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchAppsInputV),
+        sdkSchemaValidator('query', SdkSearchAppsInputV),
         async context => pipe(
           context.req.valid('query'),
           appsService.asUser(context.var.jwt).search,

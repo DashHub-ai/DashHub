@@ -15,14 +15,14 @@ export const SdkSearchOrganizationItemV = SdkOrganizationV;
 
 export type SdkSearchOrganizationItemT = z.infer<typeof SdkSearchOrganizationItemV>;
 
-export const SdKSearchOrganizationsInputV = SdkOffsetPaginationInputV
+export const SdkSearchOrganizationsInputV = SdkOffsetPaginationInputV
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchOrganizationsInputT = z.infer<typeof SdKSearchOrganizationsInputV>;
+export type SdkSearchOrganizationsInputT = z.infer<typeof SdkSearchOrganizationsInputV>;
 
-export const SdKSearchOrganizationsOutputV = SdkOffsetPaginationOutputV(SdkSearchOrganizationItemV);
+export const SdkSearchOrganizationsOutputV = SdkOffsetPaginationOutputV(SdkSearchOrganizationItemV);
 
-export type SdKSearchOrganizationsOutputT = z.infer<typeof SdKSearchOrganizationsOutputV>;
+export type SdkSearchOrganizationsOutputT = z.infer<typeof SdkSearchOrganizationsOutputV>;

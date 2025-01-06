@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   AppsCategoriesSdk,
   SdkCreateAppCategoryInputV,
-  SdKSearchAppsCategoriesInputV,
+  SdkSearchAppsCategoriesInputV,
   SdkUpdateAppCategoryInputV,
 } from '@llm/sdk';
 import { AppsCategoriesService } from '~/modules/apps-categories';
@@ -31,7 +31,7 @@ export class AppsCategoriesController extends AuthorizedController {
     this.router
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchAppsCategoriesInputV),
+        sdkSchemaValidator('query', SdkSearchAppsCategoriesInputV),
         async context => pipe(
           context.req.valid('query'),
           appsCategoriesService.asUser(context.var.jwt).search,

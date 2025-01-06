@@ -3,7 +3,7 @@ import { memo } from 'react';
 
 import type {
   SdkChatT,
-  SdKSearchMessagesOutputT,
+  SdkSearchMessagesOutputT,
 } from '@llm/sdk';
 
 import { ChatConversationPanel } from './chat-conversation-panel';
@@ -11,7 +11,7 @@ import { ChatConfigPanel } from './config-panel';
 
 type Props = {
   chat: SdkChatT;
-  initialMessages: SdKSearchMessagesOutputT;
+  initialMessages: SdkSearchMessagesOutputT;
 };
 
 export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Props) => {

@@ -7,3 +7,7 @@ export const SdkTableRowWithPermissionsV = z.object({
 });
 
 export type SdkTableRowWithPermissionsT = z.infer<typeof SdkTableRowWithPermissionsV>;
+
+export function isSdkRecordWithPermissions(value: unknown): value is SdkTableRowWithPermissionsT {
+  return SdkTableRowWithPermissionsV.safeParse(value).success;
+}

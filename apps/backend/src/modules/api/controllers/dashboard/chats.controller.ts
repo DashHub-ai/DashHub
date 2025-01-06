@@ -10,8 +10,8 @@ import {
   SdkCreateChatInputV,
   SdkCreateMessageInputV,
   SdkRequestAIReplyInputV,
-  SdKSearchChatsInputV,
-  SdKSearchMessagesInputV,
+  SdkSearchChatsInputV,
+  SdkSearchMessagesInputV,
   SdkUpdateChatInputV,
 } from '@llm/sdk';
 import { ChatsService } from '~/modules/chats';
@@ -41,7 +41,7 @@ export class ChatsController extends AuthorizedController {
     this.router
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchChatsInputV),
+        sdkSchemaValidator('query', SdkSearchChatsInputV),
         async context => pipe(
           context.req.valid('query'),
           chatsService.asUser(context.var.jwt).search,
@@ -107,7 +107,7 @@ export class ChatsController extends AuthorizedController {
       )
       .get(
         '/:id/messages',
-        sdkSchemaValidator('query', SdKSearchMessagesInputV),
+        sdkSchemaValidator('query', SdkSearchMessagesInputV),
         async context => pipe(
           messagesService.asUser(context.var.jwt).search(
             {

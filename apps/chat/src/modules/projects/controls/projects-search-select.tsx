@@ -1,12 +1,12 @@
 import type { ComponentProps } from 'react';
 
-import type { SdkSearchProjectsInputT, SdKSearchProjectsOutputT } from '@llm/sdk';
+import type { SdkSearchProjectsInputT, SdkSearchProjectsOutputT } from '@llm/sdk';
 
 import { createSdkAutocomplete } from '@llm/ui';
 import { useWorkspaceOrganization } from '~/modules/workspace';
 
 export const ProjectsAbstractSearchSelect = createSdkAutocomplete<
-  SdKSearchProjectsOutputT,
+  SdkSearchProjectsOutputT,
   SdkSearchProjectsInputT
 >({
   fetchFn: ({ sdk: { sdks }, phrase, limit, filters }) =>

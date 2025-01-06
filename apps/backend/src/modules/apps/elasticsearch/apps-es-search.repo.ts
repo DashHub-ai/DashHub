@@ -6,7 +6,7 @@ import { inject, injectable } from 'tsyringe';
 import type {
   SdkCountedIdRecordT,
   SdkSearchAppItemT,
-  SdKSearchAppsInputT,
+  SdkSearchAppsInputT,
   SdkSearchAppsOutputT,
 } from '@llm/sdk';
 
@@ -28,7 +28,7 @@ import {
   AppsEsIndexRepo,
 } from './apps-es-index.repo';
 
-export type EsAppsInternalFilters = WithPermissionsInternalFilters<SdKSearchAppsInputT>;
+export type EsAppsInternalFilters = WithPermissionsInternalFilters<SdkSearchAppsInputT>;
 
 @injectable()
 export class AppsEsSearchRepo {
@@ -42,7 +42,7 @@ export class AppsEsSearchRepo {
     TE.map(AppsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdKSearchAppsInputT) => pipe(
+  search = (dto: SdkSearchAppsInputT) => pipe(
     TE.Do,
     TE.bind('query', () => this.indexRepo.search(
       AppsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),

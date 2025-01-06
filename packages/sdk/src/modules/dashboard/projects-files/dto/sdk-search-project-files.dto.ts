@@ -25,6 +25,6 @@ export const SdkSearchProjectFilesInputV = SdkOffsetPaginationInputV
 
 export type SdkSearchProjectFilesInputT = z.infer<typeof SdkSearchProjectFilesInputV>;
 
-export const SdKSearchProjectFilesOutputV = SdkOffsetPaginationOutputV(SdkSearchProjectFileItemV);
+export const SdkSearchProjectFilesOutputV = SdkOffsetPaginationOutputV(SdkSearchProjectFileItemV);
 
-export type SdKSearchProjectFilesOutputT = z.infer<typeof SdKSearchProjectFilesOutputV>;
+export type SdkSearchProjectFilesOutputT = z.infer<typeof SdkSearchProjectFilesOutputV>;

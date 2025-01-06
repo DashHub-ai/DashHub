@@ -24,15 +24,15 @@ import type {
   SdkAttachAppInputT,
   SdkCreateMessageInputT,
   SdkRequestAIReplyInputT,
-  SdKSearchMessagesInputT,
-  SdKSearchMessagesOutputT,
+  SdkSearchMessagesInputT,
+  SdkSearchMessagesOutputT,
 } from '../messages';
 import type {
   SdkChatT,
   SdkCreateChatInputT,
   SdkCreateChatOutputT,
   SdkSearchChatsInputT,
-  SdKSearchChatsOutputT,
+  SdkSearchChatsOutputT,
   SdkUpdateChatInputT,
   SdkUpdateChatOutputT,
 } from './dto';
@@ -54,7 +54,7 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
     });
 
   search = (data: SdkSearchChatsInputT) =>
-    this.fetch<SdKSearchChatsOutputT>({
+    this.fetch<SdkSearchChatsOutputT>({
       url: this.endpoint('/search'),
       query: data,
       options: getPayload(),
@@ -95,9 +95,9 @@ export class ChatsSdk extends AbstractNestedSdkWithAuth {
 
   searchMessages = (
     chatId: SdkTableRowUuidT,
-    data: Omit<SdKSearchMessagesInputT, 'chatIds'>,
+    data: Omit<SdkSearchMessagesInputT, 'chatIds'>,
   ) =>
-    this.fetch<SdKSearchMessagesOutputT>({
+    this.fetch<SdkSearchMessagesOutputT>({
       url: this.endpoint(`/${chatId}/messages`),
       query: data,
       options: getPayload(),

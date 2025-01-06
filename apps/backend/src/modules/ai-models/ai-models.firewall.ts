@@ -1,46 +1,68 @@
-import { flow } from 'fp-ts/lib/function';
+import { taskEither as TE } from 'fp-ts';
+import { flow, pipe } from 'fp-ts/lib/function';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type {
+  SdkCreateAIModelInputT,
+  SdkJwtTokenT,
+  SdkSearchAIModelsInputT,
+  SdkUpdateAIModelInputT,
+} from '@llm/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
+import type { TableId, TableRowWithId } from '../database';
+import type { PermissionsService } from '../permissions';
 import type { AIModelsService } from './ai-models.service';
 
 export class AIModelsFirewall extends AuthFirewallService {
   constructor(
     jwt: SdkJwtTokenT,
     private readonly aiModelsService: AIModelsService,
+    private readonly permissionsService: Readonly<PermissionsService>,
   ) {
     super(jwt);
   }
 
-  unarchive = flow(
-    this.aiModelsService.unarchive,
-    this.tryTEIfUser.is.root,
+  update = (attrs: SdkUpdateAIModelInputT & TableRowWithId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckOrganizationMatch({
+      findRecord: this.aiModelsService.get(attrs.id),
+    }),
+    TE.chainW(() => this.aiModelsService.update(attrs)),
+    this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 
-  archive = flow(
-    this.aiModelsService.archive,
-    this.tryTEIfUser.is.root,
+  create = (dto: SdkCreateAIModelInputT) => pipe(
+    this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto),
+    TE.fromEither,
+    TE.chainW(this.aiModelsService.create),
+    this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 
-  update = flow(
-    this.aiModelsService.update,
-    this.tryTEIfUser.is.root,
+  unarchive = (id: TableId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckOrganizationMatch({
+      findRecord: this.aiModelsService.get(id),
+    }),
+    TE.chainW(() => this.aiModelsService.unarchive(id)),
+    this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 
-  create = flow(
-    this.aiModelsService.create,
-    this.tryTEIfUser.is.root,
+  archive = (id: TableId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckOrganizationMatch({
+      findRecord: this.aiModelsService.get(id),
+    }),
+    TE.chainW(() => this.aiModelsService.archive(id)),
+    this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 
-  search = flow(
-    this.aiModelsService.search,
-    this.tryTEIfUser.is.root,
+  search = (dto: SdkSearchAIModelsInputT) => pipe(
+    this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters(dto),
+    TE.fromEither,
+    TE.chainW(this.aiModelsService.search),
   );
 
   getDefault = flow(
-    this.aiModelsService.getDefault,
-    this.tryTEIfUser.is.root,
+    this.permissionsService.asUser(this.jwt).enforceMatchingOrganizationId,
+    TE.fromEither,
+    TE.chainW(this.aiModelsService.getDefault),
   );
 }

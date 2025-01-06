@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   type S3BucketsSdk,
   SdkCreateS3BucketInputV,
-  SdKSearchS3BucketsInputV,
+  SdkSearchS3BucketsInputV,
   SdkUpdateS3BucketInputV,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
@@ -30,7 +30,7 @@ export class S3BucketsController extends AuthorizedController {
     this.router
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchS3BucketsInputV),
+        sdkSchemaValidator('query', SdkSearchS3BucketsInputV),
         async context => pipe(
           context.req.valid('query'),
           orgs3bucketsService.asUser(context.var.jwt).search,

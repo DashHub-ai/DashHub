@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 import {
-  SdKSearchChatsInputV,
+  SdkSearchChatsInputV,
   type SdkTableRowWithIdT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
@@ -35,7 +35,7 @@ export function ChatsContainer({ project, columns = 2 }: Props) {
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
     storeDataInUrl: false,
-    schema: SdKSearchChatsInputV,
+    schema: SdkSearchChatsInputV,
     fallbackSearchParams: {
       limit: 12,
     },

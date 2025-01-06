@@ -13,8 +13,8 @@ import {
 import type {
   SdkCreateExpertInputT,
   SdkCreateExpertOutputT,
-  SdKSearchExpertsInputT,
-  SdKSearchExpertsOutputT,
+  SdkSearchExpertsInputT,
+  SdkSearchExpertsOutputT,
   SdkUpdateExpertInputT,
   SdkUpdateExpertOutputT,
 } from './dto';
@@ -22,8 +22,8 @@ import type {
 export class ExpertsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/experts';
 
-  search = (data: SdKSearchExpertsInputT) =>
-    this.fetch<SdKSearchExpertsOutputT>({
+  search = (data: SdkSearchExpertsInputT) =>
+    this.fetch<SdkSearchExpertsOutputT>({
       url: this.endpoint('/search'),
       query: data,
       options: getPayload(),

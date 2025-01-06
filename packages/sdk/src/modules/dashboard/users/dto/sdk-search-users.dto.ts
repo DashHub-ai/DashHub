@@ -27,6 +27,6 @@ export const SdkSearchUsersInputV = SdkOffsetPaginationInputV
 
 export type SdkSearchUsersInputT = z.infer<typeof SdkSearchUsersInputV>;
 
-export const SdKSearchUsersOutputV = SdkOffsetPaginationOutputV(SdkSearchUserItemV);
+export const SdkSearchUsersOutputV = SdkOffsetPaginationOutputV(SdkSearchUserItemV);
 
-export type SdKSearchUsersOutputT = z.infer<typeof SdKSearchUsersOutputV>;
+export type SdkSearchUsersOutputT = z.infer<typeof SdkSearchUsersOutputV>;

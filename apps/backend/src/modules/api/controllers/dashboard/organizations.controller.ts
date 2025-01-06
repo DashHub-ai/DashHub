@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   type OrganizationsSdk,
   SdkCreateOrganizationInputV,
-  SdKSearchOrganizationsInputV,
+  SdkSearchOrganizationsInputV,
   SdkUpdateOrganizationInputV,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
@@ -30,7 +30,7 @@ export class OrganizationsController extends AuthorizedController {
     this.router
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchOrganizationsInputV),
+        sdkSchemaValidator('query', SdkSearchOrganizationsInputV),
         async context => pipe(
           context.req.valid('query'),
           organizationsService.asUser(context.var.jwt).search,

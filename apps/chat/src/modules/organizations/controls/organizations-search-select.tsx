@@ -1,10 +1,10 @@
-import type { SdKSearchOrganizationsInputT, SdKSearchOrganizationsOutputT } from '@llm/sdk';
+import type { SdkSearchOrganizationsInputT, SdkSearchOrganizationsOutputT } from '@llm/sdk';
 
 import { createSdkAutocomplete } from '@llm/ui';
 
 export const OrganizationsSearchSelect = createSdkAutocomplete<
-  SdKSearchOrganizationsOutputT,
-  SdKSearchOrganizationsInputT
+  SdkSearchOrganizationsOutputT,
+  SdkSearchOrganizationsInputT
 >({
   fetchFn: ({ sdk: { sdks }, phrase, limit, filters }) =>
     sdks.dashboard.organizations.search({

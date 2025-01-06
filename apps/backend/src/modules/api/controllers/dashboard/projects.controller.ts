@@ -10,7 +10,7 @@ import {
   SdkCreateProjectInputV,
   SdkSearchProjectEmbeddingsInputV,
   SdkSearchProjectFilesInputV,
-  SdKSearchProjectsInputV,
+  SdkSearchProjectsInputV,
   SdkUpdateProjectInputV,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
@@ -105,7 +105,7 @@ export class ProjectsController extends AuthorizedController {
       )
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchProjectsInputV),
+        sdkSchemaValidator('query', SdkSearchProjectsInputV),
         async context => pipe(
           context.req.valid('query'),
           projectsService.asUser(context.var.jwt).search,

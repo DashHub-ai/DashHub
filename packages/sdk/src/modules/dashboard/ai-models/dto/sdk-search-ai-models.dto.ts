@@ -17,7 +17,7 @@ export const SdkSearchAIModelItemV = SdkAIModelV;
 
 export type SdkSearchAIModelItemT = z.infer<typeof SdkSearchAIModelItemV>;
 
-export const SdKSearchAIModelsInputV = SdkOffsetPaginationInputV
+export const SdkSearchAIModelsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
     default: StrictBooleanV.optional(),
@@ -28,8 +28,8 @@ export const SdKSearchAIModelsInputV = SdkOffsetPaginationInputV
   .merge(SdkIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchAIModelsInputT = z.infer<typeof SdKSearchAIModelsInputV>;
+export type SdkSearchAIModelsInputT = z.infer<typeof SdkSearchAIModelsInputV>;
 
-export const SdKSearchAIModelsOutputV = SdkOffsetPaginationOutputV(SdkSearchAIModelItemV);
+export const SdkSearchAIModelsOutputV = SdkOffsetPaginationOutputV(SdkSearchAIModelItemV);
 
-export type SdKSearchAIModelsOutputT = z.infer<typeof SdKSearchAIModelsOutputV>;
+export type SdkSearchAIModelsOutputT = z.infer<typeof SdkSearchAIModelsOutputV>;

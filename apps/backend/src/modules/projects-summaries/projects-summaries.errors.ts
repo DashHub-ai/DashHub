@@ -1,7 +1,7 @@
-import type { SdKSearchMessagesOutputT } from '@llm/sdk';
+import type { SdkSearchMessagesOutputT } from '@llm/sdk';
 
 import { TaggedError } from '@llm/commons';
 
 export class MissingAIModelInProjectError
-  extends TaggedError.ofLiteral<SdKSearchMessagesOutputT>()('MissingAIModelInProject') {
+  extends TaggedError.ofLiteral<SdkSearchMessagesOutputT>()('MissingAIModelInProject') {
 }

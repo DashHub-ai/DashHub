@@ -1,13 +1,13 @@
 import type { ComponentProps } from 'react';
 
-import type { SdKSearchAIModelsInputT, SdKSearchAIModelsOutputT } from '@llm/sdk';
+import type { SdkSearchAIModelsInputT, SdkSearchAIModelsOutputT } from '@llm/sdk';
 
 import { createSdkAutocomplete } from '@llm/ui';
 import { useWorkspaceOrganization } from '~/modules/workspace';
 
 const AIModelsSearchAbstractSelect = createSdkAutocomplete<
-  SdKSearchAIModelsOutputT,
-  SdKSearchAIModelsInputT
+  SdkSearchAIModelsOutputT,
+  SdkSearchAIModelsInputT
 >({
   fetchFn: ({ sdk: { sdks }, phrase, limit, filters }) =>
     sdks.dashboard.aiModels.search({
@@ -27,7 +27,7 @@ export function AIModelsSearchSelect({ filters, ...props }: ComponentProps<typeo
   return (
     <AIModelsSearchAbstractSelect
       {...props}
-      filters={assignWorkspaceToFilters(filters as SdKSearchAIModelsInputT)}
+      filters={assignWorkspaceToFilters(filters as SdkSearchAIModelsInputT)}
     />
   );
 }

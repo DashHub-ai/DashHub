@@ -4,6 +4,7 @@ import { pipe } from 'fp-ts/lib/function';
 import {
   isSdkRecordWithCreator,
   isSdkRecordWithOrganization,
+  isSdkRecordWithPermissions,
   isTechOrOwnerUserOrganizationRole,
   ofSdkUnauthorizedErrorE,
   type SdkIdsArrayT,
@@ -15,7 +16,7 @@ import {
   type WithSdkOrganization,
 } from '@llm/sdk';
 
-import type { DatabaseError } from '../database';
+import type { DatabaseError, TableId } from '../database';
 import type { UsersGroupsRepo } from '../users-groups';
 
 import { AuthFirewallService } from '../auth';
@@ -81,7 +82,7 @@ export class PermissionsFirewall extends AuthFirewallService {
    *   TE.chainW(() => this.someService.update(attrs)),
    * );
    */
-  findRecordAndCheckPermissions = <R extends SdkTableRowWithPermissionsT, E>(
+  findRecordAndCheckPermissions = <R, E>(
     { findRecord, accessLevel }: {
       accessLevel: SdkPermissionAccessLevelT;
       findRecord: TE.TaskEither<E, R>;
@@ -97,19 +98,85 @@ export class PermissionsFirewall extends AuthFirewallService {
           return E.right(data);
         }
 
-        // Check if tech user, if so skip permission check
+        // If user has tech/owner role and operates within their organization, skip permission check
         if (this.shouldAllowUsingTechOrOwnerAccess(data)) {
           return E.right(data);
         }
 
-        // If not tech user, check ACLs for other users
-        if (!checkPermissionsMatch(descriptor, data)) {
-          return ofSdkUnauthorizedErrorE();
+        // If record supports ACL permissions, check them
+        if (isSdkRecordWithPermissions(data) && checkPermissionsMatch(descriptor, data)) {
+          return E.right(data);
         }
 
-        return E.right(data);
+        // Block access to resource
+        return ofSdkUnauthorizedErrorE();
       }),
     );
+
+  /**
+   * Finds a record and validates if it belongs to the user's organization.
+   * Root users are allowed to access any record. Regular users can only
+   * access records within their organization.
+   *
+   * @example
+   * get = (id: string) => pipe(
+   *   this.permissionsService
+   *     .asUser(this.jwt)
+   *     .findRecordAndCheckOrganizationMatch({
+   *       findRecord: this.someService.get(id),
+   *     }),
+   * );
+   */
+  findRecordAndCheckOrganizationMatch = <R, E>(
+    { findRecord }: {
+      findRecord: TE.TaskEither<E, R>;
+    },
+  ): TE.TaskEither<E | DatabaseError | SdkUnauthorizedError, R> =>
+    pipe(
+      TE.Do,
+      TE.apSW('data', findRecord),
+      TE.chainEitherKW(({ data }) => {
+        const { jwt } = this;
+
+        if (jwt.role === 'root') {
+          return E.right(data);
+        }
+
+        if (isSdkRecordWithOrganization(data) && data.organization.id === jwt.organization.id) {
+          return E.right(data);
+        }
+
+        return ofSdkUnauthorizedErrorE();
+      }),
+    );
+
+  /**
+   * Enforces that the provided organization ID matches the user's organization.
+   * Root users are allowed to access any organization. Regular users can only
+   * access their own organization.
+   *
+   * @example
+   * someMethod = (organizationId: TableId) => pipe(
+   *   this.permissionsService
+   *     .asUser(this.jwt)
+   *     .enforceMatchingOrganizationId(organizationId),
+   *   TE.fromEither,
+   *   TE.chainW(this.someService.someMethod),
+   * );
+   */
+  enforceMatchingOrganizationId = (organizationId: TableId): E.Either<SdkUnauthorizedError, TableId> => {
+    const { jwt } = this;
+
+    if (jwt.role === 'root') {
+      return E.right(organizationId);
+    }
+
+    if (organizationId === jwt.organization.id) {
+      return E.right(organizationId);
+    }
+
+    return ofSdkUnauthorizedErrorE();
+  };
 
   /**
    * Enhances query filters with permission checks to ensure users can only access
@@ -175,7 +242,7 @@ export class PermissionsFirewall extends AuthFirewallService {
    * search = (dto: SdkSearchInputT) => pipe(
    *   this.permissionsFirewall.enforceOrganizationScope(dto),
    *   TE.fromEither,
-   *   TE.chainW(this.someService.search)
+   *   TE.chainW(this.someService.create)
    * );
    */
   enforceOrganizationScope = <DTO extends Partial<WithSdkOrganization>>(
@@ -278,7 +345,7 @@ export class PermissionsFirewall extends AuthFirewallService {
    * @param data - The record to check access for. Must contain organization information.
    * @returns True if the user should be granted full access, false otherwise.
    */
-  private shouldAllowUsingTechOrOwnerAccess = <R extends SdkTableRowWithPermissionsT>(data: R): boolean => {
+  private shouldAllowUsingTechOrOwnerAccess = <R>(data: R): boolean => {
     const { jwt } = this;
 
     switch (jwt.role) {

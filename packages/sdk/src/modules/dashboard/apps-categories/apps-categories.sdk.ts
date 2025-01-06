@@ -14,7 +14,7 @@ import type {
   SdkAppCategoryT,
   SdkCreateAppCategoryInputT,
   SdkCreateAppCategoryOutputT,
-  SdKSearchAppsCategoriesInputT,
+  SdkSearchAppsCategoriesInputT,
   SdkSearchAppsCategoriesOutputT,
   SdkUpdateAppCategoryInputT,
   SdkUpdateAppCategoryOutputT,
@@ -29,7 +29,7 @@ export class AppsCategoriesSdk extends AbstractNestedSdkWithAuth {
       options: getPayload(),
     });
 
-  search = (data: SdKSearchAppsCategoriesInputT) =>
+  search = (data: SdkSearchAppsCategoriesInputT) =>
     this.fetch<SdkSearchAppsCategoriesOutputT>({
       url: this.endpoint('/search'),
       query: data,

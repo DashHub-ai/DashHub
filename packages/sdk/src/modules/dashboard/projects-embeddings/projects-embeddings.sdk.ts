@@ -4,7 +4,7 @@ import { getPayload, type SdkRecordNotFoundError, type SdkTableRowIdT } from '~/
 import type {
   SdkSearchProjectEmbeddingItemT,
   SdkSearchProjectEmbeddingsInputT,
-  SdKSearchProjectEmbeddingsOutputT,
+  SdkSearchProjectEmbeddingsOutputT,
 } from './dto';
 
 export class ProjectsEmbeddingsSdk extends AbstractNestedSdkWithAuth {
@@ -17,7 +17,7 @@ export class ProjectsEmbeddingsSdk extends AbstractNestedSdkWithAuth {
     });
 
   search = (attrs: SdkSearchProjectEmbeddingsInputT) =>
-    this.fetch<SdKSearchProjectEmbeddingsOutputT>({
+    this.fetch<SdkSearchProjectEmbeddingsOutputT>({
       url: this.endpoint('/search'),
       query: attrs,
       options: getPayload(),
