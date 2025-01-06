@@ -1,6 +1,6 @@
 import { nonEmptyArray as NEA, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 import isValidUTF8 from 'utf-8-validate';
 
 import type { SdkJwtTokenT } from '@llm/sdk';
@@ -21,6 +21,7 @@ import type { UploadFilePayload } from '../s3';
 import { AIConnectorService } from '../ai-connector';
 import { AIModelsService } from '../ai-models';
 import { ChatsRepo } from '../chats/chats.repo';
+import { PermissionsService } from '../permissions';
 import { ProjectsFilesRepo } from '../projects-files/projects-files.repo';
 import {
   ProjectsEmbeddingsEsIndexRepo,
@@ -63,9 +64,10 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     @inject(ImageAIEmbeddingGenerator) private readonly imageAIEmbeddingGenerator: ImageAIEmbeddingGenerator,
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
+    @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new ProjectsEmbeddingsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new ProjectsEmbeddingsFirewall(jwt, this, this.permissionsService);
 
   get = this.esSearchRepo.get;
 

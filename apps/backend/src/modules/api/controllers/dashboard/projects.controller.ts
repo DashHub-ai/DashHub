@@ -21,6 +21,7 @@ import { ProjectsFilesService } from '~/modules/projects-files';
 import {
   mapDbRecordAlreadyExistsToSdkError,
   mapDbRecordNotFoundToSdkError,
+  mapEsDocumentNotFoundToSdkError,
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
@@ -55,6 +56,7 @@ export class ProjectsController extends AuthorizedController {
         async context => pipe(
           Number(context.req.param('embeddingId')),
           projectsEmbeddingsService.asUser(context.var.jwt).get,
+          mapEsDocumentNotFoundToSdkError,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ProjectsEmbeddingsSdk['get']>>(context),
         ),

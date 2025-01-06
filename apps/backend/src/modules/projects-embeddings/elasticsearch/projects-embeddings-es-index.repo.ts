@@ -15,6 +15,7 @@ import {
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
+import { createPermissionsRowEntryMapping } from '~/modules/permissions';
 
 import type { ProjectEmbeddingsTableRowWithRelations } from '../projects-embeddings.tables';
 
@@ -27,7 +28,10 @@ const ProjectsEmbeddingsAbstractEsIndexRepo = createElasticsearchIndexRepo({
       dynamic: false,
       properties: {
         ...createBaseDatedRecordMappings(),
-        project: createIdObjectMapping(),
+        organization: createIdObjectMapping(),
+        project: createIdObjectMapping({
+          permissions: createPermissionsRowEntryMapping(),
+        }),
         project_file: createIdObjectMapping({
           chat: createNullableIdObjectMapping({}, 'keyword'),
           resource: createIdObjectMapping(),

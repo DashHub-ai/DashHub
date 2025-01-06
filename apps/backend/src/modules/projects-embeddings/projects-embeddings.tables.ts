@@ -9,6 +9,7 @@ import type {
   TableRowWithUuid,
   TableWithDefaultColumns,
 } from '../database';
+import type { PermissionsTableRowRelation } from '../permissions';
 import type { S3ResourcesTableRowWithRelations } from '../s3';
 
 export type ProjectsEmbeddingsTable =
@@ -29,7 +30,8 @@ export type ProjectEmbeddingsInsertTableRow = NormalizeInsertTableRow<ProjectsEm
 export type ProjectEmbeddingsTableRowWithRelations =
   & Omit<ProjectEmbeddingsTableRow, 'projectFileId'>
   & {
-    project: TableRowWithId;
+    organization: TableRowWithId;
+    project: TableRowWithId & PermissionsTableRowRelation;
     projectFile: TableRowWithIdName & {
       chat: TableRowWithUuid | null;
       resource: Pick<S3ResourcesTableRowWithRelations, 'id' | 'publicUrl'>;

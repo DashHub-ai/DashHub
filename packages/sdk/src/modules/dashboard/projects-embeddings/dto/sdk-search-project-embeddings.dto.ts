@@ -16,6 +16,7 @@ export type SdkSearchProjectEmbeddingItemT = z.infer<typeof SdkSearchProjectEmbe
 
 export const SdkSearchProjectEmbeddingsInputV = SdkOffsetPaginationInputV
   .extend({
+    organizationIds: SdkIdsArrayV.optional(),
     projectsIds: SdkIdsArrayV.optional(),
   })
   .merge(SdkDefaultSortInputV)

@@ -9,9 +9,13 @@ import type { TableId, TableUuid } from '~/modules/database';
 
 import { pluck, rejectFalsyItems } from '@llm/commons';
 import { createMagicNullIdEsValue, createPaginationOffsetSearchQuery, createScoredSortFieldQuery } from '~/modules/elasticsearch';
+import { createEsPermissionsFilters, mapRawEsDocToSdkPermissions, type WithPermissionsInternalFilters } from '~/modules/permissions';
 
 import { ProjectEmbeddingsTableRowWithRelations } from '../projects-embeddings.tables';
 import { type ProjectsEmbeddingsEsDocument, ProjectsEmbeddingsEsIndexRepo } from './projects-embeddings-es-index.repo';
+
+type EsProjectsEmbeddingsInternalFilters =
+  WithPermissionsInternalFilters<SdkSearchProjectEmbeddingsInputT>;
 
 export type EsMatchingProjectEmbedding = Pick<
   ProjectEmbeddingsTableRowWithRelations,
@@ -30,7 +34,7 @@ export class ProjectsEmbeddingsEsSearchRepo {
       TE.map(ProjectsEmbeddingsEsSearchRepo.mapOutputHit),
     );
 
-  search = (dto: SdkSearchProjectEmbeddingsInputT) =>
+  search = (dto: EsProjectsEmbeddingsInternalFilters) =>
     pipe(
       this.indexRepo.search(
         createPaginationOffsetSearchQuery(dto)
@@ -109,16 +113,20 @@ export class ProjectsEmbeddingsEsSearchRepo {
       updatedAt: source.updated_at,
       text: source.text,
       projectFile: camelcaseKeys(source.project_file, { deep: true }),
+      organization: source.organization,
+      permissions: mapRawEsDocToSdkPermissions(source.project.permissions),
     });
 
   private static createEsRequestSearchFilters = (
     {
       ids,
       projectsIds,
-    }: SdkSearchProjectEmbeddingsInputT,
+      satisfyPermissions,
+    }: EsProjectsEmbeddingsInternalFilters,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions, 'project.permissions'),
         !!ids?.length && esb.termsQuery('id', ids),
         !!projectsIds?.length && esb.termsQuery('project.id', projectsIds),
       ]),

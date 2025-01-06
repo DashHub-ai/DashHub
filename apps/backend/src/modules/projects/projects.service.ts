@@ -75,6 +75,9 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
               generated: false,
             },
           },
+          // Embeddings are associated with projects, so we need to inherit permissions
+          // from the chat to keep them private.
+          permissions: chat.permissions?.current ?? [],
           creator,
         }),
         TE.tap(project => this.chatsService.assignToProject(chat.id, project.id)),
