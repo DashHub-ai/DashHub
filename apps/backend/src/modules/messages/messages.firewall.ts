@@ -1,10 +1,15 @@
 import { flow, pipe } from 'fp-ts/lib/function';
 import * as TE from 'fp-ts/lib/TaskEither';
 
-import type { SdkJwtTokenT, SdkRequestAIReplyInputT, SdkSearchMessageItemT } from '@llm/sdk';
+import type {
+  SdkJwtTokenT,
+  SdkRequestAIReplyInputT,
+  SdkSearchMessageItemT,
+  SdkSearchMessagesInputT,
+} from '@llm/sdk';
 
 import type { ChatsService } from '../chats';
-import type { TableRowWithUuid } from '../database';
+import type { TableRowWithUuid, TableUuid } from '../database';
 import type { PermissionsService } from '../permissions';
 import type { AttachAppInputT, CreateUserMessageInputT, MessagesService } from './messages.service';
 
@@ -30,10 +35,15 @@ export class MessagesFirewall extends AuthFirewallService {
     })),
   );
 
-  // TODO: Add belongs checks
-  searchByChatId = flow(
-    this.messagesService.searchByChatId,
-    this.tryTEIfUser.is.root,
+  searchByChatId = (
+    chatId: TableUuid,
+    dto: Omit<SdkSearchMessagesInputT, 'chatIds'>,
+  ) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+      accessLevel: 'read',
+      findRecord: this.chatsService.get(chatId),
+    }),
+    TE.chainW(() => this.messagesService.searchByChatId(chatId, dto)),
   );
 
   aiReply = (

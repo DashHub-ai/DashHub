@@ -109,11 +109,9 @@ export class ChatsController extends AuthorizedController {
         '/:id/messages',
         sdkSchemaValidator('query', SdkSearchMessagesInputV),
         async context => pipe(
-          messagesService.asUser(context.var.jwt).search(
-            {
-              ...context.req.valid('query'),
-              chatIds: [context.req.param('id')],
-            },
+          messagesService.asUser(context.var.jwt).searchByChatId(
+            context.req.param('id'),
+            context.req.valid('query'),
           ),
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ChatsSdk['searchMessages']>>(context),
