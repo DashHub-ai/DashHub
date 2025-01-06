@@ -1,6 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import type { SdkJwtTokenT } from '@llm/sdk';
 
@@ -9,8 +9,10 @@ import { type PartialBy, tapTaskEitherTE } from '@llm/commons';
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableUuid } from '../database';
 
+import { PermissionsService } from '../permissions';
 import { ProjectsEmbeddingsService } from '../projects-embeddings/projects-embeddings.service';
 import { ProjectsRepo } from '../projects/projects.repo';
+import { ProjectsService } from '../projects/projects.service';
 import { S3Service, UploadFileAttrs } from '../s3';
 import { ProjectsFilesEsIndexRepo, ProjectsFilesEsSearchRepo } from './elasticsearch';
 import { ProjectsFilesFirewall } from './projects-files.firewall';
@@ -25,9 +27,11 @@ export class ProjectsFilesService implements WithAuthFirewall<ProjectsFilesFirew
     @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
     @inject(ProjectsFilesEsSearchRepo) private readonly esSearchRepo: ProjectsFilesEsSearchRepo,
     @inject(ProjectsEmbeddingsService) private readonly projectsEmbeddingsService: ProjectsEmbeddingsService,
+    @inject(delay(() => ProjectsService)) private readonly projectsService: Readonly<ProjectsService>,
+    @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new ProjectsFilesFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new ProjectsFilesFirewall(jwt, this, this.projectsService, this.permissionsService);
 
   search = this.esSearchRepo.search;
 

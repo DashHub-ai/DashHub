@@ -23,7 +23,7 @@ import {
   ProjectsFilesEsIndexRepo,
 } from './projects-files-es-index.repo';
 
-type InternalSearchProjectFilesInput = SdkSearchProjectFilesInputT & {
+export type InternalSearchProjectFilesInput = SdkSearchProjectFilesInputT & {
   projectId: SdkTableRowIdT;
   ignoreAttachedToMessages?: boolean;
 };
