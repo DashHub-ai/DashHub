@@ -1,13 +1,14 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import type {
-  SdkCreateAIModelInputT,
-  SdkJwtTokenT,
-  SdkSearchAIModelsInputT,
-  SdkUpdateAIModelInputT,
+import {
+  mapSdkOffsetPaginationItems,
+  type SdkAIModelT,
+  type SdkCreateAIModelInputT,
+  type SdkJwtTokenT,
+  type SdkSearchAIModelsInputT,
+  type SdkUpdateAIModelInputT,
 } from '@llm/sdk';
-
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { TableId, TableRowWithId } from '../database';
@@ -58,11 +59,38 @@ export class AIModelsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters(dto),
     TE.fromEither,
     TE.chainW(this.aiModelsService.search),
+    TE.map((pagination) => {
+      if (this.check.is.minimum.techUser) {
+        return pagination;
+      }
+
+      return pipe(
+        pagination,
+        mapSdkOffsetPaginationItems(anonymizeAIModelCredentials),
+      );
+    }),
   );
 
   getDefault = flow(
     this.permissionsService.asUser(this.jwt).enforceMatchingOrganizationId,
     TE.fromEither,
     TE.chainW(this.aiModelsService.getDefault),
+    TE.map((record) => {
+      if (this.check.is.minimum.techUser) {
+        return record;
+      }
+
+      return anonymizeAIModelCredentials(record);
+    }),
   );
+}
+
+function anonymizeAIModelCredentials(aiModel: SdkAIModelT): SdkAIModelT {
+  return {
+    ...aiModel,
+    credentials: {
+      apiModel: '********',
+      apiKey: '********',
+    },
+  };
 }
