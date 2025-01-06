@@ -30,9 +30,7 @@ export class AppsController extends AuthorizedController {
 
     this.router
       .get('/summarize-chat-to-app/:chatId', async context => pipe(
-        {
-          id: context.req.param().chatId,
-        },
+        context.req.param().chatId,
         appsService.asUser(context.var.jwt).summarizeChatToApp,
         rejectUnsafeSdkErrors,
         serializeSdkResponseTE<ReturnType<AppsSdk['summarizeChatToApp']>>(context),

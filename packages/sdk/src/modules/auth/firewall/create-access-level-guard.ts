@@ -4,7 +4,7 @@ import { pipe } from 'fp-ts/lib/function';
 import type { SdkUserRoleT } from '~/modules/dashboard/users';
 
 import { invert } from '@llm/commons';
-import { isTechOrOwnerUserOrganizationRole } from '~/modules/dashboard/organizations/dto/sdk-organization-user.dto';
+import { isTechOrOwnerUserSdkOrganizationRole } from '~/modules/dashboard/organizations/dto/sdk-organization-user.dto';
 
 import type { SdkJwtTokenT } from '../dto';
 
@@ -23,7 +23,7 @@ export function createAccessLevelGuard(jwt: SdkJwtTokenT) {
   const minimum: Record<SdkUserRoleT | 'techUser', boolean> = {
     root: roles.root,
     user: roles.root || roles.user,
-    techUser: jwt.role === 'root' || isTechOrOwnerUserOrganizationRole(jwt.organization.role),
+    techUser: jwt.role === 'root' || isTechOrOwnerUserSdkOrganizationRole(jwt.organization.role),
   };
 
   const not = {

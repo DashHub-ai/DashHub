@@ -13,14 +13,14 @@ import {
   type SdkCreateAppInputT,
   type SdkJwtTokenT,
   type SdkTableRowIdT,
-  type SdkTableRowWithUuidT,
   type SdkUpdateAppInputT,
 } from '@llm/sdk';
 import { ChatsSummariesService } from '~/modules/chats-summaries';
 
 import type { WithAuthFirewall } from '../auth';
-import type { TableId, TableRowWithId } from '../database';
+import type { TableId, TableRowWithId, TableUuid } from '../database';
 
+import { ChatsService } from '../chats';
 import { PermissionsService } from '../permissions';
 import { AppsFirewall } from './apps.firewall';
 import { AppsRepo } from './apps.repo';
@@ -64,15 +64,16 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     @inject(AppsEsIndexRepo) private readonly esIndexRepo: AppsEsIndexRepo,
     @inject(PermissionsService) private readonly permissionsService: PermissionsService,
     @inject(delay(() => ChatsSummariesService)) private readonly chatsSummariesService: Readonly<ChatsSummariesService>,
+    @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new AppsFirewall(jwt, this, this.permissionsService);
+  asUser = (jwt: SdkJwtTokenT) => new AppsFirewall(jwt, this, this.permissionsService, this.chatsService);
 
   get = this.esSearchRepo.get;
 
-  summarizeChatToApp = ({ id }: SdkTableRowWithUuidT) =>
+  summarizeChatToApp = (chatId: TableUuid) =>
     this.chatsSummariesService.summarizeChatUsingSchema({
-      id,
+      id: chatId,
       schema: SdkAppFromChatV,
       prompt: APP_SUMMARY_TEMPLATE,
     });

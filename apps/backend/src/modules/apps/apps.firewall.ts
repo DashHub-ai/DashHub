@@ -10,7 +10,8 @@ import {
 } from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
-import type { TableId, TableRowWithId } from '../database';
+import type { ChatsService } from '../chats';
+import type { TableId, TableRowWithId, TableUuid } from '../database';
 import type { PermissionsService } from '../permissions';
 import type { AppsService } from './apps.service';
 import type { EsAppsInternalFilters } from './elasticsearch';
@@ -20,6 +21,7 @@ export class AppsFirewall extends AuthFirewallService {
     jwt: SdkJwtTokenT,
     private readonly appsService: AppsService,
     private readonly permissionsService: PermissionsService,
+    private readonly chatsService: Readonly<ChatsService>,
   ) {
     super(jwt);
   }
@@ -69,8 +71,11 @@ export class AppsFirewall extends AuthFirewallService {
     this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 
-  summarizeChatToApp = flow(
-    this.appsService.summarizeChatToApp,
-    this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
+  summarizeChatToApp = (chatId: TableUuid) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+      accessLevel: 'read',
+      findRecord: this.chatsService.get(chatId),
+    }),
+    TE.chainW(() => this.appsService.summarizeChatToApp(chatId)),
   );
 }

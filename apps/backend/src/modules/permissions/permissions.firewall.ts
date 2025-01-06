@@ -5,7 +5,7 @@ import {
   isSdkRecordWithCreator,
   isSdkRecordWithOrganization,
   isSdkRecordWithPermissions,
-  isTechOrOwnerUserOrganizationRole,
+  isTechOrOwnerUserSdkOrganizationRole,
   ofSdkUnauthorizedErrorE,
   type SdkIdsArrayT,
   type SdkJwtTokenT,
@@ -83,9 +83,10 @@ export class PermissionsFirewall extends AuthFirewallService {
    * );
    */
   findRecordAndCheckPermissions = <R, E>(
-    { findRecord, accessLevel }: {
+    { findRecord, accessLevel, refine }: {
       accessLevel: SdkPermissionAccessLevelT;
       findRecord: TE.TaskEither<E, R>;
+      refine?: (data: R) => boolean;
     },
   ): TE.TaskEither<E | DatabaseError | SdkUnauthorizedError, R> =>
     pipe(
@@ -93,6 +94,11 @@ export class PermissionsFirewall extends AuthFirewallService {
       TE.apSW('data', findRecord),
       TE.apSW('descriptor', this.findUserAccessPermissionsDescriptor(accessLevel)),
       TE.chainEitherKW(({ descriptor, data }) => {
+        // Perform additional data validation if needed
+        if (refine?.(data) === false) {
+          return ofSdkUnauthorizedErrorE();
+        }
+
         // If creator is the same as the user, skip permission check
         if (isSdkRecordWithCreator(data) && data.creator.id === this.userId) {
           return E.right(data);
@@ -354,7 +360,7 @@ export class PermissionsFirewall extends AuthFirewallService {
 
       case 'user':
         return (
-          isTechOrOwnerUserOrganizationRole(jwt.organization.role)
+          isTechOrOwnerUserSdkOrganizationRole(jwt.organization.role)
           && isSdkRecordWithOrganization(data)
           && data.organization.id === jwt.organization.id
         );

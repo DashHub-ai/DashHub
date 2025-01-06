@@ -64,9 +64,7 @@ export class UsersController extends AuthorizedController {
         '/',
         sdkSchemaValidator('json', SdkCreateUserInputV),
         async context => pipe(
-          usersService.asUser(context.var.jwt).create({
-            value: context.req.valid('json'),
-          }),
+          usersService.asUser(context.var.jwt).create(context.req.valid('json')),
           mapDbRecordAlreadyExistsToSdkError,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<UsersSdk['create']>>(context),
