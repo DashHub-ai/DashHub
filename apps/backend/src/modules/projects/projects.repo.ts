@@ -5,6 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateProjectInputT, SdkUpdateProjectInputT } from '@llm/sdk';
 
+import { rejectFalsyItems } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -21,6 +22,7 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
 import { ProjectsSummariesRepo } from '../projects-summaries/projects-summaries.repo';
 import { ProjectTableRowWithRelations } from './projects.tables';
 
@@ -130,10 +132,14 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
           qb
             .selectFrom(this.table)
             .where('projects.id', 'in', ids)
+            .innerJoin('users', 'users.id', 'creator_user_id')
             .innerJoin('organizations', 'organizations.id', 'organization_id')
             .selectAll('projects')
             .innerJoin('projects_summaries', 'projects_summaries.project_id', 'projects.id')
             .select([
+              'users.id as creator_user_id',
+              'users.email as creator_user_email',
+
               'organizations.id as organization_id',
               'organizations.name as organization_name',
 
@@ -141,6 +147,12 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
               'projects_summaries.content as summary_content',
               'projects_summaries.content_generated as summary_content_generated',
               'projects_summaries.content_generated_at as summary_content_generated_at',
+
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.project_id', '=', eb.ref('projects.id'))
+                  .as('permissions_json'),
             ])
             .limit(ids.length)
             .execute(),
@@ -148,6 +160,9 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
       DatabaseError.tryTask,
       TE.map(
         A.map(({
+          creator_user_id: creatorUserId,
+          creator_user_email: creatorUserEmail,
+
           organization_id: orgId,
           organization_name: orgName,
 
@@ -156,20 +171,42 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
           summary_content_generated: summaryContentGenerated,
           summary_content_generated_at: summaryContentGeneratedAt,
 
+          permissions_json: permissions,
           ...item
-        }): ProjectTableRowWithRelations => ({
-          ...camelcaseKeys(item),
-          organization: {
-            id: orgId,
-            name: orgName,
-          },
-          summary: {
-            id: summaryId,
-            content: summaryContent,
-            contentGenerated: summaryContentGenerated,
-            contentGeneratedAt: summaryContentGeneratedAt,
-          },
-        })),
+        }): ProjectTableRowWithRelations => {
+          const creator = {
+            id: creatorUserId,
+            email: creatorUserEmail,
+          };
+
+          return {
+            ...camelcaseKeys(item),
+            creator,
+            organization: {
+              id: orgId,
+              name: orgName,
+            },
+            summary: {
+              id: summaryId,
+              content: summaryContent,
+              contentGenerated: summaryContentGenerated,
+              contentGeneratedAt: summaryContentGeneratedAt,
+            },
+            permissions: {
+              inherited: [],
+              current: rejectFalsyItems([
+                // If it's global record, and this access level is added, then it'll be no longer global.
+                !!permissions?.length && {
+                  accessLevel: 'write',
+                  target: {
+                    user: creator,
+                  },
+                },
+                ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+              ]),
+            },
+          };
+        }),
       ),
     );
   };

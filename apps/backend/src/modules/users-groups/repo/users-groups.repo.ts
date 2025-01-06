@@ -4,7 +4,10 @@ import { pipe } from 'fp-ts/lib/function';
 import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkCreateUsersGroupInputT, SdkUpdateUsersGroupInputT } from '@llm/sdk';
+import type {
+  SdkCreateUsersGroupInputT,
+  SdkUpdateUsersGroupInputT,
+} from '@llm/sdk';
 
 import type { UsersGroupTableRowWithRelations } from '../users-groups.tables';
 
@@ -42,6 +45,8 @@ export class UsersGroupsRepo extends createProtectedDatabaseRepo('users_groups')
   unarchive = createUnarchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
 
   unarchiveRecords = createUnarchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);
+
+  getAllUsersGroupsIds = this.usersGroupsUsersRepo.getAllUsersGroupsIds;
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });

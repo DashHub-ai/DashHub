@@ -6,7 +6,7 @@ import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import {
   SdkIdNameUrlEntryV,
-  SdKSearchS3BucketsInputV,
+  SdkSearchS3BucketsInputV,
   serializeSdkIdNameUrlEntry,
   useSdkForLoggedIn,
 } from '@llm/sdk';
@@ -26,7 +26,7 @@ import { OrganizationsSearchSelect } from '~/modules/organizations';
 import { useS3BucketCreateModal } from '../form/create';
 import { S3BucketsTableRow } from './s3-bucket-table-row';
 
-const SearchUsersUrlFiltersV = SdKSearchS3BucketsInputV
+const SearchUsersUrlFiltersV = SdkSearchS3BucketsInputV
   .omit({
     organizationIds: true,
   })

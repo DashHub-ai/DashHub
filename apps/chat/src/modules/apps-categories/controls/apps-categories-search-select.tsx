@@ -1,13 +1,13 @@
 import type { ComponentProps } from 'react';
 
-import type { SdKSearchAppsCategoriesInputT, SdkSearchAppsCategoriesOutputT } from '@llm/sdk';
+import type { SdkSearchAppsCategoriesInputT, SdkSearchAppsCategoriesOutputT } from '@llm/sdk';
 
 import { createSdkAutocomplete } from '@llm/ui';
 import { useWorkspaceOrganization } from '~/modules/workspace';
 
 const AppsCategoriesAbstractSearchSelect = createSdkAutocomplete<
   SdkSearchAppsCategoriesOutputT,
-  SdKSearchAppsCategoriesInputT
+  SdkSearchAppsCategoriesInputT
 >({
   fetchFn: ({ sdk: { sdks }, phrase, limit, filters }) =>
     sdks.dashboard.appsCategories.search({
@@ -26,7 +26,7 @@ export function AppsCategoriesSearchSelect({ filters, ...props }: ComponentProps
   return (
     <AppsCategoriesAbstractSearchSelect
       {...props}
-      filters={assignWorkspaceToFilters(filters as SdKSearchAppsCategoriesInputT)}
+      filters={assignWorkspaceToFilters(filters as SdkSearchAppsCategoriesInputT)}
     />
   );
 }

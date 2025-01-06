@@ -13,7 +13,7 @@ export function Navigation() {
     <header className="relative z-50 bg-white border-b border-border w-full">
       <div className="mx-auto px-4 container">
         <nav className="flex justify-between items-center h-16">
-          <div className="flex flex-1 items-center gap-8">
+          <div className="flex flex-1 items-center gap-12">
             <Link
               className="font-semibold text-lg"
               to={sitemap.home}
@@ -22,6 +22,7 @@ export function Navigation() {
             </Link>
 
             <NavigationWorkspaceSelector />
+
             <NavigationLinks />
           </div>
 

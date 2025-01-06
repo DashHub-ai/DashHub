@@ -15,6 +15,7 @@ const I18N_USER_ROLES_EN: Record<SdkUserRoleT, string> = {
 
 const I18N_USER_ORGANIZATION_ROLES_EN: Record<SdkOrganizationUserRoleT, string> = {
   owner: 'Owner',
+  tech: 'Tech member',
   member: 'Member',
 };
 

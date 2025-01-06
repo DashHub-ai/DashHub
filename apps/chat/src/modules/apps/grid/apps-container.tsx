@@ -7,8 +7,8 @@ import { type ReactNode, useMemo } from 'react';
 import { useLastNonNullValue, useUpdateEffect } from '@llm/commons-front';
 import {
   type SdkAppT,
-  type SdKSearchAppsInputT,
-  SdKSearchAppsInputV,
+  type SdkSearchAppsInputT,
+  SdkSearchAppsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import {
@@ -39,7 +39,7 @@ export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
     storeDataInUrl: false,
-    schema: SdKSearchAppsInputV,
+    schema: SdkSearchAppsInputV,
     fallbackSearchParams: {
       limit: 12,
 
@@ -142,7 +142,7 @@ export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
 }
 
 function useAppsFavoritesFilter(
-  pagination: ControlHookResult<SdKSearchAppsInputT>,
+  pagination: ControlHookResult<SdkSearchAppsInputT>,
   favorites: ReturnType<typeof useFavoriteApps>,
 ) {
   const favoritesFilter = useMemo(

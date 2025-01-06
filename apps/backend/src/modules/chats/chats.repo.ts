@@ -3,9 +3,9 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { RequiredBy } from '@llm/commons';
+import type { SdkCreateChatInputT, SdkUpdateChatInputT } from '@llm/sdk';
 
-import { SdkCreateChatInputT, SdkUpdateChatInputT } from '@llm/sdk';
+import { rejectFalsyItems, type RequiredBy } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -25,6 +25,7 @@ import {
 import type { ChatTableRowWithRelations } from './chats.tables';
 
 import { ChatsSummariesRepo } from '../chats-summaries/chats-summaries.repo';
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
 
 @injectable()
 export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
@@ -147,6 +148,19 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               'projects.id as project_id',
               'projects.name as project_name',
               'projects.internal as project_internal',
+
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.project_id', 'is not', null)
+                  .where('permissions.project_id', '=', eb.ref('projects.id'))
+                  .as('project_permissions_json'),
+
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.chat_id', '=', eb.ref('chats.id'))
+                  .as('permissions_json'),
             ])
             .limit(ids.length)
             .execute(),
@@ -173,36 +187,56 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           project_name: projectName,
           project_internal: projectInternal,
 
+          project_permissions_json: projectPermissions,
+          permissions_json: permissions,
+
           ...item
-        }): ChatTableRowWithRelations => ({
-          ...camelcaseKeys(item),
-          project: projectId && projectName
-            ? {
-                id: projectId,
-                name: projectName,
-                internal: !!projectInternal,
-              }
-            : null,
-          organization: {
-            id: orgId,
-            name: orgName,
-          },
-          creator: {
+        }): ChatTableRowWithRelations => {
+          const creator = {
             id: creatorUserId,
             email: creatorEmail,
-          },
-          summary: {
-            id: summaryId,
+          };
 
-            content: summaryContent,
-            contentGenerated: summaryContentGenerated,
-            contentGeneratedAt: summaryContentGeneratedAt,
+          return {
+            ...camelcaseKeys(item),
+            project: projectId && projectName
+              ? {
+                  id: projectId,
+                  name: projectName,
+                  internal: !!projectInternal,
+                }
+              : null,
+            organization: {
+              id: orgId,
+              name: orgName,
+            },
+            creator,
+            summary: {
+              id: summaryId,
 
-            name: summaryName,
-            nameGenerated: summaryNameGenerated,
-            nameGeneratedAt: summaryNameGeneratedAt,
-          },
-        })),
+              content: summaryContent,
+              contentGenerated: summaryContentGenerated,
+              contentGeneratedAt: summaryContentGeneratedAt,
+
+              name: summaryName,
+              nameGenerated: summaryNameGenerated,
+              nameGeneratedAt: summaryNameGeneratedAt,
+            },
+            permissions: {
+              inherited: (projectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
+              current: rejectFalsyItems([
+                // If it's global record, and this access level is added, then it'll be no longer global.
+                !!permissions?.length && {
+                  accessLevel: 'write',
+                  target: {
+                    user: creator,
+                  },
+                },
+                ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+              ]),
+            },
+          };
+        }),
       ),
     );
   };

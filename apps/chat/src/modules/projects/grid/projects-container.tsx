@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { flow } from 'fp-ts/lib/function';
 
 import {
-  SdKSearchProjectsInputV,
+  SdkSearchProjectsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import {
@@ -29,7 +29,7 @@ export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
     storeDataInUrl,
-    schema: SdKSearchProjectsInputV,
+    schema: SdkSearchProjectsInputV,
     fallbackSearchParams: {
       limit: 12,
     },

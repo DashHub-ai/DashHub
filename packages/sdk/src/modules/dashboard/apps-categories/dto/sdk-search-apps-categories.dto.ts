@@ -18,7 +18,7 @@ export const SdkSearchAppCategoryItemV = SdkAppCategoryV;
 
 export type SdkSearchAppCategoryItemT = z.infer<typeof SdkSearchAppCategoryItemV>;
 
-export const SdKSearchAppsCategoriesInputV = SdkOffsetPaginationInputV
+export const SdkSearchAppsCategoriesInputV = SdkOffsetPaginationInputV
   .extend({
     root: StrictBooleanV.optional(),
     organizationIds: SdkIdsArrayV.optional(),
@@ -29,7 +29,7 @@ export const SdKSearchAppsCategoriesInputV = SdkOffsetPaginationInputV
   .merge(SdkExcludeIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchAppsCategoriesInputT = z.infer<typeof SdKSearchAppsCategoriesInputV>;
+export type SdkSearchAppsCategoriesInputT = z.infer<typeof SdkSearchAppsCategoriesInputV>;
 
 export const SdkSearchAppsCategoriesOutputV = SdkOffsetPaginationOutputV(SdkSearchAppCategoryItemV);
 

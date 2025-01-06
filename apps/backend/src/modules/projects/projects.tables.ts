@@ -8,7 +8,9 @@ import type {
   TableWithArchivedAtColumn,
   TableWithDefaultColumns,
 } from '../database';
+import type { PermissionsTableRowRelation } from '../permissions';
 import type { ProjectSummaryTableRow } from '../projects-summaries';
+import type { UserTableRowBaseRelation } from '../users';
 
 export type ProjectsTable =
   & TableWithDefaultColumns
@@ -26,7 +28,11 @@ type ProjectSummaryTableRowRelation = DropTableRowAccessTime<
   Omit<ProjectSummaryTableRow, 'projectId' | 'lastSummarizedMessageId'>
 >;
 
-export type ProjectTableRowWithRelations = Omit<ProjectTableRow, 'organizationId'> & {
-  organization: TableRowWithIdName;
-  summary: ProjectSummaryTableRowRelation;
-};
+export type ProjectTableRowWithRelations =
+  & Omit<ProjectTableRow, 'organizationId' | 'creatorUserId'>
+  & PermissionsTableRowRelation
+  & {
+    organization: TableRowWithIdName;
+    summary: ProjectSummaryTableRowRelation;
+    creator: UserTableRowBaseRelation;
+  };

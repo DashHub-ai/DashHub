@@ -41,7 +41,7 @@ export const InternalConversationPanel = memo(({ className, initialMessage, init
   );
 
   if (result.status === 'loading' || result.status === 'error') {
-    return <SpinnerContainer loading />;
+    return <SpinnerContainer className="flex-1" loading />;
   }
 
   const { chat, aiModel } = result.data;

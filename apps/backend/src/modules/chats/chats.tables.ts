@@ -11,6 +11,7 @@ import type {
 } from '~/modules/database';
 
 import type { ChatSummaryTableRow } from '../chats-summaries';
+import type { PermissionsTableRowRelation } from '../permissions';
 import type { UserTableRowBaseRelation } from '../users';
 
 export type ChatsTable =
@@ -21,7 +22,6 @@ export type ChatsTable =
     creator_user_id: ColumnType<TableId, TableId, never>;
     organization_id: ColumnType<TableId, TableId, never>;
     project_id: TableId | null;
-    public: boolean;
     internal: boolean;
   };
 
@@ -37,6 +37,7 @@ type ChatProjectTableRowRelation = TableRowWithIdName & {
 
 export type ChatTableRowWithRelations =
   & Omit<ChatTableRow, 'organizationId' | 'creatorUserId' | 'projectId'>
+  & PermissionsTableRowRelation
   & {
     summary: ChatSummaryTableRowRelation;
     organization: TableRowWithIdName;

@@ -8,15 +8,17 @@ type CardTitleProps = {
 export function CardTitle({ icon, children }: CardTitleProps) {
   return (
     <div className="flex items-center gap-2 mb-3">
-      <div className="text-muted-foreground">
+      <div className="flex-shrink-0 text-muted-foreground">
         {icon}
       </div>
-      <h3
-        className="flex flex-row items-center gap-2 line-clamp-1 font-medium"
-        {...typeof children === 'string' ? { title: children } : {}}
-      >
-        {children}
-      </h3>
+      <div className="flex-1 min-w-0">
+        <h3
+          className="font-medium text-base truncate"
+          {...typeof children === 'string' ? { title: children } : {}}
+        >
+          {children}
+        </h3>
+      </div>
     </div>
   );
 }

@@ -10,7 +10,7 @@ import {
   SdkCreateProjectInputV,
   SdkSearchProjectEmbeddingsInputV,
   SdkSearchProjectFilesInputV,
-  SdKSearchProjectsInputV,
+  SdkSearchProjectsInputV,
   SdkUpdateProjectInputV,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
@@ -21,6 +21,7 @@ import { ProjectsFilesService } from '~/modules/projects-files';
 import {
   mapDbRecordAlreadyExistsToSdkError,
   mapDbRecordNotFoundToSdkError,
+  mapEsDocumentNotFoundToSdkError,
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
@@ -55,6 +56,7 @@ export class ProjectsController extends AuthorizedController {
         async context => pipe(
           Number(context.req.param('embeddingId')),
           projectsEmbeddingsService.asUser(context.var.jwt).get,
+          mapEsDocumentNotFoundToSdkError,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<ProjectsEmbeddingsSdk['get']>>(context),
         ),
@@ -105,7 +107,7 @@ export class ProjectsController extends AuthorizedController {
       )
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchProjectsInputV),
+        sdkSchemaValidator('query', SdkSearchProjectsInputV),
         async context => pipe(
           context.req.valid('query'),
           projectsService.asUser(context.var.jwt).search,

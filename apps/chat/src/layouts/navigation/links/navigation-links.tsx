@@ -6,6 +6,7 @@ import {
   WandSparklesIcon,
 } from 'lucide-react';
 
+import { useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { useHasWorkspaceOrganization } from '~/modules';
 import { useSitemap } from '~/routes';
@@ -15,11 +16,13 @@ import { StayTunedNavigationItem } from './stay-tuned-navigation-item';
 
 export function NavigationLinks() {
   const t = useI18n().pack.navigation;
+
+  const { guard } = useSdkForLoggedIn();
   const sitemap = useSitemap();
   const hasOrganization = useHasWorkspaceOrganization();
 
   return (
-    <ul className="flex items-center gap-4 ml-5">
+    <ul className="flex items-center gap-4">
       <NavigationItem
         path={sitemap.home}
         icon={<MessageSquareTextIcon size={16} />}
@@ -52,13 +55,15 @@ export function NavigationLinks() {
         {t.links.experts}
       </StayTunedNavigationItem>
 
-      <NavigationItem
-        path={sitemap.management.index}
-        icon={<SettingsIcon size={16} />}
-        disabled={!hasOrganization}
-      >
-        {t.links.management}
-      </NavigationItem>
+      {guard.is.minimum.techUser && (
+        <NavigationItem
+          path={sitemap.management.index}
+          icon={<SettingsIcon size={16} />}
+          disabled={!hasOrganization}
+        >
+          {t.links.management}
+        </NavigationItem>
+      )}
     </ul>
   );
 }

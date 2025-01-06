@@ -8,6 +8,7 @@ import type {
   SdkSearchUserItemT,
   SdkSearchUsersInputT,
 } from '@llm/sdk';
+import type { TableId } from '~/modules/database';
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
 import {
@@ -26,6 +27,12 @@ export class UsersEsSearchRepo {
   constructor(
     @inject(UsersEsIndexRepo) private readonly indexRepo: UsersEsIndexRepo,
   ) {}
+
+  get = (id: TableId) =>
+    pipe(
+      this.indexRepo.getDocument(id),
+      TE.map(UsersEsSearchRepo.mapOutputHit),
+    );
 
   search = (dto: SdkSearchUsersInputT) =>
     pipe(

@@ -1,4 +1,4 @@
-import { taskEither as TE } from 'fp-ts';
+import { either as E, taskEither as TE } from 'fp-ts';
 
 import { TaggedError } from '@llm/commons';
 
@@ -8,6 +8,12 @@ export class SdkUnauthorizedError extends TaggedError.ofLiteral<any>()('SdkUnaut
 
 export function ofSdkUnauthorizedErrorTE<T = unknown>() {
   return TE.left<SdkUnauthorizedError, T>(
+    new SdkUnauthorizedError(null),
+  );
+}
+
+export function ofSdkUnauthorizedErrorE<T = unknown>() {
+  return E.left<SdkUnauthorizedError, T>(
     new SdkUnauthorizedError(null),
   );
 }

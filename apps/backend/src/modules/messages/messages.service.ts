@@ -18,6 +18,8 @@ import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../da
 import { AIConnectorService } from '../ai-connector';
 import { AppsService } from '../apps';
 import { WithAuthFirewall } from '../auth';
+import { ChatsService } from '../chats';
+import { PermissionsService } from '../permissions';
 import { ProjectsService } from '../projects';
 import { ProjectsEmbeddingsService } from '../projects-embeddings';
 import { ProjectsFilesService } from '../projects-files';
@@ -50,9 +52,11 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     @inject(ProjectsEmbeddingsService) private readonly projectsEmbeddingsService: ProjectsEmbeddingsService,
     @inject(ProjectsFilesService) private readonly projectsFilesService: ProjectsFilesService,
     @inject(ProjectsService) private readonly projectsService: ProjectsService,
+    @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
+    @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new MessagesFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new MessagesFirewall(jwt, this, this.chatsService, this.permissionsService);
 
   get = this.esSearchRepo.get;
 

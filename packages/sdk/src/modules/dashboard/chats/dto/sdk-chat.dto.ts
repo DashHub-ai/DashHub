@@ -8,6 +8,7 @@ import {
   SdkTableRowWithUuidV,
 } from '~/shared';
 
+import { SdkTableRowWithPermissionsV } from '../../permissions/dto/sdk-table-row-with-permissions.dto';
 import { SdkUserListItemV } from '../../users/dto/sdk-user-list-item.dto';
 
 export const SdkChatSummaryV = z.strictObject({
@@ -29,10 +30,10 @@ export const SdkChatV = z.object({
   creator: SdkUserListItemV,
   organization: SdkIdNameUrlEntryV,
   project: SdkChatProjectV.nullable(),
-  public: z.boolean(),
   internal: z.boolean(),
   summary: SdkChatSummaryV,
 })
+  .merge(SdkTableRowWithPermissionsV)
   .merge(SdkTableRowWithUuidV)
   .merge(SdkTableRowWithDatesV)
   .merge(SdkTableRowWithArchivedV);

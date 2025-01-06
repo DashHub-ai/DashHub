@@ -1,49 +1,70 @@
+import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import type { SdkCreateProjectInputT, SdkJwtTokenT } from '@llm/sdk';
-
+import {
+  dropSdkPaginationPermissionsKeysIfNotCreator,
+  dropSdkPermissionsKeyIfNotCreator,
+  type SdkCreateProjectInputT,
+  type SdkJwtTokenT,
+  type SdkUpdateProjectInputT,
+} from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
+import type { TableId, TableRowWithId } from '../database';
+import type { PermissionsService } from '../permissions';
+import type { EsProjectsInternalFilters } from './elasticsearch';
 import type { ProjectsService } from './projects.service';
 
 export class ProjectsFirewall extends AuthFirewallService {
   constructor(
     jwt: SdkJwtTokenT,
     private readonly projectsService: ProjectsService,
+    private readonly permissionsService: PermissionsService,
   ) {
     super(jwt);
   }
 
   get = flow(
     this.projectsService.get,
-    this.tryTEIfUser.is.root,
+    this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
+    TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
   );
 
-  unarchive = flow(
-    this.projectsService.unarchive,
-    this.tryTEIfUser.is.root,
+  unarchive = (id: TableId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+      accessLevel: 'write',
+      findRecord: this.projectsService.get(id),
+    }),
+    TE.chainW(() => this.projectsService.unarchive(id)),
   );
 
-  archive = flow(
-    this.projectsService.archive,
-    this.tryTEIfUser.is.root,
+  archive = (id: TableId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+      accessLevel: 'write',
+      findRecord: this.projectsService.get(id),
+    }),
+    TE.chainW(() => this.projectsService.archive(id)),
   );
 
-  update = flow(
-    this.projectsService.update,
-    this.tryTEIfUser.is.root,
+  update = (attrs: SdkUpdateProjectInputT & TableRowWithId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+      accessLevel: 'write',
+      findRecord: this.projectsService.get(attrs.id),
+    }),
+    TE.chainW(() => this.projectsService.update(attrs)),
   );
 
   create = (dto: SdkCreateProjectInputT) => pipe(
-    this.projectsService.create({
-      ...dto,
-      creator: this.userIdRow,
-    }),
-    this.tryTEIfUser.is.root,
+    this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto),
+    TE.fromEither,
+    TE.chainW(this.projectsService.create),
   );
 
-  search = flow(
-    this.projectsService.search,
-    this.tryTEIfUser.is.root,
+  search = (filters: EsProjectsInternalFilters) => pipe(
+    filters,
+    this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
+    TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
+    TE.chainW(this.projectsService.search),
+    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
   );
 }

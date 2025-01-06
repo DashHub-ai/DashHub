@@ -1,13 +1,13 @@
 import type { ComponentProps } from 'react';
 
-import type { SdKSearchProjectsInputT, SdKSearchProjectsOutputT } from '@llm/sdk';
+import type { SdkSearchProjectsInputT, SdkSearchProjectsOutputT } from '@llm/sdk';
 
 import { createSdkAutocomplete } from '@llm/ui';
 import { useWorkspaceOrganization } from '~/modules/workspace';
 
 export const ProjectsAbstractSearchSelect = createSdkAutocomplete<
-  SdKSearchProjectsOutputT,
-  SdKSearchProjectsInputT
+  SdkSearchProjectsOutputT,
+  SdkSearchProjectsInputT
 >({
   fetchFn: ({ sdk: { sdks }, phrase, limit, filters }) =>
     sdks.dashboard.projects.search({
@@ -26,7 +26,7 @@ export function ProjectsSearchSelect({ filters, ...props }: ComponentProps<typeo
   return (
     <ProjectsAbstractSearchSelect
       {...props}
-      filters={assignWorkspaceToFilters(filters as SdKSearchProjectsInputT)}
+      filters={assignWorkspaceToFilters(filters as SdkSearchProjectsInputT)}
     />
   );
 }

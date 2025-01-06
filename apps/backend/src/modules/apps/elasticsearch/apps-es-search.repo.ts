@@ -6,7 +6,7 @@ import { inject, injectable } from 'tsyringe';
 import type {
   SdkCountedIdRecordT,
   SdkSearchAppItemT,
-  SdKSearchAppsInputT,
+  SdkSearchAppsInputT,
   SdkSearchAppsOutputT,
 } from '@llm/sdk';
 
@@ -17,11 +17,18 @@ import {
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
 } from '~/modules/elasticsearch';
+import {
+  createEsPermissionsFilters,
+  mapRawEsDocToSdkPermissions,
+  type WithPermissionsInternalFilters,
+} from '~/modules/permissions/record-protection';
 
 import {
   type AppsEsDocument,
   AppsEsIndexRepo,
 } from './apps-es-index.repo';
+
+export type EsAppsInternalFilters = WithPermissionsInternalFilters<SdkSearchAppsInputT>;
 
 @injectable()
 export class AppsEsSearchRepo {
@@ -35,7 +42,7 @@ export class AppsEsSearchRepo {
     TE.map(AppsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdKSearchAppsInputT) => pipe(
+  search = (dto: SdkSearchAppsInputT) => pipe(
     TE.Do,
     TE.bind('query', () => this.indexRepo.search(
       AppsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
@@ -66,10 +73,12 @@ export class AppsEsSearchRepo {
       organizationIds,
       categoriesIds,
       archived,
-    }: SdKSearchAppsInputT,
+      satisfyPermissions,
+    }: EsAppsInternalFilters,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
@@ -87,7 +96,7 @@ export class AppsEsSearchRepo {
       ]),
     );
 
-  private static createEsRequestSearchBody = (dto: SdKSearchAppsInputT) =>
+  private static createEsRequestSearchBody = (dto: EsAppsInternalFilters) =>
     createPaginationOffsetSearchQuery(dto)
       .query(AppsEsSearchRepo.createEsRequestSearchFilters(dto))
       .aggs([
@@ -124,5 +133,6 @@ export class AppsEsSearchRepo {
       organization: source.organization,
       category: source.category,
       chatContext: source.chat_context,
+      permissions: mapRawEsDocToSdkPermissions(source.permissions),
     });
 }

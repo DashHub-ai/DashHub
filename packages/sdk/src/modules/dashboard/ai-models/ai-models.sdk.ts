@@ -14,8 +14,8 @@ import type {
   SdkAIModelT,
   SdkCreateAIModelInputT,
   SdkCreateAIModelOutputT,
-  SdKSearchAIModelsInputT,
-  SdKSearchAIModelsOutputT,
+  SdkSearchAIModelsInputT,
+  SdkSearchAIModelsOutputT,
   SdkUpdateAIModelInputT,
   SdkUpdateAIModelOutputT,
 } from './dto';
@@ -29,8 +29,8 @@ export class AIModelsSdk extends AbstractNestedSdkWithAuth {
       options: getPayload(),
     });
 
-  search = (data: SdKSearchAIModelsInputT) =>
-    this.fetch<SdKSearchAIModelsOutputT>({
+  search = (data: SdkSearchAIModelsInputT) =>
+    this.fetch<SdkSearchAIModelsOutputT>({
       url: this.endpoint('/search'),
       query: data,
       options: getPayload(),

@@ -6,7 +6,7 @@ import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import {
   SdkIdNameUrlEntryV,
-  SdKSearchAIModelsInputV,
+  SdkSearchAIModelsInputV,
   serializeSdkIdNameUrlEntry,
   useSdkForLoggedIn,
 } from '@llm/sdk';
@@ -26,7 +26,7 @@ import { OrganizationsSearchSelect } from '~/modules/organizations';
 import { useAIModelCreateModal } from '../form/create';
 import { AIModelsTableRow } from './ai-model-table-row';
 
-const SearchUsersUrlFiltersV = SdKSearchAIModelsInputV
+const SearchUsersUrlFiltersV = SdkSearchAIModelsInputV
   .omit({
     organizationIds: true,
   })

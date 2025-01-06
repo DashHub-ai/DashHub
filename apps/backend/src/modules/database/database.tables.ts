@@ -18,12 +18,12 @@ import type {
   OrganizationsTable,
   OrganizationsUsersTable,
 } from '../organizations';
+import type { PermissionsTable } from '../permissions';
 import type {
   ProjectsTable,
 } from '../projects';
 import type { ProjectsEmbeddingsTable } from '../projects-embeddings';
 import type { ProjectsFilesTable } from '../projects-files';
-import type { ProjectsPoliciesTable } from '../projects-policies';
 import type { ProjectsSummariesTable } from '../projects-summaries';
 import type {
   S3ResourcesBucketsTable,
@@ -61,7 +61,6 @@ export type DatabaseTables = {
   projects: ProjectsTable;
   projects_files: ProjectsFilesTable;
   projects_embeddings: ProjectsEmbeddingsTable;
-  projects_policies: ProjectsPoliciesTable;
   projects_summaries: ProjectsSummariesTable;
 
   // Apps
@@ -75,6 +74,9 @@ export type DatabaseTables = {
 
   // LLM
   ai_models: AIModelsTable;
+
+  // Permissions
+  permissions: PermissionsTable;
 };
 
 export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn | TableWithUuidColumn>;

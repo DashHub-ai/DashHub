@@ -54,7 +54,7 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCar
               {description}
             </CardDescription>
           )
-        : <div className="flex-1" />}
+        : <div className="flex-1 my-2" />}
 
       <CardFooter>
         <div className="text-muted-foreground text-xs">

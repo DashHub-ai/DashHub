@@ -13,8 +13,8 @@ import {
 import type {
   SdkCreateS3BucketInputT,
   SdkCreateS3BucketOutputT,
-  SdKSearchS3BucketsInputT,
-  SdKSearchS3BucketsOutputT,
+  SdkSearchS3BucketsInputT,
+  SdkSearchS3BucketsOutputT,
   SdkUpdateS3BucketInputT,
   SdkUpdateS3BucketOutputT,
 } from './dto';
@@ -22,8 +22,8 @@ import type {
 export class S3BucketsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/s3-buckets';
 
-  search = (data: SdKSearchS3BucketsInputT) =>
-    this.fetch<SdKSearchS3BucketsOutputT>({
+  search = (data: SdkSearchS3BucketsInputT) =>
+    this.fetch<SdkSearchS3BucketsOutputT>({
       url: this.endpoint('/search'),
       query: data,
       options: getPayload(),

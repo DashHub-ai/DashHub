@@ -19,6 +19,9 @@ export function OrganizationUserRoleBadge({ value }: Props) {
       case 'owner':
         return 'uk-badge-danger';
 
+      case 'tech':
+        return 'uk-badge-success';
+
       default: {
         const _: never = value;
 

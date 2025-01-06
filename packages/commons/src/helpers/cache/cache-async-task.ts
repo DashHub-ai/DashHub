@@ -2,8 +2,8 @@ import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { pipe } from 'fp-ts/function';
 
-import { tapTaskEither } from './tap-task-either';
-import { tryOrThrowTE } from './try-or-throw-task-either';
+import { tapTaskEither } from '../tap-task-either';
+import { tryOrThrowTE } from '../try-or-throw-task-either';
 
 export class AsyncTaskCache<K, C, T> {
   private readonly syncCache = new Map<K, T>();

@@ -6,7 +6,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type {
   SdkSearchAIModelItemT,
-  SdKSearchAIModelsInputT,
+  SdkSearchAIModelsInputT,
 } from '@llm/sdk';
 import type { TableId } from '~/modules/database';
 
@@ -59,7 +59,7 @@ export class AIModelsEsSearchRepo {
     tryGetFirstPaginationHitOrNotExists,
   );
 
-  search = (dto: SdKSearchAIModelsInputT) =>
+  search = (dto: SdkSearchAIModelsInputT) =>
     pipe(
       this.indexRepo.search(
         AIModelsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
@@ -74,7 +74,7 @@ export class AIModelsEsSearchRepo {
       })),
     );
 
-  private static createEsRequestSearchBody = (dto: SdKSearchAIModelsInputT) =>
+  private static createEsRequestSearchBody = (dto: SdkSearchAIModelsInputT) =>
     createPaginationOffsetSearchQuery(dto)
       .query(AIModelsEsSearchRepo.createEsRequestSearchFilters(dto))
       .sorts(createScoredSortFieldQuery(dto.sort));
@@ -87,7 +87,7 @@ export class AIModelsEsSearchRepo {
       organizationIds,
       archived,
       embedding,
-    }: SdKSearchAIModelsInputT,
+    }: SdkSearchAIModelsInputT,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([

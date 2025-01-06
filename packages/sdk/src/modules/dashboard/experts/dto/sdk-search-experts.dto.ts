@@ -16,7 +16,7 @@ export const SdkSearchExpertItemV = SdkExpertV;
 
 export type SdkSearchExpertItemT = z.infer<typeof SdkSearchExpertItemV>;
 
-export const SdKSearchExpertsInputV = SdkOffsetPaginationInputV
+export const SdkSearchExpertsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
   })
@@ -25,8 +25,8 @@ export const SdKSearchExpertsInputV = SdkOffsetPaginationInputV
   .merge(SdkIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchExpertsInputT = z.infer<typeof SdKSearchExpertsInputV>;
+export type SdkSearchExpertsInputT = z.infer<typeof SdkSearchExpertsInputV>;
 
-export const SdKSearchExpertsOutputV = SdkOffsetPaginationOutputV(SdkSearchExpertItemV);
+export const SdkSearchExpertsOutputV = SdkOffsetPaginationOutputV(SdkSearchExpertItemV);
 
-export type SdKSearchExpertsOutputT = z.infer<typeof SdKSearchExpertsOutputV>;
+export type SdkSearchExpertsOutputT = z.infer<typeof SdkSearchExpertsOutputV>;

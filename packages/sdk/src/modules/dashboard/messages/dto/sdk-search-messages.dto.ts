@@ -15,7 +15,7 @@ export const SdkSearchMessageItemV = SdkMessageV;
 
 export type SdkSearchMessageItemT = z.infer<typeof SdkSearchMessageItemV>;
 
-export const SdKSearchMessagesInputV = SdkOffsetPaginationInputV
+export const SdkSearchMessagesInputV = SdkOffsetPaginationInputV
   .extend({
     chatIds: SdkUuidsArrayV.optional(),
   })
@@ -23,8 +23,8 @@ export const SdKSearchMessagesInputV = SdkOffsetPaginationInputV
   .merge(SdkUuidsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchMessagesInputT = z.infer<typeof SdKSearchMessagesInputV>;
+export type SdkSearchMessagesInputT = z.infer<typeof SdkSearchMessagesInputV>;
 
-export const SdKSearchMessagesOutputV = SdkOffsetPaginationOutputV(SdkSearchMessageItemV);
+export const SdkSearchMessagesOutputV = SdkOffsetPaginationOutputV(SdkSearchMessageItemV);
 
-export type SdKSearchMessagesOutputT = z.infer<typeof SdKSearchMessagesOutputV>;
+export type SdkSearchMessagesOutputT = z.infer<typeof SdkSearchMessagesOutputV>;

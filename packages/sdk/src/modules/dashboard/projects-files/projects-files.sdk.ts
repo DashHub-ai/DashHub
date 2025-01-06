@@ -13,7 +13,7 @@ import {
 
 import type {
   SdkSearchProjectFilesInputT,
-  SdKSearchProjectFilesOutputT,
+  SdkSearchProjectFilesOutputT,
   SdkUploadProjectFileInputT,
 } from './dto';
 
@@ -35,7 +35,7 @@ export class ProjectsFilesSdk extends AbstractNestedSdkWithAuth {
   };
 
   search = ({ projectId, ...attrs }: SdkSearchProjectFilesInputT & { projectId: SdkTableRowIdT; }) =>
-    this.fetch<SdKSearchProjectFilesOutputT>({
+    this.fetch<SdkSearchProjectFilesOutputT>({
       url: this.endpoint(`/${projectId}/files/search`),
       query: attrs,
       options: getPayload(),

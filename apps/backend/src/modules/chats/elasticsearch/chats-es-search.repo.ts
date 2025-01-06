@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type {
   SdkSearchChatItemT,
-  SdKSearchChatsInputT,
+  SdkSearchChatsInputT,
 } from '@llm/sdk';
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
@@ -14,11 +14,18 @@ import {
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
 } from '~/modules/elasticsearch';
+import {
+  createEsPermissionsFilters,
+  mapRawEsDocToSdkPermissions,
+  type WithPermissionsInternalFilters,
+} from '~/modules/permissions/record-protection';
 
 import {
   type ChatsEsDocument,
   ChatsEsIndexRepo,
 } from './chats-es-index.repo';
+
+type EsChatsInternalFilters = WithPermissionsInternalFilters<SdkSearchChatsInputT>;
 
 @injectable()
 export class ChatsEsSearchRepo {
@@ -31,7 +38,7 @@ export class ChatsEsSearchRepo {
     TE.map(ChatsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdKSearchChatsInputT) => pipe(
+  search = (dto: EsChatsInternalFilters) => pipe(
     this.indexRepo.search(
       ChatsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
     ),
@@ -45,7 +52,7 @@ export class ChatsEsSearchRepo {
     })),
   );
 
-  private static createEsRequestSearchBody = (dto: SdKSearchChatsInputT) =>
+  private static createEsRequestSearchBody = (dto: SdkSearchChatsInputT) =>
     createPaginationOffsetSearchQuery(dto)
       .query(ChatsEsSearchRepo.createEsRequestSearchFilters(dto))
       .sorts(createScoredSortFieldQuery(dto.sort));
@@ -56,14 +63,18 @@ export class ChatsEsSearchRepo {
       ids,
       organizationIds,
       projectsIds,
+      creatorIds,
       archived,
-    }: SdKSearchChatsInputT,
+      satisfyPermissions,
+    }: EsChatsInternalFilters,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
         esb.termsQuery('internal', false),
+        !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!projectsIds?.length && esb.termsQuery('project.id', projectsIds),
+        !!creatorIds?.length && esb.termsQuery('creator.id', creatorIds),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
           esb
@@ -86,9 +97,9 @@ export class ChatsEsSearchRepo {
       archived: source.archived,
       organization: source.organization,
       creator: source.creator,
-      public: source.public,
       internal: source.internal,
       project: source.project,
+      permissions: mapRawEsDocToSdkPermissions(source.permissions),
       summary: {
         content: {
           generated: summary.content.generated,

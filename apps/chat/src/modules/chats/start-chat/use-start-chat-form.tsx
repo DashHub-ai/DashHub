@@ -1,29 +1,20 @@
 import { useForm } from '@under-control/forms';
 import { pipe } from 'fp-ts/lib/function';
 import { useLocation } from 'wouter';
-import { z } from 'zod';
 
-import { runTask, StrictBooleanV, tapTaskEither, tryOrThrowTE } from '@llm/commons';
+import { runTask, tapTaskEither, tryOrThrowTE } from '@llm/commons';
 import { useAsyncSetter } from '@llm/commons-front';
 import {
-  SdkCreateMessageInputV,
+  createSDKPermissionUserAccessLevel,
+  type SdkCreateChatInputT,
   type SdkTableRowWithIdNameT,
-  SdkTableRowWithIdNameV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { usePredefinedFormValidators, useSaveErrorNotification } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
-export const StartChatFormValueV = z
-  .object({
-    public: StrictBooleanV,
-    project: SdkTableRowWithIdNameV.nullable(),
-    aiModel: SdkTableRowWithIdNameV,
-  })
-  .merge(SdkCreateMessageInputV);
-
-export type StartChatFormValueT = z.infer<typeof StartChatFormValueV>;
+import type { StartChatFormValueT } from './start-chat-form.types';
 
 type FormProps = {
   project: SdkTableRowWithIdNameT | null;
@@ -33,16 +24,22 @@ export function useStartChatForm({ project }: FormProps) {
   const [, navigate] = useLocation();
   const sitemap = useSitemap();
 
-  const { sdks } = useSdkForLoggedIn();
+  const { sdks, session } = useSdkForLoggedIn();
   const { required, requiredListItem } = usePredefinedFormValidators<StartChatFormValueT>();
   const { organization, assignWorkspaceOrganization } = useWorkspaceOrganizationOrThrow();
 
   const showErrorNotification = useSaveErrorNotification();
   const onSubmit = (value: StartChatFormValueT) => pipe(
-    assignWorkspaceOrganization({
+    assignWorkspaceOrganization<SdkCreateChatInputT>({
       project: value.project,
-      public: value.public,
       internal: false,
+      permissions: (
+        value.public
+          ? []
+          : [
+              createSDKPermissionUserAccessLevel('write', session.token.sub),
+            ]
+      ),
     }),
     sdks.dashboard.chats.create,
     tapTaskEither(

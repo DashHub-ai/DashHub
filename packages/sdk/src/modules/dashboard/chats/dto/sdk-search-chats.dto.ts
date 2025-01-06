@@ -16,18 +16,19 @@ export const SdkSearchChatItemV = SdkChatV;
 
 export type SdkSearchChatItemT = z.infer<typeof SdkSearchChatItemV>;
 
-export const SdKSearchChatsInputV = SdkOffsetPaginationInputV
+export const SdkSearchChatsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
     projectsIds: SdkIdsArrayV.optional(),
+    creatorIds: SdkIdsArrayV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkUuidsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchChatsInputT = z.infer<typeof SdKSearchChatsInputV>;
+export type SdkSearchChatsInputT = z.infer<typeof SdkSearchChatsInputV>;
 
-export const SdKSearchChatsOutputV = SdkOffsetPaginationOutputV(SdkSearchChatItemV);
+export const SdkSearchChatsOutputV = SdkOffsetPaginationOutputV(SdkSearchChatItemV);
 
-export type SdKSearchChatsOutputT = z.infer<typeof SdKSearchChatsOutputV>;
+export type SdkSearchChatsOutputT = z.infer<typeof SdkSearchChatsOutputV>;

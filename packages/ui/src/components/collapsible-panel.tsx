@@ -56,7 +56,7 @@ export function CollapsiblePanel(
           contentClassName,
         )}
       >
-        <div className="p-4 pl-10">
+        <div className="p-4 pt-0 pl-10">
           <h2 className={clsx(
             'font-semibold text-xl transition-opacity',
             isCollapsed ? 'opacity-0' : 'opacity-100',

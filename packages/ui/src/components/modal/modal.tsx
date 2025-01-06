@@ -1,8 +1,7 @@
-import type { ComponentProps, PropsWithChildren, ReactNode } from 'react';
-
 import { clsx } from 'clsx';
+import { type ComponentProps, type PropsWithChildren, type ReactNode, useState } from 'react';
 
-import { useIsMounted } from '@llm/commons-front';
+import { useTimeout } from '@llm/commons-front';
 
 import { ModalBody } from './modal-body';
 import { ModalCloseButton } from './modal-close-button';
@@ -33,16 +32,20 @@ export function Modal(
     onClose,
   }: ModalProps,
 ) {
-  const isMounted = useIsMounted();
+  const [isOpened, setOpened] = useState(false);
   const DialogTag = formProps ? 'form' : 'div';
+
+  useTimeout(() => {
+    setOpened(true);
+  }, { time: 80 });
 
   return (
     <div
       className={clsx(
         'uk-flex uk-flex-top uk-modal',
         {
-          'uk-open': isMounted && !isLeaving,
-          'uk-display-block': isMounted,
+          'uk-open': isOpened && !isLeaving,
+          'uk-display-block': isOpened,
         },
         className,
       )}

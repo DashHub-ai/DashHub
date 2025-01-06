@@ -1,13 +1,22 @@
-import { type FormHookAttrs, useForm } from '@under-control/forms';
+import { type FormHookAttrs, type Overwrite, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
-import { type SdkChatT, type SdkTableRowWithUuidT, useSdkForLoggedIn } from '@llm/sdk';
+import {
+  type SdkChatT,
+  type SdkPermissionT,
+  type SdkTableRowWithUuidT,
+  useSdkForLoggedIn,
+} from '@llm/sdk';
 import { useSaveTaskEitherNotification } from '@llm/ui';
+
+type UpdateChatFormValue = Overwrite<SdkChatT & SdkTableRowWithUuidT, {
+  permissions?: SdkPermissionT[] | null;
+}>;
 
 type UpdateChatFormHookAttrs =
   & Omit<
-    FormHookAttrs<SdkChatT & SdkTableRowWithUuidT>,
+    FormHookAttrs<UpdateChatFormValue>,
     'validation' | 'onSubmit'
   >
   & {

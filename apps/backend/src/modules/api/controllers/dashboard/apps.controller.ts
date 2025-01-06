@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   type AppsSdk,
   SdkCreateAppInputV,
-  SdKSearchAppsInputV,
+  SdkSearchAppsInputV,
   SdkUpdateAppInputV,
 } from '@llm/sdk';
 import { AppsService } from '~/modules/apps';
@@ -30,16 +30,14 @@ export class AppsController extends AuthorizedController {
 
     this.router
       .get('/summarize-chat-to-app/:chatId', async context => pipe(
-        {
-          id: context.req.param().chatId,
-        },
+        context.req.param().chatId,
         appsService.asUser(context.var.jwt).summarizeChatToApp,
         rejectUnsafeSdkErrors,
         serializeSdkResponseTE<ReturnType<AppsSdk['summarizeChatToApp']>>(context),
       ))
       .get(
         '/search',
-        sdkSchemaValidator('query', SdKSearchAppsInputV),
+        sdkSchemaValidator('query', SdkSearchAppsInputV),
         async context => pipe(
           context.req.valid('query'),
           appsService.asUser(context.var.jwt).search,

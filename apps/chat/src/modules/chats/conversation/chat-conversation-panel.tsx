@@ -15,7 +15,7 @@ import {
   getLastUsedSdkMessagesAIModel,
   groupSdkAIMessagesByRepeats,
   type SdkChatT,
-  type SdKSearchMessagesOutputT,
+  type SdkSearchMessagesOutputT,
   type SdkTableRowWithIdNameT,
 } from '@llm/sdk';
 
@@ -40,7 +40,7 @@ import { ChatMessage } from './messages/chat-message';
 type Props = {
   ref?: RefObject<HTMLDivElement | null>;
   chat: SdkChatT;
-  initialMessages?: SdKSearchMessagesOutputT;
+  initialMessages?: SdkSearchMessagesOutputT;
   replyAfterMount?: {
     app?: Nullable<SdkTableRowWithIdNameT>;
     content?: Nullable<string>;

@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import type { Overwrite } from '@llm/commons';
+
 /**
  * Defines the schema for offset-based pagination input using Zod.
  */
@@ -29,3 +31,15 @@ export type SdkOffsetPaginationOutputT<T> = {
 
 export type SdkInferOffsetPaginationItemType<T> =
   T extends SdkOffsetPaginationOutputT<infer R> ? R : never;
+
+export function mapSdkOffsetPaginationItems<
+  P extends SdkOffsetPaginationOutputT<unknown>,
+  K,
+>(
+  mapperFn: (item: P['items'][number]) => K,
+) {
+  return ({ items, ...pagination }: P): Overwrite<P, { items: K[]; }> => ({
+    ...pagination,
+    items: items.map(mapperFn),
+  });
+}

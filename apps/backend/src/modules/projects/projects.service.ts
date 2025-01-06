@@ -1,6 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import type {
   SdkCreateProjectInputT,
@@ -19,6 +19,7 @@ import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId, TableRowWithUuid } from '../database';
 
 import { ChatsService } from '../chats/chats.service';
+import { PermissionsService } from '../permissions';
 import { ProjectsEsIndexRepo, ProjectsEsSearchRepo } from './elasticsearch';
 import { ProjectsFirewall } from './projects.firewall';
 import { ProjectsRepo } from './projects.repo';
@@ -29,10 +30,11 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     @inject(ProjectsRepo) private readonly repo: ProjectsRepo,
     @inject(ProjectsEsSearchRepo) private readonly esSearchRepo: ProjectsEsSearchRepo,
     @inject(ProjectsEsIndexRepo) private readonly esIndexRepo: ProjectsEsIndexRepo,
-    @inject(ChatsService) private readonly chatsService: ChatsService,
+    @inject(PermissionsService) private readonly permissionsService: PermissionsService,
+    @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new ProjectsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new ProjectsFirewall(jwt, this, this.permissionsService);
 
   get = this.esSearchRepo.get;
 
@@ -44,6 +46,7 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
   archive = (id: TableId) => pipe(
     this.repo.archive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(() => this.chatsService.archiveSeqByProjectId(id)),
   );
 
   ensureChatHasProjectOrCreateInternal = (
@@ -72,6 +75,9 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
               generated: false,
             },
           },
+          // Embeddings are associated with projects, so we need to inherit permissions
+          // from the chat to keep them private.
+          permissions: chat.permissions?.current ?? [],
           creator,
         }),
         TE.tap(project => this.chatsService.assignToProject(chat.id, project.id)),
@@ -115,6 +121,7 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
       creator,
       internal,
       organization,
+      permissions,
       ...values
     }: SdkCreateProjectInputT & {
       internal?: boolean;
@@ -129,11 +136,35 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
         internal: !!internal,
       },
     }),
+    TE.tap(({ id }) => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'project', id },
+          permissions,
+        },
+      });
+    }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, ...value }: SdkUpdateProjectInputT & TableRowWithId) => pipe(
+  update = ({ id, permissions, ...value }: SdkUpdateProjectInputT & TableRowWithId) => pipe(
     this.repo.update({ id, value }),
+    TE.tap(() => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'project', id },
+          permissions,
+        },
+      });
+    }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 }

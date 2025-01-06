@@ -11,6 +11,10 @@ export class DatabaseError extends TaggedError.ofLiteral()('DatabaseError') {
     RECORD_ALREADY_EXISTS: '23505',
   };
 
+  static tryNonErrorMappedTask<T>(task: Task<T>) {
+    return TE.tryCatch(task, (err: any) => new DatabaseError(err));
+  }
+
   static tryTask<T>(task: Task<T>) {
     return TE.tryCatch(task, (err: any) => {
       switch (err.code) {

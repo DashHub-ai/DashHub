@@ -2,6 +2,7 @@ import type { z } from 'zod';
 
 import { SdkTableRowWithIdV, ZodOmitArchivedFields, ZodOmitDateFields } from '~/shared';
 
+import { SdkUpsertTableRowWithPermissionsInputV } from '../../permissions/dto/sdk-upsert-table-row-with-permissions.dto';
 import { SdkAppV } from './sdk-app.dto';
 
 export const SdkCreateAppInputV = SdkAppV.omit({
@@ -10,10 +11,12 @@ export const SdkCreateAppInputV = SdkAppV.omit({
   id: true,
   organization: true,
   category: true,
-}).extend({
-  organization: SdkTableRowWithIdV,
-  category: SdkTableRowWithIdV,
-});
+})
+  .merge(SdkUpsertTableRowWithPermissionsInputV)
+  .extend({
+    organization: SdkTableRowWithIdV,
+    category: SdkTableRowWithIdV,
+  });
 
 export type SdkCreateAppInputT = z.infer<typeof SdkCreateAppInputV>;
 

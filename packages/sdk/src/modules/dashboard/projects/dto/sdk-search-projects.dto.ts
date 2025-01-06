@@ -16,7 +16,7 @@ export const SdkSearchProjectItemV = SdkProjectV;
 
 export type SdkSearchProjectItemT = z.infer<typeof SdkSearchProjectItemV>;
 
-export const SdKSearchProjectsInputV = SdkOffsetPaginationInputV
+export const SdkSearchProjectsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
   })
@@ -25,8 +25,8 @@ export const SdKSearchProjectsInputV = SdkOffsetPaginationInputV
   .merge(SdkIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
-export type SdKSearchProjectsInputT = z.infer<typeof SdKSearchProjectsInputV>;
+export type SdkSearchProjectsInputT = z.infer<typeof SdkSearchProjectsInputV>;
 
-export const SdKSearchProjectsOutputV = SdkOffsetPaginationOutputV(SdkSearchProjectItemV);
+export const SdkSearchProjectsOutputV = SdkOffsetPaginationOutputV(SdkSearchProjectItemV);
 
-export type SdKSearchProjectsOutputT = z.infer<typeof SdKSearchProjectsOutputV>;
+export type SdkSearchProjectsOutputT = z.infer<typeof SdkSearchProjectsOutputV>;

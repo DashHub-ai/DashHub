@@ -30,7 +30,10 @@ export function AppUpdateFormModal(
 ) {
   const t = useI18n().pack.appsCreator.edit;
   const { handleSubmitEvent, validator, submitState, bind } = useAppUpdateForm({
-    defaultValue: app,
+    defaultValue: {
+      ...app,
+      permissions: app.permissions?.current,
+    },
     onAfterSubmit,
   });
 

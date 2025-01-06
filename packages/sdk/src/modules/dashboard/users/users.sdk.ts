@@ -14,7 +14,7 @@ import type {
   SdkCreateUserInputT,
   SdkCreateUserOutputT,
   SdkSearchUsersInputT,
-  SdKSearchUsersOutputT,
+  SdkSearchUsersOutputT,
   SdkUpdateUserInputT,
   SdkUpdateUserOutputT,
 } from './dto';
@@ -41,7 +41,7 @@ export class UsersSdk extends AbstractNestedSdkWithAuth {
     });
 
   search = (data: SdkSearchUsersInputT) =>
-    this.fetch<SdKSearchUsersOutputT>({
+    this.fetch<SdkSearchUsersOutputT>({
       url: this.endpoint('/search'),
       query: data,
       options: getPayload(),

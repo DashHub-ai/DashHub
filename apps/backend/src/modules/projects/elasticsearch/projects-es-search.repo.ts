@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type {
   SdkSearchProjectItemT,
-  SdKSearchProjectsInputT,
+  SdkSearchProjectsInputT,
 } from '@llm/sdk';
 
 import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
@@ -14,15 +14,18 @@ import {
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
 } from '~/modules/elasticsearch';
+import { createEsPermissionsFilters, mapRawEsDocToSdkPermissions, WithPermissionsInternalFilters } from '~/modules/permissions/record-protection';
 
 import {
   type ProjectsEsDocument,
   ProjectsEsIndexRepo,
 } from './projects-es-index.repo';
 
-type InternalSearchProjectsInputT = SdKSearchProjectsInputT & {
-  excludeInternal?: boolean;
-};
+export type EsProjectsInternalFilters =
+  & WithPermissionsInternalFilters<SdkSearchProjectsInputT>
+  & {
+    excludeInternal?: boolean;
+  };
 
 @injectable()
 export class ProjectsEsSearchRepo {
@@ -35,7 +38,7 @@ export class ProjectsEsSearchRepo {
     TE.map(ProjectsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: InternalSearchProjectsInputT) =>
+  search = (dto: EsProjectsInternalFilters) =>
     pipe(
       this.indexRepo.search(
         ProjectsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
@@ -50,7 +53,7 @@ export class ProjectsEsSearchRepo {
       })),
     );
 
-  private static createEsRequestSearchBody = (dto: SdKSearchProjectsInputT) =>
+  private static createEsRequestSearchBody = (dto: SdkSearchProjectsInputT) =>
     createPaginationOffsetSearchQuery(dto)
       .query(ProjectsEsSearchRepo.createEsRequestSearchFilters(dto))
       .sorts(createScoredSortFieldQuery(dto.sort));
@@ -62,10 +65,12 @@ export class ProjectsEsSearchRepo {
       ids,
       organizationIds,
       archived,
-    }: InternalSearchProjectsInputT,
+      satisfyPermissions,
+    }: EsProjectsInternalFilters,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
@@ -90,6 +95,7 @@ export class ProjectsEsSearchRepo {
       updatedAt: source.updated_at,
       archived: source.archived,
       organization: source.organization,
+      permissions: mapRawEsDocToSdkPermissions(source.permissions),
       summary: {
         content: {
           generated: summary.content.generated,

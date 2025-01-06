@@ -13,7 +13,6 @@ import { OrganizationsEsIndexRepo } from '~/modules/organizations/elasticsearch'
 import { OrganizationsS3BucketsEsIndexRepo } from '~/modules/organizations/s3-buckets/elasticsearch/organizations-s3-buckets-es-index.repo';
 import { ProjectsEmbeddingsEsIndexRepo } from '~/modules/projects-embeddings/elasticsearch/projects-embeddings-es-index.repo';
 import { ProjectsFilesEsIndexRepo } from '~/modules/projects-files/elasticsearch/projects-files-es-index.repo';
-import { ProjectsPoliciesEsIndexRepo } from '~/modules/projects-policies/elasticsearch/projects-policies-es-index.repo';
 import { ProjectsEsIndexRepo } from '~/modules/projects/elasticsearch/projects-es-index.repo';
 import { UsersGroupsEsIndexRepo } from '~/modules/users-groups/elasticsearch/users-groups-es-index.repo';
 import { UsersEsIndexRepo } from '~/modules/users/elasticsearch/users-es-index.repo';
@@ -38,7 +37,6 @@ export class ElasticsearchRegistryBootService {
     @inject(AppsCategoriesEsIndexRepo) private readonly appsCategoriesEsIndexRepo: AppsCategoriesEsIndexRepo,
     @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
     @inject(ProjectsEmbeddingsEsIndexRepo) private readonly projectsEmbeddingsEsIndexRepo: ProjectsEmbeddingsEsIndexRepo,
-    @inject(ProjectsPoliciesEsIndexRepo) private readonly projectsPoliciesEsIndexRepo: ProjectsPoliciesEsIndexRepo,
   ) {}
 
   register = TE.fromIO(() => {
@@ -55,7 +53,6 @@ export class ElasticsearchRegistryBootService {
       this.appsCategoriesEsIndexRepo,
       this.projectsFilesEsIndexRepo,
       this.projectsEmbeddingsEsIndexRepo,
-      this.projectsPoliciesEsIndexRepo,
     ]);
 
     this.logger.info('Registered elasticsearch repos!');

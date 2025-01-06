@@ -38,9 +38,11 @@ export function LayoutHeader({ children, currentBreadcrumb, breadcrumbs, withBre
         </nav>
       )}
 
-      <h1 className="line-clamp-1 font-bold text-3xl tracking-tight">
-        {children}
-      </h1>
+      {children && (
+        <h1 className="line-clamp-1 font-bold text-3xl tracking-tight">
+          {children}
+        </h1>
+      )}
     </div>
   );
 }

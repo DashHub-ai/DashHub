@@ -1,12 +1,17 @@
+import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
 
+import type { SdkTableRowIdT } from '@llm/sdk';
+
+import { pluckTyped, tapTask, Time, wrapWithCache } from '@llm/commons';
 import {
   AbstractDatabaseRepo,
   DatabaseError,
   TableRowWithId,
   TransactionalAttrs,
   tryReuseOrCreateTransaction,
+  tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
 @injectable()
@@ -50,6 +55,32 @@ export class UsersGroupsUsersRepo extends AbstractDatabaseRepo {
         };
       },
       DatabaseError.tryTask,
+      tapTask(this.getAllUsersGroupsIds.clear),
     ));
   };
+
+  getAllUsersGroupsIds = wrapWithCache(
+    ({ forwardTransaction, userId }: TransactionalAttrs<{ userId: SdkTableRowIdT; }>) => {
+      const transaction = tryReuseTransactionOrSkip({
+        db: this.db,
+        forwardTransaction,
+      });
+
+      return pipe(
+        transaction(
+          async qb => qb
+            .selectFrom('users_groups_users')
+            .where('user_id', '=', userId)
+            .select('group_id as id')
+            .execute(),
+        ),
+        DatabaseError.tryNonErrorMappedTask,
+        TE.map(pluckTyped('id')),
+      );
+    },
+    {
+      getKey: ({ userId }) => userId,
+      ttlMs: Time.toMilliseconds.hours(3),
+    },
+  );
 }

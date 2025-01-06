@@ -42,7 +42,7 @@ export class UsersBootService {
         },
       });
     }),
-    TE.bindW('result', ({ dto }) => this.usersService.createIfNotExists({ value: dto })),
+    TE.bindW('result', ({ dto }) => this.usersService.createIfNotExists(dto)),
     tapTaskEither(({ dto, result }) => {
       if (result.created) {
         this.logger.info('Created root user!', {

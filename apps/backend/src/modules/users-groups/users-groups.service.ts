@@ -1,6 +1,6 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import type {
   SdkCreateUsersGroupInputT,
@@ -18,6 +18,7 @@ import {
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
 
+import { PermissionsService } from '../permissions';
 import { UsersGroupsEsIndexRepo, UsersGroupsEsSearchRepo } from './elasticsearch';
 import { UsersGroupsRepo } from './repo/users-groups.repo';
 import { UsersGroupsFirewall } from './users-groups.firewall';
@@ -28,9 +29,12 @@ export class UsersGroupsService implements WithAuthFirewall<UsersGroupsFirewall>
     @inject(UsersGroupsRepo) private readonly repo: UsersGroupsRepo,
     @inject(UsersGroupsEsSearchRepo) private readonly esSearchRepo: UsersGroupsEsSearchRepo,
     @inject(UsersGroupsEsIndexRepo) private readonly esIndexRepo: UsersGroupsEsIndexRepo,
+    @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new UsersGroupsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new UsersGroupsFirewall(jwt, this, this.permissionsService);
+
+  get = this.esSearchRepo.get;
 
   search = this.esSearchRepo.search;
 

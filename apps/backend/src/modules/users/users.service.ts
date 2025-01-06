@@ -1,8 +1,8 @@
 import { taskEither as TE } from 'fp-ts';
-import { flow, pipe } from 'fp-ts/lib/function';
+import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkJwtTokenT, SdkTableRowIdT, SdkUpdateUserInputT } from '@llm/sdk';
+import type { SdkCreateUserInputT, SdkJwtTokenT, SdkTableRowIdT, SdkUpdateUserInputT } from '@llm/sdk';
 
 import {
   asyncIteratorToVoidPromise,
@@ -14,6 +14,7 @@ import {
 import type { WithAuthFirewall } from '../auth';
 
 import { TableId, TableRowWithId } from '../database';
+import { PermissionsService } from '../permissions';
 import { UsersEsSearchRepo } from './elasticsearch';
 import { UsersEsIndexRepo } from './elasticsearch/users-es-index.repo';
 import { UsersFirewall } from './users.firewall';
@@ -25,14 +26,17 @@ export class UsersService implements WithAuthFirewall<UsersFirewall> {
     @inject(UsersRepo) private readonly repo: UsersRepo,
     @inject(UsersEsIndexRepo) private readonly esIndexRepo: UsersEsIndexRepo,
     @inject(UsersEsSearchRepo) private readonly esSearchRepo: UsersEsSearchRepo,
+    @inject(PermissionsService) private readonly permissionsService: PermissionsService,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new UsersFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new UsersFirewall(jwt, this, this.permissionsService);
+
+  get = this.esSearchRepo.get;
 
   search = this.esSearchRepo.search;
 
-  create = flow(
-    this.repo.create,
+  create = (value: SdkCreateUserInputT) => pipe(
+    this.repo.create({ value }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
@@ -41,8 +45,8 @@ export class UsersService implements WithAuthFirewall<UsersFirewall> {
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  createIfNotExists = flow(
-    this.repo.createIfNotExists,
+  createIfNotExists = (value: SdkCreateUserInputT) => pipe(
+    this.repo.createIfNotExists({ value }),
     TE.tap(({ id, created }) =>
       created
         ? this.esIndexRepo.findAndIndexDocumentById(id)

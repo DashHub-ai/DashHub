@@ -15,6 +15,7 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
 import { AppTableRowWithRelations } from './apps.tables';
 
 @injectable()
@@ -45,6 +46,12 @@ export class AppsRepo extends createDatabaseRepo('apps') {
 
               'apps_categories.id as category_id',
               'apps_categories.name as category_name',
+
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.app_id', '=', eb.ref('apps.id'))
+                  .as('permissions_json'),
             ])
             .limit(ids.length)
             .execute(),
@@ -54,6 +61,8 @@ export class AppsRepo extends createDatabaseRepo('apps') {
         A.map(({
           organization_id: orgId,
           organization_name: orgName,
+
+          permissions_json: permissions,
           ...item
         }): AppTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -64,6 +73,10 @@ export class AppsRepo extends createDatabaseRepo('apps') {
           category: {
             id: item.category_id,
             name: item.category_name,
+          },
+          permissions: {
+            inherited: [],
+            current: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
           },
         })),
       ),

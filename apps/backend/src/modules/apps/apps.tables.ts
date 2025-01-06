@@ -7,6 +7,7 @@ import type {
   TableWithArchivedAtColumn,
   TableWithDefaultColumns,
 } from '../database';
+import type { PermissionsTableRowRelation } from '../permissions';
 
 export type AppsTable = TableWithDefaultColumns &
   TableWithArchivedAtColumn & {
@@ -19,7 +20,10 @@ export type AppsTable = TableWithDefaultColumns &
 
 export type AppTableRow = NormalizeSelectTableRow<AppsTable>;
 
-export type AppTableRowWithRelations = Omit<AppTableRow, 'organizationId' | 'categoryId'> & {
-  organization: TableRowWithIdName;
-  category: TableRowWithIdName;
-};
+export type AppTableRowWithRelations =
+  & Omit<AppTableRow, 'organizationId' | 'categoryId'>
+  & PermissionsTableRowRelation
+  & {
+    organization: TableRowWithIdName;
+    category: TableRowWithIdName;
+  };

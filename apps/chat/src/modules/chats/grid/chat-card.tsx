@@ -17,17 +17,22 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
   const sitemap = useSitemap();
   const { summary } = chat;
 
+  const isGeneratingTitle = isSdkAIGeneratingString(summary.name);
+
   return (
     <CardBase>
-      <CardTitle icon={<MessageSquareIcon size={16} />}>
-        {isSdkAIGeneratingString(summary.name)
-          ? (
-              <>
-                <Loader2Icon size={14} className="animate-spin" />
-                {t.chat.generating.title}
-              </>
-            )
-          : summary.name?.value ?? 'Unnamed Chat'}
+      <CardTitle
+        icon={(
+          isGeneratingTitle
+            ? <Loader2Icon size={14} className="animate-spin" />
+            : <MessageSquareIcon size={16} />
+        )}
+      >
+        {(
+          isGeneratingTitle
+            ? t.chat.generating.title
+            : summary.name?.value ?? 'Unnamed Chat'
+        )}
       </CardTitle>
 
       {isSdkAIGeneratingString(summary.content)

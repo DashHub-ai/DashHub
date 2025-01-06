@@ -32,6 +32,7 @@ export function ProjectUpdateFormModal(
   const { handleSubmitEvent, validator, submitState, bind } = useProjectUpdateForm({
     defaultValue: {
       ...project,
+      permissions: project.permissions?.current,
       summary: {
         content: (
           project.summary.content.generated

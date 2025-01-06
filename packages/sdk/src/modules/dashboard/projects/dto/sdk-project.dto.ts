@@ -8,6 +8,8 @@ import {
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
+import { SdkTableRowWithPermissionsV } from '../../permissions/dto/sdk-table-row-with-permissions.dto';
+
 export const SdkProjectSummaryV = z.strictObject({
   content: SdkAIGeneratedStringV,
 });
@@ -18,6 +20,7 @@ export const SdkProjectV = z.object({
   organization: SdkIdNameUrlEntryV,
   summary: SdkProjectSummaryV,
 })
+  .merge(SdkTableRowWithPermissionsV)
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)
   .merge(SdkTableRowWithArchivedV);

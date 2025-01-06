@@ -3,7 +3,7 @@ import { memo } from 'react';
 
 import type {
   SdkChatT,
-  SdKSearchMessagesOutputT,
+  SdkSearchMessagesOutputT,
 } from '@llm/sdk';
 
 import { ChatConversationPanel } from './chat-conversation-panel';
@@ -11,11 +11,11 @@ import { ChatConfigPanel } from './config-panel';
 
 type Props = {
   chat: SdkChatT;
-  initialMessages: SdKSearchMessagesOutputT;
+  initialMessages: SdkSearchMessagesOutputT;
 };
 
 export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Props) => {
-  const heightClassName = 'h-[calc(100vh-190px)]';
+  const heightClassName = 'h-[calc(100vh-143px)]';
 
   return (
     <div className="flex gap-6 mx-auto">
@@ -26,7 +26,7 @@ export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Prop
       />
 
       <ChatConfigPanel
-        defaultValue={chat}
+        chat={chat}
         contentClassName={clsx(heightClassName, 'overflow-y-auto')}
       />
     </div>

@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { Overwrite, tryOrThrowTE } from '@llm/commons';
 import {
   createArchivedRecordMappings,
   createAutocompleteFieldAnalyzeSettings,
@@ -14,6 +14,10 @@ import {
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
+import {
+  createPermissionsRowEntryMapping,
+  type EsPermissionsDocument,
+} from '~/modules/permissions/record-protection';
 
 import type { AppTableRowWithRelations } from '../apps.tables';
 
@@ -28,6 +32,7 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings(),
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
+        permissions: createPermissionsRowEntryMapping(),
         organization: createIdNameObjectMapping(),
         category: createIdNameObjectMapping(),
         description: {
@@ -43,7 +48,12 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type AppsEsDocument = EsDocument<AppTableRowWithRelations>;
+export type AppsEsDocument = EsDocument<Overwrite<
+  AppTableRowWithRelations,
+  {
+    permissions: EsPermissionsDocument;
+  }
+>>;
 
 @injectable()
 export class AppsEsIndexRepo extends AppsAbstractEsIndexRepo<AppsEsDocument> {

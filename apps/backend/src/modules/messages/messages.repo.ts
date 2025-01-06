@@ -5,6 +5,7 @@ import { sql } from 'kysely';
 import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { injectable } from 'tsyringe';
 
+import { rejectFalsyItems } from '@llm/commons';
 import {
   createDatabaseRepo,
   DatabaseError,
@@ -14,6 +15,8 @@ import {
 } from '~/modules/database';
 
 import type { MessageTableRowWithRelations } from './messages.tables';
+
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
 
 @injectable()
 export class MessagesRepo extends createDatabaseRepo('messages') {
@@ -26,6 +29,10 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
           qb
             .selectFrom(this.table)
             .where('messages.id', 'in', ids)
+
+            .innerJoin('chats', 'chats.id', 'messages.chat_id')
+            .innerJoin('users as chat_creator', 'chat_creator.id', 'chats.creator_user_id')
+
             .leftJoin('users', 'users.id', 'messages.creator_user_id')
             .leftJoin('ai_models', 'ai_models.id', 'messages.ai_model_id')
             .leftJoin('apps', 'apps.id', 'messages.app_id')
@@ -34,6 +41,9 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             .leftJoin('users as reply_users', 'reply_users.id', 'reply_messages.creator_user_id')
 
             .select([
+              'chat_creator.id as chat_creator_user_id',
+              'chat_creator.email as chat_creator_user_email',
+
               'users.id as creator_user_id',
               'users.email as creator_email',
 
@@ -48,6 +58,19 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
               'reply_users.id as reply_message_creator_user_id',
               'reply_users.email as reply_message_creator_email',
+
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.project_id', 'is not', null)
+                  .where('permissions.project_id', '=', eb.ref('chats.project_id'))
+                  .as('chat_project_permissions_json'),
+
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.chat_id', '=', eb.ref('chats.id'))
+                  .as('chat_permissions_json'),
 
               eb => eb
                 .selectFrom('projects_files')
@@ -90,6 +113,9 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
         A.map(({
           chat_id: chatId,
 
+          chat_creator_user_id: chatCreatorUserId,
+          chat_creator_user_email: chatCreatorUserEmail,
+
           creator_user_id: userId,
           creator_email: userEmail,
 
@@ -108,11 +134,33 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
           files_json: filesJson,
 
+          chat_project_permissions_json: chatProjectPermissions,
+          chat_permissions_json: chatPermissions,
+
           ...item
         }): MessageTableRowWithRelations => ({
           ...camelcaseKeys(item),
           chat: {
             id: chatId,
+            creator: {
+              id: chatCreatorUserId,
+              email: chatCreatorUserEmail,
+            },
+            permissions: {
+              inherited: (chatProjectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
+              current: rejectFalsyItems([
+                !!chatPermissions?.length && {
+                  accessLevel: 'write',
+                  target: {
+                    user: {
+                      id: chatCreatorUserId,
+                      email: chatCreatorUserEmail,
+                    },
+                  },
+                },
+                ...(chatPermissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+              ]),
+            },
           },
           aiModel: aiModelId && aiModelName
             ? {
