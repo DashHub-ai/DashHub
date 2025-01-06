@@ -94,6 +94,7 @@ export class ProjectsEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       archived: source.archived,
+      creator: source.creator,
       organization: source.organization,
       permissions: mapRawEsDocToSdkPermissions(source.permissions),
       summary: {

@@ -78,6 +78,49 @@ export class PermissionsFirewall extends AuthFirewallService {
   );
 
   /**
+   * Finds a record and validates if the user is the creator of that record.
+   * For tech/owner users, also allows access if the record belongs to their organization.
+   *
+   * @example
+   * someMethod = (id: TableId) => pipe(
+   *   this.permissionsService
+   *     .asUser(this.jwt)
+   *     .findRecordAndCheckIfCreator({
+   *       findRecord: this.someService.get(id),
+   *     }),
+   *   TE.chainW(() => this.someService.someMethod(id)),
+   * );
+   */
+  findRecordAndCheckIfCreator = <R extends WithSdkCreator, E>(
+    { findRecord, refine }: {
+      findRecord: TE.TaskEither<E, R>;
+      refine?: (data: R) => boolean;
+    },
+  ): TE.TaskEither<E | DatabaseError | SdkUnauthorizedError, R> =>
+    pipe(
+      findRecord,
+      TE.chainEitherKW((data) => {
+        // Perform additional data validation if needed
+        if (refine?.(data) === false) {
+          return ofSdkUnauthorizedErrorE();
+        }
+
+        // If creator is the same as the user, skip permission check
+        if (isSdkRecordWithCreator(data) && data.creator.id === this.userId) {
+          return E.right(data);
+        }
+
+        // If user has tech/owner role and operates within their organization, skip permission check
+        if (this.shouldAllowUsingTechOrOwnerAccess(data)) {
+          return E.right(data);
+        }
+
+        // Block access to resource
+        return ofSdkUnauthorizedErrorE();
+      }),
+    );
+
+  /**
    * Finds a record and validates if the user has proper permissions to access it.
    * Useful for operations that need to verify permissions before modifying data.
    *

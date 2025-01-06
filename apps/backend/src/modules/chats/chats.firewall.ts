@@ -34,16 +34,14 @@ export class ChatsFirewall extends AuthFirewallService {
   );
 
   unarchive = (id: TableUuid) => pipe(
-    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
-      accessLevel: 'write',
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckIfCreator({
       findRecord: this.chatsService.get(id),
     }),
     TE.chainW(() => this.chatsService.unarchive(id)),
   );
 
   archive = (id: TableUuid) => pipe(
-    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
-      accessLevel: 'write',
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckIfCreator({
       findRecord: this.chatsService.get(id),
     }),
     TE.chainW(() => this.chatsService.archive(id)),

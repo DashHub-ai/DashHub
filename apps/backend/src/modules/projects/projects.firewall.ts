@@ -31,16 +31,14 @@ export class ProjectsFirewall extends AuthFirewallService {
   );
 
   unarchive = (id: TableId) => pipe(
-    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
-      accessLevel: 'write',
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckIfCreator({
       findRecord: this.projectsService.get(id),
     }),
     TE.chainW(() => this.projectsService.unarchive(id)),
   );
 
   archive = (id: TableId) => pipe(
-    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
-      accessLevel: 'write',
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckIfCreator({
       findRecord: this.projectsService.get(id),
     }),
     TE.chainW(() => this.projectsService.archive(id)),
