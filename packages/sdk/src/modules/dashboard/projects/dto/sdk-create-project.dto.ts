@@ -23,6 +23,7 @@ export const SdkCreateProjectInputV = SdkProjectV.omit({
   organization: true,
   summary: true,
   permissions: true,
+  creator: true,
 })
   .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({
