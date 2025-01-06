@@ -1,4 +1,4 @@
-import { flow, pipe } from 'fp-ts/lib/function';
+import { pipe } from 'fp-ts/lib/function';
 import * as TE from 'fp-ts/lib/TaskEither';
 
 import type {
@@ -25,10 +25,10 @@ export class MessagesFirewall extends AuthFirewallService {
     super(jwt);
   }
 
-  // TODO: Add belongs checks
-  search = flow(
-    this.messagesService.search,
-    this.tryTEIfUser.is.root,
+  search = (filters: SdkSearchMessagesInputT) => pipe(
+    filters,
+    this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
+    TE.chainW(this.messagesService.search),
     TE.map(({ items, ...attrs }) => ({
       ...attrs,
       items: MessagesFirewall.hideSystemMessages(items),

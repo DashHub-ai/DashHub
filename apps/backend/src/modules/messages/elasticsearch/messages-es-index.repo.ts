@@ -14,6 +14,7 @@ import {
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
+import { createPermissionsRowEntryMapping } from '~/modules/permissions';
 
 import type { MessageTableRowWithRelations } from '../messages.tables';
 
@@ -28,7 +29,13 @@ const MessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings({
           uuid: true,
         }),
-        chat: createIdObjectMapping({}, 'keyword'),
+        chat: createIdObjectMapping(
+          {
+            creator: createIdObjectMapping(),
+            permissions: createPermissionsRowEntryMapping(),
+          },
+          'keyword',
+        ),
         replied_message: createIdObjectMapping({}, 'keyword'),
         creator: createIdObjectMapping(),
         ai_model: createIdObjectMapping(),

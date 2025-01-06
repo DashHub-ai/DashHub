@@ -12,6 +12,7 @@ import type {
   TableWithUuidColumn,
 } from '~/modules/database';
 
+import type { PermissionsTableRowRelation } from '../permissions';
 import type { S3ResourcesTableRowWithRelations } from '../s3';
 import type { UserTableRowBaseRelation } from '../users';
 
@@ -46,7 +47,9 @@ export type MessageFileTableRelationRow =
 export type MessageTableRowWithRelations =
   & Omit<MessageTableRow, 'chatId' | 'creatorUserId' | 'aiModelId' | 'repliedMessageId' | 'appId'>
   & {
-    chat: TableRowWithUuid;
+    chat: TableRowWithUuid & PermissionsTableRowRelation & {
+      creator: UserTableRowBaseRelation;
+    };
     repliedMessage: RepliedMessageTableRelationRow | null;
     creator: UserTableRowBaseRelation | null;
     aiModel: TableRowWithIdName | null;

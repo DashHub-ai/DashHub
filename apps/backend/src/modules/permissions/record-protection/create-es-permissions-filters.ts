@@ -4,14 +4,21 @@ import { rejectFalsyItems } from '@llm/commons';
 
 import type { UserAccessPermissionsDescriptor } from './permissions-row-protection-filters.types';
 
-export function createEsPermissionsFilters(descriptor: UserAccessPermissionsDescriptor): esb.BoolQuery {
+export function createEsPermissionsFilters(
+  descriptor: UserAccessPermissionsDescriptor,
+  permissionsFieldPath = 'permissions',
+): esb.BoolQuery {
   return esb.boolQuery().filter([
-    createNestedPermissionsEsFilters('inherited', descriptor),
-    createNestedPermissionsEsFilters('current', descriptor),
+    createNestedPermissionsEsFilters('inherited', descriptor, permissionsFieldPath),
+    createNestedPermissionsEsFilters('current', descriptor, permissionsFieldPath),
   ]);
 }
 
-function createNestedPermissionsEsFilters(kind: 'current' | 'inherited', descriptor: UserAccessPermissionsDescriptor): esb.BoolQuery {
+function createNestedPermissionsEsFilters(
+  kind: 'current' | 'inherited',
+  descriptor: UserAccessPermissionsDescriptor,
+  permissionsFieldPath: string = 'permissions',
+): esb.BoolQuery {
   const { userId, groupsIds, accessLevel } = descriptor;
 
   const isReadOnly = accessLevel === 'read';
@@ -23,7 +30,7 @@ function createNestedPermissionsEsFilters(kind: 'current' | 'inherited', descrip
     esb.boolQuery().should(rejectFalsyItems([
       // Case 1: Empty permissions array means public access, but only for read
       isReadOnly && esb.boolQuery().mustNot(
-        esb.nestedQuery(esb.matchAllQuery(), `permissions.${kind}`),
+        esb.nestedQuery(esb.matchAllQuery(), `${permissionsFieldPath}.${kind}`),
       ),
 
       // Case 2: Check nested permissions
@@ -32,18 +39,18 @@ function createNestedPermissionsEsFilters(kind: 'current' | 'inherited', descrip
           esb.boolQuery().should([
             // User-level permission check
             esb.boolQuery().filter([
-              esb.termQuery(`permissions.${kind}.target.user.id`, userId),
-              esb.termsQuery(`permissions.${kind}.access_level`, accessLevels),
+              esb.termQuery(`${permissionsFieldPath}.${kind}.target.user.id`, userId),
+              esb.termsQuery(`${permissionsFieldPath}.${kind}.access_level`, accessLevels),
             ]),
 
             // Group-level permission check
             esb.boolQuery().filter([
-              esb.termsQuery(`permissions.${kind}.target.group.id`, groupsIds),
-              esb.termsQuery(`permissions.${kind}.access_level`, accessLevels),
+              esb.termsQuery(`${permissionsFieldPath}.${kind}.target.group.id`, groupsIds),
+              esb.termsQuery(`${permissionsFieldPath}.${kind}.access_level`, accessLevels),
             ]),
           ]).minimumShouldMatch(1),
         ]),
-        `permissions.${kind}`,
+        `${permissionsFieldPath}.${kind}`,
       ),
     ])).minimumShouldMatch(1),
   ]);
