@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Props) => {
-  const heightClassName = 'h-[calc(100vh-190px)]';
+  const heightClassName = 'h-[calc(100vh-143px)]';
 
   return (
     <div className="flex gap-6 mx-auto">

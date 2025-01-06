@@ -76,9 +76,7 @@ export function ChatRoute({ id }: Props) {
           ),
           currentBreadcrumb: result.data.chat.summary.name.value || t.title,
         }}
-      >
-        {t.title}
-      </LayoutHeader>
+      />
 
       <section>
         {(
