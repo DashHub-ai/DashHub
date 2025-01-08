@@ -1,8 +1,9 @@
+import clsx from 'clsx';
 import { useLocation } from 'wouter';
 
 import { type SdkIdNameUrlEntryT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { OrganizationsSearchSelect, useWorkspace, useWorkspaceOrganizationOrThrow } from '~/modules';
+import { OrganizationsSearchSelect, useWorkspace, useWorkspaceOrganization } from '~/modules';
 import { useSitemap } from '~/routes';
 
 type Props = {
@@ -16,7 +17,7 @@ export function NavigationWorkspaceSelector({ className }: Props) {
 
   const { guard } = useSdkForLoggedIn();
   const { setOrganization } = useWorkspace();
-  const { organization } = useWorkspaceOrganizationOrThrow();
+  const { organization } = useWorkspaceOrganization();
 
   const onChangeOrganizationAndRedirect = (organization: SdkIdNameUrlEntryT | null) => {
     navigate(sitemap.home, { replace: true });
@@ -35,8 +36,12 @@ export function NavigationWorkspaceSelector({ className }: Props) {
     );
   }
 
+  if (!organization) {
+    return null;
+  }
+
   return (
-    <div className={`flex items-center gap-2 px-4 py-2 border rounded-md text-sm ${className}`}>
+    <div className={clsx('flex items-center gap-2 px-4 py-2 border rounded-md text-sm', className)}>
       <span className="text-muted-foreground">
         {t.workspace.organization}
         :

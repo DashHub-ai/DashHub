@@ -49,16 +49,14 @@ export class UsersGroupsFirewall extends AuthFirewallService {
   );
 
   unarchive = (id: TableId) => pipe(
-    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
-      accessLevel: 'write',
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckIfCreator({
       findRecord: this.usersGroupsService.get(id),
     }),
     TE.chainW(() => this.usersGroupsService.unarchive(id)),
   );
 
   archive = (id: TableId) => pipe(
-    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
-      accessLevel: 'write',
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckIfCreator({
       findRecord: this.usersGroupsService.get(id),
     }),
     TE.chainW(() => this.usersGroupsService.archive(id)),
