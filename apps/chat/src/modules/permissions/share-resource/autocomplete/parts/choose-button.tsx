@@ -16,7 +16,7 @@ export function ChooseButton({ onClick, disabled }: Props) {
       disabled={disabled}
       onClick={onClick}
       className={clsx(
-        'px-2 py-1 rounded-sm text-xs',
+        'px-3 py-1.5 rounded font-semibold text-xs',
         'text-gray-600 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500',
         disabled && 'opacity-50 cursor-not-allowed',
       )}

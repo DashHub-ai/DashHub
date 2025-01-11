@@ -479,7 +479,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   permissions: {
     share: 'Udostępnij',
     modal: {
-      title: 'Udostępnij zasób',
+      title: 'Udostępnij',
       submit: 'Udostępnij',
       autocomplete: {
         users: 'Użytkownicy',

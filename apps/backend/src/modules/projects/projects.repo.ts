@@ -139,6 +139,7 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
             .select([
               'users.id as creator_user_id',
               'users.email as creator_user_email',
+              'users.name as creator_user_name',
 
               'organizations.id as organization_id',
               'organizations.name as organization_name',
@@ -162,6 +163,7 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
         A.map(({
           creator_user_id: creatorUserId,
           creator_user_email: creatorUserEmail,
+          creator_user_name: creatorUserName,
 
           organization_id: orgId,
           organization_name: orgName,
@@ -177,6 +179,7 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
           const creator = {
             id: creatorUserId,
             email: creatorUserEmail,
+            name: creatorUserName,
           };
 
           return {

@@ -9,7 +9,7 @@ type Props = {
 
 export function AutocompleteGroupItem({ group, onSelect }: Props) {
   return (
-    <div className="flex justify-between items-center hover:bg-gray-50 p-2 cursor-pointer">
+    <div className="flex justify-between items-center hover:bg-gray-50 p-3 cursor-pointer">
       <div className="flex items-center gap-2">
         <div className="flex justify-center items-center bg-gray-100 rounded-full w-8 h-8">
           <span className="font-medium text-gray-600 text-xs">

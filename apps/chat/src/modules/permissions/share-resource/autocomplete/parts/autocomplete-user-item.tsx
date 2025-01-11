@@ -11,7 +11,7 @@ type Props = {
 
 export function AutocompleteUserItem({ user, onSelect }: Props) {
   return (
-    <div className="flex justify-between items-center hover:bg-gray-50 p-2 cursor-pointer">
+    <div className="flex justify-between items-center hover:bg-gray-50 p-3 cursor-pointer">
       <div className="flex items-center gap-2">
         <Avatar size="sm" name={user.name} />
 
