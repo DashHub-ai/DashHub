@@ -2,6 +2,7 @@ import { Users2Icon, UsersIcon } from 'lucide-react';
 
 import {
   isSdkPermissionOfTargetType,
+  type SdkPermissionAccessLevelT,
   type SdkPermissionT,
   type SdkUserListItemT,
 } from '@llm/sdk';
@@ -16,13 +17,29 @@ import {
 type Props = {
   creator: SdkUserListItemT;
   permissions: SdkPermissionT[];
+  onChange: (permissions: SdkPermissionT[]) => void;
 };
 
-export function ResourcePermissionsList({ creator, permissions }: Props) {
+export function ResourcePermissionsList({ creator, permissions, onChange }: Props) {
   const t = useI18n().pack.permissions.modal.list;
 
   const userPermissions = permissions.filter(isSdkPermissionOfTargetType('user'));
   const groupPermissions = permissions.filter(isSdkPermissionOfTargetType('group'));
+
+  const onChangeAccessLevel = (user: SdkUserListItemT) => (accessLevel: SdkPermissionAccessLevelT) => {
+    const newUserPermissions = userPermissions.map((permission) => {
+      if (permission.target.user.id === user.id) {
+        return { ...permission, accessLevel };
+      }
+
+      return permission;
+    });
+
+    onChange([
+      ...newUserPermissions,
+      ...groupPermissions,
+    ]);
+  };
 
   return (
     <div className="border rounded-md divide-y max-h-[20rem] overflow-y-auto">
@@ -40,6 +57,7 @@ export function ResourcePermissionsList({ creator, permissions }: Props) {
               key={permission.target.user.id}
               user={permission.target.user}
               accessLevel={permission.accessLevel}
+              onChangeAccessLevel={onChangeAccessLevel(permission.target.user)}
             />
           ))}
         </div>

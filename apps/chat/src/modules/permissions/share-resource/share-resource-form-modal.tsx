@@ -48,6 +48,7 @@ export function ShareResourceFormModal(
       {...props}
       onClose={onClose}
       formProps={{
+        className: 'w-[550px]',
         onSubmit: handleSubmitEvent,
       }}
       header={(
@@ -69,6 +70,9 @@ export function ShareResourceFormModal(
         <ResourcePermissionsList
           creator={creator}
           permissions={value}
+          onChange={(newValue) => {
+            setValue({ value: newValue });
+          }}
         />
       </div>
     </Modal>

@@ -1,8 +1,13 @@
 import deepmerge from 'deepmerge';
 
-import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+import type { SdkOrganizationUserRoleT, SdkPermissionAccessLevelT } from '@llm/sdk';
 
 import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
+
+const I18N_ACCESS_LEVELS_EN: Record<SdkPermissionAccessLevelT, string> = {
+  read: 'Read-only',
+  write: 'Read and write',
+};
 
 const I18N_USER_ORGANIZATION_ROLES_EN: Record<SdkOrganizationUserRoleT, string> = {
   owner: 'Owner',
@@ -476,6 +481,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   },
   permissions: {
     share: 'Share',
+    accessLevels: I18N_ACCESS_LEVELS_EN,
     modal: {
       title: 'Share resource',
       submit: 'Share',

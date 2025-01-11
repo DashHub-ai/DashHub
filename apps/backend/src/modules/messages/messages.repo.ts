@@ -159,6 +159,7 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
                 !!chatPermissions?.length && {
                   accessLevel: 'write',
                   target: {
+                    type: 'user',
                     user: {
                       id: chatCreatorUserId,
                       email: chatCreatorUserEmail,
