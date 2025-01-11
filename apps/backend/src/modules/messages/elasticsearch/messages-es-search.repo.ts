@@ -96,6 +96,7 @@ export class MessagesEsSearchRepo {
     creator: source.creator && {
       id: source.creator.id,
       email: source.creator.email,
+      name: source.creator.name,
     },
     chat: {
       id: source.chat.id,
@@ -115,6 +116,7 @@ export class MessagesEsSearchRepo {
       creator: source.replied_message.creator && {
         id: source.replied_message.creator.id,
         email: source.replied_message.creator.email,
+        name: source.replied_message.creator.name,
       },
     },
   });

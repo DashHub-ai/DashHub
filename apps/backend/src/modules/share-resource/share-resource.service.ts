@@ -69,7 +69,11 @@ export class ShareResourceService implements WithAuthFirewall<ShareResourceFirew
       groups: groups.map(({ id, name }) => ({ id, name })),
       users: pipe(
         users,
-        A.map(({ id, email }) => ({ id, email })),
+        A.map(({ id, name, email }) => ({
+          id,
+          name,
+          email,
+        })),
         rejectById(user.id),
       ),
     })),

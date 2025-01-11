@@ -9,6 +9,7 @@ export type PermissionsTableRowRawAggRelation = {
 
   user_id: TableId | null;
   user_email: string | null;
+  user_name: string | null;
 };
 
 export function mapRawJSONAggRelationToSdkPermissions(rawRelationRow: PermissionsTableRowRawAggRelation): SdkPermissionT {
@@ -30,6 +31,7 @@ export function mapRawJSONAggRelationToSdkPermissions(rawRelationRow: Permission
       user: {
         id: rawRelationRow.user_id!,
         email: rawRelationRow.user_email!,
+        name: rawRelationRow.user_name!,
       },
     },
   };

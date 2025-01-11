@@ -136,6 +136,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
               'users.id as creator_user_id',
               'users.email as creator_email',
+              'users.name as creator_name',
 
               'chat_summaries.id as summary_id',
               'chat_summaries.content as summary_content',
@@ -173,6 +174,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
           creator_user_id: creatorUserId,
           creator_email: creatorEmail,
+          creator_name: creatorName,
 
           summary_id: summaryId,
           summary_content: summaryContent,
@@ -195,6 +197,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           const creator = {
             id: creatorUserId,
             email: creatorEmail,
+            name: creatorName,
           };
 
           return {
