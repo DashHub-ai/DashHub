@@ -66,7 +66,15 @@ export class UsersEsSearchRepo {
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
-        !!phrase && createPhraseFieldQuery('email')(phrase),
+        !!phrase && (
+          esb
+            .boolQuery()
+            .should([
+              createPhraseFieldQuery()(phrase).boost(3),
+              createPhraseFieldQuery('email')(phrase).boost(1.5),
+            ])
+            .minimumShouldMatch(1)
+        ),
         !isNil(archived) && esb.termQuery('archived', archived),
       ]),
     );

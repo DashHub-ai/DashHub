@@ -16,6 +16,7 @@ export type SdkCreateUserOrganizationInputT = z.infer<
 
 export const SdkCreateUserInputV = z.object({
   email: z.string(),
+  name: z.string(),
   active: z.boolean(),
   auth: SdkCreateUserAuthMethodsV,
 })

@@ -43,9 +43,11 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             .select([
               'chat_creator.id as chat_creator_user_id',
               'chat_creator.email as chat_creator_user_email',
+              'chat_creator.name as chat_creator_user_name',
 
               'users.id as creator_user_id',
               'users.email as creator_email',
+              'users.name as creator_name',
 
               'ai_models.id as ai_model_id',
               'ai_models.name as ai_model_name',
@@ -58,6 +60,7 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
               'reply_users.id as reply_message_creator_user_id',
               'reply_users.email as reply_message_creator_email',
+              'reply_users.name as reply_message_creator_name',
 
               eb =>
                 PermissionsRepo
@@ -115,8 +118,10 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
           chat_creator_user_id: chatCreatorUserId,
           chat_creator_user_email: chatCreatorUserEmail,
+          chat_creator_user_name: chatCreatorUserName,
 
           creator_user_id: userId,
+          creator_name: userName,
           creator_email: userEmail,
 
           ai_model_id: aiModelId,
@@ -128,6 +133,7 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
           reply_message_creator_user_id: replyMessageCreatorUserId,
           reply_message_creator_email: replyMessageCreatorEmail,
+          reply_message_creator_name: replyMessageCreatorName,
 
           app_id: appId,
           app_name: appName,
@@ -144,6 +150,7 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             id: chatId,
             creator: {
               id: chatCreatorUserId,
+              name: chatCreatorUserName,
               email: chatCreatorUserEmail,
             },
             permissions: {
@@ -155,6 +162,7 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
                     user: {
                       id: chatCreatorUserId,
                       email: chatCreatorUserEmail,
+                      name: chatCreatorUserName,
                     },
                   },
                 },
@@ -168,10 +176,11 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
                 name: aiModelName,
               }
             : null,
-          creator: userId && userEmail
+          creator: userId && userEmail && userName
             ? {
                 id: userId,
                 email: userEmail,
+                name: userName,
               }
             : null,
           repliedMessage: replyMessageId
@@ -179,10 +188,11 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
                 id: replyMessageId,
                 role: replyMessageRole!,
                 content: replyMessageContent!,
-                creator: replyMessageCreatorUserId && replyMessageCreatorEmail
+                creator: replyMessageCreatorUserId && replyMessageCreatorEmail && replyMessageCreatorName
                   ? {
-                      id: replyMessageCreatorUserId!,
+                      id: replyMessageCreatorUserId,
                       email: replyMessageCreatorEmail,
+                      name: replyMessageCreatorName,
                     }
                   : null,
               }

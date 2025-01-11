@@ -35,7 +35,7 @@ export class AuthJWTService {
     TE.chain(() => this.usersRepo.findWithRelationsById({
       id: userId,
     })),
-    TE.map(({ email, organization, role, jwtRefreshToken }) => {
+    TE.map(({ email, name, organization, role, jwtRefreshToken }) => {
       const { jwt } = this.configService.config.auth;
 
       const jwtRoleSpecific: SdkJwtTokenRoleSpecificT = (() => {
@@ -62,6 +62,7 @@ export class AuthJWTService {
         iat: Date.now(),
         exp: Date.now() + jwt.expiresIn * 1000,
         email,
+        name,
         ...jwtRoleSpecific,
       };
 

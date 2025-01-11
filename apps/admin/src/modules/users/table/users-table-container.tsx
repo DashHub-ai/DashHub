@@ -58,6 +58,7 @@ export function UsersTableContainer() {
       createModal.showAsOptional({
         defaultValue: {
           email: '',
+          name: '',
           role: 'root',
           active: true,
           archiveProtection: false,

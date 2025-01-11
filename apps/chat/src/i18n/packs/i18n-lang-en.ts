@@ -413,6 +413,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           label: 'E-Mail',
           placeholder: 'Enter e-mail address',
         },
+        name: {
+          label: 'Name and surname',
+          placeholder: 'Enter name and surname',
+        },
         flags: {
           label: 'Flags',
         },

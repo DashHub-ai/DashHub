@@ -92,6 +92,7 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
         id,
         value: {
           email: value.email,
+          name: value.name,
           active: value.active,
           archiveProtection: value.archiveProtection,
         },
@@ -130,6 +131,7 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
         forwardTransaction: trx,
         value: {
           email: value.email,
+          name: value.name,
           active: value.active,
           role: value.role,
           archiveProtection: value.archiveProtection,

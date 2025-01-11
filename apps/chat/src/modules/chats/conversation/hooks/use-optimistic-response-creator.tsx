@@ -41,6 +41,7 @@ export function useOptimisticResponseCreator() {
       creator: {
         id: token.sub,
         email: token.email,
+        name: token.name,
       },
     }),
 

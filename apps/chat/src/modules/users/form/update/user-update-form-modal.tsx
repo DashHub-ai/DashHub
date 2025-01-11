@@ -42,6 +42,7 @@ export function UserUpdateFormModal(
       archiveProtection: user.archiveProtection,
       auth: user.auth,
       email: user.email,
+      name: user.name,
     };
 
     return (
