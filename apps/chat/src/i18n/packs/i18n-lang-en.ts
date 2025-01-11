@@ -475,6 +475,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     modal: {
       title: 'Share resource',
       submit: 'Share',
+      autocomplete: {
+        users: 'Users',
+        groups: 'Groups',
+        placeholder: 'Search users and groups...',
+        loading: 'Loading...',
+      },
     },
   },
   footer: {

@@ -9,7 +9,7 @@ import type {
 export class ShareResourceSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/share-resource';
 
-  search = (dto: SdkSearchShareResourceUsersGroupsInputT) =>
+  searchUsersAndGroups = (dto: SdkSearchShareResourceUsersGroupsInputT) =>
     this.fetch<SdkSearchShareResourceUsersGroupsOutputT>({
       url: this.endpoint('/users-groups/search'),
       query: dto,

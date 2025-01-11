@@ -31,7 +31,7 @@ export class ShareResourceController extends AuthorizedController {
           context.req.valid('query'),
           shareResourceService.asUser(context.var.jwt).searchShareableUsersAndGroups,
           rejectUnsafeSdkErrors,
-          serializeSdkResponseTE<ReturnType<ShareResourceSdk['search']>>(context),
+          serializeSdkResponseTE<ReturnType<ShareResourceSdk['searchUsersAndGroups']>>(context),
         ),
       );
   }

@@ -47,6 +47,7 @@ export const I18N_FORWARDED_EN_PACK = {
     download: 'Download',
     select: 'Select',
     selected: 'Selected',
+    choose: 'Choose',
     expand: {
       more: 'More',
       less: 'Less',

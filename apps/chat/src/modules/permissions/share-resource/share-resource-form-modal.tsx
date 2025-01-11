@@ -10,6 +10,7 @@ import {
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
+import { SearchUsersGroupsInput } from './autocomplete';
 import { useShareResourceForm } from './use-share-resource-form';
 
 export type ShareResourceFormModalProps =
@@ -48,13 +49,13 @@ export function ShareResourceFormModal(
       footer={(
         <>
           <CancelButton disabled={submitState.loading} onClick={onClose} />
-          <FormSpinnerCTA {...props} loading={submitState.loading}>
+          <FormSpinnerCTA loading={submitState.loading}>
             {t.submit}
           </FormSpinnerCTA>
         </>
       )}
     >
-      AVC
+      <SearchUsersGroupsInput />
     </Modal>
   );
 }
