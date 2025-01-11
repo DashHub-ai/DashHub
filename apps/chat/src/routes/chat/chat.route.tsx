@@ -58,6 +58,10 @@ export function ChatRoute({ id }: Props) {
       <RouteMetaTags meta={t.meta} />
 
       <LayoutHeader
+        {...result.status === 'success' && {
+          currentBreadcrumb: result.data.chat.summary.name.value || t.title,
+        }}
+
         {...project && !project.internal && {
           breadcrumbs: (
             <>
@@ -74,7 +78,6 @@ export function ChatRoute({ id }: Props) {
               </li>
             </>
           ),
-          currentBreadcrumb: result.data.chat.summary.name.value || t.title,
         }}
       />
 
