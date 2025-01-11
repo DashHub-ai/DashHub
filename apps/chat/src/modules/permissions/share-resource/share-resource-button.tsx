@@ -24,7 +24,7 @@ export function ShareResourceButton(
     onSubmit,
   }: Props,
 ) {
-  const t = useI18n().pack.permissions.shareResource;
+  const t = useI18n().pack.permissions;
   const modal = useShareResourceModal();
   const showErrorNotification = useSaveErrorNotification();
 

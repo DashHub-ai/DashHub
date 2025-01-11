@@ -3,10 +3,10 @@ import type { SdkPermissionT } from '@llm/sdk';
 
 import {
   CancelButton,
+  FormSpinnerCTA,
   Modal,
   type ModalProps,
   ModalTitle,
-  UpdateButton,
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
@@ -27,7 +27,7 @@ export function ShareResourceFormModal(
     ...props
   }: ShareResourceFormModalProps,
 ) {
-  const t = useI18n().pack.projects.form;
+  const t = useI18n().pack.permissions.modal;
   const { handleSubmitEvent, submitState } = useShareResourceForm({
     defaultValue,
     onSubmit,
@@ -42,13 +42,15 @@ export function ShareResourceFormModal(
       }}
       header={(
         <ModalTitle>
-          {t.title.edit}
+          {t.title}
         </ModalTitle>
       )}
       footer={(
         <>
           <CancelButton disabled={submitState.loading} onClick={onClose} />
-          <UpdateButton loading={submitState.loading} type="submit" />
+          <FormSpinnerCTA {...props} loading={submitState.loading}>
+            {t.submit}
+          </FormSpinnerCTA>
         </>
       )}
     >

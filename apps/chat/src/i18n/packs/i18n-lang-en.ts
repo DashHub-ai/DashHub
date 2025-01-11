@@ -471,8 +471,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
   },
   permissions: {
-    shareResource: {
-      share: 'Share',
+    share: 'Share',
+    modal: {
+      title: 'Share resource',
+      submit: 'Share',
     },
   },
   footer: {
