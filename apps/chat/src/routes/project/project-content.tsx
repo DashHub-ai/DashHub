@@ -28,6 +28,7 @@ export function ProjectContent({ project }: Props) {
         <div className="right-0 absolute flex items-center gap-4">
           <PermissionAvatarsList permissions={permissions?.current ?? []} />
           <ShareResourceButton
+            creator={project.creator}
             defaultValue={permissions?.current ?? []}
             onSubmit={permissions => TE.fromTask(async () => {
               // eslint-disable-next-line no-console

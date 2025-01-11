@@ -1,5 +1,5 @@
 import type { CanBePromise } from '@llm/commons';
-import type { SdkPermissionT } from '@llm/sdk';
+import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
 
 import {
   CancelButton,
@@ -11,17 +11,20 @@ import {
 import { useI18n } from '~/i18n';
 
 import { SearchUsersGroupsInput } from './autocomplete';
+import { ResourcePermissionsList } from './list';
 import { useShareResourceForm } from './use-share-resource-form';
 
 export type ShareResourceFormModalProps =
   & Omit<ModalProps, 'children' | 'header' | 'formProps'>
   & {
     defaultValue: SdkPermissionT[];
+    creator: SdkUserListItemT;
     onSubmit: (value: SdkPermissionT[]) => CanBePromise<void>;
   };
 
 export function ShareResourceFormModal(
   {
+    creator,
     defaultValue,
     onSubmit,
     onClose,
@@ -29,10 +32,16 @@ export function ShareResourceFormModal(
   }: ShareResourceFormModalProps,
 ) {
   const t = useI18n().pack.permissions.modal;
-  const { handleSubmitEvent, submitState } = useShareResourceForm({
+  const { handleSubmitEvent, submitState, value, setValue } = useShareResourceForm({
     defaultValue,
     onSubmit,
   });
+
+  const onSelected = (permission: SdkPermissionT) => {
+    setValue({
+      value: [permission, ...value],
+    });
+  };
 
   return (
     <Modal
@@ -55,7 +64,13 @@ export function ShareResourceFormModal(
         </>
       )}
     >
-      <SearchUsersGroupsInput />
+      <div className="flex flex-col space-y-4">
+        <SearchUsersGroupsInput onSelected={onSelected} />
+        <ResourcePermissionsList
+          creator={creator}
+          permissions={value}
+        />
+      </div>
     </Modal>
   );
 }

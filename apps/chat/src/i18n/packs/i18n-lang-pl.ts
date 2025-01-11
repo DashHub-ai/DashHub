@@ -487,6 +487,13 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         placeholder: 'Szukaj użytkowników lub grup...',
         loading: 'Loading...',
       },
+      list: {
+        title: 'Udostępniono dla',
+        empty: 'Nie udostępniono nikomu',
+        users: 'Użytkownicy',
+        groups: 'Grupy',
+        owner: 'Właściciel',
+      },
     },
   },
   footer: {

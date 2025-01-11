@@ -17,6 +17,7 @@ export function mapRawJSONAggRelationToSdkPermissions(rawRelationRow: Permission
     return {
       accessLevel: rawRelationRow.access_level,
       target: {
+        type: 'group',
         group: {
           id: rawRelationRow.group_id,
           name: rawRelationRow.group_name!,
@@ -28,6 +29,7 @@ export function mapRawJSONAggRelationToSdkPermissions(rawRelationRow: Permission
   return {
     accessLevel: rawRelationRow.access_level,
     target: {
+      type: 'user',
       user: {
         id: rawRelationRow.user_id!,
         email: rawRelationRow.user_email!,

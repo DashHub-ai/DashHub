@@ -2,7 +2,7 @@ import { useControlStrict } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 import { useEffect, useRef, useState } from 'react';
 
-import { runTask, tryOrThrowTE } from '@llm/commons';
+import { rejectFalsyItems, runTask, tryOrThrowTE } from '@llm/commons';
 import {
   useAsyncDebounce,
   useAsyncValue,
@@ -10,13 +10,17 @@ import {
   useUpdateEffect,
   useWindowListener,
 } from '@llm/commons-front';
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkPermissionT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import { DropdownContent } from './dropdown-content';
 
-export function SearchUsersGroupsInput() {
+type Props = {
+  onSelected: (permission: SdkPermissionT) => void;
+};
+
+export function SearchUsersGroupsInput({ onSelected }: Props) {
   const t = useI18n().pack.permissions.modal.autocomplete;
   const { sdks } = useSdkForLoggedIn();
   const { organization } = useWorkspaceOrganizationOrThrow();
@@ -53,14 +57,21 @@ export function SearchUsersGroupsInput() {
     [phrase.value],
   );
 
-  const outsideClickRef = useOutsideClickRef<HTMLDivElement>(() => {
-    phrase.setValue({
-      value: '',
-    });
-  });
+  const inputRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const outsideClickRef = useOutsideClickRef<HTMLDivElement>(
+    () => {
+      phrase.setValue({
+        value: '',
+      });
+    },
+    {
+      excludeNodes: () => rejectFalsyItems([contentRef.current]),
+    },
+  );
 
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
-  const inputRef = useRef<HTMLDivElement>(null);
 
   const updatePosition = () => {
     if (inputRef.current) {
@@ -84,8 +95,9 @@ export function SearchUsersGroupsInput() {
     setIsOpened(phrase.value.length > 0);
   }, [phrase]);
 
-  const handleSelect = () => {
+  const handleSelect = (permission: SdkPermissionT) => {
     phrase.setValue({ value: '' });
+    onSelected(permission);
   };
 
   return (
@@ -109,6 +121,7 @@ export function SearchUsersGroupsInput() {
 
       {isOpened && (
         <DropdownContent
+          ref={contentRef}
           result={result}
           style={{
             position: 'absolute',
@@ -117,7 +130,7 @@ export function SearchUsersGroupsInput() {
             left: `${position.left}px`,
             width: `${position.width}px`,
           }}
-          onSelect={handleSelect}
+          onSelected={handleSelect}
         />
       )}
     </div>

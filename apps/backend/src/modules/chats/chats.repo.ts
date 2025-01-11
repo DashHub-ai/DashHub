@@ -232,6 +232,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
                 !!permissions?.length && {
                   accessLevel: 'write',
                   target: {
+                    type: 'user',
                     user: creator,
                   },
                 },

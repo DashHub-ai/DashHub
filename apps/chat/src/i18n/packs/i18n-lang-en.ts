@@ -485,6 +485,13 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         placeholder: 'Search users and groups...',
         loading: 'Loading...',
       },
+      list: {
+        title: 'Shared with',
+        empty: 'Not shared with anyone',
+        users: 'Users',
+        groups: 'Groups',
+        owner: 'Owner',
+      },
     },
   },
   footer: {

@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 import { Share2Icon } from 'lucide-react';
 
-import type { SdkPermissionT } from '@llm/sdk';
+import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
 
 import { type TaggedError, tapTaskEitherError } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
@@ -14,6 +14,7 @@ import { useShareResourceModal } from './use-share-resource-modal';
 type Props = {
   className?: string;
   defaultValue: SdkPermissionT[];
+  creator: SdkUserListItemT;
   onSubmit: (value: SdkPermissionT[]) => TE.TaskEither<TaggedError<string>, unknown>;
 };
 
@@ -21,6 +22,7 @@ export function ShareResourceButton(
   {
     className,
     defaultValue,
+    creator,
     onSubmit,
   }: Props,
 ) {
@@ -31,6 +33,7 @@ export function ShareResourceButton(
   const [onOpen, submitState] = useAsyncCallback(
     pipe(
       modal.showAsOptional({
+        creator,
         defaultValue,
       }),
       TE.fromTaskOption(() => TE.left(undefined)),
