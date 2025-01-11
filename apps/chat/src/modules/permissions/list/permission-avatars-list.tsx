@@ -14,11 +14,8 @@ export function PermissionAvatarsList({ permissions, className }: Props) {
   return (
     <div className={clsx('flex -space-x-2', className)}>
       {permissions.map(permission => (
-        <div
-          key={JSON.stringify(permission.target)}
-          className="inline-block border-2 border-white rounded-full"
-        >
-          {'user' in permission.target
+        <div key={JSON.stringify(permission.target)}>
+          {permission.target.type === 'user'
             ? (
                 <PermissionUserAvatar
                   user={permission.target.user}

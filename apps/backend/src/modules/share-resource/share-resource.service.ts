@@ -58,6 +58,7 @@ export class ShareResourceService implements WithAuthFirewall<ShareResourceFirew
         limit: 200,
         sort: 'score:desc',
         organizationIds: [organizationId],
+        excludeIds: [user.id],
         ids: pipe(
           groups.flatMap(({ users }) => users),
           pluckTyped('id'),

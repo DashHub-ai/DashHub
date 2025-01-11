@@ -30,7 +30,7 @@ export class ChatsFirewall extends AuthFirewallService {
   get = flow(
     this.chatsService.get,
     this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
-    TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
+    TE.map(dropSdkPermissionsKeyIfNotCreator(this.jwt)),
   );
 
   unarchive = (id: TableUuid) => pipe(
@@ -60,7 +60,7 @@ export class ChatsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.chatsService.search),
-    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
+    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.jwt)),
   );
 
   create = (dto: SdkCreateChatInputT) => pipe(

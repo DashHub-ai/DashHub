@@ -1,7 +1,8 @@
-import { taskEither as TE } from 'fp-ts';
+import type { taskEither as TE } from 'fp-ts';
 
-import type { SdkProjectT } from '@llm/sdk';
+import type { TaggedError } from '@llm/commons';
 
+import { castSdkProjectToUpdateInput, type SdkProjectT, type SdkUpdateProjectInputT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { ChatsContainer, StartChatForm } from '~/modules';
 import {
@@ -12,11 +13,12 @@ import { ProjectFilesListContainer } from '~/modules/projects/files';
 
 type Props = {
   project: SdkProjectT;
+  onUpdate: (value: SdkUpdateProjectInputT) => TE.TaskEither<TaggedError<string>, unknown>;
 };
 
-export function ProjectContent({ project }: Props) {
+export function ProjectContent({ project, onUpdate }: Props) {
   const t = useI18n().pack.routes.project;
-  const { permissions } = project;
+  const { creator, permissions } = project;
 
   return (
     <section className="relative">
@@ -28,11 +30,11 @@ export function ProjectContent({ project }: Props) {
         <div className="right-0 absolute flex items-center gap-4">
           <PermissionAvatarsList permissions={permissions?.current ?? []} />
           <ShareResourceButton
-            creator={project.creator}
+            creator={creator}
             defaultValue={permissions?.current ?? []}
-            onSubmit={permissions => TE.fromTask(async () => {
-              // eslint-disable-next-line no-console
-              console.log(permissions);
+            onSubmit={permissions => onUpdate({
+              ...castSdkProjectToUpdateInput(project),
+              permissions,
             })}
           />
         </div>

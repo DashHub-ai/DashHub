@@ -29,7 +29,7 @@ export class AppsFirewall extends AuthFirewallService {
   get = flow(
     this.appsService.get,
     this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
-    TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
+    TE.map(dropSdkPermissionsKeyIfNotCreator(this.jwt)),
   );
 
   search = (filters: EsAppsInternalFilters) => pipe(
@@ -37,7 +37,7 @@ export class AppsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.appsService.search),
-    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
+    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.jwt)),
   );
 
   unarchive = (id: TableId) => pipe(

@@ -24,7 +24,7 @@ export class ProjectsEmbeddingsFirewall extends AuthFirewallService {
   get = flow(
     this.projectsEmbeddingsService.get,
     this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
-    TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
+    TE.map(dropSdkPermissionsKeyIfNotCreator(this.jwt)),
   );
 
   search = (filters: SdkSearchProjectEmbeddingsInputT) => pipe(
@@ -32,6 +32,6 @@ export class ProjectsEmbeddingsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.projectsEmbeddingsService.search),
-    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
+    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.jwt)),
   );
 }

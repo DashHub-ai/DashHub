@@ -27,7 +27,7 @@ export class ProjectsFirewall extends AuthFirewallService {
   get = flow(
     this.projectsService.get,
     this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
-    TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
+    TE.map(dropSdkPermissionsKeyIfNotCreator(this.jwt)),
   );
 
   unarchive = (id: TableId) => pipe(
@@ -63,6 +63,6 @@ export class ProjectsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.projectsService.search),
-    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
+    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.jwt)),
   );
 }

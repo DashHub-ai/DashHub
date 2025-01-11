@@ -1,5 +1,4 @@
-import type { SdkProjectT } from '@llm/sdk';
-
+import { castSdkProjectToUpdateInput, type SdkProjectT } from '@llm/sdk';
 import {
   CancelButton,
   FormErrorAlert,
@@ -31,15 +30,8 @@ export function ProjectUpdateFormModal(
   const t = useI18n().pack.projects.form;
   const { handleSubmitEvent, validator, submitState, bind } = useProjectUpdateForm({
     defaultValue: {
-      ...project,
+      ...castSdkProjectToUpdateInput(project),
       permissions: project.permissions?.current,
-      summary: {
-        content: (
-          project.summary.content.generated
-            ? { generated: true, value: null }
-            : { generated: false, value: project.summary.content.value! }
-        ),
-      },
     },
     onAfterSubmit,
   });

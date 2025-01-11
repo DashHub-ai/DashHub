@@ -1,9 +1,13 @@
 import { pipe } from 'fp-ts/lib/function';
 import { Link, Redirect } from 'wouter';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { tapTaskEither, tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
-import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
+import {
+  type SdkTableRowIdT,
+  type SdkUpdateProjectInputT,
+  useSdkForLoggedIn,
+} from '@llm/sdk';
 import { Skeleton, SpinnerContainer } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
@@ -34,6 +38,11 @@ export function ProjectRoute({ id }: Props) {
     return <Redirect to={sitemap.projects.index} replace />;
   }
 
+  const onUpdate = (dto: SdkUpdateProjectInputT) => pipe(
+    sdks.dashboard.projects.update({ id, ...dto }),
+    tapTaskEither(() => void result.silentReload()),
+  );
+
   return (
     <PageWithNavigationLayout>
       <RouteMetaTags meta={t.meta} />
@@ -57,7 +66,7 @@ export function ProjectRoute({ id }: Props) {
         {(
           result.status === 'loading'
             ? <SpinnerContainer loading />
-            : <ProjectContent project={result.data} />
+            : <ProjectContent project={result.data} onUpdate={onUpdate} />
         )}
       </section>
     </PageWithNavigationLayout>

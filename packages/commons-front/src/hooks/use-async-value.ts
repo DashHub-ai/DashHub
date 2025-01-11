@@ -56,4 +56,4 @@ export function useAsyncValue<R>(
 /**
  * The result of the `useAsyncValue` hook.
  */
-export type AsyncValueHookResult<R> = Exclude<AsyncCallbackStateHookResult<never, R>, { status: 'idle'; }>;
+export type AsyncValueHookResult<R> = Exclude<AsyncCallbackStateHookResult<R>, { status: 'idle'; }>;

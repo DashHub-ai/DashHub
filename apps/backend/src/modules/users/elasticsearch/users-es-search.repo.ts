@@ -58,6 +58,7 @@ export class UsersEsSearchRepo {
     {
       phrase,
       ids,
+      excludeIds,
       organizationIds,
       archived,
     }: SdkSearchUsersInputT,
@@ -65,6 +66,7 @@ export class UsersEsSearchRepo {
     esb.boolQuery().must(
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
+        !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
           esb
