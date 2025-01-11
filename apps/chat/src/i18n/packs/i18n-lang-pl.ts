@@ -471,6 +471,11 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       totalUsers: 'Użytkowników',
     },
   },
+  permissions: {
+    shareResource: {
+      share: 'Udostępnij',
+    },
+  },
   footer: {
     copyright: 'Platforma AI Open Source',
     madeWith: 'Stworzone z',

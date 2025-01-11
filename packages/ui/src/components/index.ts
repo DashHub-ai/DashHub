@@ -1,4 +1,5 @@
 export * from './alert';
+export * from './avatar';
 export * from './balloon';
 export * from './card';
 export * from './collapsible-panel';
@@ -16,4 +17,5 @@ export * from './skeleton';
 export * from './spinner-container';
 export * from './table';
 export * from './tabs';
+export * from './tooltip';
 export * from './tutorial-box';

@@ -469,6 +469,11 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       totalUsers: 'Total users',
     },
   },
+  permissions: {
+    shareResource: {
+      share: 'Share',
+    },
+  },
   footer: {
     copyright: 'Open Source AI Platform',
     madeWith: 'Made with',
