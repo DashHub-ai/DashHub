@@ -44,6 +44,7 @@ export function ShareResourceButton(
   return (
     <FormSpinnerCTA
       className={className}
+      buttonTypeClass="uk-button-default"
       loading={submitState.isLoading}
       onClick={onOpen}
     >

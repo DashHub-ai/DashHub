@@ -37,11 +37,7 @@ export function ProjectFilesListContainer({ projectId }: Props) {
 
   return (
     <section>
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="font-semibold text-gray-800 text-xl">
-          {t.title}
-        </h2>
-
+      <div className="flex justify-end mb-8">
         <FormSpinnerCTA
           type="button"
           loading={uploadState.isLoading}

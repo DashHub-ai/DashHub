@@ -19,13 +19,13 @@ export function ProjectContent({ project }: Props) {
   const { permissions } = project;
 
   return (
-    <section>
+    <section className="relative">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="font-semibold text-2xl">
+        <h2 className="flex-1 font-semibold text-2xl text-center">
           {t.hello}
         </h2>
 
-        <div className="flex items-center gap-4">
+        <div className="right-0 absolute flex items-center gap-4">
           <PermissionAvatarsList permissions={permissions?.current ?? []} />
           <ShareResourceButton
             defaultValue={permissions?.current ?? []}
@@ -37,21 +37,27 @@ export function ProjectContent({ project }: Props) {
         </div>
       </div>
 
-      <div className="flex gap-8">
-        <div className="flex-1">
-          <StartChatForm forceProject={project} />
+      <div>
+        <StartChatForm forceProject={project} />
 
-          <hr className="border-gray-200 mx-auto my-12 border-t max-w-2xl" />
+        <hr className="border-gray-200 mx-auto my-12 border-t" />
 
-          <h2 className="mb-6 font-semibold text-2xl">
-            {t.chats}
-          </h2>
+        <div className="gap-16 grid grid-cols-1 md:grid-cols-[1fr,24rem]">
+          <div>
+            <h2 className="mb-6 font-semibold text-2xl">
+              {t.chats}
+            </h2>
 
-          <ChatsContainer project={project} columns={2} />
-        </div>
+            <ChatsContainer project={project} />
+          </div>
 
-        <div className="border-gray-200 pl-8 border-l w-[28rem]">
-          <ProjectFilesListContainer projectId={project.id} />
+          <div>
+            <h2 className="mb-6 font-semibold text-2xl">
+              {t.files}
+            </h2>
+
+            <ProjectFilesListContainer projectId={project.id} />
+          </div>
         </div>
       </div>
     </section>
