@@ -38,6 +38,8 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
 
   get = this.esSearchRepo.get;
 
+  search = this.esSearchRepo.search;
+
   unarchive = (id: TableId) => pipe(
     this.repo.unarchive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
@@ -113,8 +115,6 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
       ),
       asyncIteratorToVoidPromise,
     );
-
-  search = this.esSearchRepo.search;
 
   create = (
     {

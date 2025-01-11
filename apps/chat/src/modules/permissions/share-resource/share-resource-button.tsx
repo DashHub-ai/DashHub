@@ -48,8 +48,9 @@ export function ShareResourceButton(
       loading={submitState.isLoading}
       onClick={onOpen}
     >
-      <Share2Icon size={16} className="mr-2" />
-
+      {!submitState.isLoading && (
+        <Share2Icon size={16} className="mr-2" />
+      )}
       {t.share}
     </FormSpinnerCTA>
   );

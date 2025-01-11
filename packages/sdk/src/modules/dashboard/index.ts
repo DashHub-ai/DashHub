@@ -12,5 +12,6 @@ export * from './projects-embeddings';
 export * from './projects-files';
 export * from './s3-buckets';
 export * from './s3-files';
+export * from './share-resource';
 export * from './users';
 export * from './users-groups';

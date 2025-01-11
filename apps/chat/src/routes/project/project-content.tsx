@@ -42,7 +42,7 @@ export function ProjectContent({ project }: Props) {
 
         <hr className="border-gray-200 mx-auto my-12 border-t" />
 
-        <div className="gap-16 grid grid-cols-1 md:grid-cols-[1fr,24rem]">
+        <div className="gap-16 grid grid-cols-1 md:grid-cols-[1fr,26rem]">
           <div>
             <h2 className="mb-6 font-semibold text-2xl">
               {t.chats}
