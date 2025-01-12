@@ -30,6 +30,7 @@ export function CardRecordCreator({ creator, className }: Props) {
               id={creator.id}
               name={creator.name}
               size="xs"
+              className="shadow-sm"
             />
             {creator.name}
           </div>

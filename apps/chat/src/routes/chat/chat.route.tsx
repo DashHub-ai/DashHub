@@ -12,6 +12,7 @@ import { ChatConversationWithSidebar } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
 import { useSitemap } from '../use-sitemap';
+import { ShareChatRow } from './share-chat-row';
 
 type Props = {
   id: SdkTableRowUuidT;
@@ -81,11 +82,17 @@ export function ChatRoute({ id }: Props) {
         }}
       />
 
-      <section>
-        {(
-          result.status === 'loading'
-            ? <SpinnerContainer loading />
-            : <ChatConversationWithSidebar {...result.data} />
+      <section className="relative">
+        {result.status === 'loading' && <SpinnerContainer loading />}
+        {result.status === 'success' && (
+          <>
+            <ShareChatRow
+              chat={result.data.chat}
+              onPermissionsUpdated={result.silentReload}
+            />
+
+            <ChatConversationWithSidebar {...result.data} />
+          </>
         )}
       </section>
     </PageWithNavigationLayout>

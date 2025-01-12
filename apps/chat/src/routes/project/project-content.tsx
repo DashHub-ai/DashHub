@@ -40,10 +40,8 @@ export function ProjectContent({ project, onUpdate }: Props) {
         </div>
       </div>
 
-      <div>
+      <div className="space-y-16">
         <StartChatForm forceProject={project} />
-
-        <hr className="border-gray-200 mx-auto my-12 border-t" />
 
         <div className="gap-16 grid grid-cols-1 md:grid-cols-[1fr,26rem]">
           <div>
