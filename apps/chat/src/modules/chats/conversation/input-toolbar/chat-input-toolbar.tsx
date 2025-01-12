@@ -223,7 +223,7 @@ export function ChatInputToolbar(
             <div className="ml-auto">
               <button
                 type="submit"
-                disabled={disabled || !value.content}
+                disabled={disabled || (!replying && !value.content)}
                 className={clsx(
                   'flex flex-row items-center px-3 py-1 rounded-lg h-8 text-sm text-white transition-colors uk-button uk-button-primary',
                   disabled
