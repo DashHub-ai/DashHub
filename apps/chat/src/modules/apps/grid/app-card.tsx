@@ -10,6 +10,7 @@ import {
   CardActions,
   CardArchiveButton,
   CardBase,
+  CardContent,
   CardDescription,
   CardEditButton,
   CardFooter,
@@ -20,6 +21,7 @@ import {
 import { useI18n } from '~/i18n';
 import { useAppUpdateModal } from '~/modules/apps-creator';
 import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
+import { CardRecordPermissions } from '~/modules/permissions';
 
 import { useFavoriteApps } from '../favorite';
 
@@ -73,22 +75,28 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive }: AppCard
         {app.name}
       </CardTitle>
 
-      <CardDescription>
-        {app.description}
-      </CardDescription>
-
-      <CardFooter>
-        <div className="text-muted-foreground text-xs">
-          {formatDate(app.updatedAt)}
-        </div>
-
-        {ctaButton || (
-          <CardOpenButton
-            onClick={() => void createApp(app)}
-            loading={createStatus.isLoading}
-          />
+      <CardContent>
+        {app.permissions && (
+          <CardRecordPermissions permissions={app.permissions.current} />
         )}
-      </CardFooter>
+
+        <CardDescription>
+          {app.description}
+        </CardDescription>
+
+        <CardFooter>
+          <div className="text-muted-foreground text-xs">
+            {formatDate(app.updatedAt)}
+          </div>
+
+          {ctaButton || (
+            <CardOpenButton
+              onClick={() => void createApp(app)}
+              loading={createStatus.isLoading}
+            />
+          )}
+        </CardFooter>
+      </CardContent>
 
       {!ctaButton && !app.archived && (
         <CardActions>

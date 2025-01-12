@@ -16,7 +16,7 @@ import {
 } from './parts';
 
 type Props = {
-  creator: SdkUserListItemT;
+  creator?: SdkUserListItemT;
   permissions: SdkPermissionT[];
   onChange: (permissions: SdkPermissionT[]) => void;
 };
@@ -27,7 +27,7 @@ export function ResourcePermissionsList({ creator, permissions, onChange }: Prop
   const groupPermissions = permissions.filter(isSdkPermissionOfTargetType('group'));
   const userPermissions = permissions
     .filter(isSdkPermissionOfTargetType('user'))
-    .filter(user => user.target.user.id !== creator.id);
+    .filter(user => !creator || user.target.user.id !== creator.id);
 
   const onChangeUserAccessLevel = (user: SdkUserListItemT) => (accessLevel: SdkPermissionAccessLevelT) => {
     const newUserPermissions = userPermissions.map((permission) => {
@@ -82,7 +82,9 @@ export function ResourcePermissionsList({ creator, permissions, onChange }: Prop
         </div>
 
         <div className="divide-y">
-          <PermissionOwnerItem creator={creator} />
+          {creator && (
+            <PermissionOwnerItem creator={creator} />
+          )}
 
           {userPermissions.map(permission => (
             <PermissionUserItem

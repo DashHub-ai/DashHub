@@ -1,9 +1,8 @@
 import type { CanBePromise } from '@llm/commons';
+import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
 
-import { isSdkPublicPermissions, type SdkPermissionT, type SdkUserListItemT } from '@llm/sdk';
 import {
   CancelButton,
-  Checkbox,
   FormSpinnerCTA,
   Modal,
   type ModalProps,
@@ -11,8 +10,7 @@ import {
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-import { SearchUsersGroupsInput } from './autocomplete';
-import { ResourcePermissionsList } from './list';
+import { ShareResourceFormGroup } from './share-resource-form-group';
 import { useShareResourceForm } from './use-share-resource-form';
 
 export type ShareResourceFormModalProps =
@@ -33,33 +31,10 @@ export function ShareResourceFormModal(
   }: ShareResourceFormModalProps,
 ) {
   const t = useI18n().pack.permissions.modal;
-  const { handleSubmitEvent, submitState, value, setValue } = useShareResourceForm({
+  const { handleSubmitEvent, submitState, bind } = useShareResourceForm({
     defaultValue,
     onSubmit,
   });
-
-  const onSelected = (permission: SdkPermissionT) => {
-    setValue({
-      value: [permission, ...value],
-    });
-  };
-
-  const isPublic = isSdkPublicPermissions(value);
-  const onTogglePublic = (newPublic: boolean) => {
-    setValue({
-      value: newPublic
-        ? []
-        : [
-            {
-              accessLevel: 'write',
-              target: {
-                type: 'user',
-                user: creator,
-              },
-            },
-          ],
-    });
-  };
 
   return (
     <Modal
@@ -83,27 +58,7 @@ export function ShareResourceFormModal(
         </>
       )}
     >
-      <div className="flex flex-col space-y-6">
-        <Checkbox
-          value={isPublic}
-          onChange={onTogglePublic}
-        >
-          {t.makePublic}
-        </Checkbox>
-
-        {!isPublic && (
-          <>
-            <SearchUsersGroupsInput onSelected={onSelected} />
-            <ResourcePermissionsList
-              creator={creator}
-              permissions={value}
-              onChange={(newValue) => {
-                setValue({ value: newValue });
-              }}
-            />
-          </>
-        )}
-      </div>
+      <ShareResourceFormGroup creator={creator} {...bind.entire()} />
     </Modal>
   );
 }

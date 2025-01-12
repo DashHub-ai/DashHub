@@ -317,6 +317,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       category: {
         label: 'Kategoria',
       },
+      permissions: {
+        label: 'Uprawnienia',
+      },
       name: {
         label: 'Nazwa',
         placeholder: 'Wpisz nazwę aplikacji',

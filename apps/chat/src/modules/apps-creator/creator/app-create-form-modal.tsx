@@ -1,18 +1,18 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 
-import type { SdkCreateAppInputT, SdkCreateAppOutputT } from '@llm/sdk';
+import type { SdkCreateAppOutputT } from '@llm/sdk';
 
 import { FormErrorAlert, Modal, type ModalProps, ModalTitle } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 import { AppCreateFormStep1, AppCreateFormStep2 } from './steps';
-import { useAppCreateForm } from './use-app-create-form';
+import { type CreateAppFormValue, useAppCreateForm } from './use-app-create-form';
 
 export type AppCreateFormModalProps =
   & Omit<ModalProps, 'children' | 'header' | 'formProps'>
   & {
-    defaultValue: SdkCreateAppInputT;
+    defaultValue: CreateAppFormValue;
     onAfterSubmit?: (result: SdkCreateAppOutputT) => void;
   };
 

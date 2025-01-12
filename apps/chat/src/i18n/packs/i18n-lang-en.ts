@@ -315,6 +315,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       category: {
         label: 'Category',
       },
+      permissions: {
+        label: 'Permissions',
+      },
       name: {
         label: 'Name',
         placeholder: 'Enter app name',

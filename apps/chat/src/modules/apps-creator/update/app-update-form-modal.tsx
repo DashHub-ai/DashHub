@@ -32,7 +32,7 @@ export function AppUpdateFormModal(
   const { handleSubmitEvent, validator, submitState, bind } = useAppUpdateForm({
     defaultValue: {
       ...app,
-      permissions: app.permissions?.current,
+      permissions: app.permissions?.current ?? [],
     },
     onAfterSubmit,
   });
