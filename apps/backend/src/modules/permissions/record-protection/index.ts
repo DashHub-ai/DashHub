@@ -1,4 +1,3 @@
-export * from './check-permissions-match';
 export * from './create-es-permissions-filters';
 export * from './map-raw-es-doc-to-sdk-permissions';
 export * from './map-raw-json-agg-relation-to-sdk-permissions';

@@ -1,24 +1,18 @@
-import type { taskEither as TE } from 'fp-ts';
+import type { SdkProjectT } from '@llm/sdk';
 
-import type { TaggedError } from '@llm/commons';
-
-import { castSdkProjectToUpdateInput, type SdkProjectT, type SdkUpdateProjectInputT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { ChatsContainer, StartChatForm } from '~/modules';
-import {
-  PermissionAvatarsList,
-  ShareResourceButton,
-} from '~/modules/permissions';
 import { ProjectFilesListContainer } from '~/modules/projects/files';
+
+import { ProjectShareRow } from './project-share-row';
 
 type Props = {
   project: SdkProjectT;
-  onUpdate: (value: SdkUpdateProjectInputT) => TE.TaskEither<TaggedError<string>, unknown>;
+  onShared: VoidFunction;
 };
 
-export function ProjectContent({ project, onUpdate }: Props) {
+export function ProjectContent({ project, onShared }: Props) {
   const t = useI18n().pack.routes.project;
-  const { creator, permissions } = project;
 
   return (
     <section className="relative">
@@ -27,17 +21,10 @@ export function ProjectContent({ project, onUpdate }: Props) {
           {t.hello}
         </h2>
 
-        <div className="right-0 absolute flex items-center gap-6">
-          <PermissionAvatarsList permissions={permissions?.current ?? []} />
-          <ShareResourceButton
-            creator={creator}
-            defaultValue={permissions?.current ?? []}
-            onSubmit={permissions => onUpdate({
-              ...castSdkProjectToUpdateInput(project),
-              permissions,
-            })}
-          />
-        </div>
+        <ProjectShareRow
+          project={project}
+          onShared={onShared}
+        />
       </div>
 
       <div className="space-y-16">

@@ -1,6 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
+import { identity, pipe } from 'fp-ts/lib/function';
 import { sql } from 'kysely';
 import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { injectable } from 'tsyringe';
@@ -32,6 +32,9 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             .innerJoin('chats', 'chats.id', 'messages.chat_id')
             .innerJoin('users as chat_creator', 'chat_creator.id', 'chats.creator_user_id')
 
+            .leftJoin('projects', 'projects.id', 'chats.project_id')
+            .leftJoin('users as project_creator', 'project_creator.id', 'projects.creator_user_id')
+
             .leftJoin('users', 'users.id', 'messages.creator_user_id')
             .leftJoin('ai_models', 'ai_models.id', 'messages.ai_model_id')
             .leftJoin('apps', 'apps.id', 'messages.app_id')
@@ -60,6 +63,10 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
               'reply_users.id as reply_message_creator_user_id',
               'reply_users.email as reply_message_creator_email',
               'reply_users.name as reply_message_creator_name',
+
+              'project_creator.id as project_creator_user_id',
+              'project_creator.email as project_creator_email',
+              'project_creator.name as project_creator_name',
 
               eb =>
                 PermissionsRepo
@@ -134,6 +141,10 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
           reply_message_creator_email: replyMessageCreatorEmail,
           reply_message_creator_name: replyMessageCreatorName,
 
+          project_creator_user_id: projectCreatorUserId,
+          project_creator_email: projectCreatorEmail,
+          project_creator_name: projectCreatorName,
+
           app_id: appId,
           app_name: appName,
 
@@ -150,13 +161,26 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             email: chatCreatorUserEmail,
           };
 
+          const projectCreator = projectCreatorUserId
+            ? {
+                id: projectCreatorUserId,
+                email: projectCreatorEmail!,
+                name: projectCreatorName!,
+              }
+            : null;
+
           return {
             ...camelcaseKeys(item),
             chat: {
               id: chatId,
               creator,
               permissions: {
-                inherited: (chatProjectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
+                inherited: pipe(
+                  (chatProjectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
+                  projectCreator
+                    ? prependCreatorIfNonPublicPermissions(projectCreator)
+                    : identity,
+                ),
                 current: pipe(
                   (chatPermissions || []).map(mapRawJSONAggRelationToSdkPermissions),
                   prependCreatorIfNonPublicPermissions(creator),
