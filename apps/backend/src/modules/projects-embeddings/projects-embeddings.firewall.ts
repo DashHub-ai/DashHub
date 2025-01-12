@@ -1,12 +1,11 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import {
-  dropSdkPaginationPermissionsKeysIfNotCreator,
-  dropSdkPermissionsKeyIfNotCreator,
-  type SdkJwtTokenT,
-  type SdkSearchProjectEmbeddingsInputT,
+import type {
+  SdkJwtTokenT,
+  SdkSearchProjectEmbeddingsInputT,
 } from '@llm/sdk';
+
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { PermissionsService } from '../permissions';
@@ -24,7 +23,7 @@ export class ProjectsEmbeddingsFirewall extends AuthFirewallService {
   get = flow(
     this.projectsEmbeddingsService.get,
     this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
-    TE.map(dropSdkPermissionsKeyIfNotCreator(this.jwt)),
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPermissionsKeyIfNotCreator),
   );
 
   search = (filters: SdkSearchProjectEmbeddingsInputT) => pipe(
@@ -32,6 +31,6 @@ export class ProjectsEmbeddingsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.projectsEmbeddingsService.search),
-    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.jwt)),
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPaginationPermissionsKeysIfNotCreator),
   );
 }

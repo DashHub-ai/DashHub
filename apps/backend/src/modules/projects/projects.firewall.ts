@@ -1,13 +1,12 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import {
-  dropSdkPaginationPermissionsKeysIfNotCreator,
-  dropSdkPermissionsKeyIfNotCreator,
-  type SdkCreateProjectInputT,
-  type SdkJwtTokenT,
-  type SdkUpdateProjectInputT,
+import type {
+  SdkCreateProjectInputT,
+  SdkJwtTokenT,
+  SdkUpdateProjectInputT,
 } from '@llm/sdk';
+
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { TableId, TableRowWithId } from '../database';
@@ -27,7 +26,7 @@ export class ProjectsFirewall extends AuthFirewallService {
   get = flow(
     this.projectsService.get,
     this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
-    TE.map(dropSdkPermissionsKeyIfNotCreator(this.jwt)),
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPermissionsKeyIfNotCreator),
   );
 
   unarchive = (id: TableId) => pipe(
@@ -63,6 +62,6 @@ export class ProjectsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.projectsService.search),
-    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.jwt)),
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPaginationPermissionsKeysIfNotCreator),
   );
 }

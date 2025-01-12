@@ -9,11 +9,12 @@ import { useI18n } from '~/i18n';
 import { getFileTypeAndColor } from '~/modules/shared/get-file-type-and-color';
 
 type FileCardProps = {
+  readOnly?: boolean;
   file: SdkSearchProjectFileItemT;
   onAfterDelete: () => void;
 };
 
-export function ProjectFileCard({ file, onAfterDelete }: FileCardProps) {
+export function ProjectFileCard({ file, readOnly, onAfterDelete }: FileCardProps) {
   const t = useI18n().pack.projects.files;
   const { sdks } = useSdkForLoggedIn();
   const { resource, project, description } = file;
@@ -57,15 +58,17 @@ export function ProjectFileCard({ file, onAfterDelete }: FileCardProps) {
             <Download className="w-4 h-4" />
           </a>
 
-          <button
-            onClick={() => void onDelete()}
-            disabled={deleteStatus.loading}
-            className="hover:bg-red-50 p-1.5 rounded-md text-gray-500 hover:text-red-600 transition-colors"
-            title={t.delete}
-            type="button"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+          {!readOnly && (
+            <button
+              onClick={() => void onDelete()}
+              disabled={deleteStatus.loading}
+              className="hover:bg-red-50 p-1.5 rounded-md text-gray-500 hover:text-red-600 transition-colors"
+              title={t.delete}
+              type="button"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
 

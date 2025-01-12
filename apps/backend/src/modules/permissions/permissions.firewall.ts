@@ -2,16 +2,20 @@ import { either as E, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
 import {
+  dropSdkPermissionsKeyIfNotCreator,
   isSdkPermissionMatching,
   isSdkRecordWithCreator,
   isSdkRecordWithOrganization,
   isSdkRecordWithPermissions,
   isTechOrOwnerUserSdkOrganizationRole,
+  mapSdkOffsetPaginationItems,
   ofSdkUnauthorizedErrorE,
   ofSdkUnauthorizedErrorTE,
   type SdkIdsArrayT,
   type SdkJwtTokenT,
+  type SdkOffsetPaginationOutputT,
   type SdkPermissionAccessLevelT,
+  type SdkPermissionLikeRecordT,
   type SdkUnauthorizedError,
   type SdkUserAccessPermissionsDescriptor,
   type WithSdkCreator,
@@ -384,6 +388,54 @@ export class PermissionsFirewall extends AuthFirewallService {
       }
     }
   };
+
+  /**
+   * Drops permission keys from a record if the current user is not the creator.
+   * Also handles tech/owner roles and group permissions.
+   *
+   * @returns A function that processes a single record
+   *
+   * @example
+   * pipe(
+   *   record,
+   *   TE.chainW(this.permissionsFirewall.dropSdkPermissionsKeyIfNotCreator),
+   * );
+   */
+  dropSdkPermissionsKeyIfNotCreator = <T extends SdkPermissionLikeRecordT>(obj: T) =>
+    pipe(
+      this.usersGroupsRepo.getAllUsersGroupsIds({ userId: this.jwt.sub }),
+      TE.map(groupsIds => pipe(
+        obj,
+        dropSdkPermissionsKeyIfNotCreator({
+          jwt: this.jwt,
+          groupsIds,
+        }),
+      )),
+    );
+
+  /**
+   * Drops permission keys from all records in a paginated result if the current user is not the creator.
+   * Applies the same permission logic as dropSdkPermissionsKeyIfNotCreator but for paginated data.
+   *
+   * @returns A function that processes paginated records
+   *
+   * @example
+   * const result = await pipe(
+   *   paginatedRecords,
+   *   this.permissionsFirewall.dropSdkPaginationPermissionsKeysIfNotCreator(jwt),
+   * )();
+   */
+  dropSdkPaginationPermissionsKeysIfNotCreator = <T extends SdkPermissionLikeRecordT, P extends SdkOffsetPaginationOutputT<T>>(pagination: P) =>
+    pipe(
+      this.usersGroupsRepo.getAllUsersGroupsIds({ userId: this.jwt.sub }),
+      TE.map(groupsIds => pipe(
+        pagination,
+        mapSdkOffsetPaginationItems(dropSdkPermissionsKeyIfNotCreator({
+          jwt: this.jwt,
+          groupsIds,
+        })),
+      )),
+    );
 
   /**
    * Validates if a record belongs to the user's organization.

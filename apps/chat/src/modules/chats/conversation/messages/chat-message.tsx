@@ -31,12 +31,13 @@ type Props = {
   message: SdkRepeatedMessageItemT;
   isLast: boolean;
   readOnly?: boolean;
+  archived?: boolean;
   onRefreshResponse: (message: Omit<SdkRepeatedMessageItemT, 'content'>) => void;
   onReply: (message: SdkRepeatedMessageItemT) => void;
   onAction: (action: string) => void;
 };
 
-export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onReply, onAction }: Props) {
+export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResponse, onReply, onAction }: Props) {
   const t = useI18n().pack.chat;
   const { session } = useSdkForLoggedIn();
 
@@ -64,8 +65,8 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
           'mb-10': repeats.length,
           'flex-row': isAI,
           'flex-row-reverse': !isAI,
-          'opacity-75': readOnly,
-          'opacity-0': !readOnly,
+          'opacity-75': readOnly && archived,
+          'opacity-0': !readOnly || !archived,
         },
       )}
     >
@@ -75,7 +76,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
           {
             'bg-gray-100 border-gray-200': isAI,
             'bg-gray-700 border-gray-600': !isAI,
-            'opacity-75': readOnly,
+            'opacity-75': readOnly && archived,
           },
         )}
       >
@@ -97,7 +98,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
             {
               'bg-gray-100 before:border-gray-100 before:left-[-8px] border-gray-200 before:border-l-0 before:border-r-[12px]': isAI,
               'bg-gray-700 text-white before:border-gray-700 before:right-[-8px] border-gray-600 before:border-r-0 before:border-l-[12px]': !isAI,
-              'cursor-default opacity-75': readOnly,
+              'cursor-default opacity-75': readOnly && archived,
             },
           )}
         >
@@ -111,7 +112,7 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
           <ChatMessageContent
             key={typeof content}
             content={content}
-            disabled={!isLast}
+            disabled={!isLast || readOnly}
             darkMode={!isAI}
             showToolbars={isAI}
             onAction={onAction}
@@ -123,16 +124,18 @@ export function ChatMessage({ message, isLast, readOnly, onRefreshResponse, onRe
             </span>
 
             <div className="flex items-center gap-2">
-              <ToolbarSmallActionButton
-                title={t.actions.reply}
-                darkMode={!isAI}
-                onClick={() => onReply(message)}
-              >
-                <ReplyIcon
-                  size={14}
-                  className="opacity-50 hover:opacity-100"
-                />
-              </ToolbarSmallActionButton>
+              {!readOnly && (
+                <ToolbarSmallActionButton
+                  title={t.actions.reply}
+                  darkMode={!isAI}
+                  onClick={() => onReply(message)}
+                >
+                  <ReplyIcon
+                    size={14}
+                    className="opacity-50 hover:opacity-100"
+                  />
+                </ToolbarSmallActionButton>
+              )}
 
               {isAI
                 ? (!readOnly && (

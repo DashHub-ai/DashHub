@@ -16,6 +16,7 @@ import {
   CardOpenButton,
   CardTitle,
   useArchiveWithNotifications,
+  useUnarchiveWithNotifications,
 } from '@llm/ui';
 import { CardRecordPermissionsRows } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';
@@ -26,16 +27,23 @@ type ProjectCardProps = {
   project: SdkProjectT;
   onAfterEdit?: VoidFunction;
   onAfterArchive?: VoidFunction;
+  onAfterUnarchive?: VoidFunction;
 };
 
-export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCardProps) {
+export function ProjectCard({ project, onAfterEdit, onAfterArchive, onAfterUnarchive }: ProjectCardProps) {
   const sitemap = useSitemap();
-  const { sdks } = useSdkForLoggedIn();
+  const { sdks, createRecordGuard } = useSdkForLoggedIn();
   const { showAsOptional } = useProjectUpdateModal();
+
+  const [onUnarchive, unarchiveStatus] = useUnarchiveWithNotifications(
+    sdks.dashboard.projects.unarchive(project.id),
+  );
+
   const [onArchive, archiveStatus] = useArchiveWithNotifications(
     sdks.dashboard.projects.archive(project.id),
   );
 
+  const recordGuard = createRecordGuard(project);
   const description = project.summary.content.value?.trim();
 
   const handleEdit = flow(
@@ -68,12 +76,26 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCar
         </CardFooter>
       </CardContent>
 
-      {!project.archived && (
+      {!project.archived && (recordGuard.can.write || recordGuard.can.archive) && (
         <CardActions>
-          <CardEditButton onClick={() => void handleEdit({ project })} />
+          {recordGuard.can.write && (
+            <CardEditButton onClick={() => void handleEdit({ project })} />
+          )}
+
+          {recordGuard.can.archive && (
+            <CardArchiveButton
+              onClick={() => void onArchive().then(() => onAfterArchive?.())}
+              loading={archiveStatus.loading}
+            />
+          )}
+        </CardActions>
+      )}
+
+      {project.archived && recordGuard.can.unarchive && (
+        <CardActions>
           <CardArchiveButton
-            onClick={() => void onArchive().then(() => onAfterArchive?.())}
-            loading={archiveStatus.loading}
+            onClick={() => void onUnarchive().then(() => onAfterUnarchive?.())}
+            loading={unarchiveStatus.loading}
           />
         </CardActions>
       )}

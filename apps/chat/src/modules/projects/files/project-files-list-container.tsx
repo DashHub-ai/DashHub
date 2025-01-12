@@ -10,9 +10,10 @@ import { useFileUpload } from './use-file-upload';
 
 type Props = {
   projectId: SdkTableRowIdT;
+  readOnly?: boolean;
 };
 
-export function ProjectFilesListContainer({ projectId }: Props) {
+export function ProjectFilesListContainer({ projectId, readOnly }: Props) {
   const t = useI18n().pack.projects.files;
   const [uploadFile, uploadState] = useFileUpload(projectId);
 
@@ -37,17 +38,19 @@ export function ProjectFilesListContainer({ projectId }: Props) {
 
   return (
     <section>
-      <div className="flex justify-end mb-6">
-        <FormSpinnerCTA
-          type="button"
-          loading={uploadState.isLoading}
-          onClick={() => void handleUpload()}
-          className="flex items-center uk-button-small"
-        >
-          {!uploadState.isLoading && <PaperclipIcon size={16} className="mr-2" />}
-          {t.upload}
-        </FormSpinnerCTA>
-      </div>
+      {!readOnly && (
+        <div className="flex justify-end mb-6">
+          <FormSpinnerCTA
+            type="button"
+            loading={uploadState.isLoading}
+            onClick={() => void handleUpload()}
+            className="flex items-center uk-button-small"
+          >
+            {!uploadState.isLoading && <PaperclipIcon size={16} className="mr-2" />}
+            {t.upload}
+          </FormSpinnerCTA>
+        </div>
+      )}
 
       <div className="space-y-3">
         <PaginatedList
@@ -71,6 +74,7 @@ export function ProjectFilesListContainer({ projectId }: Props) {
               <ProjectFileCard
                 key={file.id}
                 file={file}
+                readOnly={readOnly}
                 onAfterDelete={silentReload}
               />
             ));

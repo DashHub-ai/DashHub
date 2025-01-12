@@ -5,41 +5,83 @@ import type { SdkJwtTokenT } from '~/modules/auth';
 import {
   mapSdkOffsetPaginationItems,
   type SdkOffsetPaginationOutputT,
+  type SdkTableRowIdT,
   type SdkTableRowWithIdT,
 } from '~/shared';
 
-import { isTechOrOwnerUserSdkOrganizationRole } from '../../organizations/dto/sdk-organization-user.dto';
+import type { SdkTableRowWithPermissionsT } from '../dto';
 
-type PermissionRecord = {
-  permissions?: unknown;
+import { isTechOrOwnerUserSdkOrganizationRole } from '../../organizations/dto/sdk-organization-user.dto';
+import { findSdkPermissionById } from './find-sdk-permission-by-id';
+
+export type SdkDropPermissionsKeysDescriptor = {
+  jwt: SdkJwtTokenT;
+  groupsIds: SdkTableRowIdT[];
+};
+
+export type SdkPermissionLikeRecordT = SdkTableRowWithPermissionsT & {
   creator?: SdkTableRowWithIdT;
 };
 
-export function dropSdkPermissionsKeyIfNotCreator(jwt: SdkJwtTokenT) {
-  return <T extends PermissionRecord>(obj: T): Omit<T, 'permissions'> => {
+export function dropSdkPermissionsKeyIfNotCreator({ jwt, groupsIds }: SdkDropPermissionsKeysDescriptor) {
+  return <T extends SdkPermissionLikeRecordT>(obj: T): T => {
+    const writableObj: T = {
+      ...obj,
+      permissions: {
+        ...obj.permissions,
+        yourAccessLevel: 'write',
+      },
+    };
+
     if (obj.creator?.id === jwt.sub) {
-      return obj;
+      return writableObj;
     }
 
     if (jwt.role === 'root') {
-      return obj;
+      return writableObj;
     }
 
     if (isTechOrOwnerUserSdkOrganizationRole(jwt.organization.role)) {
-      return obj;
+      return writableObj;
     }
 
-    const { permissions, ...rest } = obj;
-    return rest;
+    const isAnyGroupWithWriteAccess = groupsIds.some((groupId) => {
+      const foundGroup = pipe(
+        obj.permissions?.current ?? [],
+        findSdkPermissionById('group', groupId),
+      );
+
+      return foundGroup?.accessLevel === 'write';
+    });
+
+    if (isAnyGroupWithWriteAccess) {
+      return writableObj;
+    }
+
+    const isUserWithWriteAccess = pipe(
+      obj.permissions?.current ?? [],
+      findSdkPermissionById('user', jwt.sub),
+    )?.accessLevel === 'write';
+
+    if (isUserWithWriteAccess) {
+      return writableObj;
+    }
+
+    return {
+      ...obj,
+      permissions: {
+        yourAccessLevel: 'read',
+      },
+    };
   };
 }
 
-export function dropSdkPaginationPermissionsKeysIfNotCreator(jwt: SdkJwtTokenT) {
+export function dropSdkPaginationPermissionsKeysIfNotCreator(descriptor: SdkDropPermissionsKeysDescriptor) {
   return <
-    T extends PermissionRecord,
+    T extends SdkPermissionLikeRecordT,
     P extends SdkOffsetPaginationOutputT<T>,
   >(pagination: P) => pipe(
     pagination,
-    mapSdkOffsetPaginationItems(dropSdkPermissionsKeyIfNotCreator(jwt)),
+    mapSdkOffsetPaginationItems(dropSdkPermissionsKeyIfNotCreator(descriptor)),
   );
 }

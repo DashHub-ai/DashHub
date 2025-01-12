@@ -17,6 +17,7 @@ import {
   CardOpenButton,
   CardTitle,
   useArchiveWithNotifications,
+  useUnarchiveWithNotifications,
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { useAppUpdateModal } from '~/modules/apps-creator';
@@ -30,19 +31,26 @@ export type AppCardProps = {
   ctaButton?: ReactNode;
   onAfterEdit?: VoidFunction;
   onAfterArchive?: VoidFunction;
+  onAfterUnarchive?: VoidFunction;
 };
 
-export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive }: AppCardProps) {
+export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUnarchive }: AppCardProps) {
   const t = useI18n().pack;
   const { isFavorite, toggle } = useFavoriteApps();
   const { showAsOptional } = useAppUpdateModal();
-  const { sdks } = useSdkForLoggedIn();
+  const { sdks, createRecordGuard } = useSdkForLoggedIn();
   const favorite = isFavorite(app);
   const [createApp, createStatus] = useCreateChatWithInitialApp();
+
+  const [onUnarchive, unarchiveStatus] = useUnarchiveWithNotifications(
+    sdks.dashboard.apps.unarchive(app.id),
+  );
+
   const [onArchive, archiveStatus] = useArchiveWithNotifications(
     sdks.dashboard.apps.archive(app.id),
   );
 
+  const recordGuard = createRecordGuard(app);
   const handleEdit = flow(
     showAsOptional,
     tapTaskOption(onAfterEdit ?? (() => {})),
@@ -98,12 +106,26 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive }: AppCard
         </CardFooter>
       </CardContent>
 
-      {!ctaButton && !app.archived && (
+      {!ctaButton && !app.archived && (recordGuard.can.write || recordGuard.can.archive) && (
         <CardActions>
-          <CardEditButton onClick={() => void handleEdit({ app })} />
+          {recordGuard.can.write && (
+            <CardEditButton onClick={() => void handleEdit({ app })} />
+          )}
+
+          {recordGuard.can.archive && (
+            <CardArchiveButton
+              onClick={() => void onArchive().then(() => onAfterArchive?.())}
+              loading={archiveStatus.loading}
+            />
+          )}
+        </CardActions>
+      )}
+
+      {!ctaButton && app.archived && recordGuard.can.unarchive && (
+        <CardActions>
           <CardArchiveButton
-            onClick={() => void onArchive().then(() => onAfterArchive?.())}
-            loading={archiveStatus.loading}
+            onClick={() => void onUnarchive().then(() => onAfterUnarchive?.())}
+            loading={unarchiveStatus.loading}
           />
         </CardActions>
       )}

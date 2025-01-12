@@ -1,9 +1,11 @@
 import clsx from 'clsx';
 import { memo } from 'react';
 
-import type {
-  SdkChatT,
-  SdkSearchMessagesOutputT,
+import {
+  isTechOrOwnerUserSdkOrganizationRole,
+  type SdkChatT,
+  type SdkSearchMessagesOutputT,
+  useSdkForLoggedIn,
 } from '@llm/sdk';
 
 import { ChatConversationPanel } from './chat-conversation-panel';
@@ -15,7 +17,14 @@ type Props = {
 };
 
 export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Props) => {
-  const heightClassName = 'h-[calc(100vh-143px)]';
+  const { createRecordGuard, session: { token } } = useSdkForLoggedIn();
+  const { can } = createRecordGuard(chat);
+
+  const heightClassName = (
+    token.role === 'root' || isTechOrOwnerUserSdkOrganizationRole(token.organization.role)
+      ? 'h-[calc(100vh-171px)]'
+      : 'h-[calc(100vh-143px)]'
+  );
 
   return (
     <div className="flex gap-6 mx-auto">
@@ -25,10 +34,12 @@ export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Prop
         initialMessages={initialMessages}
       />
 
-      <ChatConfigPanel
-        chat={chat}
-        contentClassName={clsx(heightClassName, 'overflow-y-auto')}
-      />
+      {can.write && (
+        <ChatConfigPanel
+          chat={chat}
+          contentClassName={clsx(heightClassName, 'overflow-y-auto')}
+        />
+      )}
     </div>
   );
 });

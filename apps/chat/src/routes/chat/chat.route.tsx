@@ -23,7 +23,8 @@ export function ChatRoute({ id }: Props) {
   const t = pack.routes.chat;
   const sitemap = useSitemap();
 
-  const { sdks } = useSdkForLoggedIn();
+  const { sdks, createRecordGuard } = useSdkForLoggedIn();
+
   const result = useAsyncValue(
     pipe(
       apply.sequenceS(TE.ApplicativePar)({
@@ -50,6 +51,7 @@ export function ChatRoute({ id }: Props) {
   }
 
   const project = result.status === 'success' && result.data.chat.project;
+  const { can } = result.status === 'success' ? createRecordGuard(result.data.chat) : {};
 
   return (
     <PageWithNavigationLayout
@@ -86,10 +88,12 @@ export function ChatRoute({ id }: Props) {
         {result.status === 'loading' && <SpinnerContainer loading />}
         {result.status === 'success' && (
           <>
-            <ShareChatRow
-              chat={result.data.chat}
-              onPermissionsUpdated={result.silentReload}
-            />
+            {can?.write && (
+              <ShareChatRow
+                chat={result.data.chat}
+                onPermissionsUpdated={result.silentReload}
+              />
+            )}
 
             <ChatConversationWithSidebar {...result.data} />
           </>

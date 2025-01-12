@@ -17,7 +17,6 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
   const { summary } = chat;
-
   const isGeneratingTitle = isSdkAIGeneratingString(summary.name);
 
   return (
