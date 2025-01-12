@@ -3,9 +3,9 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
+import type { RequiredBy } from '@llm/commons';
 import type { SdkCreateChatInputT, SdkUpdateChatInputT } from '@llm/sdk';
 
-import { rejectFalsyItems, type RequiredBy } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -25,7 +25,11 @@ import {
 import type { ChatTableRowWithRelations } from './chats.tables';
 
 import { ChatsSummariesRepo } from '../chats-summaries/chats-summaries.repo';
-import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
+import {
+  mapRawJSONAggRelationToSdkPermissions,
+  PermissionsRepo,
+  prependCreatorIfNonPublicPermissions,
+} from '../permissions';
 
 @injectable()
 export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
@@ -227,17 +231,10 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
             },
             permissions: {
               inherited: (projectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
-              current: rejectFalsyItems([
-                // If it's global record, and this access level is added, then it'll be no longer global.
-                !!permissions?.length && {
-                  accessLevel: 'write',
-                  target: {
-                    type: 'user',
-                    user: creator,
-                  },
-                },
-                ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
-              ]),
+              current: pipe(
+                (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+                prependCreatorIfNonPublicPermissions(creator),
+              ),
             },
           };
         }),

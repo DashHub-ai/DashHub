@@ -5,7 +5,6 @@ import { sql } from 'kysely';
 import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { injectable } from 'tsyringe';
 
-import { rejectFalsyItems } from '@llm/commons';
 import {
   createDatabaseRepo,
   DatabaseError,
@@ -16,7 +15,7 @@ import {
 
 import type { MessageTableRowWithRelations } from './messages.tables';
 
-import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo, prependCreatorIfNonPublicPermissions } from '../permissions';
 
 @injectable()
 export class MessagesRepo extends createDatabaseRepo('messages') {
@@ -144,68 +143,62 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
           chat_permissions_json: chatPermissions,
 
           ...item
-        }): MessageTableRowWithRelations => ({
-          ...camelcaseKeys(item),
-          chat: {
-            id: chatId,
-            creator: {
-              id: chatCreatorUserId,
-              name: chatCreatorUserName,
-              email: chatCreatorUserEmail,
+        }): MessageTableRowWithRelations => {
+          const creator = {
+            id: chatCreatorUserId,
+            name: chatCreatorUserName,
+            email: chatCreatorUserEmail,
+          };
+
+          return {
+            ...camelcaseKeys(item),
+            chat: {
+              id: chatId,
+              creator,
+              permissions: {
+                inherited: (chatProjectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
+                current: pipe(
+                  (chatPermissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+                  prependCreatorIfNonPublicPermissions(creator),
+                ),
+              },
             },
-            permissions: {
-              inherited: (chatProjectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
-              current: rejectFalsyItems([
-                !!chatPermissions?.length && {
-                  accessLevel: 'write',
-                  target: {
-                    type: 'user',
-                    user: {
-                      id: chatCreatorUserId,
-                      email: chatCreatorUserEmail,
-                      name: chatCreatorUserName,
-                    },
-                  },
-                },
-                ...(chatPermissions || []).map(mapRawJSONAggRelationToSdkPermissions),
-              ]),
-            },
-          },
-          aiModel: aiModelId && aiModelName
-            ? {
-                id: aiModelId,
-                name: aiModelName,
-              }
-            : null,
-          creator: userId && userEmail && userName
-            ? {
-                id: userId,
-                email: userEmail,
-                name: userName,
-              }
-            : null,
-          repliedMessage: replyMessageId
-            ? {
-                id: replyMessageId,
-                role: replyMessageRole!,
-                content: replyMessageContent!,
-                creator: replyMessageCreatorUserId && replyMessageCreatorEmail && replyMessageCreatorName
-                  ? {
-                      id: replyMessageCreatorUserId,
-                      email: replyMessageCreatorEmail,
-                      name: replyMessageCreatorName,
-                    }
-                  : null,
-              }
-            : null,
-          app: appId && appName
-            ? {
-                id: appId,
-                name: appName,
-              }
-            : null,
-          files: filesJson ?? [],
-        })),
+            aiModel: aiModelId && aiModelName
+              ? {
+                  id: aiModelId,
+                  name: aiModelName,
+                }
+              : null,
+            creator: userId && userEmail && userName
+              ? {
+                  id: userId,
+                  email: userEmail,
+                  name: userName,
+                }
+              : null,
+            repliedMessage: replyMessageId
+              ? {
+                  id: replyMessageId,
+                  role: replyMessageRole!,
+                  content: replyMessageContent!,
+                  creator: replyMessageCreatorUserId && replyMessageCreatorEmail && replyMessageCreatorName
+                    ? {
+                        id: replyMessageCreatorUserId,
+                        email: replyMessageCreatorEmail,
+                        name: replyMessageCreatorName,
+                      }
+                    : null,
+                }
+              : null,
+            app: appId && appName
+              ? {
+                  id: appId,
+                  name: appName,
+                }
+              : null,
+            files: filesJson ?? [],
+          };
+        }),
       ),
     );
   };

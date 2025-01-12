@@ -5,7 +5,6 @@ import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateProjectInputT, SdkUpdateProjectInputT } from '@llm/sdk';
 
-import { rejectFalsyItems } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -22,7 +21,11 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
-import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
+import {
+  mapRawJSONAggRelationToSdkPermissions,
+  PermissionsRepo,
+  prependCreatorIfNonPublicPermissions,
+} from '../permissions';
 import { ProjectsSummariesRepo } from '../projects-summaries/projects-summaries.repo';
 import { ProjectTableRowWithRelations } from './projects.tables';
 
@@ -197,17 +200,10 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
             },
             permissions: {
               inherited: [],
-              current: rejectFalsyItems([
-                // If it's global record, and this access level is added, then it'll be no longer global.
-                !!permissions?.length && {
-                  accessLevel: 'write',
-                  target: {
-                    type: 'user',
-                    user: creator,
-                  },
-                } as const,
-                ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
-              ]),
+              current: pipe(
+                (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+                prependCreatorIfNonPublicPermissions(creator),
+              ),
             },
           };
         }),
