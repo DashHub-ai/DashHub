@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { EyeIcon, LockIcon } from 'lucide-react';
+import { EyeIcon, UsersIcon } from 'lucide-react';
 
 import { isSdkPublicPermissions, type SdkPermissionT } from '@llm/sdk';
 import { Tooltip } from '@llm/ui';
@@ -22,7 +22,7 @@ export function PermissionsStatusIcon({ permissions, className }: Props) {
       {(
         isPublic
           ? <EyeIcon size={14} />
-          : <LockIcon size={14} />
+          : <UsersIcon size={14} />
       )}
     </Tooltip>
   );

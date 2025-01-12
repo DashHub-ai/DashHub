@@ -1,14 +1,15 @@
 import type { SdkPermissionAccessLevelT, SdkUserListItemT } from '@llm/sdk';
 
-import { ColorizedAvatar, Tooltip } from '@llm/ui';
+import { ColorizedAvatar, type ColorizedAvatarSize, Tooltip } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
 type Props = {
   user: SdkUserListItemT;
   accessLevel: SdkPermissionAccessLevelT;
+  size?: ColorizedAvatarSize;
 };
 
-export function PermissionUserAvatar({ user, accessLevel }: Props) {
+export function PermissionUserAvatar({ user, accessLevel, size = 'sm' }: Props) {
   const { accessLevels } = useI18n().pack.permissions;
 
   return (
@@ -17,7 +18,7 @@ export function PermissionUserAvatar({ user, accessLevel }: Props) {
         <ColorizedAvatar
           id={user.id}
           name={user.name}
-          size="sm"
+          size={size}
           className="shadow-sm"
         />
       </div>

@@ -2,9 +2,10 @@ import type { ReactNode } from 'react';
 
 import clsx from 'clsx';
 
-type AvatarSize = 'sm' | 'md' | 'lg';
+export type AvatarSize = 'sm' | 'md' | 'lg' | 'xs';
 
 const sizeClasses: Record<AvatarSize, string> = {
+  xs: 'w-6 h-6',
   sm: 'w-8 h-8',
   md: 'w-10 h-10',
   lg: 'w-12 h-12',

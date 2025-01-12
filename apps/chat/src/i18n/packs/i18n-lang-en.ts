@@ -482,9 +482,12 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   permissions: {
     share: 'Share',
     accessLevels: I18N_ACCESS_LEVELS_EN,
+    card: {
+      sharedWith: 'Shared with',
+    },
     status: {
-      publicTooltip: 'Everyone in organization can see this project',
-      privateTooltip: 'Only shared users and groups can see this project',
+      publicTooltip: 'Everyone in organization can see this',
+      privateTooltip: 'Only shared users and groups can see this',
     },
     modal: {
       title: 'Share resource',

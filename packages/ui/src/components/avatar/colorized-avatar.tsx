@@ -3,13 +3,14 @@ import { useMemo } from 'react';
 
 import type { SdkTableRowIdT } from '@llm/sdk';
 
-const sizeClasses = {
+const SIZE_CLASSES = {
+  xs: 'h-6 w-6 text-xs',
   sm: 'h-8 w-8 text-sm',
   md: 'h-10 w-10 text-base',
   lg: 'h-12 w-12 text-lg',
 } as const;
 
-const colors = [
+const COLORS = [
   'bg-red-100 text-red-800 border-2 border-red-200',
   'bg-blue-100 text-blue-800 border-2 border-blue-200',
   'bg-green-100 text-green-800 border-2 border-green-200',
@@ -22,11 +23,13 @@ const colors = [
 let COLOR_COUNTER = 0;
 const COLOR_CACHE = new Map<string, string>();
 
+export type ColorizedAvatarSize = keyof typeof SIZE_CLASSES;
+
 type Props = {
   className?: string;
   id: SdkTableRowIdT;
   name: string;
-  size?: keyof typeof sizeClasses;
+  size?: ColorizedAvatarSize;
 };
 
 export function ColorizedAvatar({ id, className, name, size = 'md' }: Props) {
@@ -35,9 +38,9 @@ export function ColorizedAvatar({ id, className, name, size = 'md' }: Props) {
     const cacheKey = `${name}#${id}`;
 
     if (!COLOR_CACHE.has(cacheKey)) {
-      const colorIndex = COLOR_COUNTER % colors.length;
+      const colorIndex = COLOR_COUNTER % COLORS.length;
 
-      COLOR_CACHE.set(cacheKey, colors[colorIndex]);
+      COLOR_CACHE.set(cacheKey, COLORS[colorIndex]);
       COLOR_COUNTER++;
     }
 
@@ -48,7 +51,7 @@ export function ColorizedAvatar({ id, className, name, size = 'md' }: Props) {
     <div
       className={clsx(
         'inline-flex justify-center items-center rounded-full font-semibold select-none',
-        sizeClasses[size],
+        SIZE_CLASSES[size],
         colorClass,
         className,
       )}
