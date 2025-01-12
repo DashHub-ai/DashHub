@@ -28,6 +28,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       logout: 'Logout',
       settings: 'Settings',
     },
+    loggedAsRow: {
+      rootUser: 'Logged in as root user',
+      techUser: 'Logged in as tech user',
+    },
     search: {
       placeholder: 'Search...',
       button: 'Search',

@@ -30,6 +30,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       logout: 'Wyloguj się',
       settings: 'Ustawienia',
     },
+    loggedAsRow: {
+      rootUser: 'Zalogowano jako root',
+      techUser: 'Zalogowano jako user techniczny',
+    },
     search: {
       placeholder: 'Szukaj...',
       button: 'Szukaj',
