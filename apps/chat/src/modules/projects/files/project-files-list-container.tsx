@@ -37,7 +37,7 @@ export function ProjectFilesListContainer({ projectId }: Props) {
 
   return (
     <section>
-      <div className="flex justify-end mb-8">
+      <div className="flex justify-end mb-6">
         <FormSpinnerCTA
           type="button"
           loading={uploadState.isLoading}

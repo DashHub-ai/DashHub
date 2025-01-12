@@ -1,6 +1,5 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
-import { Share2Icon } from 'lucide-react';
 
 import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
 
@@ -9,6 +8,7 @@ import { useAsyncCallback } from '@llm/commons-front';
 import { FormSpinnerCTA, useSaveErrorNotification } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
+import { PermissionsStatusIcon } from '../status';
 import { useShareResourceModal } from './use-share-resource-modal';
 
 type Props = {
@@ -52,8 +52,12 @@ export function ShareResourceButton(
       onClick={onOpen}
     >
       {!submitState.isLoading && (
-        <Share2Icon size={16} className="mr-2" />
+        <PermissionsStatusIcon
+          permissions={defaultValue}
+          className="mr-2"
+        />
       )}
+
       {t.share}
     </FormSpinnerCTA>
   );

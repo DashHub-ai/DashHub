@@ -13,23 +13,37 @@ type Props = {
 export function PermissionAvatarsList({ permissions, className }: Props) {
   return (
     <div className={clsx('flex -space-x-2', className)}>
-      {permissions.map(permission => (
-        <div key={JSON.stringify(permission.target)}>
-          {permission.target.type === 'user'
-            ? (
+      {permissions.map((permission) => {
+        const { type } = permission.target;
+
+        switch (type) {
+          case 'user':
+            return (
+              <div key={JSON.stringify(permission.target)}>
                 <PermissionUserAvatar
                   user={permission.target.user}
                   accessLevel={permission.accessLevel}
                 />
-              )
-            : (
+              </div>
+            );
+
+          case 'group':
+            return (
+              <div key={JSON.stringify(permission.target)}>
                 <PermissionGroupAvatar
                   group={permission.target.group}
                   accessLevel={permission.accessLevel}
                 />
-              )}
-        </div>
-      ))}
+              </div>
+            );
+
+          default: {
+            const _: never = type;
+
+            return null;
+          }
+        }
+      })}
     </div>
   );
 }

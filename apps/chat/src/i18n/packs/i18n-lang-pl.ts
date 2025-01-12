@@ -484,6 +484,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   permissions: {
     share: 'Udostępnij',
     accessLevels: I18N_ACCESS_LEVELS_PL,
+    status: {
+      publicTooltip: 'Wszyscy w organizacji widzą ten projekt',
+      privateTooltip: 'Tylko udostępnieni użytkownicy i grupy widzą ten projekt',
+    },
     modal: {
       title: 'Udostępnij',
       submit: 'Udostępnij',

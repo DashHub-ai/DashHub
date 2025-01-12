@@ -27,7 +27,7 @@ export function ProjectContent({ project, onUpdate }: Props) {
           {t.hello}
         </h2>
 
-        <div className="right-0 absolute flex items-center gap-4">
+        <div className="right-0 absolute flex items-center gap-6">
           <PermissionAvatarsList permissions={permissions?.current ?? []} />
           <ShareResourceButton
             creator={creator}

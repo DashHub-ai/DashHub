@@ -15,6 +15,7 @@ export function PermissionUserAvatar({ user, accessLevel }: Props) {
           id={user.id}
           name={user.name}
           size="sm"
+          className="shadow-sm"
         />
       </div>
     </Tooltip>

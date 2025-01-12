@@ -18,9 +18,10 @@ type Props = {
   children: ReactNode;
   content: ReactNode;
   className?: string;
+  wrapperClassName?: string;
 };
 
-export function Tooltip({ children, content, className }: Props) {
+export function Tooltip({ children, content, className, wrapperClassName }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { refs, floatingStyles, context } = useFloating({
@@ -49,9 +50,10 @@ export function Tooltip({ children, content, className }: Props) {
 
   return (
     <>
-      <div ref={refs.setReference} {...getReferenceProps()}>
+      <span ref={refs.setReference} className={wrapperClassName} {...getReferenceProps()}>
         {children}
-      </div>
+      </span>
+
       {isOpen && (
         <FloatingPortal>
           <div
