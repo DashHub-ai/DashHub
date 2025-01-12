@@ -489,6 +489,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     modal: {
       title: 'Share resource',
       submit: 'Share',
+      makePublic: 'This project is public (everyone in the organization can edit)',
       autocomplete: {
         users: 'Users',
         groups: 'Groups',

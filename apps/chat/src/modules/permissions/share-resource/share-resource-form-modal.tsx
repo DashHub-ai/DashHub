@@ -1,8 +1,9 @@
 import type { CanBePromise } from '@llm/commons';
-import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
 
+import { isSdkPublicPermissions, type SdkPermissionT, type SdkUserListItemT } from '@llm/sdk';
 import {
   CancelButton,
+  Checkbox,
   FormSpinnerCTA,
   Modal,
   type ModalProps,
@@ -43,6 +44,23 @@ export function ShareResourceFormModal(
     });
   };
 
+  const isPublic = isSdkPublicPermissions(value);
+  const onTogglePublic = (newPublic: boolean) => {
+    setValue({
+      value: newPublic
+        ? []
+        : [
+            {
+              accessLevel: 'write',
+              target: {
+                type: 'user',
+                user: creator,
+              },
+            },
+          ],
+    });
+  };
+
   return (
     <Modal
       {...props}
@@ -65,15 +83,26 @@ export function ShareResourceFormModal(
         </>
       )}
     >
-      <div className="flex flex-col space-y-4">
-        <SearchUsersGroupsInput onSelected={onSelected} />
-        <ResourcePermissionsList
-          creator={creator}
-          permissions={value}
-          onChange={(newValue) => {
-            setValue({ value: newValue });
-          }}
-        />
+      <div className="flex flex-col space-y-6">
+        <Checkbox
+          value={isPublic}
+          onChange={onTogglePublic}
+        >
+          {t.makePublic}
+        </Checkbox>
+
+        {!isPublic && (
+          <>
+            <SearchUsersGroupsInput onSelected={onSelected} />
+            <ResourcePermissionsList
+              creator={creator}
+              permissions={value}
+              onChange={(newValue) => {
+                setValue({ value: newValue });
+              }}
+            />
+          </>
+        )}
       </div>
     </Modal>
   );

@@ -491,6 +491,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     modal: {
       title: 'Udostępnij',
       submit: 'Udostępnij',
+      makePublic: 'Udostępnij publicznie (dla wszystkich w organizacji).',
       autocomplete: {
         users: 'Użytkownicy',
         groups: 'Grupy',

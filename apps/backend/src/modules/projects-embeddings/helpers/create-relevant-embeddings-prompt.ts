@@ -69,7 +69,7 @@ export function createRelevantEmbeddingsPrompt(
     '- ✅ CORRECT for images only: "Image #embedding:789 shows..."',
     '',
     'List Guidelines:',
-    '- Always refer to content as fragments: "Fragment #embedding:<id> shows..."',
+    '- Always refer to content as fragments: "Fragment #embedding:<id> shows..." but only for text, not images',
     '- Exception for images: "Image #embedding:<id> shows..."',
     '- Never include empty or meaningless items in lists',
     '- Each item must contain meaningful content',
