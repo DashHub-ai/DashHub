@@ -10,16 +10,19 @@ import {
   CardActions,
   CardArchiveButton,
   CardBase,
+  CardContent,
   CardDescription,
   CardEditButton,
   CardFooter,
   CardOpenButton,
   CardTitle,
   useArchiveWithNotifications,
+  useUnarchiveWithNotifications,
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { useAppUpdateModal } from '~/modules/apps-creator';
 import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
+import { CardRecordPermissions } from '~/modules/permissions';
 
 import { useFavoriteApps } from '../favorite';
 
@@ -28,19 +31,26 @@ export type AppCardProps = {
   ctaButton?: ReactNode;
   onAfterEdit?: VoidFunction;
   onAfterArchive?: VoidFunction;
+  onAfterUnarchive?: VoidFunction;
 };
 
-export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive }: AppCardProps) {
+export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUnarchive }: AppCardProps) {
   const t = useI18n().pack;
   const { isFavorite, toggle } = useFavoriteApps();
   const { showAsOptional } = useAppUpdateModal();
-  const { sdks } = useSdkForLoggedIn();
+  const { sdks, createRecordGuard } = useSdkForLoggedIn();
   const favorite = isFavorite(app);
   const [createApp, createStatus] = useCreateChatWithInitialApp();
+
+  const [onUnarchive, unarchiveStatus] = useUnarchiveWithNotifications(
+    sdks.dashboard.apps.unarchive(app.id),
+  );
+
   const [onArchive, archiveStatus] = useArchiveWithNotifications(
     sdks.dashboard.apps.archive(app.id),
   );
 
+  const recordGuard = createRecordGuard(app);
   const handleEdit = flow(
     showAsOptional,
     tapTaskOption(onAfterEdit ?? (() => {})),
@@ -73,29 +83,49 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive }: AppCard
         {app.name}
       </CardTitle>
 
-      <CardDescription>
-        {app.description}
-      </CardDescription>
-
-      <CardFooter>
-        <div className="text-muted-foreground text-xs">
-          {formatDate(app.updatedAt)}
-        </div>
-
-        {ctaButton || (
-          <CardOpenButton
-            onClick={() => void createApp(app)}
-            loading={createStatus.isLoading}
-          />
+      <CardContent>
+        {app.permissions && (
+          <CardRecordPermissions permissions={app.permissions.current} />
         )}
-      </CardFooter>
 
-      {!ctaButton && !app.archived && (
+        <CardDescription>
+          {app.description}
+        </CardDescription>
+
+        <CardFooter>
+          <div className="text-muted-foreground text-xs">
+            {formatDate(app.updatedAt)}
+          </div>
+
+          {ctaButton || (
+            <CardOpenButton
+              onClick={() => void createApp(app)}
+              loading={createStatus.isLoading}
+            />
+          )}
+        </CardFooter>
+      </CardContent>
+
+      {!ctaButton && !app.archived && (recordGuard.can.write || recordGuard.can.archive) && (
         <CardActions>
-          <CardEditButton onClick={() => void handleEdit({ app })} />
+          {recordGuard.can.write && (
+            <CardEditButton onClick={() => void handleEdit({ app })} />
+          )}
+
+          {recordGuard.can.archive && (
+            <CardArchiveButton
+              onClick={() => void onArchive().then(() => onAfterArchive?.())}
+              loading={archiveStatus.loading}
+            />
+          )}
+        </CardActions>
+      )}
+
+      {!ctaButton && app.archived && recordGuard.can.unarchive && (
+        <CardActions>
           <CardArchiveButton
-            onClick={() => void onArchive().then(() => onAfterArchive?.())}
-            loading={archiveStatus.loading}
+            onClick={() => void onUnarchive().then(() => onAfterUnarchive?.())}
+            loading={unarchiveStatus.loading}
           />
         </CardActions>
       )}

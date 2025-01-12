@@ -9,6 +9,7 @@ export type PermissionsTableRowRawAggRelation = {
 
   user_id: TableId | null;
   user_email: string | null;
+  user_name: string | null;
 };
 
 export function mapRawJSONAggRelationToSdkPermissions(rawRelationRow: PermissionsTableRowRawAggRelation): SdkPermissionT {
@@ -16,6 +17,7 @@ export function mapRawJSONAggRelationToSdkPermissions(rawRelationRow: Permission
     return {
       accessLevel: rawRelationRow.access_level,
       target: {
+        type: 'group',
         group: {
           id: rawRelationRow.group_id,
           name: rawRelationRow.group_name!,
@@ -27,9 +29,11 @@ export function mapRawJSONAggRelationToSdkPermissions(rawRelationRow: Permission
   return {
     accessLevel: rawRelationRow.access_level,
     target: {
+      type: 'user',
       user: {
         id: rawRelationRow.user_id!,
         email: rawRelationRow.user_email!,
+        name: rawRelationRow.user_name!,
       },
     },
   };

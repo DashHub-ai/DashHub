@@ -1,8 +1,13 @@
 import deepmerge from 'deepmerge';
 
-import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+import type { SdkOrganizationUserRoleT, SdkPermissionAccessLevelT } from '@llm/sdk';
 
 import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
+
+const I18N_ACCESS_LEVELS_EN: Record<SdkPermissionAccessLevelT, string> = {
+  read: 'Read-only',
+  write: 'Read and write',
+};
 
 const I18N_USER_ORGANIZATION_ROLES_EN: Record<SdkOrganizationUserRoleT, string> = {
   owner: 'Owner',
@@ -22,6 +27,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     loggedIn: {
       logout: 'Logout',
       settings: 'Settings',
+    },
+    loggedAsRow: {
+      rootUser: 'Logged in as root user',
+      techUser: 'Logged in as tech user',
     },
     search: {
       placeholder: 'Search...',
@@ -134,6 +143,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       hello: 'Hello, how can we help you?',
       title: 'Project',
       chats: 'Chats in project',
+      files: 'Files in project',
     },
     experts: {
       meta: {
@@ -309,6 +319,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       category: {
         label: 'Category',
       },
+      permissions: {
+        label: 'Permissions',
+      },
       name: {
         label: 'Name',
         placeholder: 'Enter app name',
@@ -412,6 +425,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           label: 'E-Mail',
           placeholder: 'Enter e-mail address',
         },
+        name: {
+          label: 'Name and surname',
+          placeholder: 'Enter name and surname',
+        },
         flags: {
           label: 'Flags',
         },
@@ -467,6 +484,36 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     table: {
       totalUsers: 'Total users',
+    },
+  },
+  permissions: {
+    share: 'Share',
+    accessLevels: I18N_ACCESS_LEVELS_EN,
+    card: {
+      sharedWith: 'Shared with',
+      author: 'Author',
+    },
+    status: {
+      publicTooltip: 'Everyone in organization can see this',
+      privateTooltip: 'Only shared users and groups can see this',
+    },
+    modal: {
+      title: 'Share resource',
+      submit: 'Share',
+      makePublic: 'This project is public (everyone in the organization can edit)',
+      autocomplete: {
+        users: 'Users',
+        groups: 'Groups',
+        placeholder: 'Search users and groups...',
+        loading: 'Loading...',
+      },
+      list: {
+        title: 'Shared with',
+        empty: 'Not shared with anyone',
+        users: 'Users',
+        groups: 'Groups',
+        owner: 'Owner',
+      },
     },
   },
   footer: {

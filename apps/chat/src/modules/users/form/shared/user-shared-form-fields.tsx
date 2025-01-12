@@ -5,7 +5,7 @@ import type { SdkUserT } from '@llm/sdk';
 import { Checkbox, FormField, Input } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-type Value = Pick<SdkUserT, 'email' | 'active'>;
+type Value = Pick<SdkUserT, 'name' | 'email' | 'active'>;
 
 type Props = ValidationErrorsListProps<Value>;
 
@@ -15,6 +15,20 @@ export const UserSharedFormFields = controlled<Value, Props>(({ errors, control:
 
   return (
     <>
+      <FormField
+        className="uk-margin"
+        label={t.fields.name.label}
+        {...validation.extract('email')}
+      >
+        <Input
+          name="name"
+          autoComplete="new-name"
+          placeholder={t.fields.name.placeholder}
+          required
+          {...bind.path('name')}
+        />
+      </FormField>
+
       <FormField
         className="uk-margin"
         label={t.fields.email.label}

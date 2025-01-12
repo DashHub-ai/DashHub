@@ -1,11 +1,11 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
+import { identity, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
+import type { RequiredBy } from '@llm/commons';
 import type { SdkCreateChatInputT, SdkUpdateChatInputT } from '@llm/sdk';
 
-import { rejectFalsyItems, type RequiredBy } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -25,7 +25,11 @@ import {
 import type { ChatTableRowWithRelations } from './chats.tables';
 
 import { ChatsSummariesRepo } from '../chats-summaries/chats-summaries.repo';
-import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
+import {
+  mapRawJSONAggRelationToSdkPermissions,
+  PermissionsRepo,
+  prependCreatorIfNonPublicPermissions,
+} from '../permissions';
 
 @injectable()
 export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
@@ -128,7 +132,10 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
             .innerJoin('organizations', 'organizations.id', 'organization_id')
             .innerJoin('users', 'users.id', 'creator_user_id')
             .innerJoin('chat_summaries', 'chat_summaries.chat_id', 'chats.id')
+
             .leftJoin('projects', 'projects.id', 'project_id')
+            .leftJoin('users as project_creator', 'project_creator.id', 'projects.creator_user_id')
+
             .selectAll('chats')
             .select([
               'organizations.id as organization_id',
@@ -136,6 +143,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
               'users.id as creator_user_id',
               'users.email as creator_email',
+              'users.name as creator_name',
 
               'chat_summaries.id as summary_id',
               'chat_summaries.content as summary_content',
@@ -148,6 +156,10 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               'projects.id as project_id',
               'projects.name as project_name',
               'projects.internal as project_internal',
+
+              'project_creator.id as project_creator_user_id',
+              'project_creator.email as project_creator_email',
+              'project_creator.name as project_creator_name',
 
               eb =>
                 PermissionsRepo
@@ -173,6 +185,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
           creator_user_id: creatorUserId,
           creator_email: creatorEmail,
+          creator_name: creatorName,
 
           summary_id: summaryId,
           summary_content: summaryContent,
@@ -187,6 +200,10 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           project_name: projectName,
           project_internal: projectInternal,
 
+          project_creator_user_id: projectCreatorUserId,
+          project_creator_email: projectCreatorEmail,
+          project_creator_name: projectCreatorName,
+
           project_permissions_json: projectPermissions,
           permissions_json: permissions,
 
@@ -195,7 +212,16 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           const creator = {
             id: creatorUserId,
             email: creatorEmail,
+            name: creatorName,
           };
+
+          const projectCreator = projectCreatorUserId
+            ? {
+                id: projectCreatorUserId,
+                email: projectCreatorEmail!,
+                name: projectCreatorName!,
+              }
+            : null;
 
           return {
             ...camelcaseKeys(item),
@@ -222,18 +248,19 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               nameGenerated: summaryNameGenerated,
               nameGeneratedAt: summaryNameGeneratedAt,
             },
+
+            // Reflect changes in permissions in messages repo
             permissions: {
-              inherited: (projectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
-              current: rejectFalsyItems([
-                // If it's global record, and this access level is added, then it'll be no longer global.
-                !!permissions?.length && {
-                  accessLevel: 'write',
-                  target: {
-                    user: creator,
-                  },
-                },
-                ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
-              ]),
+              inherited: pipe(
+                (projectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
+                projectCreator
+                  ? prependCreatorIfNonPublicPermissions(projectCreator)
+                  : identity,
+              ),
+              current: pipe(
+                (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+                prependCreatorIfNonPublicPermissions(creator),
+              ),
             },
           };
         }),

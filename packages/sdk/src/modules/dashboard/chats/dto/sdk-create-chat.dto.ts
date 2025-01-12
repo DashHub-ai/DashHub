@@ -7,7 +7,7 @@ import {
 } from '~/shared';
 
 import { SdkUpsertTableRowWithPermissionsInputV } from '../../permissions/dto/sdk-upsert-table-row-with-permissions.dto';
-import { SdkChatV } from './sdk-chat.dto';
+import { type SdkChatSummaryT, SdkChatV } from './sdk-chat.dto';
 
 export const SdkChatSummaryInputV = z.object({
   name: SdkAIGeneratedStringInputV.optional(),
@@ -34,3 +34,15 @@ export type SdkCreateChatInputT = z.infer<typeof SdkCreateChatInputV>;
 export const SdkCreateChatOutputV = SdkTableRowWithUuidV;
 
 export type SdkCreateChatOutputT = z.infer<typeof SdkCreateChatOutputV>;
+
+export function castSdkChatSummaryToUpdateInput(summary: SdkChatSummaryT): SdkChatSummaryInputT {
+  return {
+    name: summary.name.generated
+      ? { generated: true, value: null }
+      : { generated: false, value: summary.name.value || '' },
+
+    content: summary.content.generated
+      ? { generated: true, value: null }
+      : { generated: false, value: summary.content.value || '' },
+  };
+}

@@ -1,13 +1,12 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import {
-  dropSdkPaginationPermissionsKeysIfNotCreator,
-  dropSdkPermissionsKeyIfNotCreator,
-  type SdkCreateAppInputT,
-  type SdkJwtTokenT,
-  type SdkUpdateAppInputT,
+import type {
+  SdkCreateAppInputT,
+  SdkJwtTokenT,
+  SdkUpdateAppInputT,
 } from '@llm/sdk';
+
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { ChatsService } from '../chats';
@@ -29,7 +28,7 @@ export class AppsFirewall extends AuthFirewallService {
   get = flow(
     this.appsService.get,
     this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
-    TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPermissionsKeyIfNotCreator),
   );
 
   search = (filters: EsAppsInternalFilters) => pipe(
@@ -37,7 +36,7 @@ export class AppsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.appsService.search),
-    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPaginationPermissionsKeysIfNotCreator),
   );
 
   unarchive = (id: TableId) => pipe(

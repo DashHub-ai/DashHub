@@ -12,6 +12,7 @@ import { ChatConversationWithSidebar } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
 import { useSitemap } from '../use-sitemap';
+import { ShareChatRow } from './share-chat-row';
 
 type Props = {
   id: SdkTableRowUuidT;
@@ -22,7 +23,8 @@ export function ChatRoute({ id }: Props) {
   const t = pack.routes.chat;
   const sitemap = useSitemap();
 
-  const { sdks } = useSdkForLoggedIn();
+  const { sdks, createRecordGuard } = useSdkForLoggedIn();
+
   const result = useAsyncValue(
     pipe(
       apply.sequenceS(TE.ApplicativePar)({
@@ -49,6 +51,7 @@ export function ChatRoute({ id }: Props) {
   }
 
   const project = result.status === 'success' && result.data.chat.project;
+  const { can } = result.status === 'success' ? createRecordGuard(result.data.chat) : {};
 
   return (
     <PageWithNavigationLayout
@@ -81,11 +84,19 @@ export function ChatRoute({ id }: Props) {
         }}
       />
 
-      <section>
-        {(
-          result.status === 'loading'
-            ? <SpinnerContainer loading />
-            : <ChatConversationWithSidebar {...result.data} />
+      <section className="relative">
+        {result.status === 'loading' && <SpinnerContainer loading />}
+        {result.status === 'success' && (
+          <>
+            {can?.write && (
+              <ShareChatRow
+                chat={result.data.chat}
+                onPermissionsUpdated={result.silentReload}
+              />
+            )}
+
+            <ChatConversationWithSidebar {...result.data} />
+          </>
         )}
       </section>
     </PageWithNavigationLayout>

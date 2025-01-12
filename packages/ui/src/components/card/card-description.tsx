@@ -30,7 +30,7 @@ export function CardDescription({ children, limitHeight, className }: Props) {
   }, []);
 
   return (
-    <div className={clsx('flex flex-col flex-1 mb-2 last:mb-0', className)}>
+    <div className={clsx('flex flex-col flex-1', className)}>
       <div
         ref={wrapperRef}
         className={clsx(

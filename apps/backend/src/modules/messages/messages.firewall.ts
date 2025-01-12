@@ -39,11 +39,9 @@ export class MessagesFirewall extends AuthFirewallService {
     chatId: TableUuid,
     dto: Omit<SdkSearchMessagesInputT, 'chatIds'>,
   ) => pipe(
-    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
-      accessLevel: 'read',
-      findRecord: this.chatsService.get(chatId),
-    }),
-    TE.chainW(() => this.messagesService.searchByChatId(chatId, dto)),
+    dto,
+    this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
+    TE.chainW(mappedDto => this.messagesService.searchByChatId(chatId, mappedDto)),
   );
 
   aiReply = (

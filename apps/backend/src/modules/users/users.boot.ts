@@ -28,6 +28,7 @@ export class UsersBootService {
 
       return TE.right({
         role: 'root',
+        name: 'Root',
         email: root.email,
         active: true,
         archiveProtection: true,

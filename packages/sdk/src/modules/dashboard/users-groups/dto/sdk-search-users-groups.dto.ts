@@ -20,6 +20,7 @@ export type SdkSearchUsersGroupItemT = z.infer<typeof SdkSearchUsersGroupItemV>;
 export const SdkSearchUsersGroupsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
+    usersIds: SdkIdsArrayV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)

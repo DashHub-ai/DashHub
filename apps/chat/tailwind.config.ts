@@ -27,6 +27,7 @@ export default {
     extend: {
       animation: {
         slideIn: 'slideIn 0.3s ease-out forwards',
+        fadeIn: 'fadeIn 0.3s ease-out forwards',
         messageSlideIn: 'slideIn 0.3s ease-out 100ms forwards',
         balloonIn: 'balloonIn 0.2s ease-out forwards',
       },

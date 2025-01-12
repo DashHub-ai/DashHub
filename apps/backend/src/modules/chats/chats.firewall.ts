@@ -1,16 +1,14 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
+import type {
+  SdkCreateChatInputT,
+  SdkJwtTokenT,
+  SdkSearchChatsInputT,
+  SdkUpdateChatInputT,
+} from '@llm/sdk';
 import type { PermissionsService } from '~/modules/permissions';
 
-import {
-  dropSdkPaginationPermissionsKeysIfNotCreator,
-  dropSdkPermissionsKeyIfNotCreator,
-  type SdkCreateChatInputT,
-  type SdkJwtTokenT,
-  type SdkSearchChatsInputT,
-  type SdkUpdateChatInputT,
-} from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { TableRowWithUuid, TableUuid } from '../database';
@@ -30,7 +28,7 @@ export class ChatsFirewall extends AuthFirewallService {
   get = flow(
     this.chatsService.get,
     this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
-    TE.map(dropSdkPermissionsKeyIfNotCreator(this.userId)),
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPermissionsKeyIfNotCreator),
   );
 
   unarchive = (id: TableUuid) => pipe(
@@ -60,17 +58,19 @@ export class ChatsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.chatsService.search),
-    TE.map(dropSdkPaginationPermissionsKeysIfNotCreator(this.userId)),
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPaginationPermissionsKeysIfNotCreator),
   );
 
   create = (dto: SdkCreateChatInputT) => pipe(
     TE.Do,
-    TE.chainW(() => dto.project
-      ? this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
-        accessLevel: 'write',
-        findRecord: this.projectsService.get(dto.project.id),
-      })
-      : TE.of(undefined)),
+    TE.chainW(() => (
+      dto.project
+        ? this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+          accessLevel: 'write',
+          findRecord: this.projectsService.get(dto.project.id),
+        })
+        : TE.of(undefined)
+    )),
     TE.chainEitherKW(() => this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto)),
     TE.chainW(mappedDto => this.chatsService.create(mappedDto)),
   );

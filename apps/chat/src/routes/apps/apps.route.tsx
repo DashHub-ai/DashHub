@@ -23,6 +23,7 @@ export function AppsRoute() {
           name: '',
           chatContext: '',
           description: '',
+          permissions: [],
           category: createFakeSelectItem(),
         },
       }),

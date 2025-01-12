@@ -57,7 +57,7 @@ export function ProjectRoute({ id }: Props) {
         {(
           result.status === 'loading'
             ? <SpinnerContainer loading />
-            : <ProjectContent project={result.data} />
+            : <ProjectContent project={result.data} onShared={result.silentReload} />
         )}
       </section>
     </PageWithNavigationLayout>

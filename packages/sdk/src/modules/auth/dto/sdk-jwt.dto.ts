@@ -28,6 +28,7 @@ export const SdkJwtTokenV = z
     exp: z.number(),
     iat: z.number(),
     email: z.string(),
+    name: z.string(),
   })
   .and(SdkJwtTokenRoleSpecificV);
 

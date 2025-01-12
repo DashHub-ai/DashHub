@@ -3,6 +3,7 @@ import type { z } from 'zod';
 import {
   SdkArchivedFiltersInputV,
   SdkDefaultSortInputV,
+  SdkExcludeIdsFiltersInputV,
   SdkFilteredPhraseInputV,
   SdkIdsArrayV,
   SdkIdsFiltersInputV,
@@ -23,6 +24,7 @@ export const SdkSearchUsersInputV = SdkOffsetPaginationInputV
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkIdsFiltersInputV)
+  .merge(SdkExcludeIdsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);
 
 export type SdkSearchUsersInputT = z.infer<typeof SdkSearchUsersInputV>;

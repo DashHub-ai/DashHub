@@ -7,7 +7,7 @@ type CardTitleProps = {
 
 export function CardTitle({ icon, children }: CardTitleProps) {
   return (
-    <div className="flex items-center gap-2 mb-3">
+    <div className="flex items-center gap-2 mb-4">
       <div className="flex-shrink-0 text-muted-foreground">
         {icon}
       </div>

@@ -1,9 +1,12 @@
 import { z } from 'zod';
 
+import { SdkPermissionAccessLevelV } from './sdk-permission-level.dto';
 import { SdkPermissionsV } from './sdk-permission.dto';
 
 export const SdkTableRowWithPermissionsV = z.object({
-  permissions: SdkPermissionsV.nullable().optional(),
+  permissions: SdkPermissionsV.extend({
+    yourAccessLevel: SdkPermissionAccessLevelV.optional(),
+  }),
 });
 
 export type SdkTableRowWithPermissionsT = z.infer<typeof SdkTableRowWithPermissionsV>;

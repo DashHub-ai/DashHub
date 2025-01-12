@@ -3,6 +3,7 @@ import { flow } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import {
+  castSdkChatSummaryToUpdateInput,
   type SdkChatT,
   type SdkPermissionT,
   type SdkTableRowWithUuidT,
@@ -37,15 +38,7 @@ export function useChatConfigForm(
     onSubmit: flow(
       value => sdks.dashboard.chats.update({
         ...value,
-        summary: {
-          name: value.summary.name.generated
-            ? { generated: true, value: null }
-            : { generated: false, value: value.summary.name.value || '' },
-
-          content: value.summary.content.generated
-            ? { generated: true, value: null }
-            : { generated: false, value: value.summary.content.value || '' },
-        },
+        summary: castSdkChatSummaryToUpdateInput(value.summary),
       }),
       saveNotifications,
       tapTaskEither(() => onAfterSubmit?.()),

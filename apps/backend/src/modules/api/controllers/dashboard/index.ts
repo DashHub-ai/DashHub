@@ -6,5 +6,6 @@ export * from './dashboard.controller';
 export * from './organizations.controller';
 export * from './projects.controller';
 export * from './s3-buckets.controller';
+export * from './share-resource.controller';
 export * from './users.controller';
 export * from './users-groups.controller';

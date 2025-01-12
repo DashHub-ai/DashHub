@@ -52,6 +52,7 @@ export class UsersGroupsEsSearchRepo {
       ids,
       excludeIds,
       organizationIds,
+      usersIds,
       archived,
     }: SdkSearchUsersGroupsInputT,
   ): esb.Query =>
@@ -61,6 +62,7 @@ export class UsersGroupsEsSearchRepo {
         !!ids?.length && esb.termsQuery('id', ids),
         !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
+        !!usersIds?.length && esb.nestedQuery(esb.termsQuery('users.id', usersIds), 'users'),
         !isNil(archived) && esb.termQuery('archived', archived),
       ]),
     );

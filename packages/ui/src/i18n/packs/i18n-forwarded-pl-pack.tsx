@@ -49,6 +49,7 @@ export const I18N_FORWARDED_PL_PACK: typeof I18N_FORWARDED_EN_PACK = {
     download: 'Pobierz',
     select: 'Wybierz',
     selected: 'Wybrano',
+    choose: 'Wybierz',
     expand: {
       more: 'Więcej',
       less: 'Mniej',

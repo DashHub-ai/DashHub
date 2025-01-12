@@ -20,7 +20,7 @@ export function LoggedInUserItem() {
           <li className="p-3 text-sm">
             <div className="flex flex-col space-y-1.5">
               <p className="font-medium text-sm uk-text-capitalize leading-none">
-                {session.token.role}
+                {session.token.name}
               </p>
               <p className="text-muted-foreground text-xs leading-none">
                 {session.token.email}

@@ -15,6 +15,7 @@ export type SdkUpdateUserOrganizationInputT = z.infer<
 
 export const SdkUpdateUserInputV = z.object({
   email: z.string(),
+  name: z.string(),
   active: z.boolean(),
   auth: SdkUpdateUserAuthMethodsV,
 })

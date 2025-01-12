@@ -11,6 +11,7 @@ import {
   createBaseDatedRecordMappings,
   createElasticsearchIndexRepo,
   createIdNameObjectMapping,
+  createIdObjectMapping,
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
@@ -29,6 +30,10 @@ const UsersGroupsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
         organization: createIdNameObjectMapping(),
+        users: {
+          type: 'nested',
+          ...createIdObjectMapping(),
+        },
       },
     },
     settings: {

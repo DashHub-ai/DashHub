@@ -1,10 +1,15 @@
 import deepmerge from 'deepmerge';
 
-import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+import type { SdkOrganizationUserRoleT, SdkPermissionAccessLevelT } from '@llm/sdk';
 
 import { I18N_FORWARDED_PL_PACK } from '@llm/ui';
 
 import type { I18nLangPack } from './i18n-packs';
+
+const I18N_ACCESS_LEVELS_PL: Record<SdkPermissionAccessLevelT, string> = {
+  read: 'Tylko odczyt',
+  write: 'Odczyt / Zapis',
+};
 
 const I18N_USER_ORGANIZATION_ROLES_PL: Record<SdkOrganizationUserRoleT, string> = {
   owner: 'Właściciel',
@@ -24,6 +29,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     loggedIn: {
       logout: 'Wyloguj się',
       settings: 'Ustawienia',
+    },
+    loggedAsRow: {
+      rootUser: 'Zalogowano jako root',
+      techUser: 'Zalogowano jako user techniczny',
     },
     search: {
       placeholder: 'Szukaj...',
@@ -136,6 +145,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       hello: 'Cześć, jak możemy Ci pomóc?',
       title: 'Projekt',
       chats: 'Czaty w projekcie',
+      files: 'Pliki w projekcie',
     },
     experts: {
       meta: {
@@ -311,6 +321,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       category: {
         label: 'Kategoria',
       },
+      permissions: {
+        label: 'Uprawnienia',
+      },
       name: {
         label: 'Nazwa',
         placeholder: 'Wpisz nazwę aplikacji',
@@ -414,6 +427,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
           label: 'E-Mail',
           placeholder: 'Wprowadź adres e-mail',
         },
+        name: {
+          label: 'Imię i nazwisko',
+          placeholder: 'Wprowadź imię i nazwisko',
+        },
         flags: {
           label: 'Flagi',
         },
@@ -469,6 +486,36 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     table: {
       totalUsers: 'Użytkowników',
+    },
+  },
+  permissions: {
+    share: 'Udostępnij',
+    accessLevels: I18N_ACCESS_LEVELS_PL,
+    card: {
+      sharedWith: 'Udostępniono dla',
+      author: 'Autor',
+    },
+    status: {
+      publicTooltip: 'Wszyscy w organizacji to widzą',
+      privateTooltip: 'Tylko udostępnieni użytkownicy i grupy to widzą',
+    },
+    modal: {
+      title: 'Udostępnij',
+      submit: 'Udostępnij',
+      makePublic: 'Udostępnij publicznie (dla wszystkich w organizacji).',
+      autocomplete: {
+        users: 'Użytkownicy',
+        groups: 'Grupy',
+        placeholder: 'Szukaj użytkowników lub grup...',
+        loading: 'Loading...',
+      },
+      list: {
+        title: 'Udostępniono dla',
+        empty: 'Nie udostępniono nikomu',
+        users: 'Użytkownicy',
+        groups: 'Grupy',
+        owner: 'Właściciel',
+      },
     },
   },
   footer: {

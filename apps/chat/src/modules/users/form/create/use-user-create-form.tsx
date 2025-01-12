@@ -25,7 +25,7 @@ export function useUserCreateForm(
   }: CreateUserFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { emailFormatValidator, requiredPathByPred } = usePredefinedFormValidators<CreateUserFormValue>();
+  const { emailFormatValidator, requiredPathByPred, required } = usePredefinedFormValidators<CreateUserFormValue>();
   const saveNotifications = useSaveTaskEitherNotification();
   const authValidator = useUseAuthFormValidator<CreateUserFormValue>();
 
@@ -40,6 +40,7 @@ export function useUserCreateForm(
     validation: {
       mode: ['blur', 'submit'],
       validators: () => [
+        required('name'),
         emailFormatValidator('email'),
         authValidator('auth'),
         requiredPathByPred(

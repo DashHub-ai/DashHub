@@ -1,9 +1,19 @@
-import type { SdkPermissionT, SdkTableRowWithPermissionsT } from '@llm/sdk';
+import type { SdkTableRowIdT } from '~/shared';
 
-import type { UserAccessPermissionsDescriptor } from './permissions-row-protection-filters.types';
+import type {
+  SdkPermissionAccessLevelT,
+  SdkPermissionT,
+  SdkTableRowWithPermissionsT,
+} from '../dto';
 
-export function checkPermissionsMatch(
-  descriptor: UserAccessPermissionsDescriptor,
+export type SdkUserAccessPermissionsDescriptor = {
+  accessLevel: SdkPermissionAccessLevelT;
+  userId: SdkTableRowIdT;
+  groupsIds: SdkTableRowIdT[];
+};
+
+export function isSdkPermissionMatching(
+  descriptor: SdkUserAccessPermissionsDescriptor,
   row: SdkTableRowWithPermissionsT,
 ): boolean {
   const { permissions } = row;
@@ -13,27 +23,29 @@ export function checkPermissionsMatch(
     return descriptor.accessLevel === 'read';
   }
 
-  // Check both inherited and current permissions
-  return (
-    checkPermissionsKindMatch(permissions.inherited, descriptor)
-    && checkPermissionsKindMatch(permissions.current, descriptor)
-  );
+  // If cannot read parent, cannot read child and write
+  if (!checkPermissionsKindMatch(permissions.inherited, { ...descriptor, accessLevel: 'read' })) {
+    return false;
+  }
+
+  // Check if can write to child
+  return checkPermissionsKindMatch(permissions.current, descriptor);
 }
 
 function checkPermissionsKindMatch(
   permissions: SdkPermissionT[],
-  descriptor: UserAccessPermissionsDescriptor,
+  descriptor: SdkUserAccessPermissionsDescriptor,
 ): boolean {
   const { userId, groupsIds, accessLevel } = descriptor;
+
+  const accessLevels = accessLevel === 'read'
+    ? ['read', 'write'] // if requesting read, allow both read and write
+    : [accessLevel]; // if requesting write, only allow write
 
   // If no permissions are set for this kind, it means public access
   if (!permissions || permissions.length === 0) {
     return accessLevel === 'read';
   }
-
-  const accessLevels = accessLevel === 'read'
-    ? ['read', 'write'] // if requesting read, allow both read and write
-    : [accessLevel]; // if requesting write, only allow write
 
   // Check if any permission matches
   return permissions.some((permission) => {

@@ -4,13 +4,22 @@ import clsx from 'clsx';
 
 export type FormSpinnerCTAProps = ComponentProps<'button'> & {
   loading: boolean;
+  buttonTypeClass?: string;
 };
 
-export function FormSpinnerCTA({ loading, className, children, ...props }: FormSpinnerCTAProps) {
+export function FormSpinnerCTA(
+  {
+    loading,
+    className,
+    buttonTypeClass = 'uk-button-primary',
+    children,
+    ...props
+  }: FormSpinnerCTAProps,
+) {
   return (
     <button
       type="submit"
-      className={clsx('uk-button uk-button-primary', className)}
+      className={clsx('uk-button', buttonTypeClass, className)}
       disabled={loading}
       {...props}
     >

@@ -16,6 +16,7 @@ export type SdkUserRoleT = z.infer<typeof SdkUserRoleV>;
 
 export const SdkUserV = z.object({
   email: z.string(),
+  name: z.string(),
   active: z.boolean(),
   auth: SdkEnabledUserAuthMethodsV,
   role: SdkUserRoleV,

@@ -1,10 +1,15 @@
 import type { z } from 'zod';
 
-import { SdkTableRowWithIdV, ZodOmitArchivedFields, ZodOmitDateFields } from '~/shared';
+import {
+  type SdkTableRowWithIdT,
+  SdkTableRowWithIdV,
+  ZodOmitArchivedFields,
+  ZodOmitDateFields,
+} from '~/shared';
 
 import { SdkUpsertTableRowWithPermissionsInputV } from '../../permissions/dto/sdk-upsert-table-row-with-permissions.dto';
 import { SdkProjectSummaryInputV } from './sdk-create-project.dto';
-import { SdkProjectV } from './sdk-project.dto';
+import { type SdkProjectT, SdkProjectV } from './sdk-project.dto';
 
 export const SdkUpdateProjectInputV = SdkProjectV.omit({
   ...ZodOmitDateFields,
@@ -24,3 +29,17 @@ export type SdkUpdateProjectInputT = z.infer<typeof SdkUpdateProjectInputV>;
 export const SdkUpdateProjectOutputV = SdkTableRowWithIdV;
 
 export type SdkUpdateProjectOutputT = z.infer<typeof SdkUpdateProjectOutputV>;
+
+export function castSdkProjectToUpdateInput(project: SdkProjectT): SdkUpdateProjectInputT & SdkTableRowWithIdT {
+  return {
+    ...project,
+    permissions: project.permissions?.current,
+    summary: {
+      content: (
+        project.summary.content.generated
+          ? { generated: true, value: null }
+          : { generated: false, value: project.summary.content.value! }
+      ),
+    },
+  };
+}

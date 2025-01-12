@@ -1,22 +1,22 @@
 import esb from 'elastic-builder';
 
+import type { SdkUserAccessPermissionsDescriptor } from '@llm/sdk';
+
 import { rejectFalsyItems } from '@llm/commons';
 
-import type { UserAccessPermissionsDescriptor } from './permissions-row-protection-filters.types';
-
 export function createEsPermissionsFilters(
-  descriptor: UserAccessPermissionsDescriptor,
+  descriptor: SdkUserAccessPermissionsDescriptor,
   permissionsFieldPath = 'permissions',
 ): esb.BoolQuery {
   return esb.boolQuery().filter([
-    createNestedPermissionsEsFilters('inherited', descriptor, permissionsFieldPath),
+    createNestedPermissionsEsFilters('inherited', { ...descriptor, accessLevel: 'read' }, permissionsFieldPath),
     createNestedPermissionsEsFilters('current', descriptor, permissionsFieldPath),
   ]);
 }
 
 function createNestedPermissionsEsFilters(
   kind: 'current' | 'inherited',
-  descriptor: UserAccessPermissionsDescriptor,
+  descriptor: SdkUserAccessPermissionsDescriptor,
   permissionsFieldPath: string = 'permissions',
 ): esb.BoolQuery {
   const { userId, groupsIds, accessLevel } = descriptor;

@@ -114,15 +114,15 @@ export function useAsyncCallback<A, R>(
  */
 export type AsyncCallbackHookResult<A extends Array<unknown>, R> = [
   (...args: A) => Promise<R | null>,
-  AsyncCallbackStateHookResult<A, R>,
+  AsyncCallbackStateHookResult<R>,
 ];
 
 /**
  * Represents the result of the `useAsyncCallback` hook.
  */
-export type AsyncCallbackStateHookResult<A extends Array<unknown>, R> = AsyncCallbackState<R> & {
+export type AsyncCallbackStateHookResult<R> = AsyncCallbackState<R> & {
   isLoading: boolean;
-  silentReload: (...args: A) => Promise<R | null>;
+  silentReload: () => Promise<R | null>;
 };
 
 /**

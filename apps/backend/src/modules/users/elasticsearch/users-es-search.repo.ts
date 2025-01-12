@@ -58,6 +58,7 @@ export class UsersEsSearchRepo {
     {
       phrase,
       ids,
+      excludeIds,
       organizationIds,
       archived,
     }: SdkSearchUsersInputT,
@@ -65,8 +66,17 @@ export class UsersEsSearchRepo {
     esb.boolQuery().must(
       rejectFalsyItems([
         !!ids?.length && esb.termsQuery('id', ids),
+        !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
-        !!phrase && createPhraseFieldQuery('email')(phrase),
+        !!phrase && (
+          esb
+            .boolQuery()
+            .should([
+              createPhraseFieldQuery()(phrase).boost(3),
+              createPhraseFieldQuery('email')(phrase).boost(1.5),
+            ])
+            .minimumShouldMatch(1)
+        ),
         !isNil(archived) && esb.termQuery('archived', archived),
       ]),
     );

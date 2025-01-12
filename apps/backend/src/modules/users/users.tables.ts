@@ -19,6 +19,7 @@ export type UsersTable = TableWithDefaultColumns &
     jwt_refresh_token: ColumnType<string, never>;
     active: boolean;
     last_login_at: Date | null;
+    name: string;
     email: string;
     role: SdkUserRoleT;
   };
@@ -36,4 +37,4 @@ export type UserTableRowWithRelations = NormalizeSelectTableRow<UsersTable>
     | { role: 'user'; organization: UserTableRowOrganizationRelation; }
   );
 
-export type UserTableRowBaseRelation = Pick<UserTableRowWithRelations, 'id' | 'email'>;
+export type UserTableRowBaseRelation = Pick<UserTableRowWithRelations, 'id' | 'name' | 'email'>;

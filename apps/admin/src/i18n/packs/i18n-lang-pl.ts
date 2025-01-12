@@ -333,6 +333,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
             label: 'E-mail',
             placeholder: 'Wpisz adres e-mail',
           },
+          name: {
+            label: 'Imię i nazwisko',
+            placeholder: 'Wpisz imię i nazwisko',
+          },
           flags: {
             label: 'Flagi',
           },

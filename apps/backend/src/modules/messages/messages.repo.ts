@@ -1,11 +1,10 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
+import { identity, pipe } from 'fp-ts/lib/function';
 import { sql } from 'kysely';
 import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { injectable } from 'tsyringe';
 
-import { rejectFalsyItems } from '@llm/commons';
 import {
   createDatabaseRepo,
   DatabaseError,
@@ -16,7 +15,7 @@ import {
 
 import type { MessageTableRowWithRelations } from './messages.tables';
 
-import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo, prependCreatorIfNonPublicPermissions } from '../permissions';
 
 @injectable()
 export class MessagesRepo extends createDatabaseRepo('messages') {
@@ -33,6 +32,9 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             .innerJoin('chats', 'chats.id', 'messages.chat_id')
             .innerJoin('users as chat_creator', 'chat_creator.id', 'chats.creator_user_id')
 
+            .leftJoin('projects', 'projects.id', 'chats.project_id')
+            .leftJoin('users as project_creator', 'project_creator.id', 'projects.creator_user_id')
+
             .leftJoin('users', 'users.id', 'messages.creator_user_id')
             .leftJoin('ai_models', 'ai_models.id', 'messages.ai_model_id')
             .leftJoin('apps', 'apps.id', 'messages.app_id')
@@ -43,9 +45,11 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
             .select([
               'chat_creator.id as chat_creator_user_id',
               'chat_creator.email as chat_creator_user_email',
+              'chat_creator.name as chat_creator_user_name',
 
               'users.id as creator_user_id',
               'users.email as creator_email',
+              'users.name as creator_name',
 
               'ai_models.id as ai_model_id',
               'ai_models.name as ai_model_name',
@@ -58,6 +62,11 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
               'reply_users.id as reply_message_creator_user_id',
               'reply_users.email as reply_message_creator_email',
+              'reply_users.name as reply_message_creator_name',
+
+              'project_creator.id as project_creator_user_id',
+              'project_creator.email as project_creator_email',
+              'project_creator.name as project_creator_name',
 
               eb =>
                 PermissionsRepo
@@ -115,8 +124,10 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
           chat_creator_user_id: chatCreatorUserId,
           chat_creator_user_email: chatCreatorUserEmail,
+          chat_creator_user_name: chatCreatorUserName,
 
           creator_user_id: userId,
+          creator_name: userName,
           creator_email: userEmail,
 
           ai_model_id: aiModelId,
@@ -128,6 +139,11 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
 
           reply_message_creator_user_id: replyMessageCreatorUserId,
           reply_message_creator_email: replyMessageCreatorEmail,
+          reply_message_creator_name: replyMessageCreatorName,
+
+          project_creator_user_id: projectCreatorUserId,
+          project_creator_email: projectCreatorEmail,
+          project_creator_name: projectCreatorName,
 
           app_id: appId,
           app_name: appName,
@@ -138,63 +154,75 @@ export class MessagesRepo extends createDatabaseRepo('messages') {
           chat_permissions_json: chatPermissions,
 
           ...item
-        }): MessageTableRowWithRelations => ({
-          ...camelcaseKeys(item),
-          chat: {
-            id: chatId,
-            creator: {
-              id: chatCreatorUserId,
-              email: chatCreatorUserEmail,
+        }): MessageTableRowWithRelations => {
+          const creator = {
+            id: chatCreatorUserId,
+            name: chatCreatorUserName,
+            email: chatCreatorUserEmail,
+          };
+
+          const projectCreator = projectCreatorUserId
+            ? {
+                id: projectCreatorUserId,
+                email: projectCreatorEmail!,
+                name: projectCreatorName!,
+              }
+            : null;
+
+          return {
+            ...camelcaseKeys(item),
+            chat: {
+              id: chatId,
+              creator,
+              permissions: {
+                inherited: pipe(
+                  (chatProjectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
+                  projectCreator
+                    ? prependCreatorIfNonPublicPermissions(projectCreator)
+                    : identity,
+                ),
+                current: pipe(
+                  (chatPermissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+                  prependCreatorIfNonPublicPermissions(creator),
+                ),
+              },
             },
-            permissions: {
-              inherited: (chatProjectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),
-              current: rejectFalsyItems([
-                !!chatPermissions?.length && {
-                  accessLevel: 'write',
-                  target: {
-                    user: {
-                      id: chatCreatorUserId,
-                      email: chatCreatorUserEmail,
-                    },
-                  },
-                },
-                ...(chatPermissions || []).map(mapRawJSONAggRelationToSdkPermissions),
-              ]),
-            },
-          },
-          aiModel: aiModelId && aiModelName
-            ? {
-                id: aiModelId,
-                name: aiModelName,
-              }
-            : null,
-          creator: userId && userEmail
-            ? {
-                id: userId,
-                email: userEmail,
-              }
-            : null,
-          repliedMessage: replyMessageId
-            ? {
-                id: replyMessageId,
-                role: replyMessageRole!,
-                content: replyMessageContent!,
-                creator: replyMessageCreatorUserId && replyMessageCreatorEmail
-                  ? {
-                      id: replyMessageCreatorUserId!,
-                      email: replyMessageCreatorEmail,
-                    }
-                  : null,
-              }
-            : null,
-          app: appId && appName
-            ? {
-                id: appId,
-                name: appName,
-              }
-            : null,
-          files: filesJson ?? [],
-        })),
+            aiModel: aiModelId && aiModelName
+              ? {
+                  id: aiModelId,
+                  name: aiModelName,
+                }
+              : null,
+            creator: userId && userEmail && userName
+              ? {
+                  id: userId,
+                  email: userEmail,
+                  name: userName,
+                }
+              : null,
+            repliedMessage: replyMessageId
+              ? {
+                  id: replyMessageId,
+                  role: replyMessageRole!,
+                  content: replyMessageContent!,
+                  creator: replyMessageCreatorUserId && replyMessageCreatorEmail && replyMessageCreatorName
+                    ? {
+                        id: replyMessageCreatorUserId,
+                        email: replyMessageCreatorEmail,
+                        name: replyMessageCreatorName,
+                      }
+                    : null,
+                }
+              : null,
+            app: appId && appName
+              ? {
+                  id: appId,
+                  name: appName,
+                }
+              : null,
+            files: filesJson ?? [],
+          };
+        }),
       ),
     );
   };

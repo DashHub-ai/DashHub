@@ -1,15 +1,9 @@
-import type { SdkPermissionAccessLevelT, SdkTableRowIdT } from '@llm/sdk';
-
-export type UserAccessPermissionsDescriptor = {
-  accessLevel: SdkPermissionAccessLevelT;
-  userId: SdkTableRowIdT;
-  groupsIds: SdkTableRowIdT[];
-};
+import type { SdkUserAccessPermissionsDescriptor } from '@llm/sdk';
 
 export type WithPermissionsInternalFilters<O = unknown> = O & {
-  satisfyPermissions?: UserAccessPermissionsDescriptor;
+  satisfyPermissions?: SdkUserAccessPermissionsDescriptor;
 };
 
 export type WithEnforcedPermissionsInternalFilters<O = unknown> = O & {
-  satisfyPermissions: UserAccessPermissionsDescriptor;
+  satisfyPermissions: SdkUserAccessPermissionsDescriptor;
 };

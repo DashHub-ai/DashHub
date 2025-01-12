@@ -17,6 +17,7 @@ import {
   type SdkChatT,
   type SdkSearchMessagesOutputT,
   type SdkTableRowWithIdNameT,
+  useSdkForLoggedIn,
 } from '@llm/sdk';
 
 import type { SdkRepeatedMessageItemT } from './messages/chat-message';
@@ -62,6 +63,7 @@ export const ChatConversationPanel = memo((
     replyAfterMount,
   }: Props,
 ) => {
+  const { can } = useSdkForLoggedIn().createRecordGuard(chat);
   const flickeringIndicator = useScrollFlickeringIndicator();
   const sentInitialMessageRef = useRef(false);
   const {
@@ -153,7 +155,8 @@ export const ChatConversationPanel = memo((
         key={index}
         message={message}
         isLast={index === groupedMessages.length - 1}
-        readOnly={chat.archived}
+        readOnly={!can.write || chat.archived}
+        archived={chat.archived}
         onRefreshResponse={onRefreshResponse}
         onReply={setReplyToMessage}
         onAction={onAction}
@@ -217,7 +220,7 @@ export const ChatConversationPanel = memo((
         {groupedMessages.map(renderMessage)}
       </div>
 
-      {!chat.archived && (
+      {can.write && !chat.archived && (
         <ChatInputToolbar
           {...inputToolbarProps}
           apps={apps}

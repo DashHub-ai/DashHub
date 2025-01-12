@@ -1,12 +1,14 @@
-import type { SdkCreateAppInputT, SdkCreateAppOutputT } from '@llm/sdk';
+import type { SdkCreateAppOutputT } from '@llm/sdk';
 
 import { useAnimatedModal } from '@llm/commons-front';
+
+import type { CreateAppFormValue } from './use-app-create-form';
 
 import { useWorkspaceOrganizationOrThrow } from '../../workspace';
 import { AppCreateFormModal } from './app-create-form-modal';
 
 type AppShowModalProps = {
-  defaultValue: Omit<SdkCreateAppInputT, 'organization'>;
+  defaultValue: Omit<CreateAppFormValue, 'organization'>;
 };
 
 export function useAppCreateModal() {

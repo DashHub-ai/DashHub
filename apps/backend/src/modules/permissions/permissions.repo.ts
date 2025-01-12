@@ -41,6 +41,7 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
 
             user_id: neb.ref('permissions.user_id'),
             user_email: neb.ref('users.email'),
+            user_name: neb.ref('users.name'),
           }),
         )
           .$castTo<PermissionsTableRowRawAggRelation[]>()
@@ -71,6 +72,8 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
 
               'user_id as user_id',
               'users.email as user_email',
+              'users.name as user_name',
+
               'group_id as group_id',
               'users_groups.name as group_name',
 
@@ -84,6 +87,7 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
                       jsonBuildObject({
                         id: eb.ref('group_users.id').$notNull(),
                         email: eb.ref('group_users.email').$notNull(),
+                        name: eb.ref('group_users.name').$notNull(),
                       }),
                     )
                     .as('users'),
@@ -98,6 +102,8 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
         A.filterMap(({
           user_id: userId,
           user_email: userEmail,
+          user_name: userName,
+
           group_id: groupId,
           group_name: groupName,
 
@@ -135,7 +141,7 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
           if (userId) {
             return O.some({
               ...record,
-              user: { id: userId, email: userEmail! },
+              user: { id: userId, email: userEmail!, name: userName! },
             });
           }
 

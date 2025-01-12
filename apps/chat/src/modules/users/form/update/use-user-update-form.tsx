@@ -25,7 +25,7 @@ export function useUserUpdateForm(
   }: UpdateUserFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { emailFormatValidator } = usePredefinedFormValidators<UpdateUserFormValue>();
+  const { emailFormatValidator, required } = usePredefinedFormValidators<UpdateUserFormValue>();
   const saveNotifications = useSaveTaskEitherNotification();
   const authValidator = useUseAuthFormValidator<UpdateUserFormValue>();
 
@@ -40,6 +40,7 @@ export function useUserUpdateForm(
     validation: {
       mode: ['blur', 'submit'],
       validators: () => [
+        required('name'),
         emailFormatValidator('email'),
         authValidator('auth'),
       ],

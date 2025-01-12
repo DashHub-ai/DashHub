@@ -76,6 +76,7 @@ export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
                   project={item}
                   onAfterEdit={silentReload}
                   onAfterArchive={silentReload}
+                  onAfterUnarchive={silentReload}
                 />
               ))}
             </div>

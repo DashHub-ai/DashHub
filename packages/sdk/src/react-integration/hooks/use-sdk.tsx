@@ -1,5 +1,6 @@
 import { useContextOrThrow } from '@llm/commons-front';
 import { createAccessLevelGuard } from '~/modules/auth/firewall/create-access-level-guard';
+import { createRecordAccessGuard } from '~/modules/dashboard/permissions/guards/create-record-access-guard';
 
 import { SdkContext } from '../sdk-context';
 
@@ -21,6 +22,7 @@ export function useSdkForLoggedIn() {
   return {
     ...sdk,
     session,
+    createRecordGuard: createRecordAccessGuard(session.token),
     get guard() {
       return createAccessLevelGuard(session.token);
     },

@@ -42,6 +42,7 @@ export function UsersTableContainer({ itemPropsFn }: Props) {
       createModal.showAsOptional({
         defaultValue: {
           email: '',
+          name: '',
           role: 'user',
           active: true,
           archiveProtection: false,

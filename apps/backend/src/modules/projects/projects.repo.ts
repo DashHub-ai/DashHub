@@ -5,7 +5,6 @@ import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateProjectInputT, SdkUpdateProjectInputT } from '@llm/sdk';
 
-import { rejectFalsyItems } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -22,7 +21,11 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
-import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
+import {
+  mapRawJSONAggRelationToSdkPermissions,
+  PermissionsRepo,
+  prependCreatorIfNonPublicPermissions,
+} from '../permissions';
 import { ProjectsSummariesRepo } from '../projects-summaries/projects-summaries.repo';
 import { ProjectTableRowWithRelations } from './projects.tables';
 
@@ -139,6 +142,7 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
             .select([
               'users.id as creator_user_id',
               'users.email as creator_user_email',
+              'users.name as creator_user_name',
 
               'organizations.id as organization_id',
               'organizations.name as organization_name',
@@ -162,6 +166,7 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
         A.map(({
           creator_user_id: creatorUserId,
           creator_user_email: creatorUserEmail,
+          creator_user_name: creatorUserName,
 
           organization_id: orgId,
           organization_name: orgName,
@@ -177,6 +182,7 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
           const creator = {
             id: creatorUserId,
             email: creatorUserEmail,
+            name: creatorUserName,
           };
 
           return {
@@ -194,16 +200,10 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
             },
             permissions: {
               inherited: [],
-              current: rejectFalsyItems([
-                // If it's global record, and this access level is added, then it'll be no longer global.
-                !!permissions?.length && {
-                  accessLevel: 'write',
-                  target: {
-                    user: creator,
-                  },
-                },
-                ...(permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
-              ]),
+              current: pipe(
+                (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+                prependCreatorIfNonPublicPermissions(creator),
+              ),
             },
           };
         }),

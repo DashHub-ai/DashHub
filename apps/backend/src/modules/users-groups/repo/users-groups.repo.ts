@@ -66,6 +66,7 @@ export class UsersGroupsRepo extends createProtectedDatabaseRepo('users_groups')
 
               'creator.id as creator_id',
               'creator.email as creator_email',
+              'creator.name as creator_name',
 
               eb => eb
                 .selectFrom('users_groups_users')
@@ -77,6 +78,7 @@ export class UsersGroupsRepo extends createProtectedDatabaseRepo('users_groups')
                       jsonBuildObject({
                         id: eb.ref('users.id').$notNull(),
                         email: eb.ref('users.email').$notNull(),
+                        name: eb.ref('users.name').$notNull(),
                       }),
                     )
                     .as('users'),
@@ -94,6 +96,7 @@ export class UsersGroupsRepo extends createProtectedDatabaseRepo('users_groups')
 
           creator_id: creatorId,
           creator_email: creatorEmail,
+          creator_name: creatorName,
 
           users,
 
@@ -103,6 +106,7 @@ export class UsersGroupsRepo extends createProtectedDatabaseRepo('users_groups')
           creator: {
             id: creatorId,
             email: creatorEmail,
+            name: creatorName,
           },
           organization: {
             id: orgId,

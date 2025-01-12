@@ -1,15 +1,18 @@
 import { type ControlBindProps, controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkTableRowWithIdT, SdkUpdateAppInputT } from '@llm/sdk';
+import type { SdkPermissionT, SdkTableRowWithIdT, SdkUpdateAppInputT } from '@llm/sdk';
 
 import { FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AppsCategoriesSearchSelect } from '~/modules/apps-categories';
+import { ShareResourceFormGroup } from '~/modules/permissions';
 
 type Value = Pick<
   SdkUpdateAppInputT,
   'name' | 'chatContext' | 'description' | 'category'
->;
+> & {
+  permissions?: SdkPermissionT[] | null;
+};
 
 export type AppSharedFormFieldsProps =
   & ValidationErrorsListProps<Value>
@@ -79,6 +82,14 @@ export const AppSharedFormFields = controlled<Value, AppSharedFormFieldsProps>((
           required
           {...bind.path('chatContext')}
         />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.permissions.label}
+        {...validation.extract('permissions')}
+      >
+        <ShareResourceFormGroup {...bind.path('permissions', { input: val => val ?? [] })} />
       </FormField>
     </>
   );
