@@ -9,6 +9,7 @@ import {
   CardActions,
   CardArchiveButton,
   CardBase,
+  CardContent,
   CardDescription,
   CardEditButton,
   CardFooter,
@@ -16,7 +17,7 @@ import {
   CardTitle,
   useArchiveWithNotifications,
 } from '@llm/ui';
-import { CardRecordPermissions } from '~/modules/permissions/card';
+import { CardRecordPermissionsRows } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';
 
 import { useProjectUpdateModal } from '../form';
@@ -49,13 +50,8 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCar
         {project.name}
       </CardTitle>
 
-      <div className="flex flex-col flex-1 space-y-4">
-        {project.permissions && (
-          <CardRecordPermissions
-            permissions={project.permissions.current}
-            className="text-sm"
-          />
-        )}
+      <CardContent>
+        <CardRecordPermissionsRows record={project} />
 
         {description && (
           <CardDescription className="flex-1">
@@ -70,7 +66,7 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive }: ProjectCar
 
           <CardOpenButton href={sitemap.projects.show.generate({ pathParams: { id: project.id } })} />
         </CardFooter>
-      </div>
+      </CardContent>
 
       {!project.archived && (
         <CardActions>

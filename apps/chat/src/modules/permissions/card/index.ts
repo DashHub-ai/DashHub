@@ -1,3 +1,3 @@
-export * from './card-record-permissions';
-export * from './card-record-public';
-export * from './card-record-shared-with';
+export * from './card-record-creator';
+export * from './card-record-permissions-rows';
+export * from './shared-with';

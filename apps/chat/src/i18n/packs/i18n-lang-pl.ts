@@ -486,6 +486,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     accessLevels: I18N_ACCESS_LEVELS_PL,
     card: {
       sharedWith: 'Udostępniono dla',
+      author: 'Autor',
     },
     status: {
       publicTooltip: 'Wszyscy w organizacji to widzą',

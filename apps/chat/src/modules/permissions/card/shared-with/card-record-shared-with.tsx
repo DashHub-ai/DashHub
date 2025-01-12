@@ -5,7 +5,7 @@ import type { SdkPermissionT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
 
-import { PermissionAvatarsList } from '../list/permission-avatars-list';
+import { PermissionAvatarsList } from '../../list/permission-avatars-list';
 
 type Props = {
   permissions: SdkPermissionT[];

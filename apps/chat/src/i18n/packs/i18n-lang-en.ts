@@ -484,6 +484,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     accessLevels: I18N_ACCESS_LEVELS_EN,
     card: {
       sharedWith: 'Shared with',
+      author: 'Author',
     },
     status: {
       publicTooltip: 'Everyone in organization can see this',
