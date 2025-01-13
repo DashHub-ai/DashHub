@@ -7423,10 +7423,10 @@ oniguruma-to-es@0.7.0:
     regex "^5.0.2"
     regex-recursion "^4.3.0"
 
-openai@^4.73.0:
-  version "4.73.0"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.73.0.tgz#b8f8a4793d4db91e7eeab7235446d2cfe3aa0e9c"
-  integrity sha512-NZstV77w3CEol9KQTRBRQ15+Sw6nxVTicAULSjYO4wn9E5gw72Mtp3fAVaBFXyyVPws4241YmFG6ya4L8v03tA==
+openai@^4.78.1:
+  version "4.78.1"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.78.1.tgz#44c3b195d239891be9c9c53722539ad8a1fcc5f2"
+  integrity sha512-drt0lHZBd2lMyORckOXFPQTmnGLWSLt8VK0W9BhOKWpMFBEoHMoz5gxMPmVq5icp+sOrsbMnsmZTVHUlKvD1Ow==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
