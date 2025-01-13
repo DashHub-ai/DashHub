@@ -21,24 +21,22 @@ export function PermissionAvatarsList({ permissions, className, size }: Props) {
         switch (type) {
           case 'user':
             return (
-              <div key={JSON.stringify(permission.target)}>
-                <PermissionUserAvatar
-                  user={permission.target.user}
-                  accessLevel={permission.accessLevel}
-                  size={size}
-                />
-              </div>
+              <PermissionUserAvatar
+                key={JSON.stringify(permission.target)}
+                user={permission.target.user}
+                accessLevel={permission.accessLevel}
+                size={size}
+              />
             );
 
           case 'group':
             return (
-              <div key={JSON.stringify(permission.target)}>
-                <PermissionGroupAvatar
-                  group={permission.target.group}
-                  accessLevel={permission.accessLevel}
-                  size={size}
-                />
-              </div>
+              <PermissionGroupAvatar
+                key={JSON.stringify(permission.target)}
+                group={permission.target.group}
+                accessLevel={permission.accessLevel}
+                size={size}
+              />
             );
 
           default: {

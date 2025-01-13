@@ -16,5 +16,6 @@ export class ShareResourceFirewall extends AuthFirewallService {
     this.shareResourceService.searchShareableUsersAndGroups({
       ...dto,
       user: this.userIdRow,
+      showGroupsAssignedToUser: !this.check.is.minimum.techUser,
     });
 }

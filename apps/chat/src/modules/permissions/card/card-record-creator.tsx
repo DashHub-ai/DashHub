@@ -32,6 +32,7 @@ export function CardRecordCreator({ creator, className }: Props) {
               size="xs"
               className="shadow-sm"
             />
+
             {creator.name}
           </div>
         </Tooltip>

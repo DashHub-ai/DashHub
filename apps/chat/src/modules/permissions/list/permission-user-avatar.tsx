@@ -14,14 +14,14 @@ export function PermissionUserAvatar({ user, accessLevel, size = 'sm' }: Props) 
 
   return (
     <Tooltip content={`${user.email} (${accessLevels[accessLevel]})`}>
-      <div className="transform transition-transform hover:-translate-y-1">
+      <span className="inline-block transform transition-transform hover:-translate-y-1">
         <ColorizedAvatar
           id={user.id}
           name={user.name}
           size={size}
           className="shadow-sm"
         />
-      </div>
+      </span>
     </Tooltip>
   );
 }

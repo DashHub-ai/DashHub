@@ -33,7 +33,7 @@ export function UsersGroupTableRow({ item, onUpdated }: Props) {
               tapTaskOption(onUpdated),
             ),
             onArchive: pipe(
-              sdks.dashboard.users.archive(item.id),
+              sdks.dashboard.usersGroups.archive(item.id),
               tapTaskEither(onUpdated),
             ),
           }}

@@ -19,6 +19,7 @@ import { ShareResourceFirewall } from './share-resource.firewall';
 
 type SearchShareResourceGroupsInternalFilters = SdkSearchShareResourceUsersGroupsInputT & {
   user: TableRowWithId;
+  showGroupsAssignedToUser?: boolean;
 };
 
 @injectable()
@@ -35,6 +36,7 @@ export class ShareResourceService implements WithAuthFirewall<ShareResourceFirew
       phrase,
       organizationId,
       user,
+      showGroupsAssignedToUser,
     }: SearchShareResourceGroupsInternalFilters,
   ) => pipe(
     TE.Do,
@@ -45,8 +47,10 @@ export class ShareResourceService implements WithAuthFirewall<ShareResourceFirew
         offset: 0,
         limit: 200,
         organizationIds: [organizationId],
-        usersIds: [user.id],
         sort: 'score:desc',
+        ...showGroupsAssignedToUser && {
+          usersIds: [user.id],
+        },
       }),
       TE.map(({ items }) => items),
     )),
