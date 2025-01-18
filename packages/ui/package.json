@@ -29,7 +29,7 @@
     "@llm/commons": "*",
     "@llm/commons-front": "*",
     "@llm/sdk": "*",
-    "@types/react": "^19.0.0",
+    "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.3",
     "lucide-react": "^0.456.0",
     "react": "^19.0.0",
