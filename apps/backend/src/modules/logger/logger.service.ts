@@ -25,7 +25,7 @@ export class LoggerService {
               : JSON.stringify(meta, null, 2)
           );
 
-          return `[${timestamp}][${prefix}] ${level}: ${message.trim()} ${serializedMeta}`.trim();
+          return `[${timestamp}][${prefix}] ${level}: ${(message as string).trim()} ${serializedMeta}`.trim();
         }),
       ),
       transports: [new transports.Console()],
