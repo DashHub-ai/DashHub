@@ -1,3 +1,5 @@
+import type { MouseEventHandler } from 'react';
+
 import clsx from 'clsx';
 import { StarIcon } from 'lucide-react';
 
@@ -18,6 +20,11 @@ export function FavoriteAppStarButton({ app, className }: Props) {
 
   const favorite = isFavorite(app);
 
+  const onClick: MouseEventHandler = (event) => {
+    event.stopPropagation();
+    toggle(app);
+  };
+
   return (
     <button
       type="button"
@@ -29,7 +36,7 @@ export function FavoriteAppStarButton({ app, className }: Props) {
       )}
       title={t.apps.favorites[favorite ? 'remove' : 'add']}
       aria-label={t.apps.favorites[favorite ? 'remove' : 'add']}
-      onClick={() => toggle(app)}
+      onClick={onClick}
     >
       <StarIcon
         size={20}

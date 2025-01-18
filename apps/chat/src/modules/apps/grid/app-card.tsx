@@ -13,7 +13,6 @@ import {
   CardDescription,
   CardEditButton,
   CardFooter,
-  CardOpenButton,
   CardTitle,
   useArchiveWithNotifications,
   useUnarchiveWithNotifications,
@@ -53,7 +52,12 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
   );
 
   return (
-    <CardBase>
+    <CardBase
+      disabled={createStatus.isLoading}
+      {...!ctaButton && {
+        onClick: () => void createApp(app),
+      }}
+    >
       <CardTitle
         icon={<WandSparklesIcon size={16} />}
         {...!app.archived && {
@@ -64,25 +68,20 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
       </CardTitle>
 
       <CardContent>
-        <CardDescription>
-          {app.description}
-        </CardDescription>
-
         {app.permissions && (
           <CardRecordPermissions permissions={app.permissions.current} />
         )}
+
+        <CardDescription>
+          {app.description}
+        </CardDescription>
 
         <CardFooter>
           <div className="text-muted-foreground text-xs">
             {formatDate(app.updatedAt)}
           </div>
 
-          {ctaButton || (
-            <CardOpenButton
-              onClick={() => void createApp(app)}
-              loading={createStatus.isLoading}
-            />
-          )}
+          {ctaButton}
         </CardFooter>
       </CardContent>
 
