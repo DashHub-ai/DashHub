@@ -3,6 +3,7 @@ export * from './sdk-counted-id-record.dto';
 export * from './sdk-id-name-url-entry.dto';
 export * from './sdk-ids-array.dto';
 export * from './sdk-offset-pagination.dto';
+export * from './sdk-optional-file-upload.dto';
 export * from './sdk-search-filters.dto';
 export * from './sdk-search-sort.dto';
 export * from './sdk-strict-json.dto';
