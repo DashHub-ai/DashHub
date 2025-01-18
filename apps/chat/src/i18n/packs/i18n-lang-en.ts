@@ -494,8 +494,14 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       author: 'Author',
     },
     status: {
-      publicTooltip: 'Everyone in organization can see this',
-      privateTooltip: 'Only shared users and groups can see this',
+      public: {
+        tooltip: 'Everyone in organization can see this',
+        title: 'Public',
+      },
+      private: {
+        tooltip: 'Only shared users and groups can see this',
+        title: 'Private',
+      },
     },
     modal: {
       title: 'Share resource',

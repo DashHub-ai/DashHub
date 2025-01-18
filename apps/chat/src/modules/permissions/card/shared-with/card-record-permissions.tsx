@@ -16,7 +16,7 @@ export function CardRecordPermissions({ permissions, ...props }: Props) {
   }
 
   if (isSdkPublicPermissions(permissions)) {
-    return <CardRecordPublic permissions={permissions} {...props} />;
+    return <CardRecordPublic {...props} />;
   }
 
   return <CardRecordSharedWith permissions={permissions} {...props} />;

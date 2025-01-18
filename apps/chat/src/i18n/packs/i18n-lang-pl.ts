@@ -496,8 +496,14 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       author: 'Autor',
     },
     status: {
-      publicTooltip: 'Wszyscy w organizacji to widzą',
-      privateTooltip: 'Tylko udostępnieni użytkownicy i grupy to widzą',
+      public: {
+        tooltip: 'Wszyscy w organizacji to widzą',
+        title: 'Publiczny',
+      },
+      private: {
+        tooltip: 'Tylko udostępnieni użytkownicy i grupy to widzą',
+        title: 'Prywatny',
+      },
     },
     modal: {
       title: 'Udostępnij',

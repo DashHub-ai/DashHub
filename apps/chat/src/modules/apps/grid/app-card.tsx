@@ -64,13 +64,13 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
       </CardTitle>
 
       <CardContent>
-        {app.permissions && (
-          <CardRecordPermissions permissions={app.permissions.current} />
-        )}
-
         <CardDescription>
           {app.description}
         </CardDescription>
+
+        {app.permissions && (
+          <CardRecordPermissions permissions={app.permissions.current} />
+        )}
 
         <CardFooter>
           <div className="text-muted-foreground text-xs">
