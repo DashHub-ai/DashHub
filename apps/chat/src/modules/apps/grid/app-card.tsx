@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 
-import clsx from 'clsx';
 import { flow } from 'fp-ts/lib/function';
-import { StarIcon, WandSparklesIcon } from 'lucide-react';
+import { WandSparklesIcon } from 'lucide-react';
 
 import { formatDate, runTask, tapTaskOption } from '@llm/commons';
 import { type SdkAppT, useSdkForLoggedIn } from '@llm/sdk';
@@ -19,12 +18,11 @@ import {
   useArchiveWithNotifications,
   useUnarchiveWithNotifications,
 } from '@llm/ui';
-import { useI18n } from '~/i18n';
 import { useAppUpdateModal } from '~/modules/apps-creator';
 import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
 import { CardRecordPermissions } from '~/modules/permissions';
 
-import { useFavoriteApps } from '../favorite';
+import { FavoriteAppStarButton } from '../favorite';
 
 export type AppCardProps = {
   app: SdkAppT;
@@ -35,11 +33,8 @@ export type AppCardProps = {
 };
 
 export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUnarchive }: AppCardProps) {
-  const t = useI18n().pack;
-  const { isFavorite, toggle } = useFavoriteApps();
   const { showAsOptional } = useAppUpdateModal();
   const { sdks, createRecordGuard } = useSdkForLoggedIn();
-  const favorite = isFavorite(app);
   const [createApp, createStatus] = useCreateChatWithInitialApp();
 
   const [onUnarchive, unarchiveStatus] = useUnarchiveWithNotifications(
@@ -59,27 +54,12 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
 
   return (
     <CardBase>
-      {!app.archived && (
-        <button
-          type="button"
-          className={clsx(
-            'top-4 right-4 absolute',
-            favorite
-              ? 'text-yellow-500 hover:text-yellow-600'
-              : 'text-muted-foreground hover:text-primary',
-          )}
-          title={t.apps.favorites[favorite ? 'remove' : 'add']}
-          aria-label={t.apps.favorites[favorite ? 'remove' : 'add']}
-          onClick={() => toggle(app)}
-        >
-          <StarIcon
-            size={20}
-            {...favorite ? { strokeWidth: 0, fill: 'currentColor' } : {}}
-          />
-        </button>
-      )}
-
-      <CardTitle icon={<WandSparklesIcon size={16} />}>
+      <CardTitle
+        icon={<WandSparklesIcon size={16} />}
+        {...!app.archived && {
+          suffix: <FavoriteAppStarButton app={app} />,
+        }}
+      >
         {app.name}
       </CardTitle>
 

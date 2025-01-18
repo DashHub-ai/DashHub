@@ -1,16 +1,20 @@
-import type { ReactNode } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 
-type CardTitleProps = {
+import clsx from 'clsx';
+
+type CardTitleProps = PropsWithChildren & {
   icon: ReactNode;
-  children: ReactNode;
+  className?: string;
+  suffix?: ReactNode;
 };
 
-export function CardTitle({ icon, children }: CardTitleProps) {
+export function CardTitle({ icon, children, className, suffix }: CardTitleProps) {
   return (
-    <div className="flex items-center gap-2 mb-4">
+    <div className={clsx('flex items-center gap-2 mb-4', className)}>
       <div className="flex-shrink-0 text-muted-foreground">
         {icon}
       </div>
+
       <div className="flex-1 min-w-0">
         <h3
           className="font-medium text-base truncate"
@@ -19,6 +23,8 @@ export function CardTitle({ icon, children }: CardTitleProps) {
           {children}
         </h3>
       </div>
+
+      {suffix}
     </div>
   );
 }
