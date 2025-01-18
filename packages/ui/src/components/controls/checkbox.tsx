@@ -24,7 +24,12 @@ export const Checkbox = controlled<boolean, Props>((
     checkboxClassName = 'mt-[-2px]',
   },
 ) => (
-  <label className={className}>
+  <label
+    className={clsx(
+      className,
+      disabled && 'opacity-50 pointer-events-none',
+    )}
+  >
     <input
       name={name}
       disabled={disabled}
@@ -38,6 +43,8 @@ export const Checkbox = controlled<boolean, Props>((
       }}
     />
 
-    <span className="ml-2 cursor-pointer">{children}</span>
+    <span className="ml-2 cursor-pointer">
+      {children}
+    </span>
   </label>
 ));

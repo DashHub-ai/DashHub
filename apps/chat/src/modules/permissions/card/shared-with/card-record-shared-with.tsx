@@ -19,7 +19,7 @@ export function CardRecordSharedWith({ permissions, className }: Props) {
     <div className={clsx('flex items-center gap-2', className)}>
       <div className="flex items-center gap-1.5 text-gray-500">
         <UsersIcon size={16} />
-        <span className="text-sm">
+        <span className="text-xs">
           {t.sharedWith}
           :
         </span>

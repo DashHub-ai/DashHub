@@ -4,6 +4,7 @@ import { delay, inject, injectable } from 'tsyringe';
 
 import {
   asyncIteratorToVoidPromise,
+  type Overwrite,
   runTaskAsVoid,
   tapAsyncIterator,
   tryOrThrowTE,
@@ -17,11 +18,14 @@ import {
 } from '@llm/sdk';
 import { ChatsSummariesService } from '~/modules/chats-summaries';
 
+import type { ExtractedFile } from '../api/helpers';
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId, TableUuid } from '../database';
 
 import { ChatsService } from '../chats';
+import { OrganizationsS3BucketsRepo } from '../organizations/s3-buckets';
 import { PermissionsService } from '../permissions';
+import { S3Service } from '../s3';
 import { AppsFirewall } from './apps.firewall';
 import { AppsRepo } from './apps.repo';
 import { AppsEsIndexRepo, AppsEsSearchRepo } from './elasticsearch';
@@ -63,6 +67,8 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     @inject(AppsEsSearchRepo) private readonly esSearchRepo: AppsEsSearchRepo,
     @inject(AppsEsIndexRepo) private readonly esIndexRepo: AppsEsIndexRepo,
     @inject(PermissionsService) private readonly permissionsService: PermissionsService,
+    @inject(S3Service) private readonly s3Service: S3Service,
+    @inject(OrganizationsS3BucketsRepo) private readonly organizationsS3BucketsRepo: OrganizationsS3BucketsRepo,
     @inject(delay(() => ChatsSummariesService)) private readonly chatsSummariesService: Readonly<ChatsSummariesService>,
     @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
   ) {}
@@ -119,14 +125,37 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
 
   search = this.esSearchRepo.search;
 
-  create = ({ organization, category, permissions, ...values }: SdkCreateAppInputT) => pipe(
-    this.repo.create({
+  create = ({ organization, category, permissions, logo, ...values }: InternalCreateAppInputT) => pipe(
+    TE.Do,
+    TE.bind('s3Resource', () => {
+      if (!logo) {
+        return TE.of(null);
+      }
+
+      if ('id' in logo) {
+        return TE.of(logo);
+      }
+
+      return pipe(
+        this.organizationsS3BucketsRepo.getDefaultS3Bucket({
+          organizationId: organization.id,
+        }),
+        TE.chainW(s3Bucket => this.s3Service.uploadFile({
+          bucketId: s3Bucket.id,
+          buffer: logo.buffer,
+          mimeType: logo.mimeType,
+          fileName: logo.fileName,
+        })),
+      );
+    }),
+    TE.chainW(({ s3Resource }) => this.repo.create({
       value: {
         ...values,
         organizationId: organization.id,
         categoryId: category.id,
+        logoS3ResourceId: s3Resource?.id,
       },
-    }),
+    })),
     TE.tap(({ id }) => {
       if (!permissions) {
         return TE.of(undefined);
@@ -142,14 +171,40 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, category, permissions, ...value }: SdkUpdateAppInputT & TableRowWithId) => pipe(
-    this.repo.update({
-      id,
-      value: {
-        ...value,
-        categoryId: category.id,
-      },
+  update = ({ id, category, permissions, logo, ...value }: InternalUpdateInputT) => pipe(
+    TE.Do,
+    TE.bind('originalRecord', () => this.get(id)),
+    TE.bindW('s3Resource', ({ originalRecord }) => {
+      if (!logo) {
+        return TE.of(null);
+      }
+
+      if ('id' in logo) {
+        return TE.of(logo);
+      }
+
+      return pipe(
+        this.organizationsS3BucketsRepo.getDefaultS3Bucket({
+          organizationId: originalRecord.organization.id,
+        }),
+        TE.chainW(s3Bucket => this.s3Service.uploadFile({
+          bucketId: s3Bucket.id,
+          buffer: logo.buffer,
+          mimeType: logo.mimeType,
+          fileName: logo.fileName,
+        })),
+      );
     }),
+    TE.bindW('record', ({ s3Resource }) => pipe(
+      this.repo.update({
+        id,
+        value: {
+          ...value,
+          categoryId: category.id,
+          logoS3ResourceId: s3Resource?.id ?? null,
+        },
+      }),
+    )),
     TE.tap(() => {
       if (!permissions) {
         return TE.of(undefined);
@@ -163,5 +218,25 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
       });
     }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(({ s3Resource, originalRecord }) => {
+      // Do it at the end, just in case. Make sure that permissions are updated before deleting the file.
+      // The deletion of the file might fail. In that case, we don't want to lose the permissions.
+      if (originalRecord.logo?.id && s3Resource?.id !== originalRecord.logo.id) {
+        return this.s3Service.deleteFile({
+          resourceId: originalRecord.logo.id,
+        });
+      }
+
+      return TE.of(undefined);
+    }),
+    TE.map(({ record }) => record),
   );
 }
+
+export type InternalCreateAppInputT = Overwrite<SdkCreateAppInputT, {
+  logo: TableRowWithId | ExtractedFile | null;
+}>;
+
+export type InternalUpdateInputT = Overwrite<SdkUpdateAppInputT & TableRowWithId, {
+  logo: TableRowWithId | ExtractedFile | null;
+}>;

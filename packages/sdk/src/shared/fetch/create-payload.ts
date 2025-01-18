@@ -56,14 +56,12 @@ export function patchPayload<T>(body: T) {
   };
 }
 
-export function jsonToFormData<
-  T extends {
-    files?: Record<string, File> | File[];
-  },
->({
-  files,
-  ...json
-}: T): FormData {
+export function jsonToFormData<T extends Record<string, any>>(
+  {
+    files,
+    ...json
+  }: T,
+): FormData {
   const formData = new FormData();
 
   for (const [key, value] of Object.entries<any>(json)) {
@@ -72,7 +70,7 @@ export function jsonToFormData<
     }
 
     if (value instanceof File) {
-      formData.append('file', value);
+      formData.append(key, value);
     }
     else {
       let mappedValue = value;
@@ -93,7 +91,9 @@ export function jsonToFormData<
 
   if (files) {
     Object.values(files).forEach((file) => {
-      formData.append(file.name, file);
+      if (file instanceof File) {
+        formData.append(file.name, file);
+      }
     });
   }
 

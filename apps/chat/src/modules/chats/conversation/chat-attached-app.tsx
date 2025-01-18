@@ -1,26 +1,71 @@
-import { Bot } from 'lucide-react';
+import { Bot, Send, Wand2 } from 'lucide-react';
 import { memo } from 'react';
 
 import type { SdkTableRowWithIdNameT } from '@llm/sdk';
 
-import { AppChatBadge } from '../../apps/chat/app-chat-badge';
+import { useI18n } from '~/i18n';
+import { useCachedAppLookup } from '~/modules/apps/use-cached-app-lookup';
+
+import type { ChatInputValue } from './input-toolbar';
 
 type ChatAttachedAppProps = {
   app: SdkTableRowWithIdNameT;
+  showPrompts?: boolean;
+  onSendChatMessage: (message: ChatInputValue) => void;
 };
 
-export const ChatAttachedApp = memo(({ app }: ChatAttachedAppProps) => {
-  return (
-    <div className="flex items-start gap-2 opacity-0 mb-5 animate-messageSlideIn">
-      <div className="flex flex-shrink-0 justify-center items-center border-gray-200 bg-gray-100 border rounded-full w-8 h-8">
-        <Bot className="w-5 h-5 text-gray-600" />
-      </div>
+export const ChatAttachedApp = memo(({ app, showPrompts, onSendChatMessage }: ChatAttachedAppProps) => {
+  const appData = useCachedAppLookup(app.id);
+  const { pack } = useI18n();
 
-      <div className="relative before:top-[12px] before:left-[-8px] before:absolute border-gray-200 before:border-8 before:border-gray-100 bg-gray-100 px-4 py-2 border before:border-transparent before:border-t-8 before:border-r-[12px] before:border-l-0 rounded-xl">
-        <div className="flex items-center gap-2 text-gray-600 text-sm">
-          <span>Attached app:</span>
-          <AppChatBadge id={app.id} />
+  if (appData.status !== 'success') {
+    return null;
+  }
+
+  const { data } = appData;
+
+  return (
+    <div className="opacity-0 mb-5 animate-messageSlideIn">
+      <div className="flex flex-col items-center space-y-6 bg-gray-50 p-4 rounded-lg">
+        {data.logo
+          ? (
+              <img src={data.logo.publicUrl} alt={data.name} className="rounded-2xl w-16 h-16" />
+            )
+          : (
+              <Bot className="rounded-2xl w-16 h-16 text-gray-400" />
+            )}
+
+        <div className="space-y-3 text-center">
+          <div className="space-y-1">
+            <h3 className="font-medium text-gray-900">{data.name}</h3>
+            <div className="inline-flex items-center gap-1 bg-blue-100 px-2 py-0.5 rounded-full text-blue-700 text-xs">
+              <Wand2 size={12} />
+              <span>
+                {pack.chat.app.attached}
+              </span>
+            </div>
+          </div>
+
+          {data.description && (
+            <p className="max-w-md text-gray-600 text-sm">{data.description}</p>
+          )}
         </div>
+
+        {showPrompts && (
+          <div className="flex flex-col gap-2 w-full max-w-md">
+            {pack.prompts.attachApp.map(prompt => (
+              <button
+                key={prompt}
+                type="button"
+                className="flex items-center gap-2 bg-white shadow-sm hover:shadow px-4 py-3 rounded-lg text-gray-700 text-sm transition-all group hover:scale-[1.01]"
+                onClick={() => onSendChatMessage({ content: prompt })}
+              >
+                <span className="flex-1">{prompt}</span>
+                <Send size={14} className="group-hover:text-blue-500 text-gray-400 transition-colors" />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

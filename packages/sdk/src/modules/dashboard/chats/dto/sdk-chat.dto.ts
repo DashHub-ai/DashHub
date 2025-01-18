@@ -26,12 +26,21 @@ export const SdkChatProjectV = z
 
 export type SdkChatProjectT = z.infer<typeof SdkChatProjectV>;
 
+export const SdkChatStatsV = z.object({
+  messages: z.object({
+    total: z.number(),
+  }),
+});
+
+export type SdkChatStatsT = z.infer<typeof SdkChatStatsV>;
+
 export const SdkChatV = z.object({
   creator: SdkUserListItemV,
   organization: SdkIdNameUrlEntryV,
   project: SdkChatProjectV.nullable(),
   internal: z.boolean(),
   summary: SdkChatSummaryV,
+  stats: SdkChatStatsV,
 })
   .merge(SdkTableRowWithPermissionsV)
   .merge(SdkTableRowWithUuidV)

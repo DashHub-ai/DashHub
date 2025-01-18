@@ -1,13 +1,11 @@
-import { Buffer } from 'node:buffer';
-
 import { either as E, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { z } from 'zod';
 
 import { tryParseUsingZodSchema } from '@llm/commons';
-import { SdkInvalidFileFormatError, SdkInvalidRequestError } from '@llm/sdk';
+import { type SdkInvalidFileFormatError, SdkInvalidRequestError } from '@llm/sdk';
 
-import type { ExtractedFile } from './try-extract-single-file';
+import { type ExtractedFile, extractFileTE } from './extract-file';
 
 export function tryExtractFiles<T extends z.ZodRawShape>(
   schema?: z.ZodObject<T>,
@@ -30,19 +28,7 @@ export function tryExtractFiles<T extends z.ZodRawShape>(
     ),
     TE.chainW(parsedPayload => pipe(
       extractAllFilesFromObject(body),
-      TE.traverseArray(file => (
-        TE.tryCatch(
-          async (): Promise<ExtractedFile> => ({
-            buffer: Buffer.from(await file.arrayBuffer()),
-            mimeType: file.type,
-            fileName: file.name,
-          }),
-          () => new SdkInvalidFileFormatError({
-            name: file.name,
-            mimeType: file.type,
-          }),
-        )),
-      ),
+      TE.traverseArray(extractFileTE),
       TE.map(extractedFiles => ({
         ...parsedPayload as z.infer<z.ZodObject<T>>,
         files: extractedFiles,

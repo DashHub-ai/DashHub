@@ -240,13 +240,18 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   chat: {
     title: 'Czat',
     archived: 'Czat jest zarchiwizowany',
+    card: {
+      noTitle: 'Czat bez nazwy',
+      noDescription: 'Brak opisu',
+      totalMessages: 'Wiadomości',
+    },
+    app: {
+      attached: 'Załączono aplikację',
+    },
     messages: {
       empty: 'Brak wiadomości',
       you: 'Ty',
       ai: 'AI',
-    },
-    prompts: {
-      explainApp: '%{mention} Wyjaśnij krótko, do czego służy aplikacja i jak jej używać.',
     },
     generating: {
       title: 'Generowanie tytułu...',
@@ -295,6 +300,14 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       },
     },
   },
+  prompts: {
+    attachApp: [
+      'Pokaż mi, jak używać tej aplikacji',
+      'Jakie są główne funkcje tej aplikacji?',
+      'Podaj mi przykłady tego, co mogę zrobić z tą aplikacją',
+      'Jakie są najlepsze praktyki korzystania z tej aplikacji?',
+    ],
+  },
   apps: {
     favorites: {
       add: 'Dodaj do ulubionych',
@@ -331,6 +344,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       description: {
         label: 'Opis',
         placeholder: 'Wpis opis aplikacji',
+      },
+      logo: {
+        label: 'Logo',
       },
       chatContext: {
         label: 'Prompt',
@@ -492,7 +508,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     share: 'Udostępnij',
     accessLevels: I18N_ACCESS_LEVELS_PL,
     card: {
-      sharedWith: 'Udostępniono dla',
+      sharedWith: 'Udostępniono',
       author: 'Autor',
     },
     status: {

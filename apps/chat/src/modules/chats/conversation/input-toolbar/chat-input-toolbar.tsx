@@ -213,9 +213,10 @@ export function ChatInputToolbar(
             </div>
 
             <Checkbox
+              className="text-sm"
+              disabled={disabled}
               value={!!submitOnEnterStorage.getOrNull()}
               onChange={submitOnEnterStorage.set}
-              className="text-sm"
             >
               {t.actions.submitOnEnter}
             </Checkbox>

@@ -39,6 +39,8 @@ export class OrganizationsS3BucketsService implements WithAuthFirewall<Organizat
 
   search = this.esSearchRepo.search;
 
+  getDefaultS3Bucket = this.repo.getDefaultS3Bucket;
+
   create = (value: SdkCreateS3BucketInputT) => pipe(
     this.repo.create({
       value,

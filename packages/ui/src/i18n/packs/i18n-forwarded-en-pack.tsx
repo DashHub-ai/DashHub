@@ -25,6 +25,7 @@ export const I18N_FORWARDED_EN_PACK = {
     gotIt: 'Rozumiem',
   },
   form: {
+    clearFile: 'Clear file',
     alerts: {
       saveSuccess: 'Changes saved successfully!',
       saveError: 'Failed to save changes!',

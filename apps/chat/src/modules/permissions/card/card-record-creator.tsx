@@ -15,11 +15,11 @@ export function CardRecordCreator({ creator, className }: Props) {
   const t = useI18n().pack.permissions.card;
 
   return (
-    <div className={clsx('flex items-center gap-2', className)}>
+    <div className={clsx('flex items-center gap-2 text-xs', className)}>
       <div className="flex items-center gap-1.5 text-gray-500">
         <UserIcon size={16} />
 
-        <span className="text-sm">
+        <span>
           {t.author}
           :
         </span>

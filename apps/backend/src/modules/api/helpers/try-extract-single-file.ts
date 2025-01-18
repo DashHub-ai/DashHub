@@ -1,17 +1,13 @@
-import { Buffer } from 'node:buffer';
-
 import { either as E, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { z } from 'zod';
 
-import { tryParseUsingZodSchema } from '@llm/commons';
-import { SdkInvalidFileFormatError, SdkInvalidRequestError } from '@llm/sdk';
+import type { SdkInvalidFileFormatError } from '@llm/sdk';
 
-export type ExtractedFile = {
-  buffer: Buffer;
-  mimeType: string;
-  fileName: string;
-};
+import { tryParseUsingZodSchema } from '@llm/commons';
+import { SdkInvalidRequestError } from '@llm/sdk';
+
+import { type ExtractedFile, extractFileTE } from './extract-file';
 
 export function tryExtractSingleFile(body: unknown): TE.TaskEither<
   SdkInvalidFileFormatError | SdkInvalidRequestError,
@@ -27,15 +23,6 @@ export function tryExtractSingleFile(body: unknown): TE.TaskEither<
         E.mapLeft(error => new SdkInvalidRequestError(error.context)),
       ),
     ),
-    TE.chainW(({ file }) =>
-      TE.tryCatch(
-        async () => ({
-          buffer: Buffer.from(await file.arrayBuffer()),
-          mimeType: file.type,
-          fileName: file.name,
-        }),
-        () => new SdkInvalidFileFormatError({}),
-      ),
-    ),
+    TE.chainW(({ file }) => extractFileTE(file)),
   );
 }

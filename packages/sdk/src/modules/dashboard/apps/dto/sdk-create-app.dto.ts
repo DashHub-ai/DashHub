@@ -1,6 +1,11 @@
 import type { z } from 'zod';
 
-import { SdkTableRowWithIdV, ZodOmitArchivedFields, ZodOmitDateFields } from '~/shared';
+import {
+  SdkOptionalFileUploadV,
+  SdkTableRowWithIdV,
+  ZodOmitArchivedFields,
+  ZodOmitDateFields,
+} from '~/shared';
 
 import { SdkUpsertTableRowWithPermissionsInputV } from '../../permissions/dto/sdk-upsert-table-row-with-permissions.dto';
 import { SdkAppV } from './sdk-app.dto';
@@ -16,6 +21,7 @@ export const SdkCreateAppInputV = SdkAppV.omit({
   .extend({
     organization: SdkTableRowWithIdV,
     category: SdkTableRowWithIdV,
+    logo: SdkOptionalFileUploadV,
   });
 
 export type SdkCreateAppInputT = z.infer<typeof SdkCreateAppInputV>;

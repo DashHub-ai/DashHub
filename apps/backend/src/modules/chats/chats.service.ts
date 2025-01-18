@@ -34,6 +34,8 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
 
   search = this.esSearchRepo.search;
 
+  findAndIndexDocumentById = this.esIndexRepo.findAndIndexDocumentById;
+
   unarchive = (id: SdkTableRowUuidT) => pipe(
     this.repo.unarchive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),

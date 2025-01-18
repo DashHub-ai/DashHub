@@ -22,6 +22,7 @@ export function ChatsHistorySection({ className }: Props) {
       <ChatsContainer
         filters={{
           creatorIds: [session.token.sub],
+          excludeEmpty: true,
         }}
       />
     </section>

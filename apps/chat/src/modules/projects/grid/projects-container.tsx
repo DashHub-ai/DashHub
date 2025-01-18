@@ -69,7 +69,7 @@ export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
           }
 
           return (
-            <div className="gap-4 grid grid-cols-2 md:grid-cols-4">
+            <div className="gap-4 grid grid-cols-2 md:grid-cols-3">
               {items.map(item => (
                 <ProjectCard
                   key={item.id}

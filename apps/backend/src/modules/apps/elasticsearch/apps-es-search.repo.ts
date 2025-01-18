@@ -1,3 +1,4 @@
+import camelcaseKeys from 'camelcase-keys';
 import esb from 'elastic-builder';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
@@ -134,5 +135,6 @@ export class AppsEsSearchRepo {
       category: source.category,
       chatContext: source.chat_context,
       permissions: mapRawEsDocToSdkPermissions(source.permissions),
+      logo: source.logo && camelcaseKeys(source.logo),
     });
 }

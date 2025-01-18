@@ -1,6 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
+import { sql } from 'kysely';
 import { injectable } from 'tsyringe';
 
 import {
@@ -37,8 +38,13 @@ export class AppsRepo extends createDatabaseRepo('apps') {
           qb
             .selectFrom(this.table)
             .where('apps.id', 'in', ids)
+
             .innerJoin('organizations', 'organizations.id', 'organization_id')
             .innerJoin('apps_categories', 'apps_categories.id', 'category_id')
+
+            .leftJoin('s3_resources', 's3_resources.id', 'apps.logo_s3_resource_id')
+            .leftJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
+
             .selectAll('apps')
             .select([
               'organizations.id as organization_id',
@@ -47,6 +53,20 @@ export class AppsRepo extends createDatabaseRepo('apps') {
               'apps_categories.id as category_id',
               'apps_categories.name as category_name',
 
+              // Logo
+              's3_resources.id as logo_s3_resource_id',
+              's3_resources.name as logo_s3_resource_name',
+              's3_resources.created_at as logo_s3_resource_created_at',
+              's3_resources.updated_at as logo_s3_resource_updated_at',
+              's3_resources.type as logo_s3_resource_type',
+              's3_resources.s3_key as logo_s3_resource_s3_key',
+              eb => sql<string>`${eb.ref('s3_resources_buckets.public_base_url')} || '/' || ${eb.ref('s3_resources.s3_key')}`.as('logo_s3_resource_public_url'),
+
+              // Logo bucket
+              's3_resources_buckets.id as logo_s3_resource_bucket_id',
+              's3_resources_buckets.name as logo_s3_resource_bucket_name',
+
+              // Permissions
               eb =>
                 PermissionsRepo
                   .createPermissionAggQuery(eb)
@@ -63,6 +83,18 @@ export class AppsRepo extends createDatabaseRepo('apps') {
           organization_name: orgName,
 
           permissions_json: permissions,
+
+          logo_s3_resource_id: logoId,
+          logo_s3_resource_name: logoName,
+          logo_s3_resource_created_at: logoCreatedAt,
+          logo_s3_resource_updated_at: logoUpdatedAt,
+          logo_s3_resource_type: logoType,
+          logo_s3_resource_s3_key: logoS3Key,
+          logo_s3_resource_public_url: logoPublicUrl,
+
+          logo_s3_resource_bucket_id: logoBucketId,
+          logo_s3_resource_bucket_name: logoBucketName,
+
           ...item
         }): AppTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -78,6 +110,21 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             inherited: [],
             current: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
           },
+          logo: logoId
+            ? {
+                id: logoId,
+                name: logoName!,
+                createdAt: logoCreatedAt!,
+                updatedAt: logoUpdatedAt!,
+                type: logoType!,
+                s3Key: logoS3Key!,
+                publicUrl: logoPublicUrl!,
+                bucket: {
+                  id: logoBucketId!,
+                  name: logoBucketName!,
+                },
+              }
+            : null,
         })),
       ),
     );

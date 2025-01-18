@@ -4,7 +4,7 @@ import { flow } from 'fp-ts/lib/function';
 import { WandSparklesIcon } from 'lucide-react';
 
 import { formatDate, runTask, tapTaskOption } from '@llm/commons';
-import { type SdkAppT, useSdkForLoggedIn } from '@llm/sdk';
+import { isSdkAppCreatorApp, type SdkAppT, useSdkForLoggedIn } from '@llm/sdk';
 import {
   CardActions,
   CardArchiveButton,
@@ -14,6 +14,7 @@ import {
   CardEditButton,
   CardFooter,
   CardTitle,
+  CardUnarchiveButton,
   useArchiveWithNotifications,
   useUnarchiveWithNotifications,
 } from '@llm/ui';
@@ -77,12 +78,12 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
             {formatDate(app.updatedAt)}
           </div>
 
+          {!ctaButton && app.permissions && (
+            <CardRecordPermissions permissions={app.permissions.current} />
+          )}
+
           {ctaButton}
         </CardFooter>
-
-        {app.permissions && (
-          <CardRecordPermissions permissions={app.permissions.current} />
-        )}
       </CardContent>
 
       {!ctaButton && !app.archived && (recordGuard.can.write || recordGuard.can.archive) && (
@@ -93,8 +94,9 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
 
           {recordGuard.can.archive && (
             <CardArchiveButton
-              onClick={() => void onArchive().then(() => onAfterArchive?.())}
+              disabled={isSdkAppCreatorApp(app)}
               loading={archiveStatus.loading}
+              onClick={() => void onArchive().then(() => onAfterArchive?.())}
             />
           )}
         </CardActions>
@@ -102,7 +104,7 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
 
       {!ctaButton && app.archived && recordGuard.can.unarchive && (
         <CardActions>
-          <CardArchiveButton
+          <CardUnarchiveButton
             onClick={() => void onUnarchive().then(() => onAfterUnarchive?.())}
             loading={unarchiveStatus.loading}
           />

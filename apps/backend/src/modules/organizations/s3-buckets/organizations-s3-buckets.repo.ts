@@ -59,6 +59,28 @@ export class OrganizationsS3BucketsRepo extends AbstractDatabaseRepo {
     );
   };
 
+  getDefaultS3Bucket = (
+    {
+      forwardTransaction,
+      organizationId,
+    }: TransactionalAttrs<{ organizationId: TableId; }>,
+  ) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(
+        async qb =>
+          qb
+            .selectFrom('organizations_s3_resources_buckets as org_buckets')
+            .where('org_buckets.organization_id', '=', organizationId)
+            .where('org_buckets.default', '=', true)
+            .select(['bucket_id as id'])
+            .executeTakeFirstOrThrow(),
+      ),
+      DatabaseError.tryTask,
+    );
+  };
+
   create = ({ forwardTransaction, value }: TransactionalAttrs<{ value: SdkCreateS3BucketInputT; }>) => {
     const transaction = tryReuseOrCreateTransaction({ db: this.db, forwardTransaction });
 

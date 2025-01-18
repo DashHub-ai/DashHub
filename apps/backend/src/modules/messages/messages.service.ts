@@ -45,7 +45,6 @@ export type AttachAppInputT = {
 export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
   constructor(
     @inject(MessagesRepo) private readonly repo: MessagesRepo,
-    @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
     @inject(MessagesEsSearchRepo) private readonly esSearchRepo: MessagesEsSearchRepo,
     @inject(MessagesEsIndexRepo) private readonly esIndexRepo: MessagesEsIndexRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
@@ -54,6 +53,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     @inject(ProjectsService) private readonly projectsService: ProjectsService,
     @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
     @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
+    @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new MessagesFirewall(jwt, this, this.chatsService, this.permissionsService);
@@ -94,7 +94,10 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           )),
         );
       }),
-      TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+      TE.tap(({ id }) => TE.sequenceArray([
+        this.esIndexRepo.findAndIndexDocumentById(id),
+        this.chatsService.findAndIndexDocumentById(chat.id),
+      ])),
     );
 
   attachApp = ({ chat, app, creator }: AttachAppInputT) =>
@@ -213,7 +216,10 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             role: 'assistant',
           },
         }),
-        TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+        TE.tap(({ id }) => TE.sequenceArray([
+          this.esIndexRepo.findAndIndexDocumentById(id),
+          this.chatsService.findAndIndexDocumentById(chatId),
+        ])),
         tryOrThrowTE,
       )();
 

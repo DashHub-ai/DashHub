@@ -238,13 +238,18 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   chat: {
     title: 'Chat',
     archived: 'Chat is archived',
+    card: {
+      noTitle: 'Unnamed Chat',
+      noDescription: 'No description',
+      totalMessages: 'messages',
+    },
+    app: {
+      attached: 'App attached',
+    },
     messages: {
       empty: 'No messages yet',
       you: 'You',
       ai: 'AI',
-    },
-    prompts: {
-      explainApp: '%{mention}Could you briefly explain what this app does and how to use it?',
     },
     generating: {
       title: 'Generating title...',
@@ -293,6 +298,14 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       },
     },
   },
+  prompts: {
+    attachApp: [
+      'Show me how to use this app',
+      'What are the main features of this app?',
+      'Give me some examples of what I can do with this app',
+      'What are the best practices for using this app?',
+    ],
+  },
   apps: {
     favorites: {
       add: 'Add to favorites',
@@ -329,6 +342,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       description: {
         label: 'Description',
         placeholder: 'Enter app description',
+      },
+      logo: {
+        label: 'Logo',
       },
       chatContext: {
         label: 'Chat prompt',

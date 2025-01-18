@@ -2,13 +2,13 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkTableRowWithIdT, SdkUpdateAppInputT } from '@llm/sdk';
 
-import { FormField, Input, TextArea } from '@llm/ui';
+import { FormField, Input, SelectGenericFileInput, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AppsCategoriesSearchSelect } from '~/modules/apps-categories';
 
 type Value = Pick<
   SdkUpdateAppInputT,
-  'name' | 'chatContext' | 'description' | 'category'
+  'name' | 'chatContext' | 'description' | 'category' | 'logo'
 >;
 
 type Props =
@@ -62,6 +62,18 @@ export const AppSharedFormFields = controlled<Value, Props>(({ errors, organizat
           placeholder={t.fields.description.placeholder}
           required
           {...bind.path('description')}
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.logo.label}
+      >
+        <SelectGenericFileInput
+          name="logo"
+          accept="image/*"
+          required
+          {...bind.path('logo')}
         />
       </FormField>
 

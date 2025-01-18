@@ -173,6 +173,13 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
                   .createPermissionAggQuery(eb)
                   .where('permissions.chat_id', '=', eb.ref('chats.id'))
                   .as('permissions_json'),
+
+              eb =>
+                eb.selectFrom('messages')
+                  .where('messages.chat_id', '=', eb.ref('chats.id'))
+                  .where('messages.role', '!=', 'system')
+                  .select(eb.fn.count('id').as('count'))
+                  .as('messages_count'),
             ])
             .limit(ids.length)
             .execute(),
@@ -206,6 +213,7 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
           project_permissions_json: projectPermissions,
           permissions_json: permissions,
+          messages_count: messagesCount,
 
           ...item
         }): ChatTableRowWithRelations => {
@@ -249,7 +257,12 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
               nameGeneratedAt: summaryNameGeneratedAt,
             },
 
-            // Reflect changes in permissions in messages repo
+            stats: {
+              messages: {
+                total: Number(messagesCount || 0),
+              },
+            },
+
             permissions: {
               inherited: pipe(
                 (projectPermissions ?? []).map(mapRawJSONAggRelationToSdkPermissions),

@@ -22,7 +22,7 @@ export function CardBase(
   const [, navigate] = useLocation();
 
   const shouldHandleClick = (target: EventTarget | null) =>
-    !(target instanceof HTMLElement && target.closest('a, button'));
+    !(target instanceof Element && target.closest('a, button'));
 
   const onMouseDown: MouseEventHandler = (event) => {
     if (!shouldHandleClick(event.target)) {

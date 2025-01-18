@@ -25,8 +25,8 @@ import {
   rejectUnsafeSdkErrors,
   sdkSchemaValidator,
   serializeSdkResponseTE,
+  tryExtractSingleFile,
 } from '../../helpers';
-import { tryExtractSingleFile } from '../../helpers/try-extract-single-file';
 import { AuthorizedController } from '../shared/authorized.controller';
 
 @injectable()
