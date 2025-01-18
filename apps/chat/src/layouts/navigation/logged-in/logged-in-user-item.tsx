@@ -32,7 +32,7 @@ export function LoggedInUserItem() {
 
           <li>
             <Link
-              className="justify-between"
+              className="justify-between opacity-50 pointer-events-none"
               href={sitemap.settings}
             >
               <span className="flex items-center gap-2">

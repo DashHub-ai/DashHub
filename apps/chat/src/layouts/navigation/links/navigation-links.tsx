@@ -1,6 +1,6 @@
 import {
   FolderKanbanIcon,
-  GraduationCapIcon,
+  // GraduationCapIcon,
   MessageSquareTextIcon,
   SettingsIcon,
   WandSparklesIcon,
@@ -12,7 +12,7 @@ import { useHasWorkspaceOrganization } from '~/modules';
 import { useSitemap } from '~/routes';
 
 import { NavigationItem } from './navigation-item';
-import { StayTunedNavigationItem } from './stay-tuned-navigation-item';
+// import { StayTunedNavigationItem } from './stay-tuned-navigation-item';
 
 export function NavigationLinks() {
   const t = useI18n().pack.navigation;
@@ -47,13 +47,13 @@ export function NavigationLinks() {
         {t.links.projects}
       </NavigationItem>
 
-      <StayTunedNavigationItem
+      {/* <StayTunedNavigationItem
         path={sitemap.experts}
         icon={<GraduationCapIcon size={16} />}
         disabled={!hasOrganization}
       >
         {t.links.experts}
-      </StayTunedNavigationItem>
+      </StayTunedNavigationItem> */}
 
       {guard.is.minimum.techUser && (
         <NavigationItem
