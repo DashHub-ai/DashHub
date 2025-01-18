@@ -136,10 +136,7 @@ export const ChatConversationPanel = memo((
 
   const onSelectApp = async (app: SdkTableRowWithIdNameT) => {
     if (!findItemById(app.id)(apps)) {
-      await onAttachApp({
-        app,
-        aiModel: aiModel!,
-      });
+      await onAttachApp(app);
     }
   };
 
@@ -174,10 +171,7 @@ export const ChatConversationPanel = memo((
 
       void (async () => {
         if (replyAfterMount.app) {
-          await onAttachApp({
-            app: replyAfterMount.app,
-            aiModel: replyAfterMount.aiModel,
-          });
+          await onAttachApp(replyAfterMount.app);
         }
 
         if (replyAfterMount.content) {
