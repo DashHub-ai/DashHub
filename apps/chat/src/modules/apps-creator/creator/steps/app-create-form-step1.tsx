@@ -37,7 +37,11 @@ export function AppCreateFormStep1({ onNext, loading }: Props) {
   const appCreatorApp = useAsyncValue(
     pipe(
       sdks.dashboard.apps.getAppCreatorApp(),
-      TE.getOrElseW(() => T.of(null)),
+      TE.getOrElseW((error) => {
+        console.error(error);
+
+        return T.of(null);
+      }),
     ),
     [],
   );

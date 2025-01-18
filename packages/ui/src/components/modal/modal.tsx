@@ -33,7 +33,7 @@ export function Modal(
   }: ModalProps,
 ) {
   const [isOpened, setOpened] = useState(false);
-  const DialogTag = formProps ? 'form' : 'div';
+  const DialogTag = formProps?.onSubmit ? 'form' : 'div';
 
   useTimeout(() => {
     setOpened(true);

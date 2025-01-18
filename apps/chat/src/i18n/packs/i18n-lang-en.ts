@@ -330,6 +330,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         label: 'Description',
         placeholder: 'Enter app description',
       },
+      logo: {
+        label: 'Logo',
+      },
       chatContext: {
         label: 'Chat prompt',
         placeholder: 'Enter app chat prompt description, it will help AI generate responses',

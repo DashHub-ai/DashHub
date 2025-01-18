@@ -129,6 +129,7 @@ export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
                     app={item}
                     onAfterEdit={silentReload}
                     onAfterArchive={silentReload}
+                    onAfterUnarchive={silentReload}
                     {...itemPropsFn?.(item)}
                   />
                 ))}

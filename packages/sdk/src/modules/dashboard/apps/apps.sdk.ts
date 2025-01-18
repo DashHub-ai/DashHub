@@ -3,10 +3,11 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
+  formDataPayload,
   getPayload,
+  jsonToFormData,
   patchPayload,
-  postPayload,
-  putPayload,
+  type SdkInvalidFileFormatError,
   type SdkRecordAlreadyExistsError,
   SdkRecordNotFoundError,
   type SdkTableRowIdT,
@@ -25,6 +26,8 @@ import type {
   SdkUpdateAppOutputT,
 } from './dto';
 
+import { SDK_MAGIC_APP_NAME } from './helpers';
+
 export class AppsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/apps';
 
@@ -37,7 +40,7 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
   getAppCreatorApp = () =>
     pipe(
       this.search({
-        phrase: 'App Creator',
+        phrase: SDK_MAGIC_APP_NAME,
         archived: false,
         offset: 0,
         limit: 1,
@@ -46,7 +49,7 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
       TE.map(({ items }) => items[0]),
       TE.chainW((item) => {
         if (!item) {
-          return TE.left(new SdkRecordNotFoundError({ id: 'App Creator' }));
+          return TE.left(new SdkRecordNotFoundError({ id: SDK_MAGIC_APP_NAME }));
         }
 
         return TE.right(item);
@@ -60,10 +63,16 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
       options: getPayload(),
     });
 
-  create = (data: SdkCreateAppInputT) =>
-    this.fetch<SdkCreateAppOutputT, SdkRecordAlreadyExistsError>({
+  create = ({ logo, ...data }: SdkCreateAppInputT) =>
+    this.fetch<SdkCreateAppOutputT, SdkRecordAlreadyExistsError | SdkInvalidFileFormatError>({
       url: this.endpoint('/'),
-      options: postPayload(data),
+      options: pipe(
+        jsonToFormData({
+          logo,
+          data: JSON.stringify(data),
+        }),
+        formDataPayload('POST'),
+      ),
     });
 
   unarchive = (id: SdkTableRowIdT) =>
@@ -84,13 +93,19 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
       options: patchPayload({}),
     });
 
-  update = ({ id, ...data }: SdkUpdateAppInputT & SdkTableRowWithIdT) =>
+  update = ({ id, logo, ...data }: SdkUpdateAppInputT & SdkTableRowWithIdT) =>
     this.fetch<
       SdkUpdateAppOutputT,
-      SdkRecordAlreadyExistsError | SdkRecordNotFoundError
+      SdkRecordAlreadyExistsError | SdkRecordNotFoundError | SdkInvalidFileFormatError
     >({
       url: this.endpoint(`/${id}`),
-      options: putPayload(data),
+      options: pipe(
+        jsonToFormData({
+          logo,
+          data: JSON.stringify(data),
+        }),
+        formDataPayload('PUT'),
+      ),
     });
 
   summarizeChatToApp = (chatId: SdkTableRowUuidT) =>

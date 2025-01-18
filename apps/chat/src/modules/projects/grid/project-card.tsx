@@ -17,7 +17,7 @@ import {
   useArchiveWithNotifications,
   useUnarchiveWithNotifications,
 } from '@llm/ui';
-import { CardRecordPermissionsRows } from '~/modules/permissions/card';
+import { CardRecordPermissionsRow } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';
 
 import { useProjectUpdateModal } from '../form';
@@ -70,12 +70,12 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive, onAfterUnarc
           </CardDescription>
         )}
 
-        <CardRecordPermissionsRows record={project} />
-
         <CardFooter>
           <div className="text-muted-foreground text-xs">
             {formatDate(project.updatedAt)}
           </div>
+
+          <CardRecordPermissionsRow record={project} />
         </CardFooter>
       </CardContent>
 

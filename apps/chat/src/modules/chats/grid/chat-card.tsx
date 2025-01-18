@@ -5,7 +5,7 @@ import { formatDate } from '@llm/commons';
 import { isSdkAIGeneratingString, type SdkSearchChatItemT } from '@llm/sdk';
 import { CardBase, CardContent, CardDescription, CardFooter, CardTitle } from '@llm/ui';
 import { useI18n } from '~/i18n';
-import { CardRecordPermissionsRows } from '~/modules/permissions/card';
+import { CardRecordPermissionsRow } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';
 
 type ChatCardProps = {
@@ -65,8 +65,6 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
           </div>
         )}
 
-        <CardRecordPermissionsRows record={chat} />
-
         <CardFooter>
           <div className="flex flex-col gap-2">
             <time className="text-gray-500 text-xs">
@@ -83,6 +81,8 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
               </span>
             )}
           </div>
+
+          <CardRecordPermissionsRow record={chat} />
         </CardFooter>
       </CardContent>
     </CardBase>

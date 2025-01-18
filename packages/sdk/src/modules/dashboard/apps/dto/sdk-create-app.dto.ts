@@ -1,4 +1,4 @@
-import type { z } from 'zod';
+import { z } from 'zod';
 
 import { SdkTableRowWithIdV, ZodOmitArchivedFields, ZodOmitDateFields } from '~/shared';
 
@@ -16,6 +16,7 @@ export const SdkCreateAppInputV = SdkAppV.omit({
   .extend({
     organization: SdkTableRowWithIdV,
     category: SdkTableRowWithIdV,
+    logo: z.instanceof(File).optional().nullable(),
   });
 
 export type SdkCreateAppInputT = z.infer<typeof SdkCreateAppInputV>;

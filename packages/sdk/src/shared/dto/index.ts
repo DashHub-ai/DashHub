@@ -5,6 +5,7 @@ export * from './sdk-ids-array.dto';
 export * from './sdk-offset-pagination.dto';
 export * from './sdk-search-filters.dto';
 export * from './sdk-search-sort.dto';
+export * from './sdk-strict-json.dto';
 export * from './sdk-success.dto';
 export * from './sdk-table-row-id.dto';
 export * from './sdk-table-row-uuid.dto';

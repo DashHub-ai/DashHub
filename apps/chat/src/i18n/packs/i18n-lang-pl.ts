@@ -332,6 +332,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         label: 'Opis',
         placeholder: 'Wpis opis aplikacji',
       },
+      logo: {
+        label: 'Logo',
+      },
       chatContext: {
         label: 'Prompt',
         placeholder: 'Wpisz opis prompt aplikacji, to pomoże AI w generowaniu odpowiedzi',
@@ -492,7 +495,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     share: 'Udostępnij',
     accessLevels: I18N_ACCESS_LEVELS_PL,
     card: {
-      sharedWith: 'Udostępniono dla',
+      sharedWith: 'Udostępniono',
       author: 'Autor',
     },
     status: {

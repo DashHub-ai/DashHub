@@ -1,16 +1,20 @@
+import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
+import { z } from 'zod';
 
 import {
   type AppsSdk,
   SdkCreateAppInputV,
   SdkSearchAppsInputV,
+  SdkStrictJsonV,
   SdkUpdateAppInputV,
 } from '@llm/sdk';
 import { AppsService } from '~/modules/apps';
 import { ConfigService } from '~/modules/config';
 
 import {
+  extractFileOrListItemOrNilTE,
   mapDbRecordAlreadyExistsToSdkError,
   mapDbRecordNotFoundToSdkError,
   mapEsDocumentNotFoundToSdkError,
@@ -55,17 +59,6 @@ export class AppsController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<AppsSdk['get']>>(context),
         ),
       )
-      .post(
-        '/',
-        sdkSchemaValidator('json', SdkCreateAppInputV),
-        async context => pipe(
-          context.req.valid('json'),
-          appsService.asUser(context.var.jwt).create,
-          mapDbRecordAlreadyExistsToSdkError,
-          rejectUnsafeSdkErrors,
-          serializeSdkResponseTE<ReturnType<AppsSdk['create']>>(context),
-        ),
-      )
       .patch(
         '/archive/:id',
         async context => pipe(
@@ -88,20 +81,53 @@ export class AppsController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<AppsSdk['unarchive']>>(context),
         ),
       )
+      .post(
+        '/',
+        sdkSchemaValidator('form', z.object({
+          logo: z.instanceof(File).optional().nullable(),
+          data: SdkStrictJsonV.pipe(SdkCreateAppInputV.omit({
+            logo: true,
+          })),
+        })),
+        async (context) => {
+          const { logo, data } = context.req.valid('form');
+
+          return pipe(
+            extractFileOrListItemOrNilTE(logo),
+            TE.chainW(extractedLogo => appsService.asUser(context.var.jwt).create({
+              ...data,
+              logo: extractedLogo,
+            })),
+            mapDbRecordAlreadyExistsToSdkError,
+            rejectUnsafeSdkErrors,
+            serializeSdkResponseTE<ReturnType<AppsSdk['create']>>(context),
+          );
+        },
+      )
       .put(
         '/:id',
-        sdkSchemaValidator('json', SdkUpdateAppInputV),
-        async context => pipe(
-          {
-            id: Number(context.req.param().id),
-            ...context.req.valid('json'),
-          },
-          appsService.asUser(context.var.jwt).update,
-          mapDbRecordAlreadyExistsToSdkError,
-          mapDbRecordNotFoundToSdkError,
-          rejectUnsafeSdkErrors,
-          serializeSdkResponseTE<ReturnType<AppsSdk['update']>>(context),
-        ),
+        sdkSchemaValidator('form', z.object({
+          logo: z.instanceof(File).optional().nullable(),
+          data: SdkStrictJsonV.pipe(SdkUpdateAppInputV.omit({
+            logo: true,
+          })),
+        })),
+        async (context) => {
+          const { logo, data } = context.req.valid('form');
+
+          return pipe(
+            extractFileOrListItemOrNilTE(logo),
+            TE.chainW(extractedLogo => appsService.asUser(context.var.jwt).update({
+              ...data,
+              id: Number(context.req.param().id),
+              logo: extractedLogo,
+            })),
+            mapDbRecordAlreadyExistsToSdkError,
+            mapDbRecordNotFoundToSdkError,
+            rejectUnsafeSdkErrors,
+            serializeSdkResponseTE<ReturnType<AppsSdk['update']>>(context),
+          );
+        },
       );
   }
 }

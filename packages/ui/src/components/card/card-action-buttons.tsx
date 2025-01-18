@@ -31,7 +31,7 @@ export function CardActionButton({
         'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-colors',
         variant === 'default' && 'bg-slate-50 hover:bg-slate-100',
         variant === 'danger' && 'bg-red-50 hover:bg-red-100 text-red-600',
-        disabled && 'opacity-50',
+        disabled && 'opacity-50 pointer-events-none',
         className,
       )}
       onClick={onClick}
@@ -42,12 +42,13 @@ export function CardActionButton({
   );
 }
 
-export function CardEditButton({ onClick }: { onClick: () => void; }) {
+export function CardEditButton({ onClick, disabled, loading }: PredefinedActionButtonProps) {
   const t = useForwardedI18n().pack;
 
   return (
     <CardActionButton
       icon={<PencilIcon size={12} />}
+      disabled={disabled || loading}
       onClick={onClick}
     >
       {t.buttons.edit}
@@ -55,17 +56,37 @@ export function CardEditButton({ onClick }: { onClick: () => void; }) {
   );
 }
 
-export function CardArchiveButton({ onClick, loading }: { onClick: () => void; loading?: boolean; }) {
+export function CardArchiveButton({ onClick, disabled, loading }: PredefinedActionButtonProps) {
   const t = useForwardedI18n().pack;
 
   return (
     <CardActionButton
       icon={<TrashIcon size={12} />}
       onClick={onClick}
-      disabled={loading}
+      disabled={disabled || loading}
       variant="danger"
     >
       {t.buttons.archive}
     </CardActionButton>
   );
 }
+
+export function CardUnarchiveButton({ onClick, disabled, loading }: PredefinedActionButtonProps) {
+  const t = useForwardedI18n().pack;
+
+  return (
+    <CardActionButton
+      icon={<TrashIcon size={12} />}
+      onClick={onClick}
+      disabled={disabled || loading}
+    >
+      {t.buttons.unarchive}
+    </CardActionButton>
+  );
+}
+
+type PredefinedActionButtonProps = {
+  loading?: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+};

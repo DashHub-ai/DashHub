@@ -27,6 +27,7 @@ export const I18N_FORWARDED_PL_PACK: typeof I18N_FORWARDED_EN_PACK = {
     gotIt: 'Rozumiem',
   },
   form: {
+    clearFile: 'Wyczyść plik',
     alerts: {
       saveSuccess: 'Pomyślnie zapisano zmiany!',
       saveError: 'Nie udało się zapisać zmian!',

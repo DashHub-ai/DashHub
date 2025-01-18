@@ -1,18 +1,14 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import type {
-  SdkCreateAppInputT,
-  SdkJwtTokenT,
-  SdkUpdateAppInputT,
-} from '@llm/sdk';
+import type { SdkJwtTokenT } from '@llm/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { ChatsService } from '../chats';
-import type { TableId, TableRowWithId, TableUuid } from '../database';
+import type { TableId, TableUuid } from '../database';
 import type { PermissionsService } from '../permissions';
-import type { AppsService } from './apps.service';
+import type { AppsService, InternalCreateAppInputT, InternalUpdateInputT } from './apps.service';
 import type { EsAppsInternalFilters } from './elasticsearch';
 
 export class AppsFirewall extends AuthFirewallService {
@@ -55,7 +51,7 @@ export class AppsFirewall extends AuthFirewallService {
     TE.chainW(() => this.appsService.archive(id)),
   );
 
-  update = (attrs: SdkUpdateAppInputT & TableRowWithId) => pipe(
+  update = (attrs: InternalUpdateInputT) => pipe(
     this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
       accessLevel: 'write',
       findRecord: this.appsService.get(attrs.id),
@@ -63,7 +59,7 @@ export class AppsFirewall extends AuthFirewallService {
     TE.chainW(() => this.appsService.update(attrs)),
   );
 
-  create = (dto: SdkCreateAppInputT) => pipe(
+  create = (dto: InternalCreateAppInputT) => pipe(
     this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto),
     TE.fromEither,
     TE.chainW(this.appsService.create),

@@ -2,14 +2,14 @@ import { type ControlBindProps, controlled, useFormValidatorMessages, type Valid
 
 import type { SdkPermissionT, SdkTableRowWithIdT, SdkUpdateAppInputT } from '@llm/sdk';
 
-import { FormField, Input, TextArea } from '@llm/ui';
+import { FormField, Input, SelectGenericFileInput, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AppsCategoriesSearchSelect } from '~/modules/apps-categories';
 import { ShareResourceFormGroup } from '~/modules/permissions';
 
 type Value = Pick<
   SdkUpdateAppInputT,
-  'name' | 'chatContext' | 'description' | 'category'
+  'name' | 'chatContext' | 'description' | 'logo' | 'category'
 > & {
   permissions?: SdkPermissionT[] | null;
 };
@@ -67,6 +67,17 @@ export const AppSharedFormFields = controlled<Value, AppSharedFormFieldsProps>((
           rows={4}
           required
           {...bind.path('description')}
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.logo.label}
+      >
+        <SelectGenericFileInput
+          name="logo"
+          accept="image/*"
+          {...bind.path('logo')}
         />
       </FormField>
 
