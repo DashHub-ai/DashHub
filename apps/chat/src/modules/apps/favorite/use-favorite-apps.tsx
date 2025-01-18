@@ -3,7 +3,11 @@ import { z } from 'zod';
 
 import { without } from '@llm/commons';
 import { useLocalStorageObject } from '@llm/commons-front';
-import { SdkTableRowIdV, type SdkTableRowWithIdT } from '@llm/sdk';
+import {
+  type SdkTableRowIdT,
+  SdkTableRowIdV,
+  type SdkTableRowWithIdT,
+} from '@llm/sdk';
 
 export function useFavoriteApps() {
   const storage = useLocalStorageObject('favorite-apps', {
@@ -27,9 +31,14 @@ export function useFavoriteApps() {
     storage.set(appsWithoutApp);
   };
 
+  const reset = () => storage.set([]);
+  const set = (ids: SdkTableRowIdT[]) => storage.set(ids);
+
   return {
     total: appsIds.length,
     ids: appsIds,
+    set,
+    reset,
     isFavorite,
     hasFavorites,
     toggle,
