@@ -240,6 +240,14 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   chat: {
     title: 'Czat',
     archived: 'Czat jest zarchiwizowany',
+    card: {
+      noTitle: 'Czat bez nazwy',
+      noDescription: 'Brak opisu',
+      totalMessages: 'Wiadomości',
+    },
+    app: {
+      attached: 'Załączono aplikację',
+    },
     messages: {
       empty: 'Brak wiadomości',
       you: 'Ty',
@@ -291,6 +299,14 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         button: 'Przywróć czat',
       },
     },
+  },
+  prompts: {
+    attachApp: [
+      'Pokaż mi, jak używać tej aplikacji',
+      'Jakie są główne funkcje tej aplikacji?',
+      'Podaj mi przykłady tego, co mogę zrobić z tą aplikacją',
+      'Jakie są najlepsze praktyki korzystania z tej aplikacji?',
+    ],
   },
   apps: {
     favorites: {

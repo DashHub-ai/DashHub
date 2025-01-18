@@ -65,6 +65,7 @@ export class ChatsEsSearchRepo {
       projectsIds,
       creatorIds,
       archived,
+      excludeEmpty,
       satisfyPermissions,
     }: EsChatsInternalFilters,
   ): esb.Query =>
@@ -76,6 +77,7 @@ export class ChatsEsSearchRepo {
         !!projectsIds?.length && esb.termsQuery('project.id', projectsIds),
         !!creatorIds?.length && esb.termsQuery('creator.id', creatorIds),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
+        !!excludeEmpty && esb.rangeQuery('stats.messages.total').gt(0),
         !!phrase && (
           esb
             .boolQuery()
@@ -99,6 +101,7 @@ export class ChatsEsSearchRepo {
       creator: source.creator,
       internal: source.internal,
       project: source.project,
+      stats: source.stats,
       permissions: mapRawEsDocToSdkPermissions(source.permissions),
       summary: {
         content: {

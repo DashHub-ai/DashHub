@@ -1,5 +1,6 @@
 import type { ColumnType } from 'kysely';
 
+import type { SdkChatStatsT } from '@llm/sdk';
 import type {
   DropTableRowAccessTime,
   NormalizeSelectTableRow,
@@ -43,4 +44,5 @@ export type ChatTableRowWithRelations =
     organization: TableRowWithIdName;
     project: ChatProjectTableRowRelation | null;
     creator: UserTableRowBaseRelation;
+    stats: SdkChatStatsT;
   };

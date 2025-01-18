@@ -1,5 +1,6 @@
 import type { z } from 'zod';
 
+import { StrictBooleanV } from '@llm/commons';
 import {
   SdkArchivedFiltersInputV,
   SdkDefaultSortInputV,
@@ -21,6 +22,7 @@ export const SdkSearchChatsInputV = SdkOffsetPaginationInputV
     organizationIds: SdkIdsArrayV.optional(),
     projectsIds: SdkIdsArrayV.optional(),
     creatorIds: SdkIdsArrayV.optional(),
+    excludeEmpty: StrictBooleanV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)

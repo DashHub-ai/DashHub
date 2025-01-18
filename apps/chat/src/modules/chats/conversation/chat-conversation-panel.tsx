@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import { taskEither as TE } from 'fp-ts';
+import { pipe } from 'fp-ts/lib/function';
 import {
   memo,
   type RefObject,
@@ -9,8 +11,8 @@ import {
   useState,
 } from 'react';
 
-import { findItemById, type Nullable, rejectFalsyItems } from '@llm/commons';
-import { useAfterMount, useInterval } from '@llm/commons-front';
+import { findItemById, type Nullable, rejectFalsyItems, runTask } from '@llm/commons';
+import { useAfterMount, useInterval, useRefSafeCallback } from '@llm/commons-front';
 import {
   getLastUsedSdkMessagesAIModel,
   groupSdkAIMessagesByRepeats,
@@ -19,6 +21,7 @@ import {
   type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import type { SdkRepeatedMessageItemT } from './messages/chat-message';
 
@@ -63,7 +66,10 @@ export const ChatConversationPanel = memo((
     replyAfterMount,
   }: Props,
 ) => {
-  const { can } = useSdkForLoggedIn().createRecordGuard(chat);
+  const { createRecordGuard, sdks } = useSdkForLoggedIn();
+  const { can } = createRecordGuard(chat);
+  const { organization } = useWorkspaceOrganizationOrThrow();
+
   const flickeringIndicator = useScrollFlickeringIndicator();
   const sentInitialMessageRef = useRef(false);
   const {
@@ -115,18 +121,27 @@ export const ChatConversationPanel = memo((
     });
   };
 
-  const onSendChatMessage = (message: ChatInputValue) => {
+  const onSendChatMessage = useRefSafeCallback((message: ChatInputValue) => {
     setReplyToMessage(null);
 
-    return onReply({
-      ...message,
-      replyToMessage: replyToMessage && {
-        ...replyToMessage,
-        content: extractOptimisticMessageContent(replyToMessage),
-      },
-      aiModel: aiModel!,
-    });
-  };
+    return pipe(
+      aiModel
+        ? TE.of(aiModel)
+        : sdks.dashboard.aiModels.getDefault(organization.id),
+      TE.chainW(defaultAiModel => TE.tryCatch(
+        async () => onReply({
+          ...message,
+          replyToMessage: replyToMessage && {
+            ...replyToMessage,
+            content: extractOptimisticMessageContent(replyToMessage),
+          },
+          aiModel: defaultAiModel,
+        }),
+        TE.left,
+      )),
+      runTask,
+    );
+  });
 
   const onAction = async (action: string) => {
     await onSendChatMessage({
@@ -141,9 +156,16 @@ export const ChatConversationPanel = memo((
   };
 
   const renderMessage = (message: SdkRepeatedMessageItemT, index: number) => {
+    const isLast = index === groupedMessages.length - 1;
+
     if (message.app) {
       return (
-        <ChatAttachedApp key={index} app={message.app} />
+        <ChatAttachedApp
+          key={index}
+          app={message.app}
+          showPrompts={isLast}
+          onSendChatMessage={onSendChatMessage}
+        />
       );
     }
 
@@ -151,7 +173,7 @@ export const ChatConversationPanel = memo((
       <ChatMessage
         key={index}
         message={message}
-        isLast={index === groupedMessages.length - 1}
+        isLast={isLast}
         readOnly={!can.write || chat.archived}
         archived={chat.archived}
         onRefreshResponse={onRefreshResponse}
@@ -220,7 +242,6 @@ export const ChatConversationPanel = memo((
           apps={apps}
           replyToMessage={replyToMessage}
           replying={replying}
-          disabled={!aiModel}
           inputRef={inputRef}
           onSubmit={onSendChatMessage}
           onCancelSubmit={() => {

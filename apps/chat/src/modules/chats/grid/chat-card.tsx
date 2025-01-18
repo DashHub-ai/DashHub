@@ -17,7 +17,11 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
   const { summary } = chat;
-  const isGeneratingTitle = isSdkAIGeneratingString(summary.name);
+
+  const totalMessages = chat.stats.messages.total;
+
+  const isGeneratingDescription = !!totalMessages && isSdkAIGeneratingString(summary.content);
+  const isGeneratingTitle = !!totalMessages && isSdkAIGeneratingString(summary.name);
 
   return (
     <CardBase
@@ -35,23 +39,23 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
         {(
           isGeneratingTitle
             ? t.chat.generating.title
-            : summary.name?.value ?? 'Unnamed Chat'
+            : summary.name?.value ?? t.chat.card.noTitle
         )}
       </CardTitle>
 
       <CardContent>
-        {isSdkAIGeneratingString(summary.content)
+        {isGeneratingDescription
           ? (
               <div className="flex flex-1 justify-center items-center gap-2 text-gray-500 text-sm">
                 <Loader2Icon size={14} className="animate-spin" />
                 {t.chat.generating.description}
               </div>
             )
-          : summary.content?.value && (
-            <CardDescription>
-              {summary.content.value}
-            </CardDescription>
-          )}
+          : (
+              <CardDescription>
+                {summary.content.value ?? t.chat.card.noDescription}
+              </CardDescription>
+            )}
 
         {withProject && chat.project && !chat.project.internal && (
           <div className="flex items-center gap-1 my-2 text-sm">
@@ -64,6 +68,15 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
             </Link>
           </div>
         )}
+
+        <div className="flex items-center gap-1 my-2 text-gray-500 text-sm">
+          <MessageSquareIcon size={14} />
+          <span>
+            {totalMessages}
+            {' '}
+            {t.chat.card.totalMessages}
+          </span>
+        </div>
 
         <CardFooter>
           <div className="flex flex-col gap-2">

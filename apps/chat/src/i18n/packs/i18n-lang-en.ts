@@ -238,6 +238,14 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   chat: {
     title: 'Chat',
     archived: 'Chat is archived',
+    card: {
+      noTitle: 'Unnamed Chat',
+      noDescription: 'No description',
+      totalMessages: 'messages',
+    },
+    app: {
+      attached: 'App attached',
+    },
     messages: {
       empty: 'No messages yet',
       you: 'You',
@@ -289,6 +297,14 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         button: 'Unarchive',
       },
     },
+  },
+  prompts: {
+    attachApp: [
+      'Show me how to use this app',
+      'What are the main features of this app?',
+      'Give me some examples of what I can do with this app',
+      'What are the best practices for using this app?',
+    ],
   },
   apps: {
     favorites: {

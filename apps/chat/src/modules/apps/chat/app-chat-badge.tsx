@@ -2,13 +2,9 @@ import clsx from 'clsx';
 import { CheckIcon, WandSparklesIcon } from 'lucide-react';
 import { memo } from 'react';
 
-import { AsyncTaskCache } from '@llm/commons';
-import { useAsyncValue } from '@llm/commons-front';
-import { type AppsSdk, type SdkAppT, type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
+import type { SdkTableRowIdT } from '@llm/sdk';
 
-const appChatsCache = new AsyncTaskCache<SdkTableRowIdT, AppsSdk, SdkAppT>(
-  (id, sdk) => sdk.get(id),
-);
+import { useCachedAppLookup } from '../use-cached-app-lookup';
 
 export type AppChatBadgeProps = {
   id: SdkTableRowIdT;
@@ -20,14 +16,7 @@ export type AppChatBadgeProps = {
 };
 
 export const AppChatBadge = memo(({ id, darkMode, selected, onClick, className, disabled }: AppChatBadgeProps) => {
-  const { sdks } = useSdkForLoggedIn();
-  const value = useAsyncValue(
-    () => appChatsCache.get(id, sdks.dashboard.apps),
-    [id],
-    {
-      initialValue: appChatsCache.getSyncValue(id),
-    },
-  );
+  const value = useCachedAppLookup(id);
 
   return (
     <button
