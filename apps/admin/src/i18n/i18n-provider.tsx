@@ -40,10 +40,10 @@ export function I18nProvider({ children }: PropsWithChildren) {
   }), [langOrDefault]);
 
   return (
-    <I18nContext.Provider value={value}>
-      <I18nForwardedContext.Provider value={value}>
+    <I18nContext value={value}>
+      <I18nForwardedContext value={value}>
         {children}
-      </I18nForwardedContext.Provider>
-    </I18nContext.Provider>
+      </I18nForwardedContext>
+    </I18nContext>
   );
 }

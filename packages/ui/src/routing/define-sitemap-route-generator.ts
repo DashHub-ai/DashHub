@@ -24,11 +24,11 @@ export function defineSitemapRouteGenerator<
 
       searchParams || defaultSearchParams
         ? withSearchParams(
-          {
-            ...defaultSearchParams,
-            ...searchParams,
-          },
-        )
+            {
+              ...defaultSearchParams,
+              ...searchParams,
+            },
+          )
         : identity,
 
       hash

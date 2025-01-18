@@ -14,8 +14,8 @@ export function ConfigProvider({ children }: PropsWithChildren) {
   const config = useMemo(() => tryReadEnvOrPanic(), []);
 
   return (
-    <ConfigContext.Provider value={config}>
+    <ConfigContext value={config}>
       {children}
-    </ConfigContext.Provider>
+    </ConfigContext>
   );
 }

@@ -66,9 +66,9 @@ export class ChatsFirewall extends AuthFirewallService {
     TE.chainW(() => (
       dto.project
         ? this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
-          accessLevel: 'write',
-          findRecord: this.projectsService.get(dto.project.id),
-        })
+            accessLevel: 'write',
+            findRecord: this.projectsService.get(dto.project.id),
+          })
         : TE.of(undefined)
     )),
     TE.chainEitherKW(() => this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto)),

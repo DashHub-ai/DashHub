@@ -39,6 +39,7 @@ export function useElementListener(
     const cachedListeners = Object.entries<AbstractEventListener>(listeners);
 
     cachedListeners.forEach(([event, listener]) => {
+      // eslint-disable-next-line react-web-api/no-leaked-event-listener
       element.addEventListener(event, listener, options);
     });
 

@@ -21,11 +21,11 @@ export type CreateSelectRecordsQueryAttrs<
   S extends keyof NormalizeSelectTableRow<DatabaseTables[K]>,
   Q = KyselySelectCreator<K>,
 > = WhereQueryBuilderAttrs<K> &
-TransactionalAttrs<{
-  select?: S[];
-  limit?: number;
-  modifyQuery?: (query: Q) => SelectQueryBuilder<DatabaseTables, any, any>;
-}>;
+  TransactionalAttrs<{
+    select?: S[];
+    limit?: number;
+    modifyQuery?: (query: Q) => SelectQueryBuilder<DatabaseTables, any, any>;
+  }>;
 
 export function createSelectRecordsQuery<K extends keyof DatabaseTables>({ table, db }: QueryBasicFactoryAttrs<K>) {
   return <S extends keyof NormalizeSelectTableRow<DatabaseTables[K]>>(

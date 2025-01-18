@@ -9,8 +9,8 @@ export function createRecordAccessGuard(jwt: SdkJwtTokenT) {
     const isCreator = record.creator?.id === jwt.sub;
     const canArchive
       = isCreator
-      || jwt.role === 'root'
-      || isTechOrOwnerUserSdkOrganizationRole(jwt.organization.role);
+        || jwt.role === 'root'
+        || isTechOrOwnerUserSdkOrganizationRole(jwt.organization.role);
 
     return {
       is: {

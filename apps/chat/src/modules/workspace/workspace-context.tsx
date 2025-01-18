@@ -60,9 +60,9 @@ export function WorkspaceProvider({ children }: PropsWithChildren) {
   }), [settings.revision]);
 
   return (
-    <WorkspaceContext.Provider value={value}>
+    <WorkspaceContext value={value}>
       {children}
-    </WorkspaceContext.Provider>
+    </WorkspaceContext>
   );
 }
 

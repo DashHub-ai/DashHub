@@ -37,9 +37,9 @@ export class AIModelsRepo extends createProtectedDatabaseRepo('ai_models') {
     return transaction(trx => pipe(
       value.default
         ? this.markAllModelsAsNotDefault({
-          forwardTransaction: trx,
-          organizationId: organization.id,
-        })
+            forwardTransaction: trx,
+            organizationId: organization.id,
+          })
         : TE.right([]),
       TE.chain(() => this.baseRepo.create({
         forwardTransaction: trx,

@@ -51,8 +51,8 @@ export function SdkProvider({ children, apiUrl, storageAttrs }: SdkProviderProps
   }, [tokensRevision, apiUrl]);
 
   return (
-    <SdkContext.Provider value={value}>
+    <SdkContext value={value}>
       {children}
-    </SdkContext.Provider>
+    </SdkContext>
   );
 }

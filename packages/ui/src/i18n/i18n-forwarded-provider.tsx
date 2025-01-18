@@ -8,8 +8,8 @@ type Props = PropsWithChildren & {
 
 export function I18nForwardedProvider({ children, value }: Props) {
   return (
-    <I18nForwardedContext.Provider value={value}>
+    <I18nForwardedContext value={value}>
       {children}
-    </I18nForwardedContext.Provider>
+    </I18nForwardedContext>
   );
 }

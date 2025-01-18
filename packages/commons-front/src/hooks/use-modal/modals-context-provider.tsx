@@ -84,7 +84,7 @@ export function ModalsContextProvider({
   }), [modals]);
 
   return (
-    <ModalsContext.Provider value={value}>
+    <ModalsContext value={value}>
       {typeof children === 'function' ? children({ modalVisible }) : children}
       {modalVisible && (
         <div id="modals-root">
@@ -104,6 +104,6 @@ export function ModalsContextProvider({
           )}
         </div>
       )}
-    </ModalsContext.Provider>
+    </ModalsContext>
   );
 }

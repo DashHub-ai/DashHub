@@ -15,10 +15,10 @@ export type CreateCountRecordsQueryAttrs<
   K extends keyof DatabaseTables,
   Q = KyselySelectCreator<K>,
 > = WhereQueryBuilderAttrs<K> &
-TransactionalAttrs<{
-  limit?: number;
-  modifyQuery?: (query: Q) => SelectQueryBuilder<DatabaseTables, any, any>;
-}>;
+  TransactionalAttrs<{
+    limit?: number;
+    modifyQuery?: (query: Q) => SelectQueryBuilder<DatabaseTables, any, any>;
+  }>;
 
 export function createCountRecordsQuery<K extends keyof DatabaseTables>({ table, db }: QueryBasicFactoryAttrs<K>) {
   return (

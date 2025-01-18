@@ -39,8 +39,8 @@ export class CronService {
     const middleware = attrs.skipIfPreviousJobNotDone
       ? exhaustMap(() => defer(execJob))
       : tap(() => {
-        void execJob();
-      });
+          void execJob();
+        });
 
     return TE.of(cron$(attrs.expression).pipe(middleware).subscribe());
   }

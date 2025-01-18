@@ -19,9 +19,9 @@
     "pg-native": ">=3.0.1"
   },
   "devDependencies": {
-    "@elastic/elasticsearch": "^8.15.0",
-    "@hono/node-server": "^1.13.3",
-    "@instructor-ai/instructor": "^1.5.0",
+    "@elastic/elasticsearch": "^8.17.0",
+    "@hono/node-server": "^1.13.7",
+    "@instructor-ai/instructor": "^1.6.0",
     "@llm/sdk": "*",
     "@types/bcryptjs": "^2.4.6",
     "@types/mime-types": "^2.1.0",
@@ -31,23 +31,23 @@
     "@types/utf-8-validate": "^5.0.2",
     "async-await-queue": "^2.1.4",
     "croner": "^9.0.0",
-    "dotenv": "^16.4.5",
-    "elastic-builder": "^2.30.0",
+    "dotenv": "^16.4.7",
+    "elastic-builder": "^2.31.0",
     "fast-deep-equal": "^3.1.3",
-    "hono": "^4.6.16",
+    "hono": "^4.6.17",
     "jwt-simple": "^0.5.6",
     "kysely": "^0.27.5",
     "mime-types": "^2.1.35",
     "minio": "^8.0.3",
     "object-hash": "^3.0.0",
     "officeparser": "^5.1.1",
-    "openai": "^4.78.1",
+    "openai": "^4.79.1",
     "pg": "^8.13.0",
     "pg-cursor": "^2.12.0",
     "rxjs": "^7.8.1",
     "tiny-glob": "^0.2.9",
     "tsyringe": "^4.8.0",
     "utf-8-validate": "^6.0.5",
-    "winston": "^3.16.0"
+    "winston": "^3.17.0"
   }
 }

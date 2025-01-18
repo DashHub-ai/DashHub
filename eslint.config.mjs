@@ -59,7 +59,7 @@ export function createAntfuEslintConfig(options) {
     })
     .overrideRules({
       'perfectionist/sort-imports': ['error', {
-        internalPattern: ['@/**', '~/**', './**', '@llm/**'],
+        internalPattern: ['^@/', '^~/', '^\\./', '^@llm/'],
         groups: [
           'side-effect',
           'type',
