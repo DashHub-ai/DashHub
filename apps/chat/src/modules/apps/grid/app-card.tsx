@@ -68,10 +68,6 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
       </CardTitle>
 
       <CardContent>
-        {app.permissions && (
-          <CardRecordPermissions permissions={app.permissions.current} />
-        )}
-
         <CardDescription>
           {app.description}
         </CardDescription>
@@ -83,6 +79,10 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
 
           {ctaButton}
         </CardFooter>
+
+        {app.permissions && (
+          <CardRecordPermissions permissions={app.permissions.current} />
+        )}
       </CardContent>
 
       {!ctaButton && !app.archived && (recordGuard.can.write || recordGuard.can.archive) && (

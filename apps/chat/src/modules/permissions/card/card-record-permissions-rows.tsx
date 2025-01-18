@@ -11,7 +11,7 @@ type Props = {
 
 export function CardRecordPermissionsRows({ record }: Props) {
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="flex flex-col gap-y-2">
       {record.creator && (
         <CardRecordCreator
           creator={record.creator}

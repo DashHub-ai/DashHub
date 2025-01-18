@@ -13,7 +13,6 @@ import {
   CardDescription,
   CardEditButton,
   CardFooter,
-  CardOpenButton,
   CardTitle,
   useArchiveWithNotifications,
   useUnarchiveWithNotifications,
@@ -53,26 +52,30 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive, onAfterUnarc
   );
 
   return (
-    <CardBase>
+    <CardBase
+      href={sitemap.projects.show.generate({
+        pathParams: {
+          id: project.id,
+        },
+      })}
+    >
       <CardTitle icon={<FolderIcon size={16} />}>
         {project.name}
       </CardTitle>
 
       <CardContent>
-        <CardRecordPermissionsRows record={project} />
-
         {description && (
           <CardDescription className="flex-1">
             {description}
           </CardDescription>
         )}
 
+        <CardRecordPermissionsRows record={project} />
+
         <CardFooter>
           <div className="text-muted-foreground text-xs">
             {formatDate(project.updatedAt)}
           </div>
-
-          <CardOpenButton href={sitemap.projects.show.generate({ pathParams: { id: project.id } })} />
         </CardFooter>
       </CardContent>
 

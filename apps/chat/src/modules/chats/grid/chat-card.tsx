@@ -1,4 +1,4 @@
-import { ArchiveIcon, ExternalLinkIcon, FolderIcon, Loader2Icon, MessageSquareIcon } from 'lucide-react';
+import { ArchiveIcon, FolderIcon, Loader2Icon, MessageSquareIcon } from 'lucide-react';
 import { Link } from 'wouter';
 
 import { formatDate } from '@llm/commons';
@@ -20,7 +20,11 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
   const isGeneratingTitle = isSdkAIGeneratingString(summary.name);
 
   return (
-    <CardBase>
+    <CardBase
+      href={sitemap.chat.generate({
+        pathParams: { id: chat.id },
+      })}
+    >
       <CardTitle
         icon={(
           isGeneratingTitle
@@ -36,8 +40,6 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
       </CardTitle>
 
       <CardContent>
-        <CardRecordPermissionsRows record={chat} />
-
         {isSdkAIGeneratingString(summary.content)
           ? (
               <div className="flex flex-1 justify-center items-center gap-2 text-gray-500 text-sm">
@@ -46,7 +48,7 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
               </div>
             )
           : summary.content?.value && (
-            <CardDescription className="flex-1">
+            <CardDescription>
               {summary.content.value}
             </CardDescription>
           )}
@@ -62,6 +64,8 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
             </Link>
           </div>
         )}
+
+        <CardRecordPermissionsRows record={chat} />
 
         <CardFooter>
           <div className="flex flex-col gap-2">
@@ -79,14 +83,6 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
               </span>
             )}
           </div>
-
-          <Link
-            href={sitemap.chat.generate({ pathParams: { id: chat.id } })}
-            className="uk-button uk-button-secondary uk-button-small"
-          >
-            <ExternalLinkIcon size={16} className="mr-2" />
-            {t.buttons.open}
-          </Link>
         </CardFooter>
       </CardContent>
     </CardBase>

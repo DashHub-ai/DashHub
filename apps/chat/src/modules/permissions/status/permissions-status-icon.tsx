@@ -16,7 +16,7 @@ export function PermissionsStatusIcon({ permissions, className }: Props) {
 
   return (
     <Tooltip
-      content={isPublic ? t.publicTooltip : t.privateTooltip}
+      content={isPublic ? t.public.tooltip : t.private.tooltip}
       wrapperClassName={clsx('text-gray-500', className)}
     >
       {(
