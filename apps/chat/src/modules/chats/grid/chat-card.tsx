@@ -69,7 +69,7 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
           </div>
         )}
 
-        <div className="flex items-center gap-1 my-2 text-gray-500 text-sm">
+        <div className="flex items-center gap-1 text-gray-500 text-sm">
           <MessageSquareIcon size={14} />
           <span>
             {totalMessages}
