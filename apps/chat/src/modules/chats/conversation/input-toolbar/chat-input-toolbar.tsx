@@ -31,6 +31,7 @@ export type ChatInputToolbarProps = {
 
   disabled?: boolean;
   inputRef?: React.RefObject<HTMLInputElement | null>;
+  withAppSelector?: boolean;
 
   onSubmit: (message: ChatInputValue) => CanBePromise<any>;
   onSelectApp?: (app: SdkTableRowWithIdNameT) => void;
@@ -41,6 +42,7 @@ export type ChatInputToolbarProps = {
 
 export function ChatInputToolbar(
   {
+    withAppSelector,
     expanded,
     rounded,
     disabled,
@@ -163,7 +165,12 @@ export function ChatInputToolbar(
           <textarea
             ref={inputRef as any}
             disabled={isTypingDisabled}
-            className="p-3 pb-0 w-full h-[60px] text-sm focus:outline-none resize-none"
+            className={clsx(
+              'p-3 pb-0 w-full text-sm focus:outline-none resize-none',
+              withAppSelector
+                ? 'h-[60px]'
+                : 'h-[45px]',
+            )}
             placeholder={t.placeholders.enterMessage}
             required
             onKeyDown={handleKeyDown}
@@ -175,12 +182,14 @@ export function ChatInputToolbar(
             className="mt-3 mb-2 px-3"
           />
 
-          <ChatSelectApp
-            apps={apps}
-            disabled={disabled}
-            className="mt-1 px-3"
-            {...selectedApp.bind.entire()}
-          />
+          {withAppSelector && (
+            <ChatSelectApp
+              apps={apps}
+              disabled={disabled}
+              className="mt-1 px-3"
+              {...selectedApp.bind.entire()}
+            />
+          )}
         </div>
 
         <div className="bottom-2 absolute flex flex-col gap-1 px-3 w-full">
@@ -200,16 +209,18 @@ export function ChatInputToolbar(
                 <span>{t.actions.attachFile}</span>
               </button>
 
-              <ChatChooseAppButton
-                selectedApps={apps}
-                disabled={disabled}
-                onSelect={(app) => {
-                  selectedApp.setValue({
-                    value: app,
-                  });
-                  onSelectApp?.(app);
-                }}
-              />
+              {withAppSelector && (
+                <ChatChooseAppButton
+                  selectedApps={apps}
+                  disabled={disabled}
+                  onSelect={(app) => {
+                    selectedApp.setValue({
+                      value: app,
+                    });
+                    onSelectApp?.(app);
+                  }}
+                />
+              )}
             </div>
 
             <Checkbox
