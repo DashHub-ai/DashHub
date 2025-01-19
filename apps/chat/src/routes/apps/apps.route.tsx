@@ -43,6 +43,7 @@ export function AppsRoute() {
 
       <AppsContainer
         key={revision}
+        storeDataInUrl
         toolbar={(
           <FormSpinnerCTA
             className="uk-button-small"

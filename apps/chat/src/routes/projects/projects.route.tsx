@@ -41,6 +41,7 @@ export function ProjectsRoute() {
 
       <ProjectsContainer
         key={revision}
+        storeDataInUrl
         toolbar={(
           <FormSpinnerCTA
             className="uk-button-small"

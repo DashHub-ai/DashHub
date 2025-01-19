@@ -18,7 +18,7 @@ export function AppsEditorRoute() {
       <LayoutHeader
         breadcrumbs={(
           <li>
-            <Link href={sitemap.apps.index}>
+            <Link href={sitemap.apps.index.generate({})}>
               {pack.routes.apps.title}
             </Link>
           </li>

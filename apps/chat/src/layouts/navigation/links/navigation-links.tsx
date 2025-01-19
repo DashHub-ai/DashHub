@@ -32,7 +32,7 @@ export function NavigationLinks() {
       </NavigationItem>
 
       <NavigationItem
-        path={sitemap.apps.index}
+        path={sitemap.apps.index.generate({})}
         icon={<WandSparklesIcon size={16} />}
         disabled={!hasOrganization}
       >
@@ -40,7 +40,7 @@ export function NavigationLinks() {
       </NavigationItem>
 
       <NavigationItem
-        path={sitemap.projects.index}
+        path={sitemap.projects.index.generate({})}
         icon={<FolderKanbanIcon size={16} />}
         disabled={!hasOrganization}
       >

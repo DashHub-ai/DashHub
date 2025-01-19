@@ -1,5 +1,10 @@
 import { pipe } from 'fp-ts/lib/function';
 
+import type {
+  SearchAppsRouteUrlFiltersT,
+  SearchProjectsRouteUrlFiltersT,
+} from '~/modules';
+
 import { concatUrls, withSearchParams } from '@llm/commons';
 import { defineSitemapRouteGenerator } from '@llm/ui';
 
@@ -7,11 +12,11 @@ export function useSitemap() {
   const sitemap = {
     home: prefixWithBaseRoute('/'),
     projects: {
-      index: prefixWithBaseRoute('/projects'),
+      index: defineSitemapRouteGenerator<SearchProjectsRouteUrlFiltersT>(prefixWithBaseRoute)('/projects'),
       show: defineSitemapRouteGenerator(prefixWithBaseRoute)('/projects/:id'),
     },
     apps: {
-      index: prefixWithBaseRoute('/apps'),
+      index: defineSitemapRouteGenerator<SearchAppsRouteUrlFiltersT>(prefixWithBaseRoute)('/apps'),
       editor: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/:id'),
     },
     experts: prefixWithBaseRoute('/experts'),

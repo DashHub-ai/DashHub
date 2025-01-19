@@ -221,6 +221,30 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     selectOrganization: 'Wybierz organizację',
     organization: 'Organizacja',
   },
+  searchBar: {
+    viewAll: 'Zobacz wszystkie',
+    input: {
+      placeholder: 'Szukaj...',
+    },
+    groups: {
+      messages: {
+        header: 'Wiadomości',
+        itemSubTitle: 'Wiadomość',
+      },
+      chats: {
+        header: 'Czaty',
+        itemSubTitle: 'Czat',
+      },
+      projects: {
+        header: 'Projekty',
+        itemSubTitle: 'Projekt',
+      },
+      apps: {
+        header: 'Aplikacje',
+        itemSubTitle: 'Aplikacja',
+      },
+    },
+  },
   chats: {
     start: {
       placeholder: 'Wpisz swoją wiadomość tutaj...',

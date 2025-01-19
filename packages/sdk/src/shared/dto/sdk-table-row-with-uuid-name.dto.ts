@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-import { SdkTableRowIdV } from './sdk-table-row-id.dto';
+import { SdkTableRowUuidV } from './sdk-table-row-uuid.dto';
 
 export const SdkTableRowWithUuidNameV = z.object({
-  id: SdkTableRowIdV,
+  id: SdkTableRowUuidV,
   name: z.string(),
 });
 
