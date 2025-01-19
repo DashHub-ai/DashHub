@@ -50,7 +50,7 @@ export const GroupUsersSelectTable = controlled<SdkUserListItemT[]>(({ control: 
       label={pack.usersGroups.form.fields.users.label}
     >
       <AddButton
-        className="mt-1 uk-button-secondary"
+        className="mt-1 uk-button-secondary uk-button-small"
         loading={choosingUsersState.isLoading}
         onClick={onShowChooseUsersModal}
       />
