@@ -10,7 +10,7 @@ At DashHub, we believe in tools that adapt to **your unique workflows and goals*
 
 ## 📋 Table of Contents
 
-- [🚀 DashHub: The Unified Open-Source AI Platform for Enterprises](#-dashhub-the-unified-open-source-ai-platform-for-enterprises)
+- [🚀 DashHub: The Open-Source AI Platform for Teams of All Sizes](#-dashhub-the-open-source-ai-platform-for-teams-of-all-sizes)
   - [📋 Table of Contents](#-table-of-contents)
   - [🌟 Introduction](#-introduction)
   - [🌟 Why Choose DashHub](#-why-choose-dashhub)
@@ -63,7 +63,7 @@ To run the project, follow these steps:
 1. Clone the repository by running the following command:
 
   ```
-  git clone https://github.com/dashhub-org/dashhub.git
+  git clone git@github.com:DashHub-ai/DashHub.git
   ```
 
 2. Install the required dependencies by running the following command:
@@ -72,7 +72,15 @@ To run the project, follow these steps:
   yarn install
   ```
 
-3. Start the project by running the following command:
+3. Start local minio server
+
+  ```bash
+  ./start-local-minio.sh
+  ```
+
+5. Ensure that elasticsearch is running on your local machine.
+
+6. Start the project by running the following command:
 
   ```
   yarn run dev
