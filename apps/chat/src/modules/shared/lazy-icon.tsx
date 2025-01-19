@@ -12,7 +12,7 @@ export const LazyIcon = memo(({ name, ...props }: IconProps) => {
   const LucideIcon = name in dynamicIconImports ? lazy(dynamicIconImports[name]) : FileWarningIcon;
 
   return (
-    <Suspense fallback={<div style={{ width: 24, height: 24 }} />}>
+    <Suspense fallback={<div style={{ width: 16, height: 16 }} />}>
       <LucideIcon {...props} />
     </Suspense>
   );
