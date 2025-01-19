@@ -4,13 +4,20 @@
     <title>DashHub Chat</title>
     <meta charset="utf-8">
     <meta name="robots" content="nofollow">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
     <link rel="preload" href="fonts/geist/geist-variable-vf.woff2" as="font" type="font/woff2">
     <link rel="preload" href="fonts/geist/geist-mono-variable-vf.woff2" as="font" type="font/woff2">
+
     <link rel="stylesheet" href="fonts/geist/style.css">
     <link rel="stylesheet" href="src/index.scss">
   </head>
 
-  <body class="hidden bg-background font-geist-sans text-foreground antialiased md:block">
+  <body class="md:block hidden bg-background font-geist-sans text-foreground antialiased">
     <div id="root"></div>
     <script src="./src/index.tsx" type="module" async></script>
   </body>
