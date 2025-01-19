@@ -20,7 +20,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     links: {
       home: 'Chats',
       projects: 'Projects',
-      apps: 'Apps',
+      apps: 'Assistants',
       experts: 'Experts',
       management: 'Management',
     },
@@ -99,25 +99,25 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     },
     apps: {
       meta: {
-        title: 'Apps',
+        title: 'Assistants',
         description: 'Manage apps',
       },
-      title: 'Apps',
+      title: 'Assistants',
       tutorial: {
-        title: 'What are DashHub Apps?',
+        title: 'What are DashHub Assistants?',
         tools: 'Specialized LLM-powered tools for email composition, data organization, and content transformation',
         modular: 'Modular and reusable applications to boost your productivity across projects',
       },
       buttons: {
-        create: 'New app',
+        create: 'New assistant',
       },
     },
     appsEditor: {
       meta: {
-        title: 'App Editor',
-        description: 'Edit app',
+        title: 'Assistant Editor',
+        description: 'Edit Assistant',
       },
-      title: 'App Editor',
+      title: 'Assistant Editor',
     },
     projects: {
       meta: {
@@ -238,8 +238,8 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         itemSubTitle: 'Project',
       },
       apps: {
-        header: 'Apps',
-        itemSubTitle: 'App',
+        header: 'Assistants',
+        itemSubTitle: 'Assistant',
       },
     },
   },
@@ -336,21 +336,21 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       remove: 'Remove from favorites',
     },
     grid: {
-      placeholder: 'No apps yet. Stay tuned!',
+      placeholder: 'No assistants yet. Stay tuned!',
     },
     chooseAppModal: {
-      title: 'Choose App',
+      title: 'Choose Assistant',
     },
   },
   appsCreator: {
     create: {
-      title: 'Create New App',
+      title: 'Create New Assistant',
       nextStep: 'Next step',
       step: 'Step',
       backStep: 'Previous step',
     },
     edit: {
-      title: 'Edit App',
+      title: 'Edit Assistant',
     },
     fields: {
       category: {
@@ -378,24 +378,24 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   },
   appsCategories: {
     sidebar: {
-      allApps: 'All Apps',
+      allApps: 'All Assistants',
       header: 'Categories',
       otherCategoryItems: 'Other',
       showMore: 'Show all (%{count} more)',
     },
     form: {
       title: {
-        create: 'Create app category',
-        edit: 'Edit app category',
+        create: 'Create assistant category',
+        edit: 'Edit assistant category',
       },
       fields: {
         name: {
           label: 'Name',
-          placeholder: 'Enter app category name',
+          placeholder: 'Enter assistant category name',
         },
         icon: {
           label: 'Icon',
-          placeholder: 'Enter app category icon',
+          placeholder: 'Enter assistant category icon',
         },
         description: {
           label: 'Description',
@@ -410,7 +410,7 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       },
     },
     manageAppsCategories: {
-      title: 'Manage Apps Categories',
+      title: 'Manage Assistants Categories',
     },
   },
   projects: {

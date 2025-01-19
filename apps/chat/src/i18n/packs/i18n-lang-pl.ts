@@ -22,7 +22,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     links: {
       home: 'Czaty',
       projects: 'Projekty',
-      apps: 'Appki',
+      apps: 'Asystenci',
       experts: 'Eksperci',
       management: 'Administracja',
     },
@@ -101,25 +101,25 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
     },
     apps: {
       meta: {
-        title: 'Aplikacje',
+        title: 'Aystenci',
         description: 'Zarządzaj aplikacjami',
       },
-      title: 'Aplikacje',
+      title: 'Aystenci',
       tutorial: {
-        title: 'Czym są Aplikacje DashHub?',
+        title: 'Czym są Aystenci DashHub?',
         tools: 'Specjalistyczne narzędzia oparte na LLM do tworzenia e-maili, organizacji danych i transformacji treści',
         modular: 'Modularne i wielokrotnego użytku aplikacje zwiększające produktywność w projektach',
       },
       buttons: {
-        create: 'Nowa appka',
+        create: 'Nowy asystent',
       },
     },
     appsEditor: {
       meta: {
-        title: 'Edytor aplikacji',
+        title: 'Edytor asystenta',
         description: 'Edytuj aplikacje',
       },
-      title: 'Edytor aplikacji',
+      title: 'Edytor asystenta',
     },
     projects: {
       meta: {
@@ -326,10 +326,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   },
   prompts: {
     attachApp: [
-      'Pokaż mi, jak używać tej aplikacji',
-      'Jakie są główne funkcje tej aplikacji?',
+      'Pokaż mi, jak używać tej asystenta',
+      'Jakie są główne funkcje tej asystenta?',
       'Podaj mi przykłady tego, co mogę zrobić z tą aplikacją',
-      'Jakie są najlepsze praktyki korzystania z tej aplikacji?',
+      'Jakie są najlepsze praktyki korzystania z tej asystenta?',
     ],
   },
   apps: {
@@ -338,7 +338,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       remove: 'Usuń z ulubionych',
     },
     grid: {
-      placeholder: 'Brak aplikacji!',
+      placeholder: 'Brak asystenta!',
     },
     chooseAppModal: {
       title: 'Wybierz aplikację',
@@ -363,41 +363,41 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       },
       name: {
         label: 'Nazwa',
-        placeholder: 'Wpisz nazwę aplikacji',
+        placeholder: 'Wpisz nazwę asystenta',
       },
       description: {
         label: 'Opis',
-        placeholder: 'Wpis opis aplikacji',
+        placeholder: 'Wpis opis asystenta',
       },
       logo: {
         label: 'Logo',
       },
       chatContext: {
         label: 'Prompt',
-        placeholder: 'Wpisz opis prompt aplikacji, to pomoże AI w generowaniu odpowiedzi',
+        placeholder: 'Wpisz opis prompt asystenta, to pomoże AI w generowaniu odpowiedzi',
       },
     },
   },
   appsCategories: {
     sidebar: {
-      allApps: 'Wszystkie aplikacje',
+      allApps: 'Wszyscy asystenci',
       header: 'Kategorie',
       showMore: 'Pokaż wszystkie (%{count} więcej)',
       otherCategoryItems: 'Pozostałe',
     },
     form: {
       title: {
-        create: 'Utwórz kategorię aplikacji',
-        edit: 'Edytuj kategorię aplikacji',
+        create: 'Utwórz kategorię asystenta',
+        edit: 'Edytuj kategorię asystenta',
       },
       fields: {
         name: {
           label: 'Nazwa',
-          placeholder: 'Wpisz nazwę kategorii aplikacji',
+          placeholder: 'Wpisz nazwę kategorii asystenta',
         },
         icon: {
           label: 'Ikona',
-          placeholder: 'Wpisz ikonę kategorii aplikacji',
+          placeholder: 'Wpisz ikonę kategorii asystenta',
         },
         description: {
           label: 'Opis',
@@ -412,7 +412,7 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       },
     },
     manageAppsCategories: {
-      title: 'Zarządzaj kategoriami aplikacji',
+      title: 'Zarządzaj kategoriami asystentów',
     },
   },
   projects: {
