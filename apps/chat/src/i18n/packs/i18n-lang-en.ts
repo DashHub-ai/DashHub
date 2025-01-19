@@ -219,6 +219,30 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
     selectOrganization: 'Select organization',
     organization: 'Organization',
   },
+  searchBar: {
+    viewAll: 'View all',
+    input: {
+      placeholder: 'Search...',
+    },
+    groups: {
+      messages: {
+        header: 'Messages',
+        itemSubTitle: 'Message',
+      },
+      chats: {
+        header: 'Chats',
+        itemSubTitle: 'Chat',
+      },
+      projects: {
+        header: 'Projects',
+        itemSubTitle: 'Project',
+      },
+      apps: {
+        header: 'Apps',
+        itemSubTitle: 'App',
+      },
+    },
+  },
   chats: {
     start: {
       placeholder: 'Type your message here...',

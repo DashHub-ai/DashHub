@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { z } from 'zod';
 
 import { flow } from 'fp-ts/lib/function';
 
@@ -11,6 +12,7 @@ import {
   PaginatedList,
   PaginationSearchToolbarItem,
   PaginationToolbar,
+  ResetFiltersButton,
   useDebouncedPaginatedSearch,
 } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
@@ -23,11 +25,13 @@ type Props = {
   toolbar?: ReactNode;
 };
 
+export type SearchProjectsRouteUrlFiltersT = z.input<typeof SdkSearchProjectsInputV>;
+
 export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
   const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
-  const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
+  const { loading, pagination, result, silentReload, reset } = useDebouncedPaginatedSearch({
     storeDataInUrl,
     schema: SdkSearchProjectsInputV,
     fallbackSearchParams: {
@@ -55,6 +59,8 @@ export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
             }),
           })}
         />
+
+        <ResetFiltersButton onClick={reset} />
       </PaginationToolbar>
 
       <PaginatedList

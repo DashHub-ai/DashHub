@@ -69,7 +69,7 @@ export function ChatRoute({ id }: Props) {
           breadcrumbs: (
             <>
               <li>
-                <Link href={sitemap.projects.index}>
+                <Link href={sitemap.projects.index.generate({})}>
                   {pack.routes.projects.title}
                 </Link>
               </li>

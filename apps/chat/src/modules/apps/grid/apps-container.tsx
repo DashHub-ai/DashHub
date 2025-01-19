@@ -1,4 +1,5 @@
 import type { ControlHookResult } from '@under-control/forms';
+import type { z } from 'zod';
 
 import { clsx } from 'clsx';
 import { flow } from 'fp-ts/lib/function';
@@ -17,6 +18,7 @@ import {
   PaginatedList,
   PaginationSearchToolbarItem,
   PaginationToolbar,
+  ResetFiltersButton,
   useDebouncedPaginatedSearch,
 } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
@@ -27,18 +29,21 @@ import { AppCard, type AppCardProps } from './app-card';
 import { AppsPlaceholder } from './apps-placeholder';
 
 type Props = {
+  storeDataInUrl?: boolean;
   itemPropsFn?: (item: SdkAppT) => Omit<AppCardProps, 'app'>;
   toolbar?: ReactNode;
   columns?: number;
 };
 
-export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
+export type SearchAppsRouteUrlFiltersT = z.input<typeof SdkSearchAppsInputV>;
+
+export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 3 }: Props) {
   const favorites = useFavoriteApps();
   const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
-  const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
-    storeDataInUrl: false,
+  const { loading, pagination, result, silentReload, reset } = useDebouncedPaginatedSearch({
+    storeDataInUrl,
     schema: SdkSearchAppsInputV,
     fallbackSearchParams: {
       limit: 12,
@@ -103,6 +108,8 @@ export function AppsContainer({ toolbar, itemPropsFn, columns = 3 }: Props) {
               }),
             })}
           />
+
+          <ResetFiltersButton onClick={reset} />
         </PaginationToolbar>
 
         <PaginatedList

@@ -62,9 +62,9 @@ function LoggedInRouter() {
         {params => <ProjectRoute id={+params.id} />}
       </Route>
 
-      <Route path={sitemap.projects.index} component={ProjectsRoute} />
+      <Route path={sitemap.projects.index.raw} component={ProjectsRoute} />
       <Route path={sitemap.apps.editor.raw} component={AppsEditorRoute} />
-      <Route path={sitemap.apps.index} component={AppsRoute} />
+      <Route path={sitemap.apps.index.raw} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
       <Route path={sitemap.settings} component={SettingsRoute} />
       <Route path={sitemap.management.users} component={UsersManagementRoute} />

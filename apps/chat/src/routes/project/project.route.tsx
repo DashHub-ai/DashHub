@@ -31,7 +31,7 @@ export function ProjectRoute({ id }: Props) {
   );
 
   if (result.status === 'error') {
-    return <Redirect to={sitemap.projects.index} replace />;
+    return <Redirect to={sitemap.projects.index.generate({})} replace />;
   }
 
   return (
@@ -41,7 +41,7 @@ export function ProjectRoute({ id }: Props) {
       <LayoutHeader
         breadcrumbs={(
           <li>
-            <Link href={sitemap.projects.index}>
+            <Link href={sitemap.projects.index.generate({})}>
               {pack.routes.projects.title}
             </Link>
           </li>
