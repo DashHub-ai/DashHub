@@ -22,7 +22,7 @@ export const I18N_FORWARDED_EN_PACK = {
     noDescription: 'No description',
   },
   tutorialBox: {
-    gotIt: 'Rozumiem',
+    gotIt: 'Got it',
   },
   form: {
     clearFile: 'Clear file',
