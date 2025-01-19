@@ -1,4 +1,4 @@
-import type { SdkAIModelT } from '@llm/sdk';
+import type { SdkS3BucketT } from '@llm/sdk';
 
 import {
   CancelButton,
@@ -10,27 +10,27 @@ import {
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-import { AIModelSharedFormFields } from '../shared';
-import { useAIModelUpdateForm } from './use-ai-model-update-form';
+import { S3BucketSharedFormFields } from '../shared';
+import { useS3BucketUpdateForm } from './use-s3-bucket-update-form';
 
-export type AIModelUpdateFormModalProps =
+export type S3BucketUpdateFormModalProps =
   & Omit<ModalProps, 'children' | 'header' | 'formProps'>
   & {
-    app: SdkAIModelT;
+    project: SdkS3BucketT;
     onAfterSubmit?: VoidFunction;
   };
 
-export function AIModelUpdateFormModal(
+export function S3BucketUpdateFormModal(
   {
-    app,
+    project,
     onAfterSubmit,
     onClose,
     ...props
-  }: AIModelUpdateFormModalProps,
+  }: S3BucketUpdateFormModalProps,
 ) {
-  const t = useI18n().pack.aiModels.form;
-  const { handleSubmitEvent, validator, submitState, bind } = useAIModelUpdateForm({
-    defaultValue: app,
+  const t = useI18n().pack.s3Buckets.form;
+  const { handleSubmitEvent, validator, submitState, bind } = useS3BucketUpdateForm({
+    defaultValue: project,
     onAfterSubmit,
   });
 
@@ -53,7 +53,7 @@ export function AIModelUpdateFormModal(
         </>
       )}
     >
-      <AIModelSharedFormFields
+      <S3BucketSharedFormFields
         errors={validator.errors.all as unknown as any}
         {...bind.merged()}
       />

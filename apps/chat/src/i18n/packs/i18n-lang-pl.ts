@@ -221,6 +221,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         aiModels: {
           title: 'Modele AI',
         },
+        s3Buckets: {
+          title: 'Kubełki S3',
+        },
       },
     },
   },
@@ -382,6 +385,72 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       chatContext: {
         label: 'Prompt',
         placeholder: 'Wpisz opis prompt asystenta, to pomoże AI w generowaniu odpowiedzi',
+      },
+    },
+  },
+  s3Buckets: {
+    prefix: {
+      s3Bucket: 'Kubełek S3',
+    },
+    table: {
+      columns: {
+        accessKeyId: 'Access key',
+        defaultForOrganization: 'Domyślny',
+      },
+    },
+    form: {
+      title: {
+        create: 'Utwórz kubełek S3',
+        edit: 'Edytuj kubełek S3',
+      },
+      fields: {
+        name: {
+          label: 'Nazwa',
+          placeholder: 'Wpisz nazwę kubełka S3',
+        },
+        organization: {
+          label: 'Organizacja',
+        },
+        settings: {
+          label: 'Ustawienia',
+        },
+        defaultForOrganization: {
+          label: 'Domyślny dla organizacji',
+        },
+        region: {
+          label: 'Region',
+          placeholder: 'Wpisz region',
+        },
+        accessKeyId: {
+          label: 'Access key',
+          placeholder: 'Wpisz access key',
+        },
+        secretAccessKey: {
+          label: 'Secret key',
+          placeholder: 'Wpisz secret key',
+        },
+        default: {
+          label: 'Domyślny',
+        },
+        ssl: {
+          label: 'SSL',
+        },
+        endpoint: {
+          label: 'Endpoint',
+          placeholder: 'Wpisz endpoint',
+        },
+        publicBaseUrl: {
+          label: 'Publiczny URL bazowy',
+          placeholder: 'Wpisz publiczny URL bazowy',
+        },
+        port: {
+          label: 'Port',
+          placeholder: 'Wpisz port',
+        },
+        bucketName: {
+          label: 'Nazwa kubełka w S3',
+          placeholder: 'Wpisz nazwę kubełka w S3',
+        },
       },
     },
   },

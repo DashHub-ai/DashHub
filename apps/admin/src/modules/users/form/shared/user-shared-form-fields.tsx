@@ -18,7 +18,7 @@ export const UserSharedFormFields = controlled<Value, Props>(({ errors, control:
       <FormField
         className="uk-margin"
         label={t.fields.name.label}
-        {...validation.extract('email')}
+        {...validation.extract('name')}
       >
         <Input
           name="name"

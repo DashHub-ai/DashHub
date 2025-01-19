@@ -6,7 +6,7 @@ type SideNavProps = {
 
 export function SideNav({ children }: SideNavProps) {
   return (
-    <nav className="space-y-1">
+    <nav className="flex flex-col gap-y-1">
       {children}
     </nav>
   );

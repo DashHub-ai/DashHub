@@ -219,6 +219,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         aiModels: {
           title: 'AI Models',
         },
+        s3Buckets: {
+          title: 'S3 Buckets',
+        },
       },
     },
   },
@@ -431,6 +434,72 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         },
         embedding: {
           label: 'Embedding',
+        },
+      },
+    },
+  },
+  s3Buckets: {
+    prefix: {
+      s3Bucket: 'S3 Bucket',
+    },
+    table: {
+      columns: {
+        accessKeyId: 'Access key',
+        defaultForOrganization: 'Default',
+      },
+    },
+    form: {
+      title: {
+        create: 'Create S3 bucket',
+        edit: 'Edit S3 bucket',
+      },
+      fields: {
+        name: {
+          label: 'Name',
+          placeholder: 'Enter S3 bucket name',
+        },
+        organization: {
+          label: 'Organization',
+        },
+        settings: {
+          label: 'Settings',
+        },
+        defaultForOrganization: {
+          label: 'Default for organization',
+        },
+        region: {
+          label: 'Region',
+          placeholder: 'Enter region',
+        },
+        accessKeyId: {
+          label: 'Access key',
+          placeholder: 'Enter access key',
+        },
+        secretAccessKey: {
+          label: 'Secret access key',
+          placeholder: 'Enter secret access key',
+        },
+        default: {
+          label: 'Default',
+        },
+        ssl: {
+          label: 'SSL',
+        },
+        endpoint: {
+          label: 'Endpoint',
+          placeholder: 'Enter endpoint',
+        },
+        publicBaseUrl: {
+          label: 'Public base URL',
+          placeholder: 'Enter public base URL',
+        },
+        port: {
+          label: 'Port',
+          placeholder: 'Enter port',
+        },
+        bucketName: {
+          label: 'Bucket name in S3',
+          placeholder: 'Enter bucket name in S3',
         },
       },
     },

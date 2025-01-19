@@ -1,60 +1,61 @@
-import type { SdkAIModelT } from '@llm/sdk';
+import type { SdkCreateS3BucketInputT } from '@llm/sdk';
 
 import {
   CancelButton,
+  CreateButton,
   FormErrorAlert,
   Modal,
   type ModalProps,
   ModalTitle,
-  UpdateButton,
 } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-import { AIModelSharedFormFields } from '../shared';
-import { useAIModelUpdateForm } from './use-ai-model-update-form';
+import { S3BucketSharedFormFields } from '../shared';
+import { useS3BucketCreateForm } from './use-s3-bucket-create-form';
 
-export type AIModelUpdateFormModalProps =
+export type S3BucketCreateFormModalProps =
   & Omit<ModalProps, 'children' | 'header' | 'formProps'>
   & {
-    app: SdkAIModelT;
+    defaultValue: SdkCreateS3BucketInputT;
     onAfterSubmit?: VoidFunction;
   };
 
-export function AIModelUpdateFormModal(
+export function S3BucketCreateFormModal(
   {
-    app,
+    defaultValue,
     onAfterSubmit,
     onClose,
     ...props
-  }: AIModelUpdateFormModalProps,
+  }: S3BucketCreateFormModalProps,
 ) {
-  const t = useI18n().pack.aiModels.form;
-  const { handleSubmitEvent, validator, submitState, bind } = useAIModelUpdateForm({
-    defaultValue: app,
+  const t = useI18n().pack.s3Buckets.form;
+  const { handleSubmitEvent, validator, submitState, bind } = useS3BucketCreateForm({
+    defaultValue,
     onAfterSubmit,
   });
 
   return (
     <Modal
       {...props}
+      isOverflowVisible
       onClose={onClose}
       formProps={{
         onSubmit: handleSubmitEvent,
       }}
       header={(
         <ModalTitle>
-          {t.title.edit}
+          {t.title.create}
         </ModalTitle>
       )}
       footer={(
         <>
           <CancelButton disabled={submitState.loading} onClick={onClose} />
-          <UpdateButton loading={submitState.loading} type="submit" />
+          <CreateButton loading={submitState.loading} type="submit" />
         </>
       )}
     >
-      <AIModelSharedFormFields
-        errors={validator.errors.all as unknown as any}
+      <S3BucketSharedFormFields
+        errors={validator.errors.all as any}
         {...bind.merged()}
       />
 
