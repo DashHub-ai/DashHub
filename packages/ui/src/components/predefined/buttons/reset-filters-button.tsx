@@ -12,7 +12,7 @@ export function ResetFiltersButton({ className, ...props }: Props) {
   return (
     <button
       type="button"
-      className={clsx('uk-button uk-button-default', className)}
+      className={clsx('shrink-0 uk-button uk-button-default', className)}
       {...props}
     >
       {pack.buttons.resetFilters}
