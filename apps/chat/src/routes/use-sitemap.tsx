@@ -27,6 +27,7 @@ export function useSitemap() {
       index: prefixWithBaseRoute('/management'),
       users: prefixWithBaseRoute('/management/users'),
       usersGroups: prefixWithBaseRoute('/management/users-groups'),
+      aiModels: prefixWithBaseRoute('/management/ai-models'),
     },
     forceRedirect: {
       raw: prefixWithBaseRoute('/force-redirect'),

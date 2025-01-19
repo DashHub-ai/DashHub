@@ -2,6 +2,7 @@ import { Redirect, Route, Switch } from 'wouter';
 
 import { type SdkTableRowWithUuidT, useSdkIsLoggedIn } from '@llm/sdk';
 import {
+  AIModelsManagementRoute,
   AppsEditorRoute,
   AppsRoute,
   ChatRoute,
@@ -67,6 +68,7 @@ function LoggedInRouter() {
       <Route path={sitemap.apps.index.raw} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
       <Route path={sitemap.settings} component={SettingsRoute} />
+      <Route path={sitemap.management.aiModels} component={AIModelsManagementRoute} />
       <Route path={sitemap.management.users} component={UsersManagementRoute} />
       <Route path={sitemap.management.usersGroups} component={UsersGroupsManagementRoute} />
       <Route path={sitemap.management.index} component={ManagementRoute} />

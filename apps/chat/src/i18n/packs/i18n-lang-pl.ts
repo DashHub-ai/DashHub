@@ -1,10 +1,14 @@
 import deepmerge from 'deepmerge';
 
-import type { SdkOrganizationUserRoleT, SdkPermissionAccessLevelT } from '@llm/sdk';
+import type { SdkAIProviderT, SdkOrganizationUserRoleT, SdkPermissionAccessLevelT } from '@llm/sdk';
 
 import { I18N_FORWARDED_PL_PACK } from '@llm/ui';
 
 import type { I18nLangPack } from './i18n-packs';
+
+const I18N_AI_PROVIDERS_PL: Record<SdkAIProviderT, string> = {
+  openai: 'OpenAI',
+};
 
 const I18N_ACCESS_LEVELS_PL: Record<SdkPermissionAccessLevelT, string> = {
   read: 'Tylko odczyt',
@@ -214,6 +218,9 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
         usersGroups: {
           title: 'Grupy użytkowników',
         },
+        aiModels: {
+          title: 'Modele AI',
+        },
       },
     },
   },
@@ -375,6 +382,58 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
       chatContext: {
         label: 'Prompt',
         placeholder: 'Wpisz opis prompt asystenta, to pomoże AI w generowaniu odpowiedzi',
+      },
+    },
+  },
+  aiModels: {
+    providers: I18N_AI_PROVIDERS_PL,
+    prefix: {
+      app: 'Model AI',
+    },
+    table: {
+      columns: {
+        defaultForOrganization: 'Domyślny',
+      },
+    },
+    form: {
+      title: {
+        create: 'Utwórz model AI',
+        edit: 'Edytuj model AI',
+      },
+      fields: {
+        name: {
+          label: 'Nazwa',
+          placeholder: 'Wpisz nazwę modelu AI',
+        },
+        description: {
+          label: 'Opis',
+          placeholder: 'Wpisz opis modelu AI',
+        },
+        organization: {
+          label: 'Organizacja',
+        },
+        provider: {
+          label: 'Dostawca AI',
+        },
+        credentials: {
+          apiModel: {
+            label: 'Model API',
+            placeholder: 'Wpisz model API',
+          },
+          apiKey: {
+            label: 'Klucz API',
+            placeholder: 'Wpisz klucz API',
+          },
+        },
+        settings: {
+          label: 'Ustawienia',
+        },
+        defaultForOrganization: {
+          label: 'Domyślny dla organizacji',
+        },
+        embedding: {
+          label: 'Embedding',
+        },
       },
     },
   },

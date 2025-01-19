@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 
-import { UserCircleIcon, UsersIcon } from 'lucide-react';
+import { BotIcon, UserCircleIcon, UsersIcon } from 'lucide-react';
 
 import { SideLayout, SideNav, SideNavItem } from '@llm/ui';
 import { useI18n } from '~/i18n';
@@ -43,6 +43,13 @@ export function ManagementLayout({ title, children }: Props) {
               href={sitemap.management.usersGroups}
             >
               {t.pages.usersGroups.title}
+            </SideNavItem>
+
+            <SideNavItem
+              icon={<BotIcon size={18} />}
+              href={sitemap.management.aiModels}
+            >
+              {t.pages.aiModels.title}
             </SideNavItem>
           </SideNav>
         )}

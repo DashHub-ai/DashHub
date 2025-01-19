@@ -1,8 +1,12 @@
 import deepmerge from 'deepmerge';
 
-import type { SdkOrganizationUserRoleT, SdkPermissionAccessLevelT } from '@llm/sdk';
+import type { SdkAIProviderT, SdkOrganizationUserRoleT, SdkPermissionAccessLevelT } from '@llm/sdk';
 
 import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
+
+const I18N_AI_PROVIDERS_EN: Record<SdkAIProviderT, string> = {
+  openai: 'OpenAI',
+};
 
 const I18N_ACCESS_LEVELS_EN: Record<SdkPermissionAccessLevelT, string> = {
   read: 'Read-only',
@@ -212,6 +216,9 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
         usersGroups: {
           title: 'Users Groups',
         },
+        aiModels: {
+          title: 'AI Models',
+        },
       },
     },
   },
@@ -373,6 +380,58 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
       chatContext: {
         label: 'Chat prompt',
         placeholder: 'Enter app chat prompt description, it will help AI generate responses',
+      },
+    },
+  },
+  aiModels: {
+    providers: I18N_AI_PROVIDERS_EN,
+    prefix: {
+      app: 'AI Model',
+    },
+    table: {
+      columns: {
+        defaultForOrganization: 'Default',
+      },
+    },
+    form: {
+      title: {
+        create: 'Create AI model',
+        edit: 'Edit AI model',
+      },
+      fields: {
+        name: {
+          label: 'Name',
+          placeholder: 'Enter AI model name',
+        },
+        description: {
+          label: 'Description',
+          placeholder: 'Enter AI model description',
+        },
+        organization: {
+          label: 'Organization',
+        },
+        provider: {
+          label: 'AI provider',
+        },
+        credentials: {
+          apiModel: {
+            label: 'API model',
+            placeholder: 'Enter API model',
+          },
+          apiKey: {
+            label: 'API key',
+            placeholder: 'Enter API key',
+          },
+        },
+        settings: {
+          label: 'Settings',
+        },
+        defaultForOrganization: {
+          label: 'Default for organization',
+        },
+        embedding: {
+          label: 'Embedding',
+        },
       },
     },
   },

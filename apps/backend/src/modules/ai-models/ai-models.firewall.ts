@@ -33,7 +33,7 @@ export class AIModelsFirewall extends AuthFirewallService {
   );
 
   create = (dto: SdkCreateAIModelInputT) => pipe(
-    this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto),
+    this.permissionsService.asUser(this.jwt).enforceOrganizationScope(dto),
     TE.fromEither,
     TE.chainW(this.aiModelsService.create),
     this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
