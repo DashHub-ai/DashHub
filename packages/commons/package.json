@@ -33,7 +33,7 @@
     "snake-case": "^4.0.0",
     "snakecase-keys": "^8.0.1",
     "type-fest": "^4.23.0",
-    "uuid": "^11.0.3",
+    "uuid": "^11.0.5",
     "zod": "^3.24.1",
     "zod-validation-error": "^3.3.1"
   },
