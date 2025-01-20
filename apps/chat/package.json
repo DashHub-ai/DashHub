@@ -13,7 +13,7 @@
     "@types/sanitize-html": "^2.13.0",
     "@under-control/forms": "^2.0.0",
     "clsx": "^2.1.1",
-    "postcss": "^8.4.48",
+    "postcss": "^8.5.1",
     "postcss-combine-duplicated-selectors": "^10.0.3",
     "react-helmet-async": "^2.0.5",
     "react-markdown": "^9.0.1",
