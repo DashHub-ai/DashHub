@@ -106,17 +106,20 @@ export class AppsEsSearchRepo {
           .agg(
             esb
               .filterAggregation('filtered')
-              .filter(AppsEsSearchRepo.createEsRequestSearchFilters({
-                ...dto,
-                categoriesIds: [],
-              }))
+              .filter(
+                AppsEsSearchRepo.createEsRequestSearchFilters({
+                  ...dto,
+                  categoriesIds: [],
+                }),
+              )
               .agg(
-                esb.termsAggregation('terms', 'category.id'),
+                esb
+                  .termsAggregation('terms', 'category.id')
+                  .size(20),
               ),
           ),
       ])
-      .sorts(createScoredSortFieldQuery(dto.sort))
-      .size(20);
+      .sorts(createScoredSortFieldQuery(dto.sort));
 
   private static mapCategoriesAggregations = (aggregations: any) =>
     aggregations.global_categories.filtered.terms.buckets.map((bucket: any): SdkCountedIdRecordT => ({
