@@ -115,7 +115,8 @@ export class AppsEsSearchRepo {
               ),
           ),
       ])
-      .sorts(createScoredSortFieldQuery(dto.sort));
+      .sorts(createScoredSortFieldQuery(dto.sort))
+      .size(20);
 
   private static mapCategoriesAggregations = (aggregations: any) =>
     aggregations.global_categories.filtered.terms.buckets.map((bucket: any): SdkCountedIdRecordT => ({
