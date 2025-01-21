@@ -9,7 +9,7 @@ ENV NODE_ENV=production
 COPY package.json .
 
 RUN jq 'del(.devDependencies)' package.json > temp.json && mv temp.json package.json && \
-    npm install --omit=dev --omit=optional
+    npm install --omit=dev --omit=optional --legacy-peer-deps
 
 # Light image with compiled binary stuff
 FROM node:22-alpine3.20 AS runner

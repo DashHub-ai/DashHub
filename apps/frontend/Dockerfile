@@ -16,7 +16,7 @@ USER node
 COPY package.json .
 
 RUN jq 'del(.devDependencies)' package.json > temp.json && mv temp.json package.json && \
-    npm install --omit=dev --omit=optional
+    npm install --omit=dev --omit=optional --legacy-peer-deps
 
 COPY dist/ dist/
 
