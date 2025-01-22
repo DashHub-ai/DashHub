@@ -115,7 +115,7 @@ export class AppsEsSearchRepo {
               .agg(
                 esb
                   .termsAggregation('terms', 'category.id')
-                  .size(20),
+                  .size(40),
               ),
           ),
       ])
