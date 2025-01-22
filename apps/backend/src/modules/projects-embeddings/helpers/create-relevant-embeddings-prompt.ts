@@ -6,27 +6,61 @@ export function createRelevantEmbeddingsPrompt(
   message: string,
   embeddings: EsMatchingProjectEmbedding[],
 ): string {
-  const groupedEmbeddings = groupEmbeddingsByFile(embeddings);
+  const groupedEmbeddings = Object.values(groupEmbeddingsByFile(embeddings));
+  let context = '';
 
-  const fragmentsText = Object
-    .values(groupedEmbeddings)
-    .slice(0, 10)
-    .map(({ file, fragments }) => [
-      `File: ${file.name}`,
-      'Content from this file (with embeddings identifiers):',
-      fragments
-        .slice(0, 10)
-        .map(({ text, id }) => `#embedding:${id}\n${text}`)
-        .join('\n--\n'),
-    ].join('\n'))
-    .join('\n\n==========\n\n');
+  if (groupedEmbeddings.length) {
+    context = groupedEmbeddings
+      .slice(0, 10)
+      .map(
+        ({ file, fragments }) => [
+          `File: ${file.name}`,
+          'Content from this file (with embeddings identifiers):',
+          fragments
+            .slice(0, 10)
+            .map(({ text, id }) => `#embedding:${id}\n${text}`)
+            .join('\n--\n'),
+        ].join('\n'),
+      )
+      .join('\n\n==========\n\n');
+  }
+  else {
+    context = 'No relevant content was found in the project files.';
+  }
+
+  const coreInstructions = groupedEmbeddings.length
+    ? [
+        '1. Respond in the same language as the user\'s prompt',
+        '2. If message contains #app mention: MAINTAIN THE APP\'S PERSONALITY AND TONE throughout the response',
+        '3. If responding as an app: DO NOT describe files, instead keep acting as the app would',
+        '4. Consider and analyze ALL provided file fragments',
+        '5. Search through ALL file types, including source code, documents, images (.png, .jpg, etc), presentations, and any other files',
+        '6. MANDATORY: Never mention filenames directly in text - always use #embedding:<id> instead',
+        '7. MANDATORY: Always consider image files in your search - they may contain crucial diagrams, screenshots or visual documentation',
+        '8. MANDATORY: If files were attached to the chat or previous messages - treat them with highest priority',
+        '9. MANDATORY: Always analyze attached files first before other context',
+        '10. MANDATORY: For attached files, provide more detailed analysis unless user specifies otherwise',
+        '11. Prefer to analyze latest attached files first but consider all attached files in the context',
+        '12. When user asks about "attached files", "uploaded files", or similar:',
+        '    - Focus ONLY on files that were actually attached in the current chat',
+        '    - Use other embeddings only for additional context if relevant',
+        '    - Always prioritize responses about attached files',
+        '    - Make it clear which information comes from attached files vs other context',
+        '13. The ✅ or ❌ characters were using in the text are for illustrative purposes only. Do not use them in your responses (unless the user uses them first)',
+      ]
+    : [
+        '1. Respond in the same language as the user\'s prompt',
+        '2. DO NOT USE OR REFERENCE ANY #app mentions - they are not allowed when no relevant content is found',
+        '3. DO NOT MAKE UP OR GUESS ANY #embedding:<id> references',
+        '4. Provide a general response without referencing any files or apps',
+      ];
 
   return [
     'User prompt:',
     message,
     '\n\n\n--\n',
     'Context (based on project files):',
-    fragmentsText,
+    context,
     '\n\n\n--\n',
     'Embeddings usage requirements:',
     '\n--\n',
@@ -40,23 +74,7 @@ export function createRelevantEmbeddingsPrompt(
     '7. If there are no relevant embeddings, tell the user that no relevant content was found. Do not mention random files if they are not relevant',
     '',
     'Core Instructions:',
-    '1. Respond in the same language as the user\'s prompt',
-    '2. If message contains #app mention: MAINTAIN THE APP\'S PERSONALITY AND TONE throughout the response',
-    '3. If responding as an app: DO NOT describe files, instead keep acting as the app would',
-    '4. Consider and analyze ALL provided file fragments',
-    '5. Search through ALL file types, including source code, documents, images (.png, .jpg, etc), presentations, and any other files',
-    '6. MANDATORY: Never mention filenames directly in text - always use #embedding:<id> instead',
-    '7. MANDATORY: Always consider image files in your search - they may contain crucial diagrams, screenshots or visual documentation',
-    '8. MANDATORY: If files were attached to the chat or previous messages - treat them with highest priority',
-    '9. MANDATORY: Always analyze attached files first before other context',
-    '10. MANDATORY: For attached files, provide more detailed analysis unless user specifies otherwise',
-    '11. Prefer to analyze latest attached files first but consider all attached files in the context',
-    '12. When user asks about "attached files", "uploaded files", or similar:',
-    '    - Focus ONLY on files that were actually attached in the current chat',
-    '    - Use other embeddings only for additional context if relevant',
-    '    - Always prioritize responses about attached files',
-    '    - Make it clear which information comes from attached files vs other context',
-    '13. The ✅ or ❌ characters were using in the text are for illustrative purposes only. Do not use them in your responses (unless the user uses them first)',
+    ...coreInstructions,
     '',
     'Text Format Rules:',
     '- ❌ WRONG: "In config.ts we see..."',

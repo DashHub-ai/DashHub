@@ -3,7 +3,11 @@ import type { SdkMessageFileT } from '@llm/sdk';
 export function createAttachedFilesMessagePrefix(files: SdkMessageFileT[]) {
   return (content: string) => {
     if (!files.length) {
-      return content;
+      return [
+        '\n---\n',
+        'User did not attach any files to this message.',
+        '\n---\n',
+      ].join('\n');
     }
 
     return [
