@@ -73,7 +73,7 @@ export const ProjectEmbeddingChatBadge = memo((
       onClick={onToggleBallon}
       disabled={disabled}
       className={clsx(
-        'inline-flex relative items-center gap-1.5 shadow-sm px-1.5 py-0.5 border rounded-md font-semibold text-xs transition-all',
+        'inline-flex relative items-center gap-1 shadow-sm px-1 py-0.5 border rounded-md font-semibold text-[10px] transition-all',
         {
           'bg-gray-100 text-gray-900 border-gray-300 hover:bg-gray-200 hover:border-gray-400': !darkMode && !isOn,
           'bg-gray-700 text-white border-gray-500 hover:bg-gray-600': darkMode && !isOn,
@@ -86,7 +86,7 @@ export const ProjectEmbeddingChatBadge = memo((
         className,
       )}
     >
-      <FileIcon size={12} />
+      <FileIcon size={10} />
       <span className="flex items-center gap-1">
         <span>
           {value.status === 'success' ? truncateText(25, '...')(value.data?.projectFile.name) : '...'}

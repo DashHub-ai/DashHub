@@ -16,6 +16,7 @@ export const MessageMarkdown = memo(({ content, inlinedReactComponents = {} }: P
         'prose-a:underline prose-code:overflow-auto prose-pre:overflow-auto',
         'prose-ol:list-decimal chat-markdown prose-sm prose-ul:list-disc',
         'prose-hr:my-3',
+        '[&_.footnotes]:text-xs [&_.footnotes]:text-gray-600',
       )}
       remarkPlugins={[remarkGfm]}
       components={{
