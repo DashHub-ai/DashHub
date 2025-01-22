@@ -24,7 +24,13 @@ import { ProjectsService } from '../projects';
 import { ProjectsEmbeddingsService } from '../projects-embeddings';
 import { ProjectsFilesService } from '../projects-files';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
-import { createActionButtonsPrompt, createAttachAppAIMessage, createAttachedFilesMessagePrefix, createReplyAiMessagePrefix } from './helpers';
+import {
+  createActionButtonsPrompt,
+  createAttachAppAIMessage,
+  createAttachedFilesMessagePrefix,
+  createQuotesPrompt,
+  createReplyAiMessagePrefix,
+} from './helpers';
 import { MessagesFirewall } from './messages.firewall';
 import { MessagesRepo } from './messages.repo';
 
@@ -153,7 +159,10 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             signal,
             aiModel,
             history,
-            context: createActionButtonsPrompt(),
+            context: [
+              createQuotesPrompt(),
+              createActionButtonsPrompt(),
+            ].join('\n'),
             message: {
               content: mappedContent,
             },

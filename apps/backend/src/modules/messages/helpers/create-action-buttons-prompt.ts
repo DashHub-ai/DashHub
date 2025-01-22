@@ -2,6 +2,7 @@ import { rejectFalsyItems } from '@llm/commons';
 
 export function createActionButtonsPrompt(): string {
   return rejectFalsyItems([
+    '******** FEATURE: ACTION BUTTONS ********',
     '!!! CRITICAL - READ FIRST !!!',
     'FORBIDDEN BUTTONS - AUTOMATIC REJECTION:',
     'System will AUTOMATICALLY REJECT any response containing these buttons:',
