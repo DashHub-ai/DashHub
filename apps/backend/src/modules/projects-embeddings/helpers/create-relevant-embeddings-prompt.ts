@@ -18,7 +18,7 @@ export function createRelevantEmbeddingsPrompt(
           'Content from this file (with embeddings identifiers):',
           fragments
             .slice(0, 10)
-            .map(({ text, id }) => `#embedding:${id}\n${text}`)
+            .map(({ text, id }) => `Embedding(#embedding:${id})\nEmbedding content: ${text}`)
             .join('\n--\n'),
         ].join('\n'),
       )

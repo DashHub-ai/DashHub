@@ -18,6 +18,10 @@ import {
   wrapEmbeddingWithInfo,
 } from './helpers';
 
+type TextGeneratorAttrs = AIEmbeddingGenerateAttrs & {
+  chunkFn?: (text: string) => string[];
+};
+
 @injectable()
 export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
   constructor(
@@ -25,9 +29,9 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
   ) {}
 
-  generate = ({ buffer, aiModel, fileName, fileUrl }: AIEmbeddingGenerateAttrs) => {
+  generate = ({ buffer, aiModel, fileName, fileUrl, chunkFn }: TextGeneratorAttrs) => {
     const text = buffer.toString('utf-8');
-    const chunks = splitTextIntoChunks({
+    const chunks = chunkFn?.(text) ?? splitTextIntoChunks({
       text,
       chunkSize: 1000,
       overlap: 100,

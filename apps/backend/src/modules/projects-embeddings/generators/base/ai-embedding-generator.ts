@@ -11,6 +11,7 @@ export type AIEmbeddingGenerateAttrs = {
   fileUrl: string;
   buffer: UploadFilePayload;
   aiModel: SdkSearchAIModelItemT;
+  chunked?: boolean;
 };
 
 export type AIEmbeddingResult =

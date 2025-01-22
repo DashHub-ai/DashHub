@@ -4,8 +4,9 @@ export function createAttachedFilesMessagePrefix(files: SdkMessageFileT[]) {
   return (content: string) => {
     if (!files.length) {
       return [
+        content,
         '\n---\n',
-        'User did not attach any files to this message.',
+        'User did not attach any files to this message, try lookup for the files in the previous messages.',
         '\n---\n',
       ].join('\n');
     }

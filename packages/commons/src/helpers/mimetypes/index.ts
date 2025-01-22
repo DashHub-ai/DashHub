@@ -1,3 +1,4 @@
+export * from './is-csv-mimetype';
 export * from './is-image-mimetype';
 export * from './is-legacy-excel-mimetype';
 export * from './is-legacy-word-mimetype';

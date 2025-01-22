@@ -22,6 +22,7 @@ export function createActionButtonsPrompt(): string {
     '2. Request SPECIFIC information',
     '3. Lead to CONCRETE answer',
     '4. Avoid ANY form of "ask me" pattern',
+    '5. Not be placed within list or table, it must be at the end of the response',
     '',
     'IF IN DOUBT - DO NOT CREATE BUTTONS',
     'Better NO buttons than BAD buttons',
