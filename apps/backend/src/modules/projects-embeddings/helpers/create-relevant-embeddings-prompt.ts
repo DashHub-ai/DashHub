@@ -50,9 +50,10 @@ export function createRelevantEmbeddingsPrompt(
       ]
     : [
         '1. Respond in the same language as the user\'s prompt',
-        '2. DO NOT USE OR REFERENCE ANY #app mentions - they are not allowed when no relevant content is found',
+        '2. DO NOT USE OR REFERENCE ANY #embedding:<id> - they are not allowed when no relevant content is found',
         '3. DO NOT MAKE UP OR GUESS ANY #embedding:<id> references',
-        '4. Provide a general response without referencing any files or apps',
+        '4. Provide a general response without referencing any embeddings',
+        '5. If the user asks about specific files or content, explain that no relevant content was found',
       ];
 
   return [
