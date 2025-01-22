@@ -155,7 +155,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
             return this.docxAIEmbeddingGenerator.generate(attrs);
           }
 
-          if (mimeType === 'text/plain'
+          if (mimeType.startsWith('text/')
             || (mimeType === 'application/octet-stream' && typeof buffer !== 'string' && isValidUTF8(buffer))
           ) {
             return this.textAIEmbeddingGenerator.generate(attrs);
