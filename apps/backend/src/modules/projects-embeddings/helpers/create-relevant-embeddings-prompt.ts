@@ -54,6 +54,8 @@ export function createRelevantEmbeddingsPrompt(
         '3. DO NOT MAKE UP OR GUESS ANY #embedding:<id> references',
         '4. Provide a general response without referencing any embeddings',
         '5. If the user asks about specific files or content, explain that no relevant content was found',
+        '6. CRITICAL: DO NOT suggest any file-related actions ([action:...]) - there are no files to act upon',
+        '7. CRITICAL: DO NOT create any buttons or actions related to file operations, summaries, or content analysis',
       ];
 
   return [
