@@ -17,6 +17,14 @@ import { rejectFalsyItems } from '@llm/commons';
 import { AIModelsService } from '../ai-models';
 import { OpenAIConnectionCreatorError } from './ai-connector.errors';
 
+const DEFAULT_CLIENT_CONFIG = {
+  temperature: 0.7,
+  top_p: 1,
+  max_tokens: 4096,
+  frequency_penalty: 0,
+  presence_penalty: 0.6,
+};
+
 @injectable()
 export class AIConnectorService {
   constructor(
@@ -74,6 +82,7 @@ export class AIConnectorService {
 
       return OpenAIConnectionCreatorError.tryCatch(
         () => ai.chat.completions.create({
+          ...DEFAULT_CLIENT_CONFIG,
           stream: true,
           model: credentials.apiModel,
           messages: rejectFalsyItems([
@@ -165,6 +174,7 @@ export class AIConnectorService {
 
       return OpenAIConnectionCreatorError.tryCatch(
         async () => client.chat.completions.create({
+          ...DEFAULT_CLIENT_CONFIG,
           model: credentials.apiModel,
           messages: [
             ...this.normalizeMessagesToCompletion(history),
