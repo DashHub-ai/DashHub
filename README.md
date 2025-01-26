@@ -76,7 +76,7 @@ To run the project, follow these steps:
 
 4. Add embedding and LLM model using [chat panel](http://localhost:5173).
 
-The default credentials for the admin panel are:
+The default credentials for the admin panel and chat application are:
 
 - **Email**: `root@dashhub.ai`
 - **Password**: `123456`
