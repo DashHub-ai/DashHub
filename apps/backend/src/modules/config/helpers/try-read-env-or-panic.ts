@@ -15,6 +15,8 @@ import { type ConfigT, ConfigV } from './config.dto';
 
 export function tryReadEnvOrPanic() {
   const envFile = dotenv.config();
+
+  // Remember to adjust turbo.json
   const {
     // BASE
     APP_ENV,

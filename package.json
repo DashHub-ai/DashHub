@@ -7,17 +7,18 @@
   "license": "Apache License 2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/evil-genius-labs/llm-integration-platform"
+    "url": "https://github.com/DashHub-ai/DashHub"
   },
   "scripts": {
     "db:migrate": "yarn workspace @llm/backend db:migrate",
     "es:reindex:all": "yarn workspace @llm/backend es:reindex:all",
     "chats:summarize:all": "yarn workspace @llm/backend chats:summarize:all",
     "projects:summarize:all": "yarn workspace @llm/backend projects:summarize:all",
-    "clean": "find . -type f -name 'vite.config.*.timestamp-*' -ls -delete 1> /dev/null 2>& 1",
+    "clean": "find . -type f -name 'vite.config.*.timestamp-*' -delete 2>/dev/null",
+    "clean:turbo": "rm -rf .turbo/ 2>/dev/null",
     "build": "NODE_ENV=production turbo run build --cache-dir=.turbo",
     "check:types": "turbo check:types --parallel",
-    "dev": "npm run clean && turbo build:dev && turbo watch build:dev dev",
+    "dev": "npm run clean && npx turbo daemon start && npm run clean:turbo && turbo build:dev && turbo watch build:dev dev",
     "lint": "turbo lint --parallel",
     "prepare": "husky",
     "test": "turbo run test --parallel",
@@ -48,7 +49,7 @@
     "rollup-plugin-swc3": "^0.12.1",
     "sass-embedded": "^1.83.4",
     "tailwind": "^4.0.0",
-    "turbo": "^2.3.3",
+    "turbo": "^2.3.4",
     "typescript": "^5.7.3",
     "vite": "^6.0.7",
     "vite-plugin-dts": "^4.5.0",

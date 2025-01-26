@@ -78,12 +78,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .selectFrom('users')
     .select(['id'])
     .where('role', '=', 'root')
-    .executeTakeFirstOrThrow();
+    .executeTakeFirst();
 
-  await db
-    .updateTable('projects')
-    .set({ creator_user_id: rootUser.id })
-    .execute();
+  if (rootUser) {
+    await db
+      .updateTable('projects')
+      .set({ creator_user_id: rootUser.id })
+      .execute();
+  }
 
   await db.schema
     .alterTable('projects')

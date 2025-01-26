@@ -1,0 +1,150 @@
+version: '3.8'
+
+services:
+  # ---- BASE SERVICES ----
+  db:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/postgres.dockerfile
+
+    restart: on-failure
+    ports:
+      - "15432:5432"
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/pgdata:rw,z
+    user: "999:999"
+    networks:
+      - dashhub-network
+
+  elasticsearch:
+    image: docker.io/elasticsearch:8.15.3
+    restart: on-failure
+    ports:
+      - "19200:9200"
+      - "19300:9300"
+    environment:
+      - ES_JAVA_OPTS=-Xms1G -Xmx1G
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - cluster.name=es-cluster
+      - logger.level=WARN
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=elastic
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data:rw,z
+    user: "1000:1000"
+    networks:
+      - dashhub-network
+
+  minio:
+    image: docker.io/minio/minio:latest
+    command: server /data
+    ports:
+      - "19000:9000"
+      - "19001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+      - MINIO_ADDRESS=:9000
+      - MINIO_CONSOLE_ADDRESS=:9001
+      - MINIO_BROWSER_REDIRECT_URL=http://localhost:9001/minio/
+    volumes:
+      - minio-data:/data:rw,z
+      - minio-policies:/policies:rw,z
+    restart: on-failure
+    networks:
+      - dashhub-network
+
+  # ---- CONFIGURATION OF SERVICES ----
+  db-init:
+    image: docker.io/pgvector/pgvector:pg17
+    depends_on:
+      - db
+    environment:
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - PGHOST=db
+    entrypoint: >
+      /bin/sh -c '
+      until PGPASSWORD=postgres psql -h db -U postgres -c "\q"; do
+        echo "Waiting for PostgreSQL..."
+        sleep 1
+      done;
+      psql -c "CREATE DATABASE dashhub_db" || echo "Database already exists";
+      psql -d dashhub_db -c "CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public" || echo "Extension pg_trgm already exists";
+      psql -d dashhub_db -c "CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public" || echo "Extension fuzzystrmatch already exists";
+      psql -d dashhub_db -c "CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public" || echo "Extension postgis already exists";
+      psql -d dashhub_db -c "CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public" || echo "Extension vector already exists";
+      echo "Database configured successfully with all required extensions.";
+      '
+    networks:
+      - dashhub-network
+
+  minio-init:
+    image: docker.io/minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until (mc alias set myminio http://minio:9000 minioadmin minioadmin) do echo 'Waiting for MinIO...' && sleep 1; done;
+      if ! mc ls myminio/default > /dev/null 2>&1; then
+        mc mb myminio/default &&
+        mc anonymous set download myminio/default;
+      else
+        echo 'Bucket already exists';
+      fi;
+      mc ls myminio/"
+    networks:
+      - dashhub-network
+
+  app:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/app-dev.dockerfile
+    ports:
+      - "3000:3000"
+      - "4321:4321"
+      - "5173:5173"
+      - "5174:5174"
+    volumes:
+      - .:/app:z,rw
+    networks:
+      - dashhub-network
+    restart: unless-stopped
+    depends_on:
+      - db
+      - elasticsearch
+      - minio
+    environment:
+      - PUBLIC_VITE_APP_ENV=dev
+      - PUBLIC_VITE_API_URL=http://localhost:3000
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+      - ELASTICSEARCH_USER=elastic
+      - ELASTICSEARCH_PASSWORD=elastic
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=dashhub_db
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_CHECK_MIGRATIONS_ON_STARTUP=true
+      - JWT_SECRET=12345678901234567890
+      - APP_ENDUSER_DOMAIN=localhost
+      - USER_ROOT_EMAIL=root@dashhub.ai
+      - USER_ROOT_PASSWORD=123456
+
+volumes:
+  postgres-data:
+  elasticsearch-data:
+  minio-data:
+  minio-policies:
+
+networks:
+  dashhub-network:
+    driver: bridge

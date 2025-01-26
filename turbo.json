@@ -7,19 +7,76 @@
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
       "cache": false,
-      "env": ["NODE_ENV=production", "PUBLIC_VITE_API_URL", "PUBLIC_VITE_DIRECTUS_URL"]
+      "env": [
+        "NODE_ENV=production",
+        "PUBLIC_VITE_API_URL",
+        "PUBLIC_VITE_DIRECTUS_URL",
+        "PUBLIC_VITE_APP_ENV",
+        "ELASTICSEARCH_HOST",
+        "ELASTICSEARCH_PORT",
+        "DATABASE_HOST",
+        "DATABASE_PORT",
+        "DATABASE_NAME",
+        "DATABASE_USER",
+        "DATABASE_PASSWORD",
+        "JWT_SECRET",
+        "APP_ENDUSER_DOMAIN",
+        "USER_ROOT_EMAIL",
+        "USER_ROOT_PASSWORD",
+        "DATABASE_CHECK_MIGRATIONS_ON_STARTUP",
+        "ELASTICSEARCH_USER",
+        "ELASTICSEARCH_PASSWORD"
+      ]
     },
     "build:dev": {
       "dependsOn": ["^build:dev"],
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
       "cache": true,
-      "env": ["NODE_ENV=development", "PUBLIC_VITE_API_URL", "PUBLIC_VITE_DIRECTUS_URL"]
+      "env": [
+        "NODE_ENV=development",
+        "PUBLIC_VITE_API_URL",
+        "PUBLIC_VITE_DIRECTUS_URL",
+        "PUBLIC_VITE_APP_ENV",
+        "ELASTICSEARCH_HOST",
+        "ELASTICSEARCH_PORT",
+        "DATABASE_HOST",
+        "DATABASE_PORT",
+        "DATABASE_NAME",
+        "DATABASE_USER",
+        "DATABASE_PASSWORD",
+        "JWT_SECRET",
+        "APP_ENDUSER_DOMAIN",
+        "USER_ROOT_EMAIL",
+        "USER_ROOT_PASSWORD",
+        "DATABASE_CHECK_MIGRATIONS_ON_STARTUP",
+        "ELASTICSEARCH_USER",
+        "ELASTICSEARCH_PASSWORD"
+      ]
     },
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": ["NODE_ENV=development", "PUBLIC_VITE_API_URL", "PUBLIC_VITE_DIRECTUS_URL"]
+      "env": [
+        "NODE_ENV=development",
+        "PUBLIC_VITE_API_URL",
+        "PUBLIC_VITE_DIRECTUS_URL",
+        "PUBLIC_VITE_APP_ENV",
+        "ELASTICSEARCH_HOST",
+        "ELASTICSEARCH_PORT",
+        "DATABASE_HOST",
+        "DATABASE_PORT",
+        "DATABASE_NAME",
+        "DATABASE_USER",
+        "DATABASE_PASSWORD",
+        "JWT_SECRET",
+        "APP_ENDUSER_DOMAIN",
+        "USER_ROOT_EMAIL",
+        "USER_ROOT_PASSWORD",
+        "DATABASE_CHECK_MIGRATIONS_ON_STARTUP",
+        "ELASTICSEARCH_USER",
+        "ELASTICSEARCH_PASSWORD"
+      ]
     },
     "lint": {
       "cache": true

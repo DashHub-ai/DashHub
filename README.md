@@ -69,24 +69,17 @@ To run the project, follow these steps:
 2. Install the required dependencies by running the following command:
 
   ```bash
-  yarn install
+  docker compose up --build
   ```
 
-3. Start local minio server
+3. Create base organization using [admin panel](http://localhost:5174).
 
-  ```bash
-  ./start-local-minio.sh
-  ```
+4. Add embedding and LLM model using [chat panel](http://localhost:5173).
 
-5. Ensure that elasticsearch is running on your local machine.
+The default credentials for the admin panel are:
 
-6. Start the project by running the following command:
-
-  ```
-  yarn run dev
-  ```
-
-After executing these commands, the project should start running and you can access it through your web browser.
+- **Email**: `root@dashhub.ai`
+- **Password**: `123456`
 
 ## Migrations ⚙️
 
