@@ -9,6 +9,8 @@ import type { I18nLangPack } from './i18n-packs';
 const I18N_AI_PROVIDERS_PL: Record<SdkAIProviderT, string> = {
   openai: 'OpenAI',
   gemini: 'Gemini',
+  deepseek: 'DeepSeek',
+  other: 'Other',
 };
 
 const I18N_USER_ROLES_PL: Record<SdkUserRoleT, string> = {
@@ -242,6 +244,10 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
             apiKey: {
               label: 'Klucz API',
               placeholder: 'Wpisz klucz API',
+            },
+            apiUrl: {
+              label: 'URL API',
+              placeholder: 'Wpisz URL API',
             },
           },
           settings: {

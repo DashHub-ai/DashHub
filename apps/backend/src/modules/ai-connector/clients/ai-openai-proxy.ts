@@ -35,9 +35,15 @@ export class AIOpenAIProxy extends AIProxy {
   constructor(aiModel: SdkAIModelT) {
     super(aiModel);
 
-    const { apiKey, apiModel } = this.credentials;
+    const { apiKey, apiModel, apiUrl } = this.credentials;
 
-    this.client = new OpenAI({ apiKey });
+    this.client = new OpenAI({
+      apiKey,
+      ...apiUrl && {
+        baseURL: apiUrl,
+      },
+    });
+
     this.instructor = Instructor({
       client: this.client,
       mode: determineOpenAIInstructorMode(apiModel),
@@ -67,7 +73,7 @@ export class AIOpenAIProxy extends AIProxy {
               role: 'system',
               content: context,
             },
-            ...normalizeOpenAIMessagesToCompletion(history),
+            ...normalizeSdkMessagesToCompletion(history),
             !!message?.content && {
               role: 'user',
               content: message.content,
@@ -90,7 +96,7 @@ export class AIOpenAIProxy extends AIProxy {
         ...DEFAULT_CLIENT_CONFIG,
         model: this.credentials.apiModel,
         messages: [
-          ...normalizeOpenAIMessagesToCompletion(history),
+          ...normalizeSdkMessagesToCompletion(history),
           {
             role: 'user',
             content: message,
@@ -111,16 +117,8 @@ export class AIOpenAIProxy extends AIProxy {
         const result = await this.instructor.chat.completions.create({
           model: this.credentials.apiModel,
           messages: [
-            ...normalizeOpenAIMessagesToCompletion(history),
-            typeof message === 'string'
-              ? {
-                  role: 'user',
-                  content: message,
-                }
-              : {
-                  role: message.role,
-                  content: message.content,
-                },
+            ...normalizeSdkMessagesToCompletion(history),
+            normalizeAIProxyMessageToCompletion(message),
           ],
         });
 
@@ -142,7 +140,33 @@ function determineOpenAIInstructorMode(model: string) {
   return 'JSON';
 }
 
-function normalizeOpenAIMessagesToCompletion(messages: SdkMessageT[]): Array<AIProxyMessage> {
+function normalizeAIProxyMessageToCompletion(message: string | AIProxyMessage): OpenAI.Chat.Completions.ChatCompletionMessageParam {
+  if (typeof message === 'string') {
+    message = {
+      role: 'user',
+      content: message,
+    };
+  }
+
+  const { role, content } = message;
+
+  if (typeof content === 'string') {
+    return {
+      role,
+      content,
+    };
+  }
+
+  return {
+    role: 'user',
+    content: [
+      { type: 'text', text: content.text },
+      { type: 'image_url', image_url: content.imageUrl } as any,
+    ],
+  };
+}
+
+function normalizeSdkMessagesToCompletion(messages: SdkMessageT[]): Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> {
   return messages.map(({ content, role }) => ({
     role,
     content,

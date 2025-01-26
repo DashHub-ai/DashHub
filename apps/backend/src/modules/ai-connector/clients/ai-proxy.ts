@@ -47,7 +47,16 @@ export type AIProxyPromptAttrs = {
   message: AIProxyMessage | string;
 };
 
+export type AIProxyImageMessage = {
+  text: string;
+  imageUrl: string;
+};
+
 export type AIProxyMessage = {
   role: SdkMessageRoleT;
-  content: string;
+  content: string | AIProxyImageMessage;
 };
+
+export function isAIProxyImageMessage(message: AIProxyMessage | string): message is AIProxyMessage {
+  return typeof message === 'object';
+}

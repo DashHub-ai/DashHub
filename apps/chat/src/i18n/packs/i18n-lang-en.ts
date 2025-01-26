@@ -7,6 +7,8 @@ import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
 const I18N_AI_PROVIDERS_EN: Record<SdkAIProviderT, string> = {
   openai: 'OpenAI',
   gemini: 'Gemini',
+  deepseek: 'DeepSeek',
+  other: 'Other',
 };
 
 const I18N_ACCESS_LEVELS_EN: Record<SdkPermissionAccessLevelT, string> = {
@@ -425,6 +427,10 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
           apiKey: {
             label: 'API key',
             placeholder: 'Enter API key',
+          },
+          apiUrl: {
+            label: 'API URL',
+            placeholder: 'Enter API URL',
           },
         },
         settings: {

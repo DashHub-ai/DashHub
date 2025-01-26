@@ -1,5 +1,7 @@
 import type { z } from 'zod';
 
+import { Buffer } from 'node:buffer';
+
 import {
   type Content,
   type GenerativeModel,
@@ -9,6 +11,8 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
 import type { SdkAIModelT, SdkMessageT } from '@llm/sdk';
+
+import { isDataUrl } from '@llm/commons';
 
 import { AIConnectionCreatorError } from '../ai-connector.errors';
 import {
@@ -113,6 +117,29 @@ export class AIGeminiProxy extends AIProxy {
         });
 
         const content = typeof message === 'string' ? message : message.content;
+
+        // Multimedia response
+        if (typeof content !== 'string') {
+          const imageResponse = isDataUrl(content.imageUrl)
+            ? await fetch(content.imageUrl)
+              .then(response => response.arrayBuffer())
+              .then(buffer => Buffer.from(buffer).toString('base64'))
+            : content.imageUrl;
+
+          const result = await this.client.generateContent([
+            {
+              inlineData: {
+                data: imageResponse,
+                mimeType: `image/${content.imageUrl.split('.').pop()}`,
+              },
+            },
+            content.text,
+          ]);
+
+          return result.response.text();
+        }
+
+        // Classical response
         const result = await chat.sendMessage(content);
 
         return result.response.text();

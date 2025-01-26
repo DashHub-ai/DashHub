@@ -15,7 +15,7 @@ type Value = Pick<
 
 type Props = ValidationErrorsListProps<Value>;
 
-export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, control: { bind } }) => {
+export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, control: { value, bind } }) => {
   const t = useI18n().pack.aiModels.form;
   const validation = useFormValidatorMessages({ errors });
 
@@ -67,6 +67,7 @@ export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, contr
       </FormField>
 
       <AIModelCredentialsFormFields
+        provider={value.provider}
         {...bind.path('credentials')}
         {...validation.extract('credentials', { nested: true })}
       />
