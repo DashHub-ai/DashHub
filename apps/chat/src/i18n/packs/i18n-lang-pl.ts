@@ -8,6 +8,7 @@ import type { I18nLangPack } from './i18n-packs';
 
 const I18N_AI_PROVIDERS_PL: Record<SdkAIProviderT, string> = {
   openai: 'OpenAI',
+  gemini: 'Gemini',
 };
 
 const I18N_ACCESS_LEVELS_PL: Record<SdkPermissionAccessLevelT, string> = {

@@ -4,11 +4,11 @@ import { taskEither as TE } from 'fp-ts';
 
 import { TaggedError } from '@llm/commons';
 
-export class OpenAIConnectionCreatorError extends TaggedError.ofLiteral<any>()('OpenAIConnectionCreatorError') {
+export class AIConnectionCreatorError extends TaggedError.ofLiteral<any>()('AIConnectionCreatorError') {
   static tryCatch<R>(task: Task<R>) {
     return TE.tryCatch(
       task,
-      (err: any) => new OpenAIConnectionCreatorError(err),
+      (err: any) => new AIConnectionCreatorError(err),
     );
   }
 }

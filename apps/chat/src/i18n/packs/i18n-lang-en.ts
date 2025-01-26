@@ -6,6 +6,7 @@ import { I18N_FORWARDED_EN_PACK } from '@llm/ui';
 
 const I18N_AI_PROVIDERS_EN: Record<SdkAIProviderT, string> = {
   openai: 'OpenAI',
+  gemini: 'Gemini',
 };
 
 const I18N_ACCESS_LEVELS_EN: Record<SdkPermissionAccessLevelT, string> = {
