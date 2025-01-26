@@ -78,6 +78,8 @@ export class AIModelsService implements WithAuthFirewall<AIModelsFirewall> {
 
   getDefault = this.esSearchRepo.getDefault;
 
+  getDefaultVision = this.esSearchRepo.getDefaultVision;
+
   search = this.esSearchRepo.search;
 
   create = (value: SdkCreateAIModelInputT) => pipe(

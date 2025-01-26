@@ -47,6 +47,27 @@ export class AIModelsEsSearchRepo {
     tryGetFirstPaginationHitOrNotExists,
   );
 
+  getDefaultVision = (organizationId: TableId) => pipe(
+    this.getDefault(organizationId),
+    TE.chainW((aiModel) => {
+      if (aiModel.vision) {
+        return TE.right(aiModel);
+      }
+
+      return pipe(
+        this.search({
+          organizationIds: [organizationId],
+          archived: false,
+          vision: true,
+          offset: 0,
+          limit: 1,
+          sort: 'id:desc',
+        }),
+        tryGetFirstPaginationHitOrNotExists,
+      );
+    }),
+  );
+
   getDefault = (organizationId: TableId) => pipe(
     this.search({
       organizationIds: [organizationId],
@@ -87,6 +108,7 @@ export class AIModelsEsSearchRepo {
       organizationIds,
       archived,
       embedding,
+      vision,
     }: SdkSearchAIModelsInputT,
   ): esb.Query =>
     esb.boolQuery().must(
@@ -95,6 +117,7 @@ export class AIModelsEsSearchRepo {
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !isNil(isDefault) && esb.termQuery('default', isDefault),
         !isNil(embedding) && esb.termQuery('embedding', embedding),
+        !isNil(vision) && esb.termQuery('vision', vision),
         !!phrase && (
           esb
             .boolQuery()
@@ -121,5 +144,6 @@ export class AIModelsEsSearchRepo {
       provider: source.provider,
       default: source.default,
       embedding: source.embedding,
+      vision: source.vision,
     });
 }

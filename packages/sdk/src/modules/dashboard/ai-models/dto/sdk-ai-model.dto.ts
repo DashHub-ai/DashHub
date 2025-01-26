@@ -32,6 +32,7 @@ export const SdkAIModelV = z.object({
   credentials: SdkAICredentialsV,
   default: z.boolean(),
   embedding: z.boolean(),
+  vision: z.boolean(),
 })
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)

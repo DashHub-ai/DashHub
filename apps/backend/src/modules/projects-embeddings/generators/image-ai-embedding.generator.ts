@@ -27,10 +27,10 @@ export class ImageAIEmbeddingGenerator implements AIEmbeddingGenerator {
       : Buffer.from(attrs.buffer).toString('base64');
 
     return pipe(
-      this.aiModelsService.getDefault(attrs.aiModel.organization.id),
-      TE.chainW(ocrModel => pipe(
+      this.aiModelsService.getDefaultVision(attrs.aiModel.organization.id),
+      TE.chainW(visionModel => pipe(
         this.aiConnectorService.executePrompt({
-          aiModel: ocrModel,
+          aiModel: visionModel,
           message: {
             role: 'user',
             content: {

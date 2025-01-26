@@ -33,6 +33,7 @@ import * as dropPublicFlagInChats from './0031-drop-public-flag-in-chats';
 import * as addTechUsersToOrganizationRoles from './0032-add-tech-users-to-organization-roles';
 import * as addNameToUsers from './0033-add-name-to-users';
 import * as addLogoToApps from './0034-add-logo-to-apps';
+import * as addVisionFlatAIModels from './0035-add-vision-flag-to-ai-models';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -70,4 +71,5 @@ export const DB_MIGRATIONS = {
   '0032-add-tech-users-to-organization-roles': addTechUsersToOrganizationRoles,
   '0033-add-name-to-users': addNameToUsers,
   '0034-add-logo-to-apps': addLogoToApps,
+  '0035-add-vision-flag-to-ai-models': addVisionFlatAIModels,
 };

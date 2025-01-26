@@ -22,6 +22,7 @@ export const SdkSearchAIModelsInputV = SdkOffsetPaginationInputV
     organizationIds: SdkIdsArrayV.optional(),
     default: StrictBooleanV.optional(),
     embedding: StrictBooleanV.optional(),
+    vision: StrictBooleanV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)

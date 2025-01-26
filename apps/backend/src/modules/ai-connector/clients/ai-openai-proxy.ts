@@ -168,6 +168,7 @@ function normalizeAIProxyMessageToCompletion(message: string | AIProxyMessage): 
         type: 'image_url',
         image_url: {
           url: content.imageUrl,
+          detail: 'auto',
         },
       },
     ],
