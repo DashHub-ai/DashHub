@@ -3,7 +3,6 @@ import type { SdkTableRowIdT } from '@llm/sdk';
 import {
   ProjectEmbeddingChatBadge,
   type ProjectEmbeddingChatBadgeProps,
-  ProjectImagesChatBadge,
 } from '~/modules/projects-embeddings';
 
 import {
@@ -33,16 +32,10 @@ export function hydrateWithProjectsEmbeddingsBadges(
       return inlineReactComponentTag(`embedding-${id}`);
     });
 
-    const appendToolbars = embeddingIds.length > 0
-      ? [
-          <ProjectImagesChatBadge key="project-images-chat-badge" ids={embeddingIds} />,
-        ]
-      : [];
-
     return {
       content: cleanContent.trim(),
       prependToolbars: [],
-      appendToolbars,
+      appendToolbars: [],
       inlinedReactComponents,
     };
   };
