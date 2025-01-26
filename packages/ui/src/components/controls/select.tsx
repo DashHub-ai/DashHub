@@ -153,7 +153,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
         type="button"
         disabled={disabled}
         className={clsx(
-          'uk-flex uk-flex-between uk-input-fake',
+          'uk-flex uk-flex-between truncate uk-input-fake',
           withBackground && 'bg-white',
           buttonClassName,
         )}
