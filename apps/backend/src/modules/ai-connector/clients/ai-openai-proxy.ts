@@ -160,8 +160,16 @@ function normalizeAIProxyMessageToCompletion(message: string | AIProxyMessage): 
   return {
     role: 'user',
     content: [
-      { type: 'text', text: content.text },
-      { type: 'image_url', image_url: content.imageUrl } as any,
+      {
+        type: 'text',
+        text: content.text,
+      },
+      {
+        type: 'image_url',
+        image_url: {
+          url: content.imageUrl,
+        },
+      },
     ],
   };
 }
