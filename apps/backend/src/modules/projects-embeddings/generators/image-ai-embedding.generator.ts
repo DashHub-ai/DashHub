@@ -33,21 +33,13 @@ export class ImageAIEmbeddingGenerator implements AIEmbeddingGenerator {
           aiModel: ocrModel,
           message: {
             role: 'user',
-            content: [
-              {
-                type: 'text',
-                text:
-                  `Describe this image. Try to guess the language based on the file name: ${attrs.fileName}.`
-                  + `If you can't guess the language, just describe the image in English.`
-                  + `Add information that it some other documents may refer to this image. It\'s part of the project.`,
-              },
-              {
-                type: 'image_url',
-                image_url: {
-                  url: `data:image/jpeg;base64,${base64Image}`,
-                },
-              },
-            ],
+            content: {
+              imageUrl: `data:image/jpeg;base64,${base64Image}`,
+              text:
+                `Describe this image. Try to guess the language based on the file name: ${attrs.fileName}.`
+                + `If you can't guess the language, just describe the image in English.`
+                + `Add information that it some other documents may refer to this image. It\'s part of the project.`,
+            },
           },
         }),
       )),

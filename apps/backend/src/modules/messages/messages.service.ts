@@ -1,10 +1,8 @@
-import type { ChatCompletionChunk } from 'openai/resources/index.mjs';
-
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
-import { findItemIndexById, mapAsyncIterator, tryOrThrowTE } from '@llm/commons';
+import { findItemIndexById, tryOrThrowTE } from '@llm/commons';
 import {
   groupSdkAIMessagesByRepeats,
   type SdkCreateMessageInputT,
@@ -167,12 +165,6 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
               content: mappedContent,
             },
           },
-        ),
-        TE.map(
-          stream => pipe(
-            stream as unknown as AsyncIterableIterator<ChatCompletionChunk>,
-            mapAsyncIterator(chunk => chunk.choices[0]?.delta?.content ?? ''),
-          ),
         ),
         TE.map(stream => this.createAIResponseMessage(
           {

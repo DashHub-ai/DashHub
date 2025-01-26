@@ -5,49 +5,55 @@ import type { SdkAICredentialsT, SdkAIProviderT } from '@llm/sdk';
 import { FormField, Input } from '@llm/ui';
 import { useI18n } from '~/i18n';
 
-type Props =
-  & ValidationErrorsListProps<SdkAICredentialsT>
-  & {
-    provider: SdkAIProviderT;
-  };
+type Props = ValidationErrorsListProps<SdkAICredentialsT> & {
+  provider: SdkAIProviderT;
+};
 
 export const AIModelCredentialsFormFields = controlled<SdkAICredentialsT, Props>(({ errors, provider, control: { bind } }) => {
   const t = useI18n().pack.aiModels.form.fields.credentials;
   const validation = useFormValidatorMessages({ errors });
 
-  switch (provider) {
-    case 'openai':
-      return (
-        <>
-          <FormField
-            className="uk-margin"
-            label={t.apiKey.label}
-            {...validation.extract('apiKey')}
-          >
-            <Input
-              name="name"
-              placeholder={t.apiKey.placeholder}
-              required
-              {...bind.path('apiKey')}
-            />
-          </FormField>
+  return (
+    <>
+      {provider === 'other' && (
+        <FormField
+          className="uk-margin"
+          label={t.apiUrl.label}
+          {...validation.extract('apiUrl')}
+        >
+          <Input
+            name="name"
+            placeholder={t.apiUrl.placeholder}
+            {...bind.path('apiUrl')}
+          />
+        </FormField>
+      )}
 
-          <FormField
-            className="uk-margin"
-            label={t.apiModel.label}
-            {...validation.extract('apiModel')}
-          >
-            <Input
-              name="name"
-              placeholder={t.apiModel.placeholder}
-              required
-              {...bind.path('apiModel')}
-            />
-          </FormField>
-        </>
-      );
+      <FormField
+        className="uk-margin"
+        label={t.apiKey.label}
+        {...validation.extract('apiKey')}
+      >
+        <Input
+          name="name"
+          placeholder={t.apiKey.placeholder}
+          required
+          {...bind.path('apiKey')}
+        />
+      </FormField>
 
-    default:
-      return null;
-  }
+      <FormField
+        className="uk-margin"
+        label={t.apiModel.label}
+        {...validation.extract('apiModel')}
+      >
+        <Input
+          name="name"
+          placeholder={t.apiModel.placeholder}
+          required
+          {...bind.path('apiModel')}
+        />
+      </FormField>
+    </>
+  );
 });

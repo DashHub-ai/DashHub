@@ -1,29 +1,15 @@
-import Instructor from '@instructor-ai/instructor';
+import type { z } from 'zod';
+
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { OpenAI } from 'openai';
 import { inject, injectable } from 'tsyringe';
-import { z } from 'zod';
 
-import type {
-  SdkCreateMessageInputT,
-  SdkMessageT,
-  SdkSearchAIModelItemT,
-  SdkTableRowWithIdT,
-} from '@llm/sdk';
+import type { SdkSearchAIModelItemT, SdkTableRowWithIdT } from '@llm/sdk';
 
-import { rejectFalsyItems } from '@llm/commons';
+import type { AIProxyInstructedAttrs, AIProxyPromptAttrs, AIProxyStreamPromptAttrs } from './clients/ai-proxy';
 
 import { AIModelsService } from '../ai-models';
-import { OpenAIConnectionCreatorError } from './ai-connector.errors';
-
-const DEFAULT_CLIENT_CONFIG = {
-  temperature: 0.7,
-  top_p: 1,
-  max_tokens: 4096,
-  frequency_penalty: 0,
-  presence_penalty: 0.6,
-};
+import { getAIModelProxyForModel } from './clients';
 
 @injectable()
 export class AIConnectorService {
@@ -31,191 +17,44 @@ export class AIConnectorService {
     @inject(AIModelsService) private readonly aiModelsService: AIModelsService,
   ) {}
 
-  executeEmbeddingPrompt = (
-    {
-      aiModel,
-      input,
-    }: {
-      aiModel: SdkTableRowWithIdT;
-      input: string;
-    },
-  ) => pipe(
-    this.aiModelsService.get(aiModel.id),
-    TE.chainW(({ credentials: { apiKey, apiModel } }) => {
-      const ai = new OpenAI({
-        apiKey,
-      });
-
-      return OpenAIConnectionCreatorError.tryCatch(
-        async () => {
-          const result = await ai.embeddings.create({
-            input,
-            model: apiModel,
-          });
-
-          return result.data[0].embedding;
-        },
-      );
-    }),
-  );
+  executeEmbeddingPrompt = ({ aiModel, input }: { aiModel: SdkTableRowWithIdT; input: string; }) =>
+    pipe(
+      this.aiModelsService.get(aiModel.id),
+      TE.map(getAIModelProxyForModel),
+      TE.chainW(proxy => proxy.executeEmbeddingPrompt(input)),
+    );
 
   executeStreamPrompt = (
-    {
-      aiModel,
-      history,
-      context,
-      message,
-      signal,
-    }: {
-      aiModel: SdkTableRowWithIdT;
-      history: SdkMessageT[];
-      message?: SdkCreateMessageInputT;
-      signal?: AbortSignal;
-      context?: string;
-    },
-  ) => pipe(
-    this.aiModelsService.get(aiModel.id),
-    TE.chainW(({ credentials }) => {
-      const ai = new OpenAI({
-        apiKey: credentials.apiKey,
-      });
-
-      return OpenAIConnectionCreatorError.tryCatch(
-        () => ai.chat.completions.create({
-          ...DEFAULT_CLIENT_CONFIG,
-          stream: true,
-          model: credentials.apiModel,
-          messages: rejectFalsyItems([
-            !!context && {
-              role: 'system',
-              content: context,
-            },
-            ...this.normalizeMessagesToCompletion(history),
-            !!message?.content && {
-              role: 'user',
-              content: message.content,
-            },
-          ]),
-        }, { signal }),
-      );
-    }),
-  );
+    params: { aiModel: SdkTableRowWithIdT; } & AIProxyStreamPromptAttrs) =>
+    pipe(
+      this.aiModelsService.get(params.aiModel.id),
+      TE.map(getAIModelProxyForModel),
+      TE.chainW(proxy => proxy.executeStreamPrompt(params)),
+    );
 
   executePrompt = (
-    {
-      aiModel,
-      history = [],
-      message,
-    }: {
+    { aiModel, ...rest }: {
       aiModel: SdkTableRowWithIdT | SdkSearchAIModelItemT;
-      history?: SdkMessageT[];
-      message: string | OpenAI.Chat.Completions.ChatCompletionMessageParam;
-    },
-  ) => pipe(
-    'credentials' in aiModel
-      ? TE.of(aiModel)
-      : this.aiModelsService.get(aiModel.id),
-    TE.chainW(({ credentials }) => {
-      const ai = new OpenAI({
-        apiKey: credentials.apiKey,
-      });
-
-      const client = Instructor({
-        client: ai,
-        mode: this.determineInstructorMode(credentials.apiModel),
-      });
-
-      return OpenAIConnectionCreatorError.tryCatch(
-        async () => {
-          const result = await client.chat.completions.create({
-            model: credentials.apiModel,
-            messages: [
-              ...this.normalizeMessagesToCompletion(history),
-              typeof message === 'string'
-                ? {
-                    role: 'user',
-                    content: message,
-                  }
-                : message,
-            ],
-          });
-
-          return result.choices[0].message.content;
-        },
-      );
-    }),
-  );
+    } & AIProxyPromptAttrs,
+  ) =>
+    pipe(
+      'credentials' in aiModel
+        ? TE.of(aiModel)
+        : this.aiModelsService.get(aiModel.id),
+      TE.map(getAIModelProxyForModel),
+      TE.chainW(proxy => proxy.executePrompt(rest)),
+    );
 
   executeInstructedPrompt = <Z extends z.AnyZodObject>(
-    {
-      aiModel,
-      history = [],
-      message,
-      schema,
-    }: {
+    { aiModel, ...rest }: {
       aiModel: SdkTableRowWithIdT | SdkSearchAIModelItemT;
-      history?: SdkMessageT[];
-      message: string;
-      schema: Z;
-    },
-  ) => pipe(
-    'credentials' in aiModel
-      ? TE.of(aiModel)
-      : this.aiModelsService.get(aiModel.id),
-    TE.chainW(({ credentials }) => {
-      const ai = new OpenAI({
-        apiKey: credentials.apiKey,
-      });
-
-      const client = Instructor({
-        client: ai,
-        mode: this.determineInstructorMode(credentials.apiModel),
-      });
-
-      return OpenAIConnectionCreatorError.tryCatch(
-        async () => client.chat.completions.create({
-          ...DEFAULT_CLIENT_CONFIG,
-          model: credentials.apiModel,
-          messages: [
-            ...this.normalizeMessagesToCompletion(history),
-            {
-              role: 'user',
-              content: message,
-            },
-          ],
-          stream: false,
-          response_model: {
-            name: 'Extractor',
-            schema,
-          },
-        }),
-      );
-    }),
-  );
-
-  private determineInstructorMode = (model: string): 'JSON' | 'JSON_SCHEMA' | 'FUNCTIONS' | 'TOOLS' => {
-    // GPT-4 models support function calling
-    if (model.includes('gpt-4')) {
-      return 'FUNCTIONS';
-    }
-
-    // GPT-3.5-turbo models after June 13th, 2023 support function calling
-    if (model.includes('gpt-3.5-turbo') && !model.includes('0301')) {
-      return 'FUNCTIONS';
-    }
-
-    // Claude models work best with JSON mode
-    if (model.includes('claude')) {
-      return 'JSON';
-    }
-
-    // Default to JSON mode as it's most widely supported
-    return 'JSON';
-  };
-
-  private normalizeMessagesToCompletion = (messages: SdkMessageT[]) =>
-    messages.map(({ content, role }): OpenAI.Chat.Completions.ChatCompletionMessageParam => ({
-      role,
-      content,
-    }));
+    } & AIProxyInstructedAttrs<Z>,
+  ) =>
+    pipe(
+      'credentials' in aiModel
+        ? TE.of(aiModel)
+        : this.aiModelsService.get(aiModel.id),
+      TE.map(getAIModelProxyForModel),
+      TE.chainW(proxy => proxy.executeInstructedPrompt(rest)),
+    );
 }

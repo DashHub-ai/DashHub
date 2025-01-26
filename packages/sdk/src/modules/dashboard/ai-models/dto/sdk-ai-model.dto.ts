@@ -10,7 +10,12 @@ import {
 
 import { SdkOpenAICredentialsV } from './credentials';
 
-export const SDK_AI_PROVIDERS = ['openai'] as const;
+export const SDK_AI_PROVIDERS = [
+  'openai',
+  'gemini',
+  'deepseek',
+  'other',
+] as const;
 
 export const SdkAIProviderV = z.enum(SDK_AI_PROVIDERS);
 

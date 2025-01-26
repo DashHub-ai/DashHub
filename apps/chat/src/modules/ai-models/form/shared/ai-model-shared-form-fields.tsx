@@ -42,7 +42,7 @@ export const AIModelSharedFormFields = controlled<Value, Props>(({ errors, contr
         <TextArea
           name="description"
           placeholder={t.fields.description.placeholder}
-          {...bind.path('description')}
+          {...bind.path('description', { input: val => val ?? '' })}
         />
       </FormField>
 
