@@ -48,6 +48,7 @@ export function AIModelsTableContainer() {
           },
           provider: 'openai',
           default: false,
+          vision: true,
           description: null,
         },
       }),
