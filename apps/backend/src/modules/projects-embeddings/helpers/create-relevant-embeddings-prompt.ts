@@ -84,10 +84,5 @@ export function createRelevantEmbeddingsPrompt(
     '- When answering specific questions about files',
     '- When providing technical details from documentation',
     '- When user asks for source information',
-    '',
-    'Action Buttons Guidelines:',
-    '- Add relevant action buttons based on context and user needs',
-    '- Buttons must be in user\'s language',
-    '- Format: [action:Label|Question about the content]',
   ].join('\n');
 }
