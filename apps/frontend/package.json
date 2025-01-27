@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@astrojs/node": "^8.3.4",
-    "@astrojs/react": "^4.1.2",
+    "@astrojs/react": "^4.2.0",
     "astro": "^4.16.18"
   },
   "devDependencies": {
