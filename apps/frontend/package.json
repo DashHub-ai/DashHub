@@ -17,7 +17,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/tailwind": "^5.1.4",
-    "@directus/sdk": "^18.0.3",
+    "@directus/sdk": "^19.0.0",
     "@llm/commons-front": "*",
     "@llm/ui": "*",
     "@tailwindcss/typography": "^0.5.16",
