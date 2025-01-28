@@ -3,7 +3,7 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
 
-import { SdkCreateAIModelInputT, SdkUpdateAIModelInputT } from '@llm/sdk';
+import { isSDKCredentialsMasked, SdkCreateAIModelInputT, SdkUpdateAIModelInputT } from '@llm/sdk';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -53,6 +53,10 @@ export class AIModelsRepo extends createProtectedDatabaseRepo('ai_models') {
 
   update = ({ forwardTransaction, id, value }: TransactionalAttrs<{ id: TableId; value: SdkUpdateAIModelInputT; }>) => {
     const transaction = tryReuseOrCreateTransaction({ db: this.db, forwardTransaction });
+    const {
+      credentials: { apiKey, ...credentials },
+      ...record
+    } = value;
 
     return transaction(trx => pipe(
       TE.Do,
@@ -67,10 +71,16 @@ export class AIModelsRepo extends createProtectedDatabaseRepo('ai_models') {
           organizationId: aiModel.organizationId,
         });
       }),
-      TE.tap(() => this.baseRepo.update({
+      TE.tap(({ aiModel }) => this.baseRepo.update({
         id,
         forwardTransaction: trx,
-        value,
+        value: {
+          ...record,
+          credentials: {
+            ...credentials,
+            apiKey: isSDKCredentialsMasked(apiKey) ? aiModel.credentials.apiKey : apiKey,
+          },
+        },
       })),
       TE.map(({ aiModel }) => ({
         id,

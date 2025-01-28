@@ -3,6 +3,7 @@ import { flow, pipe } from 'fp-ts/lib/function';
 
 import {
   mapSdkOffsetPaginationItems,
+  SDK_CREDENTIALS_MASK,
   type SdkAIModelT,
   type SdkCreateAIModelInputT,
   type SdkJwtTokenT,
@@ -59,29 +60,14 @@ export class AIModelsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters(dto),
     TE.fromEither,
     TE.chainW(this.aiModelsService.search),
-    TE.map((pagination) => {
-      if (this.check.is.minimum.techUser) {
-        return pagination;
-      }
-
-      return pipe(
-        pagination,
-        mapSdkOffsetPaginationItems(anonymizeAIModelCredentials),
-      );
-    }),
+    TE.map(mapSdkOffsetPaginationItems(anonymizeAIModelCredentials)),
   );
 
   getDefault = flow(
     this.permissionsService.asUser(this.jwt).enforceMatchingOrganizationId,
     TE.fromEither,
     TE.chainW(this.aiModelsService.getDefault),
-    TE.map((record) => {
-      if (this.check.is.minimum.techUser) {
-        return record;
-      }
-
-      return anonymizeAIModelCredentials(record);
-    }),
+    TE.map(anonymizeAIModelCredentials),
   );
 }
 
@@ -89,8 +75,8 @@ function anonymizeAIModelCredentials(aiModel: SdkAIModelT): SdkAIModelT {
   return {
     ...aiModel,
     credentials: {
-      apiModel: '********',
-      apiKey: '********',
+      ...aiModel.credentials,
+      apiKey: SDK_CREDENTIALS_MASK,
     },
   };
 }
