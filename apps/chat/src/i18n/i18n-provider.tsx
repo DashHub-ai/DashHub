@@ -4,7 +4,6 @@ import { type PropsWithChildren, useMemo } from 'react';
 import { z } from 'zod';
 
 import { useLocalStorageObject } from '@llm/commons-front';
-import { I18nForwardedContext } from '@llm/ui';
 
 import { I18N_DEFAULT_LANG, type I18nLangT, I18nLangV } from './dto';
 import { I18nContext, type I18nContextValue } from './i18n-context';
@@ -41,9 +40,7 @@ export function I18nProvider({ children }: PropsWithChildren) {
 
   return (
     <I18nContext value={value}>
-      <I18nForwardedContext value={value}>
-        {children}
-      </I18nForwardedContext>
+      {children}
     </I18nContext>
   );
 }

@@ -4,9 +4,9 @@ import {
   type ValidationErrorsListProps,
 } from '@under-control/forms';
 
-import { FormField } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { UserOrganizationRoleSelect } from '~/modules/organizations';
+import { FormField } from '~/ui';
 
 import type { CreateUserOrganizationValue } from '../types';
 

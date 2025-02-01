@@ -1,8 +1,8 @@
 import { PaperclipIcon } from 'lucide-react';
 
 import { SdkSearchProjectFilesInputV, type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
-import { FormSpinnerCTA, PaginatedList, useDebouncedPaginatedSearch } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { FormSpinnerCTA, PaginatedList, useDebouncedPaginatedSearch } from '~/ui';
 
 import { ProjectFileCard } from './project-file-card';
 import { ProjectFilesPlaceholder } from './project-files-placeholder';

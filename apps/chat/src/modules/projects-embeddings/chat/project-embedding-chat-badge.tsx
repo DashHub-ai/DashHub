@@ -10,7 +10,7 @@ import {
   type SdkTableRowIdT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
-import { useBalloon } from '@llm/ui';
+import { useBalloon } from '~/ui';
 
 import { ProjectEmbeddingPreview } from './project-embedding-preview';
 

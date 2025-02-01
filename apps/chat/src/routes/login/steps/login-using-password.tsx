@@ -4,9 +4,9 @@ import { MailIcon } from 'lucide-react';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import { type SdkPasswordLoginInputT, useSdk } from '@llm/sdk';
-import { Checkbox, FormErrorAlert, FormField, FormSpinnerCTA, Input } from '@llm/ui';
 import { usePredefinedFormValidators } from '~/hooks';
 import { useI18n } from '~/i18n';
+import { Checkbox, FormErrorAlert, FormField, FormSpinnerCTA, Input } from '~/ui';
 
 import { ContinueWithDivider } from '../parts';
 import { LoginTerms } from '../parts/login-terms';

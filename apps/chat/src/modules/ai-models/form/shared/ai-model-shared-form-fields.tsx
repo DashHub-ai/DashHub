@@ -2,8 +2,8 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkAIModelT } from '@llm/sdk';
 
-import { Checkbox, FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Checkbox, FormField, Input, TextArea } from '~/ui';
 
 import { AIModelCredentialsFormFields } from './ai-model-credentials-form-field';
 import { AIModelProviderSelect } from './ai-model-provider-select';

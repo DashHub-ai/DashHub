@@ -6,6 +6,8 @@ import {
   SdkSearchAppsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useI18n } from '~/i18n';
+import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -15,9 +17,7 @@ import {
   PaginationToolbar,
   ResetFiltersButton,
   useDebouncedPaginatedSearch,
-} from '@llm/ui';
-import { useI18n } from '~/i18n';
-import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+} from '~/ui';
 
 import { useAppCategoryCreateModal } from '../form/create';
 import { AppsCategoriesTableRow } from './apps-categories-table-row';

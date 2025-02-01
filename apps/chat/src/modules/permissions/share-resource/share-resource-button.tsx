@@ -5,8 +5,8 @@ import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
 
 import { type TaggedError, tapTaskEitherError } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
-import { FormSpinnerCTA, useSaveErrorNotification } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { FormSpinnerCTA, useSaveErrorNotification } from '~/ui';
 
 import { PermissionsStatusIcon } from '../status';
 import { useShareResourceModal } from './use-share-resource-modal';

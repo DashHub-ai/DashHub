@@ -3,10 +3,10 @@ import { Link } from 'wouter';
 
 import { formatDate } from '@llm/commons';
 import { isSdkAIGeneratingString, type SdkSearchChatItemT } from '@llm/sdk';
-import { CardBase, CardContent, CardDescription, CardFooter, CardTitle } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { CardRecordPermissionsRow } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';
+import { CardBase, CardContent, CardDescription, CardFooter, CardTitle } from '~/ui';
 
 type ChatCardProps = {
   chat: SdkSearchChatItemT;

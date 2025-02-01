@@ -4,10 +4,10 @@ import { Link, Redirect } from 'wouter';
 import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
-import { Skeleton, SpinnerContainer } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { RouteMetaTags } from '~/routes/shared';
+import { Skeleton, SpinnerContainer } from '~/ui';
 
 import { useSitemap } from '../use-sitemap';
 import { ProjectContent } from './project-content';

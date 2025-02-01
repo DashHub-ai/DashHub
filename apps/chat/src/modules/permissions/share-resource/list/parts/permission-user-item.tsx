@@ -2,8 +2,8 @@ import { Trash } from 'lucide-react';
 
 import type { SdkPermissionAccessLevelT, SdkUserListItemT } from '@llm/sdk';
 
-import { Avatar } from '@llm/ui';
 import { PermissionCheckboxes } from '~/modules/permissions/controls/permission-checkboxes';
+import { Avatar } from '~/ui';
 
 type Props = {
   user: SdkUserListItemT;

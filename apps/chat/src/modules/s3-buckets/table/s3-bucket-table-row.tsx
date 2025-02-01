@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchS3BucketItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '@llm/ui';
+import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/ui';
 
 import { useS3BucketUpdateModal } from '../form/update';
 

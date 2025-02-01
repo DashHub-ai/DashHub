@@ -2,10 +2,10 @@ import { type ControlBindProps, controlled, useFormValidatorMessages, type Valid
 
 import type { SdkPermissionT, SdkTableRowWithIdT, SdkUpdateAppInputT } from '@llm/sdk';
 
-import { FormField, Input, SelectGenericFileInput, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AppsCategoriesSearchSelect } from '~/modules/apps-categories';
 import { ShareResourceFormGroup } from '~/modules/permissions';
+import { FormField, Input, SelectGenericFileInput, TextArea } from '~/ui';
 
 type Value = Pick<
   SdkUpdateAppInputT,

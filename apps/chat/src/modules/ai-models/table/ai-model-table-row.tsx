@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchAIModelItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '@llm/ui';
+import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/ui';
 
 import { useAIModelUpdateModal } from '../form/update';
 

@@ -3,12 +3,12 @@ import { FolderPlusIcon } from 'lucide-react';
 
 import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback, useForceRerender } from '@llm/commons-front';
-import { FormSpinnerCTA } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { ProjectsContainer } from '~/modules';
 import { useProjectCreateModal } from '~/modules/projects/form';
 import { RouteMetaTags } from '~/routes/shared';
+import { FormSpinnerCTA } from '~/ui';
 
 import { ProjectsTutorial } from './projects-tutorial';
 

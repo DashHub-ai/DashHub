@@ -1,6 +1,6 @@
-import { ContentCard } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AIModelsTableContainer } from '~/modules/ai-models/table';
+import { ContentCard } from '~/ui';
 
 import { ManagementLayout } from '../layout';
 

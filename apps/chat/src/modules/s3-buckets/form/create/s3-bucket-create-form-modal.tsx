@@ -1,5 +1,6 @@
 import type { SdkCreateS3BucketInputT } from '@llm/sdk';
 
+import { useI18n } from '~/i18n';
 import {
   CancelButton,
   CreateButton,
@@ -7,8 +8,7 @@ import {
   Modal,
   type ModalProps,
   ModalTitle,
-} from '@llm/ui';
-import { useI18n } from '~/i18n';
+} from '~/ui';
 
 import { S3BucketSharedFormFields } from '../shared';
 import { useS3BucketCreateForm } from './use-s3-bucket-create-form';

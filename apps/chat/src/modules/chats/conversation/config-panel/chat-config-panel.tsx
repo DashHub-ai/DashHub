@@ -1,7 +1,7 @@
 import type { SdkChatT } from '@llm/sdk';
 
-import { Checkbox, CollapsiblePanel, FormAlertBoxes, FormField, Input, SaveButton, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Checkbox, CollapsiblePanel, FormAlertBoxes, FormField, Input, SaveButton, TextArea } from '~/ui';
 
 import { ChatConfigArchive } from './chat-config-archive';
 import { ChatConfigTutorial } from './chat-config-tutorial';

@@ -4,9 +4,9 @@ import { Download, Trash2 } from 'lucide-react';
 
 import { isImageFileUrl, tapTaskEither } from '@llm/commons';
 import { type SdkSearchProjectFileItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { CardDescription, useDeleteWithNotifications } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { getFileTypeAndColor } from '~/modules/shared/get-file-type-and-color';
+import { CardDescription, useDeleteWithNotifications } from '~/ui';
 
 type FileCardProps = {
   readOnly?: boolean;
@@ -32,7 +32,7 @@ export function ProjectFileCard({ file, readOnly, onAfterDelete }: FileCardProps
   const isImage = isImageFileUrl(resource.name);
 
   return (
-    <div className="flex flex-col border-gray-200 bg-white mb-2 p-3 border rounded-lg transition-all group">
+    <div className="group flex flex-col border-gray-200 bg-white mb-2 p-3 border rounded-lg transition-all">
       <div className="flex items-center mb-2">
         <div className="mr-3">
           <div className={clsx('flex items-center p-1 rounded', bgColor)}>

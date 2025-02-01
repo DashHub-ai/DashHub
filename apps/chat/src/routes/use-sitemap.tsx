@@ -6,7 +6,7 @@ import type {
 } from '~/modules';
 
 import { concatUrls, withSearchParams } from '@llm/commons';
-import { defineSitemapRouteGenerator } from '@llm/ui';
+import { defineSitemapRouteGenerator } from '~/ui';
 
 export function useSitemap() {
   const sitemap = {

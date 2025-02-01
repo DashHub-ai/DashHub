@@ -5,10 +5,10 @@ import type { SdkOffsetPaginationInputT, SdkUserListItemT } from '@llm/sdk';
 
 import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
-import { AddButton, EllipsisCrudDropdownButton, FormField, PaginatedTable } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { GhostPlaceholder } from '~/modules/shared';
 import { useChooseUsersModal } from '~/modules/users/choose-users';
+import { AddButton, EllipsisCrudDropdownButton, FormField, PaginatedTable } from '~/ui';
 
 export const GroupUsersSelectTable = controlled<SdkUserListItemT[]>(({ control: { value, setValue } }) => {
   const { pack } = useI18n();

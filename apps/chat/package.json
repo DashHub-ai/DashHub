@@ -9,18 +9,26 @@
     "check:types": "tsc"
   },
   "dependencies": {
-    "@llm/ui": "*",
+    "@floating-ui/react": "^0.27.3",
+    "@llm/commons-front": "*",
+    "@llm/sdk": "*",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/sanitize-html": "^2.13.0",
+    "@types/uikit": "^3.14.5",
     "@under-control/forms": "^2.0.0",
     "clsx": "^2.1.1",
+    "franken-ui": "^1.1.0",
+    "lucide-react": "^0.474.0",
     "postcss": "^8.4.48",
     "postcss-combine-duplicated-selectors": "^10.0.3",
+    "postcss-sort-media-queries": "^5.2.0",
     "react-helmet-async": "^2.0.5",
     "react-markdown": "^9.0.1",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "sanitize-html": "^2.13.1",
     "tailwindcss": "^3.4.17",
+    "uikit": "^3.21.16",
     "wouter": "^3.3.5"
   }
 }

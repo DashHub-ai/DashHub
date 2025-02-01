@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchAppCategoryItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { EllipsisCrudDropdownButton } from '@llm/ui';
+import { EllipsisCrudDropdownButton } from '~/ui';
 
 import { useAppCategoryUpdateModal } from '../form/update';
 

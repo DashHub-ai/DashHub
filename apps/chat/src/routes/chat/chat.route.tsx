@@ -5,11 +5,11 @@ import { Link, Redirect } from 'wouter';
 import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkTableRowUuidT, useSdkForLoggedIn } from '@llm/sdk';
-import { SpinnerContainer } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { ChatConversationWithSidebar } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
+import { SpinnerContainer } from '~/ui';
 
 import { useSitemap } from '../use-sitemap';
 import { ShareChatRow } from './share-chat-row';

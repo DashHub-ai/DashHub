@@ -3,8 +3,8 @@ import { UserIcon } from 'lucide-react';
 
 import type { SdkUserListItemT } from '@llm/sdk';
 
-import { ColorizedAvatar, Tooltip } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { ColorizedAvatar, Tooltip } from '~/ui';
 
 type Props = {
   creator: SdkUserListItemT;

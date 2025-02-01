@@ -1,7 +1,7 @@
 import type { SdkUserListItemT } from '@llm/sdk';
 
-import { Avatar } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Avatar } from '~/ui';
 
 type Props = {
   creator: SdkUserListItemT;

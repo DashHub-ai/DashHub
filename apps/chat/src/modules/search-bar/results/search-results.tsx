@@ -1,9 +1,9 @@
 import { BotIcon, FolderIcon, MessageSquareTextIcon } from 'lucide-react';
 
 import { useDebounceValue } from '@llm/commons-front';
-import { NoItemsPlaceholder, SpinnerContainer } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
+import { NoItemsPlaceholder, SpinnerContainer } from '~/ui';
 
 import { SearchResultGroup } from './search-result-group';
 import { useSearchResult } from './use-search-result';

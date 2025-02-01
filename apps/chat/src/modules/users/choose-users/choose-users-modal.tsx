@@ -3,8 +3,8 @@ import { useControlStrict } from '@under-control/forms';
 import type { SdkUserListItemT } from '@llm/sdk';
 
 import { findItemById, rejectById } from '@llm/commons';
-import { Modal, type ModalProps, ModalTitle, SaveButton, SelectRecordButton } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Modal, type ModalProps, ModalTitle, SaveButton, SelectRecordButton } from '~/ui';
 
 import { UsersTableContainer } from '../table';
 

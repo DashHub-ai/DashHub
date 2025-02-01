@@ -9,7 +9,7 @@ import {
   type SdkTableRowWithUuidT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
-import { useSaveTaskEitherNotification } from '@llm/ui';
+import { useSaveTaskEitherNotification } from '~/ui';
 
 type UpdateChatFormValue = Overwrite<SdkChatT & SdkTableRowWithUuidT, {
   permissions?: SdkPermissionT[] | null;

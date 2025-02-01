@@ -59,12 +59,8 @@ jobs:
     strategy:
       matrix:
         app:
-          - name: frontend
-            context: apps/frontend
           - name: backend
             context: apps/backend
-          - name: admin
-            context: apps/admin
           - name: chat
             context: apps/chat
     steps:

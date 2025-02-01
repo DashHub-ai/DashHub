@@ -1,8 +1,8 @@
-import { CreateButton, PaginationSearchToolbarItem, PaginationToolbar } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { ExpertsGrid } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
+import { CreateButton, PaginationSearchToolbarItem, PaginationToolbar } from '~/ui';
 
 import { ExpertsTutorial } from './experts-tutorial';
 

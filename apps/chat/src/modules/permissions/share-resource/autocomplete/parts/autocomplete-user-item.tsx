@@ -1,6 +1,6 @@
 import type { SdkUserListItemT } from '@llm/sdk';
 
-import { Avatar } from '@llm/ui';
+import { Avatar } from '~/ui';
 
 import { ChooseButton } from './choose-button';
 

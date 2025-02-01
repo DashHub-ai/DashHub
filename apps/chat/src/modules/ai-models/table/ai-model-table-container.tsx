@@ -6,6 +6,8 @@ import {
   SdkSearchAIModelsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useI18n } from '~/i18n';
+import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -14,9 +16,7 @@ import {
   PaginationToolbar,
   ResetFiltersButton,
   useDebouncedPaginatedSearch,
-} from '@llm/ui';
-import { useI18n } from '~/i18n';
-import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+} from '~/ui';
 
 import { useAIModelCreateModal } from '../form/create';
 import { AIModelsTableRow } from './ai-model-table-row';

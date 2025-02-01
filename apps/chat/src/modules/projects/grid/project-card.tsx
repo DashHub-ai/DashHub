@@ -5,6 +5,8 @@ import type { SdkProjectT } from '@llm/sdk';
 
 import { formatDate, runTask, tapTaskOption } from '@llm/commons';
 import { useSdkForLoggedIn } from '@llm/sdk';
+import { CardRecordPermissionsRow } from '~/modules/permissions/card';
+import { useSitemap } from '~/routes';
 import {
   CardActions,
   CardArchiveButton,
@@ -16,9 +18,7 @@ import {
   CardTitle,
   useArchiveWithNotifications,
   useUnarchiveWithNotifications,
-} from '@llm/ui';
-import { CardRecordPermissionsRow } from '~/modules/permissions/card';
-import { useSitemap } from '~/routes';
+} from '~/ui';
 
 import { useProjectUpdateModal } from '../form';
 

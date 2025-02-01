@@ -2,10 +2,10 @@ import type { PropsWithChildren } from 'react';
 
 import { BotIcon, FolderOpen, UserCircleIcon, UsersIcon } from 'lucide-react';
 
-import { SideLayout, SideNav, SideNavItem } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { RouteMetaTags, useSitemap } from '~/routes';
+import { SideLayout, SideNav, SideNavItem } from '~/ui';
 
 type Props = PropsWithChildren & {
   title: string;

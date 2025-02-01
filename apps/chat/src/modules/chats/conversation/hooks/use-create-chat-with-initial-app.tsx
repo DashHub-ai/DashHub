@@ -5,9 +5,9 @@ import { useLocation } from 'wouter';
 import { runTaskAsVoid, tapTaskEither, tryOrThrowTE } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import { type SdkTableRowWithIdT, useSdkForLoggedIn } from '@llm/sdk';
-import { useSaveErrorNotification } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
+import { useSaveErrorNotification } from '~/ui';
 
 export function useCreateChatWithInitialApp() {
   const [, navigate] = useLocation();

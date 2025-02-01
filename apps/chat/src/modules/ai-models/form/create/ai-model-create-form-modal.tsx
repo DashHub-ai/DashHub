@@ -1,5 +1,6 @@
 import type { SdkCreateAIModelInputT } from '@llm/sdk';
 
+import { useI18n } from '~/i18n';
 import {
   CancelButton,
   CreateButton,
@@ -7,8 +8,7 @@ import {
   Modal,
   type ModalProps,
   ModalTitle,
-} from '@llm/ui';
-import { useI18n } from '~/i18n';
+} from '~/ui';
 
 import { AIModelSharedFormFields } from '../shared';
 import { useAIModelCreateForm } from './use-ai-model-create-form';

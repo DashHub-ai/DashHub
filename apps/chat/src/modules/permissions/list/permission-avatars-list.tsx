@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 import type { SdkPermissionT } from '@llm/sdk';
-import type { ColorizedAvatarSize } from '@llm/ui';
+import type { ColorizedAvatarSize } from '~/ui';
 
 import { PermissionGroupAvatar } from './permission-group-avatar';
 import { PermissionUserAvatar } from './permission-user-avatar';

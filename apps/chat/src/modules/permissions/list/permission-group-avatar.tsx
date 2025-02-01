@@ -2,7 +2,7 @@ import { Users2 } from 'lucide-react';
 
 import type { SdkTableRowWithIdNameT } from '@llm/sdk';
 
-import { Avatar, type AvatarSize, Tooltip } from '@llm/ui';
+import { Avatar, type AvatarSize, Tooltip } from '~/ui';
 
 type Props = {
   group: SdkTableRowWithIdNameT;

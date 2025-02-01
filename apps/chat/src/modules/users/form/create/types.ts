@@ -1,5 +1,5 @@
 import type { SdkCreateUserInputT, SdkCreateUserOrganizationInputT } from '@llm/sdk';
-import type { SelectItem } from '@llm/ui';
+import type { SelectItem } from '~/ui';
 
 export type CreateUserOrganizationValue = SdkCreateUserOrganizationInputT & {
   item: SelectItem;

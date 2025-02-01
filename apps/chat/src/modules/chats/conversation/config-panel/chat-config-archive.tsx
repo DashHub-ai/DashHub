@@ -7,9 +7,9 @@ import type { SdkChatT } from '@llm/sdk';
 
 import { tapTaskEither } from '@llm/commons';
 import { useSdkForLoggedIn } from '@llm/sdk';
-import { TutorialBox, useArchiveWithNotifications } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
+import { TutorialBox, useArchiveWithNotifications } from '~/ui';
 
 type Props = {
   chat: SdkChatT;

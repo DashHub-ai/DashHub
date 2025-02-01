@@ -1,5 +1,5 @@
-import { TutorialBox } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { TutorialBox } from '~/ui';
 
 type Props = {
   className?: string;

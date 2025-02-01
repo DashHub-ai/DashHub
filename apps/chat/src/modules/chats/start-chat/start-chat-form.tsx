@@ -8,10 +8,10 @@ import type { SdkTableRowWithIdNameT } from '@llm/sdk';
 
 import { StrictBooleanV, tapTaskOption } from '@llm/commons';
 import { useFocusAfterMount, useLocalStorageObject } from '@llm/commons-front';
-import { Checkbox, FormSpinnerCTA } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';
 import { ProjectsSearchSelect } from '~/modules/projects';
+import { Checkbox, FormSpinnerCTA } from '~/ui';
 
 import { FilesCardsControlledList, selectChatFile } from '../conversation';
 import { useStartChatForm } from './use-start-chat-form';

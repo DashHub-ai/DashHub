@@ -7,7 +7,8 @@ import {
   type SdkUpdateAppCategoryInputT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
-import { usePredefinedFormValidators, useSaveTaskEitherNotification } from '@llm/ui';
+import { usePredefinedFormValidators } from '~/hooks';
+import { useSaveTaskEitherNotification } from '~/ui';
 
 type UpdateAppCategoryFormHookAttrs =
   & Omit<
