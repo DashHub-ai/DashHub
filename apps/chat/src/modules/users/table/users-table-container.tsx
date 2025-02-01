@@ -2,9 +2,14 @@ import { flow, pipe } from 'fp-ts/lib/function';
 
 import { genRandomPassword, tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
-import { type SdkSearchUserItemT, SdkSearchUsersInputV, useSdkForLoggedIn } from '@llm/sdk';
+import {
+  type SdkSearchUserItemT,
+  type SdkSearchUsersInputT,
+  SdkSearchUsersInputV,
+  useSdkForLoggedIn,
+} from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+import { useWorkspaceOrganization } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -15,51 +20,83 @@ import {
   useDebouncedPaginatedSearch,
 } from '~/ui';
 
+import type { CreateUserFormValue } from '../form/create/types';
+
 import { useUserCreateModal } from '../form';
 import { UsersTableRow, type UsersTableRowProps } from './users-table-row';
 
 type Props = {
   itemPropsFn?: (item: SdkSearchUserItemT) => Omit<UsersTableRowProps, 'item' | 'onUpdated'>;
+  filters?: Partial<SdkSearchUsersInputT>;
 };
 
-export function UsersTableContainer({ itemPropsFn }: Props) {
+export function UsersTableContainer({ filters: forwardedFilters, itemPropsFn }: Props) {
   const { pack } = useI18n();
   const t = pack.table.columns;
 
   const { sdks } = useSdkForLoggedIn();
-  const { organization, assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
+  const { organization, assignWorkspaceToFilters } = useWorkspaceOrganization();
 
   const { loading, pagination, result, reset, reload } = useDebouncedPaginatedSearch({
     schema: SdkSearchUsersInputV,
     fallbackSearchParams: {},
     storeDataInUrl: false,
-    fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.users.search),
+    fetchResultsTask: flow(
+      assignWorkspaceToFilters,
+      filters => sdks.dashboard.users.search({
+        ...filters,
+        ...forwardedFilters,
+      }),
+    ),
   });
+
+  const defaultValue: CreateUserFormValue = (() => {
+    if (!organization) {
+      return {
+        email: '',
+        name: '',
+        role: 'root',
+        active: true,
+        archiveProtection: false,
+        auth: {
+          email: {
+            enabled: true,
+          },
+          password: {
+            enabled: true,
+            value: genRandomPassword(),
+          },
+        },
+      };
+    }
+
+    return {
+      email: '',
+      name: '',
+      role: 'user',
+      active: true,
+      archiveProtection: false,
+      organization: {
+        item: organization,
+        role: 'member',
+      },
+      auth: {
+        email: {
+          enabled: true,
+        },
+        password: {
+          enabled: true,
+          value: genRandomPassword(),
+        },
+      },
+    };
+  })();
 
   const createModal = useUserCreateModal();
   const [onCreate, createState] = useAsyncCallback(
     pipe(
       createModal.showAsOptional({
-        defaultValue: {
-          email: '',
-          name: '',
-          role: 'user',
-          active: true,
-          archiveProtection: false,
-          organization: {
-            item: organization,
-            role: 'member',
-          },
-          auth: {
-            email: {
-              enabled: true,
-            },
-            password: {
-              enabled: true,
-              value: genRandomPassword(),
-            },
-          },
-        },
+        defaultValue,
       }),
       tapTaskOption(reset),
     ),
@@ -99,6 +136,7 @@ export function UsersTableContainer({ itemPropsFn }: Props) {
         columns={[
           { id: 'id', name: t.id, className: 'uk-table-shrink' },
           { id: 'email', name: t.email, className: 'uk-table-expand' },
+          { id: 'name', name: t.name, className: 'uk-table-expand' },
           { id: 'role', name: t.role, className: 'w-[150px]' },
           { id: 'active', name: t.active, className: 'w-[150px]' },
           { id: 'auth', name: t.auth, className: 'w-[150px]' },

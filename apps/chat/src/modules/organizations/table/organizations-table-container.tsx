@@ -27,6 +27,7 @@ export function OrganizationsTableContainer() {
 
   const { loading, pagination, result, reset, reload } = useDebouncedPaginatedSearch({
     schema: SdkSearchOrganizationsInputV,
+    storeDataInUrl: false,
     fallbackSearchParams: {},
     fetchResultsTask: sdks.dashboard.organizations.search,
   });

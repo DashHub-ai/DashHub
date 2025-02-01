@@ -14,6 +14,15 @@ export const SdkUserRoleV = z.enum(['root', 'user']);
 
 export type SdkUserRoleT = z.infer<typeof SdkUserRoleV>;
 
+export const SdkUserRolesInputV = z.union([
+  z
+    .string()
+    .transform(str => str.split(',').map(s => s.trim()) as SdkUserRoleT[]),
+  z.array(SdkUserRoleV),
+]);
+
+export type SdkUserRolesInputT = z.infer<typeof SdkUserRolesInputV>;
+
 export const SdkUserV = z.object({
   email: z.string(),
   name: z.string(),

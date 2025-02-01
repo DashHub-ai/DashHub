@@ -11,7 +11,7 @@ import {
   SdkOffsetPaginationOutputV,
 } from '~/shared';
 
-import { SdkUserV } from './sdk-user.dto';
+import { SdkUserRolesInputV, SdkUserV } from './sdk-user.dto';
 
 export const SdkSearchUserItemV = SdkUserV;
 
@@ -20,6 +20,7 @@ export type SdkSearchUserItemT = z.infer<typeof SdkSearchUserItemV>;
 export const SdkSearchUsersInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
+    roles: SdkUserRolesInputV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)

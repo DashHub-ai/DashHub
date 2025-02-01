@@ -26,15 +26,18 @@ export function UsersTableRow({ item, ctaButton, onUpdated }: UsersTableRowProps
 
   const updateModal = useUserUpdateModal();
 
-  if (item.role !== 'user') {
-    return null;
-  }
-
   return (
     <tr>
       <td>{item.id}</td>
       <td>{item.email}</td>
-      <td><OrganizationUserRoleBadge value={item.organization.role} /></td>
+      <td>{item.name}</td>
+      <td>
+        {(
+          'organization' in item && item.organization
+            ? <OrganizationUserRoleBadge value={item.organization.role} />
+            : '-'
+        )}
+      </td>
       <td>
         <BooleanBadge value={item.active} />
       </td>

@@ -61,6 +61,7 @@ export class UsersEsSearchRepo {
       excludeIds,
       organizationIds,
       archived,
+      roles,
     }: SdkSearchUsersInputT,
   ): esb.Query =>
     esb.boolQuery().must(
@@ -68,6 +69,7 @@ export class UsersEsSearchRepo {
         !!ids?.length && esb.termsQuery('id', ids),
         !!excludeIds?.length && esb.boolQuery().mustNot(esb.termsQuery('id', excludeIds)),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
+        !!roles?.length && esb.termsQuery('role', roles),
         !!phrase && (
           esb
             .boolQuery()

@@ -336,6 +336,10 @@ export const I18N_PACK_EN = {
         dashboard: 'Organization must be selected to access dashboard features',
         rootOnly: 'This step is only required for root users - regular users are automatically assigned to their organization',
       },
+      sections: {
+        organizations: 'Organizations',
+        users: 'Root users',
+      },
     },
     management: {
       meta: {

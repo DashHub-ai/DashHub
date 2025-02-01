@@ -338,6 +338,10 @@ export const I18N_PACK_PL: I18nLangPack = {
         dashboard: 'Wybór organizacji jest wymagany do korzystania z funkcji panelu',
         rootOnly: 'Ten krok jest wymagany tylko dla użytkowników root - zwykli użytkownicy są automatycznie przypisani do swojej organizacji',
       },
+      sections: {
+        organizations: 'Organizacje',
+        users: 'Administratorzy',
+      },
     },
     management: {
       meta: {
