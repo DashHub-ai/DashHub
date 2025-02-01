@@ -40,8 +40,7 @@ jobs:
         run: yarn build
         env:
           PUBLIC_VITE_APP_ENV: production
-          PUBLIC_VITE_API_URL: https://dashhub.ai/api
-          PUBLIC_VITE_DIRECTUS_URL: https://dashhub.ai/cms
+          PUBLIC_VITE_API_URL: https://app.dashhub.ai/api
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -75,7 +74,7 @@ jobs:
 
       - uses: docker/login-action@v3
         with:
-          registry: dashhub.ai
+          registry: app.dashhub.ai
           username: ${{ secrets.PRODUCTION_PODMAN_REGISTRY_USERNAME }}
           password: ${{ secrets.PRODUCTION_PODMAN_REGISTRY_PASSWORD }}
 
@@ -84,8 +83,8 @@ jobs:
           context: ${{ matrix.app.context }}
           push: true
           tags: |
-            dashhub.ai/dashhub-${{ matrix.app.name }}:latest
-            dashhub.ai/dashhub-${{ matrix.app.name }}:${{ github.sha }}
+            app.dashhub.ai/dashhub-${{ matrix.app.name }}:latest
+            app.dashhub.ai/dashhub-${{ matrix.app.name }}:${{ github.sha }}
           platforms: ${{ env.TARGET_PLATFORMS }}
           cache-from: type=gha,scope=${{ matrix.app.name }}
           cache-to: type=gha,scope=${{ matrix.app.name }},mode=max

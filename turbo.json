@@ -10,7 +10,6 @@
       "env": [
         "NODE_ENV=production",
         "PUBLIC_VITE_API_URL",
-        "PUBLIC_VITE_DIRECTUS_URL",
         "PUBLIC_VITE_APP_ENV",
         "ELASTICSEARCH_HOST",
         "ELASTICSEARCH_PORT",
@@ -36,7 +35,6 @@
       "env": [
         "NODE_ENV=development",
         "PUBLIC_VITE_API_URL",
-        "PUBLIC_VITE_DIRECTUS_URL",
         "PUBLIC_VITE_APP_ENV",
         "ELASTICSEARCH_HOST",
         "ELASTICSEARCH_PORT",
@@ -60,7 +58,6 @@
       "env": [
         "NODE_ENV=development",
         "PUBLIC_VITE_API_URL",
-        "PUBLIC_VITE_DIRECTUS_URL",
         "PUBLIC_VITE_APP_ENV",
         "ELASTICSEARCH_HOST",
         "ELASTICSEARCH_PORT",
