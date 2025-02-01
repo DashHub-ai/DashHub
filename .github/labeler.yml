@@ -6,17 +6,9 @@
 - changed-files:
   - any-glob-to-any-file: ['.github/**/*']
 
-'app: admin':
-- changed-files:
-  - any-glob-to-any-file: ['apps/admin/**/*']
-
 'app: backend':
 - changed-files:
   - any-glob-to-any-file: ['apps/backend/**/*']
-
-'app: frontend':
-- changed-files:
-  - any-glob-to-any-file: ['apps/frontend/**/*']
 
 'app: chat':
 - changed-files:
