@@ -1,6 +1,6 @@
-import { ContentCard } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { S3BucketsTableContainer } from '~/modules';
+import { ContentCard } from '~/ui';
 
 import { ManagementLayout } from '../layout';
 

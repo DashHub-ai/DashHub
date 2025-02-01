@@ -1,5 +1,6 @@
 import type { SdkAppT } from '@llm/sdk';
 
+import { useI18n } from '~/i18n';
 import {
   CancelButton,
   FormErrorAlert,
@@ -7,8 +8,7 @@ import {
   type ModalProps,
   ModalTitle,
   UpdateButton,
-} from '@llm/ui';
-import { useI18n } from '~/i18n';
+} from '~/ui';
 
 import { AppSharedFormFields } from '../shared';
 import { useAppUpdateForm } from './use-app-update-form';

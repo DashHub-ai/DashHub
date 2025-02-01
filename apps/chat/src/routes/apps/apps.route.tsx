@@ -3,11 +3,11 @@ import { WandSparklesIcon } from 'lucide-react';
 
 import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback, useForceRerender } from '@llm/commons-front';
-import { createFakeSelectItem, FormSpinnerCTA } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
 import { AppsContainer, useAppCreateModal } from '~/modules';
 import { RouteMetaTags } from '~/routes';
+import { createFakeSelectItem, FormSpinnerCTA } from '~/ui';
 
 import { AppsTutorial } from './apps-tutorial';
 

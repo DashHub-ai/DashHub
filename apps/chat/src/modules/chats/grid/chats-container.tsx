@@ -6,14 +6,14 @@ import {
   type SdkTableRowWithIdT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
   PaginatedList,
   PaginationSearchToolbarItem,
   PaginationToolbar,
   useDebouncedPaginatedSearch,
-} from '@llm/ui';
-import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+} from '~/ui';
 
 import { ChatCard } from './chat-card';
 import { ChatHistoryPlaceholder } from './chat-history-placeholder';

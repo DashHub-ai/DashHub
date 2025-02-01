@@ -1,7 +1,7 @@
 import type { SdkPermissionAccessLevelT, SdkUserListItemT } from '@llm/sdk';
 
-import { ColorizedAvatar, type ColorizedAvatarSize, Tooltip } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { ColorizedAvatar, type ColorizedAvatarSize, Tooltip } from '~/ui';
 
 type Props = {
   user: SdkUserListItemT;

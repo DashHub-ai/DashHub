@@ -2,8 +2,8 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkCreateAppCategoryInputT, SdkTableRowIdT, SdkTableRowWithIdT } from '@llm/sdk';
 
-import { FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { FormField, Input, TextArea } from '~/ui';
 
 import { AppsCategoriesSearchSelect } from '../../controls';
 

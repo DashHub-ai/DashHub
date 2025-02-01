@@ -12,6 +12,7 @@ import {
   SdkSearchAppsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
   FavoriteFiltersTabs,
@@ -20,8 +21,7 @@ import {
   PaginationToolbar,
   ResetFiltersButton,
   useDebouncedPaginatedSearch,
-} from '@llm/ui';
-import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+} from '~/ui';
 
 import { AppsCategoriesSidebar, AppsCategoriesSidebarLoader } from '../../apps-categories/sidebar';
 import { useFavoriteApps } from '../favorite';

@@ -6,9 +6,9 @@ import {
 
 import type { SdkUpdateUserOrganizationInputT } from '@llm/sdk';
 
-import { FormField } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { UserOrganizationRoleSelect } from '~/modules/organizations';
+import { FormField } from '~/ui';
 
 type Props = ValidationErrorsListProps<SdkUpdateUserOrganizationInputT>;
 

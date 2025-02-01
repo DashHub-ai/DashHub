@@ -2,8 +2,8 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkUpdateProjectInputT } from '@llm/sdk';
 
-import { Checkbox, FormField, Input, TextArea } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Checkbox, FormField, Input, TextArea } from '~/ui';
 
 type Value = Pick<SdkUpdateProjectInputT, 'name' | 'summary'>;
 

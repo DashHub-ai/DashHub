@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 import type { SdkCreateAppOutputT } from '@llm/sdk';
 
-import { FormErrorAlert, Modal, type ModalProps, ModalTitle } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { FormErrorAlert, Modal, type ModalProps, ModalTitle } from '~/ui';
 
 import { AppCreateFormStep1, AppCreateFormStep2 } from './steps';
 import { type CreateAppFormValue, useAppCreateForm } from './use-app-create-form';

@@ -4,9 +4,9 @@ import { KeyRoundIcon } from 'lucide-react';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import { type SdkEmailLoginInputT, useSdk } from '@llm/sdk';
-import { FormErrorAlert, FormField, FormSpinnerCTA, Input } from '@llm/ui';
 import { usePredefinedFormValidators } from '~/hooks';
 import { useI18n } from '~/i18n';
+import { FormErrorAlert, FormField, FormSpinnerCTA, Input } from '~/ui';
 
 import { ContinueWithDivider } from '../parts';
 import { LoginTerms } from '../parts/login-terms';

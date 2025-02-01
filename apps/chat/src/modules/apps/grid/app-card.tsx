@@ -5,6 +5,9 @@ import { WandSparklesIcon } from 'lucide-react';
 
 import { formatDate, runTask, tapTaskOption } from '@llm/commons';
 import { isSdkAppCreatorApp, type SdkAppT, useSdkForLoggedIn } from '@llm/sdk';
+import { useAppUpdateModal } from '~/modules/apps-creator';
+import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
+import { CardRecordPermissions } from '~/modules/permissions';
 import {
   CardActions,
   CardArchiveButton,
@@ -17,10 +20,7 @@ import {
   CardUnarchiveButton,
   useArchiveWithNotifications,
   useUnarchiveWithNotifications,
-} from '@llm/ui';
-import { useAppUpdateModal } from '~/modules/apps-creator';
-import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
-import { CardRecordPermissions } from '~/modules/permissions';
+} from '~/ui';
 
 import { FavoriteAppStarButton } from '../favorite';
 

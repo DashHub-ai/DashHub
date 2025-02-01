@@ -5,9 +5,9 @@ import { KeyRoundIcon, MailIcon } from 'lucide-react';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchUserItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { OrganizationUserRoleBadge } from '~/modules/organizations';
+import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/ui';
 
 import { useUserUpdateModal } from '../form';
 

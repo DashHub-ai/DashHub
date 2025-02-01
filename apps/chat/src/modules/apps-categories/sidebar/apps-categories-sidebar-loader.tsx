@@ -1,6 +1,6 @@
 import { Loader2Icon } from 'lucide-react';
 
-import { Skeleton } from '@llm/ui';
+import { Skeleton } from '~/ui';
 
 import { AppsCategoriesSidebarLayout } from './apps-categories-sidebar-layout';
 

@@ -1,7 +1,7 @@
 import type { SdkPermissionAccessLevelT } from '@llm/sdk';
 
-import { Checkbox } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Checkbox } from '~/ui';
 
 type Props = {
   value: SdkPermissionAccessLevelT;

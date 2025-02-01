@@ -2,8 +2,8 @@ import type { ComponentProps } from 'react';
 
 import type { SdkSearchAIModelsInputT, SdkSearchAIModelsOutputT } from '@llm/sdk';
 
-import { createSdkAutocomplete } from '@llm/ui';
 import { useWorkspaceOrganization } from '~/modules/workspace';
+import { createSdkAutocomplete } from '~/ui';
 
 const AIModelsSearchAbstractSelect = createSdkAutocomplete<
   SdkSearchAIModelsOutputT,

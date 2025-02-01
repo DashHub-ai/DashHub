@@ -1,14 +1,14 @@
 import type { CanBePromise } from '@llm/commons';
 import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
 
+import { useI18n } from '~/i18n';
 import {
   CancelButton,
   FormSpinnerCTA,
   Modal,
   type ModalProps,
   ModalTitle,
-} from '@llm/ui';
-import { useI18n } from '~/i18n';
+} from '~/ui';
 
 import { ShareResourceFormGroup } from './share-resource-form-group';
 import { useShareResourceForm } from './use-share-resource-form';

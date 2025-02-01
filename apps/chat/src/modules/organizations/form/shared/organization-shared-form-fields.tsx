@@ -2,8 +2,8 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkOrganizationT } from '@llm/sdk';
 
-import { FormField, Input, NumericInput } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { FormField, Input, NumericInput } from '~/ui';
 
 type Value = Pick<SdkOrganizationT, 'maxNumberOfUsers' | 'name'>;
 

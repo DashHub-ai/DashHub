@@ -1,4 +1,5 @@
 import { castSdkProjectToUpdateInput, type SdkProjectT } from '@llm/sdk';
+import { useI18n } from '~/i18n';
 import {
   CancelButton,
   FormErrorAlert,
@@ -6,8 +7,7 @@ import {
   type ModalProps,
   ModalTitle,
   UpdateButton,
-} from '@llm/ui';
-import { useI18n } from '~/i18n';
+} from '~/ui';
 
 import { ProjectSharedFormFields } from '../shared';
 import { useProjectUpdateForm } from './use-project-update-form';

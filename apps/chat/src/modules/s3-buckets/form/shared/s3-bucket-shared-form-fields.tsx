@@ -2,8 +2,8 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 
 import type { SdkS3BucketT } from '@llm/sdk';
 
-import { Checkbox, FormField, Input, NumericInput } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Checkbox, FormField, Input, NumericInput } from '~/ui';
 
 type Value = Pick<
   SdkS3BucketT,

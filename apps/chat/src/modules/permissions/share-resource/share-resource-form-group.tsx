@@ -6,8 +6,8 @@ import {
   type SdkUserListItemT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
-import { Checkbox } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Checkbox } from '~/ui';
 
 import { SearchUsersGroupsInput } from './autocomplete';
 import { ResourcePermissionsList } from './list';

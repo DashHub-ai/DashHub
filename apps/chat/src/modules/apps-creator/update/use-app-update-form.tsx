@@ -8,7 +8,8 @@ import {
   type SdkUpdateAppInputT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
-import { usePredefinedFormValidators, useSaveTaskEitherNotification } from '@llm/ui';
+import { usePredefinedFormValidators } from '~/hooks';
+import { useSaveTaskEitherNotification } from '~/ui';
 
 type UpdateAppValue = Overwrite<SdkUpdateAppInputT & SdkTableRowWithIdT, {
   permissions?: SdkPermissionT[] | null;

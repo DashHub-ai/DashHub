@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
 import { type SdkSearchUsersGroupItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { ArchivedBadge, EllipsisCrudDropdownButton } from '@llm/ui';
+import { ArchivedBadge, EllipsisCrudDropdownButton } from '~/ui';
 
 import { useUsersGroupUpdateModal } from '../form';
 

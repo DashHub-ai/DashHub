@@ -5,8 +5,8 @@ import { memo } from 'react';
 import { type Nullable, tapTaskEither, tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkChatT, type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@llm/sdk';
-import { SpinnerContainer } from '@llm/ui';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+import { SpinnerContainer } from '~/ui';
 
 import { ChatConversationPanel } from '../conversation/chat-conversation-panel';
 

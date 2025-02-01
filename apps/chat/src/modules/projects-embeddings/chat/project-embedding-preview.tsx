@@ -4,8 +4,8 @@ import Markdown from 'react-markdown';
 import type { SdkSearchProjectEmbeddingItemT } from '@llm/sdk';
 
 import { isImageFileUrl } from '@llm/commons';
-import { BalloonButton } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { BalloonButton } from '~/ui';
 
 type ProjectEmbeddingPreviewProps = {
   embedding: SdkSearchProjectEmbeddingItemT;

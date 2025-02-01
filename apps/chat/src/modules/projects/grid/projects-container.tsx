@@ -7,6 +7,7 @@ import {
   SdkSearchProjectsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
   PaginatedList,
@@ -14,8 +15,7 @@ import {
   PaginationToolbar,
   ResetFiltersButton,
   useDebouncedPaginatedSearch,
-} from '@llm/ui';
-import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+} from '~/ui';
 
 import { ProjectCard } from './project-card';
 import { ProjectsPlaceholder } from './projects-placeholder';

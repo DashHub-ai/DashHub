@@ -7,7 +7,8 @@ import {
   type SdkUpdateS3BucketInputT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
-import { usePredefinedFormValidators, useSaveTaskEitherNotification } from '@llm/ui';
+import { usePredefinedFormValidators } from '~/hooks';
+import { useSaveTaskEitherNotification } from '~/ui';
 
 type UpdateS3BucketFormHookAttrs =
   & Omit<

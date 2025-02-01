@@ -5,6 +5,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import { SdkSearchOrganizationsInputV, useSdkForLoggedIn } from '@llm/sdk';
+import { useI18n } from '~/i18n';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -13,8 +14,7 @@ import {
   PaginationToolbar,
   ResetFiltersButton,
   useDebouncedPaginatedSearch,
-} from '@llm/ui';
-import { useI18n } from '~/i18n';
+} from '~/ui';
 
 import { useOrganizationCreateModal } from '../form/create';
 import { OrganizationsTableRow } from './organizations-table-row';

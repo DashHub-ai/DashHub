@@ -10,9 +10,9 @@ import {
   type SdkTableRowWithUuidT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
-import { FormSpinnerCTA, SpinnerContainer } from '@llm/ui';
 import { useI18n } from '~/i18n';
 import { InternalConversationPanel } from '~/modules/chats';
+import { FormSpinnerCTA, SpinnerContainer } from '~/ui';
 
 type Props = {
   loading: boolean;

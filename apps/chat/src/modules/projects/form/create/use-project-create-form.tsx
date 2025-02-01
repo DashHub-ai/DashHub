@@ -3,7 +3,8 @@ import { pipe } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import { createSDKPermissionUserAccessLevel, type SdkCreateProjectInputT, useSdkForLoggedIn } from '@llm/sdk';
-import { usePredefinedFormValidators, useSaveTaskEitherNotification } from '@llm/ui';
+import { usePredefinedFormValidators } from '~/hooks';
+import { useSaveTaskEitherNotification } from '~/ui';
 
 type CreateProjectFormHookAttrs =
   & Omit<

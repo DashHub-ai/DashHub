@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import { EyeIcon, UsersIcon } from 'lucide-react';
 
 import { isSdkPublicPermissions, type SdkPermissionT } from '@llm/sdk';
-import { Tooltip } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Tooltip } from '~/ui';
 
 type Props = {
   permissions: SdkPermissionT[];

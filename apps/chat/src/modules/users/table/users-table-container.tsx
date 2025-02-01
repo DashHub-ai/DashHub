@@ -3,6 +3,8 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import { genRandomPassword, tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import { type SdkSearchUserItemT, SdkSearchUsersInputV, useSdkForLoggedIn } from '@llm/sdk';
+import { useI18n } from '~/i18n';
+import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
   CreateButton,
@@ -11,9 +13,7 @@ import {
   PaginationToolbar,
   ResetFiltersButton,
   useDebouncedPaginatedSearch,
-} from '@llm/ui';
-import { useI18n } from '~/i18n';
-import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+} from '~/ui';
 
 import { useUserCreateModal } from '../form';
 import { UsersTableRow, type UsersTableRowProps } from './users-table-row';

@@ -3,8 +3,8 @@ import { controlled } from '@under-control/forms';
 import type { SdkUserRoleT } from '@llm/sdk';
 
 import { findItemById } from '@llm/commons';
-import { Select } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Select } from '~/ui';
 
 export const AIModelProviderSelect = controlled<SdkUserRoleT>(({ control: { value, setValue } }) => {
   const { providers } = useI18n().pack.aiModels;

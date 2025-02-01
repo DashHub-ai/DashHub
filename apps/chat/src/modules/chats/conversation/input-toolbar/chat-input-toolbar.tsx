@@ -8,8 +8,8 @@ import { CircleStopIcon, PaperclipIcon, SendIcon } from 'lucide-react';
 import { StrictBooleanV, tapTaskOption } from '@llm/commons';
 import { useAfterMount, useLocalStorageObject } from '@llm/commons-front';
 import { getSdkAppMentionInChat, type SdkCreateMessageInputT, type SdkTableRowWithIdNameT } from '@llm/sdk';
-import { Checkbox } from '@llm/ui';
 import { useI18n } from '~/i18n';
+import { Checkbox } from '~/ui';
 
 import type { SdkRepeatedMessageItemT } from '../messages';
 

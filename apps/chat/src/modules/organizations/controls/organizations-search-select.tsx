@@ -1,6 +1,6 @@
 import type { SdkSearchOrganizationsInputT, SdkSearchOrganizationsOutputT } from '@llm/sdk';
 
-import { createSdkAutocomplete } from '@llm/ui';
+import { createSdkAutocomplete } from '~/ui';
 
 export const OrganizationsSearchSelect = createSdkAutocomplete<
   SdkSearchOrganizationsOutputT,
