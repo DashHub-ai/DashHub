@@ -591,6 +591,22 @@ export const I18N_PACK_EN = deepmerge(I18N_FORWARDED_EN_PACK, {
   },
   organizations: {
     userRoles: I18N_USER_ORGANIZATION_ROLES_EN,
+    form: {
+      title: {
+        create: 'Create organization',
+        edit: 'Edit organization',
+      },
+      fields: {
+        name: {
+          label: 'Name',
+          placeholder: 'Enter organization name',
+        },
+        maxNumberOfUsers: {
+          label: 'Max number of users',
+          placeholder: 'Enter max number of users',
+        },
+      },
+    },
   },
   users: {
     form: {

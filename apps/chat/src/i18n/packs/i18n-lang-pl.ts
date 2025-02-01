@@ -593,6 +593,22 @@ export const I18N_PACK_PL: I18nLangPack = deepmerge(I18N_FORWARDED_PL_PACK, {
   },
   organizations: {
     userRoles: I18N_USER_ORGANIZATION_ROLES_PL,
+    form: {
+      title: {
+        edit: 'Edytuj organizację',
+        create: 'Utwórz organizację',
+      },
+      fields: {
+        name: {
+          label: 'Nazwa',
+          placeholder: 'Wpisz nazwę organizacji',
+        },
+        maxNumberOfUsers: {
+          label: 'Maksymalna liczba użytkowników',
+          placeholder: 'Wpisz maksymalną liczbę użytkowników',
+        },
+      },
+    },
   },
   users: {
     form: {

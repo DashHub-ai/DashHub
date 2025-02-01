@@ -1,5 +1,6 @@
 import { useI18n } from '~/i18n';
 import { PageWithNavigationLayout } from '~/layouts';
+import { OrganizationsTableContainer } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
 import { ChooseOrganizationTutorial } from './choose-organization-tutorial';
@@ -11,9 +12,9 @@ export function ChooseOrganizationRoute() {
     <PageWithNavigationLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <section className="flex uk-flex-center pt-8">
-        <ChooseOrganizationTutorial />
-      </section>
+      <ChooseOrganizationTutorial />
+
+      <OrganizationsTableContainer />
     </PageWithNavigationLayout>
   );
 }
