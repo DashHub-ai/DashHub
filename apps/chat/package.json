@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.3",
+    "@llm/commons-front": "*",
     "@tailwindcss/typography": "^0.5.16",
     "@types/sanitize-html": "^2.13.0",
     "@types/uikit": "^3.14.5",
