@@ -107,7 +107,7 @@ export function ChatConfigPanel({ chat, contentClassName }: Props) {
         <FormAlertBoxes result={submitState.result} />
 
         {!chat.archived && (
-          <div className="flex flex-row justify-end mt-4 pt-4 border-t">
+          <div className="flex flex-row justify-end mt-4 pt-4">
             <SaveButton
               disabled={!isDirty}
               loading={submitState.loading}
