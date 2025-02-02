@@ -499,6 +499,9 @@ export const I18N_PACK_EN = {
     },
   },
   appsCreator: {
+    files: {
+      title: 'Files',
+    },
     create: {
       title: 'Create New Assistant',
     },

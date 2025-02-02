@@ -21,7 +21,7 @@ export const PaginationSearchToolbarItem = controlled<string, Props>((
     <div className={clsx('relative', className)} {...props}>
       <input
         type="text"
-        className="bg-white pl-8 w-auto max-w-[350px] uk-input"
+        className="bg-white pl-8 w-auto max-w-[350px] max-h-[32px] uk-input"
         placeholder={t.searchPlaceholder}
         value={value ?? ''}
         onChange={bind.entire().onChange}

@@ -15,7 +15,7 @@ export function PaginationToolbar({ children, suffix, className }: Props) {
       </div>
 
       {suffix && (
-        <div className="flex flex-row items-center gap-4">
+        <div className="flex flex-row items-center gap-4 max-h-[32px]">
           {suffix}
         </div>
       )}

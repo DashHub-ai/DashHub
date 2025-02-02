@@ -501,6 +501,9 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
   },
   appsCreator: {
+    files: {
+      title: 'Pliki',
+    },
     create: {
       title: 'Nowa aplikacja',
     },

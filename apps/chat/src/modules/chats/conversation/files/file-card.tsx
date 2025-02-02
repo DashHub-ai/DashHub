@@ -39,7 +39,7 @@ export function FileCard({ file, withBackground, limitWidth = true, onRemove }: 
   return (
     <div
       className={clsx(
-        'relative gap-2 border rounded-lg h-[57px] cursor-pointer group',
+        'group relative gap-2 border rounded-lg h-[57px] cursor-pointer',
         'hover:scale-105 transition-transform',
         withBackground && 'bg-gray-50',
         isImage

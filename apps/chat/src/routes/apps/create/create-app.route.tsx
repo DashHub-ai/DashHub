@@ -16,7 +16,7 @@ import { createFakeSelectItem } from '~/ui';
 
 export function CreateAppRoute() {
   const { pack } = useI18n();
-  const t = pack.routes.editApp;
+  const t = pack.routes.createApp;
 
   const sitemap = useSitemap();
   const { assignWorkspaceOrganization } = useWorkspaceOrganizationOrThrow();
