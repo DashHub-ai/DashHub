@@ -3,11 +3,13 @@ import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import { ChevronDownIcon } from 'lucide-react';
 
+import { isNil } from '@llm/commons';
+
 type Props = {
   onClick: () => void;
   icon: ReactNode;
   label: string;
-  count: number;
+  count?: number;
   className?: string;
   isSelected: boolean;
   hasChildren?: boolean;
@@ -60,7 +62,11 @@ export function AppCategoryButton(
           <span className="flex flex-row items-center ml-auto">{suffix}</span>
         )}
       </span>
-      <span className="flex-shrink-0 ml-2 text-xs">{count}</span>
+      {!isNil(count) && (
+        <span className="flex-shrink-0 ml-2 text-xs">
+          {count}
+        </span>
+      )}
     </button>
   );
 }

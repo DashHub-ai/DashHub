@@ -40,6 +40,18 @@ export class ProjectsRepo extends createProtectedDatabaseRepo('projects') {
 
   createIdsIterator = this.baseRepo.createIdsIterator;
 
+  delete = ({ id, forwardTransaction }: TransactionalAttrs<TableRowWithId>) => {
+    const transaction = tryReuseOrCreateTransaction({ db: this.db, forwardTransaction });
+
+    return transaction(trx => pipe(
+      this.summariesRepo.deleteAll({
+        forwardTransaction: trx,
+        where: [['projectId', '=', id]],
+      }),
+      TE.chain(() => this.baseRepo.delete({ id, forwardTransaction: trx })),
+    ));
+  };
+
   archive = createArchiveRecordQuery(this.baseRepo.queryFactoryAttrs);
 
   archiveRecords = createArchiveRecordsQuery(this.baseRepo.queryFactoryAttrs);

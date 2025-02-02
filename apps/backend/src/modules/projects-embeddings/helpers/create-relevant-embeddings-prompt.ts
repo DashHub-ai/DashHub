@@ -46,6 +46,8 @@ export function createRelevantEmbeddingsPrompt(
         '    - Use other available context to provide comprehensive answers',
         '    - Make it clear which information comes from files vs general knowledge',
         '10. Don\'t use ✅ or ❌ in responses unless the user uses them first',
+        '11. Prefer to use knowledge from the project files over general knowledge',
+        '12. If application is used, follow the app-specific guidelines for responses',
       ]
     : [
         '1. Respond in the same language as the user\'s prompt',

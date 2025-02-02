@@ -55,7 +55,7 @@ export function CardBase(
   return (
     <div
       className={clsx(
-        'relative flex flex-col bg-white shadow-sm p-4 pb-2 border border-border/50 rounded-lg transition-shadow',
+        'relative flex flex-col bg-white shadow-sm p-4 pb-2 border rounded-lg transition-shadow',
         (href || onForwardClick) && 'hover:shadow-md cursor-pointer',
         disabled && 'opacity-50 pointer-events-none',
         className,

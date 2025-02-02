@@ -105,7 +105,7 @@ export function SearchUsersGroupsInput({ onSelected }: Props) {
       <div className="relative" ref={inputRef}>
         <input
           type="text"
-          className="w-full uk-input"
+          className="bg-white w-full uk-input"
           placeholder={t.placeholder}
           {...phrase.bind.entire()}
         />

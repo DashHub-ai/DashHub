@@ -16,6 +16,7 @@ export const SdkUpdateAppInputV = SdkAppV
     ...ZodOmitArchivedFields,
     id: true,
     organization: true,
+    project: true,
     category: true,
   })
   .merge(SdkUpsertTableRowWithPermissionsInputV)

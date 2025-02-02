@@ -32,7 +32,7 @@ export function ProjectFileCard({ file, readOnly, onAfterDelete }: FileCardProps
   const isImage = isImageFileUrl(resource.name);
 
   return (
-    <div className="group flex flex-col border-gray-200 bg-white mb-2 p-3 border rounded-lg transition-all">
+    <div className="group flex flex-col bg-white shadow-sm mb-2 p-3 border rounded-lg transition-all">
       <div className="flex items-center mb-2">
         <div className="mr-3">
           <div className={clsx('flex items-center p-1 rounded', bgColor)}>

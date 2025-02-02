@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 import isValidUTF8 from 'utf-8-validate';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type { SdkJwtTokenT, SdkRepeatedMessageLike, SdkSearchMessageItemT } from '@llm/sdk';
 
 import {
   isCSVMimeType,
@@ -13,6 +13,7 @@ import {
   isNil,
   isPDFMimeType,
   isXmlOfficeMimetype,
+  rejectFalsyItems,
 } from '@llm/commons';
 
 import type { WithAuthFirewall } from '../auth';
@@ -21,6 +22,7 @@ import type { UploadFilePayload } from '../s3';
 
 import { AIConnectorService } from '../ai-connector';
 import { AIModelsService } from '../ai-models';
+import { AppsService } from '../apps';
 import { ChatsRepo } from '../chats/chats.repo';
 import { PermissionsService } from '../permissions';
 import { ProjectsFilesRepo } from '../projects-files/projects-files.repo';
@@ -68,6 +70,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
     @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
+    @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new ProjectsEmbeddingsFirewall(jwt, this, this.permissionsService);
@@ -80,32 +83,51 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     {
       message,
       chat,
+      history,
     }: {
       message: string;
       chat: TableRowWithUuid;
+      history: Array<SdkRepeatedMessageLike<SdkSearchMessageItemT>>;
     },
-  ) => pipe(
-    this.chatsRepo.getFileEmbeddingAIModelId({ id: chat.id }),
-    TE.chainW(({ id, projectId }) => {
-      if (isNil(projectId)) {
-        return TE.of(message);
-      }
+  ) => {
+    const appsIds = history.flatMap(({ app }) => app ? [app.id] : []);
 
-      return pipe(
-        this.aiModelsService.get(id),
-        TE.chainW(aiModel => this.aiConnectorService.executeEmbeddingPrompt({
-          aiModel,
-          input: message,
-        })),
-        TE.chainW(embedding => this.esSearchRepo.matchByEmbedding({
-          embedding,
+    return pipe(
+      TE.Do,
+      TE.apSW('fileEmbeddingModel', this.chatsRepo.getFileEmbeddingAIModelId({ id: chat.id })),
+      TE.apSW('apps', this.appsService.search({
+        archived: false,
+        ids: appsIds,
+        limit: appsIds.length,
+        offset: 0,
+        sort: 'createdAt:desc',
+      })),
+      TE.chainW(({ apps, fileEmbeddingModel: { id, projectId } }) => {
+        if (isNil(projectId) && !apps.items.length) {
+          return TE.of(message);
+        }
+
+        const projectsIds = rejectFalsyItems([
           projectId,
-          chatId: chat.id,
-        })),
-        TE.map(searchResults => createRelevantEmbeddingsPrompt(message, searchResults)),
-      );
-    }),
-  );
+          ...apps.items.map(({ project }) => project.id),
+        ]);
+
+        return pipe(
+          this.aiModelsService.get(id),
+          TE.chainW(aiModel => this.aiConnectorService.executeEmbeddingPrompt({
+            aiModel,
+            input: message,
+          })),
+          TE.chainW(embedding => this.esSearchRepo.matchByEmbedding({
+            embedding,
+            projectsIds,
+            chatId: chat.id,
+          })),
+          TE.map(searchResults => createRelevantEmbeddingsPrompt(message, searchResults)),
+        );
+      }),
+    );
+  };
 
   deleteProjectFileEmbeddings = (projectFileId: TableId) => pipe(
     this.repo.deleteByProjectFileId({ projectFileId }),

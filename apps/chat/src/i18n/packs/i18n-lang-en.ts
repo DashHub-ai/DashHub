@@ -499,6 +499,9 @@ export const I18N_PACK_EN = {
     },
   },
   appsCreator: {
+    files: {
+      title: 'Files',
+    },
     create: {
       title: 'Create New Assistant',
     },
@@ -840,7 +843,7 @@ export const I18N_PACK_EN = {
     modal: {
       title: 'Share resource',
       submit: 'Share',
-      makePublic: 'This project is public (everyone in the organization can edit)',
+      makePublic: 'This resource is public (everyone in the organization can edit)',
       autocomplete: {
         users: 'Users',
         groups: 'Groups',

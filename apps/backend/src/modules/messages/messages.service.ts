@@ -136,7 +136,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         );
       }),
     )),
-    TE.bindW('mappedContent', ({ message }) => pipe(
+    TE.bindW('mappedContent', ({ message, history }) => pipe(
       message.repliedMessage
         ? createReplyAiMessagePrefix(message.repliedMessage, message.content)
         : message.content,
@@ -144,6 +144,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       createAttachedFilesMessagePrefix(message.files),
 
       prefixedMessage => this.projectsEmbeddingsService.wrapWithEmbeddingContextPrompt({
+        history,
         message: prefixedMessage,
         chat: { id: message.chat.id },
       }),

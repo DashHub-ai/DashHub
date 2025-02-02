@@ -138,6 +138,7 @@ export class AppsEsSearchRepo {
       organization: source.organization,
       category: source.category,
       chatContext: source.chat_context,
+      project: source.project,
       permissions: mapRawEsDocToSdkPermissions(source.permissions),
       logo: source.logo && camelcaseKeys(source.logo),
     });

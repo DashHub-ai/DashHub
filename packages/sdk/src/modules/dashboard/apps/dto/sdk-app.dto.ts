@@ -6,6 +6,7 @@ import {
   SdkTableRowWithArchivedV,
   SdkTableRowWithDatesV,
   SdkTableRowWithIdNameV,
+  SdkTableRowWithIdV,
 } from '~/shared';
 
 import { SdkTableRowWithPermissionsV } from '../../permissions/dto/sdk-table-row-with-permissions.dto';
@@ -16,6 +17,7 @@ export const SdkAppV = z.strictObject({
   chatContext: z.string(),
   description: NonEmptyOrNullStringV,
   category: SdkTableRowWithIdNameV,
+  project: SdkTableRowWithIdV,
   logo: SdkBaseS3ResourceV.nullable(),
 })
   .merge(SdkTableRowWithPermissionsV)

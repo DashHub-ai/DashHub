@@ -75,7 +75,7 @@ export function ResourcePermissionsList({ creator, permissions, onChange }: Prop
 
   return (
     <div className="border rounded-md divide-y max-h-[20rem] overflow-y-auto">
-      <div>
+      <div className="bg-white">
         <div className="flex items-center gap-2 bg-gray-50 px-4 py-3 font-medium text-gray-500 text-xs">
           <UsersIcon size={14} />
           {t.users}
@@ -99,7 +99,7 @@ export function ResourcePermissionsList({ creator, permissions, onChange }: Prop
       </div>
 
       {groupPermissions.length > 0 && (
-        <div>
+        <div className="bg-white">
           <div className="flex items-center gap-2 bg-gray-50 px-4 py-3 font-medium text-gray-500 text-xs">
             <Users2Icon size={14} />
             {t.groups}
