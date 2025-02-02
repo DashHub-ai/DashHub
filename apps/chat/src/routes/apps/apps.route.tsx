@@ -1,35 +1,16 @@
-import { pipe } from 'fp-ts/lib/function';
 import { WandSparklesIcon } from 'lucide-react';
+import { Link } from 'wouter';
 
-import { tapTaskOption } from '@llm/commons';
-import { useAsyncCallback, useForceRerender } from '@llm/commons-front';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
-import { AppsContainer, useAppCreateModal } from '~/modules';
-import { RouteMetaTags } from '~/routes';
-import { createFakeSelectItem, FormSpinnerCTA } from '~/ui';
+import { AppsContainer } from '~/modules';
+import { RouteMetaTags, useSitemap } from '~/routes';
 
 import { AppsTutorial } from './apps-tutorial';
 
 export function AppsRoute() {
   const t = useI18n().pack.routes.apps;
-
-  const { revision, forceRerender } = useForceRerender();
-  const createModal = useAppCreateModal();
-  const [onCreate, createState] = useAsyncCallback(
-    pipe(
-      createModal.showAsOptional({
-        defaultValue: {
-          name: '',
-          chatContext: '',
-          description: '',
-          permissions: [],
-          category: createFakeSelectItem(),
-        },
-      }),
-      tapTaskOption(forceRerender),
-    ),
-  );
+  const sitemap = useSitemap();
 
   return (
     <PageWithNavigationLayout>
@@ -42,17 +23,15 @@ export function AppsRoute() {
       <AppsTutorial />
 
       <AppsContainer
-        key={revision}
         storeDataInUrl
         toolbar={(
-          <FormSpinnerCTA
-            className="uk-button-small"
-            loading={createState.isLoading}
-            onClick={() => void onCreate()}
+          <Link
+            href={sitemap.apps.create.generate({})}
+            className="uk-button uk-button-primary uk-button-small"
           >
-            {!createState.isLoading && <WandSparklesIcon className="mr-2" size={16} />}
+            <WandSparklesIcon className="mr-2" size={16} />
             {t.buttons.create}
-          </FormSpinnerCTA>
+          </Link>
         )}
       />
     </PageWithNavigationLayout>

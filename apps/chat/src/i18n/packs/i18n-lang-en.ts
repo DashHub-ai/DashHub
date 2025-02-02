@@ -238,7 +238,7 @@ export const I18N_PACK_EN = {
     apps: {
       meta: {
         title: 'Assistants',
-        description: 'Manage apps',
+        description: 'Manage assistants',
       },
       title: 'Assistants',
       tutorial: {
@@ -250,12 +250,19 @@ export const I18N_PACK_EN = {
         create: 'New assistant',
       },
     },
-    appsEditor: {
+    editApp: {
       meta: {
-        title: 'Assistant Editor',
-        description: 'Edit Assistant',
+        title: 'Edit Assistant',
+        description: 'Edit assistant',
       },
-      title: 'Assistant Editor',
+      title: 'Edit Assistant',
+    },
+    createApp: {
+      meta: {
+        title: 'Create Assistant',
+        description: 'Create assistant',
+      },
+      title: 'Create Assistant',
     },
     projects: {
       meta: {
@@ -493,9 +500,6 @@ export const I18N_PACK_EN = {
   appsCreator: {
     create: {
       title: 'Create New Assistant',
-      nextStep: 'Next step',
-      step: 'Step',
-      backStep: 'Previous step',
     },
     edit: {
       title: 'Edit Assistant',

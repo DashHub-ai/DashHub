@@ -1,9 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 
-import { Link } from 'wouter';
-
-import { useI18n } from '~/i18n';
-import { useSitemap } from '~/routes';
+import { LayoutBreadcrumbs } from './layout-breadcrumbs';
 
 type Props = PropsWithChildren & {
   withBreadcrumbs?: boolean;
@@ -13,29 +10,14 @@ type Props = PropsWithChildren & {
 };
 
 export function LayoutHeader({ children, currentBreadcrumb, breadcrumbs, withBreadcrumbs = true, root }: Props) {
-  const t = useI18n().pack;
-  const sitemap = useSitemap();
-
   return (
     <div className="flex flex-col space-y-3">
       {withBreadcrumbs && (
-        <nav aria-label="Breadcrumb">
-          <ul className="flex items-center uk-breadcrumb">
-            <li>
-              <Link href={sitemap.home}>
-                {t.breadcrumbs.routes.home}
-              </Link>
-            </li>
-
-            {breadcrumbs}
-
-            {!root && (
-              <li aria-current="page">
-                {currentBreadcrumb ?? children}
-              </li>
-            )}
-          </ul>
-        </nav>
+        <LayoutBreadcrumbs
+          currentBreadcrumb={currentBreadcrumb ?? children}
+          breadcrumbs={breadcrumbs}
+          root={root}
+        />
       )}
 
       {children && (

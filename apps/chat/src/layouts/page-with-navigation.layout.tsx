@@ -7,16 +7,26 @@ import { Navigation } from './navigation';
 
 type Props = PropsWithChildren & {
   withFooter?: boolean;
+  wrapWithContainer?: boolean;
   contentClassName?: string;
 };
 
-export function PageWithNavigationLayout({ children, contentClassName, withFooter = true }: Props) {
+export function PageWithNavigationLayout(
+  {
+    children,
+    contentClassName,
+    wrapWithContainer = true,
+    withFooter = true,
+  }: Props,
+) {
   return (
     <main className="md:flex flex-col hidden bg-gray-50 min-h-screen">
       <Navigation />
+
       <div
         className={clsx(
-          'flex-1 space-y-8 mx-auto p-4 pt-6 container',
+          'flex-1 space-y-8 mx-auto p-4 pt-6',
+          wrapWithContainer && 'container',
           contentClassName,
         )}
       >

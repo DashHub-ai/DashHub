@@ -1,13 +1,12 @@
 import type { ReactNode } from 'react';
 
-import { flow } from 'fp-ts/lib/function';
 import { WandSparklesIcon } from 'lucide-react';
 
-import { formatDate, runTask, tapTaskOption } from '@llm/commons';
+import { formatDate } from '@llm/commons';
 import { isSdkAppCreatorApp, type SdkAppT, useSdkForLoggedIn } from '@llm/sdk';
-import { useAppUpdateModal } from '~/modules/apps-creator';
 import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
 import { CardRecordPermissions } from '~/modules/permissions';
+import { useSitemap } from '~/routes';
 import {
   CardActions,
   CardArchiveButton,
@@ -27,15 +26,15 @@ import { FavoriteAppStarButton } from '../favorite';
 export type AppCardProps = {
   app: SdkAppT;
   ctaButton?: ReactNode;
-  onAfterEdit?: VoidFunction;
   onAfterArchive?: VoidFunction;
   onAfterUnarchive?: VoidFunction;
 };
 
-export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUnarchive }: AppCardProps) {
-  const { showAsOptional } = useAppUpdateModal();
+export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive }: AppCardProps) {
+  const sitemap = useSitemap();
+
   const { sdks, createRecordGuard } = useSdkForLoggedIn();
-  const [createApp, createStatus] = useCreateChatWithInitialApp();
+  const [createChatWithApp, createStatus] = useCreateChatWithInitialApp();
 
   const [onUnarchive, unarchiveStatus] = useUnarchiveWithNotifications(
     sdks.dashboard.apps.unarchive(app.id),
@@ -46,17 +45,12 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
   );
 
   const recordGuard = createRecordGuard(app);
-  const handleEdit = flow(
-    showAsOptional,
-    tapTaskOption(onAfterEdit ?? (() => {})),
-    runTask,
-  );
 
   return (
     <CardBase
       disabled={createStatus.isLoading}
       {...!ctaButton && {
-        onClick: () => void createApp(app),
+        onClick: () => void createChatWithApp(app),
       }}
     >
       <CardTitle
@@ -89,7 +83,7 @@ export function AppCard({ app, ctaButton, onAfterEdit, onAfterArchive, onAfterUn
       {!ctaButton && !app.archived && (recordGuard.can.write || recordGuard.can.archive) && (
         <CardActions>
           {recordGuard.can.write && (
-            <CardEditButton onClick={() => void handleEdit({ app })} />
+            <CardEditButton href={sitemap.apps.update.generate({ pathParams: { id: app.id } })} />
           )}
 
           {recordGuard.can.archive && (

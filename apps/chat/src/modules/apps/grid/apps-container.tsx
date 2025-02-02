@@ -135,7 +135,6 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 
                   <AppCard
                     key={item.id}
                     app={item}
-                    onAfterEdit={silentReload}
                     onAfterArchive={silentReload}
                     onAfterUnarchive={silentReload}
                     {...itemPropsFn?.(item)}

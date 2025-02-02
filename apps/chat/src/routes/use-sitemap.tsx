@@ -17,7 +17,8 @@ export function useSitemap() {
     },
     apps: {
       index: defineSitemapRouteGenerator<SearchAppsRouteUrlFiltersT>(prefixWithBaseRoute)('/apps'),
-      editor: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/:id'),
+      create: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/create'),
+      update: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/edit/:id'),
     },
     experts: prefixWithBaseRoute('/experts'),
     login: prefixWithBaseRoute('/login'),

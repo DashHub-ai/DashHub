@@ -252,12 +252,19 @@ export const I18N_PACK_PL: I18nLangPack = {
         create: 'Nowy asystent',
       },
     },
-    appsEditor: {
+    editApp: {
       meta: {
-        title: 'Edytor asystenta',
-        description: 'Edytuj aplikacje',
+        title: 'Edit Assistant',
+        description: 'Edit assistant',
       },
-      title: 'Edytor asystenta',
+      title: 'Edit Assistant',
+    },
+    createApp: {
+      meta: {
+        title: 'Create Assistant',
+        description: 'Create assistant',
+      },
+      title: 'Create Assistant',
     },
     projects: {
       meta: {
@@ -495,9 +502,6 @@ export const I18N_PACK_PL: I18nLangPack = {
   appsCreator: {
     create: {
       title: 'Nowa aplikacja',
-      nextStep: 'Następny krok',
-      step: 'Krok',
-      backStep: 'Poprzedni krok',
     },
     edit: {
       title: 'Edytuj aplikację',

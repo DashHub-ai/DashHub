@@ -3,10 +3,10 @@ import { Redirect, Route, Switch } from 'wouter';
 import { type SdkTableRowWithUuidT, useSdkIsLoggedIn } from '@llm/sdk';
 import {
   AIModelsManagementRoute,
-  AppsEditorRoute,
   AppsRoute,
   ChatRoute,
   ChooseOrganizationRoute,
+  CreateAppRoute,
   ExpertsRoute,
   ForceRedirectRoute,
   HomeRoute,
@@ -16,6 +16,7 @@ import {
   ProjectsRoute,
   S3BucketsManagementRoute,
   SettingsRoute,
+  UpdateAppRoute,
   UsersGroupsManagementRoute,
   UsersManagementRoute,
   useSitemap,
@@ -65,7 +66,10 @@ function LoggedInRouter() {
       </Route>
 
       <Route path={sitemap.projects.index.raw} component={ProjectsRoute} />
-      <Route path={sitemap.apps.editor.raw} component={AppsEditorRoute} />
+      <Route path={sitemap.apps.create.raw} component={CreateAppRoute} />
+      <Route<SdkTableRowWithUuidT> path={sitemap.apps.update.raw}>
+        {params => <UpdateAppRoute id={+params.id} />}
+      </Route>
       <Route path={sitemap.apps.index.raw} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
       <Route path={sitemap.settings} component={SettingsRoute} />
