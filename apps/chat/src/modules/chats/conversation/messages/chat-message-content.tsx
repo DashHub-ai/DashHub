@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { memo, useMemo, useSyncExternalStore } from 'react';
 import sanitizeHtml from 'sanitize-html';
 
@@ -13,10 +14,12 @@ type Props = {
   darkMode?: boolean;
   disabled?: boolean;
   showToolbars?: boolean;
+  className?: string;
+  textClassName?: string;
   onAction?: (action: string) => void;
 };
 
-export const ChatMessageContent = memo(({ content, truncate, disabled, darkMode, showToolbars = true, onAction }: Props) => {
+export const ChatMessageContent = memo(({ content, truncate, disabled, darkMode, showToolbars = true, className, textClassName, onAction }: Props) => {
   const observable = useMemo(() => {
     if (typeof content === 'string') {
       return createStoreSubscriber<AIStreamContent>({
@@ -56,10 +59,10 @@ export const ChatMessageContent = memo(({ content, truncate, disabled, darkMode,
   });
 
   return (
-    <div className="text-sm">
+    <div className={className}>
       {!truncate && showToolbars && hydrationResult.prependToolbars}
 
-      <div className="max-w-[650px] overflow-auto">
+      <div className={clsx('max-w-[800px] overflow-auto', textClassName)}>
         <MessageMarkdown
           content={hydrationResult.content}
           inlinedReactComponents={hydrationResult.inlinedReactComponents}
