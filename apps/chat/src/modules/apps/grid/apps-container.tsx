@@ -66,7 +66,6 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 
           )
         : (
             <AppsCategoriesSidebar
-              total={result?.total ?? 0}
               tree={categoriesTree ?? []}
               selected={pagination.value.categoriesIds ?? []}
               onSelect={(categoriesIds) => {

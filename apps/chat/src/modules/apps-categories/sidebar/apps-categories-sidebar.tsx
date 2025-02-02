@@ -12,12 +12,11 @@ import { AppCategoryButton } from './items/app-category-button';
 type Props =
   & Pick<AppCategoryItemProps, 'selected' | 'onSelect'>
   & {
-    total: number;
     tree: SdkCountedAppsCategoriesTreeT;
     onReload?: VoidFunction;
   };
 
-export function AppsCategoriesSidebar({ tree, total, selected, onSelect, onReload }: Props) {
+export function AppsCategoriesSidebar({ tree, selected, onSelect, onReload }: Props) {
   const t = useI18n().pack.appsCategories.sidebar;
   const manageModal = useManageAppsCategoriesModal();
 
@@ -45,7 +44,6 @@ export function AppsCategoriesSidebar({ tree, total, selected, onSelect, onReloa
             onClick={() => onSelect([])}
             icon={<LayersIcon size={16} />}
             label={t.allApps}
-            count={total}
             isSelected={selected.length === 0}
           />
         </li>
