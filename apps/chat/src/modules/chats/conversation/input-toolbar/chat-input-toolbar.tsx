@@ -42,7 +42,7 @@ export type ChatInputToolbarProps = {
 
 export function ChatInputToolbar(
   {
-    withAppSelector,
+    withAppSelector = true,
     expanded,
     rounded,
     disabled,
