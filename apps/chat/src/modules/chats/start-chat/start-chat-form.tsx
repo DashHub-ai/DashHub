@@ -55,22 +55,32 @@ export function StartChatForm({ forceProject, className }: Props) {
     <form
       className={clsx(
         'flex flex-col m-auto w-full min-w-0 max-w-4xl',
+        'px-4 md:px-0',
         className,
       )}
       onSubmit={handleSubmitEvent}
     >
       <div
         className={clsx(
-          'relative z-10 bg-background shadow-sm border border-border rounded-lg',
-          'focus-within:border-primary/50',
-          'transition-border duration-100',
+          'relative z-10 bg-white rounded-2xl',
+          'border border-gray-200',
+          'focus-within:border-gray-300',
+          'shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
+          'transition-all duration-200',
         )}
       >
-        <div className="mb-[55px]">
+        <div className="mb-14">
           <textarea
             ref={focusInputRef}
             name="message"
-            className="p-4 pb-0 rounded-lg w-full focus:outline-none resize-none"
+            className={clsx(
+              'rounded-2xl w-full resize-none',
+              'focus:outline-none',
+              'text-gray-700 placeholder:text-gray-400',
+              value.files?.length
+                ? 'p-6 pb-3 min-h-[20px]'
+                : 'p-6 min-h-[120px]',
+            )}
             placeholder={t.placeholder}
             required
             {...bind.path('content')}
@@ -79,67 +89,78 @@ export function StartChatForm({ forceProject, className }: Props) {
 
           <FilesCardsControlledList
             {...bind.path('files')}
-            className="mt-4 px-4"
+            className="px-6 pb-4"
           />
         </div>
 
-        <div className="bottom-4 left-3 absolute flex flex-row gap-4">
-          <AIModelsSearchSelect
-            buttonClassName="border-gray-300 border rounded-md h-7 text-xs"
-            placeholderClassName="text-black text-xs"
-            placeholder={t.selectModel}
-            className="min-w-36"
-            withSearch={false}
-            disabled={loading}
-            preload
-            {...bind.path('aiModel')}
-          />
+        <div
+          className={clsx(
+            'right-0 bottom-0 left-0 absolute',
+            'px-4 py-3',
+            'border-t border-gray-100',
+            'bg-gray-50',
+            'rounded-b-2xl',
+            'flex items-center justify-between gap-4',
+          )}
+        >
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onAttachFile}
+              className={clsx(
+                'hover:bg-gray-100 p-2 rounded-lg',
+                'text-gray-500 hover:text-gray-700',
+                'transition-colors duration-200',
+              )}
+            >
+              <PaperclipIcon size={20} />
+            </button>
 
-          <Checkbox
-            className="flex items-center text-sm"
-            checkboxClassName="mt-[1px]"
-            value={!!submitOnEnterStorage.getOrNull()}
-            onChange={submitOnEnterStorage.set}
-          >
-            {t.startOnEnter}
-          </Checkbox>
-        </div>
-      </div>
-
-      <div className="flex-col border-gray-300 border-x bg-gray-100 mx-5 px-4 pt-4 pb-2 border-b border-solid rounded-b-xl md:rounded-b-2xl">
-        <div className="flex flex-wrap items-center gap-4">
-          <button
-            type="button"
-            className="border-gray-300 border uk-button uk-button-default"
-            onClick={onAttachFile}
-          >
-            <PaperclipIcon size={16} className="mr-2" />
-            {t.addFile}
-          </button>
-
-          {!forceProject && (
-            <ProjectsSearchSelect
-              buttonClassName="border-gray-300 border rounded-md bg-white"
-              placeholderClassName="text-black"
-              placeholder={t.selectProject}
-              {...bind.path('project')}
+            <AIModelsSearchSelect
+              buttonClassName="text-sm py-1 px-3 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors"
+              placeholderClassName="text-gray-700"
+              placeholder={t.selectModel}
+              className="min-w-36"
+              withSearch={false}
+              disabled={loading}
+              preload
+              {...bind.path('aiModel')}
             />
-          )}
 
-          {!!forceProject && (
-            <Checkbox {...bind.path('public')}>
-              {t.publicChat}
+            {!forceProject && (
+              <ProjectsSearchSelect
+                buttonClassName="text-sm py-1 px-3 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors"
+                placeholderClassName="text-gray-700"
+                placeholder={t.selectProject}
+                {...bind.path('project')}
+              />
+            )}
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Checkbox
+              className="flex items-center text-gray-600 text-sm"
+              checkboxClassName="mt-[1px]"
+              value={!!submitOnEnterStorage.getOrNull()}
+              onChange={submitOnEnterStorage.set}
+            >
+              {t.startOnEnter}
             </Checkbox>
-          )}
 
-          <div className="ml-auto">
             <FormSpinnerCTA
               type="submit"
               loading={submitting}
-              className="uk-button uk-button-primary"
+              className={clsx(
+                'px-4 py-2 rounded-lg',
+                'bg-gray-900 hover:bg-black',
+                'text-white font-medium',
+                'transition-colors duration-200',
+                'flex items-center gap-2',
+                'disabled:opacity-50',
+              )}
               disabled={loading || !value.content}
             >
-              {!submitting && <SendIcon size={16} className="mr-2" />}
+              {!submitting && <SendIcon size={18} />}
               {t.start}
             </FormSpinnerCTA>
           </div>
