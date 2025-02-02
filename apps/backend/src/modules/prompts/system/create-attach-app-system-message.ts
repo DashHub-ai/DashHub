@@ -7,7 +7,7 @@ type AttachableApp = Pick<
   'id' | 'name' | 'chatContext' | 'description'
 >;
 
-export function createAttachAppAIMessage(app: AttachableApp): string {
+export function createAttachAppSystemMessage(app: AttachableApp): string {
   return rejectFalsyItems([
     '******** FEATURE: ATTACHED APPLICATION ********',
     '--- APP ACTIVATION RULES ---',

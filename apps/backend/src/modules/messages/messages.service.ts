@@ -9,6 +9,12 @@ import {
   type SdkJwtTokenT,
   type SdkRequestAIReplyInputT,
 } from '@llm/sdk';
+import {
+  createAttachAppSystemMessage,
+  createAttachedFilesMessagePrefix,
+  createContextPrompt,
+  createReplyAiMessagePrefix,
+} from '~/modules/prompts';
 
 import type { ExtractedFile } from '../api/helpers';
 import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../database';
@@ -22,13 +28,6 @@ import { ProjectsService } from '../projects';
 import { ProjectsEmbeddingsService } from '../projects-embeddings';
 import { ProjectsFilesService } from '../projects-files';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
-import {
-  createActionButtonsPrompt,
-  createAttachAppAIMessage,
-  createAttachedFilesMessagePrefix,
-  createQuotesPrompt,
-  createReplyAiMessagePrefix,
-} from './helpers';
 import { MessagesFirewall } from './messages.firewall';
 import { MessagesRepo } from './messages.repo';
 
@@ -111,7 +110,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         value: {
           chatId: chat.id,
           appId: app.id,
-          content: createAttachAppAIMessage(app),
+          content: createAttachAppSystemMessage(app),
           metadata: {},
           aiModelId: null,
           creatorUserId: creator.id,
@@ -157,10 +156,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             signal,
             aiModel,
             history,
-            context: [
-              createQuotesPrompt(),
-              createActionButtonsPrompt(),
-            ].join('\n'),
+            context: createContextPrompt(),
             message: {
               content: mappedContent,
             },
