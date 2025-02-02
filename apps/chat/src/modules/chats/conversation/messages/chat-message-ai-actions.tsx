@@ -22,14 +22,13 @@ export function ChatMessageAIActions({ isLast, disabled, message, onRefreshRespo
         <ToolbarSmallActionButton
           disabled={disabled}
           title={t.refresh}
+          icon={<RefreshCwIcon size={14} className="text-gray-500" />}
           onClick={onRefreshResponse}
-        >
-          <RefreshCwIcon size={14} className="opacity-50 hover:opacity-100" />
-        </ToolbarSmallActionButton>
+        />
       )}
 
       {message.aiModel && (
-        <div className="flex items-center gap-1 text-muted-foreground">
+        <div className="flex items-center gap-1.5 bg-gray-100/50 px-2 py-1.5 rounded-md text-gray-600 text-xs">
           <WandSparklesIcon size={12} />
           <span>{message.aiModel.name}</span>
         </div>

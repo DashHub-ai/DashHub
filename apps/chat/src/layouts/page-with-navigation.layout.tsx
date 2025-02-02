@@ -8,6 +8,7 @@ import { Navigation } from './navigation';
 type Props = PropsWithChildren & {
   withFooter?: boolean;
   wrapWithContainer?: boolean;
+  backgroundClassName?: string;
   contentClassName?: string;
 };
 
@@ -15,12 +16,13 @@ export function PageWithNavigationLayout(
   {
     children,
     contentClassName,
+    backgroundClassName = 'bg-gray-50',
     wrapWithContainer = true,
     withFooter = true,
   }: Props,
 ) {
   return (
-    <main className="md:flex flex-col hidden bg-gray-50 min-h-screen">
+    <main className={clsx('md:flex flex-col hidden min-h-screen', backgroundClassName)}>
       <Navigation />
 
       <div

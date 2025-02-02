@@ -1,5 +1,4 @@
 export * from './chat-attached-app';
-export * from './chat-background';
 export * from './chat-conversation-panel';
 export * from './chat-conversation-with-sidebar';
 export * from './config-panel';

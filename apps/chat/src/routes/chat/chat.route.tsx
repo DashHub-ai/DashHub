@@ -56,6 +56,7 @@ export function ChatRoute({ id }: Props) {
   return (
     <PageWithNavigationLayout
       withFooter={false}
+      backgroundClassName="bg-white"
       contentClassName="pb-0"
     >
       <RouteMetaTags meta={t.meta} />

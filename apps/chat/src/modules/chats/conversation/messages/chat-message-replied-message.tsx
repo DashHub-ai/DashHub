@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { Quote } from 'lucide-react';
 
 import type { SdkRepliedMessageT } from '@llm/sdk';
 
@@ -19,19 +18,18 @@ export function ChatMessageRepliedMessage({ message, darkMode }: Props) {
   return (
     <div
       className={clsx(
-        'relative flex items-center gap-2 mt-1 mb-3 p-2 border-l-2 rounded text-sm',
-        'before:absolute before:right-2 before:top-1/2 before:-translate-y-1/2',
+        'relative mb-3 py-2 pl-3',
+        'before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:rounded-full',
         darkMode
-          ? 'border-gray-600 text-gray-300 bg-gray-800 bg-opacity-50 before:text-gray-700'
-          : 'border-gray-300 text-gray-600 bg-gray-200 bg-opacity-50 before:text-gray-300',
+          ? 'before:bg-gray-600 bg-gray-800/30'
+          : 'before:bg-gray-300 bg-gray-50',
+        'rounded-sm',
       )}
     >
-      <Quote className="top-1/2 right-2 absolute opacity-10 w-12 h-12 -translate-y-1/2" />
-      <div className="flex flex-col flex-1 pr-[60px] min-w-0">
-        <span className="opacity-75 font-bold text-xs">
-          {isAI ? t.messages.ai : (message.creator?.email || t.messages.you)}
-        </span>
-
+      <div className="mb-1 font-medium text-gray-500 text-xs">
+        {isAI ? t.messages.ai : (message.creator?.email || t.messages.you)}
+      </div>
+      <div className="text-gray-600 text-sm">
         <ChatMessageContent
           content={message.content}
           truncate={60}

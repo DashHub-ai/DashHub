@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { PaperclipIcon } from 'lucide-react';
 import { useMemo } from 'react';
 import { v4 } from 'uuid';
 
@@ -9,10 +8,9 @@ type Props = {
   className?: string;
   items: FileCardFile[];
   itemPropsFn?: (file: FileCardFile) => Omit<FileCardProps, 'file'>;
-  withListIcon?: boolean;
 };
 
-export function FilesCardsList({ className, itemPropsFn, items, withListIcon }: Props) {
+export function FilesCardsList({ className, itemPropsFn, items }: Props) {
   const mappedFiles = useMemo(() => {
     const fileNames = new Set<string>();
     const duplicateNames = new Set<string>();
@@ -42,10 +40,6 @@ export function FilesCardsList({ className, itemPropsFn, items, withListIcon }: 
         className,
       )}
     >
-      {withListIcon && (
-        <PaperclipIcon className="w-4 h-4 text-gray-500" />
-      )}
-
       {mappedFiles.map(({ file, id }) => (
         <FileCard
           key={id}

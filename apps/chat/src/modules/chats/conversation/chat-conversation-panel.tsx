@@ -26,7 +26,6 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import type { SdkRepeatedMessageItemT } from './messages/chat-message';
 
 import { ChatAttachedApp } from './chat-attached-app';
-import { type ChatBackdropSettings, ChatBackground } from './chat-background';
 import {
   extractOptimisticMessageContent,
   useAutoFocusConversationInput,
@@ -52,7 +51,6 @@ type Props = {
   };
   className?: string;
   inputToolbarProps?: Pick<ChatInputToolbarProps, 'expanded' | 'rounded'>;
-  backdropSettings?: ChatBackdropSettings;
 };
 
 export const ChatConversationPanel = memo((
@@ -62,7 +60,6 @@ export const ChatConversationPanel = memo((
     inputToolbarProps,
     initialMessages,
     className,
-    backdropSettings,
     replyAfterMount,
   }: Props,
 ) => {
@@ -217,15 +214,19 @@ export const ChatConversationPanel = memo((
   return (
     <div
       ref={ref}
-      className={clsx('relative flex flex-col flex-1', className)}
+      className={clsx(
+        'relative flex flex-col flex-1',
+        className,
+      )}
     >
-      <ChatBackground {...backdropSettings} />
-
       <div
         ref={messagesContainerRef}
         className={clsx(
-          'relative z-10 flex-1 [&::-webkit-scrollbar]:hidden p-4 [-ms-overflow-style:none] overflow-y-scroll [scrollbar-width:none]',
-
+          'relative z-10 flex-1',
+          '[&::-webkit-scrollbar]:hidden',
+          '[-ms-overflow-style:none]',
+          'overflow-y-scroll',
+          '[scrollbar-width:none]',
           // Avoid scroll flickering on first render
           flickeringIndicator.visible
             ? 'opacity-100'
