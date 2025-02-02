@@ -1,9 +1,13 @@
-import { createActionButtonsPrompt } from './create-action-buttons-prompt';
-import { createQuotesPrompt } from './create-quotes-prompt';
+import {
+  createActionButtonsContextPrompt,
+  createQuotesContextPrompt,
+} from './features';
+import { createDefaultPersonaContextPrompt } from './personas';
 
 export function createContextPrompt() {
   return [
-    createQuotesPrompt(),
-    createActionButtonsPrompt(),
+    createDefaultPersonaContextPrompt(),
+    createQuotesContextPrompt(),
+    createActionButtonsContextPrompt(),
   ].join('\n');
 }

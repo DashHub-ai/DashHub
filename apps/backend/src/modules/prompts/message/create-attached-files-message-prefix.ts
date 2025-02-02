@@ -6,7 +6,8 @@ export function createAttachedFilesMessagePrefix(files: SdkMessageFileT[]) {
       return [
         content,
         '\n---\n',
-        'User did not attach any files to this message, try lookup for the files in the previous messages.',
+        '- User did not attach any files to this message, try lookup for the files in the previous messages.',
+        '- If user did not mention anything about the files, and you not found any files in the previous messages, just don\'t mention the files.',
         '\n---\n',
       ].join('\n');
     }

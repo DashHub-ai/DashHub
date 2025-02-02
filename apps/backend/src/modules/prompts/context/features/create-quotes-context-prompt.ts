@@ -1,6 +1,7 @@
-export function createQuotesPrompt(): string {
-  return [
-    '******** FEATURE: QUOTES ********',
+import { wrapWithFeaturePromptHeader } from './wrap-with-feature-prompt-header';
+
+export function createQuotesContextPrompt(): string {
+  return wrapWithFeaturePromptHeader('QUOTES', [
     'You can quote messages using <blockquote> HTML tags.',
     'Rules for quoting:',
     '1. You can quote previous user messages',
@@ -16,5 +17,5 @@ export function createQuotesPrompt(): string {
     '- Do not quote entire long messages',
     '- Focus on relevant parts when quoting',
     '- Maintain original language when quoting',
-  ].join('\n');
+  ]);
 }
