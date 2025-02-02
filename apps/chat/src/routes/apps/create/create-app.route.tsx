@@ -1,3 +1,5 @@
+import { Link } from 'wouter';
+
 import { useI18n } from '~/i18n';
 import {
   LayoutBreadcrumbs,
@@ -9,11 +11,14 @@ import {
   useCreateChatWithInitialApp,
   useWorkspaceOrganizationOrThrow,
 } from '~/modules';
-import { RouteMetaTags } from '~/routes';
+import { RouteMetaTags, useSitemap } from '~/routes';
 import { createFakeSelectItem } from '~/ui';
 
 export function CreateAppRoute() {
-  const t = useI18n().pack.routes.createApp;
+  const { pack } = useI18n();
+  const t = pack.routes.editApp;
+
+  const sitemap = useSitemap();
   const { assignWorkspaceOrganization } = useWorkspaceOrganizationOrThrow();
   const [createChatWithApp] = useCreateChatWithInitialApp();
 
@@ -29,7 +34,16 @@ export function CreateAppRoute() {
     <PageWithNavigationLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <LayoutBreadcrumbs currentBreadcrumb={t.title} />
+      <LayoutBreadcrumbs
+        currentBreadcrumb={t.title}
+        breadcrumbs={(
+          <li>
+            <Link href={sitemap.apps.index.generate({})}>
+              {pack.breadcrumbs.routes.apps}
+            </Link>
+          </li>
+        )}
+      />
 
       <section className="flex flex-col gap-6 mx-auto max-w-4xl">
         <LayoutHeader withBreadcrumbs={false}>

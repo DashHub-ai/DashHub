@@ -1,6 +1,6 @@
 import type { SdkCreateAppOutputT } from '@llm/sdk';
 
-import { FormErrorAlert } from '~/ui';
+import { FormErrorAlert, SaveButton } from '~/ui';
 
 import { AppSharedFormFields } from '../shared';
 import { type CreateAppFormValue, useAppCreateForm } from './use-app-create-form';
@@ -35,6 +35,13 @@ export function AppCreateForm(
       />
 
       <FormErrorAlert result={submitState.result} />
+
+      <div className="flex flex-row justify-end">
+        <SaveButton
+          type="submit"
+          loading={submitState.loading}
+        />
+      </div>
     </form>
   );
 }

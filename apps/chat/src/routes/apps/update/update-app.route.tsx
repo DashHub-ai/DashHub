@@ -1,5 +1,5 @@
 import { pipe } from 'fp-ts/lib/function';
-import { Redirect } from 'wouter';
+import { Link, Redirect } from 'wouter';
 
 import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
@@ -15,7 +15,9 @@ type Props = {
 };
 
 export function UpdateAppRoute({ id }: Props) {
-  const t = useI18n().pack.routes.editApp;
+  const { pack } = useI18n();
+  const t = pack.routes.editApp;
+
   const sitemap = useSitemap();
   const { sdks } = useSdkForLoggedIn();
   const [createChatWithApp] = useCreateChatWithInitialApp();
@@ -33,14 +35,23 @@ export function UpdateAppRoute({ id }: Props) {
   }
 
   const onAfterSubmit = () => {
-    void createChatWithApp();
+    void createChatWithApp({ id });
   };
 
   return (
     <PageWithNavigationLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <LayoutBreadcrumbs currentBreadcrumb={t.title} />
+      <LayoutBreadcrumbs
+        currentBreadcrumb={t.title}
+        breadcrumbs={(
+          <li>
+            <Link href={sitemap.apps.index.generate({})}>
+              {pack.breadcrumbs.routes.apps}
+            </Link>
+          </li>
+        )}
+      />
 
       <section className="flex flex-col gap-6 mx-auto max-w-4xl">
         <LayoutHeader withBreadcrumbs={false}>

@@ -184,6 +184,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   breadcrumbs: {
     routes: {
       home: 'Strona główna',
+      apps: 'Asystenci',
     },
   },
   table: {

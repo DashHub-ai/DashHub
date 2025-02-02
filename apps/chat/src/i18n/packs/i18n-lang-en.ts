@@ -182,6 +182,7 @@ export const I18N_PACK_EN = {
   breadcrumbs: {
     routes: {
       home: 'Home',
+      apps: 'Assistants',
     },
   },
   table: {
