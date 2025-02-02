@@ -18,11 +18,11 @@ export function ChatMessageRepliedMessage({ message, darkMode }: Props) {
   return (
     <div
       className={clsx(
-        'relative mb-3 py-2 pl-3',
+        'relative mb-2 py-2 pl-3',
         'before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:rounded-full',
         darkMode
           ? 'before:bg-gray-600 bg-gray-800/30'
-          : 'before:bg-gray-300 bg-gray-50',
+          : 'before:bg-gray-300 bg-gray-100',
         'rounded-sm',
       )}
     >

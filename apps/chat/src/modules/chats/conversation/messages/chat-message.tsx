@@ -118,21 +118,10 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
             },
           )}
         >
-          {!isAI && message.repliedMessage && (
-            <div className={clsx('mb-1', {
-              'w-full': !isAI && isYou,
+          <div
+            className={clsx('flex items-center gap-2', {
+              'items-end': !isAI && isYou,
             })}
-            >
-              <ChatMessageRepliedMessage
-                message={message.repliedMessage}
-                darkMode={false}
-              />
-            </div>
-          )}
-
-          <div className={clsx('flex items-center gap-2', {
-            'items-end': !isAI && isYou,
-          })}
           >
             {!readOnly && isYou && !isAI && (
               <button
@@ -148,6 +137,12 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
               'rounded-lg bg-gray-50 px-3 py-2': isYou && !isAI,
             })}
             >
+              {!isAI && message.repliedMessage && (
+                <ChatMessageRepliedMessage
+                  message={message.repliedMessage}
+                  darkMode={false}
+                />
+              )}
               <ChatMessageContent
                 key={typeof content}
                 content={content}

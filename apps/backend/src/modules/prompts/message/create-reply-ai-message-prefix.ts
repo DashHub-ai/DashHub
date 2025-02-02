@@ -14,7 +14,10 @@ export function createReplyAiMessagePrefix(repliedMessage: RepliedMessage, newMe
     ? `${repliedMessage.content.slice(0, 150)}...`
     : repliedMessage.content;
 
-  const quotedBy = repliedMessage.role === 'user' ? 'You' : 'I';
+  const quotedBy = repliedMessage.role === 'user' ? 'User' : 'Assistant';
 
-  return `${quotedBy}: "${truncatedContent}"\n\n${newMessage}`;
+  return [
+    `> ${quotedBy}: ${truncatedContent}`,
+    newMessage,
+  ].join('\n\n');
 }

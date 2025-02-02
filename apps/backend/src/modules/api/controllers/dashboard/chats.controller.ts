@@ -126,10 +126,11 @@ export class ChatsController extends AuthorizedController {
               files: true,
             }),
           ),
-          TE.chainW(({ content, files }) => messagesService.asUser(context.var.jwt).create({
+          TE.chainW(({ content, replyToMessageId, files }) => messagesService.asUser(context.var.jwt).create({
             files: [...files ?? []],
             message: {
               content,
+              replyToMessageId,
             },
             chat: {
               id: context.req.param('id'),

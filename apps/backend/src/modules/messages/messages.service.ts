@@ -67,41 +67,40 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
 
   searchByChatId = this.esSearchRepo.searchByChatId;
 
-  createUserMessage = ({ creator, chat, message, files }: CreateUserMessageInputT) =>
-    pipe(
-      this.repo.create({
-        value: {
-          chatId: chat.id,
-          content: message.content,
-          metadata: {},
-          aiModelId: null,
-          creatorUserId: creator.id,
-          repliedMessageId: message.replyToMessageId ?? null,
-          role: 'user',
-        },
-      }),
-      TE.tap(({ id }) => {
-        if (!files || files.length === 0) {
-          return TE.of(undefined);
-        }
+  createUserMessage = ({ creator, chat, message, files }: CreateUserMessageInputT) => pipe(
+    this.repo.create({
+      value: {
+        chatId: chat.id,
+        content: message.content,
+        metadata: {},
+        aiModelId: null,
+        creatorUserId: creator.id,
+        repliedMessageId: message.replyToMessageId ?? null,
+        role: 'user',
+      },
+    }),
+    TE.tap(({ id }) => {
+      if (!files || files.length === 0) {
+        return TE.of(undefined);
+      }
 
-        return pipe(
-          this.projectsService.ensureChatHasProjectOrCreateInternal({ creator, chat }),
-          TE.chainW(project => pipe(
-            files,
-            TE.traverseArray(file => this.projectsFilesService.uploadFile({
-              projectId: project.id,
-              messageId: id,
-              ...file,
-            })),
-          )),
-        );
-      }),
-      TE.tap(({ id }) => TE.sequenceArray([
-        this.esIndexRepo.findAndIndexDocumentById(id),
-        this.chatsService.findAndIndexDocumentById(chat.id),
-      ])),
-    );
+      return pipe(
+        this.projectsService.ensureChatHasProjectOrCreateInternal({ creator, chat }),
+        TE.chainW(project => pipe(
+          files,
+          TE.traverseArray(file => this.projectsFilesService.uploadFile({
+            projectId: project.id,
+            messageId: id,
+            ...file,
+          })),
+        )),
+      );
+    }),
+    TE.tap(({ id }) => TE.sequenceArray([
+      this.esIndexRepo.findAndIndexDocumentById(id),
+      this.chatsService.findAndIndexDocumentById(chat.id),
+    ])),
+  );
 
   attachApp = ({ chat, app, creator }: AttachAppInputT) =>
     pipe(
