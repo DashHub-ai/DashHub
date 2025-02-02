@@ -5,6 +5,7 @@ import { delay, inject, injectable } from 'tsyringe';
 import type {
   SdkCreateProjectInputT,
   SdkJwtTokenT,
+  SdkPermissionT,
   SdkUpdateProjectInputT,
 } from '@llm/sdk';
 
@@ -12,6 +13,7 @@ import {
   asyncIteratorToVoidPromise,
   runTaskAsVoid,
   tapAsyncIterator,
+  tapTaskEitherTE,
   tryOrThrowTE,
 } from '@llm/commons';
 
@@ -40,6 +42,11 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
 
   search = this.esSearchRepo.search;
 
+  deleteEmptyProject = (id: TableId) => pipe(
+    this.repo.delete({ id }),
+    tapTaskEitherTE(() => this.esIndexRepo.deleteDocument(id)),
+  );
+
   unarchive = (id: TableId) => pipe(
     this.repo.unarchive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
@@ -67,19 +74,11 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
       }
 
       return pipe(
-        this.create({
-          internal: true,
-          organization: chat.organization,
-          name: `Unnamed Project - ${Date.now()}`,
-          summary: {
-            content: {
-              value: '',
-              generated: false,
-            },
-          },
+        this.createInternal({
           // Embeddings are associated with projects, so we need to inherit permissions
           // from the chat to keep them private.
           permissions: chat.permissions?.current ?? [],
+          organization: chat.organization,
           creator,
         }),
         TE.tap(project => this.chatsService.assignToProject(chat.id, project.id)),
@@ -150,6 +149,31 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
+
+  createInternal = (
+    {
+      organization,
+      creator,
+      permissions,
+    }: {
+      organization: TableRowWithId;
+      creator: TableRowWithId;
+      permissions?: SdkPermissionT[];
+    },
+  ) =>
+    this.create({
+      internal: true,
+      organization,
+      name: `Unnamed Project - ${Date.now()}`,
+      summary: {
+        content: {
+          value: '',
+          generated: false,
+        },
+      },
+      permissions,
+      creator,
+    });
 
   update = ({ id, permissions, ...value }: SdkUpdateProjectInputT & TableRowWithId) => pipe(
     this.repo.update({ id, value }),

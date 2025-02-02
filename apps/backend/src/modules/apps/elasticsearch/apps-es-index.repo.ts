@@ -33,6 +33,7 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
         permissions: createPermissionsRowEntryMapping(),
+        project: createIdNameObjectMapping(),
         organization: createIdNameObjectMapping(),
         category: createIdNameObjectMapping(),
         description: {

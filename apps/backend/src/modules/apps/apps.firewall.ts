@@ -59,8 +59,8 @@ export class AppsFirewall extends AuthFirewallService {
     TE.chainW(() => this.appsService.update(attrs)),
   );
 
-  create = (dto: InternalCreateAppInputT) => pipe(
-    this.permissionsService.asUser(this.jwt).enforceOrganizationScope(dto),
+  create = (dto: Omit<InternalCreateAppInputT, 'creator'>) => pipe(
+    this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto),
     TE.fromEither,
     TE.chainW(this.appsService.create),
     this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),

@@ -15,6 +15,7 @@ export const SdkCreateAppInputV = SdkAppV.omit({
   ...ZodOmitArchivedFields,
   id: true,
   organization: true,
+  project: true,
   category: true,
 })
   .merge(SdkUpsertTableRowWithPermissionsInputV)

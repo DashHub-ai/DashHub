@@ -45,6 +45,8 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             .leftJoin('s3_resources', 's3_resources.id', 'apps.logo_s3_resource_id')
             .leftJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
 
+            .innerJoin('projects', 'projects.id', 'apps.project_id')
+
             .selectAll('apps')
             .select([
               'organizations.id as organization_id',
@@ -65,6 +67,10 @@ export class AppsRepo extends createDatabaseRepo('apps') {
               // Logo bucket
               's3_resources_buckets.id as logo_s3_resource_bucket_id',
               's3_resources_buckets.name as logo_s3_resource_bucket_name',
+
+              // Project
+              'projects.id as project_id',
+              'projects.name as project_name',
 
               // Permissions
               eb =>
@@ -95,6 +101,9 @@ export class AppsRepo extends createDatabaseRepo('apps') {
           logo_s3_resource_bucket_id: logoBucketId,
           logo_s3_resource_bucket_name: logoBucketName,
 
+          project_id: projectId,
+          project_name: projectName,
+
           ...item
         }): AppTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -109,6 +118,10 @@ export class AppsRepo extends createDatabaseRepo('apps') {
           permissions: {
             inherited: [],
             current: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
+          },
+          project: {
+            id: projectId,
+            name: projectName!,
           },
           logo: logoId
             ? {

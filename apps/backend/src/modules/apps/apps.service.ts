@@ -7,6 +7,7 @@ import {
   type Overwrite,
   runTaskAsVoid,
   tapAsyncIterator,
+  tapTaskEitherErrorTE,
   tryOrThrowTE,
 } from '@llm/commons';
 import {
@@ -25,6 +26,7 @@ import type { TableId, TableRowWithId, TableUuid } from '../database';
 import { ChatsService } from '../chats';
 import { OrganizationsS3BucketsRepo } from '../organizations/s3-buckets';
 import { PermissionsService } from '../permissions';
+import { ProjectsService } from '../projects';
 import { S3Service } from '../s3';
 import { AppsFirewall } from './apps.firewall';
 import { AppsRepo } from './apps.repo';
@@ -71,6 +73,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     @inject(OrganizationsS3BucketsRepo) private readonly organizationsS3BucketsRepo: OrganizationsS3BucketsRepo,
     @inject(delay(() => ChatsSummariesService)) private readonly chatsSummariesService: Readonly<ChatsSummariesService>,
     @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
+    @inject(delay(() => ProjectsService)) private readonly projectsService: Readonly<ProjectsService>,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new AppsFirewall(jwt, this, this.permissionsService, this.chatsService);
@@ -125,7 +128,16 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
 
   search = this.esSearchRepo.search;
 
-  create = ({ organization, category, permissions, logo, ...values }: InternalCreateAppInputT) => pipe(
+  create = (
+    {
+      organization,
+      category,
+      permissions,
+      logo,
+      creator,
+      ...values
+    }: InternalCreateAppInputT,
+  ) => pipe(
     TE.Do,
     TE.bind('s3Resource', () => {
       if (!logo) {
@@ -148,14 +160,22 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
         })),
       );
     }),
-    TE.chainW(({ s3Resource }) => this.repo.create({
-      value: {
-        ...values,
-        organizationId: organization.id,
-        categoryId: category.id,
-        logoS3ResourceId: s3Resource?.id,
-      },
+    TE.bindW('project', () => this.projectsService.createInternal({
+      creator,
+      organization,
     })),
+    TE.chainW(({ s3Resource, project }) => pipe(
+      this.repo.create({
+        value: {
+          ...values,
+          organizationId: organization.id,
+          categoryId: category.id,
+          logoS3ResourceId: s3Resource?.id,
+          projectId: project.id,
+        },
+      }),
+      tapTaskEitherErrorTE(() => this.projectsService.deleteEmptyProject(project.id)),
+    )),
     TE.tap(({ id }) => {
       if (!permissions) {
         return TE.of(undefined);
@@ -235,6 +255,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
 
 export type InternalCreateAppInputT = Overwrite<SdkCreateAppInputT, {
   logo: TableRowWithId | ExtractedFile | null;
+  creator: TableRowWithId;
 }>;
 
 export type InternalUpdateInputT = Overwrite<SdkUpdateAppInputT & TableRowWithId, {
