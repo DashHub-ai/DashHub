@@ -33,7 +33,7 @@ export function createAttachAppSystemMessage(app: AttachableApp): string {
     `✅ CORRECT: "#app:${app.id} Sorry, I can't help with that"`,
     '',
     '--- FILE CONTEXT HANDLING ---',
-    'When user asks about project files:',
+    'When user asks about files or embeddings:',
     '- Stay in character as the app while analyzing files',
     '- Provide insights and explanations within the app\'s specific domain/purpose',
     '- Do not break character or switch to a general assistant mode',

@@ -53,16 +53,19 @@ export class ProjectsEmbeddingsEsSearchRepo {
     );
 
   matchByEmbedding = (
-    { embedding, projectId, chatId }: {
+    { embedding, projectsIds, chatId }: {
       embedding: number[];
-      projectId: TableId;
+      projectsIds: TableId[];
       chatId: TableUuid;
     },
   ) => {
     const sharedFilters = [
-      esb.termQuery('project.id', projectId),
+      esb.termsQuery('project.id', projectsIds),
       esb.boolQuery().should([
+        // File attached to message.
         esb.termQuery('project_file.chat.id', chatId),
+
+        // File attached to whole project.
         esb.termQuery('project_file.chat.id', createMagicNullIdEsValue()),
       ]),
     ];
@@ -71,7 +74,7 @@ export class ProjectsEmbeddingsEsSearchRepo {
       this.indexRepo.search(
         esb
           .requestBodySearch()
-          .source(['id', 'text', 'project_file', 'created_at'])
+          .source(['id', 'text', 'project_file', 'project', 'created_at'])
           .size(100)
           .kNN([
             esb
@@ -97,6 +100,19 @@ export class ProjectsEmbeddingsEsSearchRepo {
       TE.map(({ hits: { hits } }) => pipe(
         hits,
         pluck('_source'),
+
+        // kNN tends to return neighboring vectors, so we need to filter out the ones that are not in the list of projects.
+        A.filter((item) => {
+          if (!projectsIds.includes(item.project!.id)) {
+            return false;
+          }
+
+          if (item.project_file?.chat?.id) {
+            return item.project_file.chat.id === chatId;
+          }
+
+          return true;
+        }),
         A.map((item): EsMatchingProjectEmbedding => ({
           id: item.id!,
           text: item.text!,
@@ -112,6 +128,7 @@ export class ProjectsEmbeddingsEsSearchRepo {
       createdAt: source.created_at,
       updatedAt: source.updated_at,
       text: source.text,
+      project: source.project,
       projectFile: camelcaseKeys(source.project_file, { deep: true }),
       organization: source.organization,
       permissions: mapRawEsDocToSdkPermissions(source.project.permissions),

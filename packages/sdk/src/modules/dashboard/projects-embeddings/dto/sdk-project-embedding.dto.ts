@@ -8,6 +8,7 @@ import { SdkBaseS3ResourceV } from '../../s3-files';
 export const SdkProjectEmbeddingV = z.object({
   text: z.string(),
   organization: SdkTableRowWithIdV,
+  project: SdkTableRowWithIdV,
   projectFile: SdkTableRowWithIdNameV.extend({
     resource: SdkBaseS3ResourceV.pick({
       id: true,
