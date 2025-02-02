@@ -19,19 +19,19 @@ export const AppChatBadge = memo(({ id, darkMode, selected, onClick, className, 
   const value = useCachedAppLookup(id);
 
   return (
-    <button
-      type="button"
+    <span
       onClick={onClick}
-      disabled={disabled}
       className={clsx(
-        'inline-flex relative items-center gap-1.5 shadow-sm px-2 py-1 border rounded-md font-medium text-xs transition-colors',
+        'inline-flex relative items-center gap-1.5 px-2 py-1.5 rounded-md text-xs transition-all',
         {
-          'bg-gray-100 text-gray-800 border-gray-300 hover:border-gray-400': !darkMode && !selected,
-          'bg-gray-700 text-white border-gray-500 hover:border-gray-400': darkMode && !selected,
-          'bg-blue-50 border-blue-300 text-blue-700': selected && !darkMode,
-          'bg-blue-900 border-blue-700 text-white': selected && darkMode,
+          'bg-gray-100/50 text-gray-600': !darkMode && !selected,
+          'bg-gray-600/30 text-gray-200': darkMode && !selected,
+          'bg-blue-100/50 text-blue-700': selected && !darkMode,
+          'bg-blue-800/50 text-blue-100': selected && darkMode,
           'opacity-50 cursor-not-allowed': disabled,
-          'cursor-pointer': !disabled,
+          'hover:bg-gray-200/70': !darkMode && !selected && onClick && !disabled,
+          'hover:bg-gray-600/50': darkMode && !selected && onClick && !disabled,
+          'cursor-pointer hover:scale-105 active:scale-95': onClick && !disabled,
         },
         className,
       )}
@@ -39,6 +39,6 @@ export const AppChatBadge = memo(({ id, darkMode, selected, onClick, className, 
       <WandSparklesIcon size={12} />
       <span>{value.status === 'success' ? value.data?.name : '...'}</span>
       {selected && <CheckIcon size={12} />}
-    </button>
+    </span>
   );
 });

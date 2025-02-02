@@ -73,15 +73,14 @@ export const ProjectEmbeddingChatBadge = memo((
       onClick={onToggleBallon}
       disabled={disabled}
       className={clsx(
-        'inline-flex relative items-center gap-1 shadow-sm px-1 py-0.5 border rounded-md font-semibold text-[10px] transition-all',
+        'inline-flex relative items-center gap-1.5 px-2 py-1.5 rounded-md text-xs transition-all',
         {
-          'bg-gray-100 text-gray-900 border-gray-300 hover:bg-gray-200 hover:border-gray-400': !darkMode && !isOn,
-          'bg-gray-700 text-white border-gray-500 hover:bg-gray-600': darkMode && !isOn,
-          'bg-blue-50 border-blue-400 text-blue-800': isOn && !darkMode,
-          'bg-blue-800 border-blue-600 text-white': isOn && darkMode,
+          'bg-gray-100/50 text-gray-600 hover:bg-gray-200/70': !darkMode && !isOn,
+          'bg-gray-600/30 text-gray-200 hover:bg-gray-600/50': darkMode && !isOn,
+          'bg-blue-100/50 text-blue-700': isOn && !darkMode,
+          'bg-blue-800/50 text-blue-100': isOn && darkMode,
           'opacity-50 cursor-not-allowed': disabled,
-          'cursor-pointer hover:scale-[1.02]': !disabled,
-          'scale-[1.02]': isOn,
+          'cursor-pointer hover:scale-105 active:scale-95': !disabled,
         },
         className,
       )}

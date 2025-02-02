@@ -23,7 +23,7 @@ export function hydrateWithAppChatBadges(
 
     const badgesToolbar = badges.length
       ? (
-          <div key="badges-toolbar" className="flex flex-wrap gap-1 mb-2">
+          <div key="badges-toolbar" className="flex flex-wrap gap-1 mt-1 mb-2">
             {badges}
           </div>
         )
