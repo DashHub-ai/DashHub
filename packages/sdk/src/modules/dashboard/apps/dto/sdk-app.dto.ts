@@ -18,6 +18,7 @@ export const SdkAppV = z.strictObject({
   description: NonEmptyOrNullStringV,
   category: SdkTableRowWithIdNameV,
   project: SdkTableRowWithIdV,
+  aiModel: SdkTableRowWithIdNameV.nullable(),
   logo: SdkBaseS3ResourceV.nullable(),
 })
   .merge(SdkTableRowWithPermissionsV)

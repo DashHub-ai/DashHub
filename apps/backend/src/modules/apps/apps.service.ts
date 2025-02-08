@@ -135,6 +135,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
       permissions,
       logo,
       creator,
+      aiModel,
       ...values
     }: InternalCreateAppInputT,
   ) => pipe(
@@ -172,6 +173,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
           categoryId: category.id,
           logoS3ResourceId: s3Resource?.id,
           projectId: project.id,
+          aiModelId: aiModel?.id ?? null,
         },
       }),
       tapTaskEitherErrorTE(() => this.projectsService.deleteEmptyProject(project.id)),
@@ -191,7 +193,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, category, permissions, logo, ...value }: InternalUpdateInputT) => pipe(
+  update = ({ id, category, permissions, logo, aiModel, ...value }: InternalUpdateInputT) => pipe(
     TE.Do,
     TE.bind('originalRecord', () => this.get(id)),
     TE.bindW('s3Resource', ({ originalRecord }) => {
@@ -222,6 +224,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
           ...value,
           categoryId: category.id,
           logoS3ResourceId: s3Resource?.id ?? null,
+          aiModelId: aiModel?.id ?? null,
         },
       }),
     )),

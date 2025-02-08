@@ -17,11 +17,13 @@ export const SdkCreateAppInputV = SdkAppV.omit({
   organization: true,
   project: true,
   category: true,
+  aiModel: true,
 })
   .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({
     organization: SdkTableRowWithIdV,
     category: SdkTableRowWithIdV,
+    aiModel: SdkTableRowWithIdV.nullable(),
     logo: SdkOptionalFileUploadV,
   });
 

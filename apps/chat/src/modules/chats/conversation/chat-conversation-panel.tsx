@@ -35,7 +35,6 @@ import {
 } from './hooks';
 import {
   ChatInputToolbar,
-  type ChatInputToolbarProps,
   type ChatInputValue,
 } from './input-toolbar';
 import { ChatMessage } from './messages/chat-message';
@@ -50,14 +49,12 @@ type Props = {
     aiModel: SdkTableRowWithIdNameT;
   };
   className?: string;
-  inputToolbarProps?: Pick<ChatInputToolbarProps, 'expanded' | 'rounded'>;
 };
 
 export const ChatConversationPanel = memo((
   {
     ref,
     chat,
-    inputToolbarProps,
     initialMessages,
     className,
     replyAfterMount,
@@ -222,7 +219,7 @@ export const ChatConversationPanel = memo((
       <div
         ref={messagesContainerRef}
         className={clsx(
-          'relative z-10 flex-1',
+          'relative z-10 flex-1 m-auto w-[800px] max-w-screen-md',
           '[&::-webkit-scrollbar]:hidden',
           '[-ms-overflow-style:none]',
           'overflow-y-scroll',
@@ -239,7 +236,6 @@ export const ChatConversationPanel = memo((
 
       {can.write && !chat.archived && (
         <ChatInputToolbar
-          {...inputToolbarProps}
           apps={apps}
           replyToMessage={replyToMessage}
           replying={replying}

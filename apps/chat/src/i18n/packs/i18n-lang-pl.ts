@@ -517,6 +517,9 @@ export const I18N_PACK_PL: I18nLangPack = {
       permissions: {
         label: 'Uprawnienia',
       },
+      aiModel: {
+        label: 'Preferowany model AI',
+      },
       name: {
         label: 'Nazwa',
         placeholder: 'Wpisz nazwę asystenta',

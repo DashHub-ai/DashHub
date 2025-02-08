@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import clsx from 'clsx';
-import { ChevronRight, Cog } from 'lucide-react';
+import { Cog } from 'lucide-react';
 
 import { StrictBooleanV } from '@llm/commons';
 import { useLocalStorageObject } from '@llm/commons-front';
@@ -10,7 +10,7 @@ type Props = {
   storageKey: string;
   contentClassName?: string;
   title: string;
-  icon?: ReactNode;
+  defaultCollapsed?: boolean;
   children: ReactNode;
   defaultWidth?: string;
 };
@@ -20,13 +20,13 @@ export function CollapsiblePanel(
     storageKey,
     contentClassName,
     title,
-    icon = <Cog size={16} />,
     children,
+    defaultCollapsed = false,
     defaultWidth = 'w-[450px]',
   }: Props,
 ) {
   const collapsedStorage = useLocalStorageObject(`${storageKey}-collapsed`, {
-    schema: StrictBooleanV.catch(false),
+    schema: StrictBooleanV.catch(defaultCollapsed),
     readBeforeMount: true,
   });
 
@@ -37,26 +37,19 @@ export function CollapsiblePanel(
       <button
         type="button"
         onClick={() => collapsedStorage.set(!isCollapsed)}
-        className="top-[40%] -left-3 absolute flex flex-col items-center gap-2 border-gray-200 bg-white hover:bg-gray-100 shadow-sm px-1 py-4 border rounded-lg -translate-y-1/2"
+        className="top-3 right-4 absolute hover:bg-gray-100 p-1.5 rounded-full text-gray-500 hover:text-gray-700"
       >
-        {icon}
-        <ChevronRight
-          size={16}
-          className={clsx(
-            'transition-transform duration-300',
-            isCollapsed ? 'rotate-180' : 'rotate-0',
-          )}
-        />
+        <Cog size={20} />
       </button>
 
       <div
         className={clsx(
-          'border-gray-200 border-l transition-all duration-300',
+          'transition-all duration-300',
           isCollapsed ? 'w-12' : defaultWidth,
           contentClassName,
         )}
       >
-        <div className="p-4 pt-0 pl-10">
+        <div className="p-4 pt-0 pr-14 pl-10">
           <h2 className={clsx(
             'font-semibold text-xl transition-opacity',
             isCollapsed ? 'opacity-0' : 'opacity-100',

@@ -28,6 +28,7 @@ export function CreateAppRoute() {
     description: '',
     permissions: [],
     category: createFakeSelectItem(),
+    aiModel: null,
   });
 
   return (

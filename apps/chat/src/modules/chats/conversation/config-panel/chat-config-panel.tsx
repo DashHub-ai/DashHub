@@ -28,6 +28,7 @@ export function ChatConfigPanel({ chat, contentClassName }: Props) {
       storageKey="chat-config-panel-state"
       title={t.title}
       contentClassName={contentClassName}
+      defaultCollapsed
     >
       <form
         className="space-y-4"

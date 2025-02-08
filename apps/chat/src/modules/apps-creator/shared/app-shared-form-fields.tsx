@@ -1,8 +1,14 @@
 import { type ControlBindProps, controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkPermissionT, SdkTableRowWithIdT, SdkUpdateAppInputT } from '@llm/sdk';
+import type {
+  SdkPermissionT,
+  SdkTableRowWithIdNameT,
+  SdkTableRowWithIdT,
+  SdkUpdateAppInputT,
+} from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
+import { AIModelsSearchSelect } from '~/modules/ai-models';
 import { AppsCategoriesSearchSelect } from '~/modules/apps-categories';
 import { ShareResourceFormGroup } from '~/modules/permissions';
 import { FormField, Input, SelectGenericFileInput, TextArea } from '~/ui';
@@ -12,6 +18,7 @@ type Value = Pick<
   'name' | 'chatContext' | 'description' | 'logo' | 'category'
 > & {
   permissions?: SdkPermissionT[] | null;
+  aiModel: SdkTableRowWithIdNameT | null;
 };
 
 export type AppSharedFormFieldsProps =
@@ -79,6 +86,14 @@ export const AppSharedFormFields = controlled<Value, AppSharedFormFieldsProps>((
           accept="image/*"
           {...bind.path('logo')}
         />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.aiModel.label}
+        {...validation.extract('aiModel')}
+      >
+        <AIModelsSearchSelect {...bind.path('aiModel')} />
       </FormField>
 
       <FormField

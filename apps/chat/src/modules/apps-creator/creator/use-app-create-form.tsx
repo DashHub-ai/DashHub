@@ -1,4 +1,4 @@
-import { type FormHookAttrs, useForm } from '@under-control/forms';
+import { type FormHookAttrs, type Overwrite, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
@@ -6,14 +6,16 @@ import {
   type SdkCreateAppInputT,
   type SdkCreateAppOutputT,
   type SdkPermissionT,
+  type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { usePredefinedFormValidators } from '~/hooks';
 import { useSaveTaskEitherNotification } from '~/ui';
 
-export type CreateAppFormValue = SdkCreateAppInputT & {
+export type CreateAppFormValue = Overwrite<SdkCreateAppInputT, {
   permissions?: SdkPermissionT[] | null;
-};
+  aiModel: SdkTableRowWithIdNameT | null;
+}>;
 
 type CreateAppFormHookAttrs =
   & Omit<

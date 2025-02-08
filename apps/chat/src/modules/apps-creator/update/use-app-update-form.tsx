@@ -4,6 +4,7 @@ import { flow } from 'fp-ts/lib/function';
 import { runTask, tapTaskEither } from '@llm/commons';
 import {
   type SdkPermissionT,
+  type SdkTableRowWithIdNameT,
   type SdkTableRowWithIdT,
   type SdkUpdateAppInputT,
   useSdkForLoggedIn,
@@ -13,6 +14,7 @@ import { useSaveTaskEitherNotification } from '~/ui';
 
 type UpdateAppValue = Overwrite<SdkUpdateAppInputT & SdkTableRowWithIdT, {
   permissions?: SdkPermissionT[] | null;
+  aiModel: SdkTableRowWithIdNameT | null;
 }>;
 
 type UpdateAppFormHookAttrs =

@@ -141,5 +141,6 @@ export class AppsEsSearchRepo {
       project: source.project,
       permissions: mapRawEsDocToSdkPermissions(source.permissions),
       logo: source.logo && camelcaseKeys(source.logo),
+      aiModel: source.ai_model,
     });
 }

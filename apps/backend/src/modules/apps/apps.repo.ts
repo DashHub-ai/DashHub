@@ -44,6 +44,7 @@ export class AppsRepo extends createDatabaseRepo('apps') {
 
             .leftJoin('s3_resources', 's3_resources.id', 'apps.logo_s3_resource_id')
             .leftJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
+            .leftJoin('ai_models', 'ai_models.id', 'apps.ai_model_id')
 
             .innerJoin('projects', 'projects.id', 'apps.project_id')
 
@@ -54,6 +55,10 @@ export class AppsRepo extends createDatabaseRepo('apps') {
 
               'apps_categories.id as category_id',
               'apps_categories.name as category_name',
+
+              // AI model
+              'ai_models.id as ai_model_id',
+              'ai_models.name as ai_model_name',
 
               // Logo
               's3_resources.id as logo_s3_resource_id',
@@ -104,6 +109,9 @@ export class AppsRepo extends createDatabaseRepo('apps') {
           project_id: projectId,
           project_name: projectName,
 
+          ai_model_id: aiModelId,
+          ai_model_name: aiModelName,
+
           ...item
         }): AppTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -123,6 +131,12 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             id: projectId,
             name: projectName!,
           },
+          aiModel: aiModelId
+            ? {
+                id: aiModelId,
+                name: aiModelName!,
+              }
+            : null,
           logo: logoId
             ? {
                 id: logoId,

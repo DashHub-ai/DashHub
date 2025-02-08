@@ -18,10 +18,12 @@ export const SdkUpdateAppInputV = SdkAppV
     organization: true,
     project: true,
     category: true,
+    aiModel: true,
   })
   .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({
     category: SdkTableRowWithIdV,
+    aiModel: SdkTableRowWithIdV.nullable(),
     logo: SdkOptionalFileUploadV,
   });
 

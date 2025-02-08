@@ -113,7 +113,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         appId: app.id,
         content: createAttachAppSystemMessage(app),
         metadata: {},
-        aiModelId: null,
+        aiModelId: app.aiModel?.id ?? null,
         creatorUserId: creator.id,
         role: 'system',
         corrupted: false,

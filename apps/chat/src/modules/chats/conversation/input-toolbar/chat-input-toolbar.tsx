@@ -23,9 +23,6 @@ export type ChatInputValue = Omit<SdkCreateMessageInputT, 'replyToMessage'>;
 export type ChatInputToolbarProps = {
   apps: Array<SdkTableRowWithIdNameT>;
 
-  expanded?: boolean;
-  rounded?: boolean;
-
   replying: boolean;
   replyToMessage?: SdkRepeatedMessageItemT | null;
 
@@ -43,8 +40,6 @@ export type ChatInputToolbarProps = {
 export function ChatInputToolbar(
   {
     withAppSelector = true,
-    expanded,
-    rounded,
     disabled,
     replying,
     replyToMessage,
@@ -140,8 +135,7 @@ export function ChatInputToolbar(
   return (
     <form
       className={clsx(
-        'mx-auto w-full max-w-full',
-        !expanded && '2xl:w-9/12',
+        'flex flex-col m-auto w-full min-w-0 max-w-[800px]',
       )}
       onSubmit={handleSubmitEvent}
     >
@@ -154,22 +148,24 @@ export function ChatInputToolbar(
 
       <div
         className={clsx(
-          'relative z-10 bg-background shadow-sm border-t border-border overflow-hidden',
-          'focus-within:border-primary/50',
-          'transition-border duration-100',
-          rounded && 'rounded-lg border',
-          !rounded && 'rounded-t-lg rounded-x-lg border-x border-t',
+          'relative z-10 bg-white rounded-2xl',
+          'border border-gray-200',
+          'focus-within:border-gray-300',
+          'shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
+          'transition-all duration-200',
         )}
       >
-        <div className="mb-[45px]">
+        <div className="mb-12">
           <textarea
             ref={inputRef as any}
             disabled={isTypingDisabled}
             className={clsx(
-              'p-3 pb-0 w-full text-sm focus:outline-none resize-none',
-              withAppSelector
-                ? 'h-[60px]'
-                : 'h-[45px]',
+              'rounded-2xl w-full resize-none',
+              'focus:outline-none',
+              'text-gray-700 placeholder:text-gray-400',
+              value.files?.length
+                ? 'p-4 pb-2 min-h-[20px]'
+                : 'p-4 min-h-[80px]',
             )}
             placeholder={t.placeholders.enterMessage}
             required
@@ -179,52 +175,62 @@ export function ChatInputToolbar(
 
           <FilesCardsControlledList
             {...bind.path('files')}
-            className="mt-3 mb-2 px-3"
+            className="px-4 pb-2"
           />
 
           {withAppSelector && (
             <ChatSelectApp
               apps={apps}
               disabled={disabled}
-              className="mt-1 px-3"
+              className="px-4 pb-2"
               {...selectedApp.bind.entire()}
             />
           )}
         </div>
 
-        <div className="bottom-2 absolute flex flex-col gap-1 px-3 w-full">
-          <div className="flex flex-row items-center gap-2 w-full">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className={clsx(
-                  'inline-flex items-center gap-2 px-3 py-1 rounded-md font-medium text-xs',
-                  'text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500',
-                  'border border-gray-200',
-                  disabled && 'opacity-50 cursor-not-allowed',
-                )}
-                onClick={onAttachFile}
-              >
-                <PaperclipIcon size={14} />
-                <span>{t.actions.attachFile}</span>
-              </button>
-
-              {withAppSelector && (
-                <ChatChooseAppButton
-                  selectedApps={apps}
-                  disabled={disabled}
-                  onSelect={(app) => {
-                    selectedApp.setValue({
-                      value: app,
-                    });
-                    onSelectApp?.(app);
-                  }}
-                />
+        <div
+          className={clsx(
+            'right-0 bottom-0 left-0 absolute',
+            'px-3 py-2',
+            'border-t border-gray-100',
+            'bg-gray-50',
+            'rounded-b-2xl',
+            'flex items-center justify-between gap-4',
+          )}
+        >
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              className={clsx(
+                'hover:bg-gray-100 p-2 rounded-lg',
+                'text-gray-500 hover:text-gray-700',
+                'transition-colors duration-200',
+                disabled && 'opacity-50 cursor-not-allowed',
               )}
-            </div>
+              onClick={onAttachFile}
+              disabled={disabled}
+            >
+              <PaperclipIcon size={20} />
+            </button>
 
+            {withAppSelector && (
+              <ChatChooseAppButton
+                selectedApps={apps}
+                disabled={disabled}
+                onSelect={(app) => {
+                  selectedApp.setValue({
+                    value: app,
+                  });
+                  onSelectApp?.(app);
+                }}
+              />
+            )}
+          </div>
+
+          <div className="flex items-center gap-4">
             <Checkbox
-              className="text-sm"
+              className="flex items-center text-gray-600 text-sm"
+              checkboxClassName="mt-[1px]"
               disabled={disabled}
               value={!!submitOnEnterStorage.getOrNull()}
               onChange={submitOnEnterStorage.set}
@@ -232,24 +238,24 @@ export function ChatInputToolbar(
               {t.actions.submitOnEnter}
             </Checkbox>
 
-            <div className="ml-auto">
-              <button
-                type="submit"
-                disabled={disabled || (!replying && !value.content)}
-                className={clsx(
-                  'flex flex-row items-center px-3 py-1 rounded-lg h-8 text-sm text-white transition-colors uk-button uk-button-primary',
-                  disabled
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-gray-700 hover:bg-gray-800',
-                )}
-                {...replying && {
-                  onClick: onClickCancelSubmit,
-                }}
-              >
-                {replying ? <CircleStopIcon size={14} className="mr-1" /> : <SendIcon size={14} className="mr-1" />}
-                {replying ? t.actions.cancel : t.actions.send}
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={disabled || (!replying && !value.content)}
+              className={clsx(
+                'px-4 py-2 rounded-lg',
+                'bg-gray-900 hover:bg-black',
+                'text-white text-sm',
+                'transition-colors duration-200',
+                'flex items-center gap-2',
+                'disabled:opacity-50',
+              )}
+              {...replying && {
+                onClick: onClickCancelSubmit,
+              }}
+            >
+              {replying ? <CircleStopIcon size={18} /> : <SendIcon size={18} />}
+              <span>{replying ? t.actions.cancel : t.actions.send}</span>
+            </button>
           </div>
         </div>
       </div>
