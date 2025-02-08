@@ -2,6 +2,7 @@ import type { ColumnType } from 'kysely';
 
 import type { SdkMessageRoleT } from '@llm/sdk';
 import type {
+  NormalizeInsertTableRow,
   NormalizeSelectTableRow,
   TableId,
   TableRowWithId,
@@ -28,9 +29,12 @@ export type MessagesTable =
     ai_model_id: ColumnType<TableId | null, TableId | null, never>;
     app_id: ColumnType<TableId | null, TableId | null, never>;
     replied_message_id: ColumnType<TableUuid | null, TableUuid | null, null>;
+    corrupted: boolean;
   };
 
 export type MessageTableRow = NormalizeSelectTableRow<MessagesTable>;
+
+export type MessageInsertTableRow = NormalizeInsertTableRow<MessagesTable>;
 
 type RepliedMessageTableRelationRow =
   & Pick<MessageTableRow, 'id' | 'role' | 'content'>

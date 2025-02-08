@@ -35,6 +35,7 @@ import * as addNameToUsers from './0033-add-name-to-users';
 import * as addLogoToApps from './0034-add-logo-to-apps';
 import * as addVisionFlatAIModels from './0035-add-vision-flag-to-ai-models';
 import * as addProjectsToApps from './0036-add-projects-to-apps';
+import * as addCorruptedFlagToMessages from './0037-add-corrupted-flag-to-messages';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -74,4 +75,5 @@ export const DB_MIGRATIONS = {
   '0034-add-logo-to-apps': addLogoToApps,
   '0035-add-vision-flag-to-ai-models': addVisionFlatAIModels,
   '0036-add-projects-to-apps': addProjectsToApps,
+  '0037-add-corrupted-flag-to-messages': addCorruptedFlagToMessages,
 };

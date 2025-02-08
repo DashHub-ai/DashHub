@@ -2,7 +2,7 @@ import { useControl } from '@under-control/forms';
 import clsx from 'clsx';
 import { takeRight } from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
-import { Bot, ReplyIcon, User } from 'lucide-react';
+import { AlertCircle, Bot, ReplyIcon, User } from 'lucide-react';
 
 import { type Overwrite, pluckTyped } from '@llm/commons';
 import {
@@ -55,6 +55,7 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
 
   const isAI = role === 'assistant';
   const isYou = creator?.email === session.token.email;
+  const isCorrupted = message.corrupted;
 
   return (
     <div
@@ -75,14 +76,17 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
           className={clsx(
             'flex flex-shrink-0 justify-center items-center border rounded-full w-8 h-8',
             {
-              'bg-blue-50 border-blue-200': isAI,
+              'bg-blue-50 border-blue-200': isAI && !isCorrupted,
+              'bg-red-50 border-red-200': isAI && isCorrupted,
               'bg-gray-100 border-gray-200': !isAI,
               'opacity-75': readOnly && archived,
             },
           )}
         >
           {isAI
-            ? <Bot className="w-5 h-5 text-blue-600" />
+            ? isCorrupted
+              ? <AlertCircle className="w-5 h-5 text-red-600" />
+              : <Bot className="w-5 h-5 text-blue-600" />
             : <User className="w-5 h-5 text-gray-600" />}
         </div>
       )}
@@ -98,11 +102,12 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
             )}
           >
             <span className={clsx('font-medium', {
-              'text-gray-900': !isYou,
+              'text-gray-900': !isYou && !isCorrupted,
+              'text-red-700': isCorrupted,
               'text-gray-700': isYou,
             })}
             >
-              {isAI ? 'Assistant' : (isYou ? t.messages.you : creator?.email)}
+              {isAI ? (isCorrupted ? 'Error' : 'Assistant') : (isYou ? t.messages.you : creator?.email)}
             </span>
             <span className="text-gray-400 text-xs">
               {new Date(createdAt).toLocaleTimeString()}
@@ -112,9 +117,11 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
 
         <div
           className={clsx(
-            'relative flex flex-col gap-3 text-gray-800',
+            'relative flex flex-col gap-3',
             {
               'items-end': !isAI && isYou,
+              'text-gray-800': !isCorrupted,
+              'text-red-800': isCorrupted,
             },
           )}
         >

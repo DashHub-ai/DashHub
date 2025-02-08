@@ -38,6 +38,7 @@ export function useOptimisticResponseCreator() {
       repliedMessage: null,
       app: null,
       files: (files ?? []).map(createOptimisticResponseFile),
+      corrupted: false,
       creator: {
         id: token.sub,
         email: token.email,
@@ -57,6 +58,7 @@ export function useOptimisticResponseCreator() {
       aiModel,
       creator: null,
       repliedMessage: null,
+      corrupted: false,
       app: null,
     }),
 
@@ -69,6 +71,7 @@ export function useOptimisticResponseCreator() {
       creator: null,
       repliedMessage: null,
       aiModel: null,
+      corrupted: false,
       app,
     }),
   };

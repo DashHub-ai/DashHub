@@ -33,6 +33,7 @@ export const SdkMessageV = z
     app: SdkTableRowWithIdNameV.nullable(),
     repliedMessage: SdkRepliedMessageV.nullable(),
     files: z.array(SdkMessageFileV),
+    corrupted: z.boolean(),
   })
   .merge(SdkTableRowWithUuidV)
   .merge(SdkTableRowWithDatesV);

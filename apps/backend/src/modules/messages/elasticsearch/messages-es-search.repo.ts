@@ -93,6 +93,7 @@ export class MessagesEsSearchRepo {
     createdAt: source.created_at,
     updatedAt: source.updated_at,
     files: camelcaseKeys(source.files, { deep: true }),
+    corrupted: source.corrupted,
     creator: source.creator && {
       id: source.creator.id,
       email: source.creator.email,

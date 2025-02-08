@@ -2,12 +2,13 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
-import { findItemIndexById, tryOrThrowTE } from '@llm/commons';
+import { findItemIndexById, tapTaskEitherErrorTE, tryOrThrowTE } from '@llm/commons';
 import {
   groupSdkAIMessagesByRepeats,
   type SdkCreateMessageInputT,
   type SdkJwtTokenT,
   type SdkRequestAIReplyInputT,
+  type SdkSearchMessageItemT,
 } from '@llm/sdk';
 import {
   createAttachAppSystemMessage,
@@ -23,6 +24,7 @@ import { AIConnectorService } from '../ai-connector';
 import { AppsService } from '../apps';
 import { WithAuthFirewall } from '../auth';
 import { ChatsService } from '../chats';
+import { LoggerService } from '../logger';
 import { PermissionsService } from '../permissions';
 import { ProjectsService } from '../projects';
 import { ProjectsEmbeddingsService } from '../projects-embeddings';
@@ -30,6 +32,7 @@ import { ProjectsFilesService } from '../projects-files';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
 import { MessagesFirewall } from './messages.firewall';
 import { MessagesRepo } from './messages.repo';
+import { MessageInsertTableRow } from './messages.tables';
 
 export type CreateUserMessageInputT = {
   chat: TableRowWithUuid;
@@ -46,6 +49,8 @@ export type AttachAppInputT = {
 
 @injectable()
 export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
+  private readonly logger = LoggerService.of('MessagesService');
+
   constructor(
     @inject(MessagesRepo) private readonly repo: MessagesRepo,
     @inject(MessagesEsSearchRepo) private readonly esSearchRepo: MessagesEsSearchRepo,
@@ -77,6 +82,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         creatorUserId: creator.id,
         repliedMessageId: message.replyToMessageId ?? null,
         role: 'user',
+        corrupted: false,
       },
     }),
     TE.tap(({ id }) => {
@@ -96,27 +102,22 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         )),
       );
     }),
-    TE.tap(({ id }) => TE.sequenceArray([
-      this.esIndexRepo.findAndIndexDocumentById(id),
-      this.chatsService.findAndIndexDocumentById(chat.id),
-    ])),
+    TE.tap(({ id }) => this.indexMessageAndSyncChat(chat.id, id)),
   );
 
   attachApp = ({ chat, app, creator }: AttachAppInputT) =>
     pipe(
       this.appsService.get(app.id),
-      TE.chainW(app => this.repo.create({
-        value: {
-          chatId: chat.id,
-          appId: app.id,
-          content: createAttachAppSystemMessage(app),
-          metadata: {},
-          aiModelId: null,
-          creatorUserId: creator.id,
-          role: 'system',
-        },
+      TE.chainW(app => this.createAndIndexMessage({
+        chatId: chat.id,
+        appId: app.id,
+        content: createAttachAppSystemMessage(app),
+        metadata: {},
+        aiModelId: null,
+        creatorUserId: creator.id,
+        role: 'system',
+        corrupted: false,
       })),
-      TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
     );
 
   aiReply = (
@@ -127,7 +128,12 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     TE.bind('message', () => this.get(id)),
     TE.bindW('history', ({ message }) => pipe(
       this.searchByChatId(message.chat.id),
-      TE.map(({ items }) => {
+      TE.map(({ items }) => pipe(
+        items,
+        rejectCorruptedMessages,
+        filterConsecutiveUserMessages,
+      )),
+      TE.map((items) => {
         const historyIndex = findItemIndexById(message.id)(items);
 
         return pipe(
@@ -162,6 +168,16 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             },
           },
         ),
+        tapTaskEitherErrorTE(() => this.createAndIndexMessage({
+          chatId: message.chat.id,
+          content: 'Cannot establish connection with my AI model.',
+          metadata: {},
+          aiModelId: aiModel.id,
+          repliedMessageId: message.id,
+          creatorUserId: null,
+          role: 'assistant',
+          corrupted: true,
+        })),
         TE.map(stream => this.createAIResponseMessage(
           {
             repliedMessageId: message.id,
@@ -190,6 +206,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     signal?: AbortSignal,
   ) {
     let content = '';
+    let corrupted = false;
 
     try {
       for await (const item of stream) {
@@ -201,33 +218,67 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         yield item;
       }
 
-      await pipe(
-        this.repo.create({
-          value: {
-            chatId,
-            aiModelId,
-            content,
-            metadata: {},
-            repliedMessageId,
-            creatorUserId: null,
-            role: 'assistant',
-          },
-        }),
-        TE.tap(({ id }) => TE.sequenceArray([
-          this.esIndexRepo.findAndIndexDocumentById(id),
-          this.chatsService.findAndIndexDocumentById(chatId),
-        ])),
-        tryOrThrowTE,
-      )();
-
       if (!signal?.aborted) {
         yield '';
       }
     }
     catch (error) {
       if (!signal?.aborted) {
-        throw error;
+        this.logger.error('AI response generation error!', error);
+
+        corrupted = true;
       }
     }
-  };
+
+    await pipe(
+      this.createAndIndexMessage({
+        chatId,
+        aiModelId,
+        content,
+        metadata: {},
+        repliedMessageId,
+        creatorUserId: null,
+        role: 'assistant',
+        corrupted,
+      }),
+      tryOrThrowTE,
+    )();
+  }
+
+  private createAndIndexMessage = (dto: MessageInsertTableRow) => pipe(
+    this.repo.create({ value: dto }),
+    TE.tap(({ id }) => this.indexMessageAndSyncChat(dto.chatId, id)),
+  );
+
+  private indexMessageAndSyncChat = (chatId: TableUuid, messageId: TableUuid) => TE.sequenceArray([
+    this.esIndexRepo.findAndIndexDocumentById(messageId),
+    this.chatsService.findAndIndexDocumentById(chatId),
+  ]);
+}
+
+function rejectCorruptedMessages(messages: SdkSearchMessageItemT[]): SdkSearchMessageItemT[] {
+  return messages.filter(message => !message.corrupted);
+}
+
+function filterConsecutiveUserMessages(messages: SdkSearchMessageItemT[]): SdkSearchMessageItemT[] {
+  return messages.reduce((acc, curr, i) => {
+    if (curr.role !== 'user') {
+      acc.push(curr);
+      return acc;
+    }
+
+    // Find next non-user message
+    const nextNonUserIndex = messages.findIndex((msg, idx) => idx > i && msg.role !== 'user');
+
+    // If this is the last message in a sequence of user messages, keep it
+    if (nextNonUserIndex === -1 && messages.slice(i + 1).every(msg => msg.role === 'user')) {
+      acc.push(curr);
+    }
+    // If next message is not a user message, keep current one
+    else if (i + 1 < messages.length && messages[i + 1].role !== 'user') {
+      acc.push(curr);
+    }
+
+    return acc;
+  }, [] as SdkSearchMessageItemT[]);
 }

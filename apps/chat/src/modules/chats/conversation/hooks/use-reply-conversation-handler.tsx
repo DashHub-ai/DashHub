@@ -84,7 +84,10 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
             return timeoutTE(500);
           }
 
-          return TE.left(error);
+          // Log the error, as the backend should create a message anyway
+          console.error(error);
+
+          return TE.right(undefined);
         }),
       )),
       TE.bindW('messages', () => searchMessages(chat.id, {
