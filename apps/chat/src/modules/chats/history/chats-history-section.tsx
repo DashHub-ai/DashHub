@@ -24,6 +24,10 @@ export function ChatsHistorySection({ className }: Props) {
           creatorIds: [session.token.sub],
           excludeEmpty: true,
         }}
+
+        itemPropsFn={() => ({
+          withPermissions: false,
+        })}
       />
     </section>
   );

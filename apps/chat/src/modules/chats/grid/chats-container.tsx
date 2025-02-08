@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
 import {
+  type SdkSearchChatItemT,
   type SdkSearchChatsInputT,
   SdkSearchChatsInputV,
   type SdkTableRowWithIdT,
@@ -15,7 +16,7 @@ import {
   useDebouncedPaginatedSearch,
 } from '~/ui';
 
-import { ChatCard } from './chat-card';
+import { ChatCard, type ChatCardProps } from './chat-card';
 import { ChatHistoryPlaceholder } from './chat-history-placeholder';
 import { useReloadIntervalIfGenerating } from './use-reload-interval-if-generating';
 
@@ -29,9 +30,10 @@ type Props = {
   project?: SdkTableRowWithIdT;
   columns?: keyof typeof GRID_COLUMNS_CLASSES;
   filters?: Partial<SdkSearchChatsInputT>;
+  itemPropsFn?: (item: SdkSearchChatItemT) => Partial<ChatCardProps>;
 };
 
-export function ChatsContainer({ filters: forwardedFilters, project, columns = 2 }: Props) {
+export function ChatsContainer({ filters: forwardedFilters, project, columns = 2, itemPropsFn }: Props) {
   const { organization } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
@@ -89,6 +91,7 @@ export function ChatsContainer({ filters: forwardedFilters, project, columns = 2
                   key={item.id}
                   chat={item}
                   withProject={!project}
+                  {...itemPropsFn?.(item)}
                 />
               ))}
             </div>

@@ -8,12 +8,13 @@ import { CardRecordPermissionsRow } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';
 import { CardBase, CardContent, CardDescription, CardFooter, CardTitle } from '~/ui';
 
-type ChatCardProps = {
+export type ChatCardProps = {
   chat: SdkSearchChatItemT;
   withProject?: boolean;
+  withPermissions?: boolean;
 };
 
-export function ChatCard({ chat, withProject = true }: ChatCardProps) {
+export function ChatCard({ chat, withProject = true, withPermissions = true }: ChatCardProps) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
   const { summary } = chat;
@@ -95,7 +96,7 @@ export function ChatCard({ chat, withProject = true }: ChatCardProps) {
             )}
           </div>
 
-          <CardRecordPermissionsRow record={chat} />
+          {withPermissions && <CardRecordPermissionsRow record={chat} />}
         </CardFooter>
       </CardContent>
     </CardBase>
