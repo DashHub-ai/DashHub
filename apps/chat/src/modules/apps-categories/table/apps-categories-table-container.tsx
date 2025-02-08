@@ -3,7 +3,7 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import {
-  SdkSearchAppsInputV,
+  SdkSearchAppsCategoriesInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { useI18n } from '~/i18n';
@@ -31,7 +31,7 @@ export function AppsCategoriesTableContainer() {
   const { sdks } = useSdkForLoggedIn();
   const { loading, pagination, result, reset, reload } = useDebouncedPaginatedSearch({
     storeDataInUrl: false,
-    schema: SdkSearchAppsInputV,
+    schema: SdkSearchAppsCategoriesInputV,
     fallbackSearchParams: {},
     fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.appsCategories.search),
   });
