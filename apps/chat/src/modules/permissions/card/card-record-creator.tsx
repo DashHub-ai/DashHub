@@ -9,9 +9,10 @@ import { ColorizedAvatar, Tooltip } from '~/ui';
 type Props = {
   creator: SdkUserListItemT;
   className?: string;
+  withName?: boolean;
 };
 
-export function CardRecordCreator({ creator, className }: Props) {
+export function CardRecordCreator({ creator, className, withName }: Props) {
   const t = useI18n().pack.permissions.card;
 
   return (
@@ -33,7 +34,7 @@ export function CardRecordCreator({ creator, className }: Props) {
               className="shadow-sm"
             />
 
-            {creator.name}
+            {withName && creator.name}
           </div>
         </Tooltip>
       </div>

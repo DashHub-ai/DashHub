@@ -18,6 +18,7 @@ import {
   createProtectedDatabaseRepo,
   DatabaseError,
   type TableId,
+  type TableUuid,
   type TransactionalAttrs,
   tryReuseOrCreateTransaction,
   tryReuseTransactionOrSkip,
@@ -223,6 +224,68 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
           .execute();
       }),
       DatabaseError.tryTask,
+    );
+  };
+
+  deleteUserExternalResourcesPermissions = (
+    {
+      forwardTransaction,
+      userId,
+    }: TransactionalAttrs<{
+      userId: TableId;
+    }>,
+  ) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(async qb =>
+        qb
+          .deleteFrom(this.table)
+          .where('user_id', '=', userId)
+          .where(eb => eb.or([
+            eb('project_id', 'is not', null),
+            eb('app_id', 'is not', null),
+          ]))
+          .where(eb => eb.and([
+            eb.not(
+              eb.exists(
+                eb.selectFrom('projects')
+                  .where('projects.id', '=', eb.ref('permissions.project_id'))
+                  .where('projects.creator_user_id', '=', userId),
+              ),
+            ),
+            eb.not(
+              eb.exists(
+                eb.selectFrom('chats')
+                  .where('chats.id', '=', eb.ref('permissions.chat_id'))
+                  .where('chats.creator_user_id', '=', userId),
+              ),
+            ),
+          ]))
+          .returning([
+            'id',
+            'project_id as projectId',
+            'app_id as appId',
+            'chat_id as chatId',
+          ])
+          .execute(),
+      ),
+      DatabaseError.tryTask,
+      TE.map(
+        A.reduce(
+          {
+            projectsIds: [] as TableId[],
+            appsIds: [] as TableId[],
+            chatsIds: [] as TableUuid[],
+          },
+          (acc, { projectId, appId, chatId }) => ({
+            ...acc,
+            projectsIds: projectId ? [...acc.projectsIds, projectId] : acc.projectsIds,
+            appsIds: appId ? [...acc.appsIds, appId] : acc.appsIds,
+            chatsIds: chatId ? [...acc.chatsIds, chatId] : acc.chatsIds,
+          }),
+        ),
+      ),
     );
   };
 

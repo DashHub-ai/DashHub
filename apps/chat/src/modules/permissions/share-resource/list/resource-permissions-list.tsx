@@ -25,9 +25,7 @@ export function ResourcePermissionsList({ creator, permissions, onChange }: Prop
   const t = useI18n().pack.permissions.modal.list;
 
   const groupPermissions = permissions.filter(isSdkPermissionOfTargetType('group'));
-  const userPermissions = permissions
-    .filter(isSdkPermissionOfTargetType('user'))
-    .filter(user => !creator || user.target.user.id !== creator.id);
+  const userPermissions = permissions.filter(isSdkPermissionOfTargetType('user'));
 
   const onChangeUserAccessLevel = (user: SdkUserListItemT) => (accessLevel: SdkPermissionAccessLevelT) => {
     const newUserPermissions = userPermissions.map((permission) => {
@@ -86,7 +84,7 @@ export function ResourcePermissionsList({ creator, permissions, onChange }: Prop
             <PermissionOwnerItem creator={creator} />
           )}
 
-          {userPermissions.map(permission => (
+          {userPermissions.map(permission => (!creator || permission.target.user.id !== creator.id) && (
             <PermissionUserItem
               key={permission.target.user.id}
               user={permission.target.user}

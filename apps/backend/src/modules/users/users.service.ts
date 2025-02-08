@@ -62,6 +62,7 @@ export class UsersService implements WithAuthFirewall<UsersFirewall> {
   archive = (id: SdkTableRowIdT) => pipe(
     this.repo.archive({ id }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
+    TE.tap(() => this.permissionsService.deleteUserExternalResourcesPermissions(id)),
   );
 
   archiveSeqStream = (stream: AsyncIterableIterator<TableId[]>) => async () =>

@@ -13,9 +13,13 @@ export function CardRecordPermissionsRow({ record }: Props) {
   const hasPermissions = record.permissions?.current && record.permissions.current.length !== 1;
 
   return (
-    <div className="flex flex-col items-start gap-y-3">
+    <div className="flex flex-row items-center gap-x-2">
       {hasPermissions && (
         <CardRecordPermissions permissions={record.permissions.current} />
+      )}
+
+      {hasPermissions && record.creator && (
+        <div className="bg-gray-200 mx-1 w-[1px] h-4" />
       )}
 
       {record.creator && (

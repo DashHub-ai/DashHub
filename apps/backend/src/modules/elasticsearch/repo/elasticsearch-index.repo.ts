@@ -185,8 +185,12 @@ export function createElasticsearchIndexRepo<
     findAndIndexDocumentsByIds = (
       ids: RelaxedId[],
       overrideIndexName: string = aliasIndexName,
-    ) =>
-      pipe(
+    ) => {
+      if (!ids.length) {
+        return TE.of(undefined);
+      }
+
+      return pipe(
         TaggedError.tryUnsafeTask(EsIndexingError, async () => this.findEntities(ids)),
         TE.chainW(
           documents =>
@@ -195,6 +199,7 @@ export function createElasticsearchIndexRepo<
               : TE.right(undefined),
         ),
       );
+    };
 
     /**
      * Find and reindex documents ids using stream iterator.
