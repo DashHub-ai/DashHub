@@ -72,7 +72,13 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
       TE.Do,
       TE.apS('summarized', this.aiConnectorService.executePrompt({
         aiModel: summarizeAiModel,
-        message: `Summarize, max 3 sentences: ${text}.`,
+        message: [
+          'Create a document summary focusing on main topics, key points and context (4-5 sentences).',
+          'Include important facts, figures, and relationships between concepts if present.',
+          'If the content appears empty or unsupported, respond with "This file appears to be empty or contains unsupported content."',
+          `Content to summarize: ${text}`,
+          `File: ${fileName}`,
+        ].join('\n'),
       })),
       TE.apS('embedding', this.aiConnectorService.executeEmbeddingPrompt({
         aiModel,
