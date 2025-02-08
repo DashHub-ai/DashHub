@@ -11,11 +11,11 @@ import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';
 import { AppsCategoriesSearchSelect } from '~/modules/apps-categories';
 import { ShareResourceFormGroup } from '~/modules/permissions';
-import { FormField, Input, SelectGenericFileInput, TextArea } from '~/ui';
+import { FormField, Input, NumericInput, SelectGenericFileInput, TextArea } from '~/ui';
 
 type Value = Pick<
   SdkUpdateAppInputT,
-  'name' | 'chatContext' | 'description' | 'logo' | 'category'
+  'name' | 'chatContext' | 'description' | 'logo' | 'category' | 'promotion'
 > & {
   permissions?: SdkPermissionT[] | null;
   aiModel: SdkTableRowWithIdNameT | null;
@@ -74,6 +74,19 @@ export const AppSharedFormFields = controlled<Value, AppSharedFormFieldsProps>((
           rows={4}
           required
           {...bind.path('description')}
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.promotion.label}
+        {...validation.extract('promotion')}
+      >
+        <NumericInput
+          name="promotion"
+          placeholder={t.fields.promotion.placeholder}
+          required
+          {...bind.path('promotion')}
         />
       </FormField>
 

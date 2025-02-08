@@ -37,6 +37,7 @@ import * as addVisionFlatAIModels from './0035-add-vision-flag-to-ai-models';
 import * as addProjectsToApps from './0036-add-projects-to-apps';
 import * as addCorruptedFlagToMessages from './0037-add-corrupted-flag-to-messages';
 import * as addAIModelToApps from './0038-add-ai-model-to-apps';
+import * as addPromotionToApps from './0039-add-promotion-to-apps';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -78,4 +79,5 @@ export const DB_MIGRATIONS = {
   '0036-add-projects-to-apps': addProjectsToApps,
   '0037-add-corrupted-flag-to-messages': addCorruptedFlagToMessages,
   '0038-add-ai-model-to-apps': addAIModelToApps,
+  '0039-add-promotion-to-apps': addPromotionToApps,
 };

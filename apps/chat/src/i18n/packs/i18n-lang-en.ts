@@ -523,6 +523,10 @@ export const I18N_PACK_EN = {
         label: 'Description',
         placeholder: 'Enter app description',
       },
+      promotion: {
+        label: 'Promotion',
+        placeholder: 'Enter app promotion',
+      },
       aiModel: {
         label: 'Preferred AI model',
       },

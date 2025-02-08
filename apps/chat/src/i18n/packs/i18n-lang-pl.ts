@@ -528,6 +528,10 @@ export const I18N_PACK_PL: I18nLangPack = {
         label: 'Opis',
         placeholder: 'Wpis opis asystenta',
       },
+      promotion: {
+        label: 'Priorytet promocji',
+        placeholder: 'Wpisz priorytet promocji',
+      },
       logo: {
         label: 'Logo',
       },

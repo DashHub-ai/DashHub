@@ -5,18 +5,20 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type {
+  SdkAppsSortT,
   SdkCountedIdRecordT,
   SdkSearchAppItemT,
   SdkSearchAppsInputT,
   SdkSearchAppsOutputT,
 } from '@llm/sdk';
 
-import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
+import { isNil, type Nullable, pluck, rejectFalsyItems } from '@llm/commons';
 import { AppsCategoriesEsTreeRepo } from '~/modules/apps-categories/elasticsearch';
 import {
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
+  createSortFieldQuery,
 } from '~/modules/elasticsearch';
 import {
   createEsPermissionsFilters,
@@ -119,7 +121,22 @@ export class AppsEsSearchRepo {
               ),
           ),
       ])
-      .sorts(createScoredSortFieldQuery(dto.sort));
+      .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort));
+
+  private static createAppsSortFieldQuery = (sort: Nullable<SdkAppsSortT>) => {
+    switch (sort) {
+      case undefined:
+      case null:
+      case 'promotion:desc':
+        return [
+          esb.sort('promotion', 'desc'),
+          createSortFieldQuery('createdAt:desc'),
+        ];
+
+      default:
+        return createScoredSortFieldQuery(sort);
+    }
+  };
 
   private static mapCategoriesAggregations = (aggregations: any) =>
     aggregations.global_categories.filtered.terms.buckets.map((bucket: any): SdkCountedIdRecordT => ({
@@ -142,5 +159,6 @@ export class AppsEsSearchRepo {
       permissions: mapRawEsDocToSdkPermissions(source.permissions),
       logo: source.logo && camelcaseKeys(source.logo),
       aiModel: source.ai_model,
+      promotion: source.promotion,
     });
 }

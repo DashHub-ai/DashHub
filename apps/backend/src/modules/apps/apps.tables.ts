@@ -21,6 +21,7 @@ export type AppsTable = TableWithDefaultColumns &
     logo_s3_resource_id: TableId | null;
     project_id: TableId | null;
     ai_model_id: TableId | null;
+    promotion: number;
   };
 
 export type AppTableRow = NormalizeSelectTableRow<AppsTable>;

@@ -36,6 +36,9 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         project: createIdNameObjectMapping(),
         organization: createIdNameObjectMapping(),
         category: createIdNameObjectMapping(),
+        promotion: {
+          type: 'integer',
+        },
         description: {
           type: 'text',
           analyzer: 'folded_lowercase_analyzer',
