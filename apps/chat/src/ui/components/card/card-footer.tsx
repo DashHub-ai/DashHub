@@ -6,7 +6,7 @@ type CardFooterProps = {
 
 export function CardFooter({ children }: CardFooterProps) {
   return (
-    <div className="flex flex-row justify-between items-center mt-auto py-1">
+    <div className="flex flex-row justify-between items-end mt-auto py-1">
       {children}
     </div>
   );
