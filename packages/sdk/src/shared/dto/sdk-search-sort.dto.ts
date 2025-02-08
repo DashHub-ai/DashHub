@@ -19,7 +19,7 @@ export const DEFAULT_SDK_SORT = [
 ] as const satisfies [SdkSortItemT, ...SdkSortItemT[]];
 
 export function SdkSortV<const T extends [SdkSortItemT, ...SdkSortItemT[]]>(values: T) {
-  return z.enum(values).optional().default(values[0]);
+  return z.enum(values).default(values[0]).optional();
 }
 
 export function SdkSortInputV<const T extends [SdkSortItemT, ...SdkSortItemT[]]>(values: T) {
