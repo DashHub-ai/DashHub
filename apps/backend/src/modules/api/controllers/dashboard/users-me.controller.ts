@@ -1,11 +1,14 @@
+import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
+import { z } from 'zod';
 
-import { SdkUpdateUserInputV, type UsersMeSdk } from '@llm/sdk';
+import { SdkStrictJsonV, SdkUpdateUserInputV, type UsersMeSdk } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
 import { UsersService } from '~/modules/users';
 
 import {
+  extractFileOrListItemOrNilTE,
   mapDbRecordAlreadyExistsToSdkError,
   mapDbRecordNotFoundToSdkError,
   mapEsDocumentNotFoundToSdkError,
@@ -35,15 +38,26 @@ export class UsersMeController extends AuthorizedController {
       )
       .put(
         '/',
-        sdkSchemaValidator('json', SdkUpdateUserInputV),
-        async context => pipe(
-          context.req.valid('json'),
-          usersService.asUser(context.var.jwt).me.update,
-          mapDbRecordAlreadyExistsToSdkError,
-          mapDbRecordNotFoundToSdkError,
-          rejectUnsafeSdkErrors,
-          serializeSdkResponseTE<ReturnType<UsersMeSdk['update']>>(context),
-        ),
+        sdkSchemaValidator('form', z.object({
+          avatar: z.instanceof(File).optional().nullable(),
+          data: SdkStrictJsonV.pipe(SdkUpdateUserInputV),
+        })),
+        async (context) => {
+          const { avatar, data } = context.req.valid('form');
+
+          return pipe(
+            extractFileOrListItemOrNilTE(avatar),
+            TE.chainW(extractedAvatar => usersService.asUser(context.var.jwt).update({
+              ...data,
+              id: context.var.jwt.sub,
+              avatar: extractedAvatar,
+            })),
+            mapDbRecordAlreadyExistsToSdkError,
+            mapDbRecordNotFoundToSdkError,
+            rejectUnsafeSdkErrors,
+            serializeSdkResponseTE<ReturnType<UsersMeSdk['update']>>(context),
+          );
+        },
       );
   }
 }

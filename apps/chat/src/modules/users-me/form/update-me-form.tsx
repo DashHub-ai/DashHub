@@ -3,7 +3,7 @@ import type { SdkUserT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { useUserUpdateForm } from '~/modules/users/form';
 import { UserUpdateAuthMethodsFormField } from '~/modules/users/form/update/fields';
-import { FormErrorAlert, FormField, Input, SaveButton } from '~/ui';
+import { FormErrorAlert, FormField, Input, SaveButton, SelectGenericFileInput } from '~/ui';
 
 type Props = {
   defaultValue: SdkUserT;
@@ -11,7 +11,7 @@ type Props = {
 
 export function UpdateMeForm({ defaultValue }: Props) {
   const t = useI18n().pack.users.form;
-  const { handleSubmitEvent, validator, bind, submitState, isDirty } = useUserUpdateForm({
+  const { handleSubmitEvent, validator, bind, submitState, value } = useUserUpdateForm({
     defaultValue,
   });
 
@@ -45,6 +45,19 @@ export function UpdateMeForm({ defaultValue }: Props) {
         />
       </FormField>
 
+      {value.role !== 'root' && (
+        <FormField
+          className="uk-margin"
+          label={t.fields.avatar.label}
+        >
+          <SelectGenericFileInput
+            name="avatar"
+            accept="image/*"
+            {...bind.path('avatar')}
+          />
+        </FormField>
+      )}
+
       <UserUpdateAuthMethodsFormField
         {...validator.errors.extract('auth', { nested: true })}
         {...bind.path('auth')}
@@ -55,7 +68,6 @@ export function UpdateMeForm({ defaultValue }: Props) {
       <div className="flex flex-row justify-end">
         <SaveButton
           type="submit"
-          disabled={!isDirty}
           loading={submitState.loading}
         />
       </div>

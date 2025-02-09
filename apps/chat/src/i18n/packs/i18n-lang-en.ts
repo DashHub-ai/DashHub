@@ -789,6 +789,9 @@ export const I18N_PACK_EN = {
             label: 'Role in organization',
           },
         },
+        avatar: {
+          label: 'Avatar',
+        },
         auth: {
           label: 'Authentication',
           email: {

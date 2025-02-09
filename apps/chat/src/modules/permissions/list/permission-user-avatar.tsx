@@ -1,7 +1,7 @@
 import type { SdkPermissionAccessLevelT, SdkUserListItemT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
-import { ColorizedAvatar, type ColorizedAvatarSize, Tooltip } from '~/ui';
+import { Avatar, ColorizedAvatar, type ColorizedAvatarSize, Tooltip } from '~/ui';
 
 type Props = {
   user: SdkUserListItemT;
@@ -11,17 +11,30 @@ type Props = {
 
 export function PermissionUserAvatar({ user, accessLevel, size = 'sm' }: Props) {
   const { accessLevels } = useI18n().pack.permissions;
+  const sharedProps = {
+    name: user.name,
+    size,
+    className: 'shadow-sm transition-transform hover:-translate-y-1 transform',
+  };
 
   return (
-    <Tooltip content={`${user.email} (${accessLevels[accessLevel]})`}>
-      <span className="inline-block transform transition-transform hover:-translate-y-1">
-        <ColorizedAvatar
-          id={user.id}
-          name={user.name}
-          size={size}
-          className="shadow-sm"
-        />
-      </span>
+    <Tooltip
+      content={`${user.email} (${accessLevels[accessLevel]})`}
+      wrapperClassName="inline-flex"
+    >
+      {user.avatar
+        ? (
+            <Avatar
+              {...sharedProps}
+              src={user.avatar.publicUrl}
+            />
+          )
+        : (
+            <ColorizedAvatar
+              {...sharedProps}
+              id={user.id}
+            />
+          )}
     </Tooltip>
   );
 }

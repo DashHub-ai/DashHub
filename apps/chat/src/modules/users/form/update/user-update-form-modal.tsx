@@ -43,6 +43,7 @@ export function UserUpdateFormModal(
       auth: user.auth,
       email: user.email,
       name: user.name,
+      avatar: user.avatar,
     };
 
     return (

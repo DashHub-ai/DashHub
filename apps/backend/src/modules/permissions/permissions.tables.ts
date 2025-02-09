@@ -6,9 +6,7 @@ import type {
   NormalizeInsertTableRow,
   NormalizeSelectTableRow,
   TableId,
-  TableRowWithId,
   TableRowWithIdName,
-  TableRowWithUuid,
   TableUuid,
   TableWithDefaultColumns,
 } from '../database';
@@ -36,21 +34,3 @@ export type PermissionGroupRelationTableRow =
   & {
     users: UserTableRowBaseRelation[];
   };
-
-export type PermissionTableRowWithRelations =
-  & Omit<PermissionTableRow, 'projectId' | 'chatId' | 'appId' | 'userId' | 'groupId'>
-  & {
-    project: TableRowWithId | null;
-    app: TableRowWithId | null;
-    chat: TableRowWithUuid | null;
-  }
-  & (
-    {
-      user: null;
-      group: PermissionGroupRelationTableRow;
-    }
-    | {
-      user: UserTableRowBaseRelation;
-      group: null;
-    }
-  );

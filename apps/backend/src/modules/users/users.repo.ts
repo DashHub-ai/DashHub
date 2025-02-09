@@ -1,11 +1,12 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
+import { sql } from 'kysely';
 import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateUserInputT, SdkTableRowWithIdT, SdkUpdateUserInputT } from '@llm/sdk';
 
-import { catchTaskEitherTagError, isNil, panicError } from '@llm/commons';
+import { catchTaskEitherTagError, DistributiveOverwrite, isNil, panicError } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -17,6 +18,7 @@ import {
   type KyselyQueryCreator,
   RecordsArchiveAttrs,
   type TableId,
+  TableRowWithId,
   type TransactionalAttrs,
   tryGetFirstOrNotExists,
   tryReuseOrCreateTransaction,
@@ -80,7 +82,12 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
       TE.map(() => refreshToken),
     );
 
-  update = ({ forwardTransaction, id, value }: TransactionalAttrs<{ id: TableId; value: SdkUpdateUserInputT; }>) => {
+  update = ({ forwardTransaction, id, value }: TransactionalAttrs<{
+    id: TableId;
+    value: DistributiveOverwrite<SdkUpdateUserInputT, {
+      avatar?: TableRowWithId | null;
+    }>;
+  }>) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.db,
       forwardTransaction,
@@ -95,6 +102,7 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           name: value.name,
           active: value.active,
           archiveProtection: value.archiveProtection,
+          avatarS3ResourceId: value.avatar?.id ?? null,
         },
       }),
       TE.tap(({ id }) => pipe(
@@ -120,7 +128,11 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
     ));
   };
 
-  create = ({ forwardTransaction, value }: TransactionalAttrs<{ value: SdkCreateUserInputT; }>) => {
+  create = ({ forwardTransaction, value }: TransactionalAttrs<{
+    value: DistributiveOverwrite<SdkCreateUserInputT, {
+      avatar?: TableRowWithId | null;
+    }>;
+  }>) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.db,
       forwardTransaction,
@@ -135,6 +147,7 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           active: value.active,
           role: value.role,
           archiveProtection: value.archiveProtection,
+          avatarS3ResourceId: value.avatar?.id ?? null,
         },
       }),
       TE.tap(({ id }) => pipe(
@@ -161,7 +174,11 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
     ));
   };
 
-  createIfNotExists = ({ forwardTransaction, value }: TransactionalAttrs<{ value: SdkCreateUserInputT; }>) => {
+  createIfNotExists = ({ forwardTransaction, value }: TransactionalAttrs<{
+    value: DistributiveOverwrite<SdkCreateUserInputT, {
+      avatar?: TableRowWithId | null;
+    }>;
+  }>) => {
     const transaction = tryReuseOrCreateTransaction({
       db: this.db,
       forwardTransaction,
@@ -201,10 +218,16 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           qb
             .selectFrom(this.table)
             .where('users.id', 'in', ids)
+
             .leftJoin('organizations_users', 'organizations_users.user_id', 'users.id')
             .leftJoin('organizations', 'organizations.id', 'organization_id')
+
             .leftJoin('auth_passwords', 'auth_passwords.user_id', 'users.id')
             .leftJoin('auth_emails', 'auth_emails.user_id', 'users.id')
+
+            .leftJoin('s3_resources', 's3_resources.id', 'users.avatar_s3_resource_id')
+            .leftJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
+
             .selectAll('users')
             .select([
               'organizations_users.role as organization_role',
@@ -213,6 +236,19 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
 
               'auth_passwords.id as auth_password_id',
               'auth_emails.id as auth_email_id',
+
+              // Avatar
+              's3_resources.id as avatar_s3_resource_id',
+              's3_resources.name as avatar_s3_resource_name',
+              's3_resources.created_at as avatar_s3_resource_created_at',
+              's3_resources.updated_at as avatar_s3_resource_updated_at',
+              's3_resources.type as avatar_s3_resource_type',
+              's3_resources.s3_key as avatar_s3_resource_s3_key',
+              eb => sql<string>`${eb.ref('s3_resources_buckets.public_base_url')} || '/' || ${eb.ref('s3_resources.s3_key')}`.as('avatar_s3_resource_public_url'),
+
+              // Logo bucket
+              's3_resources_buckets.id as avatar_s3_resource_bucket_id',
+              's3_resources_buckets.name as avatar_s3_resource_bucket_name',
             ])
             .limit(ids.length)
             .execute(),
@@ -225,6 +261,18 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           organization_role: orgRole,
           auth_password_id: authPasswordId,
           auth_email_id: authEmailId,
+
+          avatar_s3_resource_id: avatarId,
+          avatar_s3_resource_name: avatarName,
+          avatar_s3_resource_created_at: avatarCreatedAt,
+          avatar_s3_resource_updated_at: avatarUpdatedAt,
+          avatar_s3_resource_type: avatarType,
+          avatar_s3_resource_s3_key: avatarS3Key,
+          avatar_s3_resource_public_url: avatarPublicUrl,
+
+          avatar_s3_resource_bucket_id: avatarBucketId,
+          avatar_s3_resource_bucket_name: avatarBucketName,
+
           ...user
         }): UserTableRowWithRelations => {
           const baseFields = {
@@ -237,6 +285,21 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
                 enabled: !isNil(authEmailId),
               },
             },
+            avatar: avatarId
+              ? {
+                  id: avatarId,
+                  name: avatarName!,
+                  createdAt: avatarCreatedAt!,
+                  updatedAt: avatarUpdatedAt!,
+                  type: avatarType!,
+                  s3Key: avatarS3Key!,
+                  publicUrl: avatarPublicUrl!,
+                  bucket: {
+                    id: avatarBucketId!,
+                    name: avatarBucketName!,
+                  },
+                }
+              : null,
           };
 
           switch (baseFields.role) {

@@ -38,6 +38,7 @@ import * as addProjectsToApps from './0036-add-projects-to-apps';
 import * as addCorruptedFlagToMessages from './0037-add-corrupted-flag-to-messages';
 import * as addAIModelToApps from './0038-add-ai-model-to-apps';
 import * as addPromotionToApps from './0039-add-promotion-to-apps';
+import * as addUsersAvatars from './0040-add-users-avatars';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -80,4 +81,5 @@ export const DB_MIGRATIONS = {
   '0037-add-corrupted-flag-to-messages': addCorruptedFlagToMessages,
   '0038-add-ai-model-to-apps': addAIModelToApps,
   '0039-add-promotion-to-apps': addPromotionToApps,
+  '0040-add-users-avatars': addUsersAvatars,
 };

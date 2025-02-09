@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type { SdkCreateUserInputT } from '@llm/sdk';
 
-import { tapTaskEither, toVoidTE } from '@llm/commons';
+import { type DistributiveOmit, tapTaskEither, toVoidTE } from '@llm/commons';
 import { genRandomToken } from '~/helpers';
 import { ConfigService } from '~/modules/config';
 
@@ -22,7 +22,7 @@ export class UsersBootService {
 
   ensureRootUserExists = () => pipe(
     TE.Do,
-    TE.bind('dto', (): TE.TaskEither<unknown, SdkCreateUserInputT> => {
+    TE.bind('dto', (): TE.TaskEither<unknown, DistributiveOmit<SdkCreateUserInputT, 'avatar'>> => {
       const { configService } = this;
       const { root } = configService.config.users;
 

@@ -1,6 +1,10 @@
+import { pipe } from 'fp-ts/lib/function';
+
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
-  putPayload,
+  formDataPayload,
+  jsonToFormData,
+  type SdkInvalidFileFormatError,
   type SdkRecordAlreadyExistsError,
   type SdkRecordNotFoundError,
 } from '~/shared';
@@ -19,12 +23,18 @@ export class UsersMeSdk extends AbstractNestedSdkWithAuth {
       url: this.endpoint('/'),
     });
 
-  update = (data: SdkUpdateUserInputT) =>
+  update = ({ avatar, ...data }: SdkUpdateUserInputT) =>
     this.fetch<
       SdkUpdateUserOutputT,
-      SdkRecordAlreadyExistsError | SdkRecordNotFoundError
+      SdkRecordAlreadyExistsError | SdkRecordNotFoundError | SdkInvalidFileFormatError
     >({
       url: this.endpoint('/'),
-      options: putPayload(data),
+      options: pipe(
+        jsonToFormData({
+          avatar,
+          data: JSON.stringify(data),
+        }),
+        formDataPayload('PUT'),
+      ),
     });
 };

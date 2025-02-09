@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import type { SdkTableRowIdT } from '@llm/sdk';
 
-const SIZE_CLASSES = {
+export const AVATAR_SIZE_CLASSES = {
   xs: 'h-6 w-6 text-xs',
   sm: 'h-8 w-8 text-sm',
   md: 'h-10 w-10 text-base',
@@ -23,7 +23,7 @@ const COLORS = [
 let COLOR_COUNTER = 0;
 const COLOR_CACHE = new Map<string, string>();
 
-export type ColorizedAvatarSize = keyof typeof SIZE_CLASSES;
+export type ColorizedAvatarSize = keyof typeof AVATAR_SIZE_CLASSES;
 
 type Props = {
   className?: string;
@@ -48,15 +48,17 @@ export function ColorizedAvatar({ id, className, name, size = 'md' }: Props) {
   }, [id, name]);
 
   return (
-    <div
+    <span
       className={clsx(
-        'inline-flex justify-center items-center rounded-full font-semibold select-none',
-        SIZE_CLASSES[size],
+        'inline-flex relative justify-center items-center rounded-full font-semibold select-none',
+        AVATAR_SIZE_CLASSES[size],
         colorClass,
         className,
       )}
     >
-      {firstLetter}
-    </div>
+      <span className="absolute flex justify-center items-center w-full h-full">
+        {firstLetter}
+      </span>
+    </span>
   );
 }

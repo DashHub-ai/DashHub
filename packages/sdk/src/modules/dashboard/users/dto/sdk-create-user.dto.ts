@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-import { SdkTableRowWithArchiveProtectionV, SdkTableRowWithIdV } from '~/shared';
+import {
+  SdkOptionalFileUploadV,
+  SdkTableRowWithArchiveProtectionV,
+  SdkTableRowWithIdV,
+} from '~/shared';
 
 import { SdkOrganizationUserRoleV } from '../../organizations/dto/sdk-organization-user.dto';
 import { SdkCreateUserAuthMethodsV } from './auth';
@@ -19,6 +23,7 @@ export const SdkCreateUserInputV = z.object({
   name: z.string(),
   active: z.boolean(),
   auth: SdkCreateUserAuthMethodsV,
+  avatar: SdkOptionalFileUploadV,
 })
   .merge(SdkTableRowWithArchiveProtectionV)
   .and(

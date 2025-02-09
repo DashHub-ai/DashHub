@@ -59,7 +59,7 @@ export function Tooltip({ children, content, className, wrapperClassName }: Prop
           <div
             ref={refs.setFloating}
             className={clsx(
-              'z-50 bg-gray-900 shadow-lg px-3 py-2 rounded-md text-sm text-white',
+              'z-50 bg-gray-900 shadow-lg px-3 py-2 rounded-md text-white text-sm',
               className,
             )}
             style={floatingStyles}

@@ -1,3 +1,5 @@
+import camelcaseKeys from 'camelcase-keys';
+
 import type { CamelCaseToSnakeCaseObject } from '@llm/commons';
 import type { SdkPermissionsT, SdkPermissionT } from '@llm/sdk';
 
@@ -16,6 +18,6 @@ export function mapRawEsDocToSdkPermissions(rawDoc: EsPermissionsDocument): SdkP
 function mapRawEsDocToSdkPermissionsList(rawDocs: CamelCaseToSnakeCaseObject<SdkPermissionT>[]): SdkPermissionT[] {
   return rawDocs.map(doc => ({
     accessLevel: doc.access_level,
-    target: doc.target,
+    target: camelcaseKeys(doc.target, { deep: true }),
   }));
 }
