@@ -6,6 +6,7 @@ import { z } from 'zod';
 import {
   type AppsSdk,
   SdkCreateAppInputV,
+  SdkOptionalFileUploadV,
   SdkSearchAppsInputV,
   SdkStrictJsonV,
   SdkUpdateAppInputV,
@@ -84,7 +85,7 @@ export class AppsController extends AuthorizedController {
       .post(
         '/',
         sdkSchemaValidator('form', z.object({
-          logo: z.instanceof(File).optional().nullable(),
+          logo: SdkOptionalFileUploadV,
           data: SdkStrictJsonV.pipe(SdkCreateAppInputV.omit({
             logo: true,
           })),
@@ -107,7 +108,7 @@ export class AppsController extends AuthorizedController {
       .put(
         '/:id',
         sdkSchemaValidator('form', z.object({
-          logo: z.instanceof(File).optional().nullable(),
+          logo: SdkOptionalFileUploadV,
           data: SdkStrictJsonV.pipe(SdkUpdateAppInputV.omit({
             logo: true,
           })),

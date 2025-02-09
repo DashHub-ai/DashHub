@@ -29,7 +29,7 @@ export const ChatAttachedApp = memo(({ app, showPrompts, onSendChatMessage }: Ch
       <div className="flex flex-col items-center space-y-6 p-4 rounded-lg">
         {data.logo
           ? (
-              <img src={data.logo.publicUrl} alt={data.name} className="rounded-2xl w-16 h-16" />
+              <img src={data.logo.publicUrl} alt={data.name} className="rounded-2xl w-16 h-16 object-contain" />
             )
           : (
               <Bot className="rounded-2xl w-16 h-16 text-gray-400" />
@@ -57,7 +57,7 @@ export const ChatAttachedApp = memo(({ app, showPrompts, onSendChatMessage }: Ch
               <button
                 key={prompt}
                 type="button"
-                className="flex items-center gap-2 border-gray-200 bg-white shadow-sm hover:shadow px-4 py-3 border rounded-lg text-gray-700 text-sm transition-all group hover:scale-[1.01]"
+                className="group flex items-center gap-2 bg-white shadow-sm hover:shadow px-4 py-3 border border-gray-200 rounded-lg text-gray-700 text-sm hover:scale-[1.01] transition-all"
                 onClick={() => onSendChatMessage({ content: prompt })}
               >
                 <span className="flex-1">{prompt}</span>

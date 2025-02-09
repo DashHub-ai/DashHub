@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 import {
   SdkCreateUserInputV,
+  SdkOptionalFileUploadV,
   SdkSearchUsersInputV,
   SdkStrictJsonV,
   SdkUpdateUserInputV,
@@ -67,7 +68,7 @@ export class UsersController extends AuthorizedController {
       .post(
         '/',
         sdkSchemaValidator('form', z.object({
-          avatar: z.instanceof(File).optional().nullable(),
+          avatar: SdkOptionalFileUploadV,
           data: SdkStrictJsonV.pipe(SdkCreateUserInputV),
         })),
         async (context) => {
@@ -88,7 +89,7 @@ export class UsersController extends AuthorizedController {
       .put(
         '/:id',
         sdkSchemaValidator('form', z.object({
-          avatar: z.instanceof(File).optional().nullable(),
+          avatar: SdkOptionalFileUploadV,
           data: SdkStrictJsonV.pipe(SdkUpdateUserInputV),
         })),
         async (context) => {

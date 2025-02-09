@@ -1,6 +1,7 @@
 import { taskEither as TE } from 'fp-ts';
 
 import type { Nullable } from '@llm/commons';
+import type { TableRowWithId } from '~/modules/database';
 
 import { SdkInvalidFileFormatError, type SdkTableRowWithIdT } from '@llm/sdk';
 
@@ -24,12 +25,16 @@ export function extractFileOrListItemTE(file: File) {
   );
 }
 
-export function extractFileOrListItemOrNilTE(file: Nullable<File>): TE.TaskEither<
+export function extractFileOrListItemOrNilTE(file: Nullable<File | TableRowWithId>): TE.TaskEither<
   SdkInvalidFileFormatError,
-  ExtractedFile | null
+  ExtractedFile | TableRowWithId | null
 > {
   if (!file) {
     return TE.right(null);
+  }
+
+  if ('id' in file) {
+    return TE.right(file);
   }
 
   return extractFileOrListItemTE(file);

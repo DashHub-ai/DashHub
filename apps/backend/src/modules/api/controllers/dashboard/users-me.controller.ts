@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 import { z } from 'zod';
 
-import { SdkStrictJsonV, SdkUpdateUserInputV, type UsersMeSdk } from '@llm/sdk';
+import { SdkOptionalFileUploadV, SdkStrictJsonV, SdkUpdateUserInputV, type UsersMeSdk } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
 import { UsersService } from '~/modules/users';
 
@@ -39,7 +39,7 @@ export class UsersMeController extends AuthorizedController {
       .put(
         '/',
         sdkSchemaValidator('form', z.object({
-          avatar: z.instanceof(File).optional().nullable(),
+          avatar: SdkOptionalFileUploadV,
           data: SdkStrictJsonV.pipe(SdkUpdateUserInputV),
         })),
         async (context) => {
