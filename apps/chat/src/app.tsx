@@ -1,7 +1,7 @@
 import { HelmetProvider } from 'react-helmet-async';
 
 import { ModalsContextProvider } from '@llm/commons-front';
-import { SdkProvider } from '@llm/sdk';
+import { SdkMeProvider, SdkProvider } from '@llm/sdk';
 import { useConfig } from '~/config';
 import { I18nProvider } from '~/i18n';
 import { Router } from '~/router';
@@ -19,14 +19,16 @@ export function App() {
           storageKey: 'llm-chat-sdk-tokens',
         }}
       >
-        <I18nProvider>
-          <WorkspaceProvider>
-            <ModalsContextProvider>
-              <FavoriteAppsValidator />
-              <Router />
-            </ModalsContextProvider>
-          </WorkspaceProvider>
-        </I18nProvider>
+        <SdkMeProvider>
+          <I18nProvider>
+            <WorkspaceProvider>
+              <ModalsContextProvider>
+                <FavoriteAppsValidator />
+                <Router />
+              </ModalsContextProvider>
+            </WorkspaceProvider>
+          </I18nProvider>
+        </SdkMeProvider>
       </SdkProvider>
     </HelmetProvider>
   );
