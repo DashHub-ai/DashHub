@@ -312,6 +312,11 @@ export const I18N_PACK_PL: I18nLangPack = {
         description: 'Zarządzaj ustawieniami',
       },
       title: 'Ustawienia',
+      pages: {
+        me: {
+          title: 'Mój profil',
+        },
+      },
     },
     home: {
       meta: {

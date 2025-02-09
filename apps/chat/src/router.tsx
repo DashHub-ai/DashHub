@@ -12,6 +12,7 @@ import {
   HomeRoute,
   LoginRoute,
   ManagementRoute,
+  MeSettingsRoute,
   ProjectRoute,
   ProjectsRoute,
   S3BucketsManagementRoute,
@@ -72,12 +73,16 @@ function LoggedInRouter() {
       </Route>
       <Route path={sitemap.apps.index.raw} component={AppsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
-      <Route path={sitemap.settings} component={SettingsRoute} />
+
+      <Route path={sitemap.settings.me} component={MeSettingsRoute} />
+      <Route path={sitemap.settings.index} component={SettingsRoute} />
+
       <Route path={sitemap.management.s3Buckets} component={S3BucketsManagementRoute} />
       <Route path={sitemap.management.aiModels} component={AIModelsManagementRoute} />
       <Route path={sitemap.management.users} component={UsersManagementRoute} />
       <Route path={sitemap.management.usersGroups} component={UsersGroupsManagementRoute} />
       <Route path={sitemap.management.index} component={ManagementRoute} />
+
       <Route path={sitemap.forceRedirect.raw} component={ForceRedirectRoute} />
 
       <Route<SdkTableRowWithUuidT> path={sitemap.chat.raw}>

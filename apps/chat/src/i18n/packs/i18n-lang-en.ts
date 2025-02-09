@@ -310,6 +310,11 @@ export const I18N_PACK_EN = {
         description: 'Manage settings',
       },
       title: 'Settings',
+      pages: {
+        me: {
+          title: 'My Profile',
+        },
+      },
     },
     home: {
       meta: {

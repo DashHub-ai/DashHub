@@ -13,4 +13,5 @@ export * from './search-bar';
 export * from './shared';
 export * from './users';
 export * from './users-groups';
+export * from './users-me';
 export * from './workspace';
