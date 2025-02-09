@@ -1,8 +1,7 @@
 import { pipe } from 'fp-ts/lib/function';
-import { type PropsWithChildren, useMemo } from 'react';
+import { type PropsWithChildren, useEffect, useMemo } from 'react';
 
 import { createStoreSubscriber, tapTaskEither } from '@llm/commons';
-import { useAfterMount } from '@llm/commons-front';
 
 import { useSdk } from '../hooks';
 import { SdkMeContext, type SdkMeContextT, type SdkMeSnapshotT } from './sdk-me-context';
@@ -39,9 +38,9 @@ export function SdkMeProvider({ children }: PropsWithChildren) {
     };
   }, [sdk.session.isLoggedIn]);
 
-  useAfterMount(() => {
+  useEffect(() => {
     store?.reload();
-  });
+  }, [sdk.session.isLoggedIn]);
 
   return (
     <SdkMeContext value={store}>

@@ -1,7 +1,6 @@
 import { LayersIcon, SettingsIcon } from 'lucide-react';
 
-import type { SdkCountedAppsCategoriesTreeT } from '@llm/sdk';
-
+import { type SdkCountedAppsCategoriesTreeT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 
 import { useManageAppsCategoriesModal } from '../modal/use-manage-apps-categories-modal';
@@ -19,6 +18,7 @@ type Props =
 export function AppsCategoriesSidebar({ tree, selected, onSelect, onReload }: Props) {
   const t = useI18n().pack.appsCategories.sidebar;
   const manageModal = useManageAppsCategoriesModal();
+  const { guard } = useSdkForLoggedIn();
 
   const onShowSettings = async () => {
     await manageModal.show();
@@ -27,16 +27,18 @@ export function AppsCategoriesSidebar({ tree, selected, onSelect, onReload }: Pr
 
   return (
     <AppsCategoriesSidebarLayout
-      suffix={(
-        <button
-          type="button"
-          className="hover:bg-hover p-1 rounded text-muted-foreground"
-          disabled={manageModal.toggled}
-          onClick={() => void onShowSettings()}
-        >
-          <SettingsIcon size={16} />
-        </button>
-      )}
+      {...guard.is.minimum.techUser && {
+        suffix: (
+          <button
+            type="button"
+            className="hover:bg-hover p-1 rounded text-muted-foreground"
+            disabled={manageModal.toggled}
+            onClick={() => void onShowSettings()}
+          >
+            <SettingsIcon size={16} />
+          </button>
+        ),
+      }}
     >
       <ul className="space-y-1">
         <li>
