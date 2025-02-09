@@ -181,7 +181,7 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
 
             {!readOnly && !isYou && (
               <div className="flex justify-between items-center">
-                <div className="flex items-center gap-4 w-full">
+                <div className="flex flex-wrap items-center gap-4 w-full">
                   <ToolbarSmallActionButton
                     title={t.actions.reply}
                     icon={<ReplyIcon size={14} className="text-gray-500" />}
