@@ -7,11 +7,14 @@ import type {
 } from '@llm/sdk';
 import type {
   NormalizeSelectTableRow,
+  TableId,
   TableRowWithIdName,
   TableWithArchivedAtColumn,
   TableWithArchiveProtectionColumn,
   TableWithDefaultColumns,
 } from '~/modules/database';
+
+import type { S3ResourcesTableRowWithRelations } from '../s3';
 
 export type UsersTable = TableWithDefaultColumns &
   TableWithArchivedAtColumn &
@@ -22,15 +25,17 @@ export type UsersTable = TableWithDefaultColumns &
     name: string;
     email: string;
     role: SdkUserRoleT;
+    avatar_s3_resource_id: TableId | null;
   };
 
 export type UserTableRowOrganizationRelation = TableRowWithIdName & {
   role: SdkOrganizationUserRoleT;
 };
 
-export type UserTableRowWithRelations = NormalizeSelectTableRow<UsersTable>
+export type UserTableRowWithRelations = Omit<NormalizeSelectTableRow<UsersTable>, 'avatarS3ResourceId'>
   & {
     auth: SdkEnabledUserAuthMethodsT;
+    avatar: S3ResourcesTableRowWithRelations | null;
   }
   & (
     | { role: 'root'; organization: null; }

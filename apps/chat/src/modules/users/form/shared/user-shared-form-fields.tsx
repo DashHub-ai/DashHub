@@ -1,15 +1,17 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkUserT } from '@llm/sdk';
+import type { SdkOptionalFileUploadT, SdkUserT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
-import { Checkbox, FormField, Input } from '~/ui';
+import { Checkbox, FormField, Input, SelectGenericFileInput } from '~/ui';
 
-type Value = Pick<SdkUserT, 'name' | 'email' | 'active'>;
+type Value = Pick<SdkUserT, 'name' | 'email' | 'active' | 'role'> & {
+  avatar?: SdkOptionalFileUploadT;
+};
 
 type Props = ValidationErrorsListProps<Value>;
 
-export const UserSharedFormFields = controlled<Value, Props>(({ errors, control: { bind } }) => {
+export const UserSharedFormFields = controlled<Value, Props>(({ errors, control: { bind, value } }) => {
   const t = useI18n().pack.users.form;
   const validation = useFormValidatorMessages({ errors });
 
@@ -42,6 +44,19 @@ export const UserSharedFormFields = controlled<Value, Props>(({ errors, control:
           {...bind.path('email')}
         />
       </FormField>
+
+      {value.role !== 'root' && (
+        <FormField
+          className="uk-margin"
+          label={t.fields.avatar.label}
+        >
+          <SelectGenericFileInput
+            name="avatar"
+            accept="image/*"
+            {...bind.path('avatar')}
+          />
+        </FormField>
+      )}
 
       <FormField
         className="uk-margin"

@@ -1,9 +1,12 @@
+import { pipe } from 'fp-ts/lib/function';
+
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
+  formDataPayload,
   getPayload,
+  jsonToFormData,
   patchPayload,
-  postPayload,
-  putPayload,
+  type SdkInvalidFileFormatError,
   type SdkRecordAlreadyExistsError,
   type SdkRecordNotFoundError,
   type SdkTableRowIdT,
@@ -51,18 +54,30 @@ export class UsersSdk extends AbstractNestedSdkWithAuth {
       options: getPayload(),
     });
 
-  create = (data: SdkCreateUserInputT) =>
-    this.fetch<SdkCreateUserOutputT, SdkRecordAlreadyExistsError>({
+  create = ({ avatar, ...data }: SdkCreateUserInputT) =>
+    this.fetch<SdkCreateUserOutputT, SdkRecordAlreadyExistsError | SdkInvalidFileFormatError>({
       url: this.endpoint('/'),
-      options: postPayload(data),
+      options: pipe(
+        jsonToFormData({
+          avatar,
+          data: JSON.stringify(data),
+        }),
+        formDataPayload('POST'),
+      ),
     });
 
-  update = ({ id, ...data }: SdkUpdateUserInputT & SdkTableRowWithIdT) =>
+  update = ({ id, avatar, ...data }: SdkUpdateUserInputT & SdkTableRowWithIdT) =>
     this.fetch<
       SdkUpdateUserOutputT,
-      SdkRecordAlreadyExistsError | SdkRecordNotFoundError
+      SdkRecordAlreadyExistsError | SdkRecordNotFoundError | SdkInvalidFileFormatError
     >({
       url: this.endpoint(`/${id}`),
-      options: putPayload(data),
+      options: pipe(
+        jsonToFormData({
+          avatar,
+          data: JSON.stringify(data),
+        }),
+        formDataPayload('PUT'),
+      ),
     });
 };

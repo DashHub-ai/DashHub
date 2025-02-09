@@ -4,17 +4,19 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import {
   compareSdkOrganizationUserRoles,
   ofSdkUnauthorizedErrorE,
-  type SdkCreateUserInputT,
   type SdkJwtTokenT,
   type SdkSearchUsersInputT,
   type SdkUnauthorizedError,
-  type SdkUpdateUserInputT,
 } from '@llm/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { TableId, TableRowWithId } from '../database';
 import type { PermissionsService } from '../permissions';
-import type { UsersService } from './users.service';
+import type {
+  InternalCreateUserInputT,
+  InternalUpdateUserInputT,
+  UsersService,
+} from './users.service';
 
 export class UsersFirewall extends AuthFirewallService {
   constructor(
@@ -25,7 +27,7 @@ export class UsersFirewall extends AuthFirewallService {
     super(jwt);
   }
 
-  private normalizeCreateUserDto = (dto: SdkCreateUserInputT): E.Either<SdkUnauthorizedError, SdkCreateUserInputT> => {
+  private normalizeCreateUserDto = (dto: InternalCreateUserInputT): E.Either<SdkUnauthorizedError, InternalCreateUserInputT> => {
     const { jwt } = this;
 
     // Root user can create any user
@@ -39,7 +41,7 @@ export class UsersFirewall extends AuthFirewallService {
     }
 
     // Make sure the organization is enforced
-    const dtoWithEnforcedOrganization: SdkCreateUserInputT = {
+    const dtoWithEnforcedOrganization: InternalCreateUserInputT = {
       ...dto,
       role: 'user',
       organization: {
@@ -51,17 +53,17 @@ export class UsersFirewall extends AuthFirewallService {
       },
     };
 
-    // User of certain type cannot create users of higher or equal type
-    if (compareSdkOrganizationUserRoles(jwt.organization.role, dtoWithEnforcedOrganization.organization.role) >= 0) {
+    // User of certain type cannot create users of higher type
+    if (compareSdkOrganizationUserRoles(jwt.organization.role, dtoWithEnforcedOrganization.organization.role) > 0) {
       return ofSdkUnauthorizedErrorE();
     }
 
     return E.right(dtoWithEnforcedOrganization);
   };
 
-  private normalizeUpdateUserDto = (dto: SdkUpdateUserInputT & TableRowWithId): E.Either<
+  private normalizeUpdateUserDto = (dto: InternalUpdateUserInputT & TableRowWithId): E.Either<
     SdkUnauthorizedError,
-    SdkUpdateUserInputT & TableRowWithId
+    InternalUpdateUserInputT & TableRowWithId
   > => {
     const { jwt } = this;
 
@@ -75,8 +77,8 @@ export class UsersFirewall extends AuthFirewallService {
       return ofSdkUnauthorizedErrorE();
     }
 
-    // User of certain type cannot update users of higher or equal type
-    if (compareSdkOrganizationUserRoles(jwt.organization.role, dto.organization.role) >= 0) {
+    // User of certain type cannot update users of higher type
+    if (compareSdkOrganizationUserRoles(jwt.organization.role, dto.organization.role) > 0) {
       return ofSdkUnauthorizedErrorE();
     }
 
@@ -87,6 +89,7 @@ export class UsersFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
       accessLevel: 'write',
       findRecord: this.usersService.get(userId),
+      isOwner: user => user.id === this.jwt.sub,
       refine: (user) => {
         const { jwt } = this;
 
@@ -100,17 +103,8 @@ export class UsersFirewall extends AuthFirewallService {
           return false;
         }
 
-        // Tech user can modify only users of lower type
-        if (compareSdkOrganizationUserRoles(jwt.organization.role, user.organization.role) < 0) {
-          return true;
-        }
-
-        // User itself can modify itself
-        if (this.userId === userId) {
-          return true;
-        }
-
-        return false;
+        // Tech user can modify only users of lower or equal type
+        return compareSdkOrganizationUserRoles(jwt.organization.role, user.organization.role) <= 0;
       },
     });
 
@@ -121,13 +115,6 @@ export class UsersFirewall extends AuthFirewallService {
     this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 
-  createIfNotExists = flow(
-    this.normalizeCreateUserDto,
-    TE.fromEither,
-    TE.chainW(this.usersService.createIfNotExists),
-    this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
-  );
-
   search = (dto: SdkSearchUsersInputT) => pipe(
     this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters(dto),
     TE.fromEither,
@@ -135,7 +122,7 @@ export class UsersFirewall extends AuthFirewallService {
     this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 
-  update = (dto: SdkUpdateUserInputT & TableRowWithId) => pipe(
+  update = (dto: InternalUpdateUserInputT & TableRowWithId) => pipe(
     this.checkIfCanModifyUser(dto.id),
     TE.chainEitherKW(() => this.normalizeUpdateUserDto(dto)),
     TE.chainW(this.usersService.update),
@@ -153,7 +140,7 @@ export class UsersFirewall extends AuthFirewallService {
 
   readonly me = {
     get: () => this.usersService.get(this.userId),
-    update: (dto: SdkUpdateUserInputT) => pipe(
+    update: (dto: InternalUpdateUserInputT) => pipe(
       this.checkIfCanModifyUser(this.userId),
       TE.chainEitherKW(() => this.normalizeUpdateUserDto({
         ...dto,

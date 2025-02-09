@@ -1,9 +1,12 @@
+import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
+import { z } from 'zod';
 
 import {
   SdkCreateUserInputV,
   SdkSearchUsersInputV,
+  SdkStrictJsonV,
   SdkUpdateUserInputV,
   type UsersSdk,
 } from '@llm/sdk';
@@ -11,6 +14,7 @@ import { ConfigService } from '~/modules/config';
 import { UsersService } from '~/modules/users';
 
 import {
+  extractFileOrListItemOrNilTE,
   mapDbRecordAlreadyExistsToSdkError,
   mapDbRecordNotFoundToSdkError,
   rejectUnsafeSdkErrors,
@@ -62,28 +66,47 @@ export class UsersController extends AuthorizedController {
       )
       .post(
         '/',
-        sdkSchemaValidator('json', SdkCreateUserInputV),
-        async context => pipe(
-          usersService.asUser(context.var.jwt).create(context.req.valid('json')),
-          mapDbRecordAlreadyExistsToSdkError,
-          rejectUnsafeSdkErrors,
-          serializeSdkResponseTE<ReturnType<UsersSdk['create']>>(context),
-        ),
+        sdkSchemaValidator('form', z.object({
+          avatar: z.instanceof(File).optional().nullable(),
+          data: SdkStrictJsonV.pipe(SdkCreateUserInputV),
+        })),
+        async (context) => {
+          const { avatar, data } = context.req.valid('form');
+
+          return pipe(
+            extractFileOrListItemOrNilTE(avatar),
+            TE.chainW(extractedAvatar => usersService.asUser(context.var.jwt).create({
+              ...data,
+              avatar: extractedAvatar,
+            })),
+            mapDbRecordAlreadyExistsToSdkError,
+            rejectUnsafeSdkErrors,
+            serializeSdkResponseTE<ReturnType<UsersSdk['create']>>(context),
+          );
+        },
       )
       .put(
         '/:id',
-        sdkSchemaValidator('json', SdkUpdateUserInputV),
-        async context => pipe(
-          {
-            id: Number(context.req.param().id),
-            ...context.req.valid('json'),
-          },
-          usersService.asUser(context.var.jwt).update,
-          mapDbRecordAlreadyExistsToSdkError,
-          mapDbRecordNotFoundToSdkError,
-          rejectUnsafeSdkErrors,
-          serializeSdkResponseTE<ReturnType<UsersSdk['update']>>(context),
-        ),
+        sdkSchemaValidator('form', z.object({
+          avatar: z.instanceof(File).optional().nullable(),
+          data: SdkStrictJsonV.pipe(SdkUpdateUserInputV),
+        })),
+        async (context) => {
+          const { avatar, data } = context.req.valid('form');
+
+          return pipe(
+            extractFileOrListItemOrNilTE(avatar),
+            TE.chainW(extractedAvatar => usersService.asUser(context.var.jwt).update({
+              ...data,
+              id: Number(context.req.param().id),
+              avatar: extractedAvatar,
+            })),
+            mapDbRecordAlreadyExistsToSdkError,
+            mapDbRecordNotFoundToSdkError,
+            rejectUnsafeSdkErrors,
+            serializeSdkResponseTE<ReturnType<UsersSdk['update']>>(context),
+          );
+        },
       );
   }
 }

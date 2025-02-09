@@ -783,6 +783,9 @@ export const I18N_PACK_PL: I18nLangPack = {
         flags: {
           label: 'Flagi',
         },
+        avatar: {
+          label: 'Avatar',
+        },
         active: {
           label: 'Aktywny',
         },

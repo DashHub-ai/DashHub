@@ -138,8 +138,9 @@ export class PermissionsFirewall extends AuthFirewallService {
    * );
    */
   findRecordAndCheckPermissions = <R, E>(
-    { findRecord, accessLevel, refine }: {
+    { findRecord, isOwner, accessLevel, refine }: {
       accessLevel: SdkPermissionAccessLevelT;
+      isOwner?: (data: R) => boolean;
       findRecord: TE.TaskEither<E, R>;
       refine?: (data: R) => boolean;
     },
@@ -149,6 +150,11 @@ export class PermissionsFirewall extends AuthFirewallService {
       TE.apSW('data', findRecord),
       TE.apSW('descriptor', this.findUserAccessPermissionsDescriptor(accessLevel)),
       TE.chainEitherKW(({ descriptor, data }) => {
+        // Allow access if user is the owner of the record
+        if (isOwner?.(data)) {
+          return E.right(data);
+        }
+
         // Perform additional data validation if needed
         if (refine?.(data) === false) {
           return ofSdkUnauthorizedErrorE();
