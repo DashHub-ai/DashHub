@@ -8,4 +8,5 @@ export * from './projects.controller';
 export * from './s3-buckets.controller';
 export * from './share-resource.controller';
 export * from './users-groups.controller';
+export * from './users-me.controller';
 export * from './users.controller';

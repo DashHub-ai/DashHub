@@ -19,8 +19,12 @@ import type {
   SdkUpdateUserOutputT,
 } from './dto';
 
+import { UsersMeSdk } from './users-me.sdk';
+
 export class UsersSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/users';
+
+  public readonly me = new UsersMeSdk(this.config);
 
   unarchive = (id: SdkTableRowIdT) =>
     this.fetch<

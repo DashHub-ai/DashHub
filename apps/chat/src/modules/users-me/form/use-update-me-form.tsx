@@ -3,38 +3,37 @@ import { flow } from 'fp-ts/lib/function';
 
 import { runTask, tapTaskEither } from '@llm/commons';
 import {
-  type SdkTableRowWithIdT,
-  type SdkUpdateUsersGroupInputT,
+  type SdkUserT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { usePredefinedFormValidators } from '~/hooks';
+import { useUseAuthFormValidator } from '~/modules/users/form';
 import { useSaveTaskEitherNotification } from '~/ui';
 
-type UpdateUserFormValue = SdkUpdateUsersGroupInputT & SdkTableRowWithIdT;
-
-type UpdateUsersGroupFormHookAttrs =
+type UpdateMeFormHookAttrs =
   & Omit<
-    FormHookAttrs<UpdateUserFormValue>,
+    FormHookAttrs<SdkUserT>,
     'validation' | 'onSubmit'
   >
   & {
     onAfterSubmit?: VoidFunction;
   };
 
-export function useUsersGroupUpdateForm(
+export function useUpdateMeForm(
   {
     onAfterSubmit,
     ...props
-  }: UpdateUsersGroupFormHookAttrs,
+  }: UpdateMeFormHookAttrs,
 ) {
   const { sdks } = useSdkForLoggedIn();
-  const { required } = usePredefinedFormValidators<UpdateUserFormValue>();
+  const { emailFormatValidator, required } = usePredefinedFormValidators<SdkUserT>();
   const saveNotifications = useSaveTaskEitherNotification();
+  const authValidator = useUseAuthFormValidator<SdkUserT>();
 
   return useForm({
     resetAfterSubmit: false,
     onSubmit: flow(
-      sdks.dashboard.usersGroups.update,
+      sdks.dashboard.users.me.update,
       saveNotifications,
       tapTaskEither(() => onAfterSubmit?.()),
       runTask,
@@ -43,6 +42,8 @@ export function useUsersGroupUpdateForm(
       mode: ['blur', 'submit'],
       validators: () => [
         required('name'),
+        emailFormatValidator('email'),
+        authValidator('auth'),
       ],
     },
     ...props,

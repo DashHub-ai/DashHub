@@ -22,7 +22,6 @@ export function useSitemap() {
     },
     experts: prefixWithBaseRoute('/experts'),
     login: prefixWithBaseRoute('/login'),
-    settings: prefixWithBaseRoute('/settings'),
     chat: defineSitemapRouteGenerator(prefixWithBaseRoute)('/chat/:id'),
     management: {
       index: prefixWithBaseRoute('/management'),
@@ -30,6 +29,10 @@ export function useSitemap() {
       usersGroups: prefixWithBaseRoute('/management/users-groups'),
       aiModels: prefixWithBaseRoute('/management/ai-models'),
       s3Buckets: prefixWithBaseRoute('/management/s3-buckets'),
+    },
+    settings: {
+      index: prefixWithBaseRoute('/settings'),
+      me: prefixWithBaseRoute('/settings/me'),
     },
     forceRedirect: {
       raw: prefixWithBaseRoute('/force-redirect'),

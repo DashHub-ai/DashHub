@@ -90,15 +90,27 @@ export class UsersFirewall extends AuthFirewallService {
       refine: (user) => {
         const { jwt } = this;
 
+        // Root can do anything
         if (jwt.role === 'root') {
           return true;
         }
 
+        // Nobody can modify root user (besides root)
         if (user.role === 'root') {
           return false;
         }
 
-        return compareSdkOrganizationUserRoles(jwt.organization.role, user.organization.role) < 0;
+        // Tech user can modify only users of lower type
+        if (compareSdkOrganizationUserRoles(jwt.organization.role, user.organization.role) < 0) {
+          return true;
+        }
+
+        // User itself can modify itself
+        if (this.userId === userId) {
+          return true;
+        }
+
+        return false;
       },
     });
 
@@ -138,4 +150,16 @@ export class UsersFirewall extends AuthFirewallService {
     this.checkIfCanModifyUser(id),
     TE.chainW(() => this.usersService.archive(id)),
   );
+
+  readonly me = {
+    get: () => this.usersService.get(this.userId),
+    update: (dto: SdkUpdateUserInputT) => pipe(
+      this.checkIfCanModifyUser(this.userId),
+      TE.chainEitherKW(() => this.normalizeUpdateUserDto({
+        ...dto,
+        id: this.userId,
+      })),
+      TE.chainW(this.usersService.update),
+    ),
+  };
 }
