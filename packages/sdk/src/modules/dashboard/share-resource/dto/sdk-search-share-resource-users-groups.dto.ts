@@ -13,8 +13,8 @@ export type SdkSearchShareResourceUsersGroupsInputT = z.infer<
 >;
 
 export const SdkSearchShareResourceUsersGroupsOutputV = z.object({
-  users: z.array(SdkUserListItemV),
   groups: z.array(SdkTableRowWithIdNameV),
+  users: z.array(SdkUserListItemV),
 });
 
 export type SdkSearchShareResourceUsersGroupsOutputT = z.infer<

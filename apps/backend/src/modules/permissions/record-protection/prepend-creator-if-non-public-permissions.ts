@@ -11,7 +11,10 @@ export function prependCreatorIfNonPublicPermissions(creator: UserTableRowBaseRe
           accessLevel: 'write',
           target: {
             type: 'user',
-            user: creator,
+            user: {
+              ...creator,
+              avatar: null,
+            },
           },
         },
       ];
