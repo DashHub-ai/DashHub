@@ -2,14 +2,9 @@ import type { ReactNode } from 'react';
 
 import clsx from 'clsx';
 
-export type AvatarSize = 'sm' | 'md' | 'lg' | 'xs';
+import { AVATAR_SIZE_CLASSES } from './colorized-avatar';
 
-const sizeClasses: Record<AvatarSize, string> = {
-  xs: 'w-6 h-6',
-  sm: 'w-8 h-8',
-  md: 'w-10 h-10',
-  lg: 'w-12 h-12',
-};
+export type AvatarSize = 'sm' | 'md' | 'lg' | 'xs';
 
 type Props = {
   size?: AvatarSize;
@@ -28,10 +23,11 @@ export function Avatar({ size = 'md', name, src, fallback, className }: Props) {
     .slice(0, 2);
 
   return (
-    <div
+    <span
       className={clsx(
-        'relative flex justify-center items-center bg-gray-100 rounded-full text-gray-600',
-        sizeClasses[size],
+        'inline-flex relative justify-center items-center bg-gray-100 rounded-full text-gray-600',
+        'border-2 border-gray-200',
+        AVATAR_SIZE_CLASSES[size],
         className,
       )}
     >
@@ -40,16 +36,16 @@ export function Avatar({ size = 'md', name, src, fallback, className }: Props) {
             <img
               src={src}
               alt={name}
-              className="rounded-full w-full h-full object-cover"
+              className="rounded-full w-full h-full object-contain"
             />
           )
         : fallback
           ? (
-              <div className="text-gray-400">{fallback}</div>
+              <span className="text-gray-400">{fallback}</span>
             )
           : (
               <span className="font-medium text-sm">{initials}</span>
             )}
-    </div>
+    </span>
   );
 }
