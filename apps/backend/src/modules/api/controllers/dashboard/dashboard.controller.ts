@@ -10,6 +10,7 @@ import { ProjectsController } from './projects.controller';
 import { S3BucketsController } from './s3-buckets.controller';
 import { ShareResourceController } from './share-resource.controller';
 import { UsersGroupsController } from './users-groups.controller';
+import { UsersMeController } from './users-me.controller';
 import { UsersController } from './users.controller';
 
 @injectable()
@@ -25,12 +26,14 @@ export class DashboardController extends BaseController {
     @inject(ChatsController) chats: ChatsController,
     @inject(AIModelsController) aiModels: AIModelsController,
     @inject(ShareResourceController) shareResource: ShareResourceController,
+    @inject(UsersMeController) usersMe: UsersMeController,
   ) {
     super();
 
     this.router
       .route('/organizations', organizations.router)
       .route('/users/groups', usersGroups.router)
+      .route('/users/me', usersMe.router)
       .route('/users', users.router)
       .route('/projects', projects.router)
       .route('/apps/categories', appsCategories.router)
