@@ -44,6 +44,7 @@ export function UserUpdateFormModal(
       email: user.email,
       name: user.name,
       avatar: user.avatar,
+      aiSettings: user.aiSettings,
     };
 
     return (

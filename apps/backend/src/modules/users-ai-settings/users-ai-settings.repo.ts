@@ -11,7 +11,7 @@ import {
 import type { UsersAISettingsTableInsertRow } from './users-ai-settings.tables';
 
 @injectable()
-export class UsersAISettings extends AbstractDatabaseRepo {
+export class UsersAISettingsRepo extends AbstractDatabaseRepo {
   upsert = (
     {
       forwardTransaction,

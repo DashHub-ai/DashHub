@@ -29,12 +29,14 @@ import type { UserTableRowWithRelations } from './users.tables';
 
 import { AuthRepo } from '../auth/repo/auth.repo';
 import { OrganizationsUsersRepo } from '../organizations/users/organizations-users.repo';
+import { UsersAISettingsRepo } from '../users-ai-settings';
 
 @injectable()
 export class UsersRepo extends createProtectedDatabaseRepo('users') {
   constructor(
     @inject(DatabaseConnectionRepo) databaseConnectionRepo: DatabaseConnectionRepo,
     @inject(AuthRepo) private readonly authRepo: AuthRepo,
+    @inject(UsersAISettingsRepo) private readonly usersAISettingsRepo: UsersAISettingsRepo,
     @inject(OrganizationsUsersRepo) private readonly organizationsUsersRepo: OrganizationsUsersRepo,
   ) {
     super(databaseConnectionRepo);
@@ -105,6 +107,13 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           avatarS3ResourceId: value.avatar?.id ?? null,
         },
       }),
+      TE.tap(() => this.usersAISettingsRepo.upsert({
+        forwardTransaction: trx,
+        value: {
+          userId: id,
+          chatContext: value.aiSettings.chatContext,
+        },
+      })),
       TE.tap(({ id }) => pipe(
         this.authRepo.upsertUserAuthMethods({
           forwardTransaction: trx,
@@ -150,6 +159,13 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           avatarS3ResourceId: value.avatar?.id ?? null,
         },
       }),
+      TE.tap(({ id }) => this.usersAISettingsRepo.upsert({
+        forwardTransaction: trx,
+        value: {
+          userId: id,
+          chatContext: value.aiSettings.chatContext,
+        },
+      })),
       TE.tap(({ id }) => pipe(
         this.authRepo.upsertUserAuthMethods({
           forwardTransaction: trx,
@@ -228,6 +244,8 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
             .leftJoin('s3_resources', 's3_resources.id', 'users.avatar_s3_resource_id')
             .leftJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
 
+            .leftJoin('users_ai_settings', 'users_ai_settings.user_id', 'users.id')
+
             .selectAll('users')
             .select([
               'organizations_users.role as organization_role',
@@ -249,6 +267,9 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
               // Logo bucket
               's3_resources_buckets.id as avatar_s3_resource_bucket_id',
               's3_resources_buckets.name as avatar_s3_resource_bucket_name',
+
+              // AI settings
+              'users_ai_settings.chat_context as ai_settings_chat_context',
             ])
             .limit(ids.length)
             .execute(),
@@ -273,10 +294,15 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
           avatar_s3_resource_bucket_id: avatarBucketId,
           avatar_s3_resource_bucket_name: avatarBucketName,
 
+          ai_settings_chat_context: aiSettingsChatContext,
+
           ...user
         }): UserTableRowWithRelations => {
           const baseFields = {
             ...camelcaseKeys(user),
+            aiSettings: {
+              chatContext: aiSettingsChatContext,
+            },
             auth: {
               password: {
                 enabled: !isNil(authPasswordId),

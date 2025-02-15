@@ -58,6 +58,9 @@ export function UsersTableContainer({ filters: forwardedFilters, itemPropsFn }: 
         role: 'root',
         active: true,
         archiveProtection: false,
+        aiSettings: {
+          chatContext: null,
+        },
         auth: {
           email: {
             enabled: true,
@@ -76,6 +79,9 @@ export function UsersTableContainer({ filters: forwardedFilters, itemPropsFn }: 
       role: 'user',
       active: true,
       archiveProtection: false,
+      aiSettings: {
+        chatContext: null,
+      },
       organization: {
         item: organization,
         role: 'member',

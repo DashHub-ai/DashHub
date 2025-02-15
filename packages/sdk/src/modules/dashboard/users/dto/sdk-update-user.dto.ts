@@ -7,6 +7,7 @@ import {
 } from '~/shared';
 
 import { SdkOrganizationUserRoleV } from '../../organizations/dto/sdk-organization-user.dto';
+import { SdkUpsertUserAISettingsInputV } from './ai-settings';
 import { SdkUpdateUserAuthMethodsV } from './auth';
 
 export const SdkUpdateUserOrganizationInputV = z.object({
@@ -23,6 +24,7 @@ export const SdkUpdateUserInputV = z.object({
   active: z.boolean(),
   auth: SdkUpdateUserAuthMethodsV,
   avatar: SdkOptionalFileUploadV,
+  aiSettings: SdkUpsertUserAISettingsInputV,
 })
   .merge(SdkTableRowWithArchiveProtectionV)
   .and(

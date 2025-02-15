@@ -14,3 +14,5 @@ export type UsersAISettingsTable = {
 export type UsersAISettingsTableRow = NormalizeSelectTableRow<UsersAISettingsTable>;
 
 export type UsersAISettingsTableInsertRow = NormalizeInsertTableRow<UsersAISettingsTable>;
+
+export type UsersAISettingsTableRelationRow = Omit<UsersAISettingsTableRow, 'userId'>;
