@@ -30,6 +30,7 @@ import type {
   S3ResourcesTable,
 } from '../s3';
 import type { UsersTable } from '../users';
+import type { UsersAISettingsTable } from '../users-ai-settings';
 import type { UsersGroupsTable, UsersGroupsUsersTable } from '../users-groups';
 import type {
   TableWithArchivedAtColumn,
@@ -46,6 +47,7 @@ export type DatabaseTables = {
   users: UsersTable;
   users_groups: UsersGroupsTable;
   users_groups_users: UsersGroupsUsersTable;
+  users_ai_settings: UsersAISettingsTable;
 
   // Auth
   auth_emails: AuthEmailsTable;

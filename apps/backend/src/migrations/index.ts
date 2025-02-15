@@ -39,6 +39,7 @@ import * as addCorruptedFlagToMessages from './0037-add-corrupted-flag-to-messag
 import * as addAIModelToApps from './0038-add-ai-model-to-apps';
 import * as addPromotionToApps from './0039-add-promotion-to-apps';
 import * as addUsersAvatars from './0040-add-users-avatars';
+import * as addUsersAISettings from './0041-add-users-ai-settings-table';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -82,4 +83,5 @@ export const DB_MIGRATIONS = {
   '0038-add-ai-model-to-apps': addAIModelToApps,
   '0039-add-promotion-to-apps': addPromotionToApps,
   '0040-add-users-avatars': addUsersAvatars,
+  '0041-add-users-ai-settings-table': addUsersAISettings,
 };
