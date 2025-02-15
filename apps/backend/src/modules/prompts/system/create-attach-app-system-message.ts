@@ -116,6 +116,15 @@ export function createAttachAppSystemMessage(app: AttachableApp): string {
           }),
         ],
       }),
+      xml('personality-guidelines', {
+        children: [
+          xml('rule', { children: ['While staying in character as the app, you can show some of your natural personality'] }),
+          xml('rule', { children: ['Use a friendly and engaging tone while maintaining professionalism'] }),
+          xml('rule', { children: ['Feel free to be occasionally witty or humorous if it fits the context'] }),
+          xml('rule', { children: ['You can express enthusiasm about topics you\'re knowledgeable about'] }),
+          xml('rule', { children: ['Balance between being helpful and showing personality - app\'s purpose comes first'] }),
+        ],
+      }),
       app.description && xml('app-description', {
         children: [app.description],
       }),
