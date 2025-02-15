@@ -9,6 +9,7 @@ import {
 
 import { SdkOrganizationUserV } from '../../organizations/dto/sdk-organization-user.dto';
 import { SdkBaseS3ResourceV } from '../../s3-files';
+import { SdkUserAISettingsV } from './ai-settings';
 import { SdkEnabledUserAuthMethodsV } from './auth';
 
 export const SdkUserRoleV = z.enum(['root', 'user']);
@@ -31,6 +32,7 @@ export const SdkUserV = z.object({
   auth: SdkEnabledUserAuthMethodsV,
   role: SdkUserRoleV,
   avatar: SdkBaseS3ResourceV.nullable(),
+  aiSettings: SdkUserAISettingsV,
 })
   .merge(SdkTableRowWithIdV)
   .merge(SdkTableRowWithDatesV)

@@ -1,7 +1,7 @@
 import type { SdkUserT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
-import { useUserUpdateForm } from '~/modules/users/form';
+import { UserAISettingsFormField, useUserUpdateForm } from '~/modules/users/form';
 import { UserUpdateAuthMethodsFormField } from '~/modules/users/form/update/fields';
 import { FormErrorAlert, FormField, Input, SaveButton, SelectGenericFileInput } from '~/ui';
 
@@ -44,6 +44,11 @@ export function UpdateMeForm({ defaultValue }: Props) {
           {...bind.path('email')}
         />
       </FormField>
+
+      <UserAISettingsFormField
+        {...validator.errors.extract('aiSettings', { nested: true })}
+        {...bind.path('aiSettings')}
+      />
 
       {value.role !== 'root' && (
         <FormField

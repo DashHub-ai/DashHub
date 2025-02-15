@@ -15,6 +15,7 @@ import type {
 } from '~/modules/database';
 
 import type { S3ResourcesTableRowWithRelations } from '../s3';
+import type { UsersAISettingsTableRelationRow } from '../users-ai-settings';
 
 export type UsersTable = TableWithDefaultColumns &
   TableWithArchivedAtColumn &
@@ -36,6 +37,7 @@ export type UserTableRowWithRelations = Omit<NormalizeSelectTableRow<UsersTable>
   & {
     auth: SdkEnabledUserAuthMethodsT;
     avatar: S3ResourcesTableRowWithRelations | null;
+    aiSettings: UsersAISettingsTableRelationRow;
   }
   & (
     | { role: 'root'; organization: null; }

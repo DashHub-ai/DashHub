@@ -32,6 +32,9 @@ export class UsersBootService {
         email: root.email,
         active: true,
         archiveProtection: true,
+        aiSettings: {
+          chatContext: null,
+        },
         auth: {
           email: {
             enabled: false,

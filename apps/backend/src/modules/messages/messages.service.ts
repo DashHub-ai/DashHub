@@ -29,6 +29,7 @@ import { PermissionsService } from '../permissions';
 import { ProjectsService } from '../projects';
 import { ProjectsEmbeddingsService } from '../projects-embeddings';
 import { ProjectsFilesService } from '../projects-files';
+import { UsersAISettingsRepo } from '../users-ai-settings';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
 import { MessagesFirewall } from './messages.firewall';
 import { MessagesRepo } from './messages.repo';
@@ -59,6 +60,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     @inject(ProjectsEmbeddingsService) private readonly projectsEmbeddingsService: ProjectsEmbeddingsService,
     @inject(ProjectsFilesService) private readonly projectsFilesService: ProjectsFilesService,
     @inject(ProjectsService) private readonly projectsService: ProjectsService,
+    @inject(UsersAISettingsRepo) private readonly usersAISettings: UsersAISettingsRepo,
     @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
     @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
     @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
@@ -126,6 +128,13 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
   ) => pipe(
     TE.Do,
     TE.bind('message', () => this.get(id)),
+    TE.bindW('personality', ({ message }) => {
+      if (!message.creator) {
+        return TE.of(null);
+      }
+
+      return this.usersAISettings.getChatContextByUserId({ userId: message.creator.id });
+    }),
     TE.bindW('history', ({ message }) => pipe(
       this.searchByChatId(message.chat.id),
       TE.map(({ items }) => pipe(
@@ -155,14 +164,14 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         chat: { id: message.chat.id },
       }),
     )),
-    TE.chainW(({ mappedContent, history, message }) =>
+    TE.chainW(({ mappedContent, history, message, personality }) =>
       pipe(
         this.aiConnectorService.executeStreamPrompt(
           {
             signal,
             aiModel,
             history,
-            context: createContextPrompt(),
+            context: createContextPrompt({ personality }),
             message: {
               content: mappedContent,
             },
