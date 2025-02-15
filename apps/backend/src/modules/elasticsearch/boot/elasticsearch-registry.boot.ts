@@ -14,6 +14,7 @@ import { OrganizationsS3BucketsEsIndexRepo } from '~/modules/organizations/s3-bu
 import { ProjectsEmbeddingsEsIndexRepo } from '~/modules/projects-embeddings/elasticsearch/projects-embeddings-es-index.repo';
 import { ProjectsFilesEsIndexRepo } from '~/modules/projects-files/elasticsearch/projects-files-es-index.repo';
 import { ProjectsEsIndexRepo } from '~/modules/projects/elasticsearch/projects-es-index.repo';
+import { SearchEnginesEsIndexRepo } from '~/modules/search-engines';
 import { UsersGroupsEsIndexRepo } from '~/modules/users-groups/elasticsearch/users-groups-es-index.repo';
 import { UsersEsIndexRepo } from '~/modules/users/elasticsearch/users-es-index.repo';
 
@@ -37,6 +38,7 @@ export class ElasticsearchRegistryBootService {
     @inject(AppsCategoriesEsIndexRepo) private readonly appsCategoriesEsIndexRepo: AppsCategoriesEsIndexRepo,
     @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
     @inject(ProjectsEmbeddingsEsIndexRepo) private readonly projectsEmbeddingsEsIndexRepo: ProjectsEmbeddingsEsIndexRepo,
+    @inject(SearchEnginesEsIndexRepo) private readonly searchEnginesEsIndexRepo: SearchEnginesEsIndexRepo,
   ) {}
 
   register = TE.fromIO(() => {
@@ -53,6 +55,7 @@ export class ElasticsearchRegistryBootService {
       this.appsCategoriesEsIndexRepo,
       this.projectsFilesEsIndexRepo,
       this.projectsEmbeddingsEsIndexRepo,
+      this.searchEnginesEsIndexRepo,
     ]);
 
     this.logger.info('Registered elasticsearch repos!');

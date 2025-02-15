@@ -8,7 +8,9 @@ import {
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
-export const SDK_SEARCH_ENGINE_PROVIDERS = ['sarper'] as const;
+import { SdkSearchEngineCredentialsV } from './sdk-search-engine-credentials.dto';
+
+export const SDK_SEARCH_ENGINE_PROVIDERS = ['serper'] as const;
 
 export const SdkSearchEngineProviderV = z.enum(SDK_SEARCH_ENGINE_PROVIDERS);
 
@@ -18,7 +20,7 @@ export const SdkSearchEngineV = z.object({
   organization: SdkIdNameUrlEntryV,
   description: NonEmptyOrNullStringV,
   provider: SdkSearchEngineProviderV,
-  credentials: z.record(z.string(), z.any()),
+  credentials: SdkSearchEngineCredentialsV,
   default: z.boolean(),
 })
   .merge(SdkTableRowWithIdNameV)
