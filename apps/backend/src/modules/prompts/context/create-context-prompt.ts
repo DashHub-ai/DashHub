@@ -3,16 +3,25 @@ import {
   createActionButtonsContextPrompt,
   createQuotesContextPrompt,
 } from './features';
-import { createDefaultPersonaContextPrompt } from './personas';
+import {
+  createCustomPersonaContextPrompt,
+  createDefaultPersonaContextPrompt,
+} from './personas';
 
-export function createContextPrompt() {
+type Attrs = {
+  personality?: string | null;
+};
+
+export function createContextPrompt({ personality }: Attrs) {
   return xml('general-chat-context', {
     attributes: {
       name: 'General Chat',
       description: 'A general chat context for the user.',
     },
     children: [
-      createDefaultPersonaContextPrompt(),
+      personality
+        ? createCustomPersonaContextPrompt(personality)
+        : createDefaultPersonaContextPrompt(),
       createQuotesContextPrompt(),
       createActionButtonsContextPrompt(),
     ],
