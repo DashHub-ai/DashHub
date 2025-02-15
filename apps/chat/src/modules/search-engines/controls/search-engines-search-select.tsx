@@ -12,7 +12,6 @@ const SearchEnginesSearchAbstractSelect = createSdkAutocomplete<
   fetchFn: ({ sdk: { sdks }, phrase, limit, filters }) =>
     sdks.dashboard.searchEngines.search({
       archived: false,
-      embedding: false,
       sort: 'score:desc',
       offset: 0,
       limit,
