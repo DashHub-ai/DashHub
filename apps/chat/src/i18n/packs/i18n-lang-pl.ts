@@ -808,6 +808,12 @@ export const I18N_PACK_PL: I18nLangPack = {
             label: 'Zresetuj hasło',
           },
         },
+        aiSettings: {
+          chatContext: {
+            label: 'Personalizacja czatu',
+            placeholder: 'Wpisz jak AI powinno dostosować się do czatów',
+          },
+        },
       },
     },
     row: {

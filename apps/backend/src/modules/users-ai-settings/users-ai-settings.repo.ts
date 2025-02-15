@@ -23,21 +23,19 @@ export class UsersAISettingsRepo extends AbstractDatabaseRepo {
       forwardTransaction,
     });
 
-    const newContext = value.chatContext || null;
-
     return pipe(
       transaction(trx =>
         trx
           .insertInto('users_ai_settings')
           .values({
             user_id: value.userId,
-            chat_context: newContext,
+            chat_context: value.chatContext || null,
           })
           .onConflict(oc => oc
             .column('user_id')
-            .doUpdateSet({
-              chat_context: newContext,
-            }),
+            .doUpdateSet(eb => ({
+              chat_context: eb.ref('excluded.chat_context'),
+            })),
           )
           .execute(),
       ),

@@ -12,7 +12,7 @@ import type {
   CreateUserFormValue,
 } from './types';
 
-import { UserSharedFormFields } from '../shared';
+import { UserAISettingsFormField, UserSharedFormFields } from '../shared';
 import { UserCreateAuthMethodsFormField, UserOrganizationSettingsFormField } from './fields';
 import { useUserCreateForm } from './use-user-create-form';
 
@@ -66,6 +66,11 @@ export function UserCreateFormModal(
       <UserSharedFormFields
         errors={validator.errors.all as unknown as any}
         {...bind.merged()}
+      />
+
+      <UserAISettingsFormField
+        {...validator.errors.extract('aiSettings', { nested: true })}
+        {...bind.path('aiSettings')}
       />
 
       <UserCreateAuthMethodsFormField

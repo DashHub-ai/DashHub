@@ -14,7 +14,7 @@ import {
 
 import type { UpdateUserFormValue } from './types';
 
-import { UserSharedFormFields } from '../shared';
+import { UserAISettingsFormField, UserSharedFormFields } from '../shared';
 import { UserOrganizationSettingsFormField, UserUpdateAuthMethodsFormField } from './fields';
 import { useUserUpdateForm } from './use-user-update-form';
 
@@ -95,6 +95,11 @@ export function UserUpdateFormModal(
       <UserSharedFormFields
         errors={validator.errors.all as unknown as any}
         {...bind.merged()}
+      />
+
+      <UserAISettingsFormField
+        {...validator.errors.extract('aiSettings', { nested: true })}
+        {...bind.path('aiSettings')}
       />
 
       <UserUpdateAuthMethodsFormField

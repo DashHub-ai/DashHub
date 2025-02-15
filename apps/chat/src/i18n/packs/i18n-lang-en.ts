@@ -806,6 +806,12 @@ export const I18N_PACK_EN = {
             label: 'Reset password',
           },
         },
+        aiSettings: {
+          chatContext: {
+            label: 'Chat personalization',
+            placeholder: 'Enter how AI should personalize chats',
+          },
+        },
       },
     },
     row: {
