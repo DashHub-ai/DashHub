@@ -26,6 +26,7 @@ import { AppsService } from '../apps';
 import { ChatsRepo } from '../chats/chats.repo';
 import { PermissionsService } from '../permissions';
 import { ProjectsFilesRepo } from '../projects-files/projects-files.repo';
+import { createRelevantEmbeddingsPrompt } from '../prompts';
 import {
   ProjectsEmbeddingsEsIndexRepo,
   ProjectsEmbeddingsEsSearchRepo,
@@ -39,7 +40,7 @@ import {
   TextAIEmbeddingGenerator,
   XlsAIEmbeddingGenerator,
 } from './generators';
-import { createRelevantEmbeddingsPrompt, formatVector } from './helpers';
+import { formatVector } from './helpers';
 import { ProjectsEmbeddingsFirewall } from './projects-embeddings.firewall';
 import { ProjectsEmbeddingsRepo } from './projects-embeddings.repo';
 import { ProjectEmbeddingsInsertTableRow } from './projects-embeddings.tables';
@@ -112,6 +113,8 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
           ...apps.items.map(({ project }) => project.id),
         ]);
 
+        const appsProjectIds = new Set(apps.items.map(({ project }) => project.id));
+
         return pipe(
           this.aiModelsService.get(id),
           TE.chainW(aiModel => this.aiConnectorService.executeEmbeddingPrompt({
@@ -123,6 +126,10 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
             projectsIds,
             chatId: chat.id,
           })),
+          TE.map(searchResults => searchResults.map(result => ({
+            ...result,
+            isAppKnowledge: appsProjectIds.has(result.project.id),
+          }))),
           TE.map(searchResults => createRelevantEmbeddingsPrompt(message, searchResults)),
         );
       }),

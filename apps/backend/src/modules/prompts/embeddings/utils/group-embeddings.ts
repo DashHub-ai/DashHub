@@ -1,11 +1,11 @@
-import type { EsMatchingProjectEmbedding } from '../elasticsearch';
+import type { MatchingEmbedding } from './types';
 
 export type GroupedEmbeddingsByFile = Record<string, {
-  file: EsMatchingProjectEmbedding['projectFile'];
-  fragments: EsMatchingProjectEmbedding[];
+  file: MatchingEmbedding['projectFile'];
+  fragments: MatchingEmbedding[];
 }>;
 
-export function groupEmbeddingsByFile(embeddings: EsMatchingProjectEmbedding[]): GroupedEmbeddingsByFile {
+export function groupEmbeddingsByFile(embeddings: MatchingEmbedding[]): GroupedEmbeddingsByFile {
   return embeddings.reduce<GroupedEmbeddingsByFile>(
     (acc, embedding) => {
       const fileId = embedding.projectFile.id;

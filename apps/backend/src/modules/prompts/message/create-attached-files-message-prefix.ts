@@ -1,28 +1,47 @@
 import type { SdkMessageFileT } from '@llm/sdk';
 
+import { xml } from '../xml';
+
 export function createAttachedFilesMessagePrefix(files: SdkMessageFileT[]) {
   return (content: string) => {
-    if (!files.length) {
-      return [
-        content,
-        '\n---\n',
-        '- User did not attach any files to this message, try lookup for the files in the previous messages.',
-        '- If user did not mention anything about the files, and you not found any files in the previous messages, just don\'t mention the files.',
-        '\n---\n',
-      ].join('\n');
-    }
+    const contextMessage = xml('file-context', {
+      children: [
+        xml('behavior', {
+          children: [
+            xml('no-files-handling', {
+              children: [
+                xml('rule', { children: ['If no files are attached to current message, look for files in previous messages'] }),
+                xml('rule', { children: ['If no files are mentioned and none found in previous messages, do not reference files'] }),
+              ],
+            }),
+            xml('file-analysis-rules', {
+              children: [
+                xml('rule', { children: ['Skip describing file contents unless necessary for the response'] }),
+                xml('rule', { children: ['Defer to attached app for file content analysis when available'] }),
+                xml('rule', { children: ['Use attached app approach for file content analysis'] }),
+                xml('rule', { children: ['Add relevant comments to file content when appropriate'] }),
+              ],
+            }),
+          ],
+        }),
+        files.length > 0 && xml('attached-files', {
+          children: [
+            xml('files-list', {
+              children: files.map(file =>
+                xml('file', {
+                  attributes: { name: file.resource.name },
+                }),
+              ),
+            }),
+          ],
+        }),
+      ],
+    });
 
-    return [
-      content,
-      '\n---\n',
-      'User attached these files to this message:',
-      ...files.map(file => `- ${file.resource.name}`),
-      '\n---\n',
-      'Rules for handling attached files:',
-      '- Please skip describing the content of these files if it is not necessary.',
-      '- If any app is attached, please let the application analyze the content of the files.',
-      '- Use attached app approach to analyze the content of the files.',
-      '- You can add your own comments to the content of the files.',
-    ].join('\n');
+    const promptMessage = xml('user-prompt', {
+      children: [content],
+    });
+
+    return [promptMessage, '\n---\n', contextMessage, '\n---\n'].join('\n');
   };
 }

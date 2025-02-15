@@ -5,7 +5,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type { SdkSearchProjectEmbeddingItemT, SdkSearchProjectEmbeddingsInputT } from '@llm/sdk';
-import type { TableId, TableUuid } from '~/modules/database';
+import type { TableId, TableRowWithId, TableUuid } from '~/modules/database';
 
 import { pluck, rejectFalsyItems } from '@llm/commons';
 import { createMagicNullIdEsValue, createPaginationOffsetSearchQuery, createScoredSortFieldQuery } from '~/modules/elasticsearch';
@@ -20,7 +20,9 @@ type EsProjectsEmbeddingsInternalFilters =
 export type EsMatchingProjectEmbedding = Pick<
   ProjectEmbeddingsTableRowWithRelations,
   'id' | 'text' | 'projectFile'
->;
+> & {
+  project: TableRowWithId;
+};
 
 @injectable()
 export class ProjectsEmbeddingsEsSearchRepo {
@@ -116,6 +118,7 @@ export class ProjectsEmbeddingsEsSearchRepo {
         A.map((item): EsMatchingProjectEmbedding => ({
           id: item.id!,
           text: item.text!,
+          project: item.project!,
           projectFile: camelcaseKeys(item.project_file!, { deep: true }),
         })),
       )),

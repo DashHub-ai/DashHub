@@ -1,32 +1,57 @@
-import { wrapWithFeaturePromptHeader } from './wrap-with-feature-prompt-header';
+import { xml } from '../../xml';
+import { featureXML } from './feature-xml-tag';
 
 export function createActionButtonsContextPrompt(): string {
-  return wrapWithFeaturePromptHeader('ACTION BUTTONS', [
-    '--- INTELLIGENT USAGE RULES ---',
-    'Action buttons are not needed in every situation.',
-    'Only add them when the user explicitly needs to choose between several options:',
-    '1. When the message implies a choice among multiple distinct paths',
-    '2. When each option leads to a clearly different outcome',
-    '3. When the response requires explicit selection to proceed',
-    '',
-    'DO NOT USE buttons for general information, simple explanations, or non-selective replies.',
-    '',
-    '--- BUTTON SYNTAX AND PLACEMENT ---',
-    'Format: [action:Button Label|Action Text]',
-    'Always place buttons at the end of the response when required.',
-    'Never mix buttons with regular text.',
-    '',
-    '--- EXAMPLES ---',
-    'Example 1: Choosing between technologies:',
-    '   [action:REST API|Show REST API implementation]',
-    '   [action:GraphQL|Show GraphQL implementation]',
-    '',
-    'Example 2: Different implementation approaches:',
-    '   [action:Sync|Show synchronous implementation]',
-    '   [action:Async|Show asynchronous implementation]',
-    '',
-    '--- REMEMBER ---',
-    'Only include buttons when a clear choice is necessary.',
-    'Better to have no buttons than to clutter the response unnecessarily.',
-  ]);
+  return featureXML({
+    name: 'Action Buttons',
+    description: 'You can use action buttons to provide users with quick actions to choose from.',
+    children: [
+      xml('rules', {
+        attributes: { important: true },
+        children: [
+          xml('rule', { children: ['Action buttons are not needed in every situation.'] }),
+          xml('rule', { children: ['Only add them when the user needs to choose between several options'] }),
+          xml('rule', { children: ['Only include buttons when a clear choice is necessary.'] }),
+          xml('rule', { children: ['Better to have no buttons than to clutter the response unnecessarily.'] }),
+          xml('rule', { children: ['DO NOT USE buttons for general information, simple explanations, or non-selective replies.'] }),
+          xml('rule', { children: ['When the message implies a choice among multiple distinct paths'] }),
+          xml('rule', { children: ['When each option leads to a clearly different outcome'] }),
+          xml('rule', { children: ['When the response requires explicit selection to proceed'] }),
+        ],
+      }),
+      xml('syntax', {
+        attributes: { format: 'action-button' },
+        children: [
+          xml('format', { children: ['Format: [action:Button Label|Action Text]'] }),
+          xml('rule', { children: ['Always place buttons at the end of the response when required.'] }),
+          xml('rule', { children: ['Never mix buttons with regular text.'] }),
+        ],
+      }),
+      xml('examples', {
+        children: [
+          xml('example', {
+            attributes: {
+              type: 'technology-choice',
+              id: '1',
+              description: 'Choosing between technologies',
+            },
+            children: [
+              xml('button', { children: ['[action:REST API|Show REST API implementation]'] }),
+              xml('button', { children: ['[action:GraphQL|Show GraphQL implementation]'] }),
+            ],
+          }),
+          xml('example', {
+            attributes: {
+              type: 'implementation-choice',
+              id: '2',
+            },
+            children: [
+              xml('button', { children: ['[action:Sync|Show synchronous implementation]'] }),
+              xml('button', { children: ['[action:Async|Show asynchronous implementation]'] }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
 }

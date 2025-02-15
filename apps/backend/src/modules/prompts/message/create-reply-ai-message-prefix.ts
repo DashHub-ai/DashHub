@@ -1,5 +1,7 @@
 import type { SdkMessageRoleT } from '@llm/sdk';
 
+import { xml } from '../xml';
+
 type RepliedMessage = {
   role: SdkMessageRoleT;
   content: string;
@@ -16,8 +18,15 @@ export function createReplyAiMessagePrefix(repliedMessage: RepliedMessage, newMe
 
   const quotedBy = repliedMessage.role === 'user' ? 'User' : 'Assistant';
 
-  return [
-    `> ${quotedBy}: ${truncatedContent}`,
-    newMessage,
-  ].join('\n\n');
+  return xml('message', {
+    children: [
+      xml('quote', {
+        attributes: { by: quotedBy },
+        children: [truncatedContent],
+      }),
+      xml('reply', {
+        children: [newMessage],
+      }),
+    ],
+  });
 }
