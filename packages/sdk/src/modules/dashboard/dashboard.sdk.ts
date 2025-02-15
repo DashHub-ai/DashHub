@@ -10,6 +10,7 @@ import { ProjectsSdk } from './projects';
 import { ProjectsEmbeddingsSdk } from './projects-embeddings';
 import { ProjectsFilesSdk } from './projects-files';
 import { S3BucketsSdk } from './s3-buckets';
+import { SearchEnginesSdk } from './search-engines';
 import { ShareResourceSdk } from './share-resource';
 import { UsersSdk } from './users';
 import { UsersGroupsSdk } from './users-groups';
@@ -38,6 +39,8 @@ export class DashboardSdk {
   public readonly s3Buckets = new S3BucketsSdk(this.config);
 
   public readonly aiModels = new AIModelsSdk(this.config);
+
+  public readonly searchEngines = new SearchEnginesSdk(this.config);
 
   public readonly shareResource = new ShareResourceSdk(this.config);
 

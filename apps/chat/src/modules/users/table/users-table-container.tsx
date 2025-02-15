@@ -142,7 +142,6 @@ export function UsersTableContainer({ filters: forwardedFilters, itemPropsFn }: 
         columns={[
           { id: 'id', name: t.id, className: 'uk-table-shrink' },
           { id: 'email', name: t.email, className: 'uk-table-expand' },
-          { id: 'name', name: t.name, className: 'uk-table-expand' },
           { id: 'role', name: t.role, className: 'w-[150px]' },
           { id: 'active', name: t.active, className: 'w-[150px]' },
           { id: 'auth', name: t.auth, className: 'w-[150px]' },

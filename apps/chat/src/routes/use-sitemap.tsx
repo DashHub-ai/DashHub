@@ -29,6 +29,7 @@ export function useSitemap() {
       usersGroups: prefixWithBaseRoute('/management/users-groups'),
       aiModels: prefixWithBaseRoute('/management/ai-models'),
       s3Buckets: prefixWithBaseRoute('/management/s3-buckets'),
+      searchEngines: prefixWithBaseRoute('/management/search-engines'),
     },
     settings: {
       index: prefixWithBaseRoute('/settings'),

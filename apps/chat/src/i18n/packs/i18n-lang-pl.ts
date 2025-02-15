@@ -2,6 +2,7 @@ import type {
   SdkAIProviderT,
   SdkOrganizationUserRoleT,
   SdkPermissionAccessLevelT,
+  SdkSearchEngineProviderT,
   SdkTranslatedErrors,
 } from '@llm/sdk';
 
@@ -26,6 +27,10 @@ const I18N_AI_PROVIDERS_PL: Record<SdkAIProviderT, string> = {
   gemini: 'Gemini',
   deepseek: 'DeepSeek',
   other: 'Other',
+};
+
+const I18N_SEARCH_ENGINE_PROVIDERS_PL: Record<SdkSearchEngineProviderT, string> = {
+  serper: 'Serper',
 };
 
 const I18N_ACCESS_LEVELS_PL: Record<SdkPermissionAccessLevelT, string> = {
@@ -375,6 +380,9 @@ export const I18N_PACK_PL: I18nLangPack = {
         s3Buckets: {
           title: 'Kubełki S3',
         },
+        searchEngines: {
+          title: 'Wyszukiwarki',
+        },
       },
     },
   },
@@ -608,6 +616,49 @@ export const I18N_PACK_PL: I18nLangPack = {
         bucketName: {
           label: 'Nazwa kubełka w S3',
           placeholder: 'Wpisz nazwę kubełka w S3',
+        },
+      },
+    },
+  },
+  searchEngines: {
+    providers: I18N_SEARCH_ENGINE_PROVIDERS_PL,
+    title: 'Wyszukiwarki',
+    table: {
+      columns: {
+        defaultForOrganization: 'Domyślny',
+      },
+    },
+    form: {
+      title: {
+        create: 'Utwórz wyszukiwarkę',
+        edit: 'Edytuj wyszukiwarkę',
+      },
+      fields: {
+        name: {
+          label: 'Nazwa',
+          placeholder: 'Wprowadź nazwę wyszukiwarki',
+        },
+        description: {
+          label: 'Opis',
+          placeholder: 'Wprowadź opis wyszukiwarki',
+        },
+        organization: {
+          label: 'Organizacja',
+        },
+        settings: {
+          label: 'Ustawienia',
+        },
+        defaultForOrganization: {
+          label: 'Domyślna dla organizacji',
+        },
+        provider: {
+          label: 'Dostawca wyszukiwarki',
+        },
+        credentials: {
+          apiKey: {
+            label: 'Klucz API',
+            placeholder: 'Wprowadź klucz API',
+          },
         },
       },
     },
