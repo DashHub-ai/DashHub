@@ -9,31 +9,33 @@ export function createRelevantEmbeddingsPrompt(
 ): string {
   const groupedEmbeddings = Object.values(groupEmbeddingsByFile(embeddings));
 
-  const contextContent = groupedEmbeddings.length
-    ? groupedEmbeddings
-        .slice(0, 10)
-        .map(({ file, fragments }) =>
-          xml('file-context', {
-            attributes: {
-              name: file.name,
-              description: 'Content from this file (with embeddings identifiers)',
-            },
-            children:
-              fragments
-                .slice(0, 10)
-                .map(({ text, id, isAppKnowledge }) =>
-                  xml('embedding', {
-                    attributes: {
-                      id,
-                      isAppKnowledge,
-                    },
-                    children: [text],
-                  }),
-                ),
-          }),
-        )
-        .join('\n')
-    : 'No relevant content was found in the project files.';
+  if (!groupedEmbeddings.length) {
+    return '';
+  }
+
+  const contextContent = groupedEmbeddings
+    .slice(0, 10)
+    .map(({ file, fragments }) =>
+      xml('file-context', {
+        attributes: {
+          name: file.name,
+          description: 'Content from this file (with embeddings identifiers)',
+        },
+        children:
+            fragments
+              .slice(0, 10)
+              .map(({ text, id, isAppKnowledge }) =>
+                xml('embedding', {
+                  attributes: {
+                    id,
+                    isAppKnowledge,
+                  },
+                  children: [text],
+                }),
+              ),
+      }),
+    )
+    .join('\n');
 
   return embeddingsXML({
     children: [

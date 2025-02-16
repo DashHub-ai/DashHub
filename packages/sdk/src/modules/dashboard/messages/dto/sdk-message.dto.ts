@@ -8,6 +8,7 @@ import {
 
 import { SdkUserListItemV } from '../../users/dto/sdk-user-list-item.dto';
 import { SdkMessageFileV } from './sdk-message-file.dto';
+import { SdkMessageWebSearchV } from './sdk-message-websearch.dto';
 
 export const SdkMessageRoleV = z.enum(['user', 'assistant', 'system']);
 
@@ -34,6 +35,7 @@ export const SdkMessageV = z
     repliedMessage: SdkRepliedMessageV.nullable(),
     files: z.array(SdkMessageFileV),
     corrupted: z.boolean(),
+    webSearch: SdkMessageWebSearchV,
   })
   .merge(SdkTableRowWithUuidV)
   .merge(SdkTableRowWithDatesV);

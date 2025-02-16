@@ -38,7 +38,10 @@ export class SerperProxy extends SearchEngineProxy {
 
           const data = await response.json();
 
-          return data.organic.map((result: any) => ({
+          return [
+            ...data.organic,
+            ...data.peopleAlsoAsk || [],
+          ].map((result: any) => ({
             title: result.title,
             description: result.snippet,
             url: result.link,

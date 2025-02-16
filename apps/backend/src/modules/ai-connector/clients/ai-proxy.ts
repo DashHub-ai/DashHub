@@ -1,13 +1,16 @@
 import type { taskEither as TE } from 'fp-ts';
 import type { z } from 'zod';
 
-import type { SdkAIModelT, SdkCreateMessageInputT, SdkMessageRoleT, SdkMessageT } from '@llm/sdk';
+import type { SdkAIModelT, SdkCreateMessageInputT, SdkMessageRoleT, SdkMessageT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { SearchEnginesService } from '~/modules/search-engines';
+import type { SearchEngineResultItem } from '~/modules/search-engines/clients/search-engine-proxy';
 
 import type { AIConnectionCreatorError } from '../ai-connector.errors';
 
 export abstract class AIProxy {
   constructor(
     protected readonly aiModel: SdkAIModelT,
+    protected readonly searchEnginesService: SearchEnginesService,
   ) {}
 
   protected get credentials() {
@@ -20,7 +23,7 @@ export abstract class AIProxy {
 
   abstract executeStreamPrompt(
     attrs: AIProxyStreamPromptAttrs
-  ): TE.TaskEither<AIConnectionCreatorError, AsyncIterableIterator<string>>;
+  ): TE.TaskEither<AIConnectionCreatorError, AsyncIterableIterator<AIProxyStreamChunk>>;
 
   abstract executeInstructedPrompt<Z extends z.AnyZodObject>(
     attrs: AIProxyInstructedAttrs<Z>
@@ -29,9 +32,14 @@ export abstract class AIProxy {
   abstract executePrompt(attrs: AIProxyPromptAttrs): TE.TaskEither<AIConnectionCreatorError, string>;
 };
 
+export type AIProxyStreamChunk = string | {
+  webSearchResults: SearchEngineResultItem[];
+};
+
 export type AIProxyStreamPromptAttrs = {
   history: SdkMessageT[];
-  message?: SdkCreateMessageInputT;
+  organization: SdkTableRowWithIdT;
+  message: SdkCreateMessageInputT;
   signal?: AbortSignal;
   context?: string;
 };

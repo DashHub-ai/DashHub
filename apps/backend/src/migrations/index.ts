@@ -41,6 +41,7 @@ import * as addPromotionToApps from './0039-add-promotion-to-apps';
 import * as addUsersAvatars from './0040-add-users-avatars';
 import * as addUsersAISettings from './0041-add-users-ai-settings-table';
 import * as addSearchEnginesTable from './0042-add-search-engines-table';
+import * as addWebSearchToMessages from './0043-add-websearch-flag-to-messages';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -86,4 +87,5 @@ export const DB_MIGRATIONS = {
   '0040-add-users-avatars': addUsersAvatars,
   '0041-add-users-ai-settings-table': addUsersAISettings,
   '0042-add-search-engines-table': addSearchEnginesTable,
+  '0043-add-websearch-flag-to-messages': addWebSearchToMessages,
 };

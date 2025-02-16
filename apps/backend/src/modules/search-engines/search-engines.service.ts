@@ -20,6 +20,7 @@ import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
 
 import { PermissionsService } from '../permissions';
+import { getSearchEngineProxy } from './clients';
 import { SearchEnginesEsIndexRepo, SearchEnginesEsSearchRepo } from './elasticsearch';
 import { SearchEnginesFirewall } from './search-engines.firewall';
 import { SearchEnginesRepo } from './search-engines.repo';
@@ -34,6 +35,11 @@ export class SearchEnginesService implements WithAuthFirewall<SearchEnginesFirew
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new SearchEnginesFirewall(jwt, this, this.permissionsService);
+
+  getDefaultSearchEngineProxy = (organizationId: TableId) => pipe(
+    this.getDefault(organizationId),
+    TE.map(getSearchEngineProxy),
+  );
 
   archiveSeqByOrganizationId = (organizationId: SdkTableRowIdT) => TE.fromTask(
     pipe(

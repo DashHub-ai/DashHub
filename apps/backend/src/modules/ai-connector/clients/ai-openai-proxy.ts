@@ -7,8 +7,11 @@ import { pipe } from 'fp-ts/lib/function';
 import { OpenAI } from 'openai';
 
 import type { SdkAIModelT, SdkMessageT } from '@llm/sdk';
+import type { SearchEnginesService } from '~/modules/search-engines';
+import type { SearchEngineResultItem } from '~/modules/search-engines/clients/search-engine-proxy';
 
-import { mapAsyncIterator, rejectFalsyItems } from '@llm/commons';
+import { flatMapAsyncIterator, rejectFalsyItems, tryOrThrowTE } from '@llm/commons';
+import { createWebSearchFunctionTool, createWebSearchResultsPrompt } from '~/modules/prompts';
 
 import { AIConnectionCreatorError } from '../ai-connector.errors';
 import {
@@ -16,6 +19,7 @@ import {
   type AIProxyInstructedAttrs,
   type AIProxyMessage,
   type AIProxyPromptAttrs,
+  type AIProxyStreamChunk,
   type AIProxyStreamPromptAttrs,
 } from './ai-proxy';
 
@@ -32,8 +36,11 @@ export class AIOpenAIProxy extends AIProxy {
 
   private readonly instructor: InstructorClient<OpenAI>;
 
-  constructor(aiModel: SdkAIModelT) {
-    super(aiModel);
+  constructor(
+    aiModel: SdkAIModelT,
+    searchEnginesService: SearchEnginesService,
+  ) {
+    super(aiModel, searchEnginesService);
 
     const { apiKey, apiModel, apiUrl } = this.credentials;
 
@@ -61,30 +68,106 @@ export class AIOpenAIProxy extends AIProxy {
     });
   }
 
-  executeStreamPrompt({ history, context, message, signal }: AIProxyStreamPromptAttrs) {
+  executeStreamPrompt(
+    {
+      history,
+      context,
+      message,
+      organization,
+      signal,
+    }: AIProxyStreamPromptAttrs,
+  ) {
+    const { webSearch } = message;
+    const messages = rejectFalsyItems([
+      !!context && {
+        role: 'system',
+        content: context,
+      } as const,
+
+      ...normalizeSdkMessagesToCompletion(history),
+
+      !!message.content && {
+        role: 'user',
+        content: message.content,
+      } as const,
+    ]);
+
+    const executeSearchWeb = async () => {
+      const search = await this.client.chat.completions.create(
+        {
+          ...DEFAULT_CLIENT_CONFIG,
+          model: this.credentials.apiModel,
+          tools: [
+            createWebSearchFunctionTool(),
+          ],
+          tool_choice: 'required',
+          messages,
+        },
+      );
+
+      const functionCall = search.choices[0]?.message?.tool_calls?.[0]?.function;
+      if (!functionCall || functionCall.name !== 'WebSearch') {
+        return [];
+      }
+
+      const args = JSON.parse(functionCall.arguments);
+      const results = await pipe(
+        this.searchEnginesService.getDefaultSearchEngineProxy(organization.id),
+        TE.chainW(searchEngine => searchEngine.executeQuery({
+          query: args.query,
+          results: Math.min(args.results ?? 30, 30),
+          language: args.language ?? 'en',
+        })),
+        tryOrThrowTE,
+      )();
+
+      return results;
+    };
+
     return pipe(
       AIConnectionCreatorError.tryCatch(
-        () => this.client.chat.completions.create({
-          ...DEFAULT_CLIENT_CONFIG,
-          stream: true,
-          model: this.credentials.apiModel,
-          messages: rejectFalsyItems([
-            !!context && {
+        async () => {
+          let webSearchResults: SearchEngineResultItem[] | null = null;
+
+          if (webSearch) {
+            webSearchResults = await executeSearchWeb();
+            messages.push({
               role: 'system',
-              content: context,
+              content: createWebSearchResultsPrompt(webSearchResults),
+            });
+          }
+
+          const stream = await this.client.chat.completions.create(
+            {
+              ...DEFAULT_CLIENT_CONFIG,
+              stream: true,
+              model: this.credentials.apiModel,
+              messages,
             },
-            ...normalizeSdkMessagesToCompletion(history),
-            !!message?.content && {
-              role: 'user',
-              content: message.content,
-            },
-          ]),
-        }, { signal }),
+            { signal },
+          );
+
+          return {
+            stream,
+            webSearchResults,
+          };
+        },
       ),
       TE.map(
-        stream => pipe(
+        ({ stream, webSearchResults }) => pipe(
           stream as unknown as AsyncIterableIterator<ChatCompletionChunk>,
-          mapAsyncIterator(chunk => chunk.choices[0]?.delta?.content ?? ''),
+          flatMapAsyncIterator((chunk, index): AIProxyStreamChunk[] => {
+            const content = chunk.choices[0]?.delta?.content ?? '';
+
+            if (!index && webSearchResults) {
+              return [
+                { webSearchResults },
+                content,
+              ];
+            }
+
+            return [content];
+          }),
         ),
       ),
     );
