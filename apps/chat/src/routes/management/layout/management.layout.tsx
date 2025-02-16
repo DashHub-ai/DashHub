@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 
-import { BotIcon, FolderOpen, UserCircleIcon, UsersIcon } from 'lucide-react';
+import { BotIcon, FolderOpen, SearchIcon, UserCircleIcon, UsersIcon } from 'lucide-react';
 
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
@@ -54,6 +54,13 @@ export function ManagementLayout({ title, children }: Props) {
               href={sitemap.management.aiModels}
             >
               {t.pages.aiModels.title}
+            </SideNavItem>
+
+            <SideNavItem
+              icon={<SearchIcon size={18} />}
+              href={sitemap.management.searchEngines}
+            >
+              {t.pages.searchEngines.title}
             </SideNavItem>
 
             <SideNavItem

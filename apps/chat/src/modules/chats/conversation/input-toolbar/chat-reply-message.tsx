@@ -31,8 +31,12 @@ export function ChatReplyMessage({ message, onClose }: Props) {
             : <User className="w-4 h-4 text-white" />}
         </div>
 
-        <div className="flex-1 line-clamp-1 text-gray-500">
-          <ChatMessageContent content={message.content} truncate={80} />
+        <div className="flex-1 text-gray-500 line-clamp-1">
+          <ChatMessageContent
+            content={message.content}
+            searchResults={message.webSearch.results ?? []}
+            truncate={80}
+          />
         </div>
       </div>
 

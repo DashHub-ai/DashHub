@@ -11,6 +11,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
 import type { SdkAIModelT, SdkMessageT } from '@llm/sdk';
+import type { SearchEnginesService } from '~/modules/search-engines';
 
 import { isDataUrl } from '@llm/commons';
 
@@ -32,8 +33,11 @@ const DEFAULT_CLIENT_CONFIG = {
 export class AIGeminiProxy extends AIProxy {
   private readonly client: GenerativeModel;
 
-  constructor(aiModel: SdkAIModelT) {
-    super(aiModel);
+  constructor(
+    aiModel: SdkAIModelT,
+    searchEnginesService: SearchEnginesService,
+  ) {
+    super(aiModel, searchEnginesService);
 
     const { apiKey, apiModel } = this.credentials;
     const genAI = new GoogleGenerativeAI(apiKey);

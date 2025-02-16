@@ -3,7 +3,7 @@ import type { SdkTableRowIdT } from '@llm/sdk';
 import {
   ProjectEmbeddingChatBadge,
   type ProjectEmbeddingChatBadgeProps,
-} from '~/modules/projects-embeddings';
+} from '~/modules/chats/content-badges';
 
 import {
   type ContentHydrator,

@@ -8,6 +8,7 @@ import { ChatsController } from './chats.controller';
 import { OrganizationsController } from './organizations.controller';
 import { ProjectsController } from './projects.controller';
 import { S3BucketsController } from './s3-buckets.controller';
+import { SearchEnginesController } from './search-engines.controller';
 import { ShareResourceController } from './share-resource.controller';
 import { UsersGroupsController } from './users-groups.controller';
 import { UsersMeController } from './users-me.controller';
@@ -27,6 +28,7 @@ export class DashboardController extends BaseController {
     @inject(AIModelsController) aiModels: AIModelsController,
     @inject(ShareResourceController) shareResource: ShareResourceController,
     @inject(UsersMeController) usersMe: UsersMeController,
+    @inject(SearchEnginesController) searchEngines: SearchEnginesController,
   ) {
     super();
 
@@ -41,6 +43,7 @@ export class DashboardController extends BaseController {
       .route('/s3-buckets', s3Buckets.router)
       .route('/chats', chats.router)
       .route('/ai-models', aiModels.router)
+      .route('/search-engines', searchEngines.router)
       .route('/share-resource', shareResource.router);
   }
 }

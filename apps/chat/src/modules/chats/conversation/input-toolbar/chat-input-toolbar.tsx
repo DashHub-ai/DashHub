@@ -6,7 +6,7 @@ import { pipe } from 'fp-ts/function';
 import { CircleStopIcon, PaperclipIcon, SendIcon } from 'lucide-react';
 
 import { StrictBooleanV, tapTaskOption } from '@llm/commons';
-import { useAfterMount, useLocalStorageObject } from '@llm/commons-front';
+import { useAfterMount, useLocalStorageObject, useUpdateEffect } from '@llm/commons-front';
 import { getSdkAppMentionInChat, type SdkCreateMessageInputT, type SdkTableRowWithIdNameT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { Checkbox } from '~/ui';
@@ -17,10 +17,13 @@ import { FilesCardsControlledList, selectChatFile } from '../files';
 import { ChatChooseAppButton } from './chat-choose-app-button';
 import { ChatReplyMessage } from './chat-reply-message';
 import { ChatSelectApp } from './chat-select-app';
+import { ChatWebSearchButton } from './chat-web-search-button';
 
 export type ChatInputValue = Omit<SdkCreateMessageInputT, 'replyToMessage'>;
 
 export type ChatInputToolbarProps = {
+  defaultValue?: Partial<ChatInputValue>;
+
   apps: Array<SdkTableRowWithIdNameT>;
 
   replying: boolean;
@@ -39,6 +42,7 @@ export type ChatInputToolbarProps = {
 
 export function ChatInputToolbar(
   {
+    defaultValue,
     withAppSelector = true,
     disabled,
     replying,
@@ -73,12 +77,14 @@ export function ChatInputToolbar(
     defaultValue: {
       content: '',
       files: [],
+      ...defaultValue,
     },
     onSubmit: (newValue) => {
       setValue({
         value: {
           content: '',
           files: [],
+          webSearch: newValue.webSearch,
         },
       });
 
@@ -132,6 +138,15 @@ export function ChatInputToolbar(
     }
   });
 
+  useUpdateEffect(() => {
+    setValue({
+      value: {
+        ...value,
+        webSearch: defaultValue?.webSearch,
+      },
+    });
+  }, [defaultValue?.webSearch]);
+
   return (
     <form
       className={clsx(
@@ -148,14 +163,14 @@ export function ChatInputToolbar(
 
       <div
         className={clsx(
-          'relative z-10 bg-white rounded-2xl',
+          'z-10 relative bg-white rounded-2xl',
           'border border-gray-200',
           'focus-within:border-gray-300',
           'shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
           'transition-all duration-200',
         )}
       >
-        <div className="mb-12">
+        <div className="mb-[53px]">
           <textarea
             ref={inputRef as any}
             disabled={isTypingDisabled}
@@ -205,13 +220,18 @@ export function ChatInputToolbar(
                 'hover:bg-gray-100 p-2 rounded-lg',
                 'text-gray-500 hover:text-gray-700',
                 'transition-colors duration-200',
-                disabled && 'opacity-50 cursor-not-allowed',
+                (disabled || replying) && 'opacity-50 cursor-not-allowed',
               )}
               onClick={onAttachFile}
               disabled={disabled}
             >
               <PaperclipIcon size={20} />
             </button>
+
+            <ChatWebSearchButton
+              disabled={disabled || replying}
+              {...bind.path('webSearch')}
+            />
 
             {withAppSelector && (
               <ChatChooseAppButton

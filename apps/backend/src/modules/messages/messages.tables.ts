@@ -30,6 +30,7 @@ export type MessagesTable =
     app_id: ColumnType<TableId | null, TableId | null, never>;
     replied_message_id: ColumnType<TableUuid | null, TableUuid | null, null>;
     corrupted: boolean;
+    web_search: boolean;
   };
 
 export type MessageTableRow = NormalizeSelectTableRow<MessagesTable>;

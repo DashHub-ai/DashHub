@@ -2,6 +2,7 @@ import type {
   SdkAIProviderT,
   SdkOrganizationUserRoleT,
   SdkPermissionAccessLevelT,
+  SdkSearchEngineProviderT,
   SdkTranslatedErrors,
 } from '@llm/sdk';
 
@@ -24,6 +25,10 @@ const I18N_AI_PROVIDERS_EN: Record<SdkAIProviderT, string> = {
   gemini: 'Gemini',
   deepseek: 'DeepSeek',
   other: 'Other',
+};
+
+const I18N_SEARCH_ENGINE_PROVIDERS_EN: Record<SdkSearchEngineProviderT, string> = {
+  serper: 'Serper',
 };
 
 const I18N_ACCESS_LEVELS_EN: Record<SdkPermissionAccessLevelT, string> = {
@@ -373,6 +378,9 @@ export const I18N_PACK_EN = {
         s3Buckets: {
           title: 'S3 Buckets',
         },
+        searchEngines: {
+          title: 'Search Engines',
+        },
       },
     },
   },
@@ -427,6 +435,9 @@ export const I18N_PACK_EN = {
       noTitle: 'Unnamed Chat',
       noDescription: 'No description',
       totalMessages: 'messages',
+    },
+    webSearch: {
+      toggle: 'Search the Web',
     },
     app: {
       attached: 'App attached',
@@ -541,6 +552,49 @@ export const I18N_PACK_EN = {
       chatContext: {
         label: 'Chat prompt',
         placeholder: 'Enter app chat prompt description, it will help AI generate responses',
+      },
+    },
+  },
+  searchEngines: {
+    providers: I18N_SEARCH_ENGINE_PROVIDERS_EN,
+    title: 'Search Engines',
+    table: {
+      columns: {
+        defaultForOrganization: 'Default',
+      },
+    },
+    form: {
+      title: {
+        create: 'Create search engine',
+        edit: 'Edit search engine',
+      },
+      fields: {
+        name: {
+          label: 'Name',
+          placeholder: 'Enter search engine name',
+        },
+        description: {
+          label: 'Description',
+          placeholder: 'Enter search engine description',
+        },
+        organization: {
+          label: 'Organization',
+        },
+        settings: {
+          label: 'Settings',
+        },
+        defaultForOrganization: {
+          label: 'Default for organization',
+        },
+        provider: {
+          label: 'Search engine provider',
+        },
+        credentials: {
+          apiKey: {
+            label: 'API key',
+            placeholder: 'Enter API key',
+          },
+        },
       },
     },
   },

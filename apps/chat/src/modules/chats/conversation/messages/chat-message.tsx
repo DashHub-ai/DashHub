@@ -2,7 +2,7 @@ import { useControl } from '@under-control/forms';
 import clsx from 'clsx';
 import { takeRight } from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
-import { AlertCircle, Bot, ReplyIcon, User } from 'lucide-react';
+import { AlertCircle, Bot, Globe, ReplyIcon, User } from 'lucide-react';
 
 import { type Overwrite, pluckTyped } from '@llm/commons';
 import {
@@ -56,6 +56,7 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
   const isAI = role === 'assistant';
   const isYou = creator?.email === session.token.email;
   const isCorrupted = message.corrupted;
+  const hasWebSearch = message.webSearch?.enabled;
 
   return (
     <div
@@ -101,13 +102,15 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
               },
             )}
           >
-            <span className={clsx('font-medium', {
-              'text-gray-900': !isYou && !isCorrupted,
-              'text-red-700': isCorrupted,
-              'text-gray-700': isYou,
-            })}
+            <span
+              className={clsx('flex items-center gap-2 font-medium', {
+                'text-gray-900': !isYou && !isCorrupted,
+                'text-red-700': isCorrupted,
+                'text-gray-700': isYou,
+              })}
             >
               {isAI ? (isCorrupted ? 'Error' : 'Assistant') : (isYou ? t.messages.you : creator?.email)}
+              {hasWebSearch && <Globe size={14} className="text-blue-500" />}
             </span>
             <span className="text-gray-400 text-xs">
               {new Date(createdAt).toLocaleTimeString()}
@@ -145,17 +148,14 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
             })}
             >
               {!isAI && message.repliedMessage && (
-                <ChatMessageRepliedMessage
-                  message={message.repliedMessage}
-                  darkMode={false}
-                />
+                <ChatMessageRepliedMessage message={message.repliedMessage} />
               )}
               <ChatMessageContent
                 key={typeof content}
                 content={content}
                 disabled={!isLast || readOnly}
-                darkMode={false}
                 showToolbars={isAI}
+                searchResults={message.webSearch.results ?? []}
                 onAction={onAction}
               />
             </div>

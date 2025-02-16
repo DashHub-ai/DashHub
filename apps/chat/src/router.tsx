@@ -16,6 +16,7 @@ import {
   ProjectRoute,
   ProjectsRoute,
   S3BucketsManagementRoute,
+  SearchEnginesManagementRoute,
   SettingsRoute,
   UpdateAppRoute,
   UsersGroupsManagementRoute,
@@ -79,6 +80,7 @@ function LoggedInRouter() {
 
       <Route path={sitemap.management.s3Buckets} component={S3BucketsManagementRoute} />
       <Route path={sitemap.management.aiModels} component={AIModelsManagementRoute} />
+      <Route path={sitemap.management.searchEngines} component={SearchEnginesManagementRoute} />
       <Route path={sitemap.management.users} component={UsersManagementRoute} />
       <Route path={sitemap.management.usersGroups} component={UsersGroupsManagementRoute} />
       <Route path={sitemap.management.index} component={ManagementRoute} />

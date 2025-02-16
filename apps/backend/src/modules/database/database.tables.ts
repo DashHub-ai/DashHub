@@ -29,6 +29,7 @@ import type {
   S3ResourcesBucketsTable,
   S3ResourcesTable,
 } from '../s3';
+import type { SearchEnginesTable } from '../search-engines';
 import type { UsersTable } from '../users';
 import type { UsersAISettingsTable } from '../users-ai-settings';
 import type { UsersGroupsTable, UsersGroupsUsersTable } from '../users-groups';
@@ -79,6 +80,9 @@ export type DatabaseTables = {
 
   // Permissions
   permissions: PermissionsTable;
+
+  // Search engines
+  search_engines: SearchEnginesTable;
 };
 
 export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn | TableWithUuidColumn>;

@@ -17,6 +17,7 @@ import {
   createReplyAiMessagePrefix,
 } from '~/modules/prompts';
 
+import type { AIProxyStreamChunk } from '../ai-connector/clients';
 import type { ExtractedFile } from '../api/helpers';
 import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../database';
 
@@ -29,6 +30,7 @@ import { PermissionsService } from '../permissions';
 import { ProjectsService } from '../projects';
 import { ProjectsEmbeddingsService } from '../projects-embeddings';
 import { ProjectsFilesService } from '../projects-files';
+import { SearchEngineResultItem } from '../search-engines/clients/search-engine-proxy';
 import { UsersAISettingsRepo } from '../users-ai-settings';
 import { MessagesEsIndexRepo, MessagesEsSearchRepo } from './elasticsearch';
 import { MessagesFirewall } from './messages.firewall';
@@ -79,6 +81,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       value: {
         chatId: chat.id,
         content: message.content,
+        webSearch: !!message.webSearch,
         metadata: {},
         aiModelId: null,
         creatorUserId: creator.id,
@@ -119,6 +122,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         creatorUserId: creator.id,
         role: 'system',
         corrupted: false,
+        webSearch: false,
       })),
     );
 
@@ -128,6 +132,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
   ) => pipe(
     TE.Do,
     TE.bind('message', () => this.get(id)),
+    TE.bind('chat', ({ message }) => this.chatsService.get(message.chat.id)),
     TE.bindW('personality', ({ message }) => {
       if (!message.creator) {
         return TE.of(null);
@@ -164,16 +169,18 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         chat: { id: message.chat.id },
       }),
     )),
-    TE.chainW(({ mappedContent, history, message, personality }) =>
+    TE.chainW(({ mappedContent, history, message, chat, personality }) =>
       pipe(
         this.aiConnectorService.executeStreamPrompt(
           {
             signal,
             aiModel,
             history,
+            organization: chat.organization,
             context: createContextPrompt({ personality }),
             message: {
               content: mappedContent,
+              webSearch: message.webSearch.enabled,
             },
           },
         ),
@@ -186,12 +193,14 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           creatorUserId: null,
           role: 'assistant',
           corrupted: true,
+          webSearch: message.webSearch.enabled,
         })),
         TE.map(stream => this.createAIResponseMessage(
           {
             repliedMessageId: message.id,
             chatId: message.chat.id,
             aiModelId: aiModel.id,
+            webSearch: message.webSearch.enabled,
             stream,
           },
           signal,
@@ -206,16 +215,19 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       aiModelId,
       stream,
       repliedMessageId,
+      webSearch,
     }: {
       repliedMessageId: TableUuid;
       chatId: TableUuid;
       aiModelId: TableId;
-      stream: AsyncIterableIterator<string>;
+      stream: AsyncIterableIterator<AIProxyStreamChunk>;
+      webSearch: boolean;
     },
     signal?: AbortSignal,
   ) {
     let content = '';
     let corrupted = false;
+    let webSearchResults: SearchEngineResultItem[] | null = null;
 
     try {
       for await (const item of stream) {
@@ -223,8 +235,14 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           return;
         }
 
-        content += item;
-        yield item;
+        if (typeof item === 'string') {
+          content += item;
+          yield item;
+        }
+
+        if (typeof item === 'object' && 'webSearchResults' in item) {
+          webSearchResults = item.webSearchResults;
+        }
       }
 
       if (!signal?.aborted) {
@@ -239,16 +257,25 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       }
     }
 
+    const filteredWebSearchResults = (webSearchResults || []).filter(
+      ({ url, title }) => content.includes(url) || content.includes(title),
+    );
+
     await pipe(
       this.createAndIndexMessage({
         chatId,
         aiModelId,
         content,
-        metadata: {},
+        metadata: {
+          ...webSearch && {
+            webSearchResults: filteredWebSearchResults,
+          },
+        },
         repliedMessageId,
         creatorUserId: null,
         role: 'assistant',
         corrupted,
+        webSearch,
       }),
       tryOrThrowTE,
     )();

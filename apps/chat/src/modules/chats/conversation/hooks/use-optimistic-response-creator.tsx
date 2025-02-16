@@ -29,7 +29,7 @@ export function useOptimisticResponseCreator() {
   });
 
   return {
-    user: ({ content, files }: SdkCreateMessageInputT): OptimisticMessageOutputT => ({
+    user: ({ content, files, webSearch }: SdkCreateMessageInputT): OptimisticMessageOutputT => ({
       ...createBaseMessageFields(),
       content,
       role: 'user',
@@ -39,6 +39,10 @@ export function useOptimisticResponseCreator() {
       app: null,
       files: (files ?? []).map(createOptimisticResponseFile),
       corrupted: false,
+      webSearch: {
+        enabled: !!webSearch,
+        results: [],
+      },
       creator: {
         id: token.sub,
         email: token.email,
@@ -60,6 +64,10 @@ export function useOptimisticResponseCreator() {
       repliedMessage: null,
       corrupted: false,
       app: null,
+      webSearch: {
+        enabled: false,
+        results: [],
+      },
     }),
 
     app: (app: SdkTableRowWithIdNameT): OptimisticMessageOutputT => ({
@@ -73,6 +81,10 @@ export function useOptimisticResponseCreator() {
       aiModel: null,
       corrupted: false,
       app,
+      webSearch: {
+        enabled: false,
+        results: [],
+      },
     }),
   };
 }

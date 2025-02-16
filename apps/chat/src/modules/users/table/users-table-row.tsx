@@ -30,7 +30,6 @@ export function UsersTableRow({ item, ctaButton, onUpdated }: UsersTableRowProps
     <tr>
       <td>{item.id}</td>
       <td>{item.email}</td>
-      <td>{item.name}</td>
       <td>
         {(
           'organization' in item && item.organization

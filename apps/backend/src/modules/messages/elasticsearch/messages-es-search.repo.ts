@@ -94,6 +94,10 @@ export class MessagesEsSearchRepo {
     updatedAt: source.updated_at,
     files: camelcaseKeys(source.files, { deep: true }),
     corrupted: source.corrupted,
+    webSearch: {
+      enabled: source.web_search,
+      results: camelcaseKeys(source.metadata.web_search_results || [] as any, { deep: true }),
+    },
     creator: source.creator && {
       id: source.creator.id,
       email: source.creator.email,

@@ -14,6 +14,7 @@ import { ProjectsSearchSelect } from '~/modules/projects';
 import { Checkbox, FormSpinnerCTA } from '~/ui';
 
 import { FilesCardsControlledList, selectChatFile } from '../conversation';
+import { ChatWebSearchButton } from '../conversation/input-toolbar';
 import { useStartChatForm } from './use-start-chat-form';
 
 type Props = {
@@ -62,7 +63,7 @@ export function StartChatForm({ forceProject, className }: Props) {
     >
       <div
         className={clsx(
-          'relative z-10 bg-white rounded-2xl',
+          'z-10 relative bg-white rounded-2xl',
           'border border-gray-200',
           'focus-within:border-gray-300',
           'shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
@@ -115,6 +116,11 @@ export function StartChatForm({ forceProject, className }: Props) {
             >
               <PaperclipIcon size={20} />
             </button>
+
+            <ChatWebSearchButton
+              disabled={loading}
+              {...bind.path('webSearch')}
+            />
 
             <AIModelsSearchSelect
               buttonClassName="text-sm py-1 px-3 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors"

@@ -52,6 +52,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       {
         aiModel,
         files,
+        webSearch,
         content,
         replyToMessage,
       }: Overwrite<SdkCreateMessageInputT, {
@@ -65,6 +66,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
         {
           files,
           content,
+          webSearch,
           replyToMessageId: replyToMessage?.id,
         },
       )),

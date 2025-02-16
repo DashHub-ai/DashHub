@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import { memo, useMemo, useSyncExternalStore } from 'react';
 import sanitizeHtml from 'sanitize-html';
 
+import type { SdkMessageWebSearchItemT } from '@llm/sdk';
+
 import { createStoreSubscriber, truncateText } from '@llm/commons';
 
 import type { AIStreamContent, AIStreamObservable } from '../hooks';
@@ -10,8 +12,8 @@ import { MessageMarkdown, useContentHydration } from '../content-parse';
 
 type Props = {
   content: string | AIStreamObservable;
+  searchResults: SdkMessageWebSearchItemT[];
   truncate?: number;
-  darkMode?: boolean;
   disabled?: boolean;
   showToolbars?: boolean;
   className?: string;
@@ -19,7 +21,18 @@ type Props = {
   onAction?: (action: string) => void;
 };
 
-export const ChatMessageContent = memo(({ content, truncate, disabled, darkMode, showToolbars = true, className, textClassName, onAction }: Props) => {
+export const ChatMessageContent = memo((
+  {
+    content,
+    searchResults,
+    truncate,
+    disabled,
+    showToolbars = true,
+    className,
+    textClassName,
+    onAction,
+  }: Props,
+) => {
   const observable = useMemo(() => {
     if (typeof content === 'string') {
       return createStoreSubscriber<AIStreamContent>({
@@ -54,7 +67,7 @@ export const ChatMessageContent = memo(({ content, truncate, disabled, darkMode,
   const hydrationResult = useContentHydration({
     disabled,
     content: sanitizedContent,
-    darkMode,
+    searchResults,
     onAction,
   });
 

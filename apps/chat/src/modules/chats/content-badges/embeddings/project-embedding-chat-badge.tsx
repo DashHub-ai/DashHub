@@ -24,7 +24,6 @@ export const embeddingsChatsCache = new AsyncTaskCache<
 
 export type ProjectEmbeddingChatBadgeProps = {
   id: SdkTableRowIdT;
-  darkMode?: boolean;
   selected?: boolean;
   className?: string;
   disabled?: boolean;
@@ -33,7 +32,6 @@ export type ProjectEmbeddingChatBadgeProps = {
 export const ProjectEmbeddingChatBadge = memo((
   {
     id,
-    darkMode,
     selected,
     className,
     disabled,
@@ -75,10 +73,8 @@ export const ProjectEmbeddingChatBadge = memo((
       className={clsx(
         'inline-flex relative items-center gap-1.5 px-2 py-1.5 rounded-md text-xs transition-all',
         {
-          'bg-gray-100/50 text-gray-600 hover:bg-gray-200/70': !darkMode && !isOn,
-          'bg-gray-600/30 text-gray-200 hover:bg-gray-600/50': darkMode && !isOn,
-          'bg-blue-100/50 text-blue-700': isOn && !darkMode,
-          'bg-blue-800/50 text-blue-100': isOn && darkMode,
+          'bg-gray-100/50 text-gray-600 hover:bg-gray-200/70': !isOn,
+          'bg-blue-100/50 text-blue-700': isOn,
           'opacity-50 cursor-not-allowed': disabled,
           'cursor-pointer hover:scale-105 active:scale-95': !disabled,
         },
