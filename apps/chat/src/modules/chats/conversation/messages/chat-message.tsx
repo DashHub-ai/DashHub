@@ -110,7 +110,12 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
               })}
             >
               {isAI ? (isCorrupted ? 'Error' : 'Assistant') : (isYou ? t.messages.you : creator?.email)}
-              {hasWebSearch && <Globe size={14} className="text-blue-500" />}
+              {hasWebSearch && (
+                <span className="inline-flex items-center gap-1 bg-blue-100 px-1.5 py-0.5 rounded-full text-blue-700 text-xs">
+                  <Globe size={12} />
+                  {t.messages.webSearch}
+                </span>
+              )}
             </span>
             <span className="text-gray-400 text-xs">
               {new Date(createdAt).toLocaleTimeString()}
@@ -125,6 +130,7 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
               'items-end': !isAI && isYou,
               'text-gray-800': !isCorrupted,
               'text-red-800': isCorrupted,
+              'border-l-2 border-blue-200 pl-4': isAI && hasWebSearch,
             },
           )}
         >

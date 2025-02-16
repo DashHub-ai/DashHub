@@ -446,6 +446,7 @@ export const I18N_PACK_EN = {
       empty: 'No messages yet',
       you: 'You',
       ai: 'AI',
+      webSearch: 'Web search',
     },
     generating: {
       title: 'Generating title...',

@@ -448,6 +448,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       empty: 'Brak wiadomości',
       you: 'Ty',
       ai: 'AI',
+      webSearch: 'Wyszukiwanie w sieci',
     },
     generating: {
       title: 'Generowanie tytułu...',

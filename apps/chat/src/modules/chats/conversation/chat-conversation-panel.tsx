@@ -96,7 +96,9 @@ export const ChatConversationPanel = memo((
     [messages.items],
   );
 
-  const lastGroupedMessage = groupedMessages[groupedMessages.length - 1];
+  const [hasDefaultWebSearch, setDefaultWebSearch] = useState(
+    () => messages.items[messages.items.length - 1]?.webSearch?.enabled ?? false,
+  );
 
   const onRefreshResponse = ({ repliedMessage }: Pick<SdkRepeatedMessageItemT, 'repliedMessage'>) => {
     if (!repliedMessage) {
@@ -179,7 +181,11 @@ export const ChatConversationPanel = memo((
     );
   };
 
-  useSendInitialMessage(onReply);
+  useSendInitialMessage((initialMessage) => {
+    setDefaultWebSearch(!!initialMessage?.webSearch);
+    void onReply(initialMessage);
+  });
+
   useLayoutEffect(focusInput, [messages, replyToMessage]);
   useInterval(focusInput, 1, { maxTicks: 50 });
 
@@ -243,7 +249,7 @@ export const ChatConversationPanel = memo((
           replying={replying}
           inputRef={inputRef}
           defaultValue={{
-            webSearch: !!lastGroupedMessage?.webSearch?.enabled,
+            webSearch: hasDefaultWebSearch,
           }}
           onSubmit={onSendChatMessage}
           onCancelSubmit={() => {

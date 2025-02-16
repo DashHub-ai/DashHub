@@ -74,6 +74,7 @@ export function ChatInputToolbar(
     submit,
     setValue,
   } = useForm<ChatInputValue>({
+    resetAfterSubmit: false,
     defaultValue: {
       content: '',
       files: [],
@@ -81,10 +82,11 @@ export function ChatInputToolbar(
     },
     onSubmit: (newValue) => {
       setValue({
+        // Keeps webSearch value
+        merge: true,
         value: {
           content: '',
           files: [],
-          webSearch: newValue.webSearch,
         },
       });
 
@@ -142,10 +144,10 @@ export function ChatInputToolbar(
     setValue({
       value: {
         ...value,
-        webSearch: defaultValue?.webSearch,
+        webSearch: !!defaultValue?.webSearch,
       },
     });
-  }, [defaultValue?.webSearch]);
+  }, [!!defaultValue?.webSearch]);
 
   return (
     <form
