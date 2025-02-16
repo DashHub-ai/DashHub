@@ -37,15 +37,24 @@ export class SerperProxy extends SearchEngineProxy {
           }
 
           const data = await response.json();
-
-          return [
+          const output: SearchEngineResultItem[] = [
             ...data.organic,
             ...data.peopleAlsoAsk || [],
           ].map((result: any) => ({
             title: result.title,
-            description: result.snippet,
-            url: result.link,
+            description: result.snippet || result.description,
+            url: result.link || result.url,
           }));
+
+          if (data.answerBox) {
+            output.unshift({
+              title: data.answerBox.title || 'Direct Answer',
+              description: data.answerBox.answer,
+              url: data.answerBox.sourceLink || '',
+            });
+          }
+
+          return output;
         },
         error => new SearchEngineProxyError(`Failed to execute Serper search: ${error}`),
       ),

@@ -1,5 +1,6 @@
 import type { SdkMessageWebSearchItemT } from '@llm/sdk';
 
+import { decodeHtmlEntities } from '@llm/commons';
 import { WebSearchChatBadge } from '~/modules/chats/content-badges';
 
 import {
@@ -68,7 +69,8 @@ export function hydrateWithWebSearchBadges(
             i++;
           }
 
-          const searchResult = searchResults.find(item => item.url === url);
+          const decodedUrl = decodeHtmlEntities(url);
+          const searchResult = searchResults.find(item => item.url === decodedUrl);
 
           if (searchResult) {
             const componentId = `websearch-${componentCounter++}`;

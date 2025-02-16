@@ -81,7 +81,7 @@ export const WebSearchChatBadge = memo((
             <SearchIcon size={10} />
           )}
       <span className="flex items-center gap-1">
-        <span>{truncateText(25, '...')(title ?? item.title)}</span>
+        <span>{title ?? truncateText(25, '...')(item.title)}</span>
       </span>
       {selected && <CheckIcon size={12} />}
     </button>

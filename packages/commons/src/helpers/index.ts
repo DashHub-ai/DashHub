@@ -2,6 +2,7 @@ export * from './async-debounce';
 export * from './cache';
 export * from './clamp';
 export * from './date';
+export * from './decode-html-entities';
 export * from './delay-task-either';
 export * from './find-item-by-id';
 export * from './find-item-index-by-id';
