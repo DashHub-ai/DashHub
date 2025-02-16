@@ -422,7 +422,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       publicChat: 'Czat publiczny',
       privateChat: 'Czat prywatny',
       start: 'Rozpocznij czat',
-      startOnEnter: 'Rozpocznij czat po naciśnięciu Enter',
+      startOnEnter: 'Rozpocznij po wciśnięciu Enter',
       selectModel: 'Model AI',
     },
     history: {
@@ -437,6 +437,9 @@ export const I18N_PACK_PL: I18nLangPack = {
       noTitle: 'Czat bez nazwy',
       noDescription: 'Brak opisu',
       totalMessages: 'Wiadomości',
+    },
+    webSearch: {
+      toggle: 'Wyszukuj w sieci',
     },
     app: {
       attached: 'Załączono aplikację',

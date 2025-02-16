@@ -436,6 +436,9 @@ export const I18N_PACK_EN = {
       noDescription: 'No description',
       totalMessages: 'messages',
     },
+    webSearch: {
+      toggle: 'Search the Web',
+    },
     app: {
       attached: 'App attached',
     },

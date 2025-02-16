@@ -17,6 +17,7 @@ import { FilesCardsControlledList, selectChatFile } from '../files';
 import { ChatChooseAppButton } from './chat-choose-app-button';
 import { ChatReplyMessage } from './chat-reply-message';
 import { ChatSelectApp } from './chat-select-app';
+import { ChatWebSearchButton } from './chat-web-search-button';
 
 export type ChatInputValue = Omit<SdkCreateMessageInputT, 'replyToMessage'>;
 
@@ -148,14 +149,14 @@ export function ChatInputToolbar(
 
       <div
         className={clsx(
-          'relative z-10 bg-white rounded-2xl',
+          'z-10 relative bg-white rounded-2xl',
           'border border-gray-200',
           'focus-within:border-gray-300',
           'shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
           'transition-all duration-200',
         )}
       >
-        <div className="mb-12">
+        <div className="mb-[53px]">
           <textarea
             ref={inputRef as any}
             disabled={isTypingDisabled}
@@ -212,6 +213,11 @@ export function ChatInputToolbar(
             >
               <PaperclipIcon size={20} />
             </button>
+
+            <ChatWebSearchButton
+              disabled={disabled}
+              {...bind.path('webSearch')}
+            />
 
             {withAppSelector && (
               <ChatChooseAppButton
