@@ -7,7 +7,6 @@ export * from './experts';
 export * from './organizations';
 export * from './permissions';
 export * from './projects';
-export * from './projects-embeddings';
 export * from './s3-buckets';
 export * from './search-bar';
 export * from './shared';

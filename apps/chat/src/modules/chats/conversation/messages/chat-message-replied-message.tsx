@@ -8,10 +8,9 @@ import { ChatMessageContent } from './chat-message-content';
 
 type Props = {
   message: SdkRepliedMessageT;
-  darkMode?: boolean;
 };
 
-export function ChatMessageRepliedMessage({ message, darkMode }: Props) {
+export function ChatMessageRepliedMessage({ message }: Props) {
   const t = useI18n().pack.chat;
   const isAI = message.role === 'assistant';
 
@@ -20,9 +19,7 @@ export function ChatMessageRepliedMessage({ message, darkMode }: Props) {
       className={clsx(
         'relative mb-2 py-2 pl-3',
         'before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:rounded-full',
-        darkMode
-          ? 'before:bg-gray-600 bg-gray-800/30'
-          : 'before:bg-gray-300 bg-gray-100',
+        'before:bg-gray-300 bg-gray-100',
         'rounded-sm',
       )}
     >
@@ -32,8 +29,8 @@ export function ChatMessageRepliedMessage({ message, darkMode }: Props) {
       <div className="text-gray-600 text-sm">
         <ChatMessageContent
           content={message.content}
+          searchResults={[]}
           truncate={60}
-          darkMode={darkMode}
         />
       </div>
     </div>

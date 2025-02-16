@@ -145,17 +145,14 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
             })}
             >
               {!isAI && message.repliedMessage && (
-                <ChatMessageRepliedMessage
-                  message={message.repliedMessage}
-                  darkMode={false}
-                />
+                <ChatMessageRepliedMessage message={message.repliedMessage} />
               )}
               <ChatMessageContent
                 key={typeof content}
                 content={content}
                 disabled={!isLast || readOnly}
-                darkMode={false}
                 showToolbars={isAI}
+                searchResults={message.webSearch.results ?? []}
                 onAction={onAction}
               />
             </div>
