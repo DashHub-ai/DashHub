@@ -6,7 +6,7 @@ import { pipe } from 'fp-ts/function';
 import { CircleStopIcon, PaperclipIcon, SendIcon } from 'lucide-react';
 
 import { StrictBooleanV, tapTaskOption } from '@llm/commons';
-import { useAfterMount, useLocalStorageObject } from '@llm/commons-front';
+import { useAfterMount, useLocalStorageObject, useUpdateEffect } from '@llm/commons-front';
 import { getSdkAppMentionInChat, type SdkCreateMessageInputT, type SdkTableRowWithIdNameT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { Checkbox } from '~/ui';
@@ -22,6 +22,8 @@ import { ChatWebSearchButton } from './chat-web-search-button';
 export type ChatInputValue = Omit<SdkCreateMessageInputT, 'replyToMessage'>;
 
 export type ChatInputToolbarProps = {
+  defaultValue?: Partial<ChatInputValue>;
+
   apps: Array<SdkTableRowWithIdNameT>;
 
   replying: boolean;
@@ -40,6 +42,7 @@ export type ChatInputToolbarProps = {
 
 export function ChatInputToolbar(
   {
+    defaultValue,
     withAppSelector = true,
     disabled,
     replying,
@@ -74,12 +77,14 @@ export function ChatInputToolbar(
     defaultValue: {
       content: '',
       files: [],
+      ...defaultValue,
     },
     onSubmit: (newValue) => {
       setValue({
         value: {
           content: '',
           files: [],
+          webSearch: newValue.webSearch,
         },
       });
 
@@ -132,6 +137,15 @@ export function ChatInputToolbar(
       });
     }
   });
+
+  useUpdateEffect(() => {
+    setValue({
+      value: {
+        ...value,
+        webSearch: defaultValue?.webSearch,
+      },
+    });
+  }, [defaultValue?.webSearch]);
 
   return (
     <form
@@ -206,7 +220,7 @@ export function ChatInputToolbar(
                 'hover:bg-gray-100 p-2 rounded-lg',
                 'text-gray-500 hover:text-gray-700',
                 'transition-colors duration-200',
-                disabled && 'opacity-50 cursor-not-allowed',
+                (disabled || replying) && 'opacity-50 cursor-not-allowed',
               )}
               onClick={onAttachFile}
               disabled={disabled}
@@ -215,7 +229,7 @@ export function ChatInputToolbar(
             </button>
 
             <ChatWebSearchButton
-              disabled={disabled}
+              disabled={disabled || replying}
               {...bind.path('webSearch')}
             />
 

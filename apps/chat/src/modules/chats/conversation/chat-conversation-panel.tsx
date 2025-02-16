@@ -96,6 +96,8 @@ export const ChatConversationPanel = memo((
     [messages.items],
   );
 
+  const lastGroupedMessage = groupedMessages[groupedMessages.length - 1];
+
   const onRefreshResponse = ({ repliedMessage }: Pick<SdkRepeatedMessageItemT, 'repliedMessage'>) => {
     if (!repliedMessage) {
       return;
@@ -219,7 +221,7 @@ export const ChatConversationPanel = memo((
       <div
         ref={messagesContainerRef}
         className={clsx(
-          'relative z-10 flex-1 m-auto w-[800px] max-w-screen-md',
+          'z-10 relative flex-1 m-auto w-[800px] max-w-screen-md',
           '[&::-webkit-scrollbar]:hidden',
           '[-ms-overflow-style:none]',
           'overflow-y-scroll',
@@ -240,6 +242,9 @@ export const ChatConversationPanel = memo((
           replyToMessage={replyToMessage}
           replying={replying}
           inputRef={inputRef}
+          defaultValue={{
+            webSearch: !!lastGroupedMessage?.webSearch?.enabled,
+          }}
           onSubmit={onSendChatMessage}
           onCancelSubmit={() => {
             messages.replyObservable?.abort();

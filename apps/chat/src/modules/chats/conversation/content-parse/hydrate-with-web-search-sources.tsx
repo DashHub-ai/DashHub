@@ -15,29 +15,86 @@ export function hydrateWithWebSearchBadges(
     const inlinedReactComponents: HydrateInlinedComponents = {};
     let componentCounter = 0;
 
-    // Match Markdown links: [title](url)
-    const cleanContent = content.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, title, url) => {
-      const searchResult = searchResults.find(item => item.url === url);
+    // Parse Markdown links with support for nested parentheses
+    let result = '';
+    let i = 0;
 
-      if (!searchResult) {
-        return match;
+    while (i < content.length) {
+      if (content[i] === '[') {
+        const linkStart = i;
+        i++;
+
+        // Find title part
+        let title = '';
+        let bracketDepth = 1;
+
+        while (i < content.length && bracketDepth > 0) {
+          if (content[i] === '[') {
+            bracketDepth++;
+          }
+
+          if (content[i] === ']') {
+            bracketDepth--;
+          }
+
+          if (bracketDepth > 0) {
+            title += content[i];
+          }
+
+          i++;
+        }
+
+        // Check if we have a URL part
+        if (i < content.length && content[i] === '(') {
+          i++;
+
+          // Find URL part (handling nested parentheses)
+          let url = '';
+          let parenDepth = 1;
+
+          while (i < content.length && parenDepth > 0) {
+            if (content[i] === '(') {
+              parenDepth++;
+            }
+
+            if (content[i] === ')') {
+              parenDepth--;
+            }
+
+            if (parenDepth > 0) {
+              url += content[i];
+            }
+
+            i++;
+          }
+
+          const searchResult = searchResults.find(item => item.url === url);
+
+          if (searchResult) {
+            const componentId = `websearch-${componentCounter++}`;
+            inlinedReactComponents[componentId] = (
+              <WebSearchChatBadge
+                key={componentId}
+                item={searchResult}
+                title={title}
+              />
+            );
+            result += inlineReactComponentTag(componentId);
+            continue;
+          }
+        }
+
+        // If no match, add the original text
+        result += content.slice(linkStart, i);
       }
-
-      const componentId = `websearch-${componentCounter++}`;
-
-      inlinedReactComponents[componentId] = (
-        <WebSearchChatBadge
-          key={componentId}
-          item={searchResult}
-          title={title}
-        />
-      );
-
-      return inlineReactComponentTag(componentId);
-    });
+      else {
+        result += content[i];
+        i++;
+      }
+    }
 
     return {
-      content: cleanContent.trim(),
+      content: result.trim(),
       prependToolbars: [],
       appendToolbars: [],
       inlinedReactComponents,

@@ -61,7 +61,7 @@ export const WebSearchChatBadge = memo((
       onClick={onToggleBallon}
       disabled={disabled}
       className={clsx(
-        'inline-flex relative items-center gap-1.5 px-2 py-1.5 rounded-md text-xs transition-all',
+        'inline-flex top-[2px] relative items-center gap-1.5 px-2 py-1.5 rounded-md text-xs truncate transition-all',
         {
           'bg-gray-100/50 text-gray-600 hover:bg-gray-200/70': !darkMode && !isOn,
           'bg-gray-600/30 text-gray-200 hover:bg-gray-600/50': darkMode && !isOn,
@@ -81,7 +81,7 @@ export const WebSearchChatBadge = memo((
             <SearchIcon size={10} />
           )}
       <span className="flex items-center gap-1">
-        <span>{title ?? truncateText(25, '...')(item.title)}</span>
+        <span>{truncateText(25, '...')(title ?? item.title)}</span>
       </span>
       {selected && <CheckIcon size={12} />}
     </button>
