@@ -1,5 +1,5 @@
 import { controlled } from '@under-control/forms';
-import { ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react';
 
 import type {
   SdkOffsetPaginationInputT,
@@ -41,7 +41,7 @@ export const PaginationArrows = controlled<SdkOffsetPaginationInputT, Props>(
       <div className="flex flex-row space-x-4">
         <button
           type="button"
-          className="lg:inline-flex hidden uk-icon-button uk-icon-button-small"
+          className="hidden lg:inline-flex uk-icon-button uk-icon-button-small"
           disabled={!value.offset}
           onClick={() => {
             setOffset(0);
@@ -69,7 +69,7 @@ export const PaginationArrows = controlled<SdkOffsetPaginationInputT, Props>(
           </span>
 
           <span className="size-4">
-            <ChevronsLeftIcon size={16} />
+            <ChevronLeftIcon size={16} />
           </span>
         </button>
 
@@ -92,7 +92,7 @@ export const PaginationArrows = controlled<SdkOffsetPaginationInputT, Props>(
 
         <button
           type="button"
-          className="lg:inline-flex hidden uk-icon-button uk-icon-button-small"
+          className="hidden lg:inline-flex uk-icon-button uk-icon-button-small"
           disabled={value.offset >= maxOffset}
           onClick={() => {
             setOffset(value.limit * (totalPages - 1));
