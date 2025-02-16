@@ -6,6 +6,7 @@ import { usePromiseOptimisticResponse } from '@llm/commons-front';
 import {
   type SdkChatT,
   type SdkCreateMessageInputT,
+  type SdkMessageT,
   type SdkRepliedMessageT,
   type SdkSearchMessagesOutputT,
   type SdkTableRowWithIdNameT,
@@ -108,17 +109,21 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
     optimistic: ({
       before: replyObservable,
       result: { items, total },
-      args: [{ content, aiModel, files, replyToMessage }],
+      args: [{ content, aiModel, files, replyToMessage, webSearch }],
     }) => ({
       replyObservable,
       total: total + 1,
       items: [
         ...items,
         {
-          ...createOptimisticResponse.user({ content, files }),
+          ...createOptimisticResponse.user({ content, files, webSearch }),
           repliedMessage: replyToMessage || null,
         },
-        createOptimisticResponse.bot(aiModel, replyObservable),
+        createOptimisticResponse.bot({
+          aiModel,
+          observable: replyObservable,
+          webSearch: !!webSearch,
+        }),
       ],
     }),
   });
@@ -132,7 +137,7 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       replyObservable,
       { aiModel, message }: {
         aiModel: SdkTableRowWithIdNameT;
-        message: SdkRepliedMessageT;
+        message: SdkMessageT;
       },
     ) => pipe(
       TE.Do,
@@ -178,7 +183,11 @@ export function useReplyConversationHandler({ initialMessages, chat }: Attrs) {
       items: [
         ...items,
         {
-          ...createOptimisticResponse.bot(aiModel, replyObservable),
+          ...createOptimisticResponse.bot({
+            aiModel,
+            webSearch: !!message.webSearch?.enabled,
+            observable: replyObservable,
+          }),
           repliedMessage: message,
         },
       ],

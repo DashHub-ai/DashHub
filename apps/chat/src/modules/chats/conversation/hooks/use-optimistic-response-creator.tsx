@@ -51,8 +51,15 @@ export function useOptimisticResponseCreator() {
     }),
 
     bot: (
-      aiModel: SdkTableRowWithIdNameT,
-      observable: AIStreamObservable,
+      {
+        aiModel,
+        webSearch,
+        observable,
+      }: {
+        aiModel: SdkTableRowWithIdNameT;
+        observable: AIStreamObservable;
+        webSearch: boolean;
+      },
     ): OptimisticMessageOutputT => ({
       ...createBaseMessageFields(),
       files: [],
@@ -65,7 +72,7 @@ export function useOptimisticResponseCreator() {
       corrupted: false,
       app: null,
       webSearch: {
-        enabled: false,
+        enabled: webSearch,
         results: [],
       },
     }),
