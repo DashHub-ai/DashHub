@@ -499,10 +499,10 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   prompts: {
     attachApp: [
-      'Pokaż mi, jak używać tej asystenta',
-      'Jakie są główne funkcje tej asystenta?',
+      'Pokaż mi, jak używać tej aplikacji',
+      'Jakie są główne funkcje tej aplikacji?',
       'Podaj mi przykłady tego, co mogę zrobić z tą aplikacją',
-      'Jakie są najlepsze praktyki korzystania z tej asystenta?',
+      'Jakie są najlepsze praktyki korzystania z tej aplikacji?',
     ],
   },
   apps: {
