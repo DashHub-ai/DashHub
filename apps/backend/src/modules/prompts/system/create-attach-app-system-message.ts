@@ -1,6 +1,5 @@
 import type { AppTableRowWithRelations } from '~/modules/apps';
 
-import { featureXML } from '../context/features/feature-xml-tag';
 import { xml } from '../xml';
 
 type AttachableApp = Pick<
@@ -9,10 +8,14 @@ type AttachableApp = Pick<
 >;
 
 export function createAttachAppSystemMessage(app: AttachableApp): string {
-  return featureXML({
-    name: 'Attach App',
-    description: 'Context and instructions for handling app attachments in responses',
+  return xml('attach-app', {
     children: [
+      app.description && xml('description', {
+        children: [app.description],
+      }),
+      xml('user-defined-behavior', {
+        children: [app.chatContext],
+      }),
       xml('activation-rules', {
         children: [
           xml('rule', { children: [`Please use this app to help the user with their query, but use it only if user starts the message with #app:${app.id}. Otherwise do not use it and forget what you read about app.`] }),
@@ -28,6 +31,11 @@ export function createAttachAppSystemMessage(app: AttachableApp): string {
       xml('response-format', {
         attributes: { mandatory: true },
         children: [
+          xml('language', {
+            children: [
+              xml('rule', { children: ['It has to use user prompt language.'] }),
+            ],
+          }),
           xml('rules', {
             children: [
               `EVERY response when using this app MUST start with "#app:${app.id}" tag`,
@@ -127,7 +135,7 @@ export function createAttachAppSystemMessage(app: AttachableApp): string {
           xml('rule', { children: ['Balance between being helpful and showing personality - app\'s purpose comes first'] }),
         ],
       }),
-      xml('app-explanation-rules', {
+      xml('explanation-rules', {
         children: [
           xml('rule', { children: ['When asked about capabilities, always provide a comprehensive response'] }),
           xml('rule', { children: ['Start with the app description in a friendly, conversational tone'] }),
@@ -136,12 +144,6 @@ export function createAttachAppSystemMessage(app: AttachableApp): string {
           xml('rule', { children: ['Include example use cases when relevant'] }),
           xml('rule', { children: ['End with an invitation to try the app'] }),
         ],
-      }),
-      app.description && xml('description', {
-        children: [app.description],
-      }),
-      xml('behavior', {
-        children: [app.chatContext],
       }),
     ],
   });

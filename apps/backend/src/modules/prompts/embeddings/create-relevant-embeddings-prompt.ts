@@ -10,7 +10,7 @@ export function createRelevantEmbeddingsPrompt(
   const groupedEmbeddings = Object.values(groupEmbeddingsByFile(embeddings));
 
   if (!groupedEmbeddings.length) {
-    return '';
+    return message;
   }
 
   const contextContent = groupedEmbeddings
