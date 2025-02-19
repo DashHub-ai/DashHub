@@ -1,8 +1,7 @@
 import { Bot, Send, Wand2 } from 'lucide-react';
 import { memo } from 'react';
 
-import type { SdkTableRowWithIdNameT } from '@llm/sdk';
-
+import { getSdkAppMentionInChat, type SdkTableRowWithIdNameT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { useCachedAppLookup } from '~/modules/apps/use-cached-app-lookup';
 
@@ -23,6 +22,12 @@ export const ChatAttachedApp = memo(({ app, showPrompts, onSendChatMessage }: Ch
   }
 
   const { data } = appData;
+
+  const onSendAppMessage = (content: string) => {
+    onSendChatMessage({
+      content: `${getSdkAppMentionInChat(app)} ${content}`,
+    });
+  };
 
   return (
     <div className="opacity-0 mb-5 animate-messageSlideIn">
@@ -58,7 +63,7 @@ export const ChatAttachedApp = memo(({ app, showPrompts, onSendChatMessage }: Ch
                 key={prompt}
                 type="button"
                 className="group flex items-center gap-2 bg-white shadow-sm hover:shadow px-4 py-3 border border-gray-200 rounded-lg text-gray-700 text-sm hover:scale-[1.01] transition-all"
-                onClick={() => onSendChatMessage({ content: prompt })}
+                onClick={() => onSendAppMessage(prompt)}
               >
                 <span className="flex-1">{prompt}</span>
                 <Send size={14} className="group-hover:text-blue-500 text-gray-400 transition-colors" />

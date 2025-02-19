@@ -118,7 +118,6 @@ export const AppSharedFormFields = controlled<Value, AppSharedFormFieldsProps>((
           name="chat-context"
           placeholder={t.fields.chatContext.placeholder}
           rows={10}
-          required
           {...bind.path('chatContext')}
         />
       </FormField>

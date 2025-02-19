@@ -24,7 +24,6 @@ export const UserAISettingsFormField = controlled<Value, Props>(({ errors, contr
           name="chat-context"
           placeholder={t.fields.aiSettings.chatContext.placeholder}
           rows={10}
-          required
           {...bind.path('chatContext')}
         />
       </FormField>

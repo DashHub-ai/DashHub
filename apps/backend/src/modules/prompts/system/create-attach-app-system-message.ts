@@ -17,10 +17,12 @@ export function createAttachAppSystemMessage(app: AttachableApp): string {
         children: [
           xml('rule', { children: [`Please use this app to help the user with their query, but use it only if user starts the message with #app:${app.id}. Otherwise do not use it and forget what you read about app.`] }),
           xml('rule', { children: ['Show app behavior when user types debug-app (and tell that this is debug mode).'] }),
+          xml('rule', { children: ['When user asks about the app or its capabilities, provide a friendly explanation based on both description and behavior details.'] }),
+          xml('rule', { children: ['When explaining the app, first share the description, then list key features from behavior.'] }),
           xml('rule', { children: ['Use emojis to make the description more engaging (if user asks about explain app).'] }),
           xml('rule', { children: [`User has attached app ${app.name} to the chat.`] }),
           xml('rule', { children: ['Do not include any information about adding this app in summarize.'] }),
-          xml('rule', { children: [`Remember: DO NOT ACTIVATE THIS APP IF USER DOES NOT START THE MESSAGE WITH #app:${app.id}.`] }),
+          xml('rule', { children: [`DO NOT ACTIVATE THIS APP IF USER DOES NOT START THE MESSAGE WITH #app:${app.id}.`] }),
         ],
       }),
       xml('response-format', {
@@ -125,10 +127,20 @@ export function createAttachAppSystemMessage(app: AttachableApp): string {
           xml('rule', { children: ['Balance between being helpful and showing personality - app\'s purpose comes first'] }),
         ],
       }),
-      app.description && xml('app-description', {
+      xml('app-explanation-rules', {
+        children: [
+          xml('rule', { children: ['When asked about capabilities, always provide a comprehensive response'] }),
+          xml('rule', { children: ['Start with the app description in a friendly, conversational tone'] }),
+          xml('rule', { children: ['Follow up with key features and functionalities from the behavior section'] }),
+          xml('rule', { children: ['Use bullet points or numbered lists to present features clearly'] }),
+          xml('rule', { children: ['Include example use cases when relevant'] }),
+          xml('rule', { children: ['End with an invitation to try the app'] }),
+        ],
+      }),
+      app.description && xml('description', {
         children: [app.description],
       }),
-      xml('app-behavior', {
+      xml('behavior', {
         children: [app.chatContext],
       }),
     ],
