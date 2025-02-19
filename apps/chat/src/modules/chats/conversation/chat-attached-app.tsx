@@ -26,6 +26,7 @@ export const ChatAttachedApp = memo(({ app, showPrompts, onSendChatMessage }: Ch
   const onSendAppMessage = (content: string) => {
     onSendChatMessage({
       content: `${getSdkAppMentionInChat(app)} ${content}`,
+      webSearch: false,
     });
   };
 
