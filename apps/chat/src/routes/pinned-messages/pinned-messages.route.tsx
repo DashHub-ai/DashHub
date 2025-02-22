@@ -1,6 +1,6 @@
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
-import { AppsContainer } from '~/modules';
+import { PinnedMessagesContainer } from '~/modules';
 import { RouteMetaTags } from '~/routes';
 
 export function PinnedMessagesRoute() {
@@ -14,7 +14,7 @@ export function PinnedMessagesRoute() {
         {t.title}
       </LayoutHeader>
 
-      <AppsContainer storeDataInUrl />
+      <PinnedMessagesContainer storeDataInUrl />
     </PageWithNavigationLayout>
   );
 }

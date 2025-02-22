@@ -806,6 +806,14 @@ export const I18N_PACK_PL: I18nLangPack = {
       emptyPlaceholder: 'Brak plików! Dodaj nowy plik, aby zacząć.',
     },
   },
+  pinnedMessages: {
+    grid: {
+      placeholder: 'Brak przypiętych wiadomości! Dodaj nową wiadomość, aby zacząć',
+    },
+    buttons: {
+      goToChat: 'Przejdź do czatu',
+    },
+  },
   experts: {
     favorites: {
       add: 'Dodaj do ulubionych',

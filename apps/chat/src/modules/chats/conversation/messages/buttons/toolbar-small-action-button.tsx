@@ -14,7 +14,6 @@ export function ToolbarSmallActionButton({ children, icon, title, disabled, dark
       type="button"
       className={clsx(
         'flex items-center gap-1.5 bg-gray-100/50 px-2 py-1.5 rounded-md text-gray-600 text-xs transition-all',
-        'border border-gray-200',
         'hover:scale-105 active:scale-95',
         disabled
           ? 'opacity-50 cursor-not-allowed'

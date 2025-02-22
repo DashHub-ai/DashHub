@@ -804,6 +804,14 @@ export const I18N_PACK_EN = {
       emptyPlaceholder: 'No files yet. Feel free to upload one!',
     },
   },
+  pinnedMessages: {
+    grid: {
+      placeholder: 'No pinned messages yet. Pin a message to keep it here!',
+    },
+    buttons: {
+      goToChat: 'Go to chat',
+    },
+  },
   experts: {
     favorites: {
       add: 'Add to favorites',
