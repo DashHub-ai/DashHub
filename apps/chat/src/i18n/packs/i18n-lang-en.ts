@@ -455,6 +455,7 @@ export const I18N_PACK_EN = {
       you: 'You',
       ai: 'AI',
       webSearch: 'Web search',
+      saved: 'Saved for later',
     },
     generating: {
       title: 'Generating title...',

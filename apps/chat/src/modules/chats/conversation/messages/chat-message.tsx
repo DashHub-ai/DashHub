@@ -2,12 +2,13 @@ import { useControl } from '@under-control/forms';
 import clsx from 'clsx';
 import { takeRight } from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
-import { AlertCircle, Bot, Globe, ReplyIcon, User } from 'lucide-react';
+import { AlertCircle, Bookmark, Bot, Globe, ReplyIcon, User } from 'lucide-react';
 
 import { type Overwrite, pluckTyped } from '@llm/commons';
 import {
   type SdkRepeatedMessageLike,
   type SdkSearchMessageItemT,
+  useIsSdkPinnedMessageToggled,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { useI18n } from '~/i18n';
@@ -57,13 +58,15 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
 
   const isAI = role === 'assistant';
   const isYou = creator?.email === session.token.email;
+  const isPinned = useIsSdkPinnedMessageToggled(message.id);
+
   const isCorrupted = message.corrupted;
   const hasWebSearch = message.webSearch?.enabled;
 
   return (
     <div
       className={clsx(
-        'flex items-start gap-4 px-4 py-2',
+        'flex items-start gap-4',
         'animate-messageSlideIn',
         {
           'mb-5': !repeats.length,
@@ -71,6 +74,7 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
           'opacity-75': readOnly && archived,
           'opacity-0': !readOnly || !archived,
           'flex-row-reverse': !isAI && isYou,
+          'bg-purple-50/50 p-6 border border-purple-100 rounded-lg': isPinned,
         },
       )}
     >
@@ -116,6 +120,12 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
                 <span className="inline-flex items-center gap-1 bg-blue-100 px-1.5 py-0.5 rounded-full text-blue-700 text-xs">
                   <Globe size={12} />
                   {t.messages.webSearch}
+                </span>
+              )}
+              {isPinned && (
+                <span className="inline-flex items-center gap-1 bg-purple-100 px-1.5 py-0.5 rounded-full text-purple-700 text-xs">
+                  <Bookmark size={12} />
+                  {t.messages.saved}
                 </span>
               )}
             </span>

@@ -457,6 +457,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       you: 'Ty',
       ai: 'AI',
       webSearch: 'Wyszukiwanie w sieci',
+      saved: 'Zapisane na potem',
     },
     generating: {
       title: 'Generowanie tytułu...',
