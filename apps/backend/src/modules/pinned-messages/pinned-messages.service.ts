@@ -8,6 +8,7 @@ import type { SdkJwtTokenT, SdkPinMessageInputT } from '@llm/sdk';
 import type { WithAuthFirewall } from '../auth';
 import type { TableRowWithId } from '../database';
 
+import { MessagesService } from '../messages';
 import { PermissionsService } from '../permissions';
 import { PinnedMessagesEsIndexRepo, PinnedMessagesEsSearchRepo } from './elasticsearch';
 import { PinnedMessagesFirewall } from './pinned-messages.firewall';
@@ -20,9 +21,10 @@ export class PinnedMessagesService implements WithAuthFirewall<PinnedMessagesFir
     @inject(PinnedMessagesEsSearchRepo) private readonly searchRepo: PinnedMessagesEsSearchRepo,
     @inject(PinnedMessagesEsIndexRepo) private readonly esIndexRepo: PinnedMessagesEsIndexRepo,
     @inject(PermissionsService) private readonly permissionsService: PermissionsService,
+    @inject(MessagesService) private readonly messagesService: MessagesService,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new PinnedMessagesFirewall(jwt, this, this.permissionsService);
+  asUser = (jwt: SdkJwtTokenT) => new PinnedMessagesFirewall(jwt, this, this.messagesService, this.permissionsService);
 
   get = this.searchRepo.get;
 

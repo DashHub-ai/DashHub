@@ -5,6 +5,7 @@ import type { PartialBy } from '@llm/commons';
 import type { SdkJwtTokenT, SdkSearchPinnedMessagesInputT } from '@llm/sdk';
 
 import type { TableId } from '../database';
+import type { MessagesService } from '../messages';
 import type { PermissionsService } from '../permissions';
 import type { InternalCreatePinnedMessageInputT, PinnedMessagesService } from './pinned-messages.service';
 
@@ -14,6 +15,7 @@ export class PinnedMessagesFirewall extends AuthFirewallService {
   constructor(
     jwt: SdkJwtTokenT,
     private readonly pinnedMessagesService: PinnedMessagesService,
+    private readonly messagesService: MessagesService,
     private readonly permissionsService: PermissionsService,
   ) {
     super(jwt);
@@ -26,8 +28,13 @@ export class PinnedMessagesFirewall extends AuthFirewallService {
   );
 
   create = (dto: PartialBy<InternalCreatePinnedMessageInputT, 'creator'>) => pipe(
-    this.permissionsService.asUser(this.jwt).enforceCreatorScope(dto),
-    TE.fromEither,
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckIfCreator({
+      findRecord: pipe(
+        this.messagesService.get(dto.messageId),
+        TE.map(({ chat }) => chat),
+      ),
+    }),
+    TE.chainEitherKW(() => this.permissionsService.asUser(this.jwt).enforceCreatorScope(dto)),
     TE.chainW(this.pinnedMessagesService.create),
   );
 

@@ -105,6 +105,7 @@ export class MessagesEsSearchRepo {
     },
     chat: {
       id: source.chat.id,
+      creator: source.chat.creator,
     },
     aiModel: source.ai_model && {
       id: source.ai_model.id,
