@@ -2,8 +2,5 @@
   "files.associations": {
     "*.css": "tailwindcss",
     "*.scss": "tailwindcss"
-  },
-  "exportall.config.folderListener": [
-    "/apps/backend/src/modules/pinned-messages"
-  ]
+  }
 }
