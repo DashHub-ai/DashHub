@@ -11,12 +11,19 @@ import {
 
 import type {
   SdkPinMessageInputT,
+  SdkPinMessageListItemT,
   SdkSearchPinnedMessagesInputT,
   SdkSearchPinnedMessagesOutputT,
 } from './dto';
 
 export class PinnedMessagesSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/pinned-messages';
+
+  all = () =>
+    this.fetch<SdkPinMessageListItemT[]>({
+      url: this.endpoint('/all'),
+      options: getPayload(),
+    });
 
   search = (data: SdkSearchPinnedMessagesInputT) =>
     this.fetch<SdkSearchPinnedMessagesOutputT>({

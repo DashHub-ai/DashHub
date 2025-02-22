@@ -38,6 +38,14 @@ export class PinnedMessagesController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<PinnedMessagesSdk['search']>>(context),
         ),
       )
+      .get(
+        '/all',
+        async context => pipe(
+          pinnedMessagesService.asUser(context.var.jwt).findAll(),
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<PinnedMessagesSdk['all']>>(context),
+        ),
+      )
       .post(
         '/',
         sdkSchemaValidator('json', SdkPinMessageInputV),

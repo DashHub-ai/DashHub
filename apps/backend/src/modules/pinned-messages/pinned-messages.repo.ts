@@ -56,6 +56,28 @@ export class PinnedMessagesRepo extends createProtectedDatabaseRepo('pinned_mess
     );
   };
 
+  findAll = ({ creator, forwardTransaction }: TransactionalAttrs<{ creator: TableRowWithId; }>) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      DatabaseError.tryTask(
+        transaction(qb => qb
+          .selectFrom(this.table)
+          .where('creator_user_id', '=', creator.id)
+          .select([
+            'id',
+            'message_id',
+          ])
+          .execute(),
+        ),
+      ),
+      TE.map(A.map(row => ({
+        id: row.id,
+        messageId: row.message_id,
+      }))),
+    );
+  };
+
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 

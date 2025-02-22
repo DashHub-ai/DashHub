@@ -31,6 +31,8 @@ export class PinnedMessagesService implements WithAuthFirewall<PinnedMessagesFir
 
   findWithRelationsByIds = this.repo.findWithRelationsByIds;
 
+  findAll = this.repo.findAll;
+
   create = flow(
     this.repo.create,
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),

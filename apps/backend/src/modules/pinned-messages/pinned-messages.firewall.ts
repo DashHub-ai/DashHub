@@ -28,6 +28,10 @@ export class PinnedMessagesFirewall extends AuthFirewallService {
     TE.chainW(this.pinnedMessagesService.search),
   );
 
+  findAll = () => this.pinnedMessagesService.findAll({
+    creator: this.userIdRow,
+  });
+
   create = (dto: PartialBy<InternalCreatePinnedMessageInputT, 'creator'>) => pipe(
     this.permissionsService.asUser(this.jwt).findRecordAndCheckIfCreator({
       findRecord: pipe(
