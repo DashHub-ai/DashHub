@@ -10,6 +10,7 @@ export * from './nullable.type';
 export * from './object-with-id.type';
 export * from './overwrite.type';
 export * from './partial-by.type';
+export * from './record-index-key.type';
 export * from './record-of-type.type';
 export * from './relaxed-id.type';
 export * from './replace-fn-return-type.type';

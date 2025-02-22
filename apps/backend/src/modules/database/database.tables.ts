@@ -19,6 +19,7 @@ import type {
   OrganizationsUsersTable,
 } from '../organizations';
 import type { PermissionsTable } from '../permissions';
+import type { PinnedMessagesTable } from '../pinned-messages';
 import type {
   ProjectsTable,
 } from '../projects';
@@ -74,6 +75,7 @@ export type DatabaseTables = {
   chats: ChatsTable;
   chat_summaries: ChatSummariesTable;
   messages: MessagesTable;
+  pinned_messages: PinnedMessagesTable;
 
   // LLM
   ai_models: AIModelsTable;
