@@ -168,6 +168,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       apps: 'Asystenci',
       experts: 'Eksperci',
       management: 'Administracja',
+      pinnedMessages: 'Piny',
     },
     loggedIn: {
       logout: 'Wyloguj się',
@@ -310,6 +311,13 @@ export const I18N_PACK_PL: I18nLangPack = {
         organization: 'Wdrażaj i zarządzaj ekspertami AI w całej organizacji',
         knowledge: 'Wzbogaceni o wiedzę specyficzną dla projektu dla dokładniejszej pomocy',
       },
+    },
+    pinnedMessages: {
+      meta: {
+        title: 'Przypięte wiadomości',
+        description: 'Zarządzaj przypiętymi wiadomościami',
+      },
+      title: 'Przypięte wiadomości',
     },
     settings: {
       meta: {

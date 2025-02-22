@@ -2,6 +2,7 @@ import {
   FolderKanbanIcon,
   // GraduationCapIcon,
   MessageSquareTextIcon,
+  PinIcon,
   SettingsIcon,
   WandSparklesIcon,
 } from 'lucide-react';
@@ -29,6 +30,14 @@ export function NavigationLinks() {
         disabled={!hasOrganization}
       >
         {t.links.home}
+      </NavigationItem>
+
+      <NavigationItem
+        path={sitemap.pinnedMessages.index.generate({})}
+        icon={<PinIcon size={16} />}
+        disabled={!hasOrganization}
+      >
+        {t.links.pinnedMessages}
       </NavigationItem>
 
       <NavigationItem

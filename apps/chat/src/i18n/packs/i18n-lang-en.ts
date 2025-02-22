@@ -166,6 +166,7 @@ export const I18N_PACK_EN = {
       apps: 'Assistants',
       experts: 'Experts',
       management: 'Management',
+      pinnedMessages: 'Pins',
     },
     loggedIn: {
       logout: 'Logout',
@@ -285,6 +286,13 @@ export const I18N_PACK_EN = {
         collaboration: 'Build together seamlessly - invite team members and collaborate in a shared environment',
         context: 'Preserve conversation history and maintain project context for continuous progress',
       },
+    },
+    pinnedMessages: {
+      meta: {
+        title: 'Pinned messages',
+        description: 'Manage pinned messages',
+      },
+      title: 'Pinned messages',
     },
     project: {
       meta: {
