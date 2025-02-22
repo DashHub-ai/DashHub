@@ -1,6 +1,7 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
+import type { PartialBy } from '@llm/commons';
 import type { SdkJwtTokenT, SdkSearchPinnedMessagesInputT } from '@llm/sdk';
 
 import type { TableId } from '../database';
@@ -24,10 +25,10 @@ export class PinnedMessagesFirewall extends AuthFirewallService {
     TE.chainW(this.pinnedMessagesService.search),
   );
 
-  create = (dto: InternalCreatePinnedMessageInputT) => pipe(
+  create = (dto: PartialBy<InternalCreatePinnedMessageInputT, 'creator'>) => pipe(
     this.permissionsService.asUser(this.jwt).enforceCreatorScope(dto),
     TE.fromEither,
-    TE.chainW(() => this.pinnedMessagesService.create(dto)),
+    TE.chainW(this.pinnedMessagesService.create),
   );
 
   delete = (id: TableId) => pipe(

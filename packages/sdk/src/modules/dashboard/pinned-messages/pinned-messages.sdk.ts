@@ -5,6 +5,7 @@ import {
   postPayload,
   type SdkRecordAlreadyExistsError,
   type SdkRecordNotFoundError,
+  type SdkSuccessT,
   type SdkTableRowIdT,
   type SdkTableRowWithIdT,
 } from '~/shared';
@@ -36,7 +37,7 @@ export class PinnedMessagesSdk extends AbstractNestedSdkWithAuth {
 
   delete = (id: SdkTableRowIdT) =>
     this.fetch<
-      SdkTableRowWithIdT,
+      SdkSuccessT,
       SdkRecordNotFoundError | SdkRecordAlreadyExistsError
     >({
       url: this.endpoint(`/${id}`),
