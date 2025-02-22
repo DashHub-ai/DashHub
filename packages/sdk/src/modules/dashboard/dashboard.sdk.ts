@@ -6,6 +6,7 @@ import { AppsCategoriesSdk } from './apps-categories';
 import { ChatsSdk } from './chats';
 import { ExpertsSdk } from './experts';
 import { OrganizationsSdk } from './organizations';
+import { PinnedMessagesSdk } from './pinned-messages';
 import { ProjectsSdk } from './projects';
 import { ProjectsEmbeddingsSdk } from './projects-embeddings';
 import { ProjectsFilesSdk } from './projects-files';
@@ -43,6 +44,8 @@ export class DashboardSdk {
   public readonly searchEngines = new SearchEnginesSdk(this.config);
 
   public readonly shareResource = new ShareResourceSdk(this.config);
+
+  public readonly pinnedMessages = new PinnedMessagesSdk(this.config);
 
   constructor(private readonly config: AbstractNestedSdkWithAuthConfig) {}
 }
