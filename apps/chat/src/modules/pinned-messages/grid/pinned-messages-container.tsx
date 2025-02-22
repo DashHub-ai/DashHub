@@ -54,18 +54,23 @@ export function PinnedMessagesContainer({ storeDataInUrl = false }: Props) {
 
   return (
     <section>
-      <PaginationToolbar className="mb-6">
-        <PaginationSearchToolbarItem
-          {...pagination.bind.path('phrase', {
-            relatedInputs: ({ newGlobalValue, newControlValue }) => ({
-              ...newGlobalValue,
-              sort: newControlValue ? 'score:desc' : 'createdAt:asc',
-            }),
-          })}
-        />
+      <PaginationToolbar
+        className="mb-6"
+        suffix={(
+          <>
+            <PaginationSearchToolbarItem
+              {...pagination.bind.path('phrase', {
+                relatedInputs: ({ newGlobalValue, newControlValue }) => ({
+                  ...newGlobalValue,
+                  sort: newControlValue ? 'score:desc' : 'createdAt:asc',
+                }),
+              })}
+            />
 
-        <ResetFiltersButton onClick={reset} />
-      </PaginationToolbar>
+            <ResetFiltersButton onClick={reset} />
+          </>
+        )}
+      />
 
       <PaginatedList
         result={mappedResult}

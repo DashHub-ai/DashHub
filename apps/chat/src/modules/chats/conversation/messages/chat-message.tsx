@@ -41,6 +41,7 @@ type Props = {
   readOnly?: boolean;
   archived?: boolean;
   showToolbars?: boolean;
+  showAvatar?: boolean;
   onRefreshResponse?: (message: Omit<SdkRepeatedMessageItemT, 'content'>) => void;
   onReply?: (message: SdkRepeatedMessageItemT) => void;
   onAction?: (action: string) => void;
@@ -55,6 +56,7 @@ export function ChatMessage(
     actionsToolbar,
     isLast,
     readOnly,
+    showAvatar = true,
     showToolbars = true,
     onRefreshResponse,
     onReply,
@@ -99,7 +101,7 @@ export function ChatMessage(
         className,
       )}
     >
-      {(!isYou || isAI) && (
+      {showAvatar && (!isYou || isAI) && (
         <div
           className={clsx(
             'flex flex-shrink-0 justify-center items-center border rounded-full w-8 h-8',

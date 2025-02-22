@@ -30,6 +30,7 @@ export function PinnedMessageCard({ pinnedMessage }: Props) {
       className="mx-auto mb-0 max-w-[750px]"
       message={{ ...message, repeats: [] }}
       showToolbars={false}
+      showAvatar={false}
       showAnim={false}
       actionsToolbar={(
         <ToolbarSmallActionButton

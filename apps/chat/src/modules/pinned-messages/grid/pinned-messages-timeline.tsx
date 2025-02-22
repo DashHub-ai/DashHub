@@ -20,7 +20,14 @@ export function PinnedMessagesTimeline({ items }: TimelineProps) {
           const isEven = index % 2 === 0;
 
           return (
-            <div key={item.id} className="relative" style={{ marginTop: index === 0 ? '2rem' : '-4rem' }}>
+            <div
+              key={item.id}
+              className="relative"
+              style={{
+                marginTop: index === 0 ? '2rem' : '-4rem',
+                zIndex: items.length - index + 1,
+              }}
+            >
               <div className="top-[29px] left-1/2 z-10 absolute bg-white border-2 border-gray-300 rounded-full w-3 h-3 -translate-x-1/2" />
 
               <div className="top-[29px] left-1/2 absolute -translate-x-1/2 -translate-y-12">
