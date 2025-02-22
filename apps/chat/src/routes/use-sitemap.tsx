@@ -23,6 +23,9 @@ export function useSitemap() {
     experts: prefixWithBaseRoute('/experts'),
     login: prefixWithBaseRoute('/login'),
     chat: defineSitemapRouteGenerator(prefixWithBaseRoute)('/chat/:id'),
+    pinnedMessages: {
+      index: defineSitemapRouteGenerator(prefixWithBaseRoute)('/pinned-messages'),
+    },
     management: {
       index: prefixWithBaseRoute('/management'),
       users: prefixWithBaseRoute('/management/users'),

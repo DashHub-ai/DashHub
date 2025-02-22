@@ -11,6 +11,7 @@ import { LoggerService } from '~/modules/logger';
 import { MessagesEsIndexRepo } from '~/modules/messages/elasticsearch/messages-es-index.repo';
 import { OrganizationsEsIndexRepo } from '~/modules/organizations/elasticsearch';
 import { OrganizationsS3BucketsEsIndexRepo } from '~/modules/organizations/s3-buckets/elasticsearch/organizations-s3-buckets-es-index.repo';
+import { PinnedMessagesEsIndexRepo } from '~/modules/pinned-messages/elasticsearch/pinned-messages-es-index.repo';
 import { ProjectsEmbeddingsEsIndexRepo } from '~/modules/projects-embeddings/elasticsearch/projects-embeddings-es-index.repo';
 import { ProjectsFilesEsIndexRepo } from '~/modules/projects-files/elasticsearch/projects-files-es-index.repo';
 import { ProjectsEsIndexRepo } from '~/modules/projects/elasticsearch/projects-es-index.repo';
@@ -39,6 +40,7 @@ export class ElasticsearchRegistryBootService {
     @inject(ProjectsFilesEsIndexRepo) private readonly projectsFilesEsIndexRepo: ProjectsFilesEsIndexRepo,
     @inject(ProjectsEmbeddingsEsIndexRepo) private readonly projectsEmbeddingsEsIndexRepo: ProjectsEmbeddingsEsIndexRepo,
     @inject(SearchEnginesEsIndexRepo) private readonly searchEnginesEsIndexRepo: SearchEnginesEsIndexRepo,
+    @inject(PinnedMessagesEsIndexRepo) private readonly pinnedMessagesEsIndexRepo: PinnedMessagesEsIndexRepo,
   ) {}
 
   register = TE.fromIO(() => {
@@ -56,6 +58,7 @@ export class ElasticsearchRegistryBootService {
       this.projectsFilesEsIndexRepo,
       this.projectsEmbeddingsEsIndexRepo,
       this.searchEnginesEsIndexRepo,
+      this.pinnedMessagesEsIndexRepo,
     ]);
 
     this.logger.info('Registered elasticsearch repos!');

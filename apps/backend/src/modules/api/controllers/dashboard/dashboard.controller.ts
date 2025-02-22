@@ -6,6 +6,7 @@ import { AppsCategoriesController } from './apps-categories.controller';
 import { AppsController } from './apps.controller';
 import { ChatsController } from './chats.controller';
 import { OrganizationsController } from './organizations.controller';
+import { PinnedMessagesController } from './pinned-messages.controller';
 import { ProjectsController } from './projects.controller';
 import { S3BucketsController } from './s3-buckets.controller';
 import { SearchEnginesController } from './search-engines.controller';
@@ -29,6 +30,7 @@ export class DashboardController extends BaseController {
     @inject(ShareResourceController) shareResource: ShareResourceController,
     @inject(UsersMeController) usersMe: UsersMeController,
     @inject(SearchEnginesController) searchEngines: SearchEnginesController,
+    @inject(PinnedMessagesController) pinnedMessages: PinnedMessagesController,
   ) {
     super();
 
@@ -44,6 +46,7 @@ export class DashboardController extends BaseController {
       .route('/chats', chats.router)
       .route('/ai-models', aiModels.router)
       .route('/search-engines', searchEngines.router)
-      .route('/share-resource', shareResource.router);
+      .route('/share-resource', shareResource.router)
+      .route('/pinned-messages', pinnedMessages.router);
   }
 }

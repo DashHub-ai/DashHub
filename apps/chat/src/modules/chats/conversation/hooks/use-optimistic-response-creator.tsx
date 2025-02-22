@@ -19,6 +19,15 @@ export type OptimisticMessageOutputT = Overwrite<SdkMessageT, {
 export function useOptimisticResponseCreator() {
   const { session: { token } } = useSdkForLoggedIn();
 
+  const createOptimisticChat = () => ({
+    id: v4(),
+    creator: {
+      id: -1,
+      email: '',
+      name: '',
+    },
+  });
+
   const createBaseMessageFields = (): Pick<
     OptimisticMessageOutputT,
     'id' | 'updatedAt' | 'createdAt'
@@ -34,7 +43,7 @@ export function useOptimisticResponseCreator() {
       content,
       role: 'user',
       aiModel: null,
-      chat: { id: v4() },
+      chat: createOptimisticChat(),
       repliedMessage: null,
       app: null,
       files: (files ?? []).map(createOptimisticResponseFile),
@@ -65,7 +74,7 @@ export function useOptimisticResponseCreator() {
       files: [],
       content: observable,
       role: 'assistant',
-      chat: { id: v4() },
+      chat: createOptimisticChat(),
       aiModel,
       creator: null,
       repliedMessage: null,
@@ -80,7 +89,7 @@ export function useOptimisticResponseCreator() {
     app: (app: SdkTableRowWithIdNameT): OptimisticMessageOutputT => ({
       ...createBaseMessageFields(),
       files: [],
-      chat: { id: v4() },
+      chat: createOptimisticChat(),
       content: 'System message',
       role: 'assistant',
       creator: null,

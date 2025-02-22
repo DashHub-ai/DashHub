@@ -168,6 +168,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       apps: 'Asystenci',
       experts: 'Eksperci',
       management: 'Administracja',
+      pinnedMessages: 'Piny',
     },
     loggedIn: {
       logout: 'Wyloguj się',
@@ -311,6 +312,13 @@ export const I18N_PACK_PL: I18nLangPack = {
         knowledge: 'Wzbogaceni o wiedzę specyficzną dla projektu dla dokładniejszej pomocy',
       },
     },
+    pinnedMessages: {
+      meta: {
+        title: 'Przypięte wiadomości',
+        description: 'Zarządzaj przypiętymi wiadomościami',
+      },
+      title: 'Przypięte wiadomości',
+    },
     settings: {
       meta: {
         title: 'Ustawienia',
@@ -449,6 +457,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       you: 'Ty',
       ai: 'AI',
       webSearch: 'Wyszukiwanie w sieci',
+      saved: 'Zapisane na potem',
     },
     generating: {
       title: 'Generowanie tytułu...',
@@ -466,6 +475,8 @@ export const I18N_PACK_PL: I18nLangPack = {
         less: 'Pokaż mniej',
       },
       addApp: 'Dodaj aplikację',
+      pin: 'Przypnij',
+      unpin: 'Odepnij',
     },
     placeholders: {
       enterMessage: 'Wpisz wiadomość...',
@@ -793,6 +804,14 @@ export const I18N_PACK_PL: I18nLangPack = {
       download: 'Pobierz',
       delete: 'Usuń',
       emptyPlaceholder: 'Brak plików! Dodaj nowy plik, aby zacząć.',
+    },
+  },
+  pinnedMessages: {
+    grid: {
+      placeholder: 'Brak przypiętych wiadomości! Dodaj nową wiadomość, aby zacząć',
+    },
+    buttons: {
+      goToChat: 'Przejdź do czatu',
     },
   },
   experts: {

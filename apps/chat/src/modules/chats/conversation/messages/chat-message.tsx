@@ -1,13 +1,16 @@
+import type { ReactNode } from 'react';
+
 import { useControl } from '@under-control/forms';
 import clsx from 'clsx';
 import { takeRight } from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
-import { AlertCircle, Bot, Globe, ReplyIcon, User } from 'lucide-react';
+import { AlertCircle, Bookmark, Bot, Globe, ReplyIcon, User } from 'lucide-react';
 
 import { type Overwrite, pluckTyped } from '@llm/commons';
 import {
   type SdkRepeatedMessageLike,
   type SdkSearchMessageItemT,
+  useIsSdkPinnedMessageToggled,
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { useI18n } from '~/i18n';
@@ -18,26 +21,46 @@ import { FilesCardsList } from '../files';
 import { ToolbarSmallActionButton } from './buttons';
 import { ChatMessageAIActions } from './chat-message-ai-actions';
 import { ChatMessageContent } from './chat-message-content';
+import { ChatMessagePinAction } from './chat-message-pin-action';
 import { ChatMessageRepliedMessage } from './chat-message-replied-message';
 import { ChatMessageVariants } from './chat-message-variants';
 
 export type SdkRepeatedMessageItemT = SdkRepeatedMessageLike<
   Overwrite<SdkSearchMessageItemT, {
     content: string | AIStreamObservable;
+    isPinned?: boolean;
   }>
 >;
 
 type Props = {
+  className?: string;
   message: SdkRepeatedMessageItemT;
-  isLast: boolean;
+  actionsToolbar?: ReactNode;
+  showAnim?: boolean;
+  isLast?: boolean;
   readOnly?: boolean;
   archived?: boolean;
-  onRefreshResponse: (message: Omit<SdkRepeatedMessageItemT, 'content'>) => void;
-  onReply: (message: SdkRepeatedMessageItemT) => void;
-  onAction: (action: string) => void;
+  showToolbars?: boolean;
+  onRefreshResponse?: (message: Omit<SdkRepeatedMessageItemT, 'content'>) => void;
+  onReply?: (message: SdkRepeatedMessageItemT) => void;
+  onAction?: (action: string) => void;
 };
 
-export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResponse, onReply, onAction }: Props) {
+export function ChatMessage(
+  {
+    className,
+    showAnim = true,
+    archived,
+    message,
+    actionsToolbar,
+    isLast,
+    readOnly,
+    showToolbars = true,
+    onRefreshResponse,
+    onReply,
+    onAction,
+  }: Props,
+) {
   const t = useI18n().pack.chat;
   const { session } = useSdkForLoggedIn();
 
@@ -55,21 +78,25 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
 
   const isAI = role === 'assistant';
   const isYou = creator?.email === session.token.email;
+  const isPinned = useIsSdkPinnedMessageToggled(message.id);
+
   const isCorrupted = message.corrupted;
   const hasWebSearch = message.webSearch?.enabled;
 
   return (
     <div
       className={clsx(
-        'flex items-start gap-4 px-4 py-2',
-        'animate-messageSlideIn',
+        'flex items-start gap-4',
+        showAnim && 'animate-messageSlideIn',
         {
           'mb-5': !repeats.length,
           'mb-10': repeats.length,
           'opacity-75': readOnly && archived,
-          'opacity-0': !readOnly || !archived,
-          'flex-row-reverse': !isAI && isYou,
+          'opacity-0': showAnim && (!readOnly || !archived),
+          'flex-row-reverse': showAnim && (!isAI && isYou),
+          'bg-purple-50/50 p-6 border border-purple-100 rounded-lg': isPinned,
         },
+        className,
       )}
     >
       {(!isYou || isAI) && (
@@ -116,6 +143,12 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
                   {t.messages.webSearch}
                 </span>
               )}
+              {isPinned && (
+                <span className="inline-flex items-center gap-1 bg-purple-100 px-1.5 py-0.5 rounded-full text-purple-700 text-xs">
+                  <Bookmark size={12} />
+                  {t.messages.saved}
+                </span>
+              )}
             </span>
             <span className="text-gray-400 text-xs">
               {new Date(createdAt).toLocaleTimeString()}
@@ -139,7 +172,7 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
               'items-end': !isAI && isYou,
             })}
           >
-            {!readOnly && isYou && !isAI && (
+            {!readOnly && isYou && !isAI && onReply && (
               <button
                 type="button"
                 onClick={() => onReply(message)}
@@ -156,11 +189,12 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
               {!isAI && message.repliedMessage && (
                 <ChatMessageRepliedMessage message={message.repliedMessage} />
               )}
+
               <ChatMessageContent
                 key={typeof content}
                 content={content}
                 disabled={!isLast || readOnly}
-                showToolbars={isAI}
+                showToolbars={showToolbars && isAI}
                 searchResults={message.webSearch.results ?? []}
                 onAction={onAction}
               />
@@ -188,19 +222,28 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
             {!readOnly && !isYou && (
               <div className="flex justify-between items-center">
                 <div className="flex flex-wrap items-center gap-4 w-full">
-                  <ToolbarSmallActionButton
-                    title={t.actions.reply}
-                    icon={<ReplyIcon size={14} className="text-gray-500" />}
-                    onClick={() => onReply(message)}
-                  />
+                  {onReply && (
+                    <ToolbarSmallActionButton
+                      title={t.actions.reply}
+                      icon={<ReplyIcon size={14} className="text-gray-500" />}
+                      onClick={() => onReply(message)}
+                    />
+                  )}
+
+                  <ChatMessagePinAction messageId={message.id} />
+
+                  {actionsToolbar}
 
                   {isAI && (
                     <>
-                      <ChatMessageAIActions
-                        isLast={isLast}
-                        message={message}
-                        onRefreshResponse={() => onRefreshResponse(message)}
-                      />
+                      {onRefreshResponse && (
+                        <ChatMessageAIActions
+                          isLast={!!isLast}
+                          message={message}
+                          onRefreshResponse={() => onRefreshResponse(message)}
+                        />
+                      )}
+
                       {repeats.length > 0 && (
                         <ChatMessageVariants
                           {...currentVariant.bind.entire()}

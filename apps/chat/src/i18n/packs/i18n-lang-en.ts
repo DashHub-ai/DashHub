@@ -166,6 +166,7 @@ export const I18N_PACK_EN = {
       apps: 'Assistants',
       experts: 'Experts',
       management: 'Management',
+      pinnedMessages: 'Pins',
     },
     loggedIn: {
       logout: 'Logout',
@@ -285,6 +286,13 @@ export const I18N_PACK_EN = {
         collaboration: 'Build together seamlessly - invite team members and collaborate in a shared environment',
         context: 'Preserve conversation history and maintain project context for continuous progress',
       },
+    },
+    pinnedMessages: {
+      meta: {
+        title: 'Pinned messages',
+        description: 'Manage pinned messages',
+      },
+      title: 'Pinned messages',
     },
     project: {
       meta: {
@@ -447,6 +455,7 @@ export const I18N_PACK_EN = {
       you: 'You',
       ai: 'AI',
       webSearch: 'Web search',
+      saved: 'Saved for later',
     },
     generating: {
       title: 'Generating title...',
@@ -464,6 +473,8 @@ export const I18N_PACK_EN = {
       refresh: 'Refresh response',
       reply: 'Reply to this message',
       addApp: 'Add app',
+      pin: 'Pin',
+      unpin: 'Unpin',
     },
     placeholders: {
       enterMessage: 'Enter your message...',
@@ -791,6 +802,14 @@ export const I18N_PACK_EN = {
       download: 'Download file',
       delete: 'Delete file',
       emptyPlaceholder: 'No files yet. Feel free to upload one!',
+    },
+  },
+  pinnedMessages: {
+    grid: {
+      placeholder: 'No pinned messages yet. Pin a message to keep it here!',
+    },
+    buttons: {
+      goToChat: 'Go to chat',
     },
   },
   experts: {

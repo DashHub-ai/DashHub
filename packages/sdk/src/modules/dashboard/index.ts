@@ -7,6 +7,7 @@ export * from './experts';
 export * from './messages';
 export * from './organizations';
 export * from './permissions';
+export * from './pinned-messages';
 export * from './projects';
 export * from './projects-embeddings';
 export * from './projects-files';
