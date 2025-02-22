@@ -18,12 +18,14 @@ import { FilesCardsList } from '../files';
 import { ToolbarSmallActionButton } from './buttons';
 import { ChatMessageAIActions } from './chat-message-ai-actions';
 import { ChatMessageContent } from './chat-message-content';
+import { ChatMessagePinAction } from './chat-message-pin-action';
 import { ChatMessageRepliedMessage } from './chat-message-replied-message';
 import { ChatMessageVariants } from './chat-message-variants';
 
 export type SdkRepeatedMessageItemT = SdkRepeatedMessageLike<
   Overwrite<SdkSearchMessageItemT, {
     content: string | AIStreamObservable;
+    isPinned?: boolean;
   }>
 >;
 
@@ -193,6 +195,8 @@ export function ChatMessage({ archived, message, isLast, readOnly, onRefreshResp
                     icon={<ReplyIcon size={14} className="text-gray-500" />}
                     onClick={() => onReply(message)}
                   />
+
+                  <ChatMessagePinAction messageId={message.id} />
 
                   {isAI && (
                     <>

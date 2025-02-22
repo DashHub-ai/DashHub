@@ -7,7 +7,8 @@ import type { SdkJwtTokenT, SdkSearchPinnedMessagesInputT } from '@llm/sdk';
 import type { TableId } from '../database';
 import type { MessagesService } from '../messages';
 import type { PermissionsService } from '../permissions';
-import type { InternalCreatePinnedMessageInputT, PinnedMessagesService } from './pinned-messages.service';
+import type { InternalCreatePinnedMessageInputT } from './pinned-messages.repo';
+import type { PinnedMessagesService } from './pinned-messages.service';
 
 import { AuthFirewallService } from '../auth';
 
@@ -35,7 +36,7 @@ export class PinnedMessagesFirewall extends AuthFirewallService {
       ),
     }),
     TE.chainEitherKW(() => this.permissionsService.asUser(this.jwt).enforceCreatorScope(dto)),
-    TE.chainW(this.pinnedMessagesService.create),
+    TE.chainW(value => this.pinnedMessagesService.create({ value })),
   );
 
   delete = (id: TableId) => pipe(

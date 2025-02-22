@@ -1,9 +1,8 @@
 import { taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { Overwrite } from '@llm/commons';
-import type { SdkJwtTokenT, SdkPinMessageInputT } from '@llm/sdk';
+import type { SdkJwtTokenT } from '@llm/sdk';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableRowWithId } from '../database';
@@ -32,13 +31,8 @@ export class PinnedMessagesService implements WithAuthFirewall<PinnedMessagesFir
 
   findWithRelationsByIds = this.repo.findWithRelationsByIds;
 
-  create = (dto: InternalCreatePinnedMessageInputT) => pipe(
-    this.repo.create({
-      value: {
-        creatorUserId: dto.creator.id,
-        messageId: dto.messageId,
-      },
-    }),
+  create = flow(
+    this.repo.create,
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
@@ -47,7 +41,3 @@ export class PinnedMessagesService implements WithAuthFirewall<PinnedMessagesFir
     TE.tap(() => this.esIndexRepo.deleteDocument(id)),
   );
 }
-
-export type InternalCreatePinnedMessageInputT = Overwrite<SdkPinMessageInputT, {
-  creator: TableRowWithId;
-}>;

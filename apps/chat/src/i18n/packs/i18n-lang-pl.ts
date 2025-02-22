@@ -474,6 +474,8 @@ export const I18N_PACK_PL: I18nLangPack = {
         less: 'Pokaż mniej',
       },
       addApp: 'Dodaj aplikację',
+      pin: 'Przypnij',
+      unpin: 'Odepnij',
     },
     placeholders: {
       enterMessage: 'Wpisz wiadomość...',

@@ -472,6 +472,8 @@ export const I18N_PACK_EN = {
       refresh: 'Refresh response',
       reply: 'Reply to this message',
       addApp: 'Add app',
+      pin: 'Pin',
+      unpin: 'Unpin',
     },
     placeholders: {
       enterMessage: 'Enter your message...',

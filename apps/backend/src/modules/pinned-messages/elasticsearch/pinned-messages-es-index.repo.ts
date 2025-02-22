@@ -27,9 +27,10 @@ const PinnedMessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
       properties: {
         ...createBaseDatedRecordMappings(),
         creator: createIdNameObjectMapping(),
-        message: createIdObjectMapping({
-          ...createBaseAutocompleteFieldMappings('content'),
-        }),
+        message: createIdObjectMapping(
+          createBaseAutocompleteFieldMappings('content'),
+          'keyword',
+        ),
       },
     },
     settings: {

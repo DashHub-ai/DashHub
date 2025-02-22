@@ -2,12 +2,15 @@ import { array as A, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { groupByFlatProp, pluckTyped } from '@llm/commons';
+import type { SdkPinMessageInputT } from '@llm/sdk';
+
+import { groupByFlatProp, Overwrite, pluckTyped } from '@llm/commons';
 import {
-  createDatabaseRepo,
+  createProtectedDatabaseRepo,
   DatabaseConnectionRepo,
   DatabaseError,
   type TableId,
+  TableRowWithId,
   type TransactionalAttrs,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
@@ -16,13 +19,42 @@ import { MessagesRepo } from '../messages';
 import { PinnedMessageTableRowWithRelations } from './pinned-messages.tables';
 
 @injectable()
-export class PinnedMessagesRepo extends createDatabaseRepo('pinned_messages') {
+export class PinnedMessagesRepo extends createProtectedDatabaseRepo('pinned_messages') {
   constructor(
     connectionRepo: DatabaseConnectionRepo,
     @inject(MessagesRepo) private readonly messagesRepo: MessagesRepo,
   ) {
     super(connectionRepo);
   }
+
+  createIdsIterator = this.baseRepo.createIdsIterator;
+
+  delete = this.baseRepo.delete;
+
+  create = ({ forwardTransaction, value }: TransactionalAttrs<{ value: InternalCreatePinnedMessageInputT; }>) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(trx =>
+        trx
+          .insertInto(this.table)
+          .values({
+            creator_user_id: value.creator.id,
+            message_id: value.messageId,
+          })
+          .returning('id')
+          .onConflict(
+            oc => oc
+              .columns(['creator_user_id', 'message_id'])
+              .doUpdateSet(eb => ({
+                updated_at: eb.fn('now'),
+              })),
+          )
+          .executeTakeFirstOrThrow(),
+      ),
+      DatabaseError.tryTask,
+    );
+  };
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
@@ -75,3 +107,7 @@ export class PinnedMessagesRepo extends createDatabaseRepo('pinned_messages') {
     );
   };
 }
+
+export type InternalCreatePinnedMessageInputT = Overwrite<SdkPinMessageInputT, {
+  creator: TableRowWithId;
+}>;
