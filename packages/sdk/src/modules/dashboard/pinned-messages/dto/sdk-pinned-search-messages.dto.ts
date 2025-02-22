@@ -4,6 +4,7 @@ import {
   SdkDefaultSortInputV,
   SdkExcludeIdsFiltersInputV,
   SdkFilteredPhraseInputV,
+  SdkIdsArrayV,
   SdkIdsFiltersInputV,
   SdkOffsetPaginationInputV,
   SdkOffsetPaginationOutputV,
@@ -19,7 +20,9 @@ export const SdkPinnedMessagesSortV = SdkDefaultSortInputV;
 
 export type SdkPinnedMessagesSortT = z.infer<typeof SdkPinnedMessagesSortV>;
 
-export const SdkSearchPinnedMessagesInputV = SdkOffsetPaginationInputV
+export const SdkSearchPinnedMessagesInputV = SdkOffsetPaginationInputV.extend({
+  creatorsIds: SdkIdsArrayV.optional(),
+})
   .merge(SdkDefaultSortInputV)
   .merge(SdkIdsFiltersInputV)
   .merge(SdkExcludeIdsFiltersInputV)

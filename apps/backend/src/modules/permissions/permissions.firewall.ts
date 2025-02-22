@@ -310,6 +310,41 @@ export class PermissionsFirewall extends AuthFirewallService {
   };
 
   /**
+   * Enforces creator scoped access by enhancing the DTO with proper creator field.
+   *
+   * @example
+   * create = (dto: SdkCreateInputT) => pipe(
+   *  this.permissionsFirewall.enforceCreatorScopeFilters(dto),
+   *  TE.fromEither,
+   *  TE.chainW(this.someService.create),
+   * );
+   */
+  enforceCreatorScopeFilters = <F extends { creatorsIds?: SdkIdsArrayT; }>(
+    filters: F,
+  ): E.Either<SdkUnauthorizedError, F> => {
+    const { jwt } = this;
+
+    switch (jwt.role) {
+      case 'root':
+        return E.right({
+          ...filters,
+          creatorsIds: filters.creatorsIds ?? [this.userId],
+        });
+
+      case 'user':
+        return E.right({
+          ...filters,
+          creatorsIds: [this.userId],
+        });
+
+      default: {
+        const _: never = jwt;
+        return ofSdkUnauthorizedErrorE();
+      }
+    }
+  };
+
+  /**
    * Enforces organization scoped access by enhancing the DTO with proper organization field.
    * For root users, requires organization to be provided in DTO.
    * For regular users, automatically uses their organization from JWT.
