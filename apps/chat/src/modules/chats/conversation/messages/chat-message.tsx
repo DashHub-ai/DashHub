@@ -91,7 +91,7 @@ export function ChatMessage(
         'flex items-start gap-4',
         showAnim && 'animate-messageSlideIn',
         {
-          'mb-5': !repeats.length,
+          'mb-8': !repeats.length,
           'mb-10': repeats.length,
           'opacity-75': readOnly && archived,
           'opacity-0': showAnim && (!readOnly || !archived),
