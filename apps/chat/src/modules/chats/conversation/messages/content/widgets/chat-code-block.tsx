@@ -18,17 +18,16 @@ type ChatCodeBlockProps = {
 export function ChatCodeBlock({ language, children, initialShowPreview }: ChatCodeBlockProps) {
   const t = useI18n().pack.chat.widgets.code;
   const containerRef = useRef<HTMLDivElement>(null);
+  const isHtml = language === 'html';
 
   const [copied, setCopied] = useState(false);
-  const [showPreview, setShowPreview] = useState(initialShowPreview || false);
+  const [showPreview, setShowPreview] = useState(initialShowPreview ? isHtml : false);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(children);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-
-  const isHtml = language === 'html';
 
   useUpdateEffect(() => {
     if (initialShowPreview && isHtml) {

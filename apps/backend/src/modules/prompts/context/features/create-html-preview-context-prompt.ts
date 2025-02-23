@@ -4,7 +4,7 @@ import { featureXML } from './feature-xml-tag';
 export function createHtmlPreviewContextPrompt(): string {
   return featureXML({
     name: 'HTML Preview',
-    description: 'You can embed HTML content with interactive data visualizations, statistical analysis, and charts using markdown HTML tags. When presenting data analysis results, prefer visual representations using appropriate chart types. Choose vector-based charts (SVG) for complex interactions and smaller datasets, or canvas-based charts for larger datasets and better performance.',
+    description: 'You can embed HTML content with interactive data visualizations, statistical analysis, and charts using markdown HTML tags. When presenting data analysis results, prefer visual representations using appropriate chart types. If the user provides data files, analyze their content to create relevant visualizations.',
     children: [
       xml('rules', {
         children: [
@@ -35,6 +35,16 @@ export function createHtmlPreviewContextPrompt(): string {
           xml('rule', { children: ['Place charts at the beginning of the section, followed by explanatory text'] }),
           xml('rule', { children: ['Centerize your visualizations and text properly using flex, they must be centered on the page'] }),
           xml('rule', { children: ['Initialize charts and visualizations on load document event'] }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: When user requests a chart without specifying language, default to HTML'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: When files are provided, analyze their content to generate relevant visualizations'],
+          }),
+          xml('rule', { children: ['Extract meaningful patterns and relationships from provided data files'] }),
+          xml('rule', { children: ['Choose appropriate chart types based on the data structure and patterns'] }),
           xml('chart-choice', {
             attributes: { type: 'vector' },
             children: [
