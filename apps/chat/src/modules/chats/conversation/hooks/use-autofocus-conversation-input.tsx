@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { useAfterMount } from '@llm/commons-front';
+import { useAfterMount, useTimeout } from '@llm/commons-front';
 
 export function useAutoFocusConversationInput() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -18,6 +18,7 @@ export function useAutoFocusConversationInput() {
     inputRef.current?.focus();
   };
 
+  useTimeout(scrollConversation, { time: 500 });
   useAfterMount(focusInput);
 
   return {

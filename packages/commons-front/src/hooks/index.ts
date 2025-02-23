@@ -20,6 +20,7 @@ export * from './use-last-non-null-value';
 export * from './use-local-storage-object';
 export * from './use-modal';
 export * from './use-outside-click-ref';
+export * from './use-portal-root';
 export * from './use-promise-optimistic-response';
 export * from './use-ref-safe-callback';
 export * from './use-ref-safe-callbacks-hash';

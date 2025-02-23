@@ -76,10 +76,11 @@ export const ChatMessageContent = memo((
     <div className={className}>
       {!truncate && showToolbars && hydrationResult.prependToolbars}
 
-      <div className={clsx('max-w-[800px]', textClassName)}>
+      <div className={clsx('max-w-[750px]', textClassName)}>
         <ChatMessageMarkdown
           content={hydrationResult.content}
           inlinedReactComponents={hydrationResult.inlinedReactComponents}
+          isStreaming={isStreaming}
         />
       </div>
 

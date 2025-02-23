@@ -227,19 +227,29 @@ export const ChatConversationPanel = memo((
       <div
         ref={messagesContainerRef}
         className={clsx(
-          'z-10 relative flex-1 m-auto w-[800px] max-w-screen-md',
           '[&::-webkit-scrollbar]:hidden',
           '[-ms-overflow-style:none]',
           'overflow-y-scroll',
           '[scrollbar-width:none]',
-          // Avoid scroll flickering on first render
-          flickeringIndicator.visible
-            ? 'opacity-100'
-            : 'opacity-0',
+          'h-full',
         )}
-        onLoad={scrollConversation}
       >
-        {groupedMessages.map(renderMessage)}
+        <div
+          className={clsx(
+            'z-10 relative flex-1 m-auto w-[800px] max-w-screen-md',
+
+            // Avoid scroll flickering on first render
+            flickeringIndicator.visible
+              ? 'opacity-100'
+              : 'opacity-0',
+
+            // Magic CSS class for preview indicators
+            'chat-conversation-panel',
+          )}
+          onLoad={scrollConversation}
+        >
+          {groupedMessages.map(renderMessage)}
+        </div>
       </div>
 
       {can.write && !chat.archived && (

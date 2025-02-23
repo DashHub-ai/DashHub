@@ -461,6 +461,11 @@ export const I18N_PACK_EN = {
       code: {
         copy: 'Copy',
         copied: 'Copied!',
+        run: 'Run',
+        stop: 'Stop',
+        preview: {
+          addressBar: 'Preview',
+        },
       },
     },
     generating: {

@@ -9,9 +9,10 @@ import { ChatCodeBlock } from './widgets';
 type Props = {
   content: string;
   inlinedReactComponents?: Record<string, React.ReactNode>;
+  isStreaming?: boolean;
 };
 
-export const ChatMessageMarkdown = memo(({ content, inlinedReactComponents = {} }: Props) => {
+export const ChatMessageMarkdown = memo(({ content, inlinedReactComponents = {}, isStreaming }: Props) => {
   return (
     <Markdown
       className={clsx(
@@ -58,7 +59,7 @@ export const ChatMessageMarkdown = memo(({ content, inlinedReactComponents = {} 
 
           return !inline && match
             ? (
-                <ChatCodeBlock language={match[1]}>
+                <ChatCodeBlock language={match[1]} initialShowPreview={!isStreaming}>
                   {String(children).replace(/\n$/, '')}
                 </ChatCodeBlock>
               )

@@ -463,6 +463,11 @@ export const I18N_PACK_PL: I18nLangPack = {
       code: {
         copy: 'Kopiuj',
         copied: 'Skopiowano!',
+        run: 'Uruchom',
+        stop: 'Zatrzymaj',
+        preview: {
+          addressBar: 'Podgląd',
+        },
       },
     },
     generating: {
