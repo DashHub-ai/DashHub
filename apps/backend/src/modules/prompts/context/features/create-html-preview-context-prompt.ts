@@ -19,6 +19,7 @@ export function createHtmlPreviewContextPrompt(): string {
           xml('rule', { children: ['Always provide fallback content in case JavaScript is disabled'] }),
           xml('rule', { children: ['For data analysis results, combine charts with brief textual explanations below'] }),
           xml('rule', { children: ['Place charts at the beginning of the section, followed by explanatory text'] }),
+          xml('rule', { children: ['Centerize your visualizations and text properly using flex, they must be centered on the page'] }),
         ],
       }),
       xml('examples', {
