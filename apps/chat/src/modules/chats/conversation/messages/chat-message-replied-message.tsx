@@ -4,7 +4,7 @@ import type { SdkRepliedMessageT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
 
-import { ChatMessageContent } from './chat-message-content';
+import { ChatMessageContent } from './content/chat-message-content';
 
 type Props = {
   message: SdkRepliedMessageT;

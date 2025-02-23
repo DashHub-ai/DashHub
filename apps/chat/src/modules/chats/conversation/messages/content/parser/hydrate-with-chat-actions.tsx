@@ -1,6 +1,6 @@
 import type { ContentHydrator } from './hydrate-result';
 
-import { MessageContentActionButton } from '../messages/buttons';
+import { MessageContentActionButton } from '../../buttons';
 
 type ChatAction = {
   label: string;

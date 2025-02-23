@@ -6,9 +6,9 @@ import type { SdkMessageWebSearchItemT } from '@llm/sdk';
 
 import { createStoreSubscriber, truncateText } from '@llm/commons';
 
-import type { AIStreamContent, AIStreamObservable } from '../hooks';
+import type { AIStreamContent, AIStreamObservable } from '../../hooks';
 
-import { MessageMarkdown, useContentHydration } from '../content-parse';
+import { MessageMarkdown, useContentHydration } from './parser';
 
 type Props = {
   content: string | AIStreamObservable;

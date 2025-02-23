@@ -20,10 +20,10 @@ import type { AIStreamObservable } from '../hooks';
 import { FilesCardsList } from '../files';
 import { ToolbarSmallActionButton } from './buttons';
 import { ChatMessageAIActions } from './chat-message-ai-actions';
-import { ChatMessageContent } from './chat-message-content';
 import { ChatMessagePinAction } from './chat-message-pin-action';
 import { ChatMessageRepliedMessage } from './chat-message-replied-message';
 import { ChatMessageVariants } from './chat-message-variants';
+import { ChatMessageContent } from './content';
 
 export type SdkRepeatedMessageItemT = SdkRepeatedMessageLike<
   Overwrite<SdkSearchMessageItemT, {
