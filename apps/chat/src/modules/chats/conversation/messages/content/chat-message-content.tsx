@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { memo, useMemo, useSyncExternalStore } from 'react';
-import sanitizeHtml from 'sanitize-html';
 
 import type { SdkMessageWebSearchItemT } from '@llm/sdk';
 
@@ -9,7 +8,8 @@ import { createStoreSubscriber, truncateText } from '@llm/commons';
 import type { AIStreamContent, AIStreamObservable } from '../../hooks';
 
 import { ChatMessageMarkdown } from './chat-message-markdown';
-import { useContentHydration } from './parser';
+import { useContentHydration } from './hydrate';
+import { sanitizeContentPreservingCodeBlocks } from './sanitize-content-preserving-code-blocks';
 
 type Props = {
   content: string | AIStreamObservable;
@@ -56,14 +56,14 @@ export const ChatMessageContent = memo((
 
   const isStreaming = typeof content !== 'string';
   const sanitizedContent = useMemo(() => {
-    const html = sanitizeHtml(stream.content);
+    const html = sanitizeContentPreservingCodeBlocks(stream.content);
 
     if (truncate) {
       return truncateText(truncate, '...')(html);
     }
 
     return html;
-  }, [stream, truncate]);
+  }, [stream.content, truncate]);
 
   const hydrationResult = useContentHydration({
     disabled,

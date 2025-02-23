@@ -22,7 +22,7 @@ export function ChatCodeBlock({ language, children }: ChatCodeBlockProps) {
   };
 
   return (
-    <div className="relative bg-[#f7f7f8] border border-gray-200 rounded-md">
+    <div className="relative bg-[#fafafa] border border-gray-200 rounded-md">
       <div className="flex justify-between items-center px-4 pt-2">
         <span className="text-gray-600 text-xs">{language || 'plaintext'}</span>
         <button
@@ -35,18 +35,20 @@ export function ChatCodeBlock({ language, children }: ChatCodeBlockProps) {
         </button>
       </div>
 
-      <SyntaxHighlighter
-        language={language || 'plaintext'}
-        style={oneLight}
-        customStyle={{
-          margin: 0,
-          padding: '1rem',
-          background: 'transparent',
-        }}
-        PreTag="div"
-      >
-        {children}
-      </SyntaxHighlighter>
+      <div className="max-h-[500px] overflow-auto">
+        <SyntaxHighlighter
+          language={language || 'plaintext'}
+          style={oneLight}
+          customStyle={{
+            margin: 0,
+            padding: '1rem',
+            background: 'inherit',
+          }}
+          PreTag="div"
+        >
+          {children}
+        </SyntaxHighlighter>
+      </div>
     </div>
   );
 }
