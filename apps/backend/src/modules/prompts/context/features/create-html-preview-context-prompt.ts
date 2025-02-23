@@ -8,6 +8,14 @@ export function createHtmlPreviewContextPrompt(): string {
     children: [
       xml('rules', {
         children: [
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: Every diagram MUST contain complete HTML skeleton with DOCTYPE, html, head, and body tags - no shortcuts allowed'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: All <script> tags must be placed in the <head> section - no exceptions allowed'],
+          }),
           xml('rule', { children: ['Avoid calling getContext() on non-canvas elements'] }),
           xml('rule', { children: ['Place charts and visualizations before their descriptive text'] }),
           xml('rule', { children: ['All HTML must be self-contained with no local file dependencies'] }),
@@ -22,6 +30,7 @@ export function createHtmlPreviewContextPrompt(): string {
           xml('rule', { children: ['For data analysis results, combine charts with brief textual explanations below'] }),
           xml('rule', { children: ['Place charts at the beginning of the section, followed by explanatory text'] }),
           xml('rule', { children: ['Centerize your visualizations and text properly using flex, they must be centered on the page'] }),
+          xml('rule', { children: ['Initialize charts and visualizations on load document event'] }),
           xml('chart-choice', {
             attributes: { type: 'vector' },
             children: [
@@ -58,27 +67,36 @@ export function createHtmlPreviewContextPrompt(): string {
             },
             children: [
               `\`\`\`html
-<div class="chart-container">
+<!DOCTYPE html>
+<html>
+<head>
   <style>
     .chart-container { width: 100%; text-align: center; padding: 20px; }
     canvas { max-width: 600px; }
   </style>
-  <canvas id="myChart" width="600" height="400"></canvas>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    const ctx = document.getElementById('myChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: ['Analysis A', 'Analysis B', 'Analysis C'],
-        datasets: [{
-          data: [19, 26, 55],
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-        }]
-      }
+    window.addEventListener('load', function() {
+      const ctx = document.getElementById('myChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Analysis A', 'Analysis B', 'Analysis C'],
+          datasets: [{
+            data: [19, 26, 55],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+          }]
+        }
+      });
     });
   </script>
-</div>
+</head>
+<body>
+  <div class="chart-container">
+    <canvas id="myChart" width="500" height="400"></canvas>
+  </div>
+</body>
+</html>
 \`\`\``,
             ],
           }),
@@ -88,29 +106,38 @@ export function createHtmlPreviewContextPrompt(): string {
             },
             children: [
               `\`\`\`html
-<div class="chart-container">
+<!DOCTYPE html>
+<html>
+<head>
   <style>
     .chart-container { width: 100%; text-align: center; padding: 20px; }
   </style>
-  <div id="plotlyChart" style="width: 600px; height: 400px; margin: 0 auto;"></div>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script>
-    const data = [{
-      values: [19, 26, 55],
-      labels: ['Analysis A', 'Analysis B', 'Analysis C'],
-      type: 'pie',
-      marker: {
-        colors: ['#FF6384', '#36A2EB', '#FFCE56']
-      }
-    }];
-    const layout = {
-      height: 400,
-      width: 600,
-      showlegend: true
-    };
-    Plotly.newPlot('plotlyChart', data, layout);
+    window.addEventListener('load', function() {
+      const data = [{
+        values: [19, 26, 55],
+        labels: ['Analysis A', 'Analysis B', 'Analysis C'],
+        type: 'pie',
+        marker: {
+          colors: ['#FF6384', '#36A2EB', '#FFCE56']
+        }
+      }];
+      const layout = {
+        height: 400,
+        width: 600,
+        showlegend: true
+      };
+      Plotly.newPlot('plotlyChart', data, layout);
+    });
   </script>
-</div>
+</head>
+<body>
+  <div class="chart-container">
+    <div id="plotlyChart" style="width: 500px; height: 400px; margin: 0 auto;"></div>
+  </div>
+</body>
+</html>
 \`\`\``,
             ],
           }),
