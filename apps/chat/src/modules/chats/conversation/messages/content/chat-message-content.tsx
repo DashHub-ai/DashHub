@@ -8,7 +8,8 @@ import { createStoreSubscriber, truncateText } from '@llm/commons';
 
 import type { AIStreamContent, AIStreamObservable } from '../../hooks';
 
-import { MessageMarkdown, useContentHydration } from './parser';
+import { ChatMessageMarkdown } from './chat-message-markdown';
+import { useContentHydration } from './parser';
 
 type Props = {
   content: string | AIStreamObservable;
@@ -76,7 +77,7 @@ export const ChatMessageContent = memo((
       {!truncate && showToolbars && hydrationResult.prependToolbars}
 
       <div className={clsx('max-w-[800px]', textClassName)}>
-        <MessageMarkdown
+        <ChatMessageMarkdown
           content={hydrationResult.content}
           inlinedReactComponents={hydrationResult.inlinedReactComponents}
         />

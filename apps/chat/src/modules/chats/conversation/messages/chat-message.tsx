@@ -125,7 +125,7 @@ export function ChatMessage(
         {(!isYou || isAI) && (
           <div
             className={clsx(
-              'flex items-center gap-2 mb-1 text-sm',
+              'flex items-center gap-2 mb-2 text-sm',
               {
                 'flex-row-reverse': !isAI && isYou,
               },

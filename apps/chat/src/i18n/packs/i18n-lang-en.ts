@@ -457,6 +457,12 @@ export const I18N_PACK_EN = {
       webSearch: 'Web search',
       saved: 'Saved for later',
     },
+    widgets: {
+      code: {
+        copy: 'Copy',
+        copied: 'Copied!',
+      },
+    },
     generating: {
       title: 'Generating title...',
       description: 'Generating description...',

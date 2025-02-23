@@ -459,6 +459,12 @@ export const I18N_PACK_PL: I18nLangPack = {
       webSearch: 'Wyszukiwanie w sieci',
       saved: 'Zapisane na potem',
     },
+    widgets: {
+      code: {
+        copy: 'Kopiuj',
+        copied: 'Skopiowano!',
+      },
+    },
     generating: {
       title: 'Generowanie tytułu...',
       description: 'Generowanie opisu...',
