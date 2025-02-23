@@ -16,6 +16,10 @@ export function createHtmlPreviewContextPrompt(): string {
             attributes: { critical: 'true' },
             children: ['CRITICAL: All <script> tags must be placed in the <head> section - no exceptions allowed'],
           }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: Maximum chart height must not exceed 450px'],
+          }),
           xml('rule', { children: ['Avoid calling getContext() on non-canvas elements'] }),
           xml('rule', { children: ['Place charts and visualizations before their descriptive text'] }),
           xml('rule', { children: ['All HTML must be self-contained with no local file dependencies'] }),
@@ -71,8 +75,25 @@ export function createHtmlPreviewContextPrompt(): string {
 <html>
 <head>
   <style>
-    .chart-container { width: 100%; text-align: center; padding: 20px; }
-    canvas { max-width: 600px; }
+    * {
+      box-sizing: border-box;
+    }
+    .chart-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    canvas {
+      max-width: 550px;
+      max-height: 450px;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
@@ -86,6 +107,11 @@ export function createHtmlPreviewContextPrompt(): string {
             data: [19, 26, 55],
             backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
           }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 1.5
         }
       });
     });
@@ -93,7 +119,7 @@ export function createHtmlPreviewContextPrompt(): string {
 </head>
 <body>
   <div class="chart-container">
-    <canvas id="myChart" width="500" height="400"></canvas>
+    <canvas id="myChart" height="400"></canvas>
   </div>
 </body>
 </html>
@@ -110,7 +136,21 @@ export function createHtmlPreviewContextPrompt(): string {
 <html>
 <head>
   <style>
-    .chart-container { width: 100%; text-align: center; padding: 20px; }
+    * {
+      box-sizing: border-box;
+    }
+    .chart-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
   </style>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script>
@@ -124,17 +164,21 @@ export function createHtmlPreviewContextPrompt(): string {
         }
       }];
       const layout = {
-        height: 400,
-        width: 600,
-        showlegend: true
+        height: 450,
+        width: 550,
+        showlegend: true,
+        margin: { t: 10, b: 10, l: 10, r: 10 }
       };
-      Plotly.newPlot('plotlyChart', data, layout);
+      const config = {
+        responsive: true
+      };
+      Plotly.newPlot('plotlyChart', data, layout, config);
     });
   </script>
 </head>
 <body>
   <div class="chart-container">
-    <div id="plotlyChart" style="width: 500px; height: 400px; margin: 0 auto;"></div>
+    <div id="plotlyChart"></div>
   </div>
 </body>
 </html>
