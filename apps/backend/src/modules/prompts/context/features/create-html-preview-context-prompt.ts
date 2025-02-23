@@ -4,7 +4,7 @@ import { featureXML } from './feature-xml-tag';
 export function createHtmlPreviewContextPrompt(): string {
   return featureXML({
     name: 'HTML Preview',
-    description: 'You can embed HTML content with interactive data visualizations, statistical analysis, and charts using markdown HTML tags. When presenting data analysis results, prefer visual representations using appropriate chart types. If the user provides data files, analyze their content to create relevant visualizations.',
+    description: 'You can embed HTML content with interactive data visualizations, statistical analysis, and charts using markdown HTML tags. All charts and visualizations MUST be generated using real data from provided files - never use example or dummy data.',
     children: [
       xml('rules', {
         children: [
@@ -19,6 +19,18 @@ export function createHtmlPreviewContextPrompt(): string {
           xml('rule', {
             attributes: { critical: 'true' },
             children: ['CRITICAL: Maximum chart height must not exceed 450px'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: NEVER generate charts with example/dummy data - only use actual data from provided files'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: If no data files are provided, ask the user to provide the data instead of creating example visualizations'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: Always parse and validate data files before creating visualizations'],
           }),
           xml('rule', { children: ['Avoid calling getContext() on non-canvas elements'] }),
           xml('rule', { children: ['Place charts and visualizations before their descriptive text'] }),
@@ -45,6 +57,8 @@ export function createHtmlPreviewContextPrompt(): string {
           }),
           xml('rule', { children: ['Extract meaningful patterns and relationships from provided data files'] }),
           xml('rule', { children: ['Choose appropriate chart types based on the data structure and patterns'] }),
+          xml('rule', { children: ['Analyze the full dataset to determine appropriate chart scales and ranges'] }),
+          xml('rule', { children: ['Include data source attribution in chart descriptions'] }),
           xml('chart-choice', {
             attributes: { type: 'vector' },
             children: [
@@ -193,6 +207,14 @@ export function createHtmlPreviewContextPrompt(): string {
 </body>
 </html>
 \`\`\``,
+            ],
+          }),
+          xml('example', {
+            attributes: {
+              description: 'Example of requesting data when none provided',
+            },
+            children: [
+              `Please provide the data file you'd like to visualize. I can help you create an appropriate chart based on your actual data.`,
             ],
           }),
         ],

@@ -16,10 +16,16 @@ export class CsvAIEmbeddingGenerator implements AIEmbeddingGenerator {
 
   generate = (attrs: Omit<AIEmbeddingGenerateAttrs, 'chunkFn'>) => this.textEmbeddingGenerator.generate({
     ...attrs,
-    chunkFn: text => pipe(
-      text.split('\n'),
-      A.chunksOf(40),
-      A.map(chunk => chunk.join('\n')),
-    ),
+    chunkFn: (text) => {
+      const lines = text.split('\n');
+      const header = lines[0];
+      const dataLines = lines.slice(1);
+
+      return pipe(
+        dataLines,
+        A.chunksOf(40),
+        A.map(chunk => [header, ...chunk].join('\n')),
+      );
+    },
   });
 }
