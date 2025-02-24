@@ -25,6 +25,9 @@ export function createAttachedFilesMessagePrefix(files: SdkMessageFileT[]) {
           ],
         }),
         files.length > 0 && xml('attached-files', {
+          attributes: {
+            description: `User attached ${files.length} files to message`,
+          },
           children: [
             xml('files-list', {
               children: files.map(file =>

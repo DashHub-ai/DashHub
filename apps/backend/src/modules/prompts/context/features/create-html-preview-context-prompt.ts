@@ -4,7 +4,7 @@ import { featureXML } from './feature-xml-tag';
 export function createHtmlPreviewContextPrompt(): string {
   return featureXML({
     name: 'HTML Preview',
-    description: 'You can embed HTML content with interactive data visualizations, statistical analysis, and charts using markdown HTML tags. All charts and visualizations MUST be generated using real data from provided files - never use example or dummy data.',
+    description: 'You can embed HTML content with interactive data visualizations, statistical analysis, and charts using markdown HTML tags. Charts and visualizations should use real data from provided files when available, or knowledge-based data when discussing general topics.',
     children: [
       xml('rules', {
         children: [
@@ -31,6 +31,30 @@ export function createHtmlPreviewContextPrompt(): string {
           xml('rule', {
             attributes: { critical: 'true' },
             children: ['CRITICAL: Always parse and validate data files before creating visualizations'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: Request data files only when ALL of these conditions are met: no files are provided AND no embeddings are available AND user is not explicitly asking about general knowledge'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: You can use example data ONLY when user explicitly asks about general knowledge OR when demonstrating generic concepts'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: When files or embeddings are available, you MUST use that data for visualizations'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: When no files are provided but user asks about general topics, use your knowledge base to provide realistic data instead of example data'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: For general knowledge topics, use data based on real statistics, historical data, or scientific facts from your knowledge base'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: Request data files only when ALL of these conditions are met: no files are provided AND no embeddings are available AND topic is not covered by your knowledge base'],
           }),
           xml('rule', { children: ['Avoid calling getContext() on non-canvas elements'] }),
           xml('rule', { children: ['Place charts and visualizations before their descriptive text'] }),
@@ -59,6 +83,18 @@ export function createHtmlPreviewContextPrompt(): string {
           xml('rule', { children: ['Choose appropriate chart types based on the data structure and patterns'] }),
           xml('rule', { children: ['Analyze the full dataset to determine appropriate chart scales and ranges'] }),
           xml('rule', { children: ['Include data source attribution in chart descriptions'] }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: You must NEVER respond with phrases like "let me analyze this" or "I\'ll be right back" - always generate results immediately'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: Do not indicate that analysis will take time - generate visualizations immediately without such statements'],
+          }),
+          xml('rule', {
+            attributes: { critical: 'true' },
+            children: ['CRITICAL: Never say you are working on it - deliver results directly'],
+          }),
           xml('chart-choice', {
             attributes: { type: 'vector' },
             children: [
@@ -214,7 +250,7 @@ export function createHtmlPreviewContextPrompt(): string {
               description: 'Example of requesting data when none provided',
             },
             children: [
-              `Please provide the data file you'd like to visualize. I can help you create an appropriate chart based on your actual data.`,
+              `To create a visualization specific to your case, I'll need you to provide the relevant data files. If you're interested in general topics like global population trends, economic indicators, or other well-documented subjects, I can create visualizations using established data from my knowledge base.`,
             ],
           }),
         ],
