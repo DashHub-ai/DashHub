@@ -55,6 +55,9 @@ function LoggedInRouter() {
     return (
       <Switch>
         <Route path={sitemap.home} component={ChooseOrganizationRoute} />
+        <Route path={sitemap.settings.me} component={MeSettingsRoute} />
+        <Route path={sitemap.settings.index} component={SettingsRoute} />
+
         <Route>
           <Redirect to={sitemap.home} replace />
         </Route>
