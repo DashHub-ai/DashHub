@@ -1,6 +1,6 @@
 import esb from 'elastic-builder';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type {
@@ -25,6 +25,11 @@ export class OrganizationsEsSearchRepo {
   constructor(
     @inject(OrganizationsEsIndexRepo) private readonly indexRepo: OrganizationsEsIndexRepo,
   ) {}
+
+  get = flow(
+    this.indexRepo.getDocument,
+    TE.map(OrganizationsEsSearchRepo.mapOutputHit),
+  );
 
   search = (dto: SdkSearchOrganizationsInputT) =>
     pipe(
@@ -69,5 +74,8 @@ export class OrganizationsEsSearchRepo {
       updatedAt: source.updated_at,
       archived: source.archived,
       maxNumberOfUsers: source.max_number_of_users ?? 0,
+      aiSettings: {
+        chatContext: source.ai_settings?.chat_context ?? null,
+      },
     });
 }

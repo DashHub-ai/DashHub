@@ -8,13 +8,15 @@ import {
 import {
   createCustomPersonaContextPrompt,
   createDefaultPersonaContextPrompt,
+  isNonBlankPersona,
+  type PersonaPersonalities,
 } from './personas';
 
 type Attrs = {
-  personality?: string | null;
+  personalities?: PersonaPersonalities;
 };
 
-export function createContextPrompt({ personality }: Attrs) {
+export function createContextPrompt({ personalities }: Attrs) {
   return xml('general-chat-context', {
     attributes: {
       name: 'General Chat',
@@ -22,8 +24,8 @@ export function createContextPrompt({ personality }: Attrs) {
     },
     children: [
       createCriticalContextPrompt(),
-      personality
-        ? createCustomPersonaContextPrompt(personality)
+      isNonBlankPersona(personalities)
+        ? createCustomPersonaContextPrompt(personalities)
         : createDefaultPersonaContextPrompt(),
       createQuotesContextPrompt(),
       createActionButtonsContextPrompt(),

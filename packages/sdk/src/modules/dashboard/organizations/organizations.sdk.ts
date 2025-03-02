@@ -13,6 +13,7 @@ import {
 import type {
   SdkCreateOrganizationInputT,
   SdkCreateOrganizationOutputT,
+  SdkOrganizationT,
   SdkSearchOrganizationsInputT,
   SdkSearchOrganizationsOutputT,
   SdkUpdateOrganizationInputT,
@@ -21,6 +22,12 @@ import type {
 
 export class OrganizationsSdk extends AbstractNestedSdkWithAuth {
   protected endpointPrefix = '/dashboard/organizations';
+
+  get = (id: SdkTableRowIdT) =>
+    this.fetch<SdkOrganizationT>({
+      url: this.endpoint(`/${id}`),
+      options: getPayload(),
+    });
 
   search = (data: SdkSearchOrganizationsInputT) =>
     this.fetch<SdkSearchOrganizationsOutputT>({

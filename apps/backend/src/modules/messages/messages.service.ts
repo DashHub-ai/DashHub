@@ -1,4 +1,4 @@
-import { taskEither as TE } from 'fp-ts';
+import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
@@ -26,6 +26,7 @@ import { AppsService } from '../apps';
 import { WithAuthFirewall } from '../auth';
 import { ChatsService } from '../chats';
 import { LoggerService } from '../logger';
+import { OrganizationsAISettingsRepo } from '../organizations-ai-settings';
 import { PermissionsService } from '../permissions';
 import { ProjectsService } from '../projects';
 import { ProjectsEmbeddingsService } from '../projects-embeddings';
@@ -63,6 +64,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     @inject(ProjectsFilesService) private readonly projectsFilesService: ProjectsFilesService,
     @inject(ProjectsService) private readonly projectsService: ProjectsService,
     @inject(UsersAISettingsRepo) private readonly usersAISettings: UsersAISettingsRepo,
+    @inject(OrganizationsAISettingsRepo) private readonly organizationsAISettings: OrganizationsAISettingsRepo,
     @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
     @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
     @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
@@ -133,13 +135,21 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     TE.Do,
     TE.bind('message', () => this.get(id)),
     TE.bind('chat', ({ message }) => this.chatsService.get(message.chat.id)),
-    TE.bindW('personality', ({ message }) => {
-      if (!message.creator) {
-        return TE.of(null);
-      }
+    TE.bindW('personalities', ({ message, chat }) => apply.sequenceS(TE.ApplicativePar)({
+      user: (() => {
+        if (!message.creator) {
+          return TE.of(null);
+        }
 
-      return this.usersAISettings.getChatContextByUserId({ userId: message.creator.id });
-    }),
+        return this.usersAISettings.getChatContextByUserIdOrNil({
+          userId: message.creator.id,
+        });
+      })(),
+
+      organization: this.organizationsAISettings.getChatContextByOrganizationIdOrNil({
+        organizationId: chat.organization.id,
+      }),
+    })),
     TE.bindW('history', ({ message }) => pipe(
       this.searchByChatId(message.chat.id),
       TE.map(({ items }) => pipe(
@@ -169,7 +179,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         chat: { id: message.chat.id },
       }),
     )),
-    TE.chainW(({ mappedContent, history, message, chat, personality }) =>
+    TE.chainW(({ mappedContent, history, message, chat, personalities }) =>
       pipe(
         this.aiConnectorService.executeStreamPrompt(
           {
@@ -177,7 +187,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             aiModel,
             history,
             organization: chat.organization,
-            context: createContextPrompt({ personality }),
+            context: createContextPrompt({ personalities }),
             message: {
               content: mappedContent,
               webSearch: message.webSearch.enabled,

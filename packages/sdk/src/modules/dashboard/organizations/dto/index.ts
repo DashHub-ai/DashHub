@@ -1,3 +1,4 @@
+export * from './ai-settings';
 export * from './sdk-create-organization.dto';
 export * from './sdk-organization-user.dto';
 export * from './sdk-organization.dto';

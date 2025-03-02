@@ -8,5 +8,5 @@ export class UsersAISettingsService {
     @inject(UsersAISettingsRepo) private readonly usersAISettingsRepo: UsersAISettingsRepo,
   ) {}
 
-  getChatContextByUserId = this.usersAISettingsRepo.getChatContextByUserId;
+  getChatContextByUserIdOrNil = this.usersAISettingsRepo.getChatContextByUserIdOrNil;
 }

@@ -37,6 +37,7 @@ export function useSitemap() {
     settings: {
       index: prefixWithBaseRoute('/settings'),
       me: prefixWithBaseRoute('/settings/me'),
+      organization: prefixWithBaseRoute('/settings/organization'),
     },
     forceRedirect: {
       raw: prefixWithBaseRoute('/force-redirect'),

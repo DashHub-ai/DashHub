@@ -327,6 +327,9 @@ export const I18N_PACK_EN = {
         me: {
           title: 'My Profile',
         },
+        myOrganization: {
+          title: 'My Organization',
+        },
       },
     },
     home: {
@@ -844,6 +847,12 @@ export const I18N_PACK_EN = {
         maxNumberOfUsers: {
           label: 'Max number of users',
           placeholder: 'Enter max number of users',
+        },
+        aiSettings: {
+          chatContext: {
+            label: 'Chat personalization',
+            placeholder: 'Enter how AI should personalize chats',
+          },
         },
       },
     },

@@ -18,6 +18,7 @@ import type {
   OrganizationsTable,
   OrganizationsUsersTable,
 } from '../organizations';
+import type { OrganizationsAISettingsTable } from '../organizations-ai-settings';
 import type { PermissionsTable } from '../permissions';
 import type { PinnedMessagesTable } from '../pinned-messages';
 import type {
@@ -60,6 +61,7 @@ export type DatabaseTables = {
   organizations: OrganizationsTable;
   organizations_s3_resources_buckets: OrganizationsS3BucketsTable;
   organizations_users: OrganizationsUsersTable;
+  organizations_ai_settings: OrganizationsAISettingsTable;
 
   // Projects
   projects: ProjectsTable;

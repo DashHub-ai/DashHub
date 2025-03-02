@@ -329,6 +329,9 @@ export const I18N_PACK_PL: I18nLangPack = {
         me: {
           title: 'Mój profil',
         },
+        myOrganization: {
+          title: 'Moja organizacja',
+        },
       },
     },
     home: {
@@ -846,6 +849,12 @@ export const I18N_PACK_PL: I18nLangPack = {
         maxNumberOfUsers: {
           label: 'Maksymalna liczba użytkowników',
           placeholder: 'Wpisz maksymalną liczbę użytkowników',
+        },
+        aiSettings: {
+          chatContext: {
+            label: 'Personalizacja czatu',
+            placeholder: 'Wpisz jak AI powinno dostosować się do czatów',
+          },
         },
       },
     },

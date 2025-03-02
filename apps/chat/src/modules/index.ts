@@ -5,6 +5,7 @@ export * from './apps-creator';
 export * from './chats';
 export * from './experts';
 export * from './organizations';
+export * from './organizations-my';
 export * from './permissions';
 export * from './pinned-messages';
 export * from './projects';

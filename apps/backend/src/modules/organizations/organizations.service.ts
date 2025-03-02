@@ -14,6 +14,7 @@ import type { TableRowWithId } from '../database';
 
 import { AIModelsService } from '../ai-models';
 import { AppsService } from '../apps';
+import { PermissionsService } from '../permissions';
 import { ProjectsService } from '../projects';
 import { UsersService } from '../users';
 import { OrganizationsEsIndexRepo } from './elasticsearch';
@@ -30,6 +31,7 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     @inject(OrganizationsEsSearchRepo) private readonly esSearchRepo: OrganizationsEsSearchRepo,
     @inject(OrganizationsEsIndexRepo) private readonly esIndexRepo: OrganizationsEsIndexRepo,
     @inject(OrganizationsUsersRepo) private readonly organizationsUsersRepo: OrganizationsUsersRepo,
+    @inject(PermissionsService) private readonly permissionsService: PermissionsService,
     @inject(delay(() => UsersService)) private readonly usersService: Readonly<UsersService>,
     @inject(delay(() => ProjectsService)) private readonly projectsService: Readonly<ProjectsService>,
     @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
@@ -38,7 +40,7 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     private readonly orgsS3BucketsService: Readonly<OrganizationsS3BucketsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this);
+  asUser = (jwt: SdkJwtTokenT) => new OrganizationsFirewall(jwt, this, this.permissionsService);
 
   unarchive = (id: SdkTableRowIdT) => pipe(
     this.repo.unarchive({ id }),
@@ -63,6 +65,8 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     TE.chain(() => this.repo.archive({ id })),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
+
+  get = this.esSearchRepo.get;
 
   search = this.esSearchRepo.search;
 

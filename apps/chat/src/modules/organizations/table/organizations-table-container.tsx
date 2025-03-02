@@ -39,6 +39,9 @@ export function OrganizationsTableContainer() {
         defaultValue: {
           name: '',
           maxNumberOfUsers: 1,
+          aiSettings: {
+            chatContext: null,
+          },
         },
       }),
       tapTaskOption(reset),
