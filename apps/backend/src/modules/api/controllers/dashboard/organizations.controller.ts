@@ -38,6 +38,15 @@ export class OrganizationsController extends AuthorizedController {
           serializeSdkResponseTE<ReturnType<OrganizationsSdk['search']>>(context),
         ),
       )
+      .get(
+        '/:id',
+        async context => pipe(
+          context.req.param('id'),
+          organizationsService.asUser(context.var.jwt).get,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<OrganizationsSdk['get']>>(context),
+        ),
+      )
       .post(
         '/',
         sdkSchemaValidator('json', SdkCreateOrganizationInputV),

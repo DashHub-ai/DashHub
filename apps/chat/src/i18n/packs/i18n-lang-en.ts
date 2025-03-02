@@ -327,6 +327,9 @@ export const I18N_PACK_EN = {
         me: {
           title: 'My Profile',
         },
+        myOrganization: {
+          title: 'My Organization',
+        },
       },
     },
     home: {

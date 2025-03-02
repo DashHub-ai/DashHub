@@ -1,18 +1,27 @@
-import { flow } from 'fp-ts/lib/function';
+import { taskEither as TE } from 'fp-ts';
+import { flow, pipe } from 'fp-ts/lib/function';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type { SdkJwtTokenT, SdkUpdateOrganizationInputT } from '@llm/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
+import type { TableRowWithId } from '../database';
+import type { PermissionsService } from '../permissions';
 import type { OrganizationsService } from './organizations.service';
 
 export class OrganizationsFirewall extends AuthFirewallService {
   constructor(
     jwt: SdkJwtTokenT,
     private readonly organizationsService: OrganizationsService,
+    private readonly permissionsService: PermissionsService,
   ) {
     super(jwt);
   }
+
+  get = flow(
+    this.organizationsService.get,
+    this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
+  );
 
   unarchive = flow(
     this.organizationsService.unarchive,
@@ -24,9 +33,11 @@ export class OrganizationsFirewall extends AuthFirewallService {
     this.tryTEIfUser.is.root,
   );
 
-  update = flow(
-    this.organizationsService.update,
-    this.tryTEIfUser.is.root,
+  update = (attrs: SdkUpdateOrganizationInputT & TableRowWithId) => pipe(
+    this.permissionsService.asUser(this.jwt).findRecordAndCheckOrganizationMatch({
+      findRecord: this.organizationsService.get(attrs.id),
+    }),
+    TE.chainW(() => this.organizationsService.update(attrs)),
   );
 
   create = flow(

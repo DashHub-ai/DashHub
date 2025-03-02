@@ -329,6 +329,9 @@ export const I18N_PACK_PL: I18nLangPack = {
         me: {
           title: 'Mój profil',
         },
+        myOrganization: {
+          title: 'Moja organizacja',
+        },
       },
     },
     home: {

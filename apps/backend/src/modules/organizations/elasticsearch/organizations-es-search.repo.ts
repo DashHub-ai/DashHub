@@ -1,6 +1,6 @@
 import esb from 'elastic-builder';
 import { array as A, taskEither as TE } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import type {
@@ -25,6 +25,11 @@ export class OrganizationsEsSearchRepo {
   constructor(
     @inject(OrganizationsEsIndexRepo) private readonly indexRepo: OrganizationsEsIndexRepo,
   ) {}
+
+  get = flow(
+    this.indexRepo.getDocument,
+    TE.map(OrganizationsEsSearchRepo.mapOutputHit),
+  );
 
   search = (dto: SdkSearchOrganizationsInputT) =>
     pipe(

@@ -13,6 +13,7 @@ import {
   LoginRoute,
   ManagementRoute,
   MeSettingsRoute,
+  MyOrganizationSettingsRoute,
   PinnedMessagesRoute,
   ProjectRoute,
   ProjectsRoute,
@@ -77,6 +78,7 @@ function LoggedInRouter() {
       <Route path={sitemap.experts} component={ExpertsRoute} />
 
       <Route path={sitemap.settings.me} component={MeSettingsRoute} />
+      <Route path={sitemap.settings.organization} component={MyOrganizationSettingsRoute} />
       <Route path={sitemap.settings.index} component={SettingsRoute} />
 
       <Route path={sitemap.pinnedMessages.index.raw} component={PinnedMessagesRoute} />
