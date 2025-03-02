@@ -841,6 +841,7 @@ export const I18N_PACK_PL: I18nLangPack = {
         edit: 'Edytuj organizację',
         create: 'Utwórz organizację',
       },
+      knowledgeFiles: 'Pliki wiedzy',
       fields: {
         name: {
           label: 'Nazwa',

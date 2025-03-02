@@ -76,6 +76,7 @@ export class OrganizationsEsSearchRepo {
       maxNumberOfUsers: source.max_number_of_users ?? 0,
       aiSettings: {
         chatContext: source.ai_settings?.chat_context ?? null,
+        project: source.ai_settings?.project,
       },
     });
 }

@@ -34,7 +34,12 @@ export function MyOrganizationSettingsRoute() {
     <SettingsLayout title={t.title}>
       <ContentCard title={t.title} withBackground>
         <SpinnerContainer loading={result.isLoading}>
-          {() => result.status === 'success' && <MyOrganizationForm defaultValue={result.data} />}
+          {() => {
+            if (result.status === 'success') {
+              return <MyOrganizationForm defaultValue={result.data} />;
+            }
+            return null;
+          }}
         </SpinnerContainer>
       </ContentCard>
     </SettingsLayout>
