@@ -75,7 +75,7 @@ export class TextAIEmbeddingGenerator implements AIEmbeddingGenerator {
         message: [
           'Create a document summary focusing on main topics, key points and context (4-5 sentences).',
           'Include important facts, figures, and relationships between concepts if present.',
-          'If the content appears empty or unsupported, respond with "This file appears to be empty or contains unsupported content."',
+          'Always try to summarize the content of the file, and if it\'s not possible then use file name.',
           '---',
           `Content to summarize:`,
           text,
