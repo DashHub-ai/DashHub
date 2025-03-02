@@ -14,6 +14,7 @@ import type { TableRowWithId } from '../database';
 
 import { AIModelsService } from '../ai-models';
 import { AppsService } from '../apps';
+import { OrganizationsAISettingsService } from '../organizations-ai-settings/organizations-ai-settings.service';
 import { PermissionsService } from '../permissions';
 import { ProjectsService } from '../projects';
 import { UsersService } from '../users';
@@ -31,6 +32,7 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
     @inject(OrganizationsEsSearchRepo) private readonly esSearchRepo: OrganizationsEsSearchRepo,
     @inject(OrganizationsEsIndexRepo) private readonly esIndexRepo: OrganizationsEsIndexRepo,
     @inject(OrganizationsUsersRepo) private readonly organizationsUsersRepo: OrganizationsUsersRepo,
+    @inject(OrganizationsAISettingsService) private readonly organizationsAISettingsService: OrganizationsAISettingsService,
     @inject(PermissionsService) private readonly permissionsService: PermissionsService,
     @inject(delay(() => UsersService)) private readonly usersService: Readonly<UsersService>,
     @inject(delay(() => ProjectsService)) private readonly projectsService: Readonly<ProjectsService>,
@@ -70,13 +72,32 @@ export class OrganizationsService implements WithAuthFirewall<OrganizationsFirew
 
   search = this.esSearchRepo.search;
 
-  create = (value: SdkCreateOrganizationInputT) => pipe(
+  create = (
+    {
+      aiSettings: { chatContext },
+      ...value
+    }: SdkCreateOrganizationInputT,
+  ) => pipe(
     this.repo.create({ value }),
+    TE.tap(organization => this.organizationsAISettingsService.upsert({
+      organization,
+      chatContext,
+    })),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, ...value }: SdkUpdateOrganizationInputT & TableRowWithId) => pipe(
+  update = (
+    {
+      id,
+      aiSettings: { chatContext },
+      ...value
+    }: SdkUpdateOrganizationInputT & TableRowWithId,
+  ) => pipe(
     this.repo.update({ id, value }),
+    TE.tap(organization => this.organizationsAISettingsService.upsert({
+      organization,
+      chatContext,
+    })),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 }

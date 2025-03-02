@@ -7,8 +7,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   const organizations = await db
-    .selectFrom('organizations_ai_settings')
-    .select(['organization_id as id'])
+    .selectFrom('organizations')
+    .select(['id'])
     .execute();
 
   const rootUser = await db
@@ -38,9 +38,18 @@ export async function up(db: Kysely<any>): Promise<void> {
         .execute();
 
       await db
-        .updateTable('organizations_ai_settings')
-        .set({ project_id: project.id })
-        .where('organization_id', '=', organization.id)
+        .insertInto('organizations_ai_settings')
+        .values({
+          organization_id: organization.id,
+          project_id: project.id,
+          chat_context: null,
+        })
+        .onConflict(oc => oc
+          .column('organization_id')
+          .doUpdateSet(eb => ({
+            project_id: eb.ref('excluded.project_id'),
+          })),
+        )
         .execute();
     }
   }

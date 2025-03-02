@@ -11,7 +11,7 @@ type Props = {
 };
 
 export function MyOrganizationForm({ defaultValue }: Props) {
-  const t = useI18n().pack.users.form;
+  const t = useI18n().pack.organizations.form;
   const { handleSubmitEvent, validator, bind, submitState } = useOrganizationUpdateForm({
     defaultValue,
   });

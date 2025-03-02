@@ -42,6 +42,22 @@ export class UsersRepo extends createProtectedDatabaseRepo('users') {
     super(databaseConnectionRepo);
   }
 
+  getFirstRootUser = () =>
+    pipe(
+      this.baseRepo.findOne({
+        select: ['id', 'email'],
+        where: [
+          ['role', '=', 'root'],
+          ['archived', '=', false],
+          ['active', '=', true],
+        ],
+      }),
+      TE.map(({ id, email }) => ({
+        id,
+        email,
+      })),
+    );
+
   archive = (attrs: TransactionalAttrs<SdkTableRowWithIdT>) =>
     createArchiveRecordQuery(this.baseRepo.queryFactoryAttrs)({
       ...attrs,

@@ -5,8 +5,8 @@ import { injectable } from 'tsyringe';
 import {
   AbstractDatabaseRepo,
   DatabaseError,
-  TableId,
-  TransactionalAttrs,
+  type TableId,
+  type TransactionalAttrs,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
@@ -14,6 +14,30 @@ import type { OrganizationsAISettingsTableInsertRow } from './organizations-ai-s
 
 @injectable()
 export class OrganizationsAISettingsRepo extends AbstractDatabaseRepo {
+  getChatProjectIdByOrganizationIdOrNil = (
+    {
+      forwardTransaction,
+      organizationId,
+    }: TransactionalAttrs<{ organizationId: TableId; }>,
+  ) => {
+    const transaction = tryReuseTransactionOrSkip({
+      db: this.db,
+      forwardTransaction,
+    });
+
+    return pipe(
+      transaction(trx =>
+        trx
+          .selectFrom('organizations_ai_settings')
+          .select('project_id as id')
+          .where('organization_id', '=', organizationId)
+          .executeTakeFirst(),
+      ),
+      DatabaseError.tryTask,
+      TE.map(row => row?.id ?? null),
+    );
+  };
+
   getChatContextByOrganizationIdOrNil = (
     {
       forwardTransaction,
@@ -42,7 +66,9 @@ export class OrganizationsAISettingsRepo extends AbstractDatabaseRepo {
     {
       forwardTransaction,
       value,
-    }: TransactionalAttrs<{ value: OrganizationsAISettingsTableInsertRow; }>,
+    }: TransactionalAttrs<{
+      value: OrganizationsAISettingsTableInsertRow;
+    }>,
   ) => {
     const transaction = tryReuseTransactionOrSkip({
       db: this.db,
@@ -56,6 +82,7 @@ export class OrganizationsAISettingsRepo extends AbstractDatabaseRepo {
           .values({
             organization_id: value.organizationId,
             chat_context: value.chatContext || null,
+            project_id: value.projectId,
           })
           .onConflict(oc => oc
             .column('organization_id')
