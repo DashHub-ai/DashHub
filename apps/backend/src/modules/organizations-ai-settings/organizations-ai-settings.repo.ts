@@ -14,7 +14,7 @@ import type { OrganizationsAISettingsTableInsertRow } from './organizations-ai-s
 
 @injectable()
 export class OrganizationsAISettingsRepo extends AbstractDatabaseRepo {
-  getChatProjectIdByOrganizationIdOrNil = (
+  getProjectIdByOrganizationIdOrNil = (
     {
       forwardTransaction,
       organizationId,

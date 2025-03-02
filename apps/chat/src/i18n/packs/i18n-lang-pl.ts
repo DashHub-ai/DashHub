@@ -382,6 +382,9 @@ export const I18N_PACK_PL: I18nLangPack = {
         users: {
           title: 'Użytkownicy',
         },
+        organization: {
+          title: 'Organizacja',
+        },
         usersGroups: {
           title: 'Grupy użytkowników',
         },

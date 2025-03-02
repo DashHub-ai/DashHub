@@ -24,11 +24,11 @@ export function createRelevantEmbeddingsPrompt(
         children:
             fragments
               .slice(0, 10)
-              .map(({ text, id, isAppKnowledge }) =>
+              .map(({ text, id, isInternalKnowledge }) =>
                 xml('embedding', {
                   attributes: {
                     id,
-                    isAppKnowledge,
+                    isInternalKnowledge,
                   },
                   children: [text],
                 }),
@@ -58,14 +58,14 @@ export function createRelevantEmbeddingsPrompt(
                   xml('point', { children: ['First mention: cite source using footnote [^1] and provide detailed explanation'] }),
                   xml('point', { children: ['Subsequent mentions: refer back to earlier explanation without repeating the source'] }),
                   xml('point', { children: ['Only cite new, unique information from files'] }),
-                  xml('point', { children: ['For app knowledge content (isAppKnowledge=true), mention it comes from assistant\'s knowledge base without referencing specific files'] }),
+                  xml('point', { children: ['For internal knowledge content (isInternalKnowledge), ALWAYS state it comes from "knowledge provided to the assistant" and cite with footnote'] }),
                 ],
               }),
               xml('instruction', {
-                children: ['When using app knowledge, refer to it as "based on assistant\'s knowledge" or "from app\'s knowledge base" without specific file citations'],
+                children: ['When using internal knowledge, ALWAYS refer to it as "based on knowledge provided to the assistant" without referencing specific files'],
               }),
-              xml('instruction', { children: ['For app knowledge content, always make it clear this comes from the app\'s own knowledge base'] }),
-              xml('instruction', { children: ['Keep footnotes short (one sentence) and include embedding ID when citing sources'] }),
+              xml('instruction', { children: ['For internal knowledge content, make it explicit this comes from the knowledge provided to the assistant'] }),
+              xml('instruction', { children: ['Keep footnotes short (one sentence) and include embedding ID when citing sources, EXCEPT for app knowledge'] }),
               xml('instruction', {
                 attributes: {
                   description: 'When user specifically asks about files or content',
@@ -73,7 +73,7 @@ export function createRelevantEmbeddingsPrompt(
                 children: [
                   xml('point', { children: ['Prioritize information from attached files in the current chat'] }),
                   xml('point', { children: ['Use other available context to provide comprehensive answers'] }),
-                  xml('point', { children: ['Make it clear which information comes from files vs general knowledge'] }),
+                  xml('point', { children: ['Make it clear which information comes from files vs knowledge provided to the assistant'] }),
                 ],
               }),
               xml('instruction', { children: ['Don\'t use ✅ or ❌ in responses unless the user uses them first'] }),
@@ -92,10 +92,10 @@ export function createRelevantEmbeddingsPrompt(
         children: [
           xml('rule', { children: ['Add footnotes only for first mention of specific information'] }),
           xml('rule', { children: ['For regular files - Format: [^1]: Fragment #embedding:123 contains relevant details.'] }),
-          xml('rule', { children: ['For app knowledge - Format: [^1]: Based on assistant\'s knowledge base'] }),
+          xml('rule', { children: ['For internal knowledge - Format: [^1]: Based on knowledge provided to the assistant'] }),
           xml('rule', { children: ['Keep references natural and only when meaningful'] }),
-          xml('rule', { children: ['For app knowledge, NEVER reference specific files or embedding IDs'] }),
-          xml('rule', { children: ['Citations are MANDATORY for app knowledge but should only mention "assistant\'s knowledge" or "app\'s knowledge base"'] }),
+          xml('rule', { children: ['For internal knowledge, NEVER reference specific files or embedding IDs'] }),
+          xml('rule', { children: ['Citations are MANDATORY for internal knowledge and should ALWAYS mention "knowledge provided to the assistant"'] }),
           xml('rule', { children: ['Citations are optional for other content unless specifically referencing new file content'] }),
         ],
       }),
@@ -116,6 +116,7 @@ export function createRelevantEmbeddingsPrompt(
               xml('scenario', { children: ['When answering specific questions about files'] }),
               xml('scenario', { children: ['When providing technical details from documentation'] }),
               xml('scenario', { children: ['When user asks for source information'] }),
+              xml('scenario', { children: ['ALWAYS when using internal knowledge (isInternalKnowledge)'] }),
             ],
           }),
         ],

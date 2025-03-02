@@ -15,12 +15,14 @@ export class OrganizationsAISettingsService {
     @inject(ProjectsService) private readonly projectsService: ProjectsService,
   ) {}
 
+  getProjectIdByOrganizationIdOrNil = this.repo.getProjectIdByOrganizationIdOrNil;
+
   getChatContextByOrganizationIdOrNil = this.repo.getChatContextByOrganizationIdOrNil;
 
   upsert = ({ chatContext, organization }: SdkUpsertOrganizationAISettingsInputT & { organization: TableRowWithId; }) => pipe(
     TE.Do,
     TE.bind('project', () => pipe(
-      this.repo.getChatProjectIdByOrganizationIdOrNil({
+      this.repo.getProjectIdByOrganizationIdOrNil({
         organizationId: organization.id,
       }),
       TE.chainW((projectId) => {

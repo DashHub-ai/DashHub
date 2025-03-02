@@ -53,7 +53,7 @@ export function MyOrganizationForm({ defaultValue }: Props) {
       </div>
 
       <div>
-        <h2 className="mb-6 font-semibold text-2xl">
+        <h2 className="mb-6 font-semibold text-xl">
           {t.knowledgeFiles}
         </h2>
 

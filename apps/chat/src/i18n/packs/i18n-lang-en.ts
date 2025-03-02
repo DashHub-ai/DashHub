@@ -380,6 +380,9 @@ export const I18N_PACK_EN = {
         users: {
           title: 'Users',
         },
+        organization: {
+          title: 'Organization',
+        },
         usersGroups: {
           title: 'Users Groups',
         },
