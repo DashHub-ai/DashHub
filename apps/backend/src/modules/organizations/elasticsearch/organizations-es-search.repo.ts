@@ -69,5 +69,8 @@ export class OrganizationsEsSearchRepo {
       updatedAt: source.updated_at,
       archived: source.archived,
       maxNumberOfUsers: source.max_number_of_users ?? 0,
+      aiSettings: {
+        chatContext: source.ai_settings?.chat_context ?? null,
+      },
     });
 }

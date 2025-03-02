@@ -15,4 +15,4 @@ export type OrganizationsAISettingsTableRow = NormalizeSelectTableRow<Organizati
 
 export type OrganizationsAISettingsTableInsertRow = NormalizeInsertTableRow<OrganizationsAISettingsTable>;
 
-export type OrganizationsAISettingsTableRelationRow = Omit<OrganizationsAISettingsTableRow, 'userId'>;
+export type OrganizationsAISettingsTableRelationRow = Omit<OrganizationsAISettingsTableRow, 'organizationId'>;

@@ -5,7 +5,9 @@ import type { SdkOrganizationT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { FormField, Input, NumericInput } from '~/ui';
 
-type Value = Pick<SdkOrganizationT, 'maxNumberOfUsers' | 'name'>;
+import { OrganizationAISettingsFormField } from './organization-ai-settings-form-field';
+
+type Value = Pick<SdkOrganizationT, 'maxNumberOfUsers' | 'name' | 'aiSettings'>;
 
 type Props = ValidationErrorsListProps<Value>;
 
@@ -41,6 +43,11 @@ export const OrganizationSharedFormFields = controlled<Value, Props>(({ errors, 
           {...bind.path('maxNumberOfUsers')}
         />
       </FormField>
+
+      <OrganizationAISettingsFormField
+        {...validation.extract('aiSettings', { nested: true })}
+        {...bind.path('aiSettings')}
+      />
     </>
   );
 });

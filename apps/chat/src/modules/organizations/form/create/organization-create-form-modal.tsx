@@ -54,7 +54,7 @@ export function OrganizationCreateFormModal(
       )}
     >
       <OrganizationSharedFormFields
-        errors={validator.errors.all}
+        errors={validator.errors.all as unknown as any}
         {...bind.merged()}
       />
 

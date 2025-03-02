@@ -845,6 +845,12 @@ export const I18N_PACK_EN = {
           label: 'Max number of users',
           placeholder: 'Enter max number of users',
         },
+        aiSettings: {
+          chatContext: {
+            label: 'Chat personalization',
+            placeholder: 'Enter how AI should personalize chats',
+          },
+        },
       },
     },
   },
