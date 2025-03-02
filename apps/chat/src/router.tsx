@@ -14,6 +14,7 @@ import {
   ManagementRoute,
   MeSettingsRoute,
   MyOrganizationSettingsRoute,
+  OrganizationManagementRoute,
   PinnedMessagesRoute,
   ProjectRoute,
   ProjectsRoute,
@@ -85,6 +86,8 @@ function LoggedInRouter() {
       <Route path={sitemap.settings.index} component={SettingsRoute} />
 
       <Route path={sitemap.pinnedMessages.index.raw} component={PinnedMessagesRoute} />
+
+      <Route path={sitemap.management.organization} component={OrganizationManagementRoute} />
       <Route path={sitemap.management.s3Buckets} component={S3BucketsManagementRoute} />
       <Route path={sitemap.management.aiModels} component={AIModelsManagementRoute} />
       <Route path={sitemap.management.searchEngines} component={SearchEnginesManagementRoute} />

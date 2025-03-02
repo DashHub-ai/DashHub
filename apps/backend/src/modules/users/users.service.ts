@@ -39,6 +39,8 @@ export class UsersService implements WithAuthFirewall<UsersFirewall> {
 
   get = this.esSearchRepo.get;
 
+  getFirstRootUser = this.repo.getFirstRootUser;
+
   search = this.esSearchRepo.search;
 
   create = ({ avatar, ...value }: InternalCreateUserInputT) => pipe(

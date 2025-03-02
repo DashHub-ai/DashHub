@@ -22,6 +22,7 @@ import type { TableId, TableRowWithId, TableRowWithUuid } from '../database';
 
 import { ChatsService } from '../chats/chats.service';
 import { PermissionsService } from '../permissions';
+import { UsersService } from '../users';
 import { ProjectsEsIndexRepo, ProjectsEsSearchRepo } from './elasticsearch';
 import { ProjectsFirewall } from './projects.firewall';
 import { ProjectsRepo } from './projects.repo';
@@ -33,6 +34,7 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
     @inject(ProjectsEsSearchRepo) private readonly esSearchRepo: ProjectsEsSearchRepo,
     @inject(ProjectsEsIndexRepo) private readonly esIndexRepo: ProjectsEsIndexRepo,
     @inject(PermissionsService) private readonly permissionsService: PermissionsService,
+    @inject(delay(() => UsersService)) private readonly usersService: Readonly<UsersService>,
     @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
   ) {}
 
@@ -157,23 +159,33 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
       permissions,
     }: {
       organization: TableRowWithId;
-      creator: TableRowWithId;
+      creator?: TableRowWithId;
       permissions?: SdkPermissionT[];
     },
   ) =>
-    this.create({
-      internal: true,
-      organization,
-      name: `Unnamed Project - ${Date.now()}`,
-      summary: {
-        content: {
-          value: '',
-          generated: false,
+    pipe(
+      TE.Do,
+      TE.bind('safeCreator', () => {
+        if (!creator) {
+          return this.usersService.getFirstRootUser();
+        }
+
+        return TE.right(creator);
+      }),
+      TE.chainW(({ safeCreator }) => this.create({
+        internal: true,
+        organization,
+        name: `Unnamed Project - ${Date.now()}`,
+        summary: {
+          content: {
+            value: '',
+            generated: false,
+          },
         },
-      },
-      permissions,
-      creator,
-    });
+        permissions,
+        creator: safeCreator,
+      })),
+    );
 
   update = ({ id, permissions, ...value }: SdkUpdateProjectInputT & TableRowWithId) => pipe(
     this.repo.update({ id, value }),

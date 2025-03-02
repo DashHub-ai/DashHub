@@ -1,9 +1,18 @@
 import type { PropsWithChildren } from 'react';
 
-import { BotIcon, FolderOpen, SearchIcon, UserCircleIcon, UsersIcon } from 'lucide-react';
+import {
+  BotIcon,
+  BuildingIcon,
+  FolderOpen,
+  SearchIcon,
+  UserCircleIcon,
+  UsersIcon,
+} from 'lucide-react';
 
+import { useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { useHasWorkspaceOrganization } from '~/modules';
 import { RouteMetaTags, useSitemap } from '~/routes';
 import { SideLayout, SideNav, SideNavItem } from '~/ui';
 
@@ -14,6 +23,9 @@ type Props = PropsWithChildren & {
 export function ManagementLayout({ title, children }: Props) {
   const t = useI18n().pack.routes.management;
   const sitemap = useSitemap();
+
+  const { guard } = useSdkForLoggedIn();
+  const hasOrganization = useHasWorkspaceOrganization();
 
   return (
     <PageWithNavigationLayout>
@@ -44,6 +56,15 @@ export function ManagementLayout({ title, children }: Props) {
             >
               {t.pages.usersGroups.title}
             </SideNavItem>
+
+            {hasOrganization && guard.is.minimum.techUser && (
+              <SideNavItem
+                icon={<BuildingIcon size={18} />}
+                href={sitemap.management.organization}
+              >
+                {t.pages.organization.title}
+              </SideNavItem>
+            )}
 
             <div className="py-4">
               <hr />

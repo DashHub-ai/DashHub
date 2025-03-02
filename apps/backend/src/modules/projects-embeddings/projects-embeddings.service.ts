@@ -17,13 +17,14 @@ import {
 } from '@llm/commons';
 
 import type { WithAuthFirewall } from '../auth';
-import type { TableId, TableRowWithUuid } from '../database';
+import type { TableId, TableRowWithId, TableRowWithUuid } from '../database';
 import type { UploadFilePayload } from '../s3';
 
 import { AIConnectorService } from '../ai-connector';
 import { AIModelsService } from '../ai-models';
 import { AppsService } from '../apps';
 import { ChatsRepo } from '../chats/chats.repo';
+import { OrganizationsAISettingsService } from '../organizations-ai-settings';
 import { PermissionsService } from '../permissions';
 import { ProjectsFilesRepo } from '../projects-files/projects-files.repo';
 import { createRelevantEmbeddingsPrompt } from '../prompts';
@@ -70,6 +71,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     @inject(CsvAIEmbeddingGenerator) private readonly csvAIEmbeddingGenerator: CsvAIEmbeddingGenerator,
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
+    @inject(delay(() => OrganizationsAISettingsService)) private readonly organizationsAISettingsService: OrganizationsAISettingsService,
     @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
     @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
   ) {}
@@ -87,7 +89,9 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
       history,
     }: {
       message: string;
-      chat: TableRowWithUuid;
+      chat: TableRowWithUuid & {
+        organization: TableRowWithId;
+      };
       history: Array<SdkRepeatedMessageLike<SdkSearchMessageItemT>>;
     },
   ) => {
@@ -96,6 +100,12 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     return pipe(
       TE.Do,
       TE.apSW('fileEmbeddingModel', this.chatsRepo.getFileEmbeddingAIModelId({ id: chat.id })),
+      TE.apSW(
+        'organizationProjectId',
+        this.organizationsAISettingsService.getProjectIdByOrganizationIdOrNil({
+          organizationId: chat.organization.id,
+        }),
+      ),
       TE.apSW('apps', this.appsService.search({
         archived: false,
         ids: appsIds,
@@ -103,13 +113,14 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
         offset: 0,
         sort: 'createdAt:desc',
       })),
-      TE.chainW(({ apps, fileEmbeddingModel: { id, projectId } }) => {
-        if (isNil(projectId) && !apps.items.length) {
+      TE.chainW(({ apps, fileEmbeddingModel: { id, projectId }, organizationProjectId }) => {
+        if (isNil(projectId) && !apps.items.length && isNil(organizationProjectId)) {
           return TE.of(message);
         }
 
         const projectsIds = rejectFalsyItems([
           projectId,
+          organizationProjectId,
           ...apps.items.map(({ project }) => project.id),
         ]);
 
@@ -128,7 +139,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
           })),
           TE.map(searchResults => searchResults.map(result => ({
             ...result,
-            isAppKnowledge: appsProjectIds.has(result.project.id),
+            isInternalKnowledge: appsProjectIds.has(result.project.id) || result.project.id === organizationProjectId,
           }))),
           TE.map(searchResults => createRelevantEmbeddingsPrompt(message, searchResults)),
         );

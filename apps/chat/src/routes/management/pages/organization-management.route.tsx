@@ -9,11 +9,11 @@ import { MyOrganizationForm, useWorkspaceOrganizationOrThrow } from '~/modules';
 import { useSitemap } from '~/routes/use-sitemap';
 import { ContentCard, SpinnerContainer } from '~/ui';
 
-import { SettingsLayout } from '../layout';
+import { ManagementLayout } from '../layout';
 
-export function MyOrganizationSettingsRoute() {
+export function OrganizationManagementRoute() {
   const sitemap = useSitemap();
-  const t = useI18n().pack.routes.settings.pages.myOrganization;
+  const t = useI18n().pack.routes.management.pages.organization;
 
   const { sdks } = useSdkForLoggedIn();
   const { organization } = useWorkspaceOrganizationOrThrow();
@@ -27,22 +27,21 @@ export function MyOrganizationSettingsRoute() {
   );
 
   if (result.status === 'error') {
-    return <Redirect to={sitemap.home} replace />;
+    return <Redirect to={sitemap.management.index} replace />;
   }
 
   return (
-    <SettingsLayout title={t.title}>
-      <ContentCard title={t.title} withBackground>
+    <ManagementLayout title={t.title}>
+      <ContentCard title={t.title}>
         <SpinnerContainer loading={result.isLoading}>
           {() => {
             if (result.status === 'success') {
               return <MyOrganizationForm defaultValue={result.data} />;
             }
-
             return null;
           }}
         </SpinnerContainer>
       </ContentCard>
-    </SettingsLayout>
+    </ManagementLayout>
   );
 }

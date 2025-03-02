@@ -380,6 +380,9 @@ export const I18N_PACK_EN = {
         users: {
           title: 'Users',
         },
+        organization: {
+          title: 'Organization',
+        },
         usersGroups: {
           title: 'Users Groups',
         },
@@ -839,6 +842,7 @@ export const I18N_PACK_EN = {
         create: 'Create organization',
         edit: 'Edit organization',
       },
+      knowledgeFiles: 'Knowledge files',
       fields: {
         name: {
           label: 'Name',

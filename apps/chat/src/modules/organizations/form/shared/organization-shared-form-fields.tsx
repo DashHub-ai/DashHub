@@ -1,13 +1,15 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkOrganizationT } from '@llm/sdk';
+import type { SdkOrganizationT, SdkUpsertUserAISettingsInputT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
 import { FormField, Input, NumericInput } from '~/ui';
 
 import { OrganizationAISettingsFormField } from './organization-ai-settings-form-field';
 
-type Value = Pick<SdkOrganizationT, 'maxNumberOfUsers' | 'name' | 'aiSettings'>;
+type Value = Pick<SdkOrganizationT, 'maxNumberOfUsers' | 'name'> & {
+  aiSettings: SdkUpsertUserAISettingsInputT;
+};
 
 type Props = ValidationErrorsListProps<Value>;
 

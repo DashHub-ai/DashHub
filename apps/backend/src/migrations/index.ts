@@ -44,6 +44,7 @@ import * as addSearchEnginesTable from './0042-add-search-engines-table';
 import * as addWebSearchToMessages from './0043-add-websearch-flag-to-messages';
 import * as addPinnedMessages from './0044-add-pinned-messages';
 import * as addOrganizationsAISettings from './0045-add-organizations-ai-settings-table';
+import * as addProjectsToOrganizationsAISettings from './0046-add-projects-to-organizations-ai-settings';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -92,4 +93,5 @@ export const DB_MIGRATIONS = {
   '0043-add-websearch-flag-to-messages': addWebSearchToMessages,
   '0044-add-pinned-messages': addPinnedMessages,
   '0045-add-organizations-ai-settings-table': addOrganizationsAISettings,
+  '0046-add-projects-to-organizations-ai-settings': addProjectsToOrganizationsAISettings,
 };

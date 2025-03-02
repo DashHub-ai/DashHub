@@ -382,6 +382,9 @@ export const I18N_PACK_PL: I18nLangPack = {
         users: {
           title: 'Użytkownicy',
         },
+        organization: {
+          title: 'Organizacja',
+        },
         usersGroups: {
           title: 'Grupy użytkowników',
         },
@@ -841,6 +844,7 @@ export const I18N_PACK_PL: I18nLangPack = {
         edit: 'Edytuj organizację',
         create: 'Utwórz organizację',
       },
+      knowledgeFiles: 'Pliki wiedzy',
       fields: {
         name: {
           label: 'Nazwa',

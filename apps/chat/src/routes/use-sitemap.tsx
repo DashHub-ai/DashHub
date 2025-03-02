@@ -28,6 +28,7 @@ export function useSitemap() {
     },
     management: {
       index: prefixWithBaseRoute('/management'),
+      organization: prefixWithBaseRoute('/management/organization'),
       users: prefixWithBaseRoute('/management/users'),
       usersGroups: prefixWithBaseRoute('/management/users-groups'),
       aiModels: prefixWithBaseRoute('/management/ai-models'),

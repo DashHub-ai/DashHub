@@ -1,11 +1,11 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkOrganizationAISettingsT } from '@llm/sdk';
+import type { SdkUpsertOrganizationAISettingsInputT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
 import { FormField, TextArea } from '~/ui';
 
-type Value = SdkOrganizationAISettingsT;
+type Value = SdkUpsertOrganizationAISettingsInputT;
 
 type Props = ValidationErrorsListProps<Value>;
 
