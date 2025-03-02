@@ -10,15 +10,15 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
-import type { UsersAISettingsTableInsertRow } from './users-ai-settings.tables';
+import type { OrganizationsAISettingsTableInsertRow } from './organizations-ai-settings.tables';
 
 @injectable()
-export class UsersAISettingsRepo extends AbstractDatabaseRepo {
-  getChatContextByUserIdOrNil = (
+export class OrganizationsAISettingsRepo extends AbstractDatabaseRepo {
+  getChatContextByOrganizationIdOrNil = (
     {
       forwardTransaction,
-      userId,
-    }: TransactionalAttrs<{ userId: TableId; }>,
+      organizationId,
+    }: TransactionalAttrs<{ organizationId: TableId; }>,
   ) => {
     const transaction = tryReuseTransactionOrSkip({
       db: this.db,
@@ -28,9 +28,9 @@ export class UsersAISettingsRepo extends AbstractDatabaseRepo {
     return pipe(
       transaction(trx =>
         trx
-          .selectFrom('users_ai_settings')
+          .selectFrom('organizations_ai_settings')
           .select('chat_context as context')
-          .where('user_id', '=', userId)
+          .where('organization_id', '=', organizationId)
           .executeTakeFirst(),
       ),
       DatabaseError.tryTask,
@@ -42,7 +42,7 @@ export class UsersAISettingsRepo extends AbstractDatabaseRepo {
     {
       forwardTransaction,
       value,
-    }: TransactionalAttrs<{ value: UsersAISettingsTableInsertRow; }>,
+    }: TransactionalAttrs<{ value: OrganizationsAISettingsTableInsertRow; }>,
   ) => {
     const transaction = tryReuseTransactionOrSkip({
       db: this.db,
@@ -52,13 +52,13 @@ export class UsersAISettingsRepo extends AbstractDatabaseRepo {
     return pipe(
       transaction(trx =>
         trx
-          .insertInto('users_ai_settings')
+          .insertInto('organizations_ai_settings')
           .values({
-            user_id: value.userId,
+            organization_id: value.organizationId,
             chat_context: value.chatContext || null,
           })
           .onConflict(oc => oc
-            .column('user_id')
+            .column('organization_id')
             .doUpdateSet(eb => ({
               chat_context: eb.ref('excluded.chat_context'),
             })),

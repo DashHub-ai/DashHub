@@ -138,7 +138,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         return TE.of(null);
       }
 
-      return this.usersAISettings.getChatContextByUserId({ userId: message.creator.id });
+      return this.usersAISettings.getChatContextByUserIdOrNil({ userId: message.creator.id });
     }),
     TE.bindW('history', ({ message }) => pipe(
       this.searchByChatId(message.chat.id),
