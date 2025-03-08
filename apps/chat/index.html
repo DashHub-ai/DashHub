@@ -10,14 +10,14 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
 
-    <link rel="preload" href="fonts/geist/geist-variable-vf.woff2" as="font" type="font/woff2">
-    <link rel="preload" href="fonts/geist/geist-mono-variable-vf.woff2" as="font" type="font/woff2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="fonts/geist/style.css">
     <link rel="stylesheet" href="src/index.scss">
   </head>
 
-  <body class="md:block hidden bg-background font-geist-sans text-foreground antialiased">
+  <body class="hidden md:block bg-background font-manrope text-foreground antialiased">
     <div id="root"></div>
     <script src="./src/index.tsx" type="module" async></script>
   </body>

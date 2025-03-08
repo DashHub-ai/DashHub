@@ -4,6 +4,7 @@ import path from 'node:path';
 
 import typography from '@tailwindcss/typography';
 import franken from 'franken-ui/shadcn-ui/preset-quick';
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
 export default {
   presets: [
@@ -30,6 +31,25 @@ export default {
         fadeIn: 'fadeIn 0.3s ease-out forwards',
         messageSlideIn: 'slideIn 0.3s ease-out 100ms forwards',
         balloonIn: 'balloonIn 0.2s ease-out forwards',
+      },
+      fontFamily: {
+        dmsans: ['DM Sans', ...fontFamily.sans],
+        manrope: ['Manrope', ...fontFamily.sans],
+      },
+      colors: {
+        stone: {
+          50: '#fafaf9',
+          100: '#f5f5f4',
+          200: '#e7e5e4',
+          300: '#d6d3d1',
+          400: '#a6a09b',
+          500: '#79716b',
+          600: '#57534d',
+          700: '#44403b',
+          800: '#292524',
+          900: '#1c1917',
+          950: '#0c0a09',
+        },
       },
     },
   },
