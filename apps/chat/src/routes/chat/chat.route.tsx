@@ -6,7 +6,7 @@ import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkTableRowUuidT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { ChatConversationWithSidebar } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 import { SpinnerContainer } from '~/ui';
@@ -54,7 +54,7 @@ export function ChatRoute({ id }: Props) {
   const { can } = result.status === 'success' ? createRecordGuard(result.data.chat) : {};
 
   return (
-    <PageWithNavigationLayout
+    <PageWithSidebarLayout
       withFooter={false}
       backgroundClassName="bg-white"
       contentClassName="pb-0"
@@ -100,6 +100,6 @@ export function ChatRoute({ id }: Props) {
           </>
         )}
       </section>
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }

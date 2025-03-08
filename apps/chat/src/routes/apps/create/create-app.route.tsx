@@ -4,7 +4,7 @@ import { useI18n } from '~/i18n';
 import {
   LayoutBreadcrumbs,
   LayoutHeader,
-  PageWithNavigationLayout,
+  PageWithSidebarLayout,
 } from '~/layouts';
 import {
   AppCreateForm,
@@ -33,7 +33,7 @@ export function CreateAppRoute() {
   });
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
       <LayoutBreadcrumbs
@@ -59,6 +59,6 @@ export function CreateAppRoute() {
           }}
         />
       </section>
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }

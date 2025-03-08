@@ -5,7 +5,7 @@ import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { RouteMetaTags } from '~/routes/shared';
 import { Skeleton, SpinnerContainer } from '~/ui';
 
@@ -35,7 +35,7 @@ export function ProjectRoute({ id }: Props) {
   }
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
       <LayoutHeader
@@ -60,6 +60,6 @@ export function ProjectRoute({ id }: Props) {
             : <ProjectContent project={result.data} onShared={result.silentReload} />
         )}
       </section>
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }

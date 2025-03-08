@@ -4,7 +4,7 @@ import { BuildingIcon, UserCircleIcon } from 'lucide-react';
 
 import { useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { useHasWorkspaceOrganization } from '~/modules';
 import { RouteMetaTags, useSitemap } from '~/routes';
 import { SideLayout, SideNav, SideNavItem } from '~/ui';
@@ -20,7 +20,7 @@ export function SettingsLayout({ title, children }: Props) {
   const hasOrganization = useHasWorkspaceOrganization();
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithSidebarLayout>
       <RouteMetaTags
         meta={{
           ...t.meta,
@@ -59,6 +59,6 @@ export function SettingsLayout({ title, children }: Props) {
       >
         {children}
       </SideLayout>
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }
