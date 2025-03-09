@@ -1,50 +1,62 @@
 import type { PropsWithChildren } from 'react';
 
 import clsx from 'clsx';
-import { ChevronLeft } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
-import { LoggedInUserItem } from './logged-in/logged-in-user-item';
+import { LoggedInUserItem } from './logged-in';
+import { useSidebarToggledStorage } from './use-sidebar-toggled-storage';
 
-type SidebarProps = PropsWithChildren & {
-  isOpen?: boolean;
-  onClose?: () => void;
-};
+export function Sidebar({ children }: PropsWithChildren) {
+  const sidebarToggledStorage = useSidebarToggledStorage();
 
-export function Sidebar({ children, isOpen = true, onClose }: SidebarProps) {
-  return (
-    <aside
-      className={clsx(
-        'top-0 left-0 z-40 fixed flex flex-col bg-gray-50 dark:bg-gray-800 p-5 w-[300px] h-screen overflow-y-auto transition-transform',
-        {
-          'translate-x-0': isOpen,
-          '-translate-x-full': !isOpen,
-        },
-      )}
-    >
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="font-dmsans font-semibold text-2xl">
-          DashHub.ai
-        </h1>
-
-        {onClose && (
+  if (!sidebarToggledStorage.getOrNull()) {
+    return (
+      <aside>
+        <div className="bottom-0 left-0 fixed p-4">
           <button
-            onClick={onClose}
             type="button"
-            className="hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md"
-            aria-label="Close sidebar"
+            className="hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md text-gray-500"
+            onClick={() => {
+              sidebarToggledStorage.set(true);
+            }}
           >
-            <ChevronLeft size={18} />
+            <PanelLeftOpen size={18} />
           </button>
+        </div>
+      </aside>
+    );
+  }
+
+  return (
+    <div className="relative w-[300px]">
+      <aside
+        className={clsx(
+          'top-0 left-0 fixed flex flex-col bg-gray-50 dark:bg-gray-800',
+          'px-4 pt-4 pb-4 w-[inherit] h-screen transition-transform',
         )}
-      </div>
+      >
+        <div className="mb-7 p-2 font-dmsans font-semibold text-2xl">
+          DashHub.ai
+        </div>
 
-      <div className="flex flex-col flex-grow space-y-10 mb-2">
-        {children}
-      </div>
+        <div className="flex flex-col flex-grow space-y-10 mb-2 overflow-y-auto">
+          {children}
+        </div>
 
-      <div className="mt-auto">
-        <LoggedInUserItem />
-      </div>
-    </aside>
+        <div className="flex justify-between items-center mt-auto">
+          <LoggedInUserItem />
+
+          <button
+            type="button"
+            className="hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md text-gray-500"
+            onClick={() => {
+              sidebarToggledStorage.set(false);
+            }}
+          >
+            <PanelLeftClose size={18} />
+          </button>
+        </div>
+      </aside>
+    </div>
   );
 }

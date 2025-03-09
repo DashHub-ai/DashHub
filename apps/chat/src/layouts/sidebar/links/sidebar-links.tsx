@@ -16,7 +16,7 @@ type SidebarLinksProps = {
 
 export function SidebarLinks({ links }: SidebarLinksProps) {
   return (
-    <ul className="-ml-2">
+    <ul>
       {links.map(link => (
         <li key={`${link.label}-${link.href}`}>
           <Link

@@ -5,10 +5,10 @@ import clsx from 'clsx';
 type Props = PropsWithChildren & {
   title: string;
   toolbar?: ReactNode;
-  withBackground?: boolean;
+  flat?: boolean;
 };
 
-export function ContentCard({ title, toolbar, children, withBackground = false }: Props) {
+export function ContentCard({ title, toolbar, children, flat = true }: Props) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -23,7 +23,7 @@ export function ContentCard({ title, toolbar, children, withBackground = false }
       <div
         className={clsx(
           'relative flex flex-col',
-          withBackground && 'bg-white shadow-sm p-6 border border-border/50 rounded-lg',
+          !flat && 'bg-white shadow-sm p-6 border border-border/50 rounded-lg',
         )}
       >
         {children}

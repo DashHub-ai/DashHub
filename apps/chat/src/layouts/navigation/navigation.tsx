@@ -1,37 +1,21 @@
-import { Link } from 'wouter';
-
-import { useSitemap } from '~/routes';
-
-import { NavigationLinks } from './links';
-import { NavigationLoggedAsBar } from './navigation-logged-as-bar';
+import { useSidebarToggledStorage } from '../sidebar/use-sidebar-toggled-storage';
 import { NavigationRightToolbar } from './navigation-right-toolbar';
 import { NavigationWorkspaceSelector } from './navigation-workspace-selector';
 
 export function Navigation() {
-  const sitemap = useSitemap();
+  const sidebarToggledStorage = useSidebarToggledStorage();
 
   return (
-    <header className="relative z-50 bg-white border-b border-border w-full">
-      <NavigationLoggedAsBar />
+    <header className="z-10 relative flex justify-between p-6 w-full h-[80px]">
+      <div className="flex flex-row gap-10">
+        <span className="font-dmsans font-semibold text-2xl">
+          {!sidebarToggledStorage.getOrNull() && 'DashHub.ai'}
+        </span>
 
-      <div className="mx-auto px-4 container">
-        <nav className="flex justify-between items-center h-16">
-          <div className="flex flex-1 items-center gap-12">
-            <Link
-              className="font-semibold text-lg"
-              to={sitemap.home}
-            >
-              DashHub
-            </Link>
-
-            <NavigationWorkspaceSelector />
-
-            <NavigationLinks />
-          </div>
-
-          <NavigationRightToolbar />
-        </nav>
+        <NavigationWorkspaceSelector />
       </div>
+
+      <NavigationRightToolbar />
     </header>
   );
 }

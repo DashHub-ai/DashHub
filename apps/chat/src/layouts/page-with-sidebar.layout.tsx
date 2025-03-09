@@ -4,7 +4,13 @@ import clsx from 'clsx';
 import { StarIcon } from 'lucide-react';
 
 import { Footer } from './footer';
-import { Sidebar, SidebarLinks, SidebarSection } from './sidebar';
+import { Navigation } from './navigation';
+import {
+  Sidebar,
+  SidebarLinks,
+  SidebarLinksSkeleton,
+  SidebarSection,
+} from './sidebar';
 
 type Props = PropsWithChildren & {
   withFooter?: boolean;
@@ -23,7 +29,7 @@ export function PageWithSidebarLayout(
   }: Props,
 ) {
   return (
-    <main className={clsx('flex min-h-screen', backgroundClassName)}>
+    <main className={clsx('grid grid-cols-[auto_1fr] min-h-screen', backgroundClassName)}>
       <Sidebar>
         <SidebarSection
           title="Starred Chats"
@@ -51,15 +57,17 @@ export function PageWithSidebarLayout(
           title="Starred Chats"
           icon={<StarIcon size={18} />}
         >
-          AAA
+          <SidebarLinksSkeleton />
         </SidebarSection>
       </Sidebar>
 
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col">
+        <Navigation />
+
         <div
           className={clsx(
-            'flex-1 mx-auto p-6 w-full',
-            wrapWithContainer && 'container max-w-6xl',
+            'space-y-8 p-6 w-full',
+            wrapWithContainer && 'container max-w-6xl mx-auto',
             contentClassName,
           )}
         >

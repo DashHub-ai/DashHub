@@ -32,7 +32,7 @@ export function MyOrganizationSettingsRoute() {
 
   return (
     <SettingsLayout title={t.title}>
-      <ContentCard title={t.title} withBackground>
+      <ContentCard title={t.title}>
         <SpinnerContainer loading={result.isLoading}>
           {() => {
             if (result.status === 'success') {
