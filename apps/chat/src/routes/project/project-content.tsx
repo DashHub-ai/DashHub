@@ -1,5 +1,6 @@
 import { type SdkProjectT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+import { NavigationToolbarPortal } from '~/layouts/navigation/navigation-toolbar-portal';
 import { ChatsContainer, StartChatForm } from '~/modules';
 import { ProjectFilesListContainer } from '~/modules/projects/files';
 
@@ -16,29 +17,25 @@ export function ProjectContent({ project, onShared }: Props) {
 
   return (
     <section className="relative">
-      {recordGuard.can.write && (
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="flex-1 font-semibold text-2xl text-center">
-            {t.hello}
-          </h2>
+      <NavigationToolbarPortal>
+        <ProjectShareRow
+          project={project}
+          onShared={onShared}
+        />
+      </NavigationToolbarPortal>
 
-          <ProjectShareRow
-            project={project}
-            onShared={onShared}
-          />
-        </div>
-      )}
+      <div className="gap-16 grid grid-cols-1 md:grid-cols-[1fr,26rem]">
+        <div>
+          {recordGuard.can.write && (
+            <div className="mb-20">
+              <h2 className="flex-1 mb-6 font-semibold text-2xl text-center">
+                {t.hello}
+              </h2>
 
-      <div>
-        {recordGuard.can.write && (
-          <>
-            <StartChatForm forceProject={project} />
+              <StartChatForm forceProject={project} />
+            </div>
+          )}
 
-            <hr className="border-gray-200 my-14 border-t" />
-          </>
-        )}
-
-        <div className="gap-16 grid grid-cols-1 md:grid-cols-[1fr,26rem]">
           <div>
             <h2 className="mb-6 font-semibold text-2xl">
               {t.chats}
@@ -46,17 +43,17 @@ export function ProjectContent({ project, onShared }: Props) {
 
             <ChatsContainer project={project} />
           </div>
+        </div>
 
-          <div>
-            <h2 className="mb-6 font-semibold text-2xl">
-              {t.files}
-            </h2>
+        <div>
+          <h2 className="mb-6 font-semibold text-2xl">
+            {t.files}
+          </h2>
 
-            <ProjectFilesListContainer
-              projectId={project.id}
-              readOnly={!recordGuard.can.write}
-            />
-          </div>
+          <ProjectFilesListContainer
+            projectId={project.id}
+            readOnly={!recordGuard.can.write}
+          />
         </div>
       </div>
     </section>

@@ -3,6 +3,7 @@ import type { PropsWithChildren } from 'react';
 import clsx from 'clsx';
 
 import { ChatsHistorySidebarSection } from '~/modules/chats/sidebar/chats-history-sidebar-section';
+import { ProjectsHistorySidebarSection } from '~/modules/projects/sidebar/projects-history-sidebar-section';
 import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-organization';
 
 import { Footer } from './footer';
@@ -35,7 +36,12 @@ export function PageWithSidebarLayout(
       key={organization?.id ?? 'unknown'}
     >
       <Sidebar>
-        {organization && <ChatsHistorySidebarSection />}
+        {organization && (
+          <>
+            <ProjectsHistorySidebarSection />
+            <ChatsHistorySidebarSection />
+          </>
+        )}
       </Sidebar>
 
       <div className="flex flex-col">

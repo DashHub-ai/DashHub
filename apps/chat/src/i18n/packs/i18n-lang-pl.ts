@@ -123,6 +123,14 @@ export const I18N_PACK_PL: I18nLangPack = {
       no: 'Nie',
     },
   },
+  sidebar: {
+    chats: {
+      title: 'Ostatnie czaty',
+    },
+    projects: {
+      title: 'Ostatnie projekty',
+    },
+  },
   modals: {
     archiveConfirm: {
       title: 'Archiwizuj',

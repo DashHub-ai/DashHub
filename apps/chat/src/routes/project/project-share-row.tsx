@@ -34,7 +34,7 @@ export function ProjectShareRow({ project, onShared }: Props) {
   }
 
   return (
-    <div className="right-0 absolute flex items-center gap-6">
+    <div className="flex items-center gap-6">
       <PermissionAvatarsList permissions={permissions.current ?? []} />
       <ShareResourceButton
         creator={creator}

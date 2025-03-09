@@ -12,6 +12,7 @@ import {
   createBaseDatedRecordMappings,
   createElasticsearchIndexRepo,
   createIdNameObjectMapping,
+  createIdObjectMapping,
   ElasticsearchRepo,
   EsAIGeneratedField,
   type EsDocument,
@@ -33,6 +34,7 @@ const ProjectsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createArchivedRecordMappings(),
         permissions: createPermissionsRowEntryMapping(),
         organization: createIdNameObjectMapping(),
+        creator: createIdObjectMapping(),
         internal: {
           type: 'keyword',
         },

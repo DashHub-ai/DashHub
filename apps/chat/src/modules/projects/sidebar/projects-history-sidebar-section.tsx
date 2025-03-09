@@ -9,19 +9,18 @@ import { type SidebarLinkItem, SidebarLinks, SidebarLinksSkeleton, SidebarSectio
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
-export function ChatsHistorySidebarSection() {
+export function ProjectsHistorySidebarSection() {
   const { organization } = useWorkspaceOrganizationOrThrow();
   const sitemap = useSitemap();
   const { pack } = useI18n();
   const { sdks, session } = useSdkForLoggedIn();
   const value = useAsyncValue(
     pipe(
-      sdks.dashboard.chats.search({
+      sdks.dashboard.projects.search({
         creatorIds: [session.token.sub],
         organizationIds: [organization.id],
-        excludeEmpty: true,
         offset: 0,
-        limit: 20,
+        limit: 5,
         archived: false,
       }),
       tryOrThrowTE,
@@ -34,13 +33,13 @@ export function ChatsHistorySidebarSection() {
   }
 
   const links: SidebarLinkItem[] = value.data.items.map(item => ({
-    href: sitemap.chat.generate({ pathParams: { id: item.id } }),
-    label: item.summary.name.value || pack.chat.card.noTitle,
+    href: sitemap.projects.show.generate({ pathParams: { id: item.id } }),
+    label: item.name,
   }));
 
   return (
     <SidebarSection
-      title={pack.sidebar.chats.title}
+      title={pack.sidebar.projects.title}
       icon={<HistoryIcon size={18} />}
     >
       <SidebarLinks links={links} />

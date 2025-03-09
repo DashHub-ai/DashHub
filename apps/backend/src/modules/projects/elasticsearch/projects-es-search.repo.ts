@@ -64,6 +64,7 @@ export class ProjectsEsSearchRepo {
       phrase,
       ids,
       organizationIds,
+      creatorIds,
       archived,
       satisfyPermissions,
     }: EsProjectsInternalFilters,
@@ -73,6 +74,7 @@ export class ProjectsEsSearchRepo {
         !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
+        !!creatorIds?.length && esb.termsQuery('creator.id', creatorIds),
         !!phrase && (
           esb
             .boolQuery()

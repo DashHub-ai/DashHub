@@ -121,6 +121,14 @@ export const I18N_PACK_EN = {
       no: 'No',
     },
   },
+  sidebar: {
+    chats: {
+      title: 'Recent chats',
+    },
+    projects: {
+      title: 'Recent projects',
+    },
+  },
   modals: {
     archiveConfirm: {
       title: 'Archive',
