@@ -34,15 +34,18 @@ export function SidebarLinks({ links }: SidebarLinksProps) {
               )}
             >
               {link.icon && (
-                <span className={clsx('text-gray-500', {
-                  'text-gray-900 dark:text-gray-100': isActive,
-                })}
+                <span
+                  className={clsx('flex-shrink-0 text-gray-500', {
+                    'text-gray-900 dark:text-gray-100': isActive,
+                  })}
                 >
                   {link.icon}
                 </span>
               )}
 
-              <span>{link.label}</span>
+              <span className="flex-1 min-w-0 truncate">
+                {link.label}
+              </span>
             </Link>
           </li>
         );
