@@ -15,30 +15,31 @@ export type NavigationProps = {
 export function Navigation({ simplified }: NavigationProps) {
   const { pack } = useI18n();
   const sidebarToggledStorage = useSidebarToggledStorage();
+  const isSidebarVisible = !!sidebarToggledStorage.getOrNull();
 
   return (
     <header
       className={clsx(
         'z-10 relative items-center place-content-center gap-14 grid mx-auto p-6 px-14 w-full h-[80px] container',
-        sidebarToggledStorage.getOrNull()
-          ? 'grid-cols-[1fr_auto]'
-          : 'grid-cols-[1fr_auto_1fr]',
+        !isSidebarVisible
+          ? 'grid-cols-[1fr_auto_1fr]'
+          : 'grid-cols-[1fr_auto]',
       )}
     >
-      {!sidebarToggledStorage.getOrNull() && (
+      {!isSidebarVisible && (
         <div className="font-dmsans font-semibold text-2xl">
           Dashhub.ai
         </div>
       )}
 
       <div>
-        {simplified && (
+        {isSidebarVisible && simplified && (
           <Link href="/" className="inline-flex justify-center items-center gap-2 hover:bg-gray-100 disabled:opacity-50 px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 ring-offset-white focus-visible:ring-offset-2 font-medium text-gray-900 hover:text-gray-900 text-sm transition-colors disabled:pointer-events-none">
             <ArrowLeft className="w-4 h-4" />
             {pack.navigation.backToHome}
           </Link>
         )}
-        {!simplified && <NavigationLinks />}
+        {(!isSidebarVisible || !simplified) && <NavigationLinks />}
       </div>
 
       <div className="flex flex-row justify-end gap-14">
