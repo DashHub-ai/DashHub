@@ -14,7 +14,7 @@ type Props = {
   onPermissionsUpdated: VoidFunction;
 };
 
-export function ShareChatRow({ chat, onPermissionsUpdated }: Props) {
+export function ShareChatNavigationRow({ chat, onPermissionsUpdated }: Props) {
   const { permissions, creator } = chat;
   const { sdks } = useSdkForLoggedIn();
 
@@ -27,7 +27,7 @@ export function ShareChatRow({ chat, onPermissionsUpdated }: Props) {
   );
 
   return (
-    <div className="right-0 bottom-full absolute flex items-center gap-6 mb-4">
+    <div className="flex items-center gap-6">
       <PermissionAvatarsList permissions={permissions?.current ?? []} />
       <ShareResourceButton
         creator={creator}

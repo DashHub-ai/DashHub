@@ -19,6 +19,7 @@ export type SdkSearchProjectItemT = z.infer<typeof SdkSearchProjectItemV>;
 export const SdkSearchProjectsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
+    creatorIds: SdkIdsArrayV.optional(),
   })
   .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)

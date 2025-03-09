@@ -1,8 +1,6 @@
-import clsx from 'clsx';
 import { memo } from 'react';
 
 import {
-  isTechOrOwnerUserSdkOrganizationRole,
   type SdkChatT,
   type SdkSearchMessagesOutputT,
   useSdkForLoggedIn,
@@ -14,22 +12,17 @@ import { ChatConfigPanel } from './config-panel';
 type Props = {
   chat: SdkChatT;
   initialMessages: SdkSearchMessagesOutputT;
+  onSilentReload: VoidFunction;
 };
 
-export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Props) => {
-  const { createRecordGuard, session: { token } } = useSdkForLoggedIn();
+export const ChatConversationWithSidebar = memo(({ chat, initialMessages, onSilentReload }: Props) => {
+  const { createRecordGuard } = useSdkForLoggedIn();
   const { can } = createRecordGuard(chat);
-
-  const heightClassName = (
-    token.role === 'root' || isTechOrOwnerUserSdkOrganizationRole(token.organization.role)
-      ? 'h-[calc(100vh-171px)]'
-      : 'h-[calc(100vh-143px)]'
-  );
 
   return (
     <div className="flex gap-6 mx-auto">
       <ChatConversationPanel
-        className={heightClassName}
+        className="h-[calc(100vh-115px)]"
         chat={chat}
         initialMessages={initialMessages}
       />
@@ -37,7 +30,8 @@ export const ChatConversationWithSidebar = memo(({ chat, initialMessages }: Prop
       {can.write && (
         <ChatConfigPanel
           chat={chat}
-          contentClassName={clsx(heightClassName, 'overflow-y-auto')}
+          contentClassName="overflow-y-auto"
+          onSilentReload={onSilentReload}
         />
       )}
     </div>

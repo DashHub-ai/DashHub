@@ -11,9 +11,10 @@ import { useFileUpload } from './use-file-upload';
 type Props = {
   projectId: SdkTableRowIdT;
   readOnly?: boolean;
+  compactView?: boolean;
 };
 
-export function ProjectFilesListContainer({ projectId, readOnly }: Props) {
+export function ProjectFilesListContainer({ projectId, readOnly, compactView }: Props) {
   const t = useI18n().pack.projects.files;
   const [uploadFile, uploadState] = useFileUpload(projectId);
 
@@ -22,7 +23,7 @@ export function ProjectFilesListContainer({ projectId, readOnly }: Props) {
     storeDataInUrl: false,
     schema: SdkSearchProjectFilesInputV,
     fallbackSearchParams: {
-      limit: 6,
+      limit: compactView ? 10 : 6,
     },
     fetchResultsTask: filters => sdks.dashboard.projectsFiles.search({
       ...filters,
@@ -37,9 +38,9 @@ export function ProjectFilesListContainer({ projectId, readOnly }: Props) {
   };
 
   return (
-    <section>
+    <section className={compactView ? 'space-y-3' : ''}>
       {!readOnly && (
-        <div className="flex justify-end mb-6">
+        <div className={`flex justify-end ${compactView ? 'mb-3' : 'mb-6'}`}>
           <FormSpinnerCTA
             type="button"
             loading={uploadState.isLoading}
@@ -52,7 +53,7 @@ export function ProjectFilesListContainer({ projectId, readOnly }: Props) {
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         <PaginatedList
           result={result}
           loading={loading}
@@ -61,7 +62,7 @@ export function ProjectFilesListContainer({ projectId, readOnly }: Props) {
           footerProps={{
             withNthToNthOf: false,
             withPageSizeSelector: false,
-            withPageNumber: false,
+            withPageNumber: !compactView,
             centered: true,
           }}
         >
@@ -76,6 +77,7 @@ export function ProjectFilesListContainer({ projectId, readOnly }: Props) {
                 file={file}
                 readOnly={readOnly}
                 onAfterDelete={silentReload}
+                compactView={compactView}
               />
             ));
           }}

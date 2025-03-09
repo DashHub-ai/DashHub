@@ -1,13 +1,13 @@
 import { pipe } from 'fp-ts/lib/function';
-import { Link, Redirect } from 'wouter';
+import { Redirect } from 'wouter';
 
 import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { PageWithSidebarLayout } from '~/layouts';
 import { RouteMetaTags } from '~/routes/shared';
-import { Skeleton, SpinnerContainer } from '~/ui';
+import { SpinnerContainer } from '~/ui';
 
 import { useSitemap } from '../use-sitemap';
 import { ProjectContent } from './project-content';
@@ -35,23 +35,12 @@ export function ProjectRoute({ id }: Props) {
   }
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithSidebarLayout
+      navigationProps={{
+        simplified: true,
+      }}
+    >
       <RouteMetaTags meta={t.meta} />
-
-      <LayoutHeader
-        breadcrumbs={(
-          <li>
-            <Link href={sitemap.projects.index.generate({})}>
-              {pack.routes.projects.title}
-            </Link>
-          </li>
-        )}
-        currentBreadcrumb={(
-          result.status === 'success'
-            ? result.data.name
-            : <Skeleton className="w-32 h-[16px]" variant="dark" as="span" />
-        )}
-      />
 
       <section>
         {(
@@ -60,6 +49,6 @@ export function ProjectRoute({ id }: Props) {
             : <ProjectContent project={result.data} onShared={result.silentReload} />
         )}
       </section>
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }

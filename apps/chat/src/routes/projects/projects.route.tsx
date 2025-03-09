@@ -4,7 +4,7 @@ import { FolderPlusIcon } from 'lucide-react';
 import { tapTaskOption } from '@llm/commons';
 import { useAsyncCallback, useForceRerender } from '@llm/commons-front';
 import { useI18n } from '~/i18n';
-import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { ProjectsContainer } from '~/modules';
 import { useProjectCreateModal } from '~/modules/projects/form';
 import { RouteMetaTags } from '~/routes/shared';
@@ -30,7 +30,7 @@ export function ProjectsRoute() {
   );
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
       <LayoutHeader>
@@ -53,6 +53,6 @@ export function ProjectsRoute() {
           </FormSpinnerCTA>
         )}
       />
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }

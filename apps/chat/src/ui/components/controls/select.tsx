@@ -161,18 +161,20 @@ export const Select = controlled<SelectItem | null, SelectProps>((
           setIsOpen(!isOpen);
         }}
       >
-        {prefix && (!placeholder || isFilled) && (
-          <span className={clsx('mr-1', placeholderClassName || 'uk-text-muted ')}>
-            {prefix}
-            {isFilled ? ':' : ''}
-          </span>
-        )}
+        <div className="flex flex-row flex-1 justify-start">
+          {prefix && (!placeholder || isFilled) && (
+            <span className={clsx('mr-1', placeholderClassName || 'uk-text-muted ')}>
+              {prefix}
+              {isFilled ? ':' : ''}
+            </span>
+          )}
 
-        {(!prefix || isFilled || !!placeholder) && (
-          <span className="mr-2">
-            {displayValue}
-          </span>
-        )}
+          {(!prefix || isFilled || !!placeholder) && (
+            <span className="mr-2">
+              {displayValue}
+            </span>
+          )}
+        </div>
 
         <SelectExpandSVG />
       </button>

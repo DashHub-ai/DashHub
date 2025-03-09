@@ -27,13 +27,14 @@ const GRID_COLUMNS_CLASSES = {
 } as const;
 
 type Props = {
+  limit?: number;
   project?: SdkTableRowWithIdT;
   columns?: keyof typeof GRID_COLUMNS_CLASSES;
   filters?: Partial<SdkSearchChatsInputT>;
   itemPropsFn?: (item: SdkSearchChatItemT) => Partial<ChatCardProps>;
 };
 
-export function ChatsContainer({ filters: forwardedFilters, project, columns = 2, itemPropsFn }: Props) {
+export function ChatsContainer({ limit, filters: forwardedFilters, project, columns = 2, itemPropsFn }: Props) {
   const { organization } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
@@ -41,7 +42,7 @@ export function ChatsContainer({ filters: forwardedFilters, project, columns = 2
     storeDataInUrl: false,
     schema: SdkSearchChatsInputV,
     fallbackSearchParams: {
-      limit: 12,
+      limit: limit ?? 12,
     },
     fetchResultsTask: filters => sdks.dashboard.chats.search({
       ...forwardedFilters,

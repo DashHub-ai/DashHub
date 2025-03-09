@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 
 import { useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { AppsContainer } from '~/modules';
 import { RouteMetaTags, useSitemap } from '~/routes';
 
@@ -15,7 +15,7 @@ export function AppsRoute() {
   const { guard } = useSdkForLoggedIn();
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
       <LayoutHeader>
@@ -38,6 +38,6 @@ export function AppsRoute() {
           ),
         }}
       />
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }

@@ -1,5 +1,5 @@
 import { useI18n } from '~/i18n';
-import { PageWithNavigationLayout } from '~/layouts';
+import { PageWithSidebarLayout } from '~/layouts';
 import { ChatsHistorySection, StartChatForm } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
@@ -9,7 +9,7 @@ export function HomeRoute() {
   const t = useI18n().pack.routes.home;
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
       <div className="pt-8">
@@ -22,10 +22,10 @@ export function HomeRoute() {
 
         <HomeTutorial className="mx-auto mt-8" />
 
-        <hr className="border-gray-200 mx-auto my-12 border-t max-w-2xl" />
+        <hr className="mx-auto my-12 border-gray-200 border-t max-w-2xl" />
 
         <ChatsHistorySection />
       </div>
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }

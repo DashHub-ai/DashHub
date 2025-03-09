@@ -121,6 +121,16 @@ export const I18N_PACK_EN = {
       no: 'No',
     },
   },
+  sidebar: {
+    chats: {
+      title: 'Recent chats',
+      all: 'All chats',
+    },
+    projects: {
+      title: 'Recent projects',
+      all: 'All projects',
+    },
+  },
   modals: {
     archiveConfirm: {
       title: 'Archive',
@@ -160,6 +170,7 @@ export const I18N_PACK_EN = {
     },
   },
   navigation: {
+    backToHome: 'Back to home',
     links: {
       home: 'Chats',
       projects: 'Projects',

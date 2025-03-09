@@ -1,5 +1,5 @@
 import { useI18n } from '~/i18n';
-import { PageWithNavigationLayout } from '~/layouts';
+import { PageWithSidebarLayout } from '~/layouts';
 import { OrganizationsTableContainer, UsersTableContainer } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
@@ -9,13 +9,13 @@ export function ChooseOrganizationRoute() {
   const t = useI18n().pack.routes.chooseOrganization;
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
       <ChooseOrganizationTutorial />
 
       <section>
-        <h2 className="mb-6 line-clamp-1 font-bold text-2xl tracking-tight">
+        <h2 className="mb-6 font-bold text-2xl line-clamp-1 tracking-tight">
           {t.sections.organizations}
         </h2>
 
@@ -25,7 +25,7 @@ export function ChooseOrganizationRoute() {
       <hr />
 
       <section>
-        <h2 className="mb-6 line-clamp-1 font-bold text-2xl tracking-tight">
+        <h2 className="mb-6 font-bold text-2xl line-clamp-1 tracking-tight">
           {t.sections.users}
         </h2>
 
@@ -35,6 +35,6 @@ export function ChooseOrganizationRoute() {
           }}
         />
       </section>
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }

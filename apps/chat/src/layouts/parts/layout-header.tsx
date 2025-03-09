@@ -21,7 +21,7 @@ export function LayoutHeader({ children, currentBreadcrumb, breadcrumbs, withBre
       )}
 
       {children && (
-        <h1 className="line-clamp-1 font-bold text-3xl tracking-tight">
+        <h1 className="font-bold text-3xl line-clamp-1 tracking-tight">
           {children}
         </h1>
       )}

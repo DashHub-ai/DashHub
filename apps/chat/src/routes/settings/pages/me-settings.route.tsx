@@ -11,7 +11,7 @@ export function MeSettingsRoute() {
 
   return (
     <SettingsLayout title={t.title}>
-      <ContentCard title={t.title} withBackground>
+      <ContentCard title={t.title}>
         <SpinnerContainer loading={value.loading}>
           {() => !value.loading && <UpdateMeForm defaultValue={value.me} />}
         </SpinnerContainer>

@@ -5,7 +5,7 @@ import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { LayoutBreadcrumbs, LayoutHeader, PageWithNavigationLayout } from '~/layouts';
+import { LayoutBreadcrumbs, LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { AppUpdateForm, useCreateChatWithInitialApp } from '~/modules';
 import { RouteMetaTags, useSitemap } from '~/routes';
 import { SpinnerContainer } from '~/ui';
@@ -39,7 +39,7 @@ export function UpdateAppRoute({ id }: Props) {
   };
 
   return (
-    <PageWithNavigationLayout>
+    <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
       <LayoutBreadcrumbs
@@ -54,7 +54,7 @@ export function UpdateAppRoute({ id }: Props) {
       />
 
       <section className="flex flex-col gap-6 mx-auto max-w-6xl">
-        <LayoutHeader withBreadcrumbs={false}>
+        <LayoutHeader>
           {(
             result.status === 'loading'
               ? t.title
@@ -68,6 +68,6 @@ export function UpdateAppRoute({ id }: Props) {
             : <AppUpdateForm app={result.data} onAfterSubmit={onAfterSubmit} />
         )}
       </section>
-    </PageWithNavigationLayout>
+    </PageWithSidebarLayout>
   );
 }
