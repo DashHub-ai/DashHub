@@ -14,7 +14,7 @@ type Props = {
   onPermissionsUpdated: VoidFunction;
 };
 
-export function ShareChatRow({ chat, onPermissionsUpdated }: Props) {
+export function ShareChatNavigationRow({ chat, onPermissionsUpdated }: Props) {
   const { permissions, creator } = chat;
   const { sdks } = useSdkForLoggedIn();
 

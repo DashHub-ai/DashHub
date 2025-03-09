@@ -10,7 +10,10 @@ export function Navigation() {
         {!sidebarToggledStorage.getOrNull() && 'DashHub.ai'}
       </span>
 
-      <NavigationRightToolbar />
+      <div className="flex flex-row gap-14">
+        <div id="navigation-toolbar" />
+        <NavigationRightToolbar />
+      </div>
     </header>
   );
 }

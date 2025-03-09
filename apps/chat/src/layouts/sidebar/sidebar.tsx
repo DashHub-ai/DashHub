@@ -40,7 +40,7 @@ export function Sidebar({ children }: PropsWithChildren) {
           'px-4 pt-4 pb-4 w-[inherit] h-screen transition-transform',
         )}
       >
-        <div className="flex flex-col space-y-4 mb-7 p-2">
+        <div className="flex flex-col space-y-5 mb-7 p-2">
           <Link
             to={sitemap.home}
             className="font-dmsans font-semibold text-2xl"

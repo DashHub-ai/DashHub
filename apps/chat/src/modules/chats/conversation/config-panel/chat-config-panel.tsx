@@ -1,11 +1,12 @@
 import { type SdkChatT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+import { NavigationToolbarPortal } from '~/layouts/navigation/navigation-toolbar-portal';
 import { Checkbox, CollapsiblePanel, FormAlertBoxes, FormField, Input, SaveButton, TextArea } from '~/ui';
 
 import { ChatConfigArchive } from './chat-config-archive';
 import { ChatConfigTutorial } from './chat-config-tutorial';
 import { ChatConfigUnarchive } from './chat-config-unarchive';
-import { ShareChatRow } from './share-chat-row';
+import { ShareChatNavigationRow } from './share-chat-navigation-row';
 import { useChatConfigForm } from './use-chat-config-form';
 
 type Props = {
@@ -42,12 +43,12 @@ export function ChatConfigPanel({ chat, contentClassName, onSilentReload }: Prop
 
         <fieldset className="space-y-4">
           {can?.write && (
-            <div className="mb-8">
-              <ShareChatRow
+            <NavigationToolbarPortal>
+              <ShareChatNavigationRow
                 chat={chat}
                 onPermissionsUpdated={onSilentReload}
               />
-            </div>
+            </NavigationToolbarPortal>
           )}
 
           <div className="font-medium text-gray-700 text-sm">
