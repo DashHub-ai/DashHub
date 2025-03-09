@@ -27,7 +27,7 @@ export function ShareChatNavigationRow({ chat, onPermissionsUpdated }: Props) {
   );
 
   return (
-    <div className="flex items-center gap-6 mb-4">
+    <div className="flex items-center gap-6">
       <PermissionAvatarsList permissions={permissions?.current ?? []} />
       <ShareResourceButton
         creator={creator}
