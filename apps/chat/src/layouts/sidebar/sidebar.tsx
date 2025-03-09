@@ -51,7 +51,7 @@ export function Sidebar({ children }: PropsWithChildren) {
           <SidebarWorkspaceSelector />
         </div>
 
-        <div className="flex flex-col flex-grow space-y-10 mb-2 overflow-y-auto">
+        <div className="flex flex-col flex-grow space-y-10 mb-2 pb-6 overflow-y-auto">
           {children}
         </div>
 

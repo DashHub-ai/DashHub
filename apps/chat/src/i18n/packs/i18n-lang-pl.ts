@@ -126,9 +126,11 @@ export const I18N_PACK_PL: I18nLangPack = {
   sidebar: {
     chats: {
       title: 'Ostatnie czaty',
+      all: 'Wszystkie czaty',
     },
     projects: {
       title: 'Ostatnie projekty',
+      all: 'Wszystkie projekty',
     },
   },
   modals: {

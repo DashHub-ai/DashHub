@@ -48,7 +48,7 @@ export function CreateAppRoute() {
       />
 
       <section className="flex flex-col gap-6 mx-auto max-w-4xl">
-        <LayoutHeader withBreadcrumbs={false}>
+        <LayoutHeader>
           {t.title}
         </LayoutHeader>
 

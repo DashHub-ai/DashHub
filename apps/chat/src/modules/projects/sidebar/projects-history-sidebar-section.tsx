@@ -5,7 +5,13 @@ import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { type SidebarLinkItem, SidebarLinks, SidebarLinksSkeleton, SidebarSection } from '~/layouts';
+import {
+  type SidebarLinkItem,
+  SidebarLinks,
+  SidebarLinksSkeleton,
+  SidebarSection,
+  SidebarSectionAllLink,
+} from '~/layouts';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
@@ -43,6 +49,9 @@ export function ProjectsHistorySidebarSection() {
       icon={<HistoryIcon size={18} />}
     >
       <SidebarLinks links={links} />
+      <SidebarSectionAllLink href={sitemap.projects.index.generate({})}>
+        {pack.sidebar.projects.all}
+      </SidebarSectionAllLink>
     </SidebarSection>
   );
 }

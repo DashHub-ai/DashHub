@@ -124,9 +124,11 @@ export const I18N_PACK_EN = {
   sidebar: {
     chats: {
       title: 'Recent chats',
+      all: 'All chats',
     },
     projects: {
       title: 'Recent projects',
+      all: 'All projects',
     },
   },
   modals: {
