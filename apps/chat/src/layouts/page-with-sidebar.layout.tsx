@@ -1,15 +1,14 @@
 import type { PropsWithChildren } from 'react';
 
 import clsx from 'clsx';
-import { StarIcon } from 'lucide-react';
+
+import { ChatsHistorySidebarSection } from '~/modules/chats/sidebar/chats-history-sidebar-section';
+import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-organization';
 
 import { Footer } from './footer';
 import { Navigation } from './navigation';
 import {
   Sidebar,
-  SidebarLinks,
-  SidebarLinksSkeleton,
-  SidebarSection,
 } from './sidebar';
 
 type Props = PropsWithChildren & {
@@ -28,37 +27,15 @@ export function PageWithSidebarLayout(
     withFooter = true,
   }: Props,
 ) {
-  return (
-    <main className={clsx('grid grid-cols-[auto_1fr] min-h-screen', backgroundClassName)}>
-      <Sidebar>
-        <SidebarSection
-          title="Starred Chats"
-          icon={<StarIcon size={18} />}
-        >
-          <SidebarLinks
-            links={[
-              {
-                label: 'Starred Chats',
-                href: '/starred-chats',
-              },
-              {
-                label: 'Starred Chats 2',
-                href: '/starred-chats-2',
-              },
-              {
-                label: 'Starred Chats 3',
-                href: '/starred-chats-3',
-              },
-            ]}
-          />
-        </SidebarSection>
+  const { organization } = useWorkspaceOrganization();
 
-        <SidebarSection
-          title="Starred Chats"
-          icon={<StarIcon size={18} />}
-        >
-          <SidebarLinksSkeleton />
-        </SidebarSection>
+  return (
+    <main
+      className={clsx('grid grid-cols-[auto_1fr] min-h-screen', backgroundClassName)}
+      key={organization?.id ?? 'unknown'}
+    >
+      <Sidebar>
+        {organization && <ChatsHistorySidebarSection />}
       </Sidebar>
 
       <div className="flex flex-col">

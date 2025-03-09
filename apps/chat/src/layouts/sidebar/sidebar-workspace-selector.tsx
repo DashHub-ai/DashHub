@@ -10,7 +10,7 @@ type Props = {
   className?: string;
 };
 
-export function NavigationWorkspaceSelector({ className }: Props) {
+export function SidebarWorkspaceSelector({ className }: Props) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
   const [, navigate] = useLocation();

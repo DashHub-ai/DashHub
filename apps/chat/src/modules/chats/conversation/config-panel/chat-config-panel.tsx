@@ -1,19 +1,20 @@
-import type { SdkChatT } from '@llm/sdk';
-
+import { type SdkChatT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { Checkbox, CollapsiblePanel, FormAlertBoxes, FormField, Input, SaveButton, TextArea } from '~/ui';
 
 import { ChatConfigArchive } from './chat-config-archive';
 import { ChatConfigTutorial } from './chat-config-tutorial';
 import { ChatConfigUnarchive } from './chat-config-unarchive';
+import { ShareChatRow } from './share-chat-row';
 import { useChatConfigForm } from './use-chat-config-form';
 
 type Props = {
   chat: SdkChatT;
   contentClassName?: string;
+  onSilentReload: VoidFunction;
 };
 
-export function ChatConfigPanel({ chat, contentClassName }: Props) {
+export function ChatConfigPanel({ chat, contentClassName, onSilentReload }: Props) {
   const { pack } = useI18n();
   const t = pack.chat.config;
   const { bind, validator, value, submitState, isDirty, handleSubmitEvent } = useChatConfigForm({
@@ -22,6 +23,9 @@ export function ChatConfigPanel({ chat, contentClassName }: Props) {
       permissions: chat.permissions?.current,
     },
   });
+
+  const { createRecordGuard } = useSdkForLoggedIn();
+  const { can } = createRecordGuard(chat);
 
   return (
     <CollapsiblePanel
@@ -37,7 +41,18 @@ export function ChatConfigPanel({ chat, contentClassName }: Props) {
         <ChatConfigTutorial />
 
         <fieldset className="space-y-4">
-          <legend className="font-medium text-gray-700 text-sm">{t.summary}</legend>
+          {can?.write && (
+            <div className="mb-8">
+              <ShareChatRow
+                chat={chat}
+                onPermissionsUpdated={onSilentReload}
+              />
+            </div>
+          )}
+
+          <div className="font-medium text-gray-700 text-sm">
+            {t.summary}
+          </div>
 
           <FormField
             {...validator.errors.extract('summary.name')}

@@ -30,7 +30,7 @@ export function LoggedInButton() {
       </span>
 
       {!data.loading && data.me.name && (
-        <span className="ml-2 font-semibold">{data.me.name}</span>
+        <span className="ml-2 text-gray-500">{data.me.name}</span>
       )}
     </button>
   );

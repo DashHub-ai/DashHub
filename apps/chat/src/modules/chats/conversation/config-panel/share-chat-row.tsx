@@ -27,7 +27,7 @@ export function ShareChatRow({ chat, onPermissionsUpdated }: Props) {
   );
 
   return (
-    <div className="right-0 bottom-full absolute flex items-center gap-6 mb-4">
+    <div className="flex items-center gap-6 mb-4">
       <PermissionAvatarsList permissions={permissions?.current ?? []} />
       <ShareResourceButton
         creator={creator}

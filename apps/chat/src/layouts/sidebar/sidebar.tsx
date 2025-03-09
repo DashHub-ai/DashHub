@@ -2,12 +2,17 @@ import type { PropsWithChildren } from 'react';
 
 import clsx from 'clsx';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Link } from 'wouter';
+
+import { useSitemap } from '~/routes';
 
 import { LoggedInUserItem } from './logged-in';
+import { SidebarWorkspaceSelector } from './sidebar-workspace-selector';
 import { useSidebarToggledStorage } from './use-sidebar-toggled-storage';
 
 export function Sidebar({ children }: PropsWithChildren) {
   const sidebarToggledStorage = useSidebarToggledStorage();
+  const sitemap = useSitemap();
 
   if (!sidebarToggledStorage.getOrNull()) {
     return (
@@ -35,8 +40,15 @@ export function Sidebar({ children }: PropsWithChildren) {
           'px-4 pt-4 pb-4 w-[inherit] h-screen transition-transform',
         )}
       >
-        <div className="mb-7 p-2 font-dmsans font-semibold text-2xl">
-          DashHub.ai
+        <div className="flex flex-col space-y-4 mb-7 p-2">
+          <Link
+            to={sitemap.home}
+            className="font-dmsans font-semibold text-2xl"
+          >
+            DashHub.ai
+          </Link>
+
+          <SidebarWorkspaceSelector />
         </div>
 
         <div className="flex flex-col flex-grow space-y-10 mb-2 overflow-y-auto">
