@@ -35,7 +35,11 @@ export function ProjectRoute({ id }: Props) {
   }
 
   return (
-    <PageWithSidebarLayout>
+    <PageWithSidebarLayout
+      navigationProps={{
+        simplified: true,
+      }}
+    >
       <RouteMetaTags meta={t.meta} />
 
       <section>

@@ -236,7 +236,7 @@ export const ChatConversationPanel = memo((
       >
         <div
           className={clsx(
-            'z-10 relative flex-1 m-auto w-[800px] max-w-screen-md',
+            'z-10 relative flex-1 m-auto w-full max-w-[800px]',
 
             // Avoid scroll flickering on first render
             flickeringIndicator.visible

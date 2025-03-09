@@ -172,6 +172,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
   },
   navigation: {
+    backToHome: 'Powrót do strony głównej',
     links: {
       home: 'Czaty',
       projects: 'Projekty',
