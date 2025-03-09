@@ -8,7 +8,7 @@ type SidebarSectionProps = PropsWithChildren & {
 export function SidebarSection({ title, icon, children }: SidebarSectionProps) {
   return (
     <section>
-      <div className="flex items-center gap-2 mb-4 px-2 text-gray-500">
+      <div className="flex items-center gap-2 mb-3 px-2">
         <span>{icon}</span>
         <h3 className="font-dmsans font-semibold text-sm">
           {title}

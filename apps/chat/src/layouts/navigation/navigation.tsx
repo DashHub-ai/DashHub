@@ -33,9 +33,9 @@ export function Navigation({ simplified }: NavigationProps) {
 
       <div>
         {simplified && (
-          <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
-            <ArrowLeft className="w-5 h-5" />
-            <span>{pack.navigation.backToHome}</span>
+          <Link href="/" className="inline-flex justify-center items-center gap-2 hover:bg-gray-100 disabled:opacity-50 px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 ring-offset-white focus-visible:ring-offset-2 font-medium text-gray-900 hover:text-gray-900 text-sm transition-colors disabled:pointer-events-none">
+            <ArrowLeft className="w-4 h-4" />
+            {pack.navigation.backToHome}
           </Link>
         )}
         {!simplified && <NavigationLinks />}

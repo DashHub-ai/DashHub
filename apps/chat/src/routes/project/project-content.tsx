@@ -16,7 +16,7 @@ export function ProjectContent({ project, onShared }: Props) {
   const recordGuard = useSdkForLoggedIn().createRecordGuard(project);
 
   return (
-    <section className="relative">
+    <section className="flex flex-col bg-background h-[calc(100vh-4rem)] overflow-hidden">
       <NavigationToolbarPortal>
         <ProjectShareRow
           project={project}
@@ -24,36 +24,44 @@ export function ProjectContent({ project, onShared }: Props) {
         />
       </NavigationToolbarPortal>
 
-      <div className="gap-16 grid grid-cols-1 md:grid-cols-[1fr,26rem]">
-        <div>
-          {recordGuard.can.write && (
-            <div className="mb-20">
-              <h2 className="flex-1 mb-6 font-semibold text-2xl text-center">
-                {t.hello}
-              </h2>
-
-              <StartChatForm forceProject={project} />
-            </div>
-          )}
-
-          <div>
-            <h2 className="mb-6 font-semibold text-2xl">
-              {t.chats}
+      <div className="flex flex-col flex-1 overflow-hidden">
+        {/* Top area with start chat form */}
+        {recordGuard.can.write && (
+          <div className="mb-10 p-6 pb-10 border-b">
+            <h2 className="mb-6 font-semibold text-2xl text-center">
+              {t.hello}
             </h2>
-
-            <ChatsContainer project={project} />
+            <StartChatForm forceProject={project} />
           </div>
-        </div>
+        )}
 
-        <div>
-          <h2 className="mb-6 font-semibold text-2xl">
-            {t.files}
-          </h2>
+        {/* Main content with chats on left and files on right */}
+        <div className="flex-1 p-6 overflow-hidden">
+          <div className="gap-12 grid grid-cols-1 md:grid-cols-[1fr,350px] h-full">
+            {/* Chats section - now on the left */}
+            <div className="flex flex-col h-full">
+              <h2 className="mb-6 font-semibold text-xl">
+                {t.chats}
+              </h2>
+              <div className="flex-1 overflow-y-auto">
+                <ChatsContainer project={project} />
+              </div>
+            </div>
 
-          <ProjectFilesListContainer
-            projectId={project.id}
-            readOnly={!recordGuard.can.write}
-          />
+            {/* Files section - now on the right */}
+            <div className="flex flex-col md:pl-12 md:border-l h-full">
+              <h2 className="mb-6 font-semibold text-xl">
+                {t.files}
+              </h2>
+              <div className="flex-1 md:pl-4 overflow-y-auto">
+                <ProjectFilesListContainer
+                  projectId={project.id}
+                  readOnly={!recordGuard.can.write}
+                  compactView
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
