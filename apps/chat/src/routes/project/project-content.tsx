@@ -16,7 +16,7 @@ export function ProjectContent({ project, onShared }: Props) {
   const recordGuard = useSdkForLoggedIn().createRecordGuard(project);
 
   return (
-    <section className="flex flex-col bg-background h-[calc(100vh-4rem)] overflow-hidden">
+    <section className="flex flex-col bg-background overflow-hidden">
       <NavigationToolbarPortal>
         <ProjectShareRow
           project={project}
