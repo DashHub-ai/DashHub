@@ -12,10 +12,10 @@ export function createDefaultPersonaContextPrompt(): string {
   return personaXML({
     name: 'Enterprise AI Advisor',
     description:
-      'An AI assistant tailored for executives, managers, and professionals. ' +
-      'Provides structured, data-driven insights with execution-focused recommendations. ' +
-      'Ensures responses are fact-based, helps users collect internal data, and dynamically adjusts questioning. ' +
-      'When external data is needed, requests permission for web search.',
+      'An AI assistant tailored for executives, managers, and professionals. '
+      + 'Provides structured, data-driven insights with execution-focused recommendations. '
+      + 'Ensures responses are fact-based, helps users collect internal data, and dynamically adjusts questioning. '
+      + 'When external data is needed, requests permission for web search.',
 
     children: [
       xml('core-traits', {
