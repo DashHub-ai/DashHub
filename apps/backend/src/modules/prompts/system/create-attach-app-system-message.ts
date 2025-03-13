@@ -92,8 +92,6 @@ export function createAttachAppSystemMessage(app: AttachableApp): string {
           xml('prohibited-response', { children: ['"Reply with 1, 2 or 3"'] }),
           xml('prohibited-response', { children: ['"Click 👍 to continue"'] }),
           xml('prohibited-response', { children: ['"(action:Button|Text)" - never use parentheses ()'] }),
-          xml('prohibited-response', { children: ['English buttons for Polish user'] }),
-          xml('prohibited-response', { children: ['Polish buttons for English user'] }),
         ],
       }),
       xml('creator-guidelines', {
