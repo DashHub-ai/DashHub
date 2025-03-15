@@ -2,9 +2,6 @@ import type { PropsWithChildren } from 'react';
 
 import clsx from 'clsx';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
-import { Link } from 'wouter';
-
-import { useSitemap } from '~/routes';
 
 import { LoggedInUserItem } from './logged-in';
 import { SidebarWorkspaceSelector } from './sidebar-workspace-selector';
@@ -12,7 +9,6 @@ import { useSidebarToggledStorage } from './use-sidebar-toggled-storage';
 
 export function Sidebar({ children }: PropsWithChildren) {
   const sidebarToggledStorage = useSidebarToggledStorage();
-  const sitemap = useSitemap();
 
   if (!sidebarToggledStorage.getOrNull()) {
     return (
@@ -41,13 +37,6 @@ export function Sidebar({ children }: PropsWithChildren) {
       )}
     >
       <div className="flex flex-col space-y-5 mb-7 p-2">
-        <Link
-          to={sitemap.home}
-          className="font-dmsans font-semibold text-2xl"
-        >
-          DashHub.ai
-        </Link>
-
         <SidebarWorkspaceSelector />
       </div>
 

@@ -12,12 +12,16 @@ export function SearchBarInput({ className, ...inputProps }: Props) {
 
   return (
     <div
-      className={clsx('relative group', className)}
+      className={clsx('group relative', className)}
     >
       <input
         type="text"
         placeholder={t.input.placeholder}
-        className="focus:border-gray-200 bg-gray-100/80 focus:bg-white py-2 pr-4 pl-10 border border-transparent rounded-full focus:ring-0 w-44 focus:w-80 text-gray-800 text-sm transition-all duration-200 focus:outline-none placeholder-gray-500"
+        className={clsx(
+          'bg-gray-100/80 focus:bg-white focus:border-gray-200',
+          'py-2 pr-4 pl-10 border border-transparent rounded-full focus:ring-0 w-22 lg:w-44',
+          'focus:w-80 text-gray-800 text-sm transition-all duration-200 focus:outline-none placeholder-gray-500',
+        )}
         {...inputProps}
       />
 

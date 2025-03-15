@@ -1,56 +1,28 @@
 import clsx from 'clsx';
-import { ArrowLeft } from 'lucide-react';
-import { Link } from 'wouter';
 
-import { useI18n } from '~/i18n';
-
-import { useSidebarToggledStorage } from '../sidebar/use-sidebar-toggled-storage';
+import { HamburgerMenu } from './hamburger-menu';
 import { NavigationLinks } from './links';
 import { NavigationRightToolbar } from './navigation-right-toolbar';
 
-export type NavigationProps = {
-  simplified?: boolean;
-};
-
-export function Navigation({ simplified }: NavigationProps) {
-  const { pack } = useI18n();
-  const sidebarToggledStorage = useSidebarToggledStorage();
-  const isSidebarVisible = !!sidebarToggledStorage.getOrNull();
-
+export function Navigation() {
   return (
     <header
       className={clsx(
-        'z-10 relative items-center place-content-center gap-14 grid mx-auto p-6 px-14 w-full h-[80px] container',
-        'grid-cols-[1fr_auto_1fr]',
-        isSidebarVisible && '2xl:grid-cols-[1fr_auto]',
+        'z-10 relative items-center place-content-center grid mx-auto w-full h-auto sm:h-[70px] md:h-[80px] container',
+        'grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto] gap-2 sm:gap-4 md:gap-6',
       )}
     >
-      <div
-        className={clsx(
-          'font-dmsans font-semibold text-2xl',
-          isSidebarVisible && 'invisible 2xl:visible 2xl:hidden',
-        )}
-      >
-        Dashhub.ai
+      <div className="font-dmsans font-semibold text-lg sm:text-xl md:text-2xl">
+        DashHub.AI
       </div>
 
-      <div>
-        {isSidebarVisible && simplified && (
-          <Link href="/" className="inline-flex justify-center items-center gap-2 hover:bg-gray-100 disabled:opacity-50 px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 ring-offset-white focus-visible:ring-offset-2 font-medium text-gray-900 hover:text-gray-900 text-sm transition-colors disabled:pointer-events-none">
-            <ArrowLeft className="w-4 h-4" />
-            {pack.navigation.backToHome}
-          </Link>
-        )}
-        {(!isSidebarVisible || !simplified) && <NavigationLinks />}
+      <div className="hidden lg:flex flex-wrap justify-center overflow-visible">
+        <NavigationLinks />
       </div>
 
-      <div className="flex flex-row justify-end gap-14">
-        <div
-          id="navigation-toolbar"
-          className="flex justify-center items-center"
-        />
-
+      <div className="flex flex-row justify-end items-center gap-2 sm:gap-6 md:gap-14">
         <NavigationRightToolbar />
+        <HamburgerMenu />
       </div>
     </header>
   );

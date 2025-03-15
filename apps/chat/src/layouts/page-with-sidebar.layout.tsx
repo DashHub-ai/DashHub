@@ -7,21 +7,19 @@ import { ProjectsHistorySidebarSection } from '~/modules/projects/sidebar/projec
 import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-organization';
 
 import { Footer } from './footer';
-import { Navigation, type NavigationProps } from './navigation';
+import { Navigation } from './navigation';
 import { Sidebar, useSidebarToggledStorage } from './sidebar';
 
 type Props = PropsWithChildren & {
   withFooter?: boolean;
   backgroundClassName?: string;
   contentClassName?: string;
-  navigationProps?: NavigationProps;
 };
 
 export function PageWithSidebarLayout(
   {
     children,
     contentClassName,
-    navigationProps,
     backgroundClassName = 'bg-white',
     withFooter = true,
   }: Props,
@@ -48,12 +46,12 @@ export function PageWithSidebarLayout(
         )}
       </Sidebar>
 
-      <div className="flex flex-col">
-        <Navigation {...navigationProps} />
+      <div className="flex flex-col gap-8 2xl:px-16 min-h-screen">
+        <Navigation />
 
         <div
           className={clsx(
-            'space-y-8 p-6 px-14 w-full',
+            'flex-1 space-y-8 w-full',
             'container mx-auto',
             contentClassName,
           )}
