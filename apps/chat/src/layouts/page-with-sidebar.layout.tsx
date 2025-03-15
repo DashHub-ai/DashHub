@@ -46,7 +46,12 @@ export function PageWithSidebarLayout(
         </Sidebar>
       )}
 
-      <div className="flex flex-col gap-8 2xl:px-16 min-h-screen">
+      <div
+        className={clsx(
+          'flex flex-col gap-8 2xl:px-16 min-h-screen',
+          !isSidebarVisible && organization && '2xl:pl-8',
+        )}
+      >
         <Navigation {...navigationProps} />
 
         <div

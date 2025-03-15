@@ -17,8 +17,8 @@ export function Sidebar({ children }: PropsWithChildren) {
 
   if (!sidebarToggledStorage.getOrNull()) {
     return (
-      <aside>
-        <div className="bottom-0 left-0 fixed p-4">
+      <aside className="top-0 left-0 fixed flex flex-col">
+        <div className="xl:hidden bottom-0 left-0 fixed p-4">
           <button
             type="button"
             className="hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md text-gray-500"
@@ -29,6 +29,21 @@ export function Sidebar({ children }: PropsWithChildren) {
             <PanelLeftOpen size={18} />
           </button>
         </div>
+
+        <button
+          type="button"
+          className={clsx(
+            'group hidden xl:block top-1/2 left-0 z-50 fixed bg-gray-800/60 hover:bg-gray-800 hover:dark:bg-gray-900 dark:bg-gray-900/60',
+            '-ml-4 hover:-ml-3 rounded-r-full outline-none w-10 h-20 transition-all -translate-y-1/2 duration-300',
+          )}
+          onClick={() => {
+            sidebarToggledStorage.set(true);
+          }}
+        >
+          <div className="flex justify-end items-center pr-2 h-full">
+            <PanelLeftOpen className="text-gray-300" size={16} />
+          </div>
+        </button>
       </aside>
     );
   }
