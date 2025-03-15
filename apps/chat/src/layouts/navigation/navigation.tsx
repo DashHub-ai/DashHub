@@ -21,16 +21,18 @@ export function Navigation({ simplified }: NavigationProps) {
     <header
       className={clsx(
         'z-10 relative items-center place-content-center gap-14 grid mx-auto p-6 px-14 w-full h-[80px] container',
-        !isSidebarVisible
-          ? 'grid-cols-[1fr_auto_1fr]'
-          : 'grid-cols-[1fr_auto]',
+        'grid-cols-[1fr_auto_1fr]',
+        isSidebarVisible && '2xl:grid-cols-[1fr_auto]',
       )}
     >
-      {!isSidebarVisible && (
-        <div className="font-dmsans font-semibold text-2xl">
-          Dashhub.ai
-        </div>
-      )}
+      <div
+        className={clsx(
+          'font-dmsans font-semibold text-2xl',
+          isSidebarVisible && 'invisible 2xl:visible 2xl:hidden',
+        )}
+      >
+        Dashhub.ai
+      </div>
 
       <div>
         {isSidebarVisible && simplified && (

@@ -11,10 +11,10 @@ import { Navigation, type NavigationProps } from './navigation';
 import {
   Sidebar,
 } from './sidebar';
+import { useSidebarToggledStorage } from './sidebar/use-sidebar-toggled-storage';
 
 type Props = PropsWithChildren & {
   withFooter?: boolean;
-  wrapWithContainer?: boolean;
   backgroundClassName?: string;
   contentClassName?: string;
   navigationProps?: NavigationProps;
@@ -26,15 +26,20 @@ export function PageWithSidebarLayout(
     contentClassName,
     navigationProps,
     backgroundClassName = 'bg-white',
-    wrapWithContainer = true,
     withFooter = true,
   }: Props,
 ) {
   const { organization } = useWorkspaceOrganization();
+  const sidebarToggledStorage = useSidebarToggledStorage();
+  const isSidebarVisible = !!sidebarToggledStorage.getOrNull();
 
   return (
     <main
-      className={clsx('grid grid-cols-[auto_1fr] min-h-screen', backgroundClassName)}
+      className={clsx(
+        'min-h-screen',
+        isSidebarVisible && '2xl:pl-[300px]',
+        backgroundClassName,
+      )}
       key={organization?.id ?? 'unknown'}
     >
       <Sidebar>
@@ -52,7 +57,7 @@ export function PageWithSidebarLayout(
         <div
           className={clsx(
             'space-y-8 p-6 px-14 w-full',
-            wrapWithContainer && 'container max-w-6xl mx-auto',
+            'container mx-auto',
             contentClassName,
           )}
         >

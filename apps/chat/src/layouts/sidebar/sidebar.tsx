@@ -33,42 +33,41 @@ export function Sidebar({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="relative w-[300px]">
-      <aside
-        className={clsx(
-          'top-0 left-0 fixed flex flex-col bg-gray-50 dark:bg-gray-800',
-          'px-4 pt-4 pb-4 w-[inherit] h-screen transition-transform',
-        )}
-      >
-        <div className="flex flex-col space-y-5 mb-7 p-2">
-          <Link
-            to={sitemap.home}
-            className="font-dmsans font-semibold text-2xl"
-          >
-            DashHub.ai
-          </Link>
+    <aside
+      className={clsx(
+        'top-0 left-0 fixed flex flex-col bg-gray-50 dark:bg-gray-800',
+        'px-4 pt-4 pb-4 w-[inherit] h-screen transition-transform z-50',
+        'shadow-lg shadow-gray-300 dark:shadow-gray-900 2xl:shadow-none',
+      )}
+    >
+      <div className="flex flex-col space-y-5 mb-7 p-2">
+        <Link
+          to={sitemap.home}
+          className="font-dmsans font-semibold text-2xl"
+        >
+          DashHub.ai
+        </Link>
 
-          <SidebarWorkspaceSelector />
-        </div>
+        <SidebarWorkspaceSelector />
+      </div>
 
-        <div className="flex flex-col flex-grow space-y-10 mb-2 pb-6 overflow-y-auto">
-          {children}
-        </div>
+      <div className="flex flex-col flex-grow space-y-10 mb-2 pb-6 overflow-y-auto">
+        {children}
+      </div>
 
-        <div className="flex justify-between items-center mt-auto">
-          <LoggedInUserItem />
+      <div className="flex justify-between items-center mt-auto">
+        <LoggedInUserItem />
 
-          <button
-            type="button"
-            className="hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md text-gray-500"
-            onClick={() => {
-              sidebarToggledStorage.set(false);
-            }}
-          >
-            <PanelLeftClose size={18} />
-          </button>
-        </div>
-      </aside>
-    </div>
+        <button
+          type="button"
+          className="hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md text-gray-500"
+          onClick={() => {
+            sidebarToggledStorage.set(false);
+          }}
+        >
+          <PanelLeftClose size={18} />
+        </button>
+      </div>
+    </aside>
   );
 }
