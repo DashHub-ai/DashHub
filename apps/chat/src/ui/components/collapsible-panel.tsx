@@ -59,10 +59,11 @@ export function CollapsiblePanel(
           </h2>
         </div>
 
-        <div className={clsx(
-          'transition-opacity duration-300',
-          isCollapsed ? 'opacity-0 hidden' : 'opacity-100',
-        )}
+        <div
+          className={clsx(
+            'transition-opacity duration-300',
+            isCollapsed ? 'opacity-0 hidden' : 'opacity-100',
+          )}
         >
           <div className="px-6 pb-4 pl-10">
             {children}

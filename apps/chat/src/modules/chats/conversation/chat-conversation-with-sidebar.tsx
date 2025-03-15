@@ -30,7 +30,6 @@ export const ChatConversationWithSidebar = memo(({ chat, initialMessages, onSile
       {can.write && (
         <ChatConfigPanel
           chat={chat}
-          contentClassName="overflow-y-auto"
           onSilentReload={onSilentReload}
         />
       )}

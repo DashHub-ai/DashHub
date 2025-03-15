@@ -4,7 +4,6 @@ import { NavigationToolbarPortal } from '~/layouts/navigation/navigation-toolbar
 import { Checkbox, CollapsiblePanel, FormAlertBoxes, FormField, Input, SaveButton, TextArea } from '~/ui';
 
 import { ChatConfigArchive } from './chat-config-archive';
-import { ChatConfigTutorial } from './chat-config-tutorial';
 import { ChatConfigUnarchive } from './chat-config-unarchive';
 import { ShareChatNavigationRow } from './share-chat-navigation-row';
 import { useChatConfigForm } from './use-chat-config-form';
@@ -39,8 +38,6 @@ export function ChatConfigPanel({ chat, contentClassName, onSilentReload }: Prop
         className="space-y-4"
         onSubmit={handleSubmitEvent}
       >
-        <ChatConfigTutorial />
-
         <fieldset className="space-y-4">
           {can?.write && (
             <NavigationToolbarPortal>
