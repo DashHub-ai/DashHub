@@ -54,7 +54,7 @@ export function UpdateAppRoute({ id }: Props) {
       />
 
       <section className="flex flex-col gap-6 mx-auto max-w-6xl">
-        <LayoutHeader>
+        <LayoutHeader withBreadcrumbs={false}>
           {(
             result.status === 'loading'
               ? t.title
