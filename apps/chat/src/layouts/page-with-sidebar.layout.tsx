@@ -8,10 +8,7 @@ import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-orga
 
 import { Footer } from './footer';
 import { Navigation, type NavigationProps } from './navigation';
-import {
-  Sidebar,
-} from './sidebar';
-import { useSidebarToggledStorage } from './sidebar/use-sidebar-toggled-storage';
+import { Sidebar, useSidebarToggledStorage } from './sidebar';
 
 type Props = PropsWithChildren & {
   withFooter?: boolean;
