@@ -41,7 +41,7 @@ export function AppCategoryButton(
         'flex justify-between items-center px-3 py-2 rounded-md w-full text-sm transition-colors',
         isSelected
           ? 'bg-primary/5 text-primary font-semibold'
-          : 'hover:bg-muted text-muted-foreground hover:text-foreground',
+          : 'hover:bg-muted hover:text-foreground',
         depth > 0 && 'pl-6',
         className,
       )}

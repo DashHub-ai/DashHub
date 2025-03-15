@@ -19,7 +19,7 @@ export function MyOrganizationForm({ defaultValue }: Props) {
 
   return (
     <form
-      className="gap-16 grid grid-cols-1 md:grid-cols-[1fr,26rem]"
+      className="gap-16 grid grid-cols-1"
       onSubmit={handleSubmitEvent}
     >
       <div>
@@ -60,6 +60,7 @@ export function MyOrganizationForm({ defaultValue }: Props) {
         <ProjectFilesListContainer
           projectId={defaultValue.aiSettings.project.id}
           readOnly={false}
+          columns={2}
         />
       </div>
     </form>

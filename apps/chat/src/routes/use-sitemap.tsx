@@ -11,6 +11,9 @@ import { defineSitemapRouteGenerator } from '~/ui';
 export function useSitemap() {
   const sitemap = {
     home: prefixWithBaseRoute('/'),
+    chats: {
+      index: prefixWithBaseRoute('/chats'),
+    },
     projects: {
       index: defineSitemapRouteGenerator<SearchProjectsRouteUrlFiltersT>(prefixWithBaseRoute)('/projects'),
       show: defineSitemapRouteGenerator(prefixWithBaseRoute)('/projects/:id'),

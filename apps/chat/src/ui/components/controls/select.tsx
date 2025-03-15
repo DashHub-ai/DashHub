@@ -161,7 +161,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
           setIsOpen(!isOpen);
         }}
       >
-        <div className="flex flex-row flex-1 justify-start">
+        <div className="flex flex-row flex-1 justify-start truncate">
           {prefix && (!placeholder || isFilled) && (
             <span className={clsx('mr-1', placeholderClassName || 'uk-text-muted ')}>
               {prefix}
@@ -170,7 +170,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
           )}
 
           {(!prefix || isFilled || !!placeholder) && (
-            <span className="mr-2">
+            <span className="mr-2 truncate">
               {displayValue}
             </span>
           )}

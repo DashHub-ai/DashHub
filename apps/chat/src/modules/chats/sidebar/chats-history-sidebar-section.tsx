@@ -50,6 +50,7 @@ export function ChatsHistorySidebarSection() {
       icon={<HistoryIcon size={18} />}
     >
       <SidebarLinks links={links} />
+
       <SidebarSectionAllLink href={sitemap.home}>
         {pack.sidebar.chats.all}
       </SidebarSectionAllLink>

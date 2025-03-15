@@ -5,6 +5,7 @@ import {
   AIModelsManagementRoute,
   AppsRoute,
   ChatRoute,
+  ChatsRoute,
   ChooseOrganizationRoute,
   CreateAppRoute,
   ExpertsRoute,
@@ -69,6 +70,7 @@ function LoggedInRouter() {
   return (
     <Switch key={workspace.organization?.id ?? '-'}>
       <Route path={sitemap.home} component={HomeRoute} />
+      <Route path={sitemap.chats.index} component={ChatsRoute} />
       <Route<SdkTableRowWithUuidT> path={sitemap.projects.show.raw}>
         {params => <ProjectRoute id={+params.id} />}
       </Route>

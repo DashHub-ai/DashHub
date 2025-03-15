@@ -26,19 +26,28 @@ export function NavigationLinks({ inMobileMenu = false }: NavigationLinksProps) 
   const hasOrganization = useHasWorkspaceOrganization();
 
   return (
-    <ul className={clsx(
-      'flex',
-      inMobileMenu
-        ? 'flex-col w-full items-start gap-4'
-        : 'flex-wrap justify-center items-center gap-1 sm:gap-2 md:gap-4',
-    )}
+    <ul
+      className={clsx(
+        'flex',
+        inMobileMenu
+          ? 'flex-col w-full items-start gap-4'
+          : 'flex-wrap justify-center items-center gap-1 sm:gap-2 md:gap-4',
+      )}
     >
       <NavigationItem
-        path={sitemap.home}
+        path={sitemap.apps.index.generate({})}
+        icon={<WandSparklesIcon size={16} />}
+        disabled={!hasOrganization}
+      >
+        {t.links.apps}
+      </NavigationItem>
+
+      <NavigationItem
+        path={sitemap.chats.index}
         icon={<MessageSquareTextIcon size={16} />}
         disabled={!hasOrganization}
       >
-        {t.links.home}
+        {t.links.chats}
       </NavigationItem>
 
       <NavigationItem
@@ -47,14 +56,6 @@ export function NavigationLinks({ inMobileMenu = false }: NavigationLinksProps) 
         disabled={!hasOrganization}
       >
         {t.links.pinnedMessages}
-      </NavigationItem>
-
-      <NavigationItem
-        path={sitemap.apps.index.generate({})}
-        icon={<WandSparklesIcon size={16} />}
-        disabled={!hasOrganization}
-      >
-        {t.links.apps}
       </NavigationItem>
 
       <NavigationItem

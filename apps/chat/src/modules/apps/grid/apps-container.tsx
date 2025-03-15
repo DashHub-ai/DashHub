@@ -204,14 +204,16 @@ function useAppsFavoritesFilter(
 function getGridColumns(columns: number) {
   switch (columns) {
     case 2:
-      return 'md:grid-cols-2';
+      return 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-2';
+    case 3:
+      return 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3';
     case 4:
-      return 'md:grid-cols-4';
+      return 'grid-cols-1 lg:grid-cols-3 2xl:grid-cols-4';
     case 5:
-      return 'md:grid-cols-5';
+      return 'grid-cols-1 lg:grid-cols-4 2xl:grid-cols-5';
     case 6:
-      return 'md:grid-cols-6';
+      return 'grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6';
     default:
-      return 'md:grid-cols-3';
+      return 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3';
   }
 }

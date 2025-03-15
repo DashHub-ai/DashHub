@@ -9,14 +9,15 @@ type Props = {
   currentBreadcrumb?: ReactNode;
   breadcrumbs?: ReactNode;
   root?: boolean;
+  className?: string;
 };
 
-export function LayoutBreadcrumbs({ currentBreadcrumb, breadcrumbs, root }: Props) {
+export function LayoutBreadcrumbs({ currentBreadcrumb, breadcrumbs, root, className }: Props) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
 
   return (
-    <nav aria-label="Breadcrumb">
+    <nav aria-label="Breadcrumb" className={className}>
       <ul className="flex items-center uk-breadcrumb">
         <li>
           <Link href={sitemap.home}>

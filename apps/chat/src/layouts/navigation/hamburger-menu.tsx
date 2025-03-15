@@ -5,7 +5,11 @@ import { useModal } from '@llm/commons-front';
 
 import { NavigationLinks } from './links';
 
-export function HamburgerMenu() {
+type Props = {
+  className?: string;
+};
+
+export function HamburgerMenu({ className }: Props) {
   const menuModal = useModal({
     renderModalContent: ({ onClose }) => (
       <div className={clsx(
@@ -37,7 +41,7 @@ export function HamburgerMenu() {
   return (
     <button
       className={clsx(
-        'lg:hidden',
+        className,
         'h-10 w-10 inline-flex items-center justify-center',
         'text-sm font-medium rounded-md',
         'bg-transparent hover:bg-muted transition-colors',

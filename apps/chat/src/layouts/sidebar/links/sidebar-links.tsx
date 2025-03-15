@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import { Link, useLocation } from 'wouter';
 
+import { useI18n } from '~/i18n';
+
 export type SidebarLinkItem = {
   icon?: ReactNode;
   label: string;
@@ -14,7 +16,16 @@ type SidebarLinksProps = {
 };
 
 export function SidebarLinks({ links }: SidebarLinksProps) {
+  const { pack } = useI18n();
   const [location] = useLocation();
+
+  if (!links.length) {
+    return (
+      <div className="flex justify-center items-center p-4 w-full h-full text-muted-foreground text-sm">
+        {pack.sidebar.noLinksAvailable}
+      </div>
+    );
+  }
 
   return (
     <ul>

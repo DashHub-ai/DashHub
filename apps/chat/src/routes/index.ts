@@ -1,5 +1,6 @@
 export * from './apps';
 export * from './chat';
+export * from './chats';
 export * from './choose-organization';
 export * from './experts';
 export * from './force-redirect-route';

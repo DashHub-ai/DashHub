@@ -124,6 +124,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
   },
   sidebar: {
+    noLinksAvailable: 'Brak dostępnych linków',
     chats: {
       title: 'Ostatnie czaty',
       all: 'Wszystkie czaty',
@@ -174,7 +175,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   navigation: {
     backToHome: 'Powrót do strony głównej',
     links: {
-      home: 'Czaty',
+      chats: 'Czaty',
       projects: 'Projekty',
       apps: 'Asystenci',
       experts: 'Eksperci',
@@ -345,10 +346,10 @@ export const I18N_PACK_PL: I18nLangPack = {
         },
       },
     },
-    home: {
+    chats: {
       meta: {
-        title: 'Strona główna',
-        description: 'Strona główna',
+        title: 'Czaty',
+        description: 'Czaty',
       },
       title: 'Czaty',
       hello: 'Cześć, jak możemy Ci pomóc?',

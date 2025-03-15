@@ -7,13 +7,14 @@ import { ProjectsHistorySidebarSection } from '~/modules/projects/sidebar/projec
 import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-organization';
 
 import { Footer } from './footer';
-import { Navigation } from './navigation';
+import { Navigation, type NavigationProps } from './navigation';
 import { Sidebar, useSidebarToggledStorage } from './sidebar';
 
 type Props = PropsWithChildren & {
   withFooter?: boolean;
   backgroundClassName?: string;
   contentClassName?: string;
+  navigationProps?: NavigationProps;
 };
 
 export function PageWithSidebarLayout(
@@ -22,6 +23,7 @@ export function PageWithSidebarLayout(
     contentClassName,
     backgroundClassName = 'bg-white',
     withFooter = true,
+    navigationProps,
   }: Props,
 ) {
   const { organization } = useWorkspaceOrganization();
@@ -32,22 +34,20 @@ export function PageWithSidebarLayout(
     <main
       className={clsx(
         'min-h-screen',
-        isSidebarVisible && '2xl:pl-[300px]',
+        isSidebarVisible && organization && '2xl:pl-[300px]',
         backgroundClassName,
       )}
       key={organization?.id ?? 'unknown'}
     >
-      <Sidebar>
-        {organization && (
-          <>
-            <ProjectsHistorySidebarSection />
-            <ChatsHistorySidebarSection />
-          </>
-        )}
-      </Sidebar>
+      {organization && (
+        <Sidebar>
+          <ProjectsHistorySidebarSection />
+          <ChatsHistorySidebarSection />
+        </Sidebar>
+      )}
 
       <div className="flex flex-col gap-8 2xl:px-16 min-h-screen">
-        <Navigation />
+        <Navigation {...navigationProps} />
 
         <div
           className={clsx(

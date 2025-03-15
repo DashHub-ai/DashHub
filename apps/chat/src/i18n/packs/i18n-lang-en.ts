@@ -122,6 +122,7 @@ export const I18N_PACK_EN = {
     },
   },
   sidebar: {
+    noLinksAvailable: 'No links available',
     chats: {
       title: 'Recent chats',
       all: 'All chats',
@@ -172,7 +173,7 @@ export const I18N_PACK_EN = {
   navigation: {
     backToHome: 'Back to home',
     links: {
-      home: 'Chats',
+      chats: 'Chats',
       projects: 'Projects',
       apps: 'Assistants',
       experts: 'Experts',
@@ -343,10 +344,10 @@ export const I18N_PACK_EN = {
         },
       },
     },
-    home: {
+    chats: {
       meta: {
-        title: 'Home',
-        description: 'Home',
+        title: 'Chats',
+        description: 'chats',
       },
       title: 'Chats',
       hello: 'Hello, how can we help you?',

@@ -3,6 +3,7 @@ import type { PropsWithChildren } from 'react';
 import clsx from 'clsx';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
+import { ChooseLanguageItem } from './choose-language-item';
 import { LoggedInUserItem } from './logged-in';
 import { SidebarWorkspaceSelector } from './sidebar-workspace-selector';
 import { useSidebarToggledStorage } from './use-sidebar-toggled-storage';
@@ -34,10 +35,12 @@ export function Sidebar({ children }: PropsWithChildren) {
         'top-0 left-0 fixed flex flex-col bg-gray-50 dark:bg-gray-800',
         'px-4 pt-4 pb-4 w-[inherit] h-screen transition-transform z-50',
         'shadow-lg shadow-gray-300 dark:shadow-gray-900 2xl:shadow-none',
+        'w-[300px]',
       )}
     >
-      <div className="flex flex-col space-y-5 mb-7 p-2">
+      <div className="gap-4 grid grid-cols-[170px_auto] mb-7 p-2">
         <SidebarWorkspaceSelector />
+        <ChooseLanguageItem />
       </div>
 
       <div className="flex flex-col flex-grow space-y-10 mb-2 pb-6 overflow-y-auto">
