@@ -266,7 +266,10 @@ export const I18N_PACK_EN = {
         modular: 'Modular and reusable applications to boost your productivity across projects',
       },
       buttons: {
-        create: 'New assistant',
+        create: 'Create',
+      },
+      startChat: {
+        title: 'Start a chat with AI',
       },
     },
     editApp: {

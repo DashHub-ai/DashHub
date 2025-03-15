@@ -25,7 +25,7 @@ export function Navigation({ withAdditionalUI, breadcrumbs }: NavigationProps) {
       )}
     >
       <Link
-        className="font-dmsans font-semibold text-lg sm:text-xl md:text-2xl"
+        className="font-dmsans font-semibold text-lg sm:text-xl md:text-xl"
         href={sitemap.home}
       >
         <span>Dash</span>

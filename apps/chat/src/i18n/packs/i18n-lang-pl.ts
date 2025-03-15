@@ -268,7 +268,10 @@ export const I18N_PACK_PL: I18nLangPack = {
         modular: 'Modularne i wielokrotnego użytku aplikacje zwiększające produktywność w projektach',
       },
       buttons: {
-        create: 'Nowy asystent',
+        create: 'Stwórz',
+      },
+      startChat: {
+        title: 'Rozpocznij czat z AI',
       },
     },
     editApp: {
@@ -280,10 +283,10 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
     createApp: {
       meta: {
-        title: 'Create Assistant',
-        description: 'Create assistant',
+        title: 'Stwórz asystenta',
+        description: 'Stwórz asystenta',
       },
-      title: 'Create Assistant',
+      title: 'Stwórz asystenta',
     },
     projects: {
       meta: {

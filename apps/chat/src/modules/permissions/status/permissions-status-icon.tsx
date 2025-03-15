@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import { EyeIcon, UsersIcon } from 'lucide-react';
 
 import { isSdkPublicPermissions, type SdkPermissionT } from '@llm/sdk';
@@ -17,7 +16,7 @@ export function PermissionsStatusIcon({ permissions, className }: Props) {
   return (
     <Tooltip
       content={isPublic ? t.public.tooltip : t.private.tooltip}
-      wrapperClassName={clsx('text-gray-500', className)}
+      wrapperClassName={className}
     >
       {(
         isPublic
