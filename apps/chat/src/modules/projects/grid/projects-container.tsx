@@ -10,6 +10,7 @@ import {
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
+  CardSkeletonGrid,
   PaginatedList,
   PaginationSearchToolbarItem,
   PaginationToolbar,
@@ -40,6 +41,8 @@ export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
     fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.projects.search),
   });
 
+  const gridClassName = 'gap-4 grid grid-cols-2 md:grid-cols-3';
+
   return (
     <section>
       <PaginationToolbar
@@ -68,6 +71,9 @@ export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
         loading={loading}
         pagination={pagination.bind.entire()}
         withEmptyPlaceholder={false}
+        loadingFallback={(
+          <CardSkeletonGrid className={gridClassName} count={12} />
+        )}
       >
         {({ items, total }) => {
           if (!total) {
@@ -75,7 +81,7 @@ export function ProjectsContainer({ toolbar, storeDataInUrl = false }: Props) {
           }
 
           return (
-            <div className="gap-4 grid grid-cols-2 md:grid-cols-3">
+            <div className={gridClassName}>
               {items.map(item => (
                 <ProjectCard
                   key={item.id}

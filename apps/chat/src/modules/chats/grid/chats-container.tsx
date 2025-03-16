@@ -10,6 +10,7 @@ import {
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
+  CardSkeletonGrid,
   PaginatedList,
   PaginationSearchToolbarItem,
   PaginationToolbar,
@@ -56,6 +57,8 @@ export function ChatsContainer({ limit, filters: forwardedFilters, project, colu
 
   useReloadIntervalIfGenerating(silentReload, result);
 
+  const gridClassName = clsx('gap-4 grid grid-cols-1', GRID_COLUMNS_CLASSES[columns]);
+
   return (
     <section>
       <PaginationToolbar
@@ -79,6 +82,9 @@ export function ChatsContainer({ limit, filters: forwardedFilters, project, colu
         loading={loading}
         pagination={pagination.bind.entire()}
         withEmptyPlaceholder={false}
+        loadingFallback={(
+          <CardSkeletonGrid className={gridClassName} count={4} />
+        )}
       >
         {({ items, total }) => {
           if (!total) {
@@ -86,7 +92,7 @@ export function ChatsContainer({ limit, filters: forwardedFilters, project, colu
           }
 
           return (
-            <div className={clsx('gap-4 grid grid-cols-1', GRID_COLUMNS_CLASSES[columns])}>
+            <div className={gridClassName}>
               {items.map(item => (
                 <ChatCard
                   key={item.id}
