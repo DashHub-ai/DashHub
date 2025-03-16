@@ -559,6 +559,9 @@ export const I18N_PACK_PL: I18nLangPack = {
     chooseAppModal: {
       title: 'Wybierz aplikację',
     },
+    card: {
+      run: 'Uruchom asystenta',
+    },
   },
   appsCreator: {
     files: {

@@ -557,6 +557,9 @@ export const I18N_PACK_EN = {
     chooseAppModal: {
       title: 'Choose Assistant',
     },
+    card: {
+      run: 'Run Assistant',
+    },
   },
   appsCreator: {
     files: {

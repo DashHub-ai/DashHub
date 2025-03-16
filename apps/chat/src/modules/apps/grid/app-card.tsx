@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 
-import { WandSparklesIcon } from 'lucide-react';
+import { PlayIcon, WandSparklesIcon } from 'lucide-react';
 
 import { formatDate } from '@llm/commons';
 import { isSdkAppCreatorApp, type SdkAppT, useSdkForLoggedIn } from '@llm/sdk';
+import { useI18n } from '~/i18n';
 import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
 import { CardRecordPermissions } from '~/modules/permissions';
 import { useSitemap } from '~/routes';
@@ -32,6 +33,7 @@ export type AppCardProps = {
 
 export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive }: AppCardProps) {
   const sitemap = useSitemap();
+  const t = useI18n().pack.apps;
 
   const { sdks, createRecordGuard } = useSdkForLoggedIn();
   const [createChatWithApp, createStatus] = useCreateChatWithInitialApp();
@@ -66,6 +68,23 @@ export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive }: Ap
         <CardDescription>
           {app.description}
         </CardDescription>
+
+        {!ctaButton && (
+          <div className="flex justify-center mt-4">
+            <button
+              type="button"
+              className="flex justify-center items-center bg-green-600 hover:bg-green-700 shadow-sm px-4 py-2 rounded-md w-full font-bold text-white text-sm transition-colors"
+              disabled={createStatus.isLoading}
+              onClick={(e) => {
+                e.stopPropagation();
+                void createChatWithApp(app);
+              }}
+            >
+              {t.card.run}
+              <PlayIcon className="ml-2" size={16} />
+            </button>
+          </div>
+        )}
 
         <CardFooter>
           <div className="text-muted-foreground text-xs">
