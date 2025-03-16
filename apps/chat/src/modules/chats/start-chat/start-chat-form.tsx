@@ -20,11 +20,18 @@ import { useStartChatForm } from './use-start-chat-form';
 type Props = {
   forceProject?: SdkTableRowWithIdNameT;
   className?: string;
+  focusOnMount?: boolean;
 };
 
-export function StartChatForm({ forceProject, className }: Props) {
+export function StartChatForm(
+  {
+    forceProject,
+    className,
+    focusOnMount = true,
+  }: Props,
+) {
   const t = useI18n().pack.chats.start;
-  const focusInputRef = useFocusAfterMount<HTMLTextAreaElement>();
+  const focusInputRef = useFocusAfterMount<HTMLTextAreaElement>(focusOnMount);
 
   const { loading, form, submitting } = useStartChatForm({ project: forceProject || null });
   const { bind, handleSubmitEvent, value } = form;

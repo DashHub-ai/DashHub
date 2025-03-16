@@ -15,6 +15,7 @@ import {
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,
+  CardSkeletonGrid,
   FavoriteFiltersTabs,
   PaginatedList,
   PaginationSearchToolbarItem,
@@ -58,6 +59,10 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 
 
   const categoriesTree = useLastNonNullValue(result?.aggs?.categories);
   const { favoritesFilter, onToggleFavoriteFilter } = useAppsFavoritesFilter(pagination, favorites);
+  const gridClassName = clsx(
+    'gap-4 grid grid-cols-1',
+    getGridColumns(columns),
+  );
 
   return (
     <div className="flex">
@@ -118,6 +123,9 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 
           loading={loading}
           pagination={pagination.bind.entire()}
           withEmptyPlaceholder={false}
+          loadingFallback={(
+            <CardSkeletonGrid className={gridClassName} count={12} />
+          )}
         >
           {({ items, total }) => {
             if (!total) {
@@ -125,12 +133,7 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 
             }
 
             return (
-              <div
-                className={clsx(
-                  'gap-4 grid grid-cols-1',
-                  getGridColumns(columns),
-                )}
-              >
+              <div className={gridClassName}>
                 {items.map(item => (
                   <AppCard
                     key={item.id}

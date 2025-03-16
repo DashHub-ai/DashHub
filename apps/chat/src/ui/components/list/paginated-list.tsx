@@ -22,16 +22,29 @@ export type PaginatedListProps<
   result?: SdkOffsetPaginationOutputT<I> | null;
   pagination: ControlledControlStateAttrs<P>;
   footerProps?: Omit<PaginationFooterProps, 'result'>;
+  loadingFallback?: ReactNode;
   children: (result: SdkOffsetPaginationOutputT<I>) => ReactNode;
 };
 
 export function PaginatedList<
   I extends SdkTableRowWithIdT | SdkTableRowWithUuidT,
   P extends SdkOffsetPaginationInputT,
->({ result, footerProps, withEmptyPlaceholder = true, loading, pagination, children }: PaginatedListProps<I, P>) {
+>({
+  result,
+  footerProps,
+  withEmptyPlaceholder = true,
+  loading,
+  pagination,
+  loadingFallback,
+  children,
+}: PaginatedListProps<I, P>) {
   const { bind } = useControlStrict<SdkOffsetPaginationInputT>(
     pagination as unknown as ControlledControlStateAttrs<SdkOffsetPaginationInputT>,
   );
+
+  if (loading && loadingFallback) {
+    return loadingFallback;
+  }
 
   return (
     <SpinnerContainer loading={loading}>

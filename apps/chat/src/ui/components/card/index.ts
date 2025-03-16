@@ -5,4 +5,5 @@ export * from './card-content';
 export * from './card-description';
 export * from './card-footer';
 export * from './card-open-button';
+export * from './card-skeleton';
 export * from './card-title';

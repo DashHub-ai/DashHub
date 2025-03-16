@@ -46,7 +46,8 @@ export function AppsRoute() {
                 <h2 className="mb-6 font-semibold text-2xl text-center">
                   {t.startChat.title}
                 </h2>
-                <StartChatForm />
+
+                <StartChatForm focusOnMount={false} />
               </section>
             </>
           )}
