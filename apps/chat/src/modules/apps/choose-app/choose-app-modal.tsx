@@ -53,7 +53,6 @@ export function ChooseAppModal({
       )}
     >
       <AppsContainer
-        columns={2}
         itemPropsFn={app => ({
           ctaButton: renderAppCTA(app),
         })}

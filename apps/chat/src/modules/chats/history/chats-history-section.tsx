@@ -20,7 +20,7 @@ export function ChatsHistorySection({ className }: Props) {
       </h2>
 
       <ChatsContainer
-        limit={4}
+        limit={12}
         filters={{
           creatorIds: [session.token.sub],
           excludeEmpty: true,

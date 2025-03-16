@@ -26,6 +26,18 @@ export default {
   ],
   theme: {
     extend: {
+      container: {
+        screens: {
+          'sm': '640px',
+          'md': '768px',
+          'lg': '1024px',
+          'xl': '1280px',
+          '2xl': '1536px',
+        },
+      },
+      screens: {
+        '3xl': '1900px',
+      },
       animation: {
         slideIn: 'slideIn 0.3s ease-out forwards',
         fadeIn: 'fadeIn 0.3s ease-out forwards',

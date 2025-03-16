@@ -83,7 +83,7 @@ export function ChatsContainer({ limit, filters: forwardedFilters, project, colu
         pagination={pagination.bind.entire()}
         withEmptyPlaceholder={false}
         loadingFallback={(
-          <CardSkeletonGrid className={gridClassName} count={4} />
+          <CardSkeletonGrid className={gridClassName} count={pagination.value.limit} />
         )}
       >
         {({ items, total }) => {

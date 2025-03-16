@@ -33,13 +33,12 @@ type Props = {
   storeDataInUrl?: boolean;
   itemPropsFn?: (item: SdkAppT) => Omit<AppCardProps, 'app'>;
   toolbar?: ReactNode;
-  columns?: number;
   contentFooter?: ReactNode;
 };
 
 export type SearchAppsRouteUrlFiltersT = z.input<typeof SdkSearchAppsInputV>;
 
-export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 3, contentFooter }: Props) {
+export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, contentFooter }: Props) {
   const favorites = useFavoriteApps();
   const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
 
@@ -61,7 +60,7 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 
   const { favoritesFilter, onToggleFavoriteFilter } = useAppsFavoritesFilter(pagination, favorites);
   const gridClassName = clsx(
     'gap-4 grid grid-cols-1',
-    getGridColumns(columns),
+    'lg:grid-cols-2 3xl:grid-cols-3',
   );
 
   return (
@@ -205,21 +204,4 @@ function useAppsFavoritesFilter(
     favoritesFilter,
     onToggleFavoriteFilter,
   };
-}
-
-function getGridColumns(columns: number) {
-  switch (columns) {
-    case 2:
-      return 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-2';
-    case 3:
-      return 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3';
-    case 4:
-      return 'grid-cols-1 lg:grid-cols-3 2xl:grid-cols-4';
-    case 5:
-      return 'grid-cols-1 lg:grid-cols-4 2xl:grid-cols-5';
-    case 6:
-      return 'grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6';
-    default:
-      return 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3';
-  }
 }
