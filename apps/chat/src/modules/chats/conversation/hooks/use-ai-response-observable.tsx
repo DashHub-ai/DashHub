@@ -10,6 +10,7 @@ import {
   type SdkTableRowWithUuidT,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useI18n } from '~/i18n';
 
 export type AIStreamContent = {
   error: boolean;
@@ -35,6 +36,7 @@ type StreamAIResponseAttrs = {
 
 export function useAIResponseObservable({ chat }: Attrs) {
   const { sdks } = useSdkForLoggedIn();
+  const { lang } = useI18n();
 
   const createAIReplyObservable = (): AIStreamObservable => {
     const abortController = new AbortController();
@@ -112,6 +114,7 @@ export function useAIResponseObservable({ chat }: Attrs) {
       chatId: chat.id,
       messageId: attrs.message.id,
       data: {
+        preferredLanguageCode: lang,
         aiModel,
       },
     }),

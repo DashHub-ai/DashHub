@@ -82,7 +82,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
 
   search = this.esSearchRepo.search;
 
-  wrapWithEmbeddingContextPrompt = (
+  createEmbeddingsAITag = (
     {
       message,
       chat,
@@ -115,7 +115,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
       })),
       TE.chainW(({ apps, fileEmbeddingModel: { id, projectId }, organizationProjectId }) => {
         if (isNil(projectId) && !apps.items.length && isNil(organizationProjectId)) {
-          return TE.of(message);
+          return TE.of(null);
         }
 
         const projectsIds = rejectFalsyItems([
@@ -141,7 +141,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
             ...result,
             isInternalKnowledge: appsProjectIds.has(result.project.id) || result.project.id === organizationProjectId,
           }))),
-          TE.map(searchResults => createRelevantEmbeddingsPrompt(message, searchResults)),
+          TE.map(createRelevantEmbeddingsPrompt),
         );
       }),
     );

@@ -1,1 +1,1 @@
-export * from './create-relevant-embeddings-prompt';
+export * from './create-relevant-embeddings-ai-tag';

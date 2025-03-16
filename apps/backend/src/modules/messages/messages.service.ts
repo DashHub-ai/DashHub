@@ -2,7 +2,7 @@ import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
-import { findItemIndexById, tapTaskEitherErrorTE, tryOrThrowTE } from '@llm/commons';
+import { findItemIndexById, rejectFalsyItems, tapTaskEitherErrorTE, tryOrThrowTE } from '@llm/commons';
 import {
   groupSdkAIMessagesByRepeats,
   type SdkCreateMessageInputT,
@@ -11,10 +11,11 @@ import {
   type SdkSearchMessageItemT,
 } from '@llm/sdk';
 import {
+  createAIAttachedFilesTag,
+  createAIQuoteTag,
   createAttachAppSystemMessage,
-  createAttachedFilesMessagePrefix,
   createContextPrompt,
-  createReplyAiMessagePrefix,
+  wrapUserPromptWithAiTags,
 } from '~/modules/prompts';
 
 import type { AIProxyStreamChunk } from '../ai-connector/clients';
@@ -129,7 +130,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     );
 
   aiReply = (
-    { id, aiModel }: TableRowWithUuid & SdkRequestAIReplyInputT,
+    { id, aiModel, preferredLanguageCode }: TableRowWithUuid & SdkRequestAIReplyInputT,
     signal?: AbortSignal,
   ) => pipe(
     TE.Do,
@@ -167,17 +168,30 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
       }),
     )),
     TE.bindW('mappedContent', ({ message, chat, history }) => pipe(
-      message.repliedMessage
-        ? createReplyAiMessagePrefix(message.repliedMessage, message.content)
-        : message.content,
-
-      createAttachedFilesMessagePrefix(message.files),
-
-      prefixedMessage => this.projectsEmbeddingsService.wrapWithEmbeddingContextPrompt({
-        history,
-        message: prefixedMessage,
+      TE.Do,
+      TE.bind('embeddings', () => this.projectsEmbeddingsService.createEmbeddingsAITag({
         chat,
-      }),
+        history,
+        message: rejectFalsyItems(
+          [
+            message.content,
+            message.repliedMessage?.content,
+          ],
+        ).join('\n'),
+      })),
+      TE.bind('reply', () => TE.of(createAIQuoteTag(message.repliedMessage))),
+      TE.bind('attachedFiles', () => TE.of(createAIAttachedFilesTag(message.files))),
+      TE.map(({ reply, attachedFiles, embeddings }) =>
+        wrapUserPromptWithAiTags({
+          preferredLanguageCode,
+          userPrompt: message.content,
+          children: [
+            reply,
+            attachedFiles,
+            embeddings,
+          ],
+        }),
+      ),
     )),
     TE.chainW(({ mappedContent, history, message, chat, personalities }) =>
       pipe(
@@ -187,7 +201,9 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             aiModel,
             history,
             organization: chat.organization,
-            context: createContextPrompt({ personalities }),
+            context: createContextPrompt({
+              personalities,
+            }),
             message: {
               content: mappedContent,
               webSearch: message.webSearch.enabled,

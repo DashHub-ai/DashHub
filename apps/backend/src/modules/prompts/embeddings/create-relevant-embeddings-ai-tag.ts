@@ -3,14 +3,11 @@ import type { MatchingEmbedding } from './utils/types';
 import { xml } from '../xml';
 import { embeddingsXML, groupEmbeddingsByFile } from './utils';
 
-export function createRelevantEmbeddingsPrompt(
-  message: string,
-  embeddings: MatchingEmbedding[],
-): string {
+export function createRelevantEmbeddingsPrompt(embeddings: MatchingEmbedding[]): string | null {
   const groupedEmbeddings = Object.values(groupEmbeddingsByFile(embeddings));
 
   if (!groupedEmbeddings.length) {
-    return message;
+    return null;
   }
 
   const contextContent = groupedEmbeddings
@@ -39,7 +36,6 @@ export function createRelevantEmbeddingsPrompt(
 
   return embeddingsXML({
     children: [
-      xml('user-prompt', { children: [message] }),
       xml('context', { children: [contextContent] }),
       xml('core-instructions', {
         children: groupedEmbeddings.length

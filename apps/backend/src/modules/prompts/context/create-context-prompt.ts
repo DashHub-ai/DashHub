@@ -1,5 +1,4 @@
 import { xml } from '../xml';
-import { createCriticalContextPrompt } from './create-critical-context-prompt';
 import {
   createActionButtonsContextPrompt,
   createHtmlPreviewContextPrompt,
@@ -23,7 +22,6 @@ export function createContextPrompt({ personalities }: Attrs) {
       description: 'A general chat context for the user.',
     },
     children: [
-      createCriticalContextPrompt(),
       isNonBlankPersona(personalities)
         ? createCustomPersonaContextPrompt(personalities)
         : createDefaultPersonaContextPrompt(),
