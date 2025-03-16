@@ -10,7 +10,7 @@ export function AppsCategoriesSidebarLayout({ children, suffix }: Props) {
   const t = useI18n().pack.appsCategories.sidebar;
 
   return (
-    <div className="pr-6 border-r border-border w-80">
+    <div className="pr-6 w-80">
       <h3 className="flex items-center gap-2 mb-4 font-medium">
         <span>{t.header}</span>
         {suffix}

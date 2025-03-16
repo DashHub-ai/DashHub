@@ -773,6 +773,7 @@ export const I18N_PACK_EN = {
       header: 'Categories',
       otherCategoryItems: 'Other',
       showMore: 'Show all (%{count} more)',
+      noCategories: 'No categories yet!',
     },
     form: {
       title: {

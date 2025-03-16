@@ -775,6 +775,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       header: 'Kategorie',
       showMore: 'Pokaż wszystkie (%{count} więcej)',
       otherCategoryItems: 'Pozostałe',
+      noCategories: 'Brak kategorii!',
     },
     form: {
       title: {

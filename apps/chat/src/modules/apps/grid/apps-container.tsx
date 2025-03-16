@@ -33,11 +33,12 @@ type Props = {
   itemPropsFn?: (item: SdkAppT) => Omit<AppCardProps, 'app'>;
   toolbar?: ReactNode;
   columns?: number;
+  contentFooter?: ReactNode;
 };
 
 export type SearchAppsRouteUrlFiltersT = z.input<typeof SdkSearchAppsInputV>;
 
-export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 3 }: Props) {
+export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 3, contentFooter }: Props) {
   const favorites = useFavoriteApps();
   const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
 
@@ -143,6 +144,8 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, columns = 
             );
           }}
         </PaginatedList>
+
+        {contentFooter}
       </section>
     </div>
   );

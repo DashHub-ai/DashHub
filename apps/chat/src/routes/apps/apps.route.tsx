@@ -38,16 +38,19 @@ export function AppsRoute() {
               </Link>
             ),
           }}
+          contentFooter={(
+            <>
+              <hr className="mx-auto my-14 w-1/4" />
+
+              <section className="mx-auto px-4 max-w-3xl container">
+                <h2 className="mb-6 font-semibold text-2xl text-center">
+                  {t.startChat.title}
+                </h2>
+                <StartChatForm />
+              </section>
+            </>
+          )}
         />
-
-        <hr className="mx-auto w-1/4" />
-
-        <section className="mx-auto px-4 max-w-3xl container">
-          <h2 className="mb-6 font-semibold text-2xl text-center">
-            {t.startChat.title}
-          </h2>
-          <StartChatForm />
-        </section>
       </div>
     </PageWithSidebarLayout>
   );

@@ -2,6 +2,7 @@ import { LayersIcon, SettingsIcon } from 'lucide-react';
 
 import { type SdkCountedAppsCategoriesTreeT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+import { GhostPlaceholder } from '~/modules/shared';
 
 import { useManageAppsCategoriesModal } from '../modal/use-manage-apps-categories-modal';
 import { AppsCategoriesSidebarLayout } from './apps-categories-sidebar-layout';
@@ -53,6 +54,12 @@ export function AppsCategoriesSidebar({ tree, selected, onSelect, onReload }: Pr
         <li>
           <div className="my-4 border-b border-border" />
         </li>
+
+        {!tree.length && (
+          <GhostPlaceholder>
+            {t.noCategories}
+          </GhostPlaceholder>
+        )}
 
         {tree.map(category => (
           <li key={category.id}>
