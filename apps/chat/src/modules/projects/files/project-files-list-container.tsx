@@ -3,6 +3,7 @@ import { PaperclipIcon } from 'lucide-react';
 
 import { SdkSearchProjectFilesInputV, type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+import { useChatFileDrop } from '~/modules/chats';
 import { FormSpinnerCTA, PaginatedList, useDebouncedPaginatedSearch } from '~/ui';
 
 import { ProjectFileCard } from './project-file-card';
@@ -39,8 +40,22 @@ export function ProjectFilesListContainer({ projectId, readOnly, compactView, co
     silentReload();
   };
 
+  const fileDrop = useChatFileDrop({
+    onDrop: async (files: File[]) => {
+      if (!files.length) {
+        return;
+      }
+
+      await uploadFile(files[0]);
+      silentReload();
+    },
+  });
+
   return (
-    <section className={compactView ? 'space-y-5' : ''}>
+    <section
+      className={compactView ? 'space-y-5' : ''}
+      {...fileDrop.listeners}
+    >
       {!readOnly && (
         <div className={`flex justify-end ${compactView ? 'mb-3' : 'mb-6'}`}>
           <FormSpinnerCTA

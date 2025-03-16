@@ -9,6 +9,7 @@ export * from './use-context-or-throw';
 export * from './use-debounce-value';
 export * from './use-element-listener';
 export * from './use-element-listener-ref';
+export * from './use-file-drop';
 export * from './use-focus-after-mount';
 export * from './use-force-rerender';
 export * from './use-instant-update-effect';

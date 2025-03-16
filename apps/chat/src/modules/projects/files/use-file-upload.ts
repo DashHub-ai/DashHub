@@ -1,8 +1,9 @@
+import { taskEither as TE, taskOption as TO } from 'fp-ts';
 import { pipe } from 'fp-ts/function';
-import * as TE from 'fp-ts/TaskEither';
 
 import type { SdkTableRowIdT } from '@llm/sdk';
 
+import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import { useSdkForLoggedIn } from '@llm/sdk';
 import { selectChatFile } from '~/modules/chats/conversation/files/select-chat-file';
@@ -13,8 +14,10 @@ export function useFileUpload(projectId: SdkTableRowIdT) {
   const saveNotifications = useSaveTaskEitherNotification();
 
   return useAsyncCallback(
-    pipe(
-      selectChatFile,
+    async (maybeFile?: File) => pipe(
+      maybeFile
+        ? TO.some(maybeFile)
+        : selectChatFile,
       TE.fromTaskOption(() => new Error('No file selected')),
       TE.chainW(file => pipe(
         sdks.dashboard.projectsFiles.upload({
@@ -23,6 +26,7 @@ export function useFileUpload(projectId: SdkTableRowIdT) {
         }),
         saveNotifications,
       )),
-    ),
+      tryOrThrowTE,
+    )(),
   );
 }

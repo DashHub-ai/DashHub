@@ -13,7 +13,7 @@ import { AIModelsSearchSelect } from '~/modules/ai-models';
 import { ProjectsSearchSelect } from '~/modules/projects';
 import { Checkbox, FormSpinnerCTA } from '~/ui';
 
-import { FilesCardsControlledList, selectChatFile } from '../conversation';
+import { FilesCardsControlledList, selectChatFile, useChatFileDrop } from '../conversation';
 import { ChatWebSearchButton } from '../conversation/input-toolbar';
 import { useStartChatForm } from './use-start-chat-form';
 
@@ -52,6 +52,12 @@ export function StartChatForm({ forceProject, className }: Props) {
     }),
   );
 
+  const fileDrop = useChatFileDrop({
+    onDrop: (files: File[]) => {
+      bind.path('files').onChange([...value.files ?? [], ...files]);
+    },
+  });
+
   return (
     <form
       className={clsx(
@@ -60,6 +66,7 @@ export function StartChatForm({ forceProject, className }: Props) {
         className,
       )}
       onSubmit={handleSubmitEvent}
+      {...fileDrop.listeners}
     >
       <div
         className={clsx(
@@ -68,9 +75,15 @@ export function StartChatForm({ forceProject, className }: Props) {
           'focus-within:border-gray-300',
           'shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
           'transition-all duration-200',
+          fileDrop.isDragging && 'border-blue-400 border-2 bg-blue-50',
         )}
       >
-        <div className="mb-14">
+        <div
+          className={clsx(
+            'mb-14',
+            fileDrop.isDragging && 'opacity-70',
+          )}
+        >
           <textarea
             ref={focusInputRef}
             name="message"
