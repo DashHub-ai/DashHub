@@ -177,7 +177,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     links: {
       chats: 'Czaty',
       projects: 'Projekty',
-      apps: 'Asystenci',
+      apps: 'Agenci',
       experts: 'Eksperci',
       management: 'Administracja',
       pinnedMessages: 'Piny',
@@ -202,7 +202,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   breadcrumbs: {
     routes: {
       home: 'Strona główna',
-      apps: 'Asystenci',
+      apps: 'Agenci',
     },
   },
   table: {
@@ -283,10 +283,10 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
     createApp: {
       meta: {
-        title: 'Stwórz asystenta',
-        description: 'Stwórz asystenta',
+        title: 'Stwórz agenta',
+        description: 'Stwórz agenta',
       },
-      title: 'Stwórz asystenta',
+      title: 'Stwórz agenta',
     },
     projects: {
       meta: {
@@ -322,7 +322,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       title: 'Eksperci',
       tutorial: {
         title: 'Czym są Eksperci DashHub?',
-        custom: 'Wyspecjalizowani asystenci AI zaprojektowani do konkretnych zadań i dziedzin',
+        custom: 'Wyspecjalizowani agenci AI zaprojektowani do konkretnych zadań i dziedzin',
         organization: 'Wdrażaj i zarządzaj ekspertami AI w całej organizacji',
         knowledge: 'Wzbogaceni o wiedzę specyficzną dla projektu dla dokładniejszej pomocy',
       },
@@ -358,7 +358,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       hello: 'Cześć, jak możemy Ci pomóc?',
       tutorial: {
         title: 'Witaj w DashHub Chat!',
-        ai: 'Potężny asystent AI gotowy pomóc w Twoich zadaniach i pytaniach',
+        ai: 'Potężny agent AI gotowy pomóc w Twoich zadaniach i pytaniach',
         knowledge: 'Dostęp do obszernej bazy wiedzy i wyspecjalizowanych narzędzi',
         history: 'Śledź i kontynuuj swoje rozmowy bez przeszkód',
       },
@@ -554,13 +554,10 @@ export const I18N_PACK_PL: I18nLangPack = {
       remove: 'Usuń z ulubionych',
     },
     grid: {
-      placeholder: 'Brak asystenta!',
+      placeholder: 'Brak agenta!',
     },
     chooseAppModal: {
       title: 'Wybierz aplikację',
-    },
-    card: {
-      run: 'Uruchom asystenta',
     },
   },
   appsCreator: {
@@ -585,11 +582,11 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
       name: {
         label: 'Nazwa',
-        placeholder: 'Wpisz nazwę asystenta',
+        placeholder: 'Wpisz nazwę agenta',
       },
       description: {
         label: 'Opis',
-        placeholder: 'Wpis opis asystenta',
+        placeholder: 'Wpis opis agenta',
       },
       promotion: {
         label: 'Priorytet promocji',
@@ -600,7 +597,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
       chatContext: {
         label: 'Prompt',
-        placeholder: 'Wpisz opis prompt asystenta, to pomoże AI w generowaniu odpowiedzi',
+        placeholder: 'Wpisz opis prompt agenta, to pomoże AI w generowaniu odpowiedzi',
       },
     },
   },
@@ -774,7 +771,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   appsCategories: {
     sidebar: {
-      allApps: 'Wszyscy asystenci',
+      allApps: 'Wszyscy agenci',
       header: 'Kategorie',
       showMore: 'Pokaż wszystkie (%{count} więcej)',
       otherCategoryItems: 'Pozostałe',
@@ -782,17 +779,17 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
     form: {
       title: {
-        create: 'Utwórz kategorię asystenta',
-        edit: 'Edytuj kategorię asystenta',
+        create: 'Utwórz kategorię agenta',
+        edit: 'Edytuj kategorię agenta',
       },
       fields: {
         name: {
           label: 'Nazwa',
-          placeholder: 'Wpisz nazwę kategorii asystenta',
+          placeholder: 'Wpisz nazwę kategorii agenta',
         },
         icon: {
           label: 'Ikona',
-          placeholder: 'Wpisz ikonę kategorii asystenta',
+          placeholder: 'Wpisz ikonę kategorii agenta',
         },
         description: {
           label: 'Opis',
@@ -807,7 +804,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
     },
     manageAppsCategories: {
-      title: 'Zarządzaj kategoriami asystentów',
+      title: 'Zarządzaj kategoriami agentów',
     },
   },
   projects: {

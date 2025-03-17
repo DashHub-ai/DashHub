@@ -175,7 +175,7 @@ export const I18N_PACK_EN = {
     links: {
       chats: 'Chats',
       projects: 'Projects',
-      apps: 'Assistants',
+      apps: 'Agents',
       experts: 'Experts',
       management: 'Management',
       pinnedMessages: 'Pins',
@@ -200,7 +200,7 @@ export const I18N_PACK_EN = {
   breadcrumbs: {
     routes: {
       home: 'Home',
-      apps: 'Assistants',
+      apps: 'Agents',
     },
   },
   table: {
@@ -256,12 +256,12 @@ export const I18N_PACK_EN = {
     },
     apps: {
       meta: {
-        title: 'Assistants',
-        description: 'Manage assistants',
+        title: 'Agents',
+        description: 'Manage agents',
       },
-      title: 'Assistants',
+      title: 'Agents',
       tutorial: {
-        title: 'What are DashHub Assistants?',
+        title: 'What are DashHub Agents?',
         tools: 'Specialized LLM-powered tools for email composition, data organization, and content transformation',
         modular: 'Modular and reusable applications to boost your productivity across projects',
       },
@@ -274,17 +274,17 @@ export const I18N_PACK_EN = {
     },
     editApp: {
       meta: {
-        title: 'Edit Assistant',
-        description: 'Edit assistant',
+        title: 'Edit Agent',
+        description: 'Edit agent',
       },
-      title: 'Edit Assistant',
+      title: 'Edit Agent',
     },
     createApp: {
       meta: {
-        title: 'Create Assistant',
-        description: 'Create assistant',
+        title: 'Create Agent',
+        description: 'Create agent',
       },
-      title: 'Create Assistant',
+      title: 'Create Agent',
     },
     projects: {
       meta: {
@@ -327,7 +327,7 @@ export const I18N_PACK_EN = {
       title: 'Experts',
       tutorial: {
         title: 'What are DashHub Experts?',
-        custom: 'Specialized AI assistants designed for specific tasks and domains',
+        custom: 'Specialized AI agents designed for specific tasks and domains',
         organization: 'Deploy and manage AI experts across your entire organization',
         knowledge: 'Enhanced with project-specific knowledge for more accurate assistance',
       },
@@ -356,7 +356,7 @@ export const I18N_PACK_EN = {
       hello: 'Hello, how can we help you?',
       tutorial: {
         title: 'Welcome to DashHub Chat!',
-        ai: 'Powerful AI assistant ready to help with your tasks and questions',
+        ai: 'Powerful AI agent ready to help with your tasks and questions',
         knowledge: 'Access to extensive knowledge base and specialized tools',
         history: 'Track and continue your conversations seamlessly',
       },
@@ -436,8 +436,8 @@ export const I18N_PACK_EN = {
         itemSubTitle: 'Project',
       },
       apps: {
-        header: 'Assistants',
-        itemSubTitle: 'Assistant',
+        header: 'Agents',
+        itemSubTitle: 'Agent',
       },
     },
   },
@@ -552,13 +552,10 @@ export const I18N_PACK_EN = {
       remove: 'Remove from favorites',
     },
     grid: {
-      placeholder: 'No assistants yet. Stay tuned!',
+      placeholder: 'No agents yet. Stay tuned!',
     },
     chooseAppModal: {
-      title: 'Choose Assistant',
-    },
-    card: {
-      run: 'Run Assistant',
+      title: 'Choose Agent',
     },
   },
   appsCreator: {
@@ -566,10 +563,10 @@ export const I18N_PACK_EN = {
       title: 'Files',
     },
     create: {
-      title: 'Create New Assistant',
+      title: 'Create New Agent',
     },
     edit: {
-      title: 'Edit Assistant',
+      title: 'Edit Agent',
     },
     fields: {
       category: {
@@ -772,7 +769,7 @@ export const I18N_PACK_EN = {
   },
   appsCategories: {
     sidebar: {
-      allApps: 'All Assistants',
+      allApps: 'All Agents',
       header: 'Categories',
       otherCategoryItems: 'Other',
       showMore: 'Show all (%{count} more)',
@@ -780,17 +777,17 @@ export const I18N_PACK_EN = {
     },
     form: {
       title: {
-        create: 'Create assistant category',
-        edit: 'Edit assistant category',
+        create: 'Create agent category',
+        edit: 'Edit agent category',
       },
       fields: {
         name: {
           label: 'Name',
-          placeholder: 'Enter assistant category name',
+          placeholder: 'Enter agent category name',
         },
         icon: {
           label: 'Icon',
-          placeholder: 'Enter assistant category icon',
+          placeholder: 'Enter agent category icon',
         },
         description: {
           label: 'Description',
@@ -805,7 +802,7 @@ export const I18N_PACK_EN = {
       },
     },
     manageAppsCategories: {
-      title: 'Manage Assistants Categories',
+      title: 'Manage Agents Categories',
     },
   },
   projects: {
