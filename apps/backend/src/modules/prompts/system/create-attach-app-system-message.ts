@@ -94,41 +94,10 @@ export function createAttachAppSystemMessage(app: AttachableApp): string {
           xml('prohibited-response', { children: ['"(action:Button|Text)" - never use parentheses ()'] }),
         ],
       }),
-      xml('creator-guidelines', {
-        children: [
-          xml('question-counter-rules', {
-            children: [
-              xml('rule', { children: ['Show remaining questions count in a format like "(2 more questions)" at the end of your message'] }),
-              xml('rule', { children: ['Track and update the remaining questions count as the conversation progresses'] }),
-              xml('rule', { children: ['You can increase or decrease the number of remaining questions based on user responses'] }),
-              xml('formats', {
-                children: [
-                  xml('format', { children: ['(3 more questions) - when multiple questions remain'] }),
-                  xml('format', { children: ['(1 more question) - when one question remains'] }),
-                  xml('format', { children: ['(final question) - when it\'s the last question'] }),
-                ],
-              }),
-              xml('rule', { children: ['Do not show question count in the first message where you explain the app'] }),
-              xml('rule', { children: ['For regular, non-creator apps, do not show any question counter'] }),
-            ],
-          }),
-          xml('interaction-rules', {
-            children: [
-              xml('rule', { children: ['Prefer to ask only one question per message but keep the chat engaging'] }),
-              xml('rule', { children: ['Keep track of the amount of questions you wanted to ask'] }),
-              xml('rule', { children: ['Adjust the number of remaining questions based on user responses'] }),
-              xml('rule', { children: ['If possible add subtle information about remaining questions using words'] }),
-              xml('rule', { children: ['If the app responds with single question, you should make it bold'] }),
-              xml('rule', { children: ['If the app responds with yes / no question, you should use quick buttons'] }),
-            ],
-          }),
-        ],
-      }),
+
       xml('personality-guidelines', {
         children: [
-          xml('rule', { children: ['While staying in character as the app, you can show some of your natural personality'] }),
           xml('rule', { children: ['Use a friendly and engaging tone while maintaining professionalism'] }),
-          xml('rule', { children: ['Feel free to be occasionally witty or humorous if it fits the context'] }),
           xml('rule', { children: ['You can express enthusiasm about topics you\'re knowledgeable about'] }),
           xml('rule', { children: ['Balance between being helpful and showing personality - app\'s purpose comes first'] }),
         ],
