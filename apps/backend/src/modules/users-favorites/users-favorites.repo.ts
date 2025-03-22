@@ -1,9 +1,13 @@
+import { array as A, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
+
+import type { SdkFavoriteT, SdkUpsertFavoriteT } from '@llm/sdk';
 
 import {
   AbstractDatabaseRepo,
   DatabaseError,
+  DatabaseTE,
   type TableId,
   TableUuid,
   type TransactionalAttrs,
@@ -15,9 +19,11 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
   upsert = (
     {
       forwardTransaction,
-      value,
+      userId,
+      favorite,
     }: TransactionalAttrs<{
-      value: UpsertUserFavoritesAttrs;
+      userId: TableId;
+      favorite: SdkUpsertFavoriteT;
     }>,
   ) => {
     const transaction = tryReuseTransactionOrSkip({
@@ -30,9 +36,9 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
         trx
           .insertInto('users_favorites')
           .values({
-            user_id: value.userId,
-            chat_id: value.resource.type === 'chat' ? value.resource.id : null,
-            app_id: value.resource.type === 'app' ? value.resource.id : null,
+            user_id: userId,
+            chat_id: favorite.type === 'chat' ? favorite.id : null,
+            app_id: favorite.type === 'app' ? favorite.id : null,
           })
           .onConflict(oc => oc.doNothing())
           .execute(),
@@ -41,20 +47,18 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
     );
   };
 
-  getFavoritesByUserId = <T extends UserFavoritesType>(
+  getFavoritesByUserId = (
     {
       forwardTransaction,
       organizationId,
       userId,
-      type,
-      id,
+      favorite,
     }: TransactionalAttrs<{
       userId: TableId;
       organizationId: TableId;
-      type: T;
-      id: InferUserFavoritesId<T>;
+      favorite: SdkFavoriteT;
     }>,
-  ) => {
+  ): DatabaseTE<SdkFavoriteT[]> => {
     const transaction = tryReuseTransactionOrSkip({
       db: this.db,
       forwardTransaction,
@@ -65,17 +69,18 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
         trx
           .selectFrom('users_favorites')
           .selectAll()
+          .limit(400)
           .where('user_id', '=', userId)
 
-          .$if(type === 'app', q =>
+          .$if(favorite.type === 'app', q =>
             q
-              .where('app_id', '=', id as TableId)
+              .where('app_id', '=', favorite.id as TableId)
               .innerJoin('apps', 'apps.id', 'app_id')
               .innerJoin('organizations', 'organizations.id', 'apps.organization_id')
               .where('organizations.id', '=', organizationId))
 
-          .$if(type === 'chat', q =>
-            q.where('chat_id', '=', id as TableUuid)
+          .$if(favorite.type === 'chat', q =>
+            q.where('chat_id', '=', favorite.id as TableUuid)
               .innerJoin('chats', 'chats.id', 'chat_id')
               .innerJoin('organizations', 'organizations.id', 'chats.organization_id')
               .where('organizations.id', '=', organizationId))
@@ -83,20 +88,25 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
           .execute(),
       ),
       DatabaseError.tryTask,
+      TE.map(
+        A.filterMap((item) => {
+          if (item.app_id) {
+            return O.some({
+              type: 'app',
+              id: item.app_id,
+            } as SdkFavoriteT);
+          }
+
+          if (item.chat_id) {
+            return O.some({
+              type: 'chat',
+              id: item.chat_id,
+            } as SdkFavoriteT);
+          }
+
+          return O.none;
+        }),
+      ),
     );
   };
 }
-
-type UpsertUserFavoritesAttrs = {
-  userId: TableId;
-  resource:
-    | { type: 'app'; id: TableId; }
-    | { type: 'chat'; id: TableUuid; };
-};
-
-type UserFavoritesType = UpsertUserFavoritesAttrs['resource']['type'];
-
-type InferUserFavoritesId<T extends UserFavoritesType> = Extract<
-  UpsertUserFavoritesAttrs['resource'],
-  { type: T; }
->['id'];
