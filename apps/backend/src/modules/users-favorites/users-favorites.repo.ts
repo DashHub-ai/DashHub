@@ -2,7 +2,11 @@ import { array as A, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
 
-import type { SdkFavoriteT, SdkFavoriteTypeT, SdkUpsertFavoriteT } from '@llm/sdk';
+import type {
+  SdkFavoriteT,
+  SdkFavoriteTypeT,
+  SdkUpsertFavoriteInputT,
+} from '@llm/sdk';
 
 import {
   AbstractDatabaseRepo,
@@ -22,7 +26,7 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
       favorite,
     }: TransactionalAttrs<{
       userId: TableId;
-      favorite: SdkUpsertFavoriteT;
+      favorite: SdkUpsertFavoriteInputT;
     }>,
   ) => {
     const transaction = tryReuseTransactionOrSkip({
@@ -54,7 +58,7 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
       type,
       limit = 500,
     }: TransactionalAttrs<UserFavoritesInternalSearchAttrs>,
-  ): DatabaseTE<SdkFavoriteT[]> => {
+  ): DatabaseTE<SdkUpsertFavoriteInputT[]> => {
     const transaction = tryReuseTransactionOrSkip({
       db: this.db,
       forwardTransaction,

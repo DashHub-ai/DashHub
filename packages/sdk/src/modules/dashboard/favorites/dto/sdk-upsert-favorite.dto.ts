@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { SdkTableRowIdV, SdkTableRowUuidV } from '~/shared';
 
-export const SdkUpsertFavoriteV = z.discriminatedUnion('type', [
+export const SdkUpsertFavoriteInputV = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('app'),
     id: SdkTableRowIdV,
@@ -13,4 +13,4 @@ export const SdkUpsertFavoriteV = z.discriminatedUnion('type', [
   }),
 ]);
 
-export type SdkUpsertFavoriteT = z.infer<typeof SdkUpsertFavoriteV>;
+export type SdkUpsertFavoriteInputT = z.infer<typeof SdkUpsertFavoriteInputV>;

@@ -2,10 +2,11 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
 import {
+  ofSdkSuccess,
   ofSdkUnauthorizedErrorTE,
   type SdkJwtTokenT,
   type SdkUnauthorizedError,
-  type SdkUpsertFavoriteT,
+  type SdkUpsertFavoriteInputT,
 } from '@llm/sdk';
 
 import type { AppsService } from '../apps';
@@ -28,7 +29,7 @@ export class UsersFavoritesFirewall extends AuthFirewallService {
     super(jwt);
   }
 
-  upsert = (favorite: SdkUpsertFavoriteT) => {
+  upsert = (favorite: SdkUpsertFavoriteInputT) => {
     const asUser = this.permissionsService.asUser(this.jwt);
 
     const guardTask: TE.TaskEither<SdkUnauthorizedError | DatabaseError | EsDocumentNotFoundError, any> = (() => {
@@ -59,6 +60,7 @@ export class UsersFavoritesFirewall extends AuthFirewallService {
         userId: this.userId,
         favorite,
       })),
+      TE.map(() => ofSdkSuccess()),
     );
   };
 }
