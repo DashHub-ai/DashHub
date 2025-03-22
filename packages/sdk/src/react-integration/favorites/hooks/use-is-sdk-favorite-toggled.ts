@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import type { SdkFavoriteT } from '@llm/sdk';
+import type { SdkFavoriteT } from '~/modules/dashboard/favorites';
 
 import { useSdkSubscribeFavoritesOrThrow } from './use-sdk-subscribe-favorites-or-throw';
 
