@@ -5,6 +5,7 @@ import { AppsSdk } from './apps';
 import { AppsCategoriesSdk } from './apps-categories';
 import { ChatsSdk } from './chats';
 import { ExpertsSdk } from './experts';
+import { FavoritesSdk } from './favorites';
 import { OrganizationsSdk } from './organizations';
 import { PinnedMessagesSdk } from './pinned-messages';
 import { ProjectsSdk } from './projects';
@@ -46,6 +47,8 @@ export class DashboardSdk {
   public readonly shareResource = new ShareResourceSdk(this.config);
 
   public readonly pinnedMessages = new PinnedMessagesSdk(this.config);
+
+  public readonly favorites = new FavoritesSdk(this.config);
 
   constructor(private readonly config: AbstractNestedSdkWithAuthConfig) {}
 }

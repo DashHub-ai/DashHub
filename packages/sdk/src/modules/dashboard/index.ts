@@ -4,6 +4,7 @@ export * from './apps-categories';
 export * from './chats';
 export * from './dashboard.sdk';
 export * from './experts';
+export * from './favorites';
 export * from './messages';
 export * from './organizations';
 export * from './permissions';

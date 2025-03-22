@@ -5,6 +5,7 @@ import { WandSparklesIcon } from 'lucide-react';
 import { formatDate } from '@llm/commons';
 import { isSdkAppCreatorApp, type SdkAppT, useSdkForLoggedIn } from '@llm/sdk';
 import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
+import { FavoriteStarButton } from '~/modules/favorites';
 import { CardRecordPermissions } from '~/modules/permissions';
 import { useSitemap } from '~/routes';
 import {
@@ -21,16 +22,15 @@ import {
   useUnarchiveWithNotifications,
 } from '~/ui';
 
-import { FavoriteAppStarButton } from '../favorite';
-
 export type AppCardProps = {
   app: SdkAppT;
   ctaButton?: ReactNode;
   onAfterArchive?: VoidFunction;
   onAfterUnarchive?: VoidFunction;
+  onAfterToggleFavorite?: VoidFunction;
 };
 
-export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive }: AppCardProps) {
+export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive, onAfterToggleFavorite }: AppCardProps) {
   const sitemap = useSitemap();
 
   const { sdks, createRecordGuard } = useSdkForLoggedIn();
@@ -56,7 +56,12 @@ export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive }: Ap
       <CardTitle
         icon={<WandSparklesIcon size={16} />}
         {...!app.archived && {
-          suffix: <FavoriteAppStarButton app={app} />,
+          suffix: (
+            <FavoriteStarButton
+              favorite={{ type: 'app', id: app.id }}
+              onAfterToggleFavorite={onAfterToggleFavorite}
+            />
+          ),
         }}
       >
         {app.name}

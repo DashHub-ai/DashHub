@@ -769,6 +769,7 @@ export const I18N_PACK_EN = {
   appsCategories: {
     sidebar: {
       allApps: 'All Agents',
+      favoriteApps: 'Favorite Agents',
       header: 'Categories',
       otherCategoryItems: 'Other',
       showMore: 'Show all (%{count} more)',

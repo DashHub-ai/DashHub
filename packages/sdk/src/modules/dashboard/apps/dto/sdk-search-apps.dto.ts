@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
+import { StrictBooleanV } from '@llm/commons';
 import {
   DEFAULT_SDK_SORT,
   SdkArchivedFiltersInputV,
+  SdkCountedRecordV,
   SdkExcludeIdsFiltersInputV,
   SdkFilteredPhraseInputV,
   SdkIdsArrayV,
@@ -31,6 +33,7 @@ export const SdkSearchAppsInputV = SdkOffsetPaginationInputV
     organizationIds: SdkIdsArrayV.optional(),
     categoriesIds: SdkIdsArrayV.optional(),
     sort: SdkAppsSortV.optional(),
+    favorites: StrictBooleanV.optional(),
   })
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkIdsFiltersInputV)
@@ -41,6 +44,7 @@ export type SdkSearchAppsInputT = z.infer<typeof SdkSearchAppsInputV>;
 
 export const SdkSearchAppsAggsV = z.object({
   categories: SdkCountedAppsCategoriesTreeV,
+  favorites: SdkCountedRecordV,
 });
 
 export type SdkSearchAppsAggsT = z.infer<typeof SdkSearchAppsAggsV>;

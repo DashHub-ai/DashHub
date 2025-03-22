@@ -150,6 +150,8 @@ export class PermissionsFirewall extends AuthFirewallService {
       TE.apSW('data', findRecord),
       TE.apSW('descriptor', this.findUserAccessPermissionsDescriptor(accessLevel)),
       TE.chainEitherKW(({ descriptor, data }) => {
+        const { jwt } = this;
+
         // Allow access if user is the owner of the record
         if (isOwner?.(data)) {
           return E.right(data);
@@ -157,6 +159,11 @@ export class PermissionsFirewall extends AuthFirewallService {
 
         // Perform additional data validation if needed
         if (refine?.(data) === false) {
+          return ofSdkUnauthorizedErrorE();
+        }
+
+        // If record with organization, check organization match. If not  - raise unauthorized error.
+        if (jwt.role !== 'root' && isSdkRecordWithOrganization(data) && data.organization.id === jwt.organization.id) {
           return ofSdkUnauthorizedErrorE();
         }
 

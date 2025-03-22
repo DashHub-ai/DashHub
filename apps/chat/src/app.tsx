@@ -1,12 +1,12 @@
 import { HelmetProvider } from 'react-helmet-async';
 
 import { ModalsContextProvider } from '@llm/commons-front';
-import { SdkMeProvider, SdkPinnedMessagesProvider, SdkProvider } from '@llm/sdk';
+import { SdkFavoritesProvider, SdkMeProvider, SdkPinnedMessagesProvider, SdkProvider } from '@llm/sdk';
 import { useConfig } from '~/config';
 import { I18nProvider } from '~/i18n';
 import { Router } from '~/router';
 
-import { FavoriteAppsValidator, WorkspaceProvider } from './modules';
+import { WorkspaceProvider } from './modules';
 
 export function App() {
   const config = useConfig();
@@ -21,14 +21,15 @@ export function App() {
       >
         <SdkMeProvider>
           <SdkPinnedMessagesProvider>
-            <I18nProvider>
-              <WorkspaceProvider>
-                <ModalsContextProvider>
-                  <FavoriteAppsValidator />
-                  <Router />
-                </ModalsContextProvider>
-              </WorkspaceProvider>
-            </I18nProvider>
+            <SdkFavoritesProvider>
+              <I18nProvider>
+                <WorkspaceProvider>
+                  <ModalsContextProvider>
+                    <Router />
+                  </ModalsContextProvider>
+                </WorkspaceProvider>
+              </I18nProvider>
+            </SdkFavoritesProvider>
           </SdkPinnedMessagesProvider>
         </SdkMeProvider>
       </SdkProvider>
