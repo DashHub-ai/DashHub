@@ -108,6 +108,8 @@ export class AppsEsSearchRepo {
         createPaginationOffsetSearchQuery(filtersWithMaybeFavorites)
           .query(AppsEsSearchRepo.createEsRequestSearchFilters(filtersWithMaybeFavorites))
           .aggs([
+            // Categories are not affected by the favorite filters,
+            // as the favorite filters pretends to be fake category
             esb
               .globalAggregation('global_categories')
               .agg(
@@ -115,7 +117,7 @@ export class AppsEsSearchRepo {
                   .filterAggregation('filtered')
                   .filter(
                     AppsEsSearchRepo.createEsRequestSearchFilters({
-                      ...filtersWithMaybeFavorites,
+                      ...dto,
                       categoriesIds: [],
                     }),
                   )

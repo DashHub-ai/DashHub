@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { LayersIcon, SettingsIcon } from 'lucide-react';
 
 import { type SdkCountedAppsCategoriesTreeT, useSdkForLoggedIn } from '@llm/sdk';
@@ -12,11 +14,13 @@ import { AppCategoryButton } from './items/app-category-button';
 type Props =
   & Pick<AppCategoryItemProps, 'selected' | 'onSelect'>
   & {
+    allowShowAllSelected?: boolean;
+    prependItems?: ReactNode;
     tree: SdkCountedAppsCategoriesTreeT;
     onReload?: VoidFunction;
   };
 
-export function AppsCategoriesSidebar({ tree, selected, onSelect, onReload }: Props) {
+export function AppsCategoriesSidebar({ prependItems, tree, allowShowAllSelected = true, selected, onSelect, onReload }: Props) {
   const t = useI18n().pack.appsCategories.sidebar;
   const manageModal = useManageAppsCategoriesModal();
   const { guard } = useSdkForLoggedIn();
@@ -47,7 +51,7 @@ export function AppsCategoriesSidebar({ tree, selected, onSelect, onReload }: Pr
             onClick={() => onSelect([])}
             icon={<LayersIcon size={16} />}
             label={t.allApps}
-            isSelected={selected.length === 0}
+            isSelected={allowShowAllSelected && selected.length === 0}
           />
         </li>
 
@@ -60,6 +64,8 @@ export function AppsCategoriesSidebar({ tree, selected, onSelect, onReload }: Pr
             {t.noCategories}
           </GhostPlaceholder>
         )}
+
+        {prependItems}
 
         {tree.map(category => (
           <li key={category.id}>
