@@ -82,10 +82,7 @@ export function useSdkToggleFavorite() {
     optimisticUpdateFn: initialMessages => pipe(
       initialMessages,
       A.filter(message => message.id !== dto.id),
-      A.append({
-        ...dto,
-        id: Date.now() as any,
-      }),
+      A.append(dto),
     ),
   });
 
