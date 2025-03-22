@@ -20,7 +20,6 @@ import {
   useDebouncedPaginatedSearch,
 } from '~/ui';
 
-import { AppsCategoriesSidebarLoader } from '../../apps-categories/sidebar';
 import { AppCard, type AppCardProps } from './app-card';
 import { AppsPlaceholder } from './apps-placeholder';
 import { AppsSidebar } from './apps-sidebar';
@@ -54,15 +53,12 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, contentFoo
 
   return (
     <div className="flex">
-      {result
-        ? (
-            <AppsSidebar
-              {...pagination.bind.entire()}
-              result={result}
-              onSilentReload={silentReload}
-            />
-          )
-        : <AppsCategoriesSidebarLoader />}
+      <AppsSidebar
+        {...pagination.bind.entire()}
+        result={result}
+        onSilentReload={silentReload}
+      />
+
       <section className="flex-1 pl-6">
         <PaginationToolbar
           className="mb-6"

@@ -5,11 +5,11 @@ import type { SdkIdsArrayT, SdkSearchAppsInputT, SdkSearchAppsOutputT } from '@l
 
 import { useLastNonNullValue } from '@llm/commons-front';
 import { useI18n } from '~/i18n';
-import { AppsCategoriesSidebar } from '~/modules/apps-categories';
+import { AppsCategoriesSidebar, AppsCategoriesSidebarLoader } from '~/modules/apps-categories';
 import { AppCategoryButton } from '~/modules/apps-categories/sidebar/items';
 
 type Props = {
-  result: SdkSearchAppsOutputT;
+  result: SdkSearchAppsOutputT | null;
   onSilentReload: VoidFunction;
 };
 
@@ -21,7 +21,9 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
   },
 ) => {
   const t = useI18n().pack.appsCategories.sidebar;
+
   const categoriesTree = useLastNonNullValue(result?.aggs?.categories);
+  const totalFavorites = useLastNonNullValue(result?.aggs?.favorites.count);
 
   const onSelectCategories = (categoriesIds: SdkIdsArrayT) => {
     setValue({
@@ -45,6 +47,10 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
     });
   };
 
+  if (!categoriesTree) {
+    return <AppsCategoriesSidebarLoader />;
+  }
+
   return (
     <AppsCategoriesSidebar
       allowShowAllSelected={!value.favorites}
@@ -52,13 +58,13 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
       selected={value.categoriesIds ?? []}
       onSelect={onSelectCategories}
       onReload={onSilentReload}
-      {...result.aggs.favorites.count > 0 && {
+      {...totalFavorites && {
         prependItems: (
           <li>
             <AppCategoryButton
               icon={<HeartIcon size={16} />}
               label={t.favoriteApps}
-              count={result.aggs.favorites.count}
+              count={totalFavorites}
               isSelected={!!value.favorites}
               onClick={() => onToggleFavorites(!value.favorites)}
             />
