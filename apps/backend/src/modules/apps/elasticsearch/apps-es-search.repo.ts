@@ -13,7 +13,7 @@ import type {
 } from '@llm/sdk';
 import type { TableId } from '~/modules/database';
 
-import { isNil, type Nullable, pluck, pluckIds, rejectFalsyItems } from '@llm/commons';
+import { isNil, type Nullable, pluck, pluckIds, rejectFalsyItems, uniq } from '@llm/commons';
 import { AppsCategoriesEsTreeRepo } from '~/modules/apps-categories/elasticsearch';
 import {
   createPaginationOffsetSearchQuery,
@@ -83,15 +83,30 @@ export class AppsEsSearchRepo {
 
   private readonly createEsRequestSearchBody = ({ favoritesAgg, ...dto }: EsAppsInternalFilters) =>
     pipe(
-      favoritesAgg
-        ? this.usersFavoritesRepo.findAll({
-            type: 'app',
-            userId: favoritesAgg.userId,
-          })
-        : TE.right([]),
-      TE.map(favorites =>
-        createPaginationOffsetSearchQuery(dto)
-          .query(AppsEsSearchRepo.createEsRequestSearchFilters(dto))
+      TE.Do,
+      TE.bind('favorites', () =>
+        favoritesAgg
+          ? this.usersFavoritesRepo.findAll({
+              type: 'app',
+              userId: favoritesAgg.userId,
+            })
+          : TE.right([])),
+      TE.bind('filtersWithMaybeFavorites', ({ favorites }) => {
+        if (!favorites.length || !dto.favorites) {
+          return TE.right(dto);
+        }
+
+        return TE.right({
+          ...dto,
+          ids: [
+            ...(dto.ids ?? []),
+            ...pluckIds(favorites) as number[],
+          ],
+        });
+      }),
+      TE.map(({ favorites, filtersWithMaybeFavorites }) =>
+        createPaginationOffsetSearchQuery(filtersWithMaybeFavorites)
+          .query(AppsEsSearchRepo.createEsRequestSearchFilters(filtersWithMaybeFavorites))
           .aggs([
             esb
               .globalAggregation('global_categories')
@@ -100,7 +115,7 @@ export class AppsEsSearchRepo {
                   .filterAggregation('filtered')
                   .filter(
                     AppsEsSearchRepo.createEsRequestSearchFilters({
-                      ...dto,
+                      ...filtersWithMaybeFavorites,
                       categoriesIds: [],
                     }),
                   )
@@ -120,12 +135,12 @@ export class AppsEsSearchRepo {
                         .filterAggregation('filtered')
                         .filter(
                           AppsEsSearchRepo.createEsRequestSearchFilters({
-                            ...dto,
+                            ...filtersWithMaybeFavorites,
                             categoriesIds: [],
-                            ids: [
-                              ...dto.ids ?? [],
+                            ids: uniq([
+                              ...filtersWithMaybeFavorites.ids ?? [],
                               ...pluckIds(favorites) as number[],
-                            ],
+                            ]),
                           }),
                         ),
                     ),

@@ -4,7 +4,6 @@ import type { z } from 'zod';
 import { clsx } from 'clsx';
 import { flow } from 'fp-ts/lib/function';
 
-import { useLastNonNullValue } from '@llm/commons-front';
 import {
   type SdkAppT,
   SdkSearchAppsInputV,
@@ -21,9 +20,10 @@ import {
   useDebouncedPaginatedSearch,
 } from '~/ui';
 
-import { AppsCategoriesSidebar, AppsCategoriesSidebarLoader } from '../../apps-categories/sidebar';
+import { AppsCategoriesSidebarLoader } from '../../apps-categories/sidebar';
 import { AppCard, type AppCardProps } from './app-card';
 import { AppsPlaceholder } from './apps-placeholder';
+import { AppsSidebar } from './apps-sidebar';
 
 type Props = {
   storeDataInUrl?: boolean;
@@ -47,7 +47,6 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, contentFoo
     fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.apps.search),
   });
 
-  const categoriesTree = useLastNonNullValue(result?.aggs?.categories);
   const gridClassName = clsx(
     'gap-4 grid grid-cols-1',
     'lg:grid-cols-2 3xl:grid-cols-3',
@@ -55,26 +54,15 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, contentFoo
 
   return (
     <div className="flex">
-      {!categoriesTree
+      {result
         ? (
-            <AppsCategoriesSidebarLoader />
-          )
-        : (
-            <AppsCategoriesSidebar
-              tree={categoriesTree ?? []}
-              selected={pagination.value.categoriesIds ?? []}
-              onSelect={(categoriesIds) => {
-                pagination.setValue({
-                  merge: true,
-                  value: {
-                    categoriesIds,
-                    offset: 0,
-                  },
-                });
-              }}
-              onReload={silentReload}
+            <AppsSidebar
+              {...pagination.bind.entire()}
+              result={result}
+              onSilentReload={silentReload}
             />
-          )}
+          )
+        : <AppsCategoriesSidebarLoader />}
       <section className="flex-1 pl-6">
         <PaginationToolbar
           className="mb-6"
@@ -123,6 +111,7 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, contentFoo
                     app={item}
                     onAfterArchive={silentReload}
                     onAfterUnarchive={silentReload}
+                    onAfterToggleFavorite={silentReload}
                     {...itemPropsFn?.(item)}
                   />
                 ))}

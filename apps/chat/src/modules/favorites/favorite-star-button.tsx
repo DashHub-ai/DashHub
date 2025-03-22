@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { pipe } from 'fp-ts/lib/function';
 import { StarIcon } from 'lucide-react';
 
-import { tapTaskEitherError, toVoidTE, tryOrThrowTE } from '@llm/commons';
+import { tapTaskEither, toVoidTE, tryOrThrowTE } from '@llm/commons';
 import { useAsyncCallback } from '@llm/commons-front';
 import { type SdkFavoriteT, useIsSdkFavoriteToggled, useSdkToggleFavorite } from '@llm/sdk';
 import { useI18n } from '~/i18n';
@@ -11,9 +11,10 @@ import { useSaveErrorNotification } from '~/ui';
 type Props = {
   favorite: SdkFavoriteT;
   className?: string;
+  onAfterToggleFavorite?: VoidFunction;
 };
 
-export function FavoriteStarButton({ favorite, className }: Props) {
+export function FavoriteStarButton({ favorite, className, onAfterToggleFavorite }: Props) {
   const t = useI18n().pack;
   const isPinned = useIsSdkFavoriteToggled(favorite);
   const { pin, unpin } = useSdkToggleFavorite();
@@ -24,7 +25,10 @@ export function FavoriteStarButton({ favorite, className }: Props) {
       isPinned
         ? toVoidTE(unpin(favorite))
         : toVoidTE(pin(favorite)),
-      tapTaskEitherError(showErrorNotification),
+      tapTaskEither(
+        () => onAfterToggleFavorite?.(),
+        showErrorNotification,
+      ),
       tryOrThrowTE,
     ),
   );

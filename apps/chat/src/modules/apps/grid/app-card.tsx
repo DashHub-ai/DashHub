@@ -27,9 +27,10 @@ export type AppCardProps = {
   ctaButton?: ReactNode;
   onAfterArchive?: VoidFunction;
   onAfterUnarchive?: VoidFunction;
+  onAfterToggleFavorite?: VoidFunction;
 };
 
-export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive }: AppCardProps) {
+export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive, onAfterToggleFavorite }: AppCardProps) {
   const sitemap = useSitemap();
 
   const { sdks, createRecordGuard } = useSdkForLoggedIn();
@@ -55,7 +56,12 @@ export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive }: Ap
       <CardTitle
         icon={<WandSparklesIcon size={16} />}
         {...!app.archived && {
-          suffix: <FavoriteStarButton favorite={{ type: 'app', id: app.id }} />,
+          suffix: (
+            <FavoriteStarButton
+              favorite={{ type: 'app', id: app.id }}
+              onAfterToggleFavorite={onAfterToggleFavorite}
+            />
+          ),
         }}
       >
         {app.name}
