@@ -24,6 +24,24 @@ export class FavoritesController extends AuthorizedController {
     super(configService);
 
     this.router
+      .get(
+        '/all',
+        async context => pipe(
+          favoritesService.asUser(context.var.jwt).findAll(),
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<FavoritesSdk['all']>>(context),
+        ),
+      )
+      .delete(
+        '/',
+        sdkSchemaValidator('json', SdkUpsertFavoriteInputV),
+        async context => pipe(
+          context.req.valid('json'),
+          favoritesService.asUser(context.var.jwt).delete,
+          rejectUnsafeSdkErrors,
+          serializeSdkResponseTE<ReturnType<FavoritesSdk['delete']>>(context),
+        ),
+      )
       .post(
         '/',
         sdkSchemaValidator('json', SdkUpsertFavoriteInputV),

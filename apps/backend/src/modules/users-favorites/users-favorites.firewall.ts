@@ -30,37 +30,58 @@ export class UsersFavoritesFirewall extends AuthFirewallService {
   }
 
   upsert = (favorite: SdkUpsertFavoriteInputT) => {
-    const asUser = this.permissionsService.asUser(this.jwt);
-
-    const guardTask: TE.TaskEither<SdkUnauthorizedError | DatabaseError | EsDocumentNotFoundError, any> = (() => {
-      switch (favorite.type) {
-        case 'chat':
-          return asUser.findRecordAndCheckPermissions({
-            accessLevel: 'read',
-            findRecord: this.chatsService.get(favorite.id),
-          });
-
-        case 'app':
-          return asUser.findRecordAndCheckPermissions({
-            accessLevel: 'read',
-            findRecord: this.appsService.get(favorite.id),
-          });
-
-        default: {
-          const _: never = favorite;
-
-          return ofSdkUnauthorizedErrorTE();
-        }
-      }
-    })();
-
     return pipe(
-      guardTask,
+      this.guardFavoriteAccess(favorite),
       TE.chainW(() => this.usersFavoritesService.upsert({
         userId: this.userId,
         favorite,
       })),
       TE.map(() => ofSdkSuccess()),
     );
+  };
+
+  delete = (favorite: SdkUpsertFavoriteInputT) => {
+    return pipe(
+      this.guardFavoriteAccess(favorite),
+      TE.chainW(() => this.usersFavoritesService.delete({
+        userId: this.userId,
+        favorite,
+      })),
+      TE.map(() => ofSdkSuccess()),
+    );
+  };
+
+  findAll = () => this.usersFavoritesService.findAll({
+    userId: this.userId,
+    ...this.jwt.role !== 'root' && {
+      organizationId: this.jwt.organization.id,
+    },
+  });
+
+  private guardFavoriteAccess = (favorite: SdkUpsertFavoriteInputT): TE.TaskEither<
+    SdkUnauthorizedError | DatabaseError | EsDocumentNotFoundError,
+    unknown
+  > => {
+    const asUser = this.permissionsService.asUser(this.jwt);
+
+    switch (favorite.type) {
+      case 'chat':
+        return asUser.findRecordAndCheckPermissions({
+          accessLevel: 'read',
+          findRecord: this.chatsService.get(favorite.id),
+        });
+
+      case 'app':
+        return asUser.findRecordAndCheckPermissions({
+          accessLevel: 'read',
+          findRecord: this.appsService.get(favorite.id),
+        });
+
+      default: {
+        const _: never = favorite;
+
+        return ofSdkUnauthorizedErrorTE();
+      }
+    }
   };
 }

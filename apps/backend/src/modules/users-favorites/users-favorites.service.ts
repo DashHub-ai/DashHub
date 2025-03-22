@@ -27,5 +27,7 @@ export class UsersFavoritesService {
 
   upsert = this.usersFavoritesRepo.upsert;
 
+  delete = this.usersFavoritesRepo.delete;
+
   findAll = this.usersFavoritesRepo.findAll;
 }

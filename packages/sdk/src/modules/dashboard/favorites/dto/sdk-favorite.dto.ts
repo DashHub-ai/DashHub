@@ -16,3 +16,7 @@ export const SdkFavoriteV = z.discriminatedUnion('type', [
 export type SdkFavoriteT = z.infer<typeof SdkFavoriteV>;
 
 export type SdkFavoriteTypeT = SdkFavoriteT['type'];
+
+export type SdkInferFavoriteT<T extends SdkFavoriteTypeT> = Extract<SdkFavoriteT, { type: T; }>;
+
+export type SdkInferFavoriteIdT<T extends SdkFavoriteTypeT> = Extract<SdkFavoriteT, { type: T; }>['id'];

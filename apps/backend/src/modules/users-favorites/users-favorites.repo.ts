@@ -50,6 +50,48 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
     );
   };
 
+  delete = (
+    {
+      forwardTransaction,
+      userId,
+      favorite,
+    }: TransactionalAttrs<{
+      userId: TableId;
+      favorite: SdkUpsertFavoriteInputT;
+    }>,
+  ) => {
+    const transaction = tryReuseTransactionOrSkip({
+      db: this.db,
+      forwardTransaction,
+    });
+
+    return pipe(
+      transaction((trx) => {
+        let query = trx
+          .deleteFrom('users_favorites')
+          .where('user_id', '=', userId);
+
+        switch (favorite.type) {
+          case 'chat':
+            query = query.where('chat_id', '=', favorite.id);
+            break;
+
+          case 'app':
+            query = query.where('app_id', '=', favorite.id);
+            break;
+
+          default: {
+            const _: never = favorite;
+            throw new Error('Unsupported favorite type!');
+          }
+        }
+
+        return query.execute();
+      }),
+      DatabaseError.tryTask,
+    );
+  };
+
   findAll = (
     {
       forwardTransaction,
@@ -65,29 +107,37 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
     });
 
     return pipe(
-      transaction(trx =>
-        trx
+      transaction((trx) => {
+        let query = trx
           .selectFrom('users_favorites')
           .selectAll()
           .limit(limit)
-          .where('user_id', '=', userId)
+          .where('user_id', '=', userId);
 
-          .$if(type === 'app', q =>
-            q
-              .innerJoin('apps', 'apps.id', 'app_id')
-              .innerJoin('organizations', 'organizations.id', 'apps.organization_id')
-              .where('organizations.id', '=', organizationId)
-              .where('apps.archived', '=', false))
+        if (type === 'app' || type === undefined) {
+          query = query
+            .leftJoin('apps', 'apps.id', 'users_favorites.app_id')
+            .leftJoin('organizations as app_orgs', 'app_orgs.id', 'apps.organization_id')
+            .$if(!!organizationId, q => q.where('app_orgs.id', '=', organizationId!))
+            .where(eb => eb.or([
+              eb('users_favorites.app_id', 'is', null),
+              eb('apps.archived', '=', false),
+            ]));
+        }
 
-          .$if(type === 'chat', q =>
-            q
-              .innerJoin('chats', 'chats.id', 'chat_id')
-              .innerJoin('organizations', 'organizations.id', 'chats.organization_id')
-              .where('organizations.id', '=', organizationId)
-              .where('chats.archived', '=', false))
+        if (type === 'chat' || type === undefined) {
+          query = query
+            .leftJoin('chats', 'chats.id', 'users_favorites.chat_id')
+            .leftJoin('organizations as chat_orgs', 'chat_orgs.id', 'chats.organization_id')
+            .$if(!!organizationId, q => q.where('chat_orgs.id', '=', organizationId!))
+            .where(eb => eb.or([
+              eb('users_favorites.chat_id', 'is', null),
+              eb('chats.archived', '=', false),
+            ]));
+        }
 
-          .execute(),
-      ),
+        return query.execute();
+      }),
       DatabaseError.tryTask,
       TE.map(
         A.filterMap((item) => {
@@ -118,7 +168,7 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
 
 export type UserFavoritesInternalSearchAttrs = {
   userId: TableId;
-  organizationId: TableId;
-  type: SdkFavoriteTypeT;
+  organizationId?: TableId;
+  type?: SdkFavoriteTypeT;
   limit?: number;
 };
