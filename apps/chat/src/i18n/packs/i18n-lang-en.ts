@@ -268,9 +268,6 @@ export const I18N_PACK_EN = {
       buttons: {
         create: 'Create',
       },
-      startChat: {
-        title: 'Start a chat with AI',
-      },
     },
     editApp: {
       meta: {

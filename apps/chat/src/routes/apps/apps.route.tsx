@@ -4,7 +4,7 @@ import { Link } from 'wouter';
 import { useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
-import { AppsContainer, StartChatForm } from '~/modules';
+import { AppsContainer } from '~/modules';
 import { RouteMetaTags, useSitemap } from '~/routes';
 
 import { AppsTutorial } from './apps-tutorial';
@@ -38,19 +38,6 @@ export function AppsRoute() {
               </Link>
             ),
           }}
-          contentFooter={(
-            <>
-              <hr className="mx-auto my-14 w-1/4" />
-
-              <section className="mx-auto px-4 max-w-3xl container">
-                <h2 className="mb-6 font-semibold text-2xl text-center">
-                  {t.startChat.title}
-                </h2>
-
-                <StartChatForm focusOnMount={false} />
-              </section>
-            </>
-          )}
         />
       </div>
     </PageWithSidebarLayout>

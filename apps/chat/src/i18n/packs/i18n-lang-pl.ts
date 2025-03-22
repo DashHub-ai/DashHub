@@ -270,9 +270,6 @@ export const I18N_PACK_PL: I18nLangPack = {
       buttons: {
         create: 'Stwórz',
       },
-      startChat: {
-        title: 'Rozpocznij czat z AI',
-      },
     },
     editApp: {
       meta: {
