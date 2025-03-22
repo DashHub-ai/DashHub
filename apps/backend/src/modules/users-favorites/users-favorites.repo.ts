@@ -2,14 +2,13 @@ import { array as A, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
 
-import type { SdkFavoriteT, SdkUpsertFavoriteT } from '@llm/sdk';
+import type { SdkFavoriteT, SdkFavoriteTypeT, SdkUpsertFavoriteT } from '@llm/sdk';
 
 import {
   AbstractDatabaseRepo,
   DatabaseError,
   DatabaseTE,
   type TableId,
-  TableUuid,
   type TransactionalAttrs,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
@@ -52,12 +51,9 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
       forwardTransaction,
       organizationId,
       userId,
-      favorite,
-    }: TransactionalAttrs<{
-      userId: TableId;
-      organizationId: TableId;
-      favorite: SdkFavoriteT;
-    }>,
+      type,
+      limit = 500,
+    }: TransactionalAttrs<UserFavoritesInternalSearchAttrs>,
   ): DatabaseTE<SdkFavoriteT[]> => {
     const transaction = tryReuseTransactionOrSkip({
       db: this.db,
@@ -69,19 +65,18 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
         trx
           .selectFrom('users_favorites')
           .selectAll()
-          .limit(400)
+          .limit(limit)
           .where('user_id', '=', userId)
 
-          .$if(favorite.type === 'app', q =>
+          .$if(type === 'app', q =>
             q
-              .where('app_id', '=', favorite.id as TableId)
               .innerJoin('apps', 'apps.id', 'app_id')
               .innerJoin('organizations', 'organizations.id', 'apps.organization_id')
               .where('organizations.id', '=', organizationId)
               .where('apps.archived', '=', false))
 
-          .$if(favorite.type === 'chat', q =>
-            q.where('chat_id', '=', favorite.id as TableUuid)
+          .$if(type === 'chat', q =>
+            q
               .innerJoin('chats', 'chats.id', 'chat_id')
               .innerJoin('organizations', 'organizations.id', 'chats.organization_id')
               .where('organizations.id', '=', organizationId)
@@ -116,3 +111,10 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
     );
   };
 }
+
+export type UserFavoritesInternalSearchAttrs = {
+  userId: TableId;
+  organizationId: TableId;
+  type: SdkFavoriteTypeT;
+  limit?: number;
+};
