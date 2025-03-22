@@ -186,6 +186,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     loggedIn: {
       logout: 'Wyloguj się',
       settings: 'Ustawienia',
+      management: 'Zarządzanie',
     },
     loggedAsRow: {
       rootUser: 'Zalogowano jako root',

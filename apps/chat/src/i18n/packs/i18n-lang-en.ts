@@ -184,6 +184,7 @@ export const I18N_PACK_EN = {
     loggedIn: {
       logout: 'Logout',
       settings: 'Settings',
+      management: 'Management',
     },
     loggedAsRow: {
       rootUser: 'Logged in as root user',

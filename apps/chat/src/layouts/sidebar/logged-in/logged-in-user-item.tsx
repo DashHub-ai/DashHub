@@ -1,8 +1,9 @@
-import { LogOut, Settings } from 'lucide-react';
+import { Building2Icon, LogOut, Settings } from 'lucide-react';
 import { Link } from 'wouter';
 
 import { useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+import { useHasWorkspaceOrganization } from '~/modules';
 import { useSitemap } from '~/routes';
 
 import { LoggedInButton } from './logged-in-button';
@@ -11,6 +12,8 @@ export function LoggedInUserItem() {
   const t = useI18n().pack.navigation.loggedIn;
   const sitemap = useSitemap();
   const { session, sdks } = useSdkForLoggedIn();
+  const { guard } = useSdkForLoggedIn();
+  const hasOrganization = useHasWorkspaceOrganization();
 
   return (
     <>
@@ -42,6 +45,20 @@ export function LoggedInUserItem() {
               </span>
             </Link>
           </li>
+
+          {guard.is.minimum.techUser && hasOrganization && (
+            <li>
+              <Link
+                className="justify-between"
+                href={sitemap.management.index}
+              >
+                <span className="flex items-center gap-2">
+                  <Building2Icon size={16} />
+                  {t.management}
+                </span>
+              </Link>
+            </li>
+          )}
 
           <li>
             <a
