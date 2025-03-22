@@ -34,6 +34,7 @@ import type {
 import type { SearchEnginesTable } from '../search-engines';
 import type { UsersTable } from '../users';
 import type { UsersAISettingsTable } from '../users-ai-settings';
+import type { UsersFavoritesTable } from '../users-favorites';
 import type { UsersGroupsTable, UsersGroupsUsersTable } from '../users-groups';
 import type {
   TableWithArchivedAtColumn,
@@ -51,6 +52,7 @@ export type DatabaseTables = {
   users_groups: UsersGroupsTable;
   users_groups_users: UsersGroupsUsersTable;
   users_ai_settings: UsersAISettingsTable;
+  users_favorites: UsersFavoritesTable;
 
   // Auth
   auth_emails: AuthEmailsTable;
