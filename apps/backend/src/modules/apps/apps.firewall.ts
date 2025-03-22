@@ -31,7 +31,12 @@ export class AppsFirewall extends AuthFirewallService {
     filters,
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
-    TE.chainW(this.appsService.search),
+    TE.chainW(filters => this.appsService.search({
+      ...filters,
+      favoritesAgg: {
+        userId: this.userId,
+      },
+    })),
     TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPaginationPermissionsKeysIfNotCreator),
   );
 

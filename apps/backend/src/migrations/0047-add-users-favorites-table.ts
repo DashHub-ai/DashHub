@@ -18,6 +18,12 @@ export async function up(db: Kysely<any>): Promise<void> {
     .unique()
     .columns(['user_id', 'app_id', 'chat_id'])
     .execute();
+
+  await db.schema
+    .createIndex('users_favorites_user_id_index')
+    .on('users_favorites')
+    .columns(['user_id'])
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {

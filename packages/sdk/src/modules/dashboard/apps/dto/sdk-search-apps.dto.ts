@@ -3,6 +3,7 @@ import { z } from 'zod';
 import {
   DEFAULT_SDK_SORT,
   SdkArchivedFiltersInputV,
+  SdkCountedRecordV,
   SdkExcludeIdsFiltersInputV,
   SdkFilteredPhraseInputV,
   SdkIdsArrayV,
@@ -41,6 +42,7 @@ export type SdkSearchAppsInputT = z.infer<typeof SdkSearchAppsInputV>;
 
 export const SdkSearchAppsAggsV = z.object({
   categories: SdkCountedAppsCategoriesTreeV,
+  favorites: SdkCountedRecordV,
 });
 
 export type SdkSearchAppsAggsT = z.infer<typeof SdkSearchAppsAggsV>;

@@ -11,8 +11,9 @@ import type {
   SdkSearchAppsInputT,
   SdkSearchAppsOutputT,
 } from '@llm/sdk';
+import type { TableId } from '~/modules/database';
 
-import { isNil, type Nullable, pluck, rejectFalsyItems } from '@llm/commons';
+import { isNil, type Nullable, pluck, pluckIds, rejectFalsyItems } from '@llm/commons';
 import { AppsCategoriesEsTreeRepo } from '~/modules/apps-categories/elasticsearch';
 import {
   createPaginationOffsetSearchQuery,
@@ -25,19 +26,27 @@ import {
   mapRawEsDocToSdkPermissions,
   type WithPermissionsInternalFilters,
 } from '~/modules/permissions/record-protection';
+import { UsersFavoritesRepo } from '~/modules/users-favorites/users-favorites.repo';
 
 import {
   type AppsEsDocument,
   AppsEsIndexRepo,
 } from './apps-es-index.repo';
 
-export type EsAppsInternalFilters = WithPermissionsInternalFilters<SdkSearchAppsInputT>;
+export type EsAppsInternalFilters =
+  & WithPermissionsInternalFilters<SdkSearchAppsInputT>
+  & {
+    favoritesAgg?: {
+      userId: TableId;
+    };
+  };
 
 @injectable()
 export class AppsEsSearchRepo {
   constructor(
     @inject(AppsEsIndexRepo) private readonly indexRepo: AppsEsIndexRepo,
     @inject(AppsCategoriesEsTreeRepo) private readonly categoriesTreeRepo: AppsCategoriesEsTreeRepo,
+    @inject(UsersFavoritesRepo) private readonly usersFavoritesRepo: UsersFavoritesRepo,
   ) {}
 
   get = flow(
@@ -45,17 +54,18 @@ export class AppsEsSearchRepo {
     TE.map(AppsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdkSearchAppsInputT) => pipe(
+  search = (dto: EsAppsInternalFilters) => pipe(
     TE.Do,
-    TE.bind('query', () => this.indexRepo.search(
-      AppsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
+    TE.bind('query', () => pipe(
+      this.createEsRequestSearchBody(dto),
+      TE.chainW(query => this.indexRepo.search(query.toJSON())),
     )),
     TE.bindW('categoriesAggs', ({ query: { aggregations } }) =>
       this.categoriesTreeRepo.createCountedTree({
         countedAggs: AppsEsSearchRepo.mapCategoriesAggregations(aggregations),
         organizationIds: dto.organizationIds,
       })),
-    TE.map(({ categoriesAggs, query: { hits: { total, hits } } }): SdkSearchAppsOutputT => ({
+    TE.map(({ categoriesAggs, query: { aggregations, hits: { total, hits } } }): SdkSearchAppsOutputT => ({
       items: pipe(
         hits,
         pluck('_source'),
@@ -64,9 +74,66 @@ export class AppsEsSearchRepo {
       total: total.value,
       aggs: {
         categories: categoriesAggs,
+        favorites: {
+          count: (aggregations as any)?.total_favorites?.filtered?.doc_count ?? 0,
+        },
       },
     })),
   );
+
+  private readonly createEsRequestSearchBody = ({ favoritesAgg, ...dto }: EsAppsInternalFilters) =>
+    pipe(
+      favoritesAgg
+        ? this.usersFavoritesRepo.findAll({
+            type: 'app',
+            userId: favoritesAgg.userId,
+          })
+        : TE.right([]),
+      TE.map(favorites =>
+        createPaginationOffsetSearchQuery(dto)
+          .query(AppsEsSearchRepo.createEsRequestSearchFilters(dto))
+          .aggs([
+            esb
+              .globalAggregation('global_categories')
+              .agg(
+                esb
+                  .filterAggregation('filtered')
+                  .filter(
+                    AppsEsSearchRepo.createEsRequestSearchFilters({
+                      ...dto,
+                      categoriesIds: [],
+                    }),
+                  )
+                  .agg(
+                    esb
+                      .termsAggregation('terms', 'category.id')
+                      .size(40),
+                  ),
+              ),
+
+            ...favorites.length
+              ? [
+                  esb
+                    .globalAggregation('total_favorites')
+                    .agg(
+                      esb
+                        .filterAggregation('filtered')
+                        .filter(
+                          AppsEsSearchRepo.createEsRequestSearchFilters({
+                            ...dto,
+                            categoriesIds: [],
+                            ids: [
+                              ...dto.ids ?? [],
+                              ...pluckIds(favorites) as number[],
+                            ],
+                          }),
+                        ),
+                    ),
+                ]
+              : [],
+          ])
+          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort))),
+    );
 
   private static createEsRequestSearchFilters = (
     {
@@ -98,30 +165,6 @@ export class AppsEsSearchRepo {
         !isNil(archived) && esb.termQuery('archived', archived),
       ]),
     );
-
-  private static createEsRequestSearchBody = (dto: EsAppsInternalFilters) =>
-    createPaginationOffsetSearchQuery(dto)
-      .query(AppsEsSearchRepo.createEsRequestSearchFilters(dto))
-      .aggs([
-        esb
-          .globalAggregation('global_categories')
-          .agg(
-            esb
-              .filterAggregation('filtered')
-              .filter(
-                AppsEsSearchRepo.createEsRequestSearchFilters({
-                  ...dto,
-                  categoriesIds: [],
-                }),
-              )
-              .agg(
-                esb
-                  .termsAggregation('terms', 'category.id')
-                  .size(40),
-              ),
-          ),
-      ])
-      .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort));
 
   private static createAppsSortFieldQuery = (sort: Nullable<SdkAppsSortT>) => {
     switch (sort) {

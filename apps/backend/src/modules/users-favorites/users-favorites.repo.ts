@@ -8,6 +8,7 @@ import type {
   SdkUpsertFavoriteInputT,
 } from '@llm/sdk';
 
+import { rejectFalsyItems } from '@llm/commons';
 import {
   AbstractDatabaseRepo,
   DatabaseError,
@@ -119,10 +120,13 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
             .leftJoin('apps', 'apps.id', 'users_favorites.app_id')
             .leftJoin('organizations as app_orgs', 'app_orgs.id', 'apps.organization_id')
             .$if(!!organizationId, q => q.where('app_orgs.id', '=', organizationId!))
-            .where(eb => eb.or([
-              eb('users_favorites.app_id', 'is', null),
-              eb('apps.archived', '=', false),
-            ]));
+            .where(eb => eb.or(
+              rejectFalsyItems([
+                !type && eb('users_favorites.app_id', 'is', null),
+                eb('apps.archived', '=', false),
+              ]),
+            ),
+            );
         }
 
         if (type === 'chat' || type === undefined) {
@@ -130,10 +134,12 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
             .leftJoin('chats', 'chats.id', 'users_favorites.chat_id')
             .leftJoin('organizations as chat_orgs', 'chat_orgs.id', 'chats.organization_id')
             .$if(!!organizationId, q => q.where('chat_orgs.id', '=', organizationId!))
-            .where(eb => eb.or([
-              eb('users_favorites.chat_id', 'is', null),
-              eb('chats.archived', '=', false),
-            ]));
+            .where(eb => eb.or(
+              rejectFalsyItems([
+                !type && eb('users_favorites.chat_id', 'is', null),
+                eb('chats.archived', '=', false),
+              ]),
+            ));
         }
 
         return query.execute();
