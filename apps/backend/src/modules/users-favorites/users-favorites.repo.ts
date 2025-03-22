@@ -47,7 +47,7 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
     );
   };
 
-  getFavoritesByUserId = (
+  findAll = (
     {
       forwardTransaction,
       organizationId,
@@ -77,13 +77,15 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
               .where('app_id', '=', favorite.id as TableId)
               .innerJoin('apps', 'apps.id', 'app_id')
               .innerJoin('organizations', 'organizations.id', 'apps.organization_id')
-              .where('organizations.id', '=', organizationId))
+              .where('organizations.id', '=', organizationId)
+              .where('apps.archived', '=', false))
 
           .$if(favorite.type === 'chat', q =>
             q.where('chat_id', '=', favorite.id as TableUuid)
               .innerJoin('chats', 'chats.id', 'chat_id')
               .innerJoin('organizations', 'organizations.id', 'chats.organization_id')
-              .where('organizations.id', '=', organizationId))
+              .where('organizations.id', '=', organizationId)
+              .where('chats.archived', '=', false))
 
           .execute(),
       ),
@@ -91,17 +93,21 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
       TE.map(
         A.filterMap((item) => {
           if (item.app_id) {
-            return O.some({
-              type: 'app',
-              id: item.app_id,
-            } as SdkFavoriteT);
+            return O.some(
+              {
+                type: 'app',
+                id: item.app_id,
+              } as SdkFavoriteT,
+            );
           }
 
           if (item.chat_id) {
-            return O.some({
-              type: 'chat',
-              id: item.chat_id,
-            } as SdkFavoriteT);
+            return O.some(
+              {
+                type: 'chat',
+                id: item.chat_id,
+              } as SdkFavoriteT,
+            );
           }
 
           return O.none;
