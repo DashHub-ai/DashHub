@@ -175,6 +175,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   navigation: {
     backToHome: 'Powrót do strony głównej',
     links: {
+      home: 'Strona główna',
       chats: 'Czaty',
       projects: 'Projekty',
       apps: 'Agenci',

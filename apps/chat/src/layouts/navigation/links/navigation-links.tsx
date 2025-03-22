@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import {
   FolderKanbanIcon,
-  MessageSquareTextIcon,
+  HomeIcon,
   PinIcon,
   SettingsIcon,
   WandSparklesIcon,
@@ -35,19 +35,19 @@ export function NavigationLinks({ inMobileMenu = false }: NavigationLinksProps) 
       )}
     >
       <NavigationItem
+        path={sitemap.chats.index}
+        icon={<HomeIcon size={16} />}
+        disabled={!hasOrganization}
+      >
+        {t.links.home}
+      </NavigationItem>
+
+      <NavigationItem
         path={sitemap.apps.index.generate({})}
         icon={<WandSparklesIcon size={16} />}
         disabled={!hasOrganization}
       >
         {t.links.apps}
-      </NavigationItem>
-
-      <NavigationItem
-        path={sitemap.chats.index}
-        icon={<MessageSquareTextIcon size={16} />}
-        disabled={!hasOrganization}
-      >
-        {t.links.chats}
       </NavigationItem>
 
       <NavigationItem

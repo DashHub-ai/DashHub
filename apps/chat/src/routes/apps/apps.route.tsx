@@ -18,7 +18,7 @@ export function AppsRoute() {
     <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <LayoutHeader root>
+      <LayoutHeader>
         {t.title}
       </LayoutHeader>
 

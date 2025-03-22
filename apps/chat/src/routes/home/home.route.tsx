@@ -10,7 +10,7 @@ export function HomeRoute() {
 
   const path = (
     hasOrganization
-      ? sitemap.apps.index.generate({})
+      ? sitemap.chats.index
       : sitemap.home
   );
 

@@ -173,6 +173,7 @@ export const I18N_PACK_EN = {
   navigation: {
     backToHome: 'Back to home',
     links: {
+      home: 'Home',
       chats: 'Chats',
       projects: 'Projects',
       apps: 'Agents',
