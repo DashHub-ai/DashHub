@@ -43,6 +43,7 @@ export function SearchBar({ disabled }: Props) {
       <div className="uk-custom-select">
         <SearchBarInput
           {...phrase.bind.entire()}
+          isExpanded={isOpen}
           onKeyDown={onInputKeyDown}
           onClick={() => {
             if (phrase.value !== '') {
@@ -52,7 +53,7 @@ export function SearchBar({ disabled }: Props) {
         />
 
         {isOpen && (
-          <div className="uk-drop uk-dropdown uk-open">
+          <div className="max-h-[calc(100vh-200px)] overflow-y-auto uk-drop uk-dropdown uk-open">
             <SearchResults phrase={phrase.value} />
           </div>
         )}

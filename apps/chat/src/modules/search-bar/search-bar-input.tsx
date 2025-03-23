@@ -5,9 +5,11 @@ import { SearchIcon } from 'lucide-react';
 
 import { useI18n } from '~/i18n';
 
-type Props = ComponentProps<'input'>;
+type Props = ComponentProps<'input'> & {
+  isExpanded?: boolean;
+};
 
-export function SearchBarInput({ className, ...inputProps }: Props) {
+export function SearchBarInput({ className, isExpanded, ...inputProps }: Props) {
   const t = useI18n().pack.searchBar;
 
   return (
@@ -19,8 +21,10 @@ export function SearchBarInput({ className, ...inputProps }: Props) {
         placeholder={t.input.placeholder}
         className={clsx(
           'bg-gray-100/80 focus:bg-white focus:border-gray-200',
-          'py-2 pr-4 pl-10 border border-transparent rounded-full focus:ring-0 w-22 lg:w-44',
-          'focus:w-80 text-gray-800 text-sm transition-all duration-200 focus:outline-none placeholder-gray-500',
+          'py-2 pr-4 pl-10 border border-transparent rounded-full focus:ring-0',
+          'text-gray-800 text-sm transition-all duration-200 focus:outline-none placeholder-gray-500',
+          isExpanded && 'w-80',
+          !isExpanded && 'focus:w-80 w-22 lg:w-44',
         )}
         {...inputProps}
       />
