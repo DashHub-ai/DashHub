@@ -8,6 +8,7 @@ import { type SdkTableRowUuidT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { LayoutBreadcrumbs, PageWithSidebarLayout } from '~/layouts';
 import { ChatConversationWithSidebar } from '~/modules';
+import { FavoriteStarButton } from '~/modules/favorites';
 import { RouteMetaTags } from '~/routes/shared';
 import { SpinnerContainer } from '~/ui';
 
@@ -61,7 +62,17 @@ export function ChatRoute({ id }: Props) {
         breadcrumbs: (
           <LayoutBreadcrumbs
             {...result.status === 'success' && {
-              currentBreadcrumb: result.data.chat.summary.name.value || t.title,
+              currentBreadcrumb: (
+                <span className="inline-flex items-center gap-3">
+                  {result.data.chat.summary.name.value || t.title}
+                  <FavoriteStarButton
+                    favorite={{
+                      type: 'chat',
+                      id: result.data.chat.id,
+                    }}
+                  />
+                </span>
+              ),
             }}
 
             {...project && !project.internal && {
