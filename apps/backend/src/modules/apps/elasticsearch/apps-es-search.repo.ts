@@ -19,6 +19,7 @@ import {
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
+  createSortByIdsOrderScript,
   createSortFieldQuery,
 } from '~/modules/elasticsearch';
 import {
@@ -100,7 +101,7 @@ export class AppsEsSearchRepo {
           ...dto,
           ids: [
             ...(dto.ids ?? []),
-            ...pluckIds(favorites) as number[],
+            ...pluckIds(favorites) as TableId[],
           ],
         });
       }),
@@ -149,7 +150,7 @@ export class AppsEsSearchRepo {
                 ]
               : [],
           ])
-          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort))),
+          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort, filtersWithMaybeFavorites.ids))),
     );
 
   private static createEsRequestSearchFilters = (
@@ -183,7 +184,7 @@ export class AppsEsSearchRepo {
       ]),
     );
 
-  private static createAppsSortFieldQuery = (sort: Nullable<SdkAppsSortT>) => {
+  private static createAppsSortFieldQuery = (sort: Nullable<SdkAppsSortT>, ids?: TableId[]) => {
     switch (sort) {
       case undefined:
       case null:
@@ -192,6 +193,15 @@ export class AppsEsSearchRepo {
           esb.sort('promotion', 'desc'),
           createSortFieldQuery('createdAt:desc'),
         ];
+
+      case 'favorites:desc':
+        if (ids?.length) {
+          return [
+            createSortByIdsOrderScript(ids),
+          ];
+        }
+
+        return createScoredSortFieldQuery('createdAt:desc');
 
       default:
         return createScoredSortFieldQuery(sort);

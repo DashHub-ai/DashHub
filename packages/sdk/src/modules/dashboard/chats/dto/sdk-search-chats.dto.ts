@@ -2,12 +2,13 @@ import type { z } from 'zod';
 
 import { StrictBooleanV } from '@llm/commons';
 import {
+  DEFAULT_SDK_SORT,
   SdkArchivedFiltersInputV,
-  SdkDefaultSortInputV,
   SdkFilteredPhraseInputV,
   SdkIdsArrayV,
   SdkOffsetPaginationInputV,
   SdkOffsetPaginationOutputV,
+  SdkSortV,
   SdkUuidsFiltersInputV,
 } from '~/shared';
 
@@ -17,14 +18,22 @@ export const SdkSearchChatItemV = SdkChatV;
 
 export type SdkSearchChatItemT = z.infer<typeof SdkSearchChatItemV>;
 
+export const SdkChatsSortV = SdkSortV([
+  'favorites:desc',
+  ...DEFAULT_SDK_SORT,
+]);
+
+export type SdkChatsSortT = z.infer<typeof SdkChatsSortV>;
+
 export const SdkSearchChatsInputV = SdkOffsetPaginationInputV
   .extend({
     organizationIds: SdkIdsArrayV.optional(),
     projectsIds: SdkIdsArrayV.optional(),
     creatorIds: SdkIdsArrayV.optional(),
     excludeEmpty: StrictBooleanV.optional(),
+    favorites: StrictBooleanV.optional(),
+    sort: SdkChatsSortV.optional(),
   })
-  .merge(SdkDefaultSortInputV)
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkUuidsFiltersInputV)
   .merge(SdkFilteredPhraseInputV);

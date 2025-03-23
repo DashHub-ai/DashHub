@@ -57,7 +57,14 @@ export class ChatsFirewall extends AuthFirewallService {
     filters,
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
-    TE.chainW(this.chatsService.search),
+    TE.chainW(({ favorites, ...dto }) => this.chatsService.search({
+      ...dto,
+      ...favorites && {
+        favorites: {
+          userId: this.userId,
+        },
+      },
+    })),
     TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPaginationPermissionsKeysIfNotCreator),
   );
 

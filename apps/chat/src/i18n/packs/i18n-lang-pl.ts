@@ -129,6 +129,14 @@ export const I18N_PACK_PL: I18nLangPack = {
       title: 'Ostatnie czaty',
       all: 'Wszystkie czaty',
     },
+    favoriteChats: {
+      title: 'Ulubione czaty',
+      all: 'Wszystkie ulubione czaty',
+    },
+    favoriteApps: {
+      title: 'Ulubieni agenci',
+      all: 'Wszyscy ulubieni agenci',
+    },
     projects: {
       title: 'Ostatnie projekty',
       all: 'Wszystkie projekty',

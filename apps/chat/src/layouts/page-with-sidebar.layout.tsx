@@ -2,6 +2,7 @@ import type { PropsWithChildren } from 'react';
 
 import clsx from 'clsx';
 
+import { FavoriteAppsSidebarSection, FavoriteChatsSidebarSection } from '~/modules';
 import { ChatsHistorySidebarSection } from '~/modules/chats/sidebar/chats-history-sidebar-section';
 import { ProjectsHistorySidebarSection } from '~/modules/projects/sidebar/projects-history-sidebar-section';
 import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-organization';
@@ -41,6 +42,8 @@ export function PageWithSidebarLayout(
     >
       {organization && (
         <Sidebar>
+          <FavoriteAppsSidebarSection />
+          <FavoriteChatsSidebarSection />
           <ProjectsHistorySidebarSection />
           <ChatsHistorySidebarSection />
         </Sidebar>

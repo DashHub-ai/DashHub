@@ -127,6 +127,14 @@ export const I18N_PACK_EN = {
       title: 'Recent chats',
       all: 'All chats',
     },
+    favoriteChats: {
+      title: 'Favorite chats',
+      all: 'All favorite chats',
+    },
+    favoriteApps: {
+      title: 'Favorite agents',
+      all: 'All favorite agents',
+    },
     projects: {
       title: 'Recent projects',
       all: 'All projects',

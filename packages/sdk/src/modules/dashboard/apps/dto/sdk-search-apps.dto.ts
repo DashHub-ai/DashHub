@@ -23,6 +23,7 @@ export type SdkSearchAppItemT = z.infer<typeof SdkSearchAppItemV>;
 
 export const SdkAppsSortV = SdkSortV([
   'promotion:desc',
+  'favorites:desc',
   ...DEFAULT_SDK_SORT,
 ]);
 
