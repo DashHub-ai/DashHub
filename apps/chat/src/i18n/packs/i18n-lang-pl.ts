@@ -461,6 +461,10 @@ export const I18N_PACK_PL: I18nLangPack = {
       startOnEnter: 'Rozpocznij po wciśnięciu Enter',
       selectModel: 'Model AI',
     },
+    favorite: {
+      title: 'Ulubione czaty',
+      placeholder: 'Brak ulubionych czatów',
+    },
     history: {
       title: 'Twoje czaty',
       placeholder: 'Brak czatów',

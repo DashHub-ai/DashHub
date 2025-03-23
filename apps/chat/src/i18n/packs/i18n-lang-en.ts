@@ -459,6 +459,10 @@ export const I18N_PACK_EN = {
       startOnEnter: 'Start chat on Enter',
       selectModel: 'AI Model',
     },
+    favorite: {
+      title: 'Favorite chats',
+      placeholder: 'No favorite chats yet',
+    },
     history: {
       title: 'Your Chats',
       placeholder: 'No chats yet',

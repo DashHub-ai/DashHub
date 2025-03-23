@@ -13,9 +13,10 @@ export type ChatCardProps = {
   chat: SdkSearchChatItemT;
   withProject?: boolean;
   withPermissions?: boolean;
+  onAfterToggleFavorite?: VoidFunction;
 };
 
-export function ChatCard({ chat, withProject = true, withPermissions = true }: ChatCardProps) {
+export function ChatCard({ chat, withProject = true, withPermissions = true, onAfterToggleFavorite }: ChatCardProps) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
   const { summary } = chat;
@@ -39,7 +40,10 @@ export function ChatCard({ chat, withProject = true, withPermissions = true }: C
         )}
         {...!chat.archived && {
           suffix: (
-            <FavoriteStarButton favorite={{ type: 'chat', id: chat.id }} />
+            <FavoriteStarButton
+              favorite={{ type: 'chat', id: chat.id }}
+              onAfterToggleFavorite={onAfterToggleFavorite}
+            />
           ),
         }}
       >

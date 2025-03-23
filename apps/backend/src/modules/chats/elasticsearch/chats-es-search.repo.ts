@@ -82,6 +82,9 @@ export class ChatsEsSearchRepo {
           TE.map(result => ({
             ...dto,
             ids: [
+              // trick for making the `ids` query generator always generate ids term query even if array is empty.
+              // It'll make the query work properly when there is no favorites.
+              '',
               ...(dto.ids ?? []),
               ...pluckIds(result) as TableUuid[],
             ],

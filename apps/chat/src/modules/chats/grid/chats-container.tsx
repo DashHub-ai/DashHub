@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import clsx from 'clsx';
 
 import {
@@ -14,6 +16,7 @@ import {
   PaginatedList,
   PaginationSearchToolbarItem,
   PaginationToolbar,
+  type PaginationToolbarProps,
   useDebouncedPaginatedSearch,
 } from '~/ui';
 
@@ -32,10 +35,24 @@ type Props = {
   project?: SdkTableRowWithIdT;
   columns?: keyof typeof GRID_COLUMNS_CLASSES;
   filters?: Partial<SdkSearchChatsInputT>;
+  withAutoRefresh?: boolean;
+  placeholder?: ReactNode;
   itemPropsFn?: (item: SdkSearchChatItemT) => Partial<ChatCardProps>;
+  paginationToolbarProps?: Pick<PaginationToolbarProps, 'suffix'>;
 };
 
-export function ChatsContainer({ limit, filters: forwardedFilters, project, columns = 2, itemPropsFn }: Props) {
+export function ChatsContainer(
+  {
+    limit,
+    filters: forwardedFilters,
+    project,
+    columns = 2,
+    itemPropsFn,
+    withAutoRefresh = true,
+    placeholder,
+    paginationToolbarProps,
+  }: Props,
+) {
   const { organization } = useWorkspaceOrganizationOrThrow();
 
   const { sdks } = useSdkForLoggedIn();
@@ -55,7 +72,7 @@ export function ChatsContainer({ limit, filters: forwardedFilters, project, colu
     }),
   });
 
-  useReloadIntervalIfGenerating(silentReload, result);
+  useReloadIntervalIfGenerating(silentReload, result, !withAutoRefresh);
 
   const gridClassName = clsx('gap-4 grid grid-cols-1', GRID_COLUMNS_CLASSES[columns]);
 
@@ -66,6 +83,7 @@ export function ChatsContainer({ limit, filters: forwardedFilters, project, colu
         suffix={(
           <ArchiveFilterTabs {...pagination.bind.path('archived')} />
         )}
+        {...paginationToolbarProps}
       >
         <PaginationSearchToolbarItem
           {...pagination.bind.path('phrase', {
@@ -88,7 +106,7 @@ export function ChatsContainer({ limit, filters: forwardedFilters, project, colu
       >
         {({ items, total }) => {
           if (!total) {
-            return <ChatHistoryPlaceholder />;
+            return placeholder ?? <ChatHistoryPlaceholder />;
           }
 
           return (
@@ -98,6 +116,7 @@ export function ChatsContainer({ limit, filters: forwardedFilters, project, colu
                   key={item.id}
                   chat={item}
                   withProject={!project}
+                  onAfterToggleFavorite={silentReload}
                   {...itemPropsFn?.(item)}
                 />
               ))}
