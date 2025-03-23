@@ -53,7 +53,7 @@ export function ProjectContent({ project, onShared }: Props) {
               <h2 className="mb-6 font-semibold text-xl">
                 {t.files}
               </h2>
-              <div className="flex-1 md:pl-4 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto">
                 <ProjectFilesListContainer
                   projectId={project.id}
                   readOnly={!recordGuard.can.write}

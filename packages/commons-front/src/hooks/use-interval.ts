@@ -4,13 +4,14 @@ import { useRefSafeCallback } from './use-ref-safe-callback';
 
 type Attrs = {
   maxTicks?: number;
+  disable?: boolean;
 };
 
-export function useInterval(fn: VoidFunction, delay: number | null, { maxTicks }: Attrs = {}) {
+export function useInterval(fn: VoidFunction, delay: number | null, { maxTicks, disable }: Attrs = {}) {
   const safeCallback = useRefSafeCallback(fn);
 
   useEffect(() => {
-    if (delay === null) {
+    if (delay === null || disable) {
       return;
     }
 
@@ -27,5 +28,5 @@ export function useInterval(fn: VoidFunction, delay: number | null, { maxTicks }
     return () => {
       clearInterval(id);
     };
-  }, [delay]);
+  }, [delay, disable]);
 }

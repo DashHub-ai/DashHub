@@ -20,7 +20,7 @@ export function Navigation({ withAdditionalUI, breadcrumbs }: NavigationProps) {
   return (
     <header
       className={clsx(
-        'z-10 relative items-center place-content-center grid mx-auto w-full h-auto sm:h-[70px] md:h-[80px] container',
+        'z-40 relative items-center place-content-center grid mx-auto w-full h-auto sm:h-[70px] md:h-[80px] container',
         'grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto] gap-2 sm:gap-4 md:gap-6',
       )}
     >

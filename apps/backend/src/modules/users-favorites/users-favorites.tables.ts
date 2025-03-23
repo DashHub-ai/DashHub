@@ -5,9 +5,10 @@ import type {
   NormalizeSelectTableRow,
   TableId,
   TableUuid,
+  TableWithAccessTimeColumns,
 } from '../database';
 
-export type UsersFavoritesTable = {
+export type UsersFavoritesTable = TableWithAccessTimeColumns & {
   user_id: ColumnType<TableId, TableId, never>;
   chat_id: ColumnType<TableUuid | null, TableUuid | null, never>;
   app_id: ColumnType<TableId | null, TableId | null, never>;

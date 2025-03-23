@@ -2,12 +2,12 @@ import type { PropsWithChildren, ReactNode } from 'react';
 
 import { clsx } from 'clsx';
 
-type Props = PropsWithChildren & {
+export type PaginationToolbarProps = PropsWithChildren & {
   suffix?: ReactNode;
   className?: string;
 };
 
-export function PaginationToolbar({ children, suffix, className }: Props) {
+export function PaginationToolbar({ children, suffix, className }: PaginationToolbarProps) {
   return (
     <div className={clsx('flex flex-wrap justify-between items-center gap-4', className)}>
       <div className="flex flex-1 gap-4">

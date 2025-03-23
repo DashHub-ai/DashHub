@@ -6,6 +6,7 @@ import { isSdkAIGeneratingString, type SdkSearchChatsOutputT } from '@llm/sdk';
 export function useReloadIntervalIfGenerating(
   reload: VoidFunction,
   pagination: SdkSearchChatsOutputT | null,
+  disable?: boolean,
 ) {
   const isGenerating = useMemo(() => {
     if (!pagination) {
@@ -18,5 +19,7 @@ export function useReloadIntervalIfGenerating(
     );
   }, [pagination]);
 
-  useInterval(reload, isGenerating ? 2000 : 7000);
+  useInterval(reload, isGenerating ? 2000 : 7000, {
+    disable,
+  });
 }

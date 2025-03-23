@@ -8,6 +8,7 @@ import { isNil, TaggedError, tapTaskEither, tapTaskEitherError } from '@llm/comm
 import { useSdkForLoggedIn } from '~/react-integration/hooks';
 
 import { useSdkFavoritesContextOrThrow } from '../sdk-favorites-context';
+import { FavoriteActionEvent } from './use-sdk-on-favorite-action';
 
 export class SdkFavoritesStillLoadingError extends TaggedError.ofLiteral()('favorites-list-still-loading') {}
 
@@ -77,14 +78,19 @@ export function useSdkToggleFavorite() {
     )),
   );
 
-  const pin = (dto: SdkUpsertFavoriteInputT) => optimisticUpdate({
-    asyncExecutor: () => sdks.dashboard.favorites.upsert(dto),
-    optimisticUpdateFn: initialMessages => pipe(
-      initialMessages,
-      A.filter(message => message.id !== dto.id),
-      A.append(dto),
-    ),
-  });
+  const pin = (dto: SdkUpsertFavoriteInputT) => pipe(
+    optimisticUpdate({
+      asyncExecutor: () => sdks.dashboard.favorites.upsert(dto),
+      optimisticUpdateFn: initialMessages => pipe(
+        initialMessages,
+        A.filter(message => message.id !== dto.id),
+        A.append(dto),
+      ),
+    }),
+    tapTaskEither(() => {
+      window.dispatchEvent(new FavoriteActionEvent('pinned-favorite', dto));
+    }),
+  );
 
   const unpin = (dto: SdkUpsertFavoriteInputT) => {
     const snapshot = store.getSnapshot();
@@ -99,13 +105,18 @@ export function useSdkToggleFavorite() {
       return TE.of(undefined);
     }
 
-    return optimisticUpdate({
-      asyncExecutor: () => sdks.dashboard.favorites.delete(dto),
-      optimisticUpdateFn: initialMessages => pipe(
-        initialMessages,
-        A.filter(message => message.id !== id),
-      ),
-    });
+    return pipe(
+      optimisticUpdate({
+        asyncExecutor: () => sdks.dashboard.favorites.delete(dto),
+        optimisticUpdateFn: initialMessages => pipe(
+          initialMessages,
+          A.filter(message => message.id !== id),
+        ),
+      }),
+      tapTaskEither(() => {
+        window.dispatchEvent(new FavoriteActionEvent('unpinned-favorite', dto));
+      }),
+    );
   };
 
   return {

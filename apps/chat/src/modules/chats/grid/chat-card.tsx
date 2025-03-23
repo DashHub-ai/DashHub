@@ -4,6 +4,7 @@ import { Link } from 'wouter';
 import { formatDate } from '@llm/commons';
 import { isSdkAIGeneratingString, type SdkSearchChatItemT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+import { FavoriteStarButton } from '~/modules/favorites';
 import { CardRecordPermissionsRow } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';
 import { CardBase, CardContent, CardDescription, CardFooter, CardTitle } from '~/ui';
@@ -12,9 +13,10 @@ export type ChatCardProps = {
   chat: SdkSearchChatItemT;
   withProject?: boolean;
   withPermissions?: boolean;
+  onAfterToggleFavorite?: VoidFunction;
 };
 
-export function ChatCard({ chat, withProject = true, withPermissions = true }: ChatCardProps) {
+export function ChatCard({ chat, withProject = true, withPermissions = true, onAfterToggleFavorite }: ChatCardProps) {
   const t = useI18n().pack;
   const sitemap = useSitemap();
   const { summary } = chat;
@@ -36,6 +38,14 @@ export function ChatCard({ chat, withProject = true, withPermissions = true }: C
             ? <Loader2Icon size={14} className="animate-spin" />
             : <MessageSquareIcon size={16} />
         )}
+        {...!chat.archived && {
+          suffix: (
+            <FavoriteStarButton
+              favorite={{ type: 'chat', id: chat.id }}
+              onAfterToggleFavorite={onAfterToggleFavorite}
+            />
+          ),
+        }}
       >
         {(
           isGeneratingTitle

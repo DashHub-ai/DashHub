@@ -46,6 +46,7 @@ import * as addPinnedMessages from './0044-add-pinned-messages';
 import * as addOrganizationsAISettings from './0045-add-organizations-ai-settings-table';
 import * as addProjectsToOrganizationsAISettings from './0046-add-projects-to-organizations-ai-settings';
 import * as addUsersFavoritesTable from './0047-add-users-favorites-table';
+import * as addTimestampToFavorites from './0048-add-timestamp-to-favorites';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -96,4 +97,5 @@ export const DB_MIGRATIONS = {
   '0045-add-organizations-ai-settings-table': addOrganizationsAISettings,
   '0046-add-projects-to-organizations-ai-settings': addProjectsToOrganizationsAISettings,
   '0047-add-users-favorites-table': addUsersFavoritesTable,
+  '0048-add-timestamp-to-favorites': addTimestampToFavorites,
 };

@@ -127,6 +127,14 @@ export const I18N_PACK_EN = {
       title: 'Recent chats',
       all: 'All chats',
     },
+    favoriteChats: {
+      title: 'Favorite chats',
+      all: 'All favorite chats',
+    },
+    favoriteApps: {
+      title: 'Favorite agents',
+      all: 'All favorite agents',
+    },
     projects: {
       title: 'Recent projects',
       all: 'All projects',
@@ -450,6 +458,10 @@ export const I18N_PACK_EN = {
       start: 'Start chat',
       startOnEnter: 'Start chat on Enter',
       selectModel: 'AI Model',
+    },
+    favorite: {
+      title: 'Favorite chats',
+      placeholder: 'No favorite chats yet',
     },
     history: {
       title: 'Your Chats',

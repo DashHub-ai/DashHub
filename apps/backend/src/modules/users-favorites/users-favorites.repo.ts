@@ -112,6 +112,7 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
         let query = trx
           .selectFrom('users_favorites')
           .selectAll()
+          .orderBy('users_favorites.created_at', 'desc')
           .limit(limit)
           .where('user_id', '=', userId);
 

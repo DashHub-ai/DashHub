@@ -1,6 +1,6 @@
 import { useI18n } from '~/i18n';
 import { PageWithSidebarLayout } from '~/layouts';
-import { ChatsHistorySection, StartChatForm } from '~/modules';
+import { ChatsFavoriteSection, ChatsHistorySection, StartChatForm } from '~/modules';
 import { RouteMetaTags } from '~/routes/shared';
 
 export function ChatsRoute() {
@@ -17,6 +17,10 @@ export function ChatsRoute() {
           </h2>
           <StartChatForm />
         </section>
+
+        <hr className="mx-auto my-12 border-gray-200 border-t max-w-2xl" />
+
+        <ChatsFavoriteSection />
 
         <hr className="mx-auto my-12 border-gray-200 border-t max-w-2xl" />
 
