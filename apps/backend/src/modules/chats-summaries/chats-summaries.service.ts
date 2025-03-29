@@ -84,7 +84,7 @@ export class ChatsSummariesService {
     TE.chainW(({ messages, aiModel }) => pipe(
       this.aiConnectorService.executeInstructedPrompt({
         aiModel,
-        history: messages.items,
+        history: messages.items.toReversed(),
         message: prompt,
         schema,
       }),

@@ -8,7 +8,10 @@ export class AIConnectionCreatorError extends TaggedError.ofLiteral<any>()('AICo
   static tryCatch<R>(task: Task<R>) {
     return TE.tryCatch(
       task,
-      (err: any) => new AIConnectionCreatorError(err),
+      (err: any) => {
+        console.error(err);
+        return new AIConnectionCreatorError(err);
+      },
     );
   }
 }

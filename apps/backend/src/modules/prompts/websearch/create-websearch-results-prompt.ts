@@ -21,7 +21,7 @@ export function createWebSearchResultsPrompt(results: SearchEngineResultItem[]):
     return xml('web-search-results', {
       children: [
         instructions,
-        'No results found',
+        '<not-found>No results found</not-found>',
       ],
     });
   }

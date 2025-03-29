@@ -11,7 +11,10 @@ import type { SearchEnginesService } from '~/modules/search-engines';
 import type { SearchEngineResultItem } from '~/modules/search-engines/clients/search-engine-proxy';
 
 import { flatMapAsyncIterator, rejectFalsyItems, tryOrThrowTE } from '@llm/commons';
-import { createWebSearchFunctionTool, createWebSearchResultsPrompt } from '~/modules/prompts';
+import {
+  createWebSearchFunctionOpenAITool,
+  createWebSearchResultsPrompt,
+} from '~/modules/prompts';
 
 import { AIConnectionCreatorError } from '../ai-connector.errors';
 import {
@@ -98,7 +101,7 @@ export class AIOpenAIProxy extends AIProxy {
           ...DEFAULT_CLIENT_CONFIG,
           model: this.credentials.apiModel,
           tools: [
-            createWebSearchFunctionTool(),
+            createWebSearchFunctionOpenAITool(),
           ],
           tool_choice: 'required',
           messages,

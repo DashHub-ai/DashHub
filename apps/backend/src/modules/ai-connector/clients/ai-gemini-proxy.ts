@@ -4,6 +4,7 @@ import { Buffer } from 'node:buffer';
 
 import {
   type Content,
+  FunctionCallingMode,
   type GenerativeModel,
   GoogleGenerativeAI,
 } from '@google/generative-ai';
@@ -13,7 +14,8 @@ import { pipe } from 'fp-ts/lib/function';
 import type { SdkAIModelT, SdkMessageT } from '@llm/sdk';
 import type { SearchEnginesService } from '~/modules/search-engines';
 
-import { isDataUrl } from '@llm/commons';
+import { isDataUrl, rejectFalsyItems, tryOrThrowTE } from '@llm/commons';
+import { createWebSearchFunctionGeminiTool, createWebSearchResultsPrompt } from '~/modules/prompts';
 
 import { AIConnectionCreatorError } from '../ai-connector.errors';
 import {
@@ -45,10 +47,6 @@ export class AIGeminiProxy extends AIProxy {
     this.client = genAI.getGenerativeModel({ model: apiModel });
   }
 
-  private get isSystemMessagePromptSupported() {
-    return !this.credentials.apiModel.includes('1.5');
-  }
-
   executeEmbeddingPrompt(input: string) {
     return AIConnectionCreatorError.tryCatch(async () => {
       const embeddingModel = await this.client.embedContent(input);
@@ -57,26 +55,95 @@ export class AIGeminiProxy extends AIProxy {
     });
   }
 
-  executeStreamPrompt({ history, context, message, signal }: AIProxyStreamPromptAttrs) {
+  executeStreamPrompt(
+    {
+      history,
+      context,
+      message,
+      organization,
+      signal,
+    }: AIProxyStreamPromptAttrs,
+  ) {
+    const { webSearch } = message;
+    const executeSearchWeb = async () => {
+      const client = this.client.startChat(
+        {
+          generationConfig: DEFAULT_CLIENT_CONFIG,
+          tools: [
+            {
+              functionDeclarations: [
+                createWebSearchFunctionGeminiTool(),
+              ],
+            },
+          ],
+          toolConfig: {
+            functionCallingConfig: {
+              mode: FunctionCallingMode.ANY,
+            },
+          },
+        },
+      );
+
+      const result = await client.sendMessage(
+        message?.content || '',
+        { signal },
+      );
+
+      const functionCall = result.response?.candidates?.[0].content.parts[0]?.functionCall;
+
+      if (!functionCall || functionCall.name !== 'WebSearch') {
+        return [];
+      }
+
+      const args = typeof functionCall.args === 'string'
+        ? JSON.parse(functionCall.args)
+        : functionCall.args;
+
+      const results = await pipe(
+        this.searchEnginesService.getDefaultSearchEngineProxy(organization.id),
+        TE.chainW(searchEngine => searchEngine.executeQuery({
+          query: args.query,
+          results: Math.min(args.results ?? 30, 30),
+          language: args.language ?? 'en',
+        })),
+        tryOrThrowTE,
+      )();
+
+      return results;
+    };
+
     return pipe(
       AIConnectionCreatorError.tryCatch(
         async () => {
+          let searchResults: string | null = null;
+
+          if (webSearch) {
+            searchResults = createWebSearchResultsPrompt(await executeSearchWeb());
+          }
+
           const chat = this.client.startChat({
             generationConfig: DEFAULT_CLIENT_CONFIG,
-            history: this.normalizeGeminiMessagesToCompletion(history),
+            history: normalizeGeminiMessagesToCompletion(history),
 
-            ...!this.isSystemMessagePromptSupported && {
-              systemInstruction: [
-                collectSystemMessages(history),
-                context,
-              ]
-                .filter(Boolean)
-                .join('\n---\n'),
+            ...context && {
+              systemInstruction: {
+                role: 'system',
+                parts: [
+                  {
+                    text: context,
+                  },
+                ],
+              },
             },
           });
 
           const result = await chat.sendMessageStream(
-            message?.content || '',
+            rejectFalsyItems(
+              [
+                message?.content || '',
+                searchResults,
+              ],
+            ).join('\n---\n'),
             { signal },
           );
 
@@ -97,9 +164,16 @@ export class AIGeminiProxy extends AIProxy {
     return AIConnectionCreatorError.tryCatch(
       async () => {
         const chat = this.client.startChat({
-          systemInstruction: collectSystemMessages(history),
-          history: this.normalizeGeminiMessagesToCompletion(history),
+          history: normalizeGeminiMessagesToCompletion(history),
           generationConfig: DEFAULT_CLIENT_CONFIG,
+          systemInstruction: {
+            role: 'system',
+            parts: [
+              {
+                text: collectSystemMessages(history),
+              },
+            ],
+          },
         });
 
         const result = await chat.sendMessage(
@@ -109,9 +183,13 @@ export class AIGeminiProxy extends AIProxy {
           ].join('\n'),
         );
 
-        const jsonResponse = result.response.text();
+        const responseText = result.response.text();
 
-        return JSON.parse(jsonResponse);
+        // Try to extract JSON from code blocks like ```json { ... } ```
+        const jsonMatch = responseText.match(/```(?:json)?([^`]*)```/);
+        const jsonText = jsonMatch ? jsonMatch[1].trim() : responseText;
+
+        return JSON.parse(jsonText);
       },
     );
   }
@@ -120,20 +198,29 @@ export class AIGeminiProxy extends AIProxy {
     return AIConnectionCreatorError.tryCatch(
       async () => {
         const chat = this.client.startChat({
-          systemInstruction: collectSystemMessages(history),
-          history: this.normalizeGeminiMessagesToCompletion(history),
+          history: normalizeGeminiMessagesToCompletion(history),
           generationConfig: DEFAULT_CLIENT_CONFIG,
+          systemInstruction: {
+            role: 'system',
+            parts: [
+              {
+                text: collectSystemMessages(history),
+              },
+            ],
+          },
         });
 
         const content = typeof message === 'string' ? message : message.content;
 
         // Multimedia response
         if (typeof content !== 'string') {
-          const imageResponse = isDataUrl(content.imageUrl)
-            ? await fetch(content.imageUrl)
-              .then(response => response.arrayBuffer())
-              .then(buffer => Buffer.from(buffer).toString('base64'))
-            : content.imageUrl;
+          const imageResponse = (
+            isDataUrl(content.imageUrl)
+              ? await fetch(content.imageUrl)
+                .then(response => response.arrayBuffer())
+                .then(buffer => Buffer.from(buffer).toString('base64'))
+              : content.imageUrl
+          );
 
           const result = await this.client.generateContent([
             {
@@ -155,15 +242,15 @@ export class AIGeminiProxy extends AIProxy {
       },
     );
   }
+}
 
-  private normalizeGeminiMessagesToCompletion(messages: SdkMessageT[]): Array<Content> {
-    return messages
-      .filter(({ role }) => this.isSystemMessagePromptSupported || role !== 'system')
-      .map(({ content, role }) => ({
-        role: role === 'assistant' ? 'model' : role,
-        parts: [{ text: content }],
-      }));
-  }
+function normalizeGeminiMessagesToCompletion(messages: SdkMessageT[]): Content[] {
+  return messages
+    .filter(({ role }) => role !== 'system')
+    .map(({ content, role }) => ({
+      role: role === 'assistant' ? 'model' : role,
+      parts: [{ text: content }],
+    }));
 }
 
 function collectSystemMessages(messages: SdkMessageT[]): string {
