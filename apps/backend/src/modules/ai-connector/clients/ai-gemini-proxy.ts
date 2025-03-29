@@ -45,6 +45,10 @@ export class AIGeminiProxy extends AIProxy {
     this.client = genAI.getGenerativeModel({ model: apiModel });
   }
 
+  private get isSystemMessagePromptSupported() {
+    return !this.credentials.apiModel.includes('1.5');
+  }
+
   executeEmbeddingPrompt(input: string) {
     return AIConnectionCreatorError.tryCatch(async () => {
       const embeddingModel = await this.client.embedContent(input);
@@ -57,17 +61,18 @@ export class AIGeminiProxy extends AIProxy {
     return pipe(
       AIConnectionCreatorError.tryCatch(
         async () => {
-          const systemInstruction = [
-            collectSystemMessages(history),
-            context,
-          ]
-            .filter(Boolean)
-            .join('\n\n\n');
-
           const chat = this.client.startChat({
             generationConfig: DEFAULT_CLIENT_CONFIG,
-            history: normalizeGeminiMessagesToCompletion(history),
-            systemInstruction,
+            history: this.normalizeGeminiMessagesToCompletion(history),
+
+            ...!this.isSystemMessagePromptSupported && {
+              systemInstruction: [
+                collectSystemMessages(history),
+                context,
+              ]
+                .filter(Boolean)
+                .join('\n---\n'),
+            },
           });
 
           const result = await chat.sendMessageStream(
@@ -93,7 +98,7 @@ export class AIGeminiProxy extends AIProxy {
       async () => {
         const chat = this.client.startChat({
           systemInstruction: collectSystemMessages(history),
-          history: normalizeGeminiMessagesToCompletion(history),
+          history: this.normalizeGeminiMessagesToCompletion(history),
           generationConfig: DEFAULT_CLIENT_CONFIG,
         });
 
@@ -116,7 +121,7 @@ export class AIGeminiProxy extends AIProxy {
       async () => {
         const chat = this.client.startChat({
           systemInstruction: collectSystemMessages(history),
-          history: normalizeGeminiMessagesToCompletion(history),
+          history: this.normalizeGeminiMessagesToCompletion(history),
           generationConfig: DEFAULT_CLIENT_CONFIG,
         });
 
@@ -150,6 +155,15 @@ export class AIGeminiProxy extends AIProxy {
       },
     );
   }
+
+  private normalizeGeminiMessagesToCompletion(messages: SdkMessageT[]): Array<Content> {
+    return messages
+      .filter(({ role }) => this.isSystemMessagePromptSupported || role !== 'system')
+      .map(({ content, role }) => ({
+        role: role === 'assistant' ? 'model' : role,
+        parts: [{ text: content }],
+      }));
+  }
 }
 
 function collectSystemMessages(messages: SdkMessageT[]): string {
@@ -157,13 +171,4 @@ function collectSystemMessages(messages: SdkMessageT[]): string {
     .filter(({ role }) => role === 'system')
     .map(({ content }) => content)
     .join('\n');
-}
-
-function normalizeGeminiMessagesToCompletion(messages: SdkMessageT[]): Array<Content> {
-  return messages
-    .filter(({ role }) => role !== 'system')
-    .map(({ content, role }) => ({
-      role: role === 'assistant' ? 'model' : role,
-      parts: [{ text: content }],
-    }));
 }
