@@ -32,7 +32,7 @@
     "fp-ts": "^2.16.1",
     "snake-case": "^4.0.0",
     "snakecase-keys": "^8.0.1",
-    "type-fest": "^4.32.0",
+    "type-fest": "^4.38.0",
     "uuid": "^11.0.3",
     "zod": "^3.24.1",
     "zod-validation-error": "^3.3.1"
