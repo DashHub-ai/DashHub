@@ -2,10 +2,9 @@ import type { KeyboardEventHandler, MouseEventHandler } from 'react';
 
 import { type CanBePromise, suppressEvent, useControlStrict, useForm } from '@under-control/forms';
 import clsx from 'clsx';
-import { pipe } from 'fp-ts/function';
-import { CircleStopIcon, PaperclipIcon, SendIcon } from 'lucide-react';
+import { CircleStopIcon, SendIcon } from 'lucide-react';
 
-import { StrictBooleanV, tapTaskOption } from '@llm/commons';
+import { StrictBooleanV } from '@llm/commons';
 import { useAfterMount, useLocalStorageObject, useUpdateEffect } from '@llm/commons-front';
 import { getSdkAppMentionInChat, type SdkCreateMessageInputT, type SdkTableRowWithIdNameT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
@@ -13,7 +12,7 @@ import { Checkbox } from '~/ui';
 
 import type { SdkRepeatedMessageItemT } from '../messages';
 
-import { FilesCardsControlledList, selectChatFile } from '../files';
+import { AttachFileButton, FilesCardsControlledList } from '../files';
 import { ChatChooseAppButton } from './chat-choose-app-button';
 import { ChatReplyMessage } from './chat-reply-message';
 import { ChatSelectApp } from './chat-select-app';
@@ -120,18 +119,6 @@ export function ChatInputToolbar(
     onCancelSubmit?.();
   };
 
-  const onAttachFile = pipe(
-    selectChatFile,
-    tapTaskOption((file) => {
-      setValue({
-        value: {
-          ...value,
-          files: [...(value.files ?? []), file],
-        },
-      });
-    }),
-  );
-
   useAfterMount(() => {
     if (apps.length) {
       selectedApp.setValue({
@@ -216,19 +203,12 @@ export function ChatInputToolbar(
           )}
         >
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              className={clsx(
-                'hover:bg-gray-100 p-2 rounded-lg',
-                'text-gray-500 hover:text-gray-700',
-                'transition-colors duration-200',
-                (disabled || replying) && 'opacity-50 cursor-not-allowed',
-              )}
-              onClick={onAttachFile}
-              disabled={disabled}
-            >
-              <PaperclipIcon size={20} />
-            </button>
+            <AttachFileButton
+              disabled={disabled || replying}
+              {...bind.path('files', {
+                input: val => val ?? [],
+              })}
+            />
 
             <ChatWebSearchButton
               disabled={disabled || replying}

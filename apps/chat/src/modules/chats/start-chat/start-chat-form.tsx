@@ -1,19 +1,18 @@
 import type { KeyboardEventHandler } from 'react';
 
 import clsx from 'clsx';
-import { pipe } from 'fp-ts/function';
-import { PaperclipIcon, SendIcon } from 'lucide-react';
+import { SendIcon } from 'lucide-react';
 
 import type { SdkTableRowWithIdNameT } from '@llm/sdk';
 
-import { StrictBooleanV, tapTaskOption } from '@llm/commons';
+import { StrictBooleanV } from '@llm/commons';
 import { useFocusAfterMount, useLocalStorageObject } from '@llm/commons-front';
 import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';
 import { ProjectsSearchSelect } from '~/modules/projects';
 import { Checkbox, FormSpinnerCTA } from '~/ui';
 
-import { FilesCardsControlledList, selectChatFile, useChatFileDrop } from '../conversation';
+import { AttachFileButton, FilesCardsControlledList, useChatFileDrop } from '../conversation';
 import { ChatWebSearchButton } from '../conversation/input-toolbar';
 import { useStartChatForm } from './use-start-chat-form';
 
@@ -51,13 +50,6 @@ export function StartChatForm(
       }
     }
   };
-
-  const onAttachFile = pipe(
-    selectChatFile,
-    tapTaskOption((file) => {
-      bind.path('files').onChange([...value.files ?? [], file]);
-    }),
-  );
 
   const fileDrop = useChatFileDrop({
     onDrop: (files: File[]) => {
@@ -125,17 +117,11 @@ export function StartChatForm(
           )}
         >
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onAttachFile}
-              className={clsx(
-                'hover:bg-gray-100 p-2 rounded-lg',
-                'text-gray-500 hover:text-gray-700',
-                'transition-colors duration-200',
-              )}
-            >
-              <PaperclipIcon size={20} />
-            </button>
+            <AttachFileButton
+              {...bind.path('files', {
+                input: val => val ?? [],
+              })}
+            />
 
             <ChatWebSearchButton
               disabled={loading}
