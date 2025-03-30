@@ -17,6 +17,21 @@ const GOOGLE_API_SCRIPTS = [
   'https://accounts.google.com/gsi/client',
 ];
 
+const BINARY_MIME_TYPES = [
+  'application/pdf', // .pdf
+  'text/csv', // .csv
+  'application/msword', // .doc
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+  'application/vnd.ms-excel', // .xls
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+  'image/png', // .png
+  'image/jpeg', // .jpg, .jpeg
+  'image/bmp', // .bmp
+  'text/plain', // .txt
+  'text/html', // .html
+  'text/markdown', // .md
+];
+
 export function useGoogleDriveFilePicker() {
   const { googleDrive } = useConfig();
   const oauthAccessTokenRef = useRef<string | null>(null);
@@ -66,10 +81,13 @@ export function useGoogleDriveFilePicker() {
     await new Promise(resolve => gapi.load('picker', resolve));
 
     const oAuthAccessToken = await requestOAuthAccessToken();
+
+    const docsView = new google.picker.DocsView()
+      .setIncludeFolders(true)
+      .setMimeTypes(BINARY_MIME_TYPES.join(','));
+
     const filePickerBuilder = new google.picker.PickerBuilder()
-      .addView(google.picker.ViewId.DOCS)
-      .addView(google.picker.ViewId.SPREADSHEETS)
-      .addView(google.picker.ViewId.PDFS)
+      .addView(docsView)
       .setOAuthToken(oAuthAccessToken)
       .enableFeature(google.picker.Feature.MULTISELECT_ENABLED);
 
