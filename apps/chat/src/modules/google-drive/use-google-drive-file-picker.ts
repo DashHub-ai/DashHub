@@ -70,8 +70,6 @@ export function useGoogleDriveFilePicker() {
       .addView(google.picker.ViewId.DOCS)
       .addView(google.picker.ViewId.SPREADSHEETS)
       .addView(google.picker.ViewId.PDFS)
-      .setDeveloperKey(googleDrive.apiKey)
-      .setAppId(googleDrive.appId)
       .setOAuthToken(oAuthAccessToken)
       .enableFeature(google.picker.Feature.MULTISELECT_ENABLED);
 
