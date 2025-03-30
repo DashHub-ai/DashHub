@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 
 import { useSdkForLoggedIn } from '@llm/sdk';
-import { useI18n } from '~/i18n';
 
 import { ChatsContainer } from '../grid';
 
@@ -10,17 +9,13 @@ type Props = {
 };
 
 export function ChatsHistorySection({ className }: Props) {
-  const t = useI18n().pack.chats.history;
   const { session } = useSdkForLoggedIn();
 
   return (
-    <section className={clsx('space-y-6 mx-auto w-full max-w-5xl', className)}>
-      <h2 className="font-semibold text-2xl text-center">
-        {t.title}
-      </h2>
-
+    <section className={clsx('space-y-6 w-full', className)}>
       <ChatsContainer
-        limit={12}
+        limit={15}
+        columns={3}
         filters={{
           creatorIds: [session.token.sub],
           excludeEmpty: true,

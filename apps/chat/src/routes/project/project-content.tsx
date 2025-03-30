@@ -25,7 +25,6 @@ export function ProjectContent({ project, onShared }: Props) {
       </NavigationToolbarPortal>
 
       <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Top area with start chat form */}
         {recordGuard.can.write && (
           <div className="mb-10 p-6 pb-10 border-b">
             <h2 className="mb-6 font-semibold text-2xl text-center">
@@ -35,10 +34,8 @@ export function ProjectContent({ project, onShared }: Props) {
           </div>
         )}
 
-        {/* Main content with chats on left and files on right */}
         <div className="flex-1 p-6 overflow-hidden">
           <div className="gap-12 grid grid-cols-1 md:grid-cols-[1fr,350px] h-full">
-            {/* Chats section - now on the left */}
             <div className="flex flex-col h-full">
               <h2 className="mb-6 font-semibold text-xl">
                 {t.chats}
@@ -48,7 +45,6 @@ export function ProjectContent({ project, onShared }: Props) {
               </div>
             </div>
 
-            {/* Files section - now on the right */}
             <div className="flex flex-col md:pl-12 md:border-l h-full">
               <h2 className="mb-6 font-semibold text-xl">
                 {t.files}

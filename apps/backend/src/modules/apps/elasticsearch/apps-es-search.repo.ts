@@ -93,13 +93,16 @@ export class AppsEsSearchRepo {
             })
           : TE.right([])),
       TE.bind('filtersWithMaybeFavorites', ({ favorites }) => {
-        if (!favorites.length || !dto.favorites) {
+        if (!dto.favorites) {
           return TE.right(dto);
         }
 
         return TE.right({
           ...dto,
           ids: [
+            // trick for making the `ids` query generator always generate ids term query even if array is empty.
+            // It'll make the query work properly when there is no favorites.
+            -2,
             ...(dto.ids ?? []),
             ...pluckIds(favorites) as TableId[],
           ],

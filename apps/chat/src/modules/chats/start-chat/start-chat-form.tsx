@@ -87,12 +87,12 @@ export function StartChatForm(
             ref={focusInputRef}
             name="message"
             className={clsx(
-              'rounded-2xl w-full resize-none',
+              'py-4 rounded-2xl w-full resize-none',
               'focus:outline-none',
               'text-gray-700 placeholder:text-gray-400',
               value.files?.length
-                ? 'p-6 pb-3 min-h-[20px]'
-                : 'p-6 min-h-[120px]',
+                ? 'px-6 pb-3'
+                : 'px-6',
             )}
             placeholder={t.placeholder}
             required

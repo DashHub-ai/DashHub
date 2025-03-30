@@ -61,7 +61,7 @@ export function FavoriteChatsSidebarSection() {
     >
       <SidebarLinks links={links} />
 
-      <SidebarSectionAllLink href={sitemap.home}>
+      <SidebarSectionAllLink href={sitemap.chats.index}>
         {pack.sidebar.favoriteChats.all}
       </SidebarSectionAllLink>
     </SidebarSection>
