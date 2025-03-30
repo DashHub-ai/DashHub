@@ -59,6 +59,9 @@ export const I18N_PACK_EN = {
       saveError: 'Failed to save changes!',
     },
   },
+  links: {
+    seeAll: 'See all',
+  },
   buttons: {
     create: 'Create',
     cancel: 'Cancel',

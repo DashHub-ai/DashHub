@@ -1,5 +1,7 @@
 import { clsx } from 'clsx';
 import { flow } from 'fp-ts/lib/function';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'wouter';
 
 import { useLastNonNullValue } from '@llm/commons-front';
 import {
@@ -7,8 +9,10 @@ import {
   SdkSearchAppsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
+import { useI18n } from '~/i18n';
 import { LazyIcon } from '~/modules/shared';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
+import { useSitemap } from '~/routes';
 import {
   CardSkeletonGrid,
   PaginatedList,
@@ -29,6 +33,9 @@ type Props = {
 export function PromotedAppsContainer({ title, limit = 3, className }: Props) {
   const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
   const { sdks } = useSdkForLoggedIn();
+
+  const sitemap = useSitemap();
+  const t = useI18n().pack;
 
   const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
     storeDataInUrl: false,
@@ -52,9 +59,16 @@ export function PromotedAppsContainer({ title, limit = 3, className }: Props) {
   return (
     <div className={className}>
       {title && (
-        <h2 className="mb-8 font-semibold text-xl">
-          {title}
-        </h2>
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="font-semibold text-xl">
+            {title}
+          </h2>
+
+          <Link href={sitemap.apps.index.generate({})} className="flex items-center gap-1 text-primary hover:underline">
+            {t.links.seeAll}
+            <ArrowRight size={16} className="text-primary" />
+          </Link>
+        </div>
       )}
 
       <div className="mb-6">

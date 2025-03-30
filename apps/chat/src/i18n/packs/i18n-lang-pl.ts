@@ -61,6 +61,9 @@ export const I18N_PACK_PL: I18nLangPack = {
       saveError: 'Nie udało się zapisać zmian!',
     },
   },
+  links: {
+    seeAll: 'Zobacz wszystko',
+  },
   buttons: {
     edit: 'Edytuj',
     archive: 'Archiwizuj',
