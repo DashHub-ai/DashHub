@@ -1,29 +1,19 @@
-import { controlled } from '@under-control/forms';
 import clsx from 'clsx';
-import { pipe } from 'fp-ts/lib/function';
 import { PaperclipIcon } from 'lucide-react';
 
-import { tapTaskOption } from '@llm/commons';
-
-import { selectChatFile } from '../select-chat-file';
+import { useI18n } from '~/i18n';
 
 type Props = {
   disabled?: boolean;
 };
 
-export const AttachFileButton = controlled<File[], Props>(({ disabled, control: { value, setValue } }) => {
-  const onAttachFile = pipe(
-    selectChatFile,
-    tapTaskOption((file) => {
-      setValue({
-        value: [...(value ?? []), file],
-      });
-    }),
-  );
+export function AttachFileButton({ disabled }: Props) {
+  const t = useI18n().pack.chat.actions.files;
 
   return (
     <button
       type="button"
+      title={t.attachFile}
       className={clsx(
         'hover:bg-gray-100 p-2 rounded-lg',
         'text-gray-500 hover:text-gray-700',
@@ -31,9 +21,8 @@ export const AttachFileButton = controlled<File[], Props>(({ disabled, control: 
         disabled && 'opacity-50 cursor-not-allowed',
       )}
       disabled={disabled}
-      onClick={onAttachFile}
     >
       <PaperclipIcon size={20} />
     </button>
   );
-});
+}

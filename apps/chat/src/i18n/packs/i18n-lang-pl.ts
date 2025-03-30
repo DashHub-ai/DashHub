@@ -510,7 +510,6 @@ export const I18N_PACK_PL: I18nLangPack = {
       send: 'Wyślij',
       cancel: 'Anuluj',
       submitOnEnter: 'Wyślij po naciśnięciu Enter',
-      attachFile: 'Załącz plik',
       refresh: 'Odśwież odpowiedź',
       reply: 'Odpowiedz na tę wiadomość',
       expand: {
@@ -520,6 +519,10 @@ export const I18N_PACK_PL: I18nLangPack = {
       addApp: 'Dodaj aplikację',
       pin: 'Przypnij',
       unpin: 'Odepnij',
+      files: {
+        attachFile: 'Załącz plik',
+        attachLocalFile: 'Załącz plik ze swojego komputera',
+      },
     },
     placeholders: {
       enterMessage: 'Wpisz wiadomość...',

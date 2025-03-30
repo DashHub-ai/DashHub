@@ -12,7 +12,7 @@ import { AIModelsSearchSelect } from '~/modules/ai-models';
 import { ProjectsSearchSelect } from '~/modules/projects';
 import { Checkbox, FormSpinnerCTA } from '~/ui';
 
-import { AttachFileButton, FilesCardsControlledList, useChatFileDrop } from '../conversation';
+import { AttachFileDropdown, FilesCardsControlledList, useChatFileDrop } from '../conversation';
 import { ChatWebSearchButton } from '../conversation/input-toolbar';
 import { useStartChatForm } from './use-start-chat-form';
 
@@ -117,7 +117,7 @@ export function StartChatForm(
           )}
         >
           <div className="flex items-center gap-3">
-            <AttachFileButton
+            <AttachFileDropdown
               {...bind.path('files', {
                 input: val => val ?? [],
               })}

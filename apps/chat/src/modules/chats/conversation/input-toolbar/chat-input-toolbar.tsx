@@ -12,7 +12,7 @@ import { Checkbox } from '~/ui';
 
 import type { SdkRepeatedMessageItemT } from '../messages';
 
-import { AttachFileButton, FilesCardsControlledList } from '../files';
+import { AttachFileDropdown, FilesCardsControlledList } from '../files';
 import { ChatChooseAppButton } from './chat-choose-app-button';
 import { ChatReplyMessage } from './chat-reply-message';
 import { ChatSelectApp } from './chat-select-app';
@@ -203,7 +203,7 @@ export function ChatInputToolbar(
           )}
         >
           <div className="flex items-center gap-3">
-            <AttachFileButton
+            <AttachFileDropdown
               disabled={disabled || replying}
               {...bind.path('files', {
                 input: val => val ?? [],
