@@ -30,6 +30,10 @@ export function useGoogleDriveFilePicker() {
       throw new Error('Google Drive is not configured.');
     }
 
+    if (oauthAccessTokenRef.current) {
+      return oauthAccessTokenRef.current;
+    }
+
     const { clientId } = googleDrive;
     const { access_token: oAuthToken } = await new Promise<google.accounts.oauth2.TokenResponse>((resolve, reject) => {
       try {
