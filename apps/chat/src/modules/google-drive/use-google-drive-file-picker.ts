@@ -107,8 +107,8 @@ export function useGoogleDriveFilePicker() {
 }
 
 function downloadGoogleDriveFile(oAuthAccessToken: string) {
-  return async ({ name, mimeType, downloadUrl }: google.picker.DocumentObject): Promise<File> => {
-    const response = await fetch(downloadUrl!, {
+  return async ({ id, name, mimeType }: google.picker.DocumentObject): Promise<File> => {
+    const response = await fetch(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
       headers: {
         Authorization: `Bearer ${oAuthAccessToken}`,
       },
