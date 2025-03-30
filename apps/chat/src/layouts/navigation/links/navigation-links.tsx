@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import {
   FolderKanbanIcon,
   HomeIcon,
+  MessageSquareIcon,
   PinIcon,
   WandSparklesIcon,
 } from 'lucide-react';
@@ -32,9 +33,8 @@ export function NavigationLinks({ inMobileMenu = false }: NavigationLinksProps) 
       )}
     >
       <NavigationItem
-        path={sitemap.chats.index}
+        path={sitemap.home}
         icon={<HomeIcon size={16} />}
-        disabled={!hasOrganization}
       >
         {t.links.home}
       </NavigationItem>
@@ -45,6 +45,14 @@ export function NavigationLinks({ inMobileMenu = false }: NavigationLinksProps) 
         disabled={!hasOrganization}
       >
         {t.links.apps}
+      </NavigationItem>
+
+      <NavigationItem
+        path={sitemap.chats.index}
+        icon={<MessageSquareIcon size={16} />}
+        disabled={!hasOrganization}
+      >
+        {t.links.chats}
       </NavigationItem>
 
       <NavigationItem

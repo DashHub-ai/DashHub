@@ -36,7 +36,7 @@ export function Footer() {
               {t.github}
             </a>
             <a
-              href="https://dashhub.ai/blog"
+              href="https://dashhub.ai/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-gray-400 hover:text-gray-500"

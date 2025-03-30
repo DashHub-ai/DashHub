@@ -51,7 +51,7 @@ export function ChatsHistorySidebarSection() {
     >
       <SidebarLinks links={links} />
 
-      <SidebarSectionAllLink href={sitemap.home}>
+      <SidebarSectionAllLink href={sitemap.chats.index}>
         {pack.sidebar.chats.all}
       </SidebarSectionAllLink>
     </SidebarSection>
