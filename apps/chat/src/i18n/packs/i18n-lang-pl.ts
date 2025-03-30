@@ -238,6 +238,13 @@ export const I18N_PACK_PL: I18nLangPack = {
         title: 'DashHub Chat',
       },
     },
+    home: {
+      exploreApps: 'Eksploruj dostępne aplikacje',
+      meta: {
+        title: 'Strona Główna',
+        description: 'Strona główna DashHub Chat',
+      },
+    },
     login: {
       meta: {
         title: 'Zaloguj się',
