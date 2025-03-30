@@ -522,6 +522,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       files: {
         attachFile: 'Załącz plik',
         attachLocalFile: 'Załącz plik ze swojego komputera',
+        attachGoogleDriveFile: 'Załącz plik z Google Drive',
       },
     },
     placeholders: {

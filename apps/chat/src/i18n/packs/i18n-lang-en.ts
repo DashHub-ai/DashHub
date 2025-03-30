@@ -520,6 +520,7 @@ export const I18N_PACK_EN = {
       files: {
         attachFile: 'Attach file',
         attachLocalFile: 'Attach file from your computer',
+        attachGoogleDriveFile: 'Attach file from Google Drive',
       },
     },
     placeholders: {

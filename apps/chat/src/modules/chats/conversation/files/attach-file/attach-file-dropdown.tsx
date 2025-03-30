@@ -1,9 +1,13 @@
 import { controlled } from '@under-control/forms';
+import clsx from 'clsx';
 import { pipe } from 'fp-ts/lib/function';
-import { ComputerIcon } from 'lucide-react';
+import { UploadIcon } from 'lucide-react';
 
 import { tapTaskOption } from '@llm/commons';
+import { useConfig } from '~/config';
 import { useI18n } from '~/i18n';
+import { useGoogleDriveFilePicker } from '~/modules/google-drive';
+import { GoogleDriveSVG } from '~/ui';
 
 import { selectChatFile } from '../select-chat-file';
 import { AttachFileButton } from './attach-file-button';
@@ -13,6 +17,7 @@ type Props = {
 };
 
 export const AttachFileDropdown = controlled<File[], Props>(({ disabled, control: { value, setValue } }) => {
+  const config = useConfig();
   const t = useI18n().pack.chat.actions.files;
 
   const onAppendFile = (file: File) => {
@@ -21,6 +26,7 @@ export const AttachFileDropdown = controlled<File[], Props>(({ disabled, control
     });
   };
 
+  const [onAttachGoogleDriveFile, attachGoogleFileStatus] = useGoogleDriveFilePicker();
   const onAttachLocalFile = pipe(
     selectChatFile,
     tapTaskOption(onAppendFile),
@@ -43,11 +49,33 @@ export const AttachFileDropdown = controlled<File[], Props>(({ disabled, control
               }}
             >
               <span className="flex items-center gap-2">
-                <ComputerIcon size={16} />
+                <UploadIcon size={16} />
                 {t.attachLocalFile}
               </span>
             </a>
           </li>
+
+          {config.googleDrive && (
+            <li>
+              <a
+                className={clsx(
+                  'justify-between uk-drop-close',
+                  attachGoogleFileStatus.isLoading && 'opacity-50 cursor-not-allowed pointer-events-none',
+                )}
+                type="button"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  void onAttachGoogleDriveFile();
+                }}
+              >
+                <span className="flex items-center gap-2">
+                  <GoogleDriveSVG width={16} height={16} />
+                  {t.attachGoogleDriveFile}
+                </span>
+              </a>
+            </li>
+          )}
         </ul>
       </div>
     </>
