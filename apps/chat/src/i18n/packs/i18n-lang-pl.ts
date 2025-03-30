@@ -239,7 +239,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
     },
     home: {
-      exploreApps: 'Eksploruj dostępne aplikacje',
+      exploreApps: 'Eksploruj dostępnych agentów',
       meta: {
         title: 'Strona Główna',
         description: 'Strona główna DashHub Chat',

@@ -237,7 +237,7 @@ export const I18N_PACK_EN = {
       },
     },
     home: {
-      exploreApps: 'Explore Available Apps',
+      exploreApps: 'Explore Available Agents',
       meta: {
         title: 'Home',
         description: 'Welcome to DashHub Chat! Explore available agents and start a new chat.',
