@@ -71,14 +71,31 @@ export function useGoogleDriveFilePicker() {
       .addView(google.picker.ViewId.PDFS)
       .setDeveloperKey(googleDrive.apiKey)
       .setAppId(googleDrive.appId)
-      .setOAuthToken(oAuthAccessToken);
+      .setOAuthToken(oAuthAccessToken)
+      .enableFeature(google.picker.Feature.MULTISELECT_ENABLED);
 
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<File[]>((resolve, reject) => {
+      const onPickerCallback = async (data: google.picker.ResponseObject) => {
+        if (data.action === google.picker.Action.PICKED && data.docs && data.docs.length > 0) {
+          try {
+            const downloadPromises = data.docs.map(downloadGoogleDriveFile(oAuthAccessToken));
+            const files = await Promise.all(downloadPromises);
+
+            resolve(files);
+          }
+          catch (error) {
+            console.error('Error downloading files:', error);
+            reject(error);
+          }
+        }
+        else if (data.action === google.picker.Action.CANCEL) {
+          resolve([]);
+        }
+      };
+
       try {
         filePickerBuilder
-          .setCallback((data: unknown) => {
-            resolve(data);
-          })
+          .setCallback(onPickerCallback)
           .build()
           .setVisible(true);
       }
@@ -88,4 +105,22 @@ export function useGoogleDriveFilePicker() {
       }
     });
   });
+}
+
+function downloadGoogleDriveFile(oAuthAccessToken: string) {
+  return async ({ id, name, mimeType }: google.picker.DocumentObject): Promise<File> => {
+    const response = await fetch(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
+      headers: {
+        Authorization: `Bearer ${oAuthAccessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to download file: ${response.statusText}`);
+    }
+
+    const blob = await response.blob();
+
+    return new File([blob], name || 'file', { type: mimeType });
+  };
 }

@@ -20,16 +20,23 @@ export const AttachFileDropdown = controlled<File[], Props>(({ disabled, control
   const config = useConfig();
   const t = useI18n().pack.chat.actions.files;
 
-  const onAppendFile = (file: File) => {
+  const [selectGoogleDriveFile, attachGoogleFileStatus] = useGoogleDriveFilePicker();
+
+  const onAttachGoogleDriveFile = async () => {
+    const files = await selectGoogleDriveFile();
+
     setValue({
-      value: [...(value ?? []), file],
+      value: [...(value ?? []), ...files ?? []],
     });
   };
 
-  const [onAttachGoogleDriveFile, attachGoogleFileStatus] = useGoogleDriveFilePicker();
   const onAttachLocalFile = pipe(
     selectChatFile,
-    tapTaskOption(onAppendFile),
+    tapTaskOption((file: File) => {
+      setValue({
+        value: [...(value ?? []), file],
+      });
+    }),
   );
 
   return (
