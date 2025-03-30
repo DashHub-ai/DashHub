@@ -63,6 +63,7 @@ export function useGoogleDriveFilePicker() {
     }
 
     await injectScriptsInParallel(GOOGLE_API_SCRIPTS);
+    await new Promise(resolve => gapi.load('picker', resolve));
 
     const oAuthAccessToken = await requestOAuthAccessToken();
     const filePickerBuilder = new google.picker.PickerBuilder()
@@ -88,7 +89,7 @@ export function useGoogleDriveFilePicker() {
             reject(error);
           }
         }
-        else if (data.action === google.picker.Action.CANCEL) {
+        else {
           resolve([]);
         }
       };
