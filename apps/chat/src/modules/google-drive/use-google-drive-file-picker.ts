@@ -87,7 +87,7 @@ export function useGoogleDriveFilePicker() {
             reject(error);
           }
         }
-        else {
+        else if ([google.picker.Action.CANCEL, google.picker.Action.ERROR].includes(data.action as any)) {
           resolve([]);
         }
       };
