@@ -6,7 +6,10 @@
       "~/*": ["*"]
     },
     "types": [
-      "vite/client"
+      "vite/client",
+      "@types/google.picker",
+      "@types/google.accounts",
+      "@types/gapi"
     ]
   },
   "include": ["src/"]

@@ -512,12 +512,16 @@ export const I18N_PACK_EN = {
       send: 'Send',
       cancel: 'Cancel',
       submitOnEnter: 'Submit on Enter',
-      attachFile: 'Attach file',
       refresh: 'Refresh response',
       reply: 'Reply to this message',
       addApp: 'Add app',
       pin: 'Pin',
       unpin: 'Unpin',
+      files: {
+        attachFile: 'Attach file',
+        attachLocalFile: 'Attach file from your computer',
+        attachGoogleDriveFile: 'Attach file from Google Drive',
+      },
     },
     placeholders: {
       enterMessage: 'Enter your message...',
