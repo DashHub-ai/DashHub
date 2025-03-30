@@ -47,5 +47,6 @@ export * from './try-parse-zod-schema';
 export * from './uniq';
 export * from './urls';
 export * from './wait-for';
+export * from './wait-for-window-entry';
 export * from './without';
 export * from './zod';
