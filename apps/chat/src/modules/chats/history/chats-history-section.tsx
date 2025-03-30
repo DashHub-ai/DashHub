@@ -19,6 +19,7 @@ export function ChatsHistorySection({ className }: Props) {
         filters={{
           creatorIds: [session.token.sub],
           excludeEmpty: true,
+          sort: 'favoritesFirst:createdAt:desc',
         }}
 
         itemPropsFn={() => ({

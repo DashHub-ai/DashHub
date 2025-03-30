@@ -31,9 +31,9 @@ import {
 } from './chats-es-index.repo';
 
 type EsChatsInternalFilters =
-  & WithPermissionsInternalFilters<Omit<SdkSearchChatsInputT, 'favorites'>>
+  & WithPermissionsInternalFilters<SdkSearchChatsInputT>
   & {
-    favorites?: {
+    customization?: {
       userId: TableId;
     };
   };
@@ -66,35 +66,42 @@ export class ChatsEsSearchRepo {
     })),
   );
 
-  private createEsRequestSearchBody = ({ favorites, ...dto }: EsChatsInternalFilters) =>
+  private createEsRequestSearchBody = ({ customization, favorites, ...dto }: EsChatsInternalFilters) =>
     pipe(
       TE.Do,
-      TE.bind('mappedFilters', () => {
-        if (!favorites) {
-          return TE.right(dto);
+      TE.bind('favoritesIds', () => {
+        if (!customization?.userId || (!dto.sort?.includes('favorites') && !favorites)) {
+          return TE.right(null);
         }
 
         return pipe(
           this.usersFavoritesRepo.findAll({
             type: 'chat',
-            userId: favorites.userId,
+            userId: customization.userId,
           }),
-          TE.map(result => ({
-            ...dto,
-            ids: [
-              // trick for making the `ids` query generator always generate ids term query even if array is empty.
-              // It'll make the query work properly when there is no favorites.
-              '',
-              ...(dto.ids ?? []),
-              ...pluckIds(result) as TableUuid[],
-            ],
-          })),
+          TE.map(items => pluckIds(items) as TableUuid[]),
         );
       }),
-      TE.map(({ mappedFilters }) =>
+      TE.bind('mappedFilters', ({ favoritesIds }) => {
+        if (!favorites) {
+          return TE.right(dto);
+        }
+
+        return TE.right({
+          ...dto,
+          ids: [
+            // trick for making the `ids` query generator always generate ids term query even if array is empty.
+            // It'll make the query work properly when there is no favorites.
+            '',
+            ...(dto.ids ?? []),
+            ...favoritesIds || [],
+          ],
+        });
+      }),
+      TE.map(({ mappedFilters, favoritesIds }) =>
         createPaginationOffsetSearchQuery(mappedFilters)
           .query(ChatsEsSearchRepo.createEsRequestSearchFilters(mappedFilters))
-          .sorts(ChatsEsSearchRepo.createChatsSortFieldQuery(mappedFilters.sort, mappedFilters.ids)),
+          .sorts(ChatsEsSearchRepo.createChatsSortFieldQuery(mappedFilters.sort, favoritesIds || [])),
       ),
     );
 
@@ -132,8 +139,14 @@ export class ChatsEsSearchRepo {
       ]),
     );
 
-  private static createChatsSortFieldQuery = (sort: Nullable<SdkChatsSortT>, ids?: TableUuid[]) => {
+  private static createChatsSortFieldQuery = (sort: Nullable<SdkChatsSortT>, ids: TableUuid[]) => {
     switch (sort) {
+      case 'favoritesFirst:createdAt:desc':
+        return rejectFalsyItems([
+          ids.length > 0 && createSortByIdsOrderScript(ids),
+          ...createScoredSortFieldQuery('createdAt:desc'),
+        ]);
+
       case 'favorites:desc':
         if (ids?.length) {
           return [

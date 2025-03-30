@@ -20,6 +20,7 @@ export type SdkSearchChatItemT = z.infer<typeof SdkSearchChatItemV>;
 
 export const SdkChatsSortV = SdkSortV([
   'favorites:desc',
+  'favoritesFirst:createdAt:desc',
   ...DEFAULT_SDK_SORT,
 ]);
 
