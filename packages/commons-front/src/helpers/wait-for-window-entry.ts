@@ -1,4 +1,4 @@
-import { waitFor, type WaitForConfig } from './wait-for';
+import { waitFor, type WaitForConfig } from '@llm/commons';
 
 export async function waitForWindowEntry<
   N extends keyof Window,
@@ -6,7 +6,7 @@ export async function waitForWindowEntry<
 >(entryNames: Array<N>, config?: WaitForConfig): Promise<O> {
   const tryPickBundle = () => (
     entryNames
-      .map(name => (window as any)[name])
+      .map(name => window[name])
       .filter(Boolean)[0]
   );
 
