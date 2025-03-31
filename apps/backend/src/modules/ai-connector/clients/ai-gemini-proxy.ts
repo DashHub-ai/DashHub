@@ -112,6 +112,11 @@ export class AIGeminiProxy extends AIProxy {
       return results;
     };
 
+    const systemMessages = rejectFalsyItems([
+      context,
+      collectSystemMessages(history),
+    ]).join('\n');
+
     return pipe(
       AIConnectionCreatorError.tryCatch(
         async () => {
@@ -125,12 +130,12 @@ export class AIGeminiProxy extends AIProxy {
             generationConfig: DEFAULT_CLIENT_CONFIG,
             history: normalizeGeminiMessagesToCompletion(history),
 
-            ...context && {
+            ...systemMessages && {
               systemInstruction: {
                 role: 'system',
                 parts: [
                   {
-                    text: context,
+                    text: systemMessages,
                   },
                 ],
               },
