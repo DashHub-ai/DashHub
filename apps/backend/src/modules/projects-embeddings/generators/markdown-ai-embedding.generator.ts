@@ -93,16 +93,17 @@ export class MarkdownAIEmbeddingGenerator implements AIEmbeddingGenerator {
           ? headerStack[headerStack.length - 2]
           : null;
 
-        const sectionHeader = xml('section', {
+        const section = xml('section', {
           attributes: {
             title: currentSectionTitle,
             level: currentSectionLevel,
             ...(parentSection ? { parentSection: parentSection.title } : {}),
             ...(fileTitle ? { file: fileTitle } : {}),
           },
+          children: currentChunk,
         });
 
-        chunks.push(`${sectionHeader}\n${currentChunk.join('\n')}`);
+        chunks.push(section);
       }
 
       return chunks.length > 0 ? chunks : [text];
