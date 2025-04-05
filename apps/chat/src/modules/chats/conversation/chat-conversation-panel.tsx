@@ -213,7 +213,12 @@ export const ChatConversationPanel = memo((
       return;
     }
 
-    return messages.replyObservable.subscribe(scrollConversation);
+    let enforceScroll = true;
+
+    return messages.replyObservable.subscribe(() => {
+      scrollConversation(enforceScroll);
+      enforceScroll = false;
+    });
   }, [messages.replyObservable]);
 
   return (
@@ -246,7 +251,7 @@ export const ChatConversationPanel = memo((
             // Magic CSS class for preview indicators
             'chat-conversation-panel',
           )}
-          onLoad={scrollConversation}
+          onLoad={() => scrollConversation()}
         >
           {groupedMessages.map(renderMessage)}
         </div>
