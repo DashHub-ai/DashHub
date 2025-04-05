@@ -95,7 +95,7 @@ export class ProjectsEmbeddingsEsIndexRepo extends ProjectsEmbeddingsAbstractEsI
 
   deleteByProjectFileId = (projectFileId: TableId) =>
     this.deleteByQuery(
-      esb.termQuery('projectFile.id', projectFileId),
+      esb.termQuery('project_file.id', projectFileId),
       {
         waitForRecordAvailability: true,
       },
