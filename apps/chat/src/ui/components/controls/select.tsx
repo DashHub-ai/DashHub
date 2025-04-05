@@ -2,8 +2,10 @@ import { type ControlBindProps, controlled } from '@under-control/forms';
 import clsx from 'clsx';
 import { CheckIcon } from 'lucide-react';
 import {
+  type CSSProperties,
   type PropsWithChildren,
   type ReactNode,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -69,9 +71,10 @@ export const Select = controlled<SelectItem | null, SelectProps>((
 ) => {
   const { pack } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownStyle, setDropdownStyle] = useState<CSSProperties>({});
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const outsideClickRef = useOutsideClickRef<HTMLButtonElement>((event) => {
+  const buttonRef = useOutsideClickRef<HTMLButtonElement>((event) => {
     if (!dropdownRef.current?.contains(event.target as Node)) {
       setIsOpen(false);
     }
@@ -79,6 +82,25 @@ export const Select = controlled<SelectItem | null, SelectProps>((
 
   useUpdateEffect(() => {
     onOpenChanged?.(isOpen);
+  }, [isOpen]);
+
+  useLayoutEffect(() => {
+    if (isOpen && dropdownRef.current && buttonRef.current) {
+      const dropdownRect = dropdownRef.current.getBoundingClientRect();
+      const buttonRect = buttonRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      if (buttonRect.bottom + dropdownRect.height > viewportHeight) {
+        setDropdownStyle({
+          transform: `translateY(calc(-100% - ${buttonRect.height + 10}px))`,
+        });
+      }
+      else {
+        setDropdownStyle({
+          transform: 'none',
+        });
+      }
+    }
   }, [isOpen]);
 
   const onInputKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
@@ -96,6 +118,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
         'uk-drop uk-dropdown uk-open',
         dropdownClassName,
       )}
+      style={dropdownStyle}
       tabIndex={-1}
       onKeyDown={onInputKeyDown}
     >
@@ -149,7 +172,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
   return (
     <div className={clsx('uk-custom-select', className)}>
       <button
-        ref={outsideClickRef}
+        ref={buttonRef}
         type="button"
         disabled={disabled}
         className={clsx(
