@@ -92,7 +92,7 @@ export const Select = controlled<SelectItem | null, SelectProps>((
 
       if (buttonRect.bottom + dropdownRect.height > viewportHeight) {
         setDropdownStyle({
-          transform: `translateY(calc(-100% - ${buttonRect.height + 10}px))`,
+          transform: `translateY(calc(-100% - ${buttonRect.height + 14}px))`,
         });
       }
       else {
