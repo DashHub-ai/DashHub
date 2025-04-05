@@ -8,6 +8,7 @@ import {
 
 import {
   isImageFileUrl,
+  isMarkdownFileUrl,
   isPDFFileUrl,
   isSpreadsheetFileUrl,
   isWordFileUrl,
@@ -43,6 +44,14 @@ export function getFileTypeAndColor(url: string) {
       type: 'Image',
       bgColor: 'bg-purple-500',
       icon: ImageIcon,
+    };
+  }
+
+  if (isMarkdownFileUrl(url)) {
+    return {
+      type: 'Markdown',
+      bgColor: 'bg-[#000000]',
+      icon: FileTextIcon,
     };
   }
 

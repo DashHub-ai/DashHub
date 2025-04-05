@@ -37,6 +37,7 @@ import {
   DocAIEmbeddingGenerator,
   DocxAIEmbeddingGenerator,
   ImageAIEmbeddingGenerator,
+  MarkdownAIEmbeddingGenerator,
   PdfAIEmbeddingGenerator,
   TextAIEmbeddingGenerator,
   XlsAIEmbeddingGenerator,
@@ -69,6 +70,7 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
     @inject(XlsAIEmbeddingGenerator) private readonly xlsAIEmbeddingGenerator: XlsAIEmbeddingGenerator,
     @inject(ImageAIEmbeddingGenerator) private readonly imageAIEmbeddingGenerator: ImageAIEmbeddingGenerator,
     @inject(CsvAIEmbeddingGenerator) private readonly csvAIEmbeddingGenerator: CsvAIEmbeddingGenerator,
+    @inject(MarkdownAIEmbeddingGenerator) private readonly markdownAIEmbeddingGenerator: MarkdownAIEmbeddingGenerator,
     @inject(ChatsRepo) private readonly chatsRepo: ChatsRepo,
     @inject(AIConnectorService) private readonly aiConnectorService: AIConnectorService,
     @inject(delay(() => OrganizationsAISettingsService)) private readonly organizationsAISettingsService: OrganizationsAISettingsService,
@@ -200,6 +202,10 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
 
           if (isCSVMimeType(mimeType)) {
             return this.csvAIEmbeddingGenerator.generate(attrs);
+          }
+
+          if (mimeType === 'text/markdown' || fileName.endsWith('.md') || fileName.endsWith('.markdown')) {
+            return this.markdownAIEmbeddingGenerator.generate(attrs);
           }
 
           if (mimeType.startsWith('text/')
