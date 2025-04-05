@@ -19,7 +19,7 @@ export function HomeRoute() {
           <div className="top-0 right-0 left-0 absolute flex flex-col justify-start [@media(min-height:870px)]:justify-center h-full overflow-y-auto">
             <PromotedAppsContainer
               title={t.exploreApps}
-              className="mb-16 w-full"
+              className="mb-24 w-full"
             />
           </div>
         </div>

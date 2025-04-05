@@ -5,7 +5,6 @@ import { Link } from 'wouter';
 
 import { useLastNonNullValue } from '@llm/commons-front';
 import {
-  type SdkAppT,
   SdkSearchAppsInputV,
   useSdkForLoggedIn,
 } from '@llm/sdk';
@@ -15,7 +14,6 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 import {
   CardSkeletonGrid,
-  PaginatedList,
   SelectableBadges,
   SelectableBadgesSkeleton,
   useDebouncedPaginatedSearch,
@@ -26,11 +24,10 @@ import { AppsPlaceholder } from '../grid/apps-placeholder';
 
 type Props = {
   title?: string;
-  limit?: number;
   className?: string;
 };
 
-export function PromotedAppsContainer({ title, limit = 3, className }: Props) {
+export function PromotedAppsContainer({ title, className }: Props) {
   const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
   const { sdks } = useSdkForLoggedIn();
 
@@ -41,7 +38,7 @@ export function PromotedAppsContainer({ title, limit = 3, className }: Props) {
     storeDataInUrl: false,
     schema: SdkSearchAppsInputV,
     fallbackSearchParams: {
-      limit,
+      limit: 3,
     },
     fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.apps.search),
   });
@@ -63,11 +60,6 @@ export function PromotedAppsContainer({ title, limit = 3, className }: Props) {
           <h2 className="font-semibold text-xl">
             {title}
           </h2>
-
-          <Link href={sitemap.apps.index.generate({})} className="flex items-center gap-1 text-primary hover:underline">
-            {t.links.seeAll}
-            <ArrowRight size={16} className="text-primary" />
-          </Link>
         </div>
       )}
 
@@ -80,41 +72,42 @@ export function PromotedAppsContainer({ title, limit = 3, className }: Props) {
               <SelectableBadges
                 {...pagination.bind.path('categoriesIds', { input: val => val ?? [] })}
                 items={categoriesTree}
-                multiSelect
                 visibilityLimit={5}
               />
             )}
       </div>
 
-      <PaginatedList
-        result={result}
-        loading={loading}
-        pagination={pagination.bind.entire()}
-        withEmptyPlaceholder={false}
-        loadingFallback={(
-          <CardSkeletonGrid className={gridClassName} count={limit} />
-        )}
-      >
-        {({ items, total }) => {
-          if (!total) {
-            return <AppsPlaceholder />;
-          }
+      {loading && <CardSkeletonGrid className={gridClassName} count={3} />}
 
-          return (
-            <div className={gridClassName}>
-              {(items as SdkAppT[]).map(item => (
-                <AppCard
-                  key={item.id}
-                  app={item}
-                  onAfterArchive={silentReload}
-                  onAfterUnarchive={silentReload}
-                  onAfterToggleFavorite={silentReload}
-                />
-              ))}
-            </div>
-          );
-        }}
-      </PaginatedList>
+      {!loading && !result?.total && <AppsPlaceholder />}
+
+      {!loading && result?.total && (
+        <div className={gridClassName}>
+          {result.items.map(item => (
+            <AppCard
+              key={item.id}
+              app={item}
+              onAfterArchive={silentReload}
+              onAfterUnarchive={silentReload}
+              onAfterToggleFavorite={silentReload}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="flex justify-center mt-6">
+        <Link
+          href={sitemap.apps.index.generate({
+            searchParams: {
+              categoriesIds: pagination.value.categoriesIds || [],
+            },
+          })}
+          className="flex items-center gap-1 text-primary text-sm transition-colors"
+        >
+          {t.links.seeAll}
+          <ArrowRight size={14} className="text-primary" />
+        </Link>
+      </div>
     </div>
   );
 }
