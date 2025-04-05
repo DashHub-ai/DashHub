@@ -96,7 +96,6 @@ export class MarkdownAIEmbeddingGenerator implements AIEmbeddingGenerator {
         const section = xml('section', {
           attributes: {
             title: currentSectionTitle,
-            level: currentSectionLevel,
             ...(parentSection ? { parentSection: parentSection.title } : {}),
             ...(fileTitle ? { file: fileTitle } : {}),
           },
