@@ -15,9 +15,10 @@ import { NavigationItem } from './navigation-item';
 
 type NavigationLinksProps = {
   inMobileMenu?: boolean;
+  className?: string;
 };
 
-export function NavigationLinks({ inMobileMenu = false }: NavigationLinksProps) {
+export function NavigationLinks({ inMobileMenu = false, className }: NavigationLinksProps) {
   const t = useI18n().pack.navigation;
 
   const sitemap = useSitemap();
@@ -27,6 +28,7 @@ export function NavigationLinks({ inMobileMenu = false }: NavigationLinksProps) 
     <ul
       className={clsx(
         'flex',
+        className,
         inMobileMenu
           ? 'flex-col w-full items-start gap-4'
           : 'flex-wrap justify-center items-center gap-1 sm:gap-2 md:gap-4',

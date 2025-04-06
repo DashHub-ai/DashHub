@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react';
-
 import clsx from 'clsx';
 import { Link } from 'wouter';
 
@@ -11,10 +9,9 @@ import { NavigationRightToolbar } from './navigation-right-toolbar';
 
 export type NavigationProps = {
   withAdditionalUI?: boolean;
-  breadcrumbs?: ReactNode;
 };
 
-export function Navigation({ withAdditionalUI, breadcrumbs }: NavigationProps) {
+export function Navigation({ withAdditionalUI }: NavigationProps) {
   const sitemap = useSitemap();
 
   return (
@@ -39,17 +36,14 @@ export function Navigation({ withAdditionalUI, breadcrumbs }: NavigationProps) {
 
       <div
         className={clsx(
-          'hidden lg:flex flex-wrap overflow-visible',
+          'hidden lg:flex flex-wrap justify-center overflow-visible',
           withAdditionalUI
             ? 'justify-start'
             : 'justify-center',
         )}
       >
-        {(
-          withAdditionalUI
-            ? <div className="empty:hidden ml-5">{breadcrumbs}</div>
-            : <NavigationLinks />
-        )}
+        <NavigationLinks className="hidden xl:flex" />
+        <HamburgerMenu className="xl:hidden" />
       </div>
 
       <div className="flex flex-row justify-end items-center gap-2 sm:gap-6 md:gap-14">
