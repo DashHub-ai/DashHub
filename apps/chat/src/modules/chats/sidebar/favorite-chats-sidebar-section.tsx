@@ -56,8 +56,10 @@ export function FavoriteChatsSidebarSection() {
 
   return (
     <SidebarSection
+      id="favorite-chats"
       title={pack.sidebar.favoriteChats.title}
       icon={<HeartIcon size={18} />}
+      defaultExpanded={false}
     >
       <SidebarLinks links={links} />
 

@@ -46,6 +46,7 @@ export function ChatsHistorySidebarSection() {
 
   return (
     <SidebarSection
+      id="chats-history"
       title={pack.sidebar.chats.title}
       icon={<HistoryIcon size={18} />}
     >

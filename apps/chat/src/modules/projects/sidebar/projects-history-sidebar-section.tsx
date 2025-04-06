@@ -45,6 +45,7 @@ export function ProjectsHistorySidebarSection() {
 
   return (
     <SidebarSection
+      id="projects-history"
       title={pack.sidebar.projects.title}
       icon={<HistoryIcon size={18} />}
     >

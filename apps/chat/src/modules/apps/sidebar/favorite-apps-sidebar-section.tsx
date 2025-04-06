@@ -56,8 +56,10 @@ export function FavoriteAppsSidebarSection() {
 
   return (
     <SidebarSection
+      id="favorite-apps"
       title={pack.sidebar.favoriteApps.title}
       icon={<HeartIcon size={18} />}
+      defaultExpanded={false}
     >
       <SidebarLinks links={links} />
 
