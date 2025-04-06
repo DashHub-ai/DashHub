@@ -48,6 +48,7 @@ export function ProjectsHistorySidebarSection() {
       id="projects-history"
       title={pack.sidebar.projects.title}
       icon={<HistoryIcon size={18} />}
+      defaultExpanded={false}
     >
       <SidebarLinks links={links} />
       <SidebarSectionAllLink href={sitemap.projects.index.generate({})}>
