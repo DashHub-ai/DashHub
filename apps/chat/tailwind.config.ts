@@ -44,6 +44,22 @@ export default {
         fadeIn: 'fadeIn 0.3s ease-out forwards',
         messageSlideIn: 'slideIn 0.3s ease-out 100ms forwards',
         balloonIn: 'balloonIn 0.2s ease-out forwards',
+        gradientHighlight: 'gradientHighlight 500ms cubic-bezier(.16,1,.3,1) forwards',
+      },
+      keyframes: {
+        gradientHighlight: {
+          '0%': {
+            width: '0',
+            opacity: '0',
+          },
+          '50%': {
+            opacity: '1',
+          },
+          '100%': {
+            width: '30%', // Match the maxWidth in the component
+            opacity: '1',
+          },
+        },
       },
       fontFamily: {
         dmsans: ['DM Sans', ...fontFamily.sans],
