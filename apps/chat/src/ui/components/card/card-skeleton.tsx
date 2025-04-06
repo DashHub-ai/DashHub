@@ -19,7 +19,9 @@ export function CardSkeleton(
   return (
     <div
       className={clsx(
-        'bg-background shadow-sm p-4 border border-border rounded-lg',
+        'bg-white/95 p-4 rounded-lg transition-all duration-200',
+        'border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
+        'backdrop-blur-[2px] backdrop-saturate-[1.8]',
         className,
       )}
       {...props}
@@ -38,7 +40,7 @@ export function CardSkeleton(
 
       {/* Optional Footer */}
       {withFooter && (
-        <div className="mt-4 pt-3 border-t">
+        <div className="mt-4 pt-3 border-slate-200/70 border-t">
           <div className="flex justify-between items-center">
             <Skeleton className="w-1/4 h-4" />
             <Skeleton className="rounded-md w-20 h-8" />

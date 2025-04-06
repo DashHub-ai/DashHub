@@ -32,9 +32,17 @@ export function CardActionButton({
     <Tag
       disabled={disabled}
       className={clsx(
-        'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-colors',
-        variant === 'default' && 'bg-slate-50 hover:bg-slate-100',
-        variant === 'danger' && 'bg-red-50 hover:bg-red-100 text-red-600',
+        'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-all duration-200',
+        variant === 'default' && [
+          'bg-slate-50/80 hover:bg-slate-100 border border-slate-100',
+          'backdrop-blur-[1px]',
+          'hover:shadow-sm',
+        ],
+        variant === 'danger' && [
+          'bg-red-50/90 hover:bg-red-100/90 text-red-600 border border-red-100',
+          'backdrop-blur-[1px]',
+          'hover:shadow-sm',
+        ],
         disabled && 'opacity-50 pointer-events-none',
         className,
       )}

@@ -55,8 +55,15 @@ export function CardBase(
   return (
     <div
       className={clsx(
-        'relative flex flex-col bg-white shadow-sm p-4 pb-2 border rounded-lg transition-shadow',
-        (href || onForwardClick) && 'hover:shadow-md cursor-pointer',
+        'relative flex flex-col bg-white/95 p-4 pb-2 rounded-lg transition-all duration-200',
+        'border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
+        'backdrop-blur-[2px] backdrop-saturate-[1.8]',
+        (href || onForwardClick) && [
+          'hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)]',
+          'hover:border-slate-300/80',
+          'hover:translate-y-[-1px]',
+          'cursor-pointer',
+        ],
         disabled && 'opacity-50 pointer-events-none',
         className,
       )}
