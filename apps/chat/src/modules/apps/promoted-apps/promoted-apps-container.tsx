@@ -23,11 +23,10 @@ import { AppCard } from '../grid/app-card';
 import { AppsPlaceholder } from '../grid/apps-placeholder';
 
 type Props = {
-  title?: string;
   className?: string;
 };
 
-export function PromotedAppsContainer({ title, className }: Props) {
+export function PromotedAppsContainer({ className }: Props) {
   const { assignWorkspaceToFilters } = useWorkspaceOrganizationOrThrow();
   const { sdks } = useSdkForLoggedIn();
 
@@ -55,14 +54,6 @@ export function PromotedAppsContainer({ title, className }: Props) {
 
   return (
     <div className={className}>
-      {title && (
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="font-semibold text-xl">
-            {title}
-          </h2>
-        </div>
-      )}
-
       <div className="mb-6">
         {loading || !categoriesTree
           ? (

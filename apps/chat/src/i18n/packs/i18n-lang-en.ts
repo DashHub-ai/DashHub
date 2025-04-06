@@ -240,7 +240,10 @@ export const I18N_PACK_EN = {
       },
     },
     home: {
-      exploreApps: 'Explore Available Agents',
+      header: {
+        primary: 'What do you want to get done today?',
+        secondary: 'AI agents to simplify, accelerate, and support your work.',
+      },
       meta: {
         title: 'Home',
         description: 'Welcome to DashHub Chat! Explore available agents and start a new chat.',

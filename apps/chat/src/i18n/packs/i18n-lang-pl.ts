@@ -242,7 +242,10 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
     },
     home: {
-      exploreApps: 'Eksploruj dostępnych agentów',
+      header: {
+        primary: 'Co chcesz dziś zrobić?',
+        secondary: 'Agenci AI do uproszczenia, przyspieszenia i wsparcia Twojej pracy.',
+      },
       meta: {
         title: 'Strona Główna',
         description: 'Strona główna DashHub Chat',
@@ -293,10 +296,10 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
     editApp: {
       meta: {
-        title: 'Edit Assistant',
-        description: 'Edit assistant',
+        title: 'Edytuj Asystenta',
+        description: 'Edytuj asystenta',
       },
-      title: 'Edit Assistant',
+      title: 'Edytuj Asystenta',
     },
     createApp: {
       meta: {

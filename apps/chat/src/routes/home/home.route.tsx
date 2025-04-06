@@ -17,10 +17,11 @@ export function HomeRoute() {
       <div className="gap-5 grid grid-rows-[1fr_auto] mx-auto w-full max-w-5xl">
         <div className="relative">
           <div className="top-0 right-0 left-0 absolute flex flex-col justify-start [@media(min-height:870px)]:justify-center h-full overflow-y-auto">
-            <PromotedAppsContainer
-              title={t.exploreApps}
-              className="mb-24 w-full"
-            />
+            <div className="mb-8">
+              <h1 className="mb-2 font-bold text-3xl">{t.header.primary}</h1>
+              <h2 className="text-gray-500 text-xl">{t.header.secondary}</h2>
+            </div>
+            <PromotedAppsContainer className="mb-24 w-full" />
           </div>
         </div>
 
