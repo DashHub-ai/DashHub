@@ -1,14 +1,13 @@
 import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
-import { Link, Redirect } from 'wouter';
+import { Redirect } from 'wouter';
 
 import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkTableRowUuidT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { LayoutBreadcrumbs, PageWithSidebarLayout } from '~/layouts';
+import { PageWithSidebarLayout } from '~/layouts';
 import { ChatConversationWithSidebar } from '~/modules';
-import { FavoriteStarButton } from '~/modules/favorites';
 import { RouteMetaTags } from '~/routes/shared';
 import { SpinnerContainer } from '~/ui';
 
@@ -50,8 +49,6 @@ export function ChatRoute({ id }: Props) {
     return <Redirect to={sitemap.home} replace />;
   }
 
-  const project = result.status === 'success' && result.data.chat.project;
-
   return (
     <PageWithSidebarLayout
       withFooter={false}
@@ -59,41 +56,6 @@ export function ChatRoute({ id }: Props) {
       contentClassName="pb-0"
       navigationProps={{
         withAdditionalUI: true,
-        breadcrumbs: (
-          <LayoutBreadcrumbs
-            {...result.status === 'success' && {
-              currentBreadcrumb: (
-                <span className="inline-flex items-center gap-3">
-                  {result.data.chat.summary.name.value || t.title}
-                  <FavoriteStarButton
-                    favorite={{
-                      type: 'chat',
-                      id: result.data.chat.id,
-                    }}
-                  />
-                </span>
-              ),
-            }}
-
-            {...project && !project.internal && {
-              breadcrumbs: (
-                <>
-                  <li>
-                    <Link href={sitemap.projects.index.generate({})}>
-                      {pack.routes.projects.title}
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link href={sitemap.projects.show.generate({ pathParams: { id: project.id } })}>
-                      {project.name}
-                    </Link>
-                  </li>
-                </>
-              ),
-            }}
-          />
-        ),
       }}
     >
       <RouteMetaTags meta={t.meta} />

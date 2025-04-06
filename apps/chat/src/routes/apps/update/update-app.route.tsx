@@ -1,11 +1,11 @@
 import { pipe } from 'fp-ts/lib/function';
-import { Link, Redirect } from 'wouter';
+import { Redirect } from 'wouter';
 
 import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
-import { LayoutBreadcrumbs, LayoutHeader, PageWithSidebarLayout } from '~/layouts';
+import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { AppUpdateForm, useCreateChatWithInitialApp } from '~/modules';
 import { RouteMetaTags, useSitemap } from '~/routes';
 import { SpinnerContainer } from '~/ui';
@@ -42,19 +42,8 @@ export function UpdateAppRoute({ id }: Props) {
     <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <LayoutBreadcrumbs
-        currentBreadcrumb={t.title}
-        breadcrumbs={(
-          <li>
-            <Link href={sitemap.apps.index.generate({})}>
-              {pack.breadcrumbs.routes.apps}
-            </Link>
-          </li>
-        )}
-      />
-
       <section className="flex flex-col gap-6 mx-auto max-w-6xl">
-        <LayoutHeader withBreadcrumbs={false}>
+        <LayoutHeader>
           {(
             result.status === 'loading'
               ? t.title

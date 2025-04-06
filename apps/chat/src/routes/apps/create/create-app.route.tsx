@@ -1,6 +1,5 @@
 import { useI18n } from '~/i18n';
 import {
-  LayoutBreadcrumbs,
   LayoutHeader,
   PageWithSidebarLayout,
 } from '~/layouts';
@@ -33,10 +32,8 @@ export function CreateAppRoute() {
     <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <LayoutBreadcrumbs currentBreadcrumb={t.title} />
-
       <section className="flex flex-col gap-6 mx-auto max-w-4xl">
-        <LayoutHeader withBreadcrumbs={false}>
+        <LayoutHeader>
           {t.title}
         </LayoutHeader>
 
