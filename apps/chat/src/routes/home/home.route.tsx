@@ -25,7 +25,7 @@ export function HomeRoute() {
               </h1>
               <h2 className="text-gray-500 text-xl">{t.header.secondary}</h2>
             </div>
-            <PromotedAppsContainer className="mb-24 w-full" />
+            <PromotedAppsContainer className="w-full" />
           </div>
         </div>
 
