@@ -9,7 +9,6 @@ import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-orga
 
 import { Footer } from './footer';
 import { Navigation, type NavigationProps } from './navigation';
-import { LayoutBackgroundDecorations } from './parts/layout-background-decorations';
 import { Sidebar, useSidebarToggledStorage } from './sidebar';
 
 type Props = PropsWithChildren & {
@@ -17,7 +16,6 @@ type Props = PropsWithChildren & {
   backgroundClassName?: string;
   contentClassName?: string;
   navigationProps?: NavigationProps;
-  withBackgroundDecorations?: boolean;
 };
 
 export function PageWithSidebarLayout(
@@ -27,7 +25,6 @@ export function PageWithSidebarLayout(
     backgroundClassName = 'bg-white',
     withFooter = true,
     navigationProps,
-    withBackgroundDecorations = true,
   }: Props,
 ) {
   const { organization } = useWorkspaceOrganization();
@@ -50,10 +47,6 @@ export function PageWithSidebarLayout(
           <ProjectsHistorySidebarSection />
           <ChatsHistorySidebarSection />
         </Sidebar>
-      )}
-
-      {withBackgroundDecorations && (
-        <LayoutBackgroundDecorations sidebarWidth={isSidebarVisible ? 300 : 0} />
       )}
 
       <div
