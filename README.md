@@ -1,5 +1,7 @@
 # 🚀 DashHub.ai: The Open-Source AI Platform for Teams of All Sizes
 
+![DashHub Agents Interface showing the AI applications grid view](screens/agents.png)
+
 Empower your AI journey with **Seamless Integration** ⚙️, **Unmatched Flexibility** 🔄, and **Built-In Security** 🔐, all driven by a **Community-First Approach** 🌐
 
 **DashHub.ai** is crafted to make AI more **accessible** 💰, **faster** to deploy ⏩, and **safer** 🔒 for businesses and teams of every size. From startups to growing organizations, DashHub.ai enables you to adopt the latest in AI technology while keeping full control over your data and APIs. The open-source design provides **tailored, plug-and-play solutions** that scale with your needs, **reducing complexity** and **lowering costs** 💡. DashHub.ai fosters **secure**, **vendor-neutral AI adoption**, letting teams **collaborate** 🤝 and **innovate** with ease 💻.
@@ -11,25 +13,21 @@ At DashHub.ai, we believe in tools that adapt to **your unique workflows and goa
 ## 📋 Table of Contents
 
 - [🚀 DashHub.ai: The Open-Source AI Platform for Teams of All Sizes](#-dashhubai-the-open-source-ai-platform-for-teams-of-all-sizes)
- - [📋 Table of Contents](#-table-of-contents)
- - [🌟 Introduction](#-introduction)
- - [🌟 Why Choose DashHub.ai](#-why-choose-dashhubai)
- - [Setup ⚙️](#setup-️)
- - [Migrations ⚙️](#migrations-️)
- - [Elasticsearch](#elasticsearch)
- - [Deployment 🚀](#deployment-)
- - [👥 User Roles and Permissions](#-user-roles-and-permissions)
- - [🔑 Key Features](#-key-features)
-  - [Projects 📂](#projects-)
-  - [Agents 🧠](#agents-)
-  - [Pins 📌](#pins-)
-  - [Knowledge Management 📚](#knowledge-management-)
- - [📈 Future Plans - feel free to contribute! 🤘](#-future-plans---feel-free-to-contribute-)
- - [🔄 Integration Process](#-integration-process)
- - [🏗️ Technical Architecture](#️-technical-architecture)
- - [🔒 Security and Compliance](#-security-and-compliance)
- - [📄 License](#-license)
- - [🤝 Contributing](#-contributing)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [🌟 Introduction](#-introduction)
+  - [🌟 Why Choose DashHub.ai](#-why-choose-dashhubai)
+  - [Setup ⚙️](#setup-️)
+  - [Migrations ⚙️](#migrations-️)
+  - [Elasticsearch](#elasticsearch)
+  - [Deployment 🚀](#deployment-)
+  - [👥 User Roles and Permissions](#-user-roles-and-permissions)
+  - [🔑 Key Features](#-key-features)
+    - [Projects 📂](#projects-)
+    - [Agents 🧠](#agents-)
+    - [Pins 📌](#pins-)
+    - [Knowledge Management 📚](#knowledge-management-)
+  - [📈 Future Plans - feel free to contribute! 🤘](#-future-plans---feel-free-to-contribute-)
+  - [🔄 Integration Process](#-integration-process)
 
 ## 🌟 Introduction
 
@@ -147,7 +145,7 @@ The platform supports three types of users:
 ### Pins 📌
 
 -   **Pinning Important AI Outputs**: DashHub.ai's pinning feature allows users to bookmark significant AI-generated outputs. This functionality facilitates quick reference and collaboration, enabling teams to efficiently recall, access and utilize critical information within the platform.
-  
+
 ### Knowledge Management 📚
 
 -   **Knowledge Bases**: Users can add outputs to project knowledge bases.
