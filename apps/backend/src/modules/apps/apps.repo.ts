@@ -4,6 +4,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { sql } from 'kysely';
 import { injectable } from 'tsyringe';
 
+import { uniq } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -48,7 +49,7 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             .select('app_id as id')
             .select(qb => [
               qb.fn.max('messages.created_at').as('last_used_at'),
-              sql<TableUuid[]>`array_agg(distinct "chats"."id")`.as('chatIds'),
+              sql<TableUuid[]>`array_agg("chats"."id" order by "chats"."created_at" desc)`.as('chatIds'),
             ])
             .$narrowType<TableRowWithId>()
             .orderBy('last_used_at', 'desc')
@@ -56,6 +57,12 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             .execute(),
       ),
       DatabaseError.tryTask,
+      TE.map(
+        A.map(item => ({
+          ...item,
+          chatIds: uniq(item.chatIds ?? []),
+        })),
+      ),
     );
   };
 

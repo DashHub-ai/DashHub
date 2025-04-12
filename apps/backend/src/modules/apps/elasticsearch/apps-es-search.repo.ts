@@ -155,6 +155,12 @@ export class AppsEsSearchRepo {
         });
       }),
       TE.map(({ favoritesIds, recentlyUsedApps, extendedFilters }) => {
+        const recentlyUsedAppsIds = pipe(
+          recentlyUsedApps,
+          pluckIds,
+          uniq,
+        );
+
         const searchBody = createPaginationOffsetSearchQuery(extendedFilters)
           .query(AppsEsSearchRepo.createEsRequestSearchFilters(extendedFilters))
           .aggs([
@@ -178,7 +184,7 @@ export class AppsEsSearchRepo {
                   ),
               ),
 
-            ...recentlyUsedApps.length
+            ...recentlyUsedApps.length && recentAgg
               ? [
                   esb
                     .globalAggregation('total_recently_used')
@@ -189,18 +195,14 @@ export class AppsEsSearchRepo {
                           AppsEsSearchRepo.createEsRequestSearchFilters({
                             ...extendedFilters,
                             categoriesIds: [],
-                            ids: pipe(
-                              recentlyUsedApps,
-                              pluckIds,
-                              uniq,
-                            ),
+                            ids: recentlyUsedAppsIds,
                           }),
                         ),
                     ),
                 ]
               : [],
 
-            ...favoritesIds.length
+            ...favoritesIds.length && favoritesAgg
               ? [
                   esb
                     .globalAggregation('total_favorites')
@@ -218,7 +220,11 @@ export class AppsEsSearchRepo {
                 ]
               : [],
           ])
-          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort, extendedFilters.ids));
+          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery({
+            sort: dto.sort,
+            favoriteIds: uniq(favoritesIds),
+            recentIds: recentlyUsedAppsIds,
+          }));
 
         return {
           recentlyUsedApps,
@@ -258,7 +264,17 @@ export class AppsEsSearchRepo {
       ]),
     );
 
-  private static createAppsSortFieldQuery = (sort: Nullable<SdkAppsSortT>, ids?: TableId[]) => {
+  private static createAppsSortFieldQuery = (
+    {
+      sort,
+      recentIds,
+      favoriteIds,
+    }: {
+      sort: Nullable<SdkAppsSortT>;
+      favoriteIds?: TableId[];
+      recentIds?: TableId[];
+    },
+  ) => {
     switch (sort) {
       case undefined:
       case null:
@@ -269,18 +285,18 @@ export class AppsEsSearchRepo {
         ];
 
       case 'recently-used:desc':
-        if (ids?.length) {
+        if (recentIds?.length) {
           return [
-            createSortByIdsOrderScript(ids),
+            createSortByIdsOrderScript(recentIds),
           ];
         }
 
         return createScoredSortFieldQuery('createdAt:desc');
 
       case 'favorites:desc':
-        if (ids?.length) {
+        if (favoriteIds?.length) {
           return [
-            createSortByIdsOrderScript(ids),
+            createSortByIdsOrderScript(favoriteIds),
           ];
         }
 

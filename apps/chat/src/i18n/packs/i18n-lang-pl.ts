@@ -593,6 +593,10 @@ export const I18N_PACK_PL: I18nLangPack = {
     chooseAppModal: {
       title: 'Wybierz aplikację',
     },
+    card: {
+      startChat: 'Nowy czat',
+      continueChat: 'Kontynuuj czat',
+    },
   },
   appsCreator: {
     files: {

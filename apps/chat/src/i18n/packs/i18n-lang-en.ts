@@ -591,6 +591,10 @@ export const I18N_PACK_EN = {
     chooseAppModal: {
       title: 'Choose Agent',
     },
+    card: {
+      startChat: 'New chat',
+      continueChat: 'Continue chat',
+    },
   },
   appsCreator: {
     files: {
