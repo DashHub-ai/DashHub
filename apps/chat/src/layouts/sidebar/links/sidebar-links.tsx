@@ -9,6 +9,7 @@ export type SidebarLinkItem = {
   icon?: ReactNode;
   label: string;
   href: string;
+  suffix?: ReactNode;
 };
 
 type SidebarLinksProps = {
@@ -57,6 +58,8 @@ export function SidebarLinks({ links }: SidebarLinksProps) {
               <span className="flex-1 min-w-0 truncate">
                 {link.label}
               </span>
+
+              {link.suffix && <span className="ml-2">{link.suffix}</span>}
             </Link>
           </li>
         );

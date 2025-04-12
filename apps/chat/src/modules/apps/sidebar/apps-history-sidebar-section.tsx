@@ -58,10 +58,6 @@ function AppsHistorySidebarContent() {
     return <SidebarLinksSkeleton count={3} />;
   }
 
-  if (!value.data.total) {
-    return null;
-  }
-
   const links: SidebarLinkItem[] = value.data.items.map(item => ({
     label: item.name,
     href: sitemap.forceRedirect.generate(

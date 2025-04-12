@@ -60,10 +60,6 @@ function FavoriteChatsSidebarContent() {
     return <SidebarLinksSkeleton count={5} />;
   }
 
-  if (!value.data.total) {
-    return null;
-  }
-
   const links: SidebarLinkItem[] = value.data.items.map(item => ({
     href: sitemap.chat.generate({ pathParams: { id: item.id } }),
     label: item.summary.name.value || pack.chat.card.noTitle,

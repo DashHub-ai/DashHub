@@ -58,10 +58,6 @@ function FavoriteAppsSidebarContent() {
     return <SidebarLinksSkeleton count={4} />;
   }
 
-  if (!value.data.total) {
-    return null;
-  }
-
   const links: SidebarLinkItem[] = value.data.items.map(item => ({
     label: item.name,
     href: sitemap.forceRedirect.generate(
