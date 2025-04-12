@@ -142,6 +142,10 @@ export const I18N_PACK_EN = {
       title: 'Recent projects',
       all: 'All projects',
     },
+    apps: {
+      title: 'Recent agents',
+      all: 'All agents',
+    },
   },
   modals: {
     archiveConfirm: {
@@ -587,6 +591,10 @@ export const I18N_PACK_EN = {
     chooseAppModal: {
       title: 'Choose Agent',
     },
+    card: {
+      startChat: 'New chat',
+      continueChat: 'Continue chat',
+    },
   },
   appsCreator: {
     files: {
@@ -801,6 +809,7 @@ export const I18N_PACK_EN = {
     sidebar: {
       allApps: 'All Agents',
       favoriteApps: 'Favorite Agents',
+      recentApps: 'Recently Used Agents',
       header: 'Categories',
       otherCategoryItems: 'Other',
       showMore: 'Show all (%{count} more)',

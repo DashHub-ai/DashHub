@@ -39,6 +39,10 @@ const ChatsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         project: createIdNameObjectMapping(),
         creator: createIdObjectMapping(),
         internal: { type: 'boolean' },
+        apps: {
+          type: 'nested',
+          ...createIdObjectMapping(),
+        },
         stats: {
           properties: {
             messages: {

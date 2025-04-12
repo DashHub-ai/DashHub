@@ -1,11 +1,7 @@
 import clsx from 'clsx';
-import { useEffect, useRef } from 'react';
+import { type PropsWithChildren, useEffect, useRef } from 'react';
 
-type AnimatedGradientTitleProps = {
-  text: string;
-};
-
-export function AnimatedGradientTitle({ text }: AnimatedGradientTitleProps) {
+export function AnimatedGradientTitle({ children }: PropsWithChildren) {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -31,7 +27,7 @@ export function AnimatedGradientTitle({ text }: AnimatedGradientTitleProps) {
 
   return (
     <span className="inline-block relative">
-      {text}
+      {children}
       <span
         ref={ref}
         className={clsx(
@@ -41,7 +37,7 @@ export function AnimatedGradientTitle({ text }: AnimatedGradientTitleProps) {
         style={{
           transformOrigin: 'left',
           width: '0',
-          maxWidth: '30%', // Keep the highlight shorter than the text
+          maxWidth: 'max(64px, 30%)', // Keep the highlight shorter than the text
         }}
       />
     </span>

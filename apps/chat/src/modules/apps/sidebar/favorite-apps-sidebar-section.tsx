@@ -16,6 +16,21 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
 export function FavoriteAppsSidebarSection() {
+  const { pack } = useI18n();
+
+  return (
+    <SidebarSection
+      id="favorite-apps"
+      title={pack.sidebar.favoriteApps.title}
+      icon={<HeartIcon size={18} />}
+      defaultExpanded={false}
+    >
+      <FavoriteAppsSidebarContent />
+    </SidebarSection>
+  );
+}
+
+function FavoriteAppsSidebarContent() {
   const { organization } = useWorkspaceOrganizationOrThrow();
   const sitemap = useSitemap();
   const { pack } = useI18n();
@@ -40,11 +55,7 @@ export function FavoriteAppsSidebarSection() {
   });
 
   if (value.status !== 'success') {
-    return <SidebarLinksSkeleton count={3} />;
-  }
-
-  if (!value.data.total) {
-    return null;
+    return <SidebarLinksSkeleton count={4} />;
   }
 
   const links: SidebarLinkItem[] = value.data.items.map(item => ({
@@ -55,14 +66,8 @@ export function FavoriteAppsSidebarSection() {
   }));
 
   return (
-    <SidebarSection
-      id="favorite-apps"
-      title={pack.sidebar.favoriteApps.title}
-      icon={<HeartIcon size={18} />}
-      defaultExpanded={false}
-    >
+    <>
       <SidebarLinks links={links} />
-
       <SidebarSectionAllLink
         href={sitemap.forceRedirect.generate(
           sitemap.apps.index.generate({ searchParams: { favorites: true } }),
@@ -70,6 +75,6 @@ export function FavoriteAppsSidebarSection() {
       >
         {pack.sidebar.favoriteApps.all}
       </SidebarSectionAllLink>
-    </SidebarSection>
+    </>
   );
 }

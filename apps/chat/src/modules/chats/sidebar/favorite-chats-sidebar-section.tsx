@@ -16,6 +16,21 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
 export function FavoriteChatsSidebarSection() {
+  const { pack } = useI18n();
+
+  return (
+    <SidebarSection
+      id="favorite-chats"
+      title={pack.sidebar.favoriteChats.title}
+      icon={<HeartIcon size={18} />}
+      defaultExpanded={false}
+    >
+      <FavoriteChatsSidebarContent />
+    </SidebarSection>
+  );
+}
+
+function FavoriteChatsSidebarContent() {
   const { organization } = useWorkspaceOrganizationOrThrow();
   const sitemap = useSitemap();
   const { pack } = useI18n();
@@ -42,11 +57,7 @@ export function FavoriteChatsSidebarSection() {
   });
 
   if (value.status !== 'success') {
-    return <SidebarLinksSkeleton count={3} />;
-  }
-
-  if (!value.data.total) {
-    return null;
+    return <SidebarLinksSkeleton count={5} />;
   }
 
   const links: SidebarLinkItem[] = value.data.items.map(item => ({
@@ -55,17 +66,11 @@ export function FavoriteChatsSidebarSection() {
   }));
 
   return (
-    <SidebarSection
-      id="favorite-chats"
-      title={pack.sidebar.favoriteChats.title}
-      icon={<HeartIcon size={18} />}
-      defaultExpanded={false}
-    >
+    <>
       <SidebarLinks links={links} />
-
       <SidebarSectionAllLink href={sitemap.chats.index}>
         {pack.sidebar.favoriteChats.all}
       </SidebarSectionAllLink>
-    </SidebarSection>
+    </>
   );
 }

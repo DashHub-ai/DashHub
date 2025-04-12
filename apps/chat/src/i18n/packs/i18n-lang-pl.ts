@@ -144,6 +144,10 @@ export const I18N_PACK_PL: I18nLangPack = {
       title: 'Ostatnie projekty',
       all: 'Wszystkie projekty',
     },
+    apps: {
+      title: 'Ostatni agenci',
+      all: 'Wszyscy agenci',
+    },
   },
   modals: {
     archiveConfirm: {
@@ -589,6 +593,10 @@ export const I18N_PACK_PL: I18nLangPack = {
     chooseAppModal: {
       title: 'Wybierz aplikację',
     },
+    card: {
+      startChat: 'Nowy czat',
+      continueChat: 'Kontynuuj czat',
+    },
   },
   appsCreator: {
     files: {
@@ -803,6 +811,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     sidebar: {
       allApps: 'Wszyscy agenci',
       favoriteApps: 'Ulubieni agenci',
+      recentApps: 'Ostatnio używani agenci',
       header: 'Kategorie',
       showMore: 'Pokaż wszystkie (%{count} więcej)',
       otherCategoryItems: 'Pozostałe',

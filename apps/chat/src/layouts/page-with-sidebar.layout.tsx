@@ -2,9 +2,13 @@ import type { PropsWithChildren } from 'react';
 
 import clsx from 'clsx';
 
-import { FavoriteAppsSidebarSection, FavoriteChatsSidebarSection } from '~/modules';
-import { ChatsHistorySidebarSection } from '~/modules/chats/sidebar/chats-history-sidebar-section';
-import { ProjectsHistorySidebarSection } from '~/modules/projects/sidebar/projects-history-sidebar-section';
+import {
+  AppsHistorySidebarSection,
+  ChatsHistorySidebarSection,
+  FavoriteAppsSidebarSection,
+  FavoriteChatsSidebarSection,
+  ProjectsHistorySidebarSection,
+} from '~/modules';
 import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-organization';
 
 import { Footer } from './footer';
@@ -12,7 +16,6 @@ import { Navigation, type NavigationProps } from './navigation';
 import { Sidebar, useSidebarToggledStorage } from './sidebar';
 
 type Props = PropsWithChildren & {
-  gapClassName?: string;
   withFooter?: boolean;
   backgroundClassName?: string;
   contentClassName?: string;
@@ -22,7 +25,6 @@ type Props = PropsWithChildren & {
 export function PageWithSidebarLayout(
   {
     children,
-    gapClassName,
     contentClassName,
     backgroundClassName = 'bg-white',
     withFooter = true,
@@ -47,6 +49,7 @@ export function PageWithSidebarLayout(
           <FavoriteAppsSidebarSection />
           <FavoriteChatsSidebarSection />
           <ProjectsHistorySidebarSection />
+          <AppsHistorySidebarSection />
           <ChatsHistorySidebarSection />
         </Sidebar>
       )}
@@ -54,15 +57,17 @@ export function PageWithSidebarLayout(
       <div
         className={clsx(
           'flex flex-col 2xl:px-16 min-h-screen',
-          gapClassName ?? 'gap-8',
           !isSidebarVisible && organization && '2xl:pl-8',
         )}
       >
-        <Navigation {...navigationProps} />
+        <Navigation
+          className="mb-4"
+          {...navigationProps}
+        />
 
         <div
           className={clsx(
-            'flex-1 space-y-8 w-full',
+            'flex-1 space-y-10 mb-4 last:mb-0 w-full',
             'container mx-auto',
             contentClassName,
           )}

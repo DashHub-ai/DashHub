@@ -42,6 +42,9 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, contentFoo
     schema: SdkSearchAppsInputV,
     fallbackSearchParams: {
       limit: 12,
+      favoritesAgg: true,
+      recentAgg: true,
+      includeRecentChats: true,
     },
     fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.apps.search),
   });

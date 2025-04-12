@@ -18,6 +18,7 @@ export const SdkCreateAppInputV = SdkAppV.omit({
   project: true,
   category: true,
   aiModel: true,
+  recentChats: true,
 })
   .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({

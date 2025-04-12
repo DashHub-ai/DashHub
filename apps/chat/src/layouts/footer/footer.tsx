@@ -6,7 +6,7 @@ export function Footer() {
   const t = useI18n().pack.footer;
 
   return (
-    <footer className="py-12 w-full">
+    <footer className="py-12 pb-8 w-full">
       <div className="mx-auto px-4 container">
         <div className="flex flex-col items-center gap-6 text-sm">
           <div className="text-gray-400">

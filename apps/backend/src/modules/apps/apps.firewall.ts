@@ -1,7 +1,7 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type { SdkJwtTokenT, SdkSearchAppsInputT } from '@llm/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
@@ -9,7 +9,6 @@ import type { ChatsService } from '../chats';
 import type { TableId, TableUuid } from '../database';
 import type { PermissionsService } from '../permissions';
 import type { AppsService, InternalCreateAppInputT, InternalUpdateInputT } from './apps.service';
-import type { EsAppsInternalFilters } from './elasticsearch';
 
 export class AppsFirewall extends AuthFirewallService {
   constructor(
@@ -27,13 +26,13 @@ export class AppsFirewall extends AuthFirewallService {
     TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPermissionsKeyIfNotCreator),
   );
 
-  search = (filters: EsAppsInternalFilters) => pipe(
+  search = (filters: SdkSearchAppsInputT) => pipe(
     filters,
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(filters => this.appsService.search({
       ...filters,
-      favoritesAgg: {
+      personalization: {
         userId: this.userId,
       },
     })),

@@ -4,6 +4,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { sql } from 'kysely';
 import { injectable } from 'tsyringe';
 
+import { uniq } from '@llm/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,
@@ -11,8 +12,10 @@ import {
   createUnarchiveRecordQuery,
   createUnarchiveRecordsQuery,
   DatabaseError,
-  TableId,
-  TransactionalAttrs,
+  type TableId,
+  type TableRowWithId,
+  type TableUuid,
+  type TransactionalAttrs,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
@@ -28,6 +31,40 @@ export class AppsRepo extends createDatabaseRepo('apps') {
   unarchive = createUnarchiveRecordQuery(this.queryFactoryAttrs);
 
   unarchiveRecords = createUnarchiveRecordsQuery(this.queryFactoryAttrs);
+
+  findAllRecentlyUsedApps = ({ forwardTransaction, userId }: TransactionalAttrs<{ userId: TableId; }>) => {
+    const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
+
+    return pipe(
+      transaction(
+        async qb =>
+          qb
+            .selectFrom('messages')
+            .innerJoin('chats', 'chats.id', 'messages.chat_id')
+            .where('chats.archived', '=', false)
+            .where('messages.creator_user_id', '=', userId)
+            .where('messages.role', '=', 'system')
+            .where('messages.app_id', 'is not', null)
+            .groupBy('app_id')
+            .select('app_id as id')
+            .select(qb => [
+              qb.fn.max('messages.created_at').as('last_used_at'),
+              sql<TableUuid[]>`array_agg("chats"."id" order by "chats"."created_at" desc)`.as('chatIds'),
+            ])
+            .$narrowType<TableRowWithId>()
+            .orderBy('last_used_at', 'desc')
+            .limit(500)
+            .execute(),
+      ),
+      DatabaseError.tryTask,
+      TE.map(
+        A.map(item => ({
+          ...item,
+          chatIds: uniq(item.chatIds ?? []),
+        })),
+      ),
+    );
+  };
 
   findWithRelationsByIds = ({ forwardTransaction, ids }: TransactionalAttrs<{ ids: TableId[]; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });

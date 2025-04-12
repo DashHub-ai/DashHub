@@ -52,11 +52,11 @@ export function ChatRoute({ id }: Props) {
   return (
     <PageWithSidebarLayout
       withFooter={false}
-      gapClassName="gap-0"
       backgroundClassName="bg-white"
       contentClassName="pb-0"
       navigationProps={{
         withAdditionalUI: true,
+        className: 'mb-0',
       }}
     >
       <RouteMetaTags meta={t.meta} />

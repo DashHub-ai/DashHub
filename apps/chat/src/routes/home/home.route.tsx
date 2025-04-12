@@ -12,6 +12,9 @@ export function HomeRoute() {
   return (
     <PageWithSidebarLayout
       contentClassName="flex align-stretch"
+      navigationProps={{
+        className: 'mb-0',
+      }}
       withFooter={false}
     >
       <RouteMetaTags meta={t.meta} />
@@ -21,8 +24,11 @@ export function HomeRoute() {
           <div className="top-0 right-0 left-0 absolute flex flex-col justify-start [@media(min-height:870px)]:justify-center h-full overflow-y-auto">
             <div className="mb-8">
               <h1 className="mb-5 font-bold text-3xl">
-                <AnimatedGradientTitle text={t.header.primary} />
+                <AnimatedGradientTitle>
+                  {t.header.primary}
+                </AnimatedGradientTitle>
               </h1>
+
               <h2 className="text-gray-500 text-xl">{t.header.secondary}</h2>
             </div>
             <PromotedAppsContainer className="w-full" />

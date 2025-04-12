@@ -56,7 +56,7 @@ export default {
             opacity: '1',
           },
           '100%': {
-            width: '30%', // Match the maxWidth in the component
+            width: 'max(64px, 30%)', // Match the maxWidth in the component
             opacity: '1',
           },
         },

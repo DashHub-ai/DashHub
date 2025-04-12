@@ -178,8 +178,16 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
                 eb.selectFrom('messages')
                   .where('messages.chat_id', '=', eb.ref('chats.id'))
                   .where('messages.role', '!=', 'system')
-                  .select(eb.fn.count('id').as('count'))
+                  .select(({ fn }) => fn.count('id').as('count'))
                   .as('messages_count'),
+
+              eb =>
+                eb.selectFrom('messages')
+                  .where('messages.chat_id', '=', eb.ref('chats.id'))
+                  .where('messages.role', '=', 'system')
+                  .where('app_id', 'is not', null)
+                  .select(({ fn }) => fn.agg<TableId[]>('array_agg', ['app_id']).as('ids'))
+                  .as('apps'),
             ])
             .limit(ids.length)
             .execute(),
@@ -215,6 +223,8 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
           permissions_json: permissions,
           messages_count: messagesCount,
 
+          apps,
+
           ...item
         }): ChatTableRowWithRelations => {
           const creator = {
@@ -233,6 +243,9 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
           return {
             ...camelcaseKeys(item),
+            apps: (apps ?? []).map(id => ({
+              id,
+            })),
             project: projectId && projectName
               ? {
                   id: projectId,

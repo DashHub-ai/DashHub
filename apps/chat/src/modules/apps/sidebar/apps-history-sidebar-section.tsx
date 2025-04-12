@@ -3,7 +3,7 @@ import { HistoryIcon } from 'lucide-react';
 
 import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { useSdkForLoggedIn, useSdkOnFavoriteAction } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import {
   type SidebarLinkItem,
@@ -15,54 +15,65 @@ import {
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
-export function ProjectsHistorySidebarSection() {
+export function AppsHistorySidebarSection() {
   const { pack } = useI18n();
 
   return (
     <SidebarSection
-      id="projects-history"
-      title={pack.sidebar.projects.title}
+      id="apps-history"
+      title={pack.sidebar.apps.title}
       icon={<HistoryIcon size={18} />}
-      defaultExpanded={false}
+      defaultExpanded
     >
-      <ProjectsHistorySidebarContent />
+      <AppsHistorySidebarContent />
     </SidebarSection>
   );
 }
 
-function ProjectsHistorySidebarContent() {
+function AppsHistorySidebarContent() {
   const { organization } = useWorkspaceOrganizationOrThrow();
   const sitemap = useSitemap();
   const { pack } = useI18n();
-  const { sdks, session } = useSdkForLoggedIn();
+  const { sdks } = useSdkForLoggedIn();
   const value = useAsyncValue(
     pipe(
-      sdks.dashboard.projects.search({
-        creatorIds: [session.token.sub],
+      sdks.dashboard.apps.search({
         organizationIds: [organization.id],
         offset: 0,
         limit: 5,
         archived: false,
+        sort: 'recently-used:desc',
+        includeRecentChats: true,
       }),
       tryOrThrowTE,
     ),
     [],
   );
 
+  useSdkOnFavoriteAction(() => {
+    void value.silentReload();
+  });
+
   if (value.status !== 'success') {
-    return <SidebarLinksSkeleton count={5} />;
+    return <SidebarLinksSkeleton count={3} />;
   }
 
   const links: SidebarLinkItem[] = value.data.items.map(item => ({
-    href: sitemap.projects.show.generate({ pathParams: { id: item.id } }),
     label: item.name,
+    href: sitemap.forceRedirect.generate(
+      sitemap.apps.recentChatOrFallback(item),
+    ),
   }));
 
   return (
     <>
       <SidebarLinks links={links} />
-      <SidebarSectionAllLink href={sitemap.projects.index.generate({})}>
-        {pack.sidebar.projects.all}
+      <SidebarSectionAllLink
+        href={sitemap.forceRedirect.generate(
+          sitemap.apps.index.generate({ searchParams: { includeRecentChats: true } }),
+        )}
+      >
+        {pack.sidebar.favoriteApps.all}
       </SidebarSectionAllLink>
     </>
   );

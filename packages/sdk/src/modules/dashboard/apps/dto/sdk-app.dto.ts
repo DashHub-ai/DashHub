@@ -7,6 +7,7 @@ import {
   SdkTableRowWithDatesV,
   SdkTableRowWithIdNameV,
   SdkTableRowWithIdV,
+  SdkTableRowWithUuidV,
 } from '~/shared';
 
 import { SdkTableRowWithPermissionsV } from '../../permissions/dto/sdk-table-row-with-permissions.dto';
@@ -21,6 +22,7 @@ export const SdkAppV = z.strictObject({
   aiModel: SdkTableRowWithIdNameV.nullable(),
   logo: SdkBaseS3ResourceV.nullable(),
   promotion: z.number(),
+  recentChats: z.array(SdkTableRowWithUuidV),
 })
   .merge(SdkTableRowWithPermissionsV)
   .merge(SdkTableRowWithIdNameV)

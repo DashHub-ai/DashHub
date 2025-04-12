@@ -43,7 +43,7 @@ export function ChooseAppModal({
     <Modal
       {...props}
       formProps={{
-        className: 'w-[1200px]',
+        className: 'w-[1500px] max-w-[90vw]',
       }}
       onClose={onClose}
       header={(

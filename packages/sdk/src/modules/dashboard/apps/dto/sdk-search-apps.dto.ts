@@ -24,6 +24,7 @@ export type SdkSearchAppItemT = z.infer<typeof SdkSearchAppItemV>;
 export const SdkAppsSortV = SdkSortV([
   'promotion:desc',
   'favorites:desc',
+  'recently-used:desc',
   ...DEFAULT_SDK_SORT,
 ]);
 
@@ -35,6 +36,10 @@ export const SdkSearchAppsInputV = SdkOffsetPaginationInputV
     categoriesIds: SdkIdsArrayV.optional(),
     sort: SdkAppsSortV.optional(),
     favorites: StrictBooleanV.optional(),
+    favoritesAgg: StrictBooleanV.optional(),
+    recent: StrictBooleanV.optional(),
+    recentAgg: StrictBooleanV.optional(),
+    includeRecentChats: StrictBooleanV.optional(),
   })
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkIdsFiltersInputV)
@@ -46,6 +51,7 @@ export type SdkSearchAppsInputT = z.infer<typeof SdkSearchAppsInputV>;
 export const SdkSearchAppsAggsV = z.object({
   categories: SdkCountedAppsCategoriesTreeV,
   favorites: SdkCountedRecordV,
+  recentlyUsed: SdkCountedRecordV,
 });
 
 export type SdkSearchAppsAggsT = z.infer<typeof SdkSearchAppsAggsV>;

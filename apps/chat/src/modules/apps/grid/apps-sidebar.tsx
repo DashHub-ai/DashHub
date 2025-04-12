@@ -1,5 +1,5 @@
 import { controlled } from '@under-control/forms';
-import { HeartIcon } from 'lucide-react';
+import { HeartIcon, HistoryIcon } from 'lucide-react';
 
 import type { SdkIdsArrayT, SdkSearchAppsInputT, SdkSearchAppsOutputT } from '@llm/sdk';
 
@@ -23,7 +23,8 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
   const t = useI18n().pack.appsCategories.sidebar;
 
   const categoriesTree = useLastNonNullValue(result?.aggs?.categories);
-  const totalFavorites = useLastNonNullValue(result?.aggs?.favorites.count);
+  const totalFavorites = useLastNonNullValue(result?.aggs?.favorites.count) || 0;
+  const totalRecent = useLastNonNullValue(result?.aggs?.recentlyUsed.count) || 0;
 
   const onSelectCategories = (categoriesIds: SdkIdsArrayT) => {
     setValue({
@@ -31,7 +32,9 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
       value: {
         categoriesIds,
         favorites: false,
+        recent: false,
         offset: 0,
+        sort: 'createdAt:asc',
       },
     });
   };
@@ -42,7 +45,22 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
       value: {
         categoriesIds: [],
         favorites: isSelected,
+        recent: false,
         offset: 0,
+        sort: 'createdAt:asc',
+      },
+    });
+  };
+
+  const onToggleRecent = (isSelected: boolean) => {
+    setValue({
+      merge: true,
+      value: {
+        categoriesIds: [],
+        favorites: false,
+        recent: isSelected,
+        offset: 0,
+        sort: 'recently-used:desc',
       },
     });
   };
@@ -53,24 +71,38 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
 
   return (
     <AppsCategoriesSidebar
-      allowShowAllSelected={!value.favorites}
+      allowShowAllSelected={!value.favorites && !value.recent}
       tree={categoriesTree ?? []}
       selected={value.categoriesIds ?? []}
       onSelect={onSelectCategories}
       onReload={onSilentReload}
-      {...totalFavorites && {
-        prependItems: (
-          <li>
-            <AppCategoryButton
-              icon={<HeartIcon size={16} />}
-              label={t.favoriteApps}
-              count={totalFavorites}
-              isSelected={!!value.favorites}
-              onClick={() => onToggleFavorites(!value.favorites)}
-            />
-          </li>
-        ),
-      }}
+      prependItems={(
+        <>
+          {totalFavorites > 0 && (
+            <li>
+              <AppCategoryButton
+                icon={<HeartIcon size={16} />}
+                label={t.favoriteApps}
+                count={totalFavorites}
+                isSelected={!!value.favorites}
+                onClick={() => onToggleFavorites(!value.favorites)}
+              />
+            </li>
+          )}
+
+          {totalRecent > 0 && (
+            <li>
+              <AppCategoryButton
+                icon={<HistoryIcon size={16} />}
+                label={t.recentApps}
+                count={totalRecent}
+                isSelected={!!value.recent}
+                onClick={() => onToggleRecent(!value.recent)}
+              />
+            </li>
+          )}
+        </>
+      )}
     />
   );
 });

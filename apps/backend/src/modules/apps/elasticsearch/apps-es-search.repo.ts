@@ -13,7 +13,16 @@ import type {
 } from '@llm/sdk';
 import type { TableId } from '~/modules/database';
 
-import { isNil, type Nullable, pluck, pluckIds, rejectFalsyItems, uniq } from '@llm/commons';
+import {
+  groupByFlatProp,
+  isNil,
+  type Nullable,
+  type Overwrite,
+  pluck,
+  pluckIds,
+  rejectFalsyItems,
+  uniq,
+} from '@llm/commons';
 import { AppsCategoriesEsTreeRepo } from '~/modules/apps-categories/elasticsearch';
 import {
   createPaginationOffsetSearchQuery,
@@ -29,24 +38,27 @@ import {
 } from '~/modules/permissions/record-protection';
 import { UsersFavoritesRepo } from '~/modules/users-favorites/users-favorites.repo';
 
+import { AppsRepo } from '../apps.repo';
 import {
   type AppsEsDocument,
   AppsEsIndexRepo,
 } from './apps-es-index.repo';
 
-export type EsAppsInternalFilters =
-  & WithPermissionsInternalFilters<SdkSearchAppsInputT>
-  & {
-    favoritesAgg?: {
+export type EsAppsInternalFilters = Overwrite<
+  WithPermissionsInternalFilters<SdkSearchAppsInputT>,
+  {
+    personalization?: {
       userId: TableId;
     };
-  };
+  }
+>;
 
 @injectable()
 export class AppsEsSearchRepo {
   constructor(
     @inject(AppsEsIndexRepo) private readonly indexRepo: AppsEsIndexRepo,
     @inject(AppsCategoriesEsTreeRepo) private readonly categoriesTreeRepo: AppsCategoriesEsTreeRepo,
+    @inject(AppsRepo) private readonly appsRepo: AppsRepo,
     @inject(UsersFavoritesRepo) private readonly usersFavoritesRepo: UsersFavoritesRepo,
   ) {}
 
@@ -56,44 +68,78 @@ export class AppsEsSearchRepo {
   );
 
   search = (dto: EsAppsInternalFilters) => pipe(
-    TE.Do,
-    TE.bind('query', () => pipe(
-      this.createEsRequestSearchBody(dto),
-      TE.chainW(query => this.indexRepo.search(query.toJSON())),
-    )),
+    this.createEsRequestSearchBody(dto),
+    TE.bindW('query', ({ searchBody }) => this.indexRepo.search(searchBody.toJSON())),
     TE.bindW('categoriesAggs', ({ query: { aggregations } }) =>
       this.categoriesTreeRepo.createCountedTree({
         countedAggs: AppsEsSearchRepo.mapCategoriesAggregations(aggregations),
         organizationIds: dto.organizationIds,
       })),
-    TE.map(({ categoriesAggs, query: { aggregations, hits: { total, hits } } }): SdkSearchAppsOutputT => ({
-      items: pipe(
-        hits,
-        pluck('_source'),
-        A.map(item => AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument)),
-      ),
-      total: total.value,
-      aggs: {
-        categories: categoriesAggs,
-        favorites: {
-          count: (aggregations as any)?.total_favorites?.filtered?.doc_count ?? 0,
-        },
+    TE.map((
+      {
+        recentlyUsedApps,
+        categoriesAggs,
+        query: { aggregations, hits: { total, hits } },
       },
-    })),
+    ): SdkSearchAppsOutputT => {
+      const recentChatsMap = pipe(
+        recentlyUsedApps,
+        groupByFlatProp('id'),
+      );
+
+      return {
+        items: pipe(
+          hits,
+          pluck('_source'),
+          A.map(item => ({
+            ...AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument),
+            recentChats: (recentChatsMap[item.id!]?.chatIds ?? []).map(id => ({
+              id,
+            })),
+          })),
+        ),
+        total: total.value,
+        aggs: {
+          categories: categoriesAggs,
+          favorites: {
+            count: (aggregations as any)?.total_favorites?.filtered?.doc_count ?? 0,
+          },
+          recentlyUsed: {
+            count: (aggregations as any)?.total_recently_used?.filtered?.doc_count ?? 0,
+          },
+        },
+      };
+    }),
   );
 
-  private readonly createEsRequestSearchBody = ({ favoritesAgg, ...dto }: EsAppsInternalFilters) =>
+  private readonly createEsRequestSearchBody = (
+    {
+      favoritesAgg,
+      recentAgg,
+      personalization,
+      ...dto
+    }: EsAppsInternalFilters,
+  ) =>
     pipe(
       TE.Do,
-      TE.bind('favorites', () =>
-        favoritesAgg
-          ? this.usersFavoritesRepo.findAll({
+      TE.apSW('favoritesIds', (dto.sort === 'favorites:desc' || dto.favorites || favoritesAgg) && personalization
+        ? pipe(
+            this.usersFavoritesRepo.findAll({
               type: 'app',
-              userId: favoritesAgg.userId,
-            })
-          : TE.right([])),
-      TE.bind('filtersWithMaybeFavorites', ({ favorites }) => {
-        if (!dto.favorites) {
+              userId: personalization.userId,
+            }),
+            TE.map(favorites => pluckIds(favorites) as TableId[]),
+          )
+        : TE.right([])),
+
+      TE.apSW('recentlyUsedApps', (dto.sort === 'recently-used:desc' || dto.recent || recentAgg || dto.includeRecentChats) && personalization
+        ? this.appsRepo.findAllRecentlyUsedApps({
+            userId: personalization.userId,
+          })
+        : TE.right([])),
+
+      TE.bind('extendedFilters', ({ favoritesIds, recentlyUsedApps }) => {
+        if (!dto.favorites && !dto.recent) {
           return TE.right(dto);
         }
 
@@ -103,14 +149,20 @@ export class AppsEsSearchRepo {
             // trick for making the `ids` query generator always generate ids term query even if array is empty.
             // It'll make the query work properly when there is no favorites.
             -2,
-            ...(dto.ids ?? []),
-            ...pluckIds(favorites) as TableId[],
+            ...dto.recent ? pluckIds(recentlyUsedApps) : [],
+            ...dto.favorites ? favoritesIds : [],
           ],
         });
       }),
-      TE.map(({ favorites, filtersWithMaybeFavorites }) =>
-        createPaginationOffsetSearchQuery(filtersWithMaybeFavorites)
-          .query(AppsEsSearchRepo.createEsRequestSearchFilters(filtersWithMaybeFavorites))
+      TE.map(({ favoritesIds, recentlyUsedApps, extendedFilters }) => {
+        const recentlyUsedAppsIds = pipe(
+          recentlyUsedApps,
+          pluckIds,
+          uniq,
+        );
+
+        const searchBody = createPaginationOffsetSearchQuery(extendedFilters)
+          .query(AppsEsSearchRepo.createEsRequestSearchFilters(extendedFilters))
           .aggs([
             // Categories are not affected by the favorite filters,
             // as the favorite filters pretends to be fake category
@@ -132,7 +184,25 @@ export class AppsEsSearchRepo {
                   ),
               ),
 
-            ...favorites.length
+            ...recentlyUsedApps.length && recentAgg
+              ? [
+                  esb
+                    .globalAggregation('total_recently_used')
+                    .agg(
+                      esb
+                        .filterAggregation('filtered')
+                        .filter(
+                          AppsEsSearchRepo.createEsRequestSearchFilters({
+                            ...extendedFilters,
+                            categoriesIds: [],
+                            ids: recentlyUsedAppsIds,
+                          }),
+                        ),
+                    ),
+                ]
+              : [],
+
+            ...favoritesIds.length && favoritesAgg
               ? [
                   esb
                     .globalAggregation('total_favorites')
@@ -141,19 +211,26 @@ export class AppsEsSearchRepo {
                         .filterAggregation('filtered')
                         .filter(
                           AppsEsSearchRepo.createEsRequestSearchFilters({
-                            ...filtersWithMaybeFavorites,
+                            ...extendedFilters,
                             categoriesIds: [],
-                            ids: uniq([
-                              ...filtersWithMaybeFavorites.ids ?? [],
-                              ...pluckIds(favorites) as number[],
-                            ]),
+                            ids: uniq(favoritesIds),
                           }),
                         ),
                     ),
                 ]
               : [],
           ])
-          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort, filtersWithMaybeFavorites.ids))),
+          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery({
+            sort: dto.sort,
+            favoriteIds: uniq(favoritesIds),
+            recentIds: recentlyUsedAppsIds,
+          }));
+
+        return {
+          recentlyUsedApps,
+          searchBody,
+        };
+      }),
     );
 
   private static createEsRequestSearchFilters = (
@@ -187,7 +264,17 @@ export class AppsEsSearchRepo {
       ]),
     );
 
-  private static createAppsSortFieldQuery = (sort: Nullable<SdkAppsSortT>, ids?: TableId[]) => {
+  private static createAppsSortFieldQuery = (
+    {
+      sort,
+      recentIds,
+      favoriteIds,
+    }: {
+      sort: Nullable<SdkAppsSortT>;
+      favoriteIds?: TableId[];
+      recentIds?: TableId[];
+    },
+  ) => {
     switch (sort) {
       case undefined:
       case null:
@@ -197,10 +284,19 @@ export class AppsEsSearchRepo {
           createSortFieldQuery('createdAt:desc'),
         ];
 
-      case 'favorites:desc':
-        if (ids?.length) {
+      case 'recently-used:desc':
+        if (recentIds?.length) {
           return [
-            createSortByIdsOrderScript(ids),
+            createSortByIdsOrderScript(recentIds),
+          ];
+        }
+
+        return createScoredSortFieldQuery('createdAt:desc');
+
+      case 'favorites:desc':
+        if (favoriteIds?.length) {
+          return [
+            createSortByIdsOrderScript(favoriteIds),
           ];
         }
 
@@ -233,5 +329,6 @@ export class AppsEsSearchRepo {
       logo: source.logo && camelcaseKeys(source.logo),
       aiModel: source.ai_model,
       promotion: source.promotion,
+      recentChats: [],
     });
 }
