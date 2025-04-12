@@ -142,6 +142,10 @@ export const I18N_PACK_EN = {
       title: 'Recent projects',
       all: 'All projects',
     },
+    apps: {
+      title: 'Recent agents',
+      all: 'All agents',
+    },
   },
   modals: {
     archiveConfirm: {

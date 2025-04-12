@@ -2,9 +2,13 @@ import type { PropsWithChildren } from 'react';
 
 import clsx from 'clsx';
 
-import { FavoriteAppsSidebarSection, FavoriteChatsSidebarSection } from '~/modules';
-import { ChatsHistorySidebarSection } from '~/modules/chats/sidebar/chats-history-sidebar-section';
-import { ProjectsHistorySidebarSection } from '~/modules/projects/sidebar/projects-history-sidebar-section';
+import {
+  AppsHistorySidebarSection,
+  ChatsHistorySidebarSection,
+  FavoriteAppsSidebarSection,
+  FavoriteChatsSidebarSection,
+  ProjectsHistorySidebarSection,
+} from '~/modules';
 import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-organization';
 
 import { Footer } from './footer';
@@ -47,6 +51,7 @@ export function PageWithSidebarLayout(
           <FavoriteAppsSidebarSection />
           <FavoriteChatsSidebarSection />
           <ProjectsHistorySidebarSection />
+          <AppsHistorySidebarSection />
           <ChatsHistorySidebarSection />
         </Sidebar>
       )}

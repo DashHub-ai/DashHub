@@ -144,6 +144,10 @@ export const I18N_PACK_PL: I18nLangPack = {
       title: 'Ostatnie projekty',
       all: 'Wszystkie projekty',
     },
+    apps: {
+      title: 'Ostatni agenci',
+      all: 'Wszyscy agenci',
+    },
   },
   modals: {
     archiveConfirm: {

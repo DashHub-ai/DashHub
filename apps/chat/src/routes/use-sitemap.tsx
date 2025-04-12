@@ -1,5 +1,6 @@
 import { pipe } from 'fp-ts/lib/function';
 
+import type { SdkAppT } from '@llm/sdk';
 import type {
   SearchAppsRouteUrlFiltersT,
   SearchProjectsRouteUrlFiltersT,
@@ -22,6 +23,13 @@ export function useSitemap() {
       index: defineSitemapRouteGenerator<SearchAppsRouteUrlFiltersT>(prefixWithBaseRoute)('/apps'),
       create: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/create'),
       update: defineSitemapRouteGenerator(prefixWithBaseRoute)('/apps/edit/:id'),
+      recentChatOrFallback: ({ name, recentChats }: Pick<SdkAppT, 'id' | 'name' | 'recentChats'>) => {
+        if (recentChats.length) {
+          return sitemap.chat.generate({ pathParams: { id: recentChats[0].id } });
+        }
+
+        return sitemap.apps.index.generate({ searchParams: { phrase: name } });
+      },
     },
     experts: prefixWithBaseRoute('/experts'),
     login: prefixWithBaseRoute('/login'),
