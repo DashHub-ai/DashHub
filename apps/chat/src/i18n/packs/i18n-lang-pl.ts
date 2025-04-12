@@ -807,6 +807,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     sidebar: {
       allApps: 'Wszyscy agenci',
       favoriteApps: 'Ulubieni agenci',
+      recentApps: 'Ostatnio używani agenci',
       header: 'Kategorie',
       showMore: 'Pokaż wszystkie (%{count} więcej)',
       otherCategoryItems: 'Pozostałe',

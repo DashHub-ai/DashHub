@@ -37,6 +37,8 @@ export const SdkSearchAppsInputV = SdkOffsetPaginationInputV
     sort: SdkAppsSortV.optional(),
     favorites: StrictBooleanV.optional(),
     favoritesAgg: StrictBooleanV.optional(),
+    recent: StrictBooleanV.optional(),
+    recentAgg: StrictBooleanV.optional(),
     includeRecentChats: StrictBooleanV.optional(),
   })
   .merge(SdkArchivedFiltersInputV)
@@ -49,6 +51,7 @@ export type SdkSearchAppsInputT = z.infer<typeof SdkSearchAppsInputV>;
 export const SdkSearchAppsAggsV = z.object({
   categories: SdkCountedAppsCategoriesTreeV,
   favorites: SdkCountedRecordV,
+  recentlyUsed: SdkCountedRecordV,
 });
 
 export type SdkSearchAppsAggsT = z.infer<typeof SdkSearchAppsAggsV>;

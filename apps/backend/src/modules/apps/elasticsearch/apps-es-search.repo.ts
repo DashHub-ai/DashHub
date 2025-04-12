@@ -104,15 +104,25 @@ export class AppsEsSearchRepo {
           favorites: {
             count: (aggregations as any)?.total_favorites?.filtered?.doc_count ?? 0,
           },
+          recentlyUsed: {
+            count: (aggregations as any)?.total_recently_used?.filtered?.doc_count ?? 0,
+          },
         },
       };
     }),
   );
 
-  private readonly createEsRequestSearchBody = ({ favoritesAgg, personalization, ...dto }: EsAppsInternalFilters) =>
+  private readonly createEsRequestSearchBody = (
+    {
+      favoritesAgg,
+      recentAgg,
+      personalization,
+      ...dto
+    }: EsAppsInternalFilters,
+  ) =>
     pipe(
       TE.Do,
-      TE.apSW('favoritesIds', (dto.sort === 'favorites:desc' || favoritesAgg) && personalization
+      TE.apSW('favoritesIds', (dto.sort === 'favorites:desc' || dto.favorites || favoritesAgg) && personalization
         ? pipe(
             this.usersFavoritesRepo.findAll({
               type: 'app',
@@ -122,16 +132,14 @@ export class AppsEsSearchRepo {
           )
         : TE.right([])),
 
-      TE.apSW('recentlyUsedApps', (dto.sort === 'recently-used:desc' || dto.includeRecentChats) && personalization
+      TE.apSW('recentlyUsedApps', (dto.sort === 'recently-used:desc' || dto.recent || recentAgg || dto.includeRecentChats) && personalization
         ? this.appsRepo.findAllRecentlyUsedApps({
             userId: personalization.userId,
           })
         : TE.right([])),
 
       TE.bind('extendedFilters', ({ favoritesIds, recentlyUsedApps }) => {
-        const { sort } = dto;
-
-        if (sort !== 'recently-used:desc' && sort !== 'favorites:desc') {
+        if (!dto.favorites && !dto.recent) {
           return TE.right(dto);
         }
 
@@ -141,8 +149,8 @@ export class AppsEsSearchRepo {
             // trick for making the `ids` query generator always generate ids term query even if array is empty.
             // It'll make the query work properly when there is no favorites.
             -2,
-            ...sort === 'recently-used:desc' ? pluckIds(recentlyUsedApps) : [],
-            ...sort === 'favorites:desc' ? favoritesIds : [],
+            ...dto.recent ? pluckIds(recentlyUsedApps) : [],
+            ...dto.favorites ? favoritesIds : [],
           ],
         });
       }),
@@ -170,6 +178,28 @@ export class AppsEsSearchRepo {
                   ),
               ),
 
+            ...recentlyUsedApps.length
+              ? [
+                  esb
+                    .globalAggregation('total_recently_used')
+                    .agg(
+                      esb
+                        .filterAggregation('filtered')
+                        .filter(
+                          AppsEsSearchRepo.createEsRequestSearchFilters({
+                            ...extendedFilters,
+                            categoriesIds: [],
+                            ids: pipe(
+                              recentlyUsedApps,
+                              pluckIds,
+                              uniq,
+                            ),
+                          }),
+                        ),
+                    ),
+                ]
+              : [],
+
             ...favoritesIds.length
               ? [
                   esb
@@ -181,10 +211,7 @@ export class AppsEsSearchRepo {
                           AppsEsSearchRepo.createEsRequestSearchFilters({
                             ...extendedFilters,
                             categoriesIds: [],
-                            ids: uniq([
-                              ...extendedFilters.ids ?? [],
-                              ...favoritesIds,
-                            ]),
+                            ids: uniq(favoritesIds),
                           }),
                         ),
                     ),
