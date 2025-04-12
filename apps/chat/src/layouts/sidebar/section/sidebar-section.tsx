@@ -57,7 +57,7 @@ export function SidebarSection(
       </div>
 
       {isExpanded && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 pl-1">
           {children}
         </div>
       )}
