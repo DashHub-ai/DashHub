@@ -24,6 +24,7 @@ export type SdkSearchAppItemT = z.infer<typeof SdkSearchAppItemV>;
 export const SdkAppsSortV = SdkSortV([
   'promotion:desc',
   'favorites:desc',
+  'recently-used:desc',
   ...DEFAULT_SDK_SORT,
 ]);
 
@@ -35,6 +36,7 @@ export const SdkSearchAppsInputV = SdkOffsetPaginationInputV
     categoriesIds: SdkIdsArrayV.optional(),
     sort: SdkAppsSortV.optional(),
     favorites: StrictBooleanV.optional(),
+    favoritesAgg: StrictBooleanV.optional(),
   })
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkIdsFiltersInputV)

@@ -13,7 +13,15 @@ import type {
 } from '@llm/sdk';
 import type { TableId } from '~/modules/database';
 
-import { isNil, type Nullable, pluck, pluckIds, rejectFalsyItems, uniq } from '@llm/commons';
+import {
+  isNil,
+  type Nullable,
+  type Overwrite,
+  pluck,
+  pluckIds,
+  rejectFalsyItems,
+  uniq,
+} from '@llm/commons';
 import { AppsCategoriesEsTreeRepo } from '~/modules/apps-categories/elasticsearch';
 import {
   createPaginationOffsetSearchQuery,
@@ -29,24 +37,27 @@ import {
 } from '~/modules/permissions/record-protection';
 import { UsersFavoritesRepo } from '~/modules/users-favorites/users-favorites.repo';
 
+import { AppsRepo } from '../apps.repo';
 import {
   type AppsEsDocument,
   AppsEsIndexRepo,
 } from './apps-es-index.repo';
 
-export type EsAppsInternalFilters =
-  & WithPermissionsInternalFilters<SdkSearchAppsInputT>
-  & {
-    favoritesAgg?: {
+export type EsAppsInternalFilters = Overwrite<
+  WithPermissionsInternalFilters<SdkSearchAppsInputT>,
+  {
+    personalization?: {
       userId: TableId;
     };
-  };
+  }
+>;
 
 @injectable()
 export class AppsEsSearchRepo {
   constructor(
     @inject(AppsEsIndexRepo) private readonly indexRepo: AppsEsIndexRepo,
     @inject(AppsCategoriesEsTreeRepo) private readonly categoriesTreeRepo: AppsCategoriesEsTreeRepo,
+    @inject(AppsRepo) private readonly appsRepo: AppsRepo,
     @inject(UsersFavoritesRepo) private readonly usersFavoritesRepo: UsersFavoritesRepo,
   ) {}
 
@@ -82,35 +93,62 @@ export class AppsEsSearchRepo {
     })),
   );
 
-  private readonly createEsRequestSearchBody = ({ favoritesAgg, ...dto }: EsAppsInternalFilters) =>
+  private readonly createEsRequestSearchBody = ({ favoritesAgg, personalization, ...dto }: EsAppsInternalFilters) =>
     pipe(
       TE.Do,
-      TE.bind('favorites', () =>
-        favoritesAgg
-          ? this.usersFavoritesRepo.findAll({
-              type: 'app',
-              userId: favoritesAgg.userId,
-            })
+      TE.bind('favoritesIds', () =>
+        favoritesAgg && personalization
+          ? pipe(
+              this.usersFavoritesRepo.findAll({
+                type: 'app',
+                userId: personalization.userId,
+              }),
+              TE.map(favorites => pluckIds(favorites) as TableId[]),
+            )
           : TE.right([])),
-      TE.bind('filtersWithMaybeFavorites', ({ favorites }) => {
-        if (!dto.favorites) {
-          return TE.right(dto);
+
+      TE.bind('recentlyUsedIds', () =>
+        dto.sort === 'recently-used:desc' && personalization
+          ? pipe(
+              this.appsRepo.findAllRecentlyUsedAppIds({
+                userId: personalization.userId,
+              }),
+              TE.map(pluckIds),
+            )
+          : TE.right([])),
+
+      TE.bind('extendedFilters', ({ favoritesIds, recentlyUsedIds }) => {
+        let newFilters = dto;
+
+        if (dto.favorites) {
+          newFilters = {
+            ...dto,
+            ids: [
+              // trick for making the `ids` query generator always generate ids term query even if array is empty.
+              // It'll make the query work properly when there is no favorites.
+              -2,
+              ...favoritesIds,
+            ],
+          };
         }
 
-        return TE.right({
-          ...dto,
-          ids: [
-            // trick for making the `ids` query generator always generate ids term query even if array is empty.
-            // It'll make the query work properly when there is no favorites.
-            -2,
-            ...(dto.ids ?? []),
-            ...pluckIds(favorites) as TableId[],
-          ],
-        });
+        if (dto.sort === 'recently-used:desc') {
+          newFilters = {
+            ...newFilters,
+            ids: [
+              // trick for making the `ids` query generator always generate ids term query even if array is empty.
+              // It'll make the query work properly when there is no favorites.
+              -2,
+              ...recentlyUsedIds,
+            ],
+          };
+        }
+
+        return TE.right(newFilters);
       }),
-      TE.map(({ favorites, filtersWithMaybeFavorites }) =>
-        createPaginationOffsetSearchQuery(filtersWithMaybeFavorites)
-          .query(AppsEsSearchRepo.createEsRequestSearchFilters(filtersWithMaybeFavorites))
+      TE.map(({ favoritesIds, extendedFilters }) =>
+        createPaginationOffsetSearchQuery(extendedFilters)
+          .query(AppsEsSearchRepo.createEsRequestSearchFilters(extendedFilters))
           .aggs([
             // Categories are not affected by the favorite filters,
             // as the favorite filters pretends to be fake category
@@ -132,7 +170,7 @@ export class AppsEsSearchRepo {
                   ),
               ),
 
-            ...favorites.length
+            ...favoritesIds.length
               ? [
                   esb
                     .globalAggregation('total_favorites')
@@ -141,11 +179,11 @@ export class AppsEsSearchRepo {
                         .filterAggregation('filtered')
                         .filter(
                           AppsEsSearchRepo.createEsRequestSearchFilters({
-                            ...filtersWithMaybeFavorites,
+                            ...extendedFilters,
                             categoriesIds: [],
                             ids: uniq([
-                              ...filtersWithMaybeFavorites.ids ?? [],
-                              ...pluckIds(favorites) as number[],
+                              ...extendedFilters.ids ?? [],
+                              ...favoritesIds,
                             ]),
                           }),
                         ),
@@ -153,7 +191,7 @@ export class AppsEsSearchRepo {
                 ]
               : [],
           ])
-          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort, filtersWithMaybeFavorites.ids))),
+          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort, extendedFilters.ids))),
     );
 
   private static createEsRequestSearchFilters = (
@@ -196,6 +234,15 @@ export class AppsEsSearchRepo {
           esb.sort('promotion', 'desc'),
           createSortFieldQuery('createdAt:desc'),
         ];
+
+      case 'recently-used:desc':
+        if (ids?.length) {
+          return [
+            createSortByIdsOrderScript(ids),
+          ];
+        }
+
+        return createScoredSortFieldQuery('createdAt:desc');
 
       case 'favorites:desc':
         if (ids?.length) {
