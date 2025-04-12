@@ -7,7 +7,7 @@ import { useIsSdkPinnedMessageToggled, useSdkTogglePinnedMessage } from '@llm/sd
 import { useI18n } from '~/i18n';
 import { useSaveErrorNotification } from '~/ui';
 
-import { ToolbarSmallActionButton } from './buttons';
+import { ToolbarSmallActionButton } from '../buttons';
 
 type Props = {
   messageId: string;

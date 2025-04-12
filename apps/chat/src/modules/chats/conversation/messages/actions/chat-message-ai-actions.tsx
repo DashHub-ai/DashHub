@@ -4,7 +4,7 @@ import type { SdkSearchMessageItemT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
 
-import { ToolbarSmallActionButton } from './buttons';
+import { ToolbarSmallActionButton } from '../buttons';
 
 type Props = {
   isLast: boolean;

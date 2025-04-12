@@ -526,6 +526,8 @@ export const I18N_PACK_EN = {
       cancel: 'Cancel',
       submitOnEnter: 'Submit on Enter',
       refresh: 'Refresh response',
+      copy: 'Copy',
+      copied: 'Copied',
       reply: 'Reply to this message',
       addApp: 'Add app',
       pin: 'Pin',

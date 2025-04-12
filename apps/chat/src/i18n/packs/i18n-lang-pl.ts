@@ -524,6 +524,8 @@ export const I18N_PACK_PL: I18nLangPack = {
       cancel: 'Anuluj',
       submitOnEnter: 'Wyślij po naciśnięciu Enter',
       refresh: 'Odśwież odpowiedź',
+      copy: 'Kopiuj',
+      copied: 'Copied',
       reply: 'Odpowiedz na tę wiadomość',
       expand: {
         more: 'Pokaż więcej',

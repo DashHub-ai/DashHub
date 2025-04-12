@@ -18,9 +18,12 @@ import { useI18n } from '~/i18n';
 import type { AIStreamObservable } from '../hooks';
 
 import { FilesCardsList } from '../files';
+import {
+  ChatMessageAIActions,
+  ChatMessagePinAction,
+  ChatMesssageCopyAction,
+} from './actions';
 import { ToolbarSmallActionButton } from './buttons';
-import { ChatMessageAIActions } from './chat-message-ai-actions';
-import { ChatMessagePinAction } from './chat-message-pin-action';
 import { ChatMessageRepliedMessage } from './chat-message-replied-message';
 import { ChatMessageVariants } from './chat-message-variants';
 import { ChatMessageContent } from './content';
@@ -231,6 +234,8 @@ export function ChatMessage(
                       onClick={() => onReply(message)}
                     />
                   )}
+
+                  <ChatMesssageCopyAction content={content} />
 
                   <ChatMessagePinAction messageId={message.id} />
 
