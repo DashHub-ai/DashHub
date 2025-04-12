@@ -12,6 +12,7 @@ import { Navigation, type NavigationProps } from './navigation';
 import { Sidebar, useSidebarToggledStorage } from './sidebar';
 
 type Props = PropsWithChildren & {
+  gapClassName?: string;
   withFooter?: boolean;
   backgroundClassName?: string;
   contentClassName?: string;
@@ -21,6 +22,7 @@ type Props = PropsWithChildren & {
 export function PageWithSidebarLayout(
   {
     children,
+    gapClassName,
     contentClassName,
     backgroundClassName = 'bg-white',
     withFooter = true,
@@ -51,7 +53,8 @@ export function PageWithSidebarLayout(
 
       <div
         className={clsx(
-          'flex flex-col gap-8 2xl:px-16 min-h-screen',
+          'flex flex-col 2xl:px-16 min-h-screen',
+          gapClassName ?? 'gap-8',
           !isSidebarVisible && organization && '2xl:pl-8',
         )}
       >

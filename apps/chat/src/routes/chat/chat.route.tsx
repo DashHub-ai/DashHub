@@ -52,6 +52,7 @@ export function ChatRoute({ id }: Props) {
   return (
     <PageWithSidebarLayout
       withFooter={false}
+      gapClassName="gap-0"
       backgroundClassName="bg-white"
       contentClassName="pb-0"
       navigationProps={{

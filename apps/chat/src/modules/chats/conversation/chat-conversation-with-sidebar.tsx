@@ -22,13 +22,14 @@ export const ChatConversationWithSidebar = memo(({ chat, initialMessages, onSile
   return (
     <div className="flex gap-6 mx-auto">
       <ChatConversationPanel
-        className="h-[calc(100vh-125px)]"
+        className="h-[calc(100vh-90px)]"
         chat={chat}
         initialMessages={initialMessages}
       />
 
       {can.write && (
         <ChatConfigPanel
+          contentClassName="mt-6"
           chat={chat}
           onSilentReload={onSilentReload}
         />
