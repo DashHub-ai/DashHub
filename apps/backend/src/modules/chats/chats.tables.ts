@@ -5,6 +5,7 @@ import type {
   DropTableRowAccessTime,
   NormalizeSelectTableRow,
   TableId,
+  TableRowWithId,
   TableRowWithIdName,
   TableWithAccessTimeColumns,
   TableWithArchivedAtColumn,
@@ -42,6 +43,7 @@ export type ChatTableRowWithRelations =
   & {
     summary: ChatSummaryTableRowRelation;
     organization: TableRowWithIdName;
+    apps: TableRowWithId[];
     project: ChatProjectTableRowRelation | null;
     creator: UserTableRowBaseRelation;
     stats: SdkChatStatsT;
