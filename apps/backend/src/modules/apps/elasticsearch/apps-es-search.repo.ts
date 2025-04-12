@@ -14,6 +14,7 @@ import type {
 import type { TableId } from '~/modules/database';
 
 import {
+  groupByFlatProp,
   isNil,
   type Nullable,
   type Overwrite,
@@ -67,87 +68,86 @@ export class AppsEsSearchRepo {
   );
 
   search = (dto: EsAppsInternalFilters) => pipe(
-    TE.Do,
-    TE.bind('query', () => pipe(
-      this.createEsRequestSearchBody(dto),
-      TE.chainW(query => this.indexRepo.search(query.toJSON())),
-    )),
+    this.createEsRequestSearchBody(dto),
+    TE.bindW('query', ({ searchBody }) => this.indexRepo.search(searchBody.toJSON())),
     TE.bindW('categoriesAggs', ({ query: { aggregations } }) =>
       this.categoriesTreeRepo.createCountedTree({
         countedAggs: AppsEsSearchRepo.mapCategoriesAggregations(aggregations),
         organizationIds: dto.organizationIds,
       })),
-    TE.map(({ categoriesAggs, query: { aggregations, hits: { total, hits } } }): SdkSearchAppsOutputT => ({
-      items: pipe(
-        hits,
-        pluck('_source'),
-        A.map(item => AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument)),
-      ),
-      total: total.value,
-      aggs: {
-        categories: categoriesAggs,
-        favorites: {
-          count: (aggregations as any)?.total_favorites?.filtered?.doc_count ?? 0,
-        },
+    TE.map((
+      {
+        recentlyUsedApps,
+        categoriesAggs,
+        query: { aggregations, hits: { total, hits } },
       },
-    })),
+    ): SdkSearchAppsOutputT => {
+      const recentChatsMap = pipe(
+        recentlyUsedApps,
+        groupByFlatProp('id'),
+      );
+
+      return {
+        items: pipe(
+          hits,
+          pluck('_source'),
+          A.map(item => ({
+            ...AppsEsSearchRepo.mapOutputHit(item as AppsEsDocument),
+            recentChats: (recentChatsMap[item.id!]?.chatIds ?? []).map(id => ({
+              id,
+            })),
+          })),
+        ),
+        total: total.value,
+        aggs: {
+          categories: categoriesAggs,
+          favorites: {
+            count: (aggregations as any)?.total_favorites?.filtered?.doc_count ?? 0,
+          },
+        },
+      };
+    }),
   );
 
   private readonly createEsRequestSearchBody = ({ favoritesAgg, personalization, ...dto }: EsAppsInternalFilters) =>
     pipe(
       TE.Do,
-      TE.bind('favoritesIds', () =>
-        favoritesAgg && personalization
-          ? pipe(
-              this.usersFavoritesRepo.findAll({
-                type: 'app',
-                userId: personalization.userId,
-              }),
-              TE.map(favorites => pluckIds(favorites) as TableId[]),
-            )
-          : TE.right([])),
+      TE.apSW('favoritesIds', (dto.sort === 'favorites:desc' || favoritesAgg) && personalization
+        ? pipe(
+            this.usersFavoritesRepo.findAll({
+              type: 'app',
+              userId: personalization.userId,
+            }),
+            TE.map(favorites => pluckIds(favorites) as TableId[]),
+          )
+        : TE.right([])),
 
-      TE.bind('recentlyUsedIds', () =>
-        dto.sort === 'recently-used:desc' && personalization
-          ? pipe(
-              this.appsRepo.findAllRecentlyUsedAppIds({
-                userId: personalization.userId,
-              }),
-              TE.map(pluckIds),
-            )
-          : TE.right([])),
+      TE.apSW('recentlyUsedApps', (dto.sort === 'recently-used:desc' || dto.includeRecentChats) && personalization
+        ? this.appsRepo.findAllRecentlyUsedApps({
+            userId: personalization.userId,
+          })
+        : TE.right([])),
 
-      TE.bind('extendedFilters', ({ favoritesIds, recentlyUsedIds }) => {
-        let newFilters = dto;
+      TE.bind('extendedFilters', ({ favoritesIds, recentlyUsedApps }) => {
+        const { sort } = dto;
 
-        if (dto.favorites) {
-          newFilters = {
-            ...dto,
-            ids: [
-              // trick for making the `ids` query generator always generate ids term query even if array is empty.
-              // It'll make the query work properly when there is no favorites.
-              -2,
-              ...favoritesIds,
-            ],
-          };
+        if (sort !== 'recently-used:desc' && sort !== 'favorites:desc') {
+          return TE.right(dto);
         }
 
-        if (dto.sort === 'recently-used:desc') {
-          newFilters = {
-            ...newFilters,
-            ids: [
-              // trick for making the `ids` query generator always generate ids term query even if array is empty.
-              // It'll make the query work properly when there is no favorites.
-              -2,
-              ...recentlyUsedIds,
-            ],
-          };
-        }
-
-        return TE.right(newFilters);
+        return TE.right({
+          ...dto,
+          ids: [
+            // trick for making the `ids` query generator always generate ids term query even if array is empty.
+            // It'll make the query work properly when there is no favorites.
+            -2,
+            ...sort === 'recently-used:desc' ? pluckIds(recentlyUsedApps) : [],
+            ...sort === 'favorites:desc' ? favoritesIds : [],
+          ],
+        });
       }),
-      TE.map(({ favoritesIds, extendedFilters }) =>
-        createPaginationOffsetSearchQuery(extendedFilters)
+      TE.map(({ favoritesIds, recentlyUsedApps, extendedFilters }) => {
+        const searchBody = createPaginationOffsetSearchQuery(extendedFilters)
           .query(AppsEsSearchRepo.createEsRequestSearchFilters(extendedFilters))
           .aggs([
             // Categories are not affected by the favorite filters,
@@ -191,7 +191,13 @@ export class AppsEsSearchRepo {
                 ]
               : [],
           ])
-          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort, extendedFilters.ids))),
+          .sorts(AppsEsSearchRepo.createAppsSortFieldQuery(dto.sort, extendedFilters.ids));
+
+        return {
+          recentlyUsedApps,
+          searchBody,
+        };
+      }),
     );
 
   private static createEsRequestSearchFilters = (
@@ -280,5 +286,6 @@ export class AppsEsSearchRepo {
       logo: source.logo && camelcaseKeys(source.logo),
       aiModel: source.ai_model,
       promotion: source.promotion,
+      recentChats: [],
     });
 }

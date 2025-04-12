@@ -37,6 +37,7 @@ export const SdkSearchAppsInputV = SdkOffsetPaginationInputV
     sort: SdkAppsSortV.optional(),
     favorites: StrictBooleanV.optional(),
     favoritesAgg: StrictBooleanV.optional(),
+    includeRecentChats: StrictBooleanV.optional(),
   })
   .merge(SdkArchivedFiltersInputV)
   .merge(SdkIdsFiltersInputV)

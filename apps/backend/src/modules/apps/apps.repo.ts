@@ -13,6 +13,7 @@ import {
   DatabaseError,
   type TableId,
   type TableRowWithId,
+  type TableUuid,
   type TransactionalAttrs,
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
@@ -30,7 +31,7 @@ export class AppsRepo extends createDatabaseRepo('apps') {
 
   unarchiveRecords = createUnarchiveRecordsQuery(this.queryFactoryAttrs);
 
-  findAllRecentlyUsedAppIds = ({ forwardTransaction, userId }: TransactionalAttrs<{ userId: TableId; }>) => {
+  findAllRecentlyUsedApps = ({ forwardTransaction, userId }: TransactionalAttrs<{ userId: TableId; }>) => {
     const transaction = tryReuseTransactionOrSkip({ db: this.db, forwardTransaction });
 
     return pipe(
@@ -47,8 +48,9 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             .select('app_id as id')
             .select(qb => [
               qb.fn.max('messages.created_at').as('last_used_at'),
+              sql<TableUuid[]>`array_agg(distinct "chats"."id")`.as('chatIds'),
             ])
-            .$narrowType<TableRowWithId & { last_used_at: Date; }>()
+            .$narrowType<TableRowWithId>()
             .orderBy('last_used_at', 'desc')
             .limit(500)
             .execute(),
