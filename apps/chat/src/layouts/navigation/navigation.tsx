@@ -9,9 +9,10 @@ import { NavigationRightToolbar } from './navigation-right-toolbar';
 
 export type NavigationProps = {
   withAdditionalUI?: boolean;
+  className?: string;
 };
 
-export function Navigation({ withAdditionalUI }: NavigationProps) {
+export function Navigation({ withAdditionalUI, className }: NavigationProps) {
   const sitemap = useSitemap();
 
   return (
@@ -19,6 +20,7 @@ export function Navigation({ withAdditionalUI }: NavigationProps) {
       className={clsx(
         'z-40 relative items-center place-content-center grid mx-auto w-full h-auto sm:h-[70px] md:h-[80px] container',
         'grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto] gap-2 sm:gap-4 md:gap-6',
+        className,
       )}
     >
       <Link
