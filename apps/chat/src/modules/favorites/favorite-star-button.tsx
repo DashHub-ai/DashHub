@@ -1,3 +1,4 @@
+import { suppressEvent } from '@under-control/forms';
 import clsx from 'clsx';
 import { pipe } from 'fp-ts/lib/function';
 import { StarIcon } from 'lucide-react';
@@ -45,7 +46,10 @@ export function FavoriteStarButton({ favorite, className, onAfterToggleFavorite 
       )}
       title={t.apps.favorites[favorite ? 'remove' : 'add']}
       aria-label={t.apps.favorites[favorite ? 'remove' : 'add']}
-      onClick={handlePin}
+      onClick={(e) => {
+        suppressEvent(e);
+        void handlePin();
+      }}
     >
       <StarIcon
         size={20}

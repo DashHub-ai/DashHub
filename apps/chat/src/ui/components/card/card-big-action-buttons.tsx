@@ -36,7 +36,7 @@ export function CardBigActionButton({
           'shadow-sm',
         ],
         variant === 'secondary' && [
-          'bg-slate-100 text-slate-800 hover:bg-slate-200',
+          'text-slate-800 hover:bg-slate-100',
           'border border-slate-200',
         ],
         (disabled || loading) && 'opacity-50 pointer-events-none',

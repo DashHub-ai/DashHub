@@ -38,6 +38,7 @@ export function PromotedAppsContainer({ className }: Props) {
     schema: SdkSearchAppsInputV,
     fallbackSearchParams: {
       limit: 3,
+      includeRecentChats: true,
     },
     fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.apps.search),
   });
