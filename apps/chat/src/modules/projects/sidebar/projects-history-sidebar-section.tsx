@@ -16,6 +16,21 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
 export function ProjectsHistorySidebarSection() {
+  const { pack } = useI18n();
+
+  return (
+    <SidebarSection
+      id="projects-history"
+      title={pack.sidebar.projects.title}
+      icon={<HistoryIcon size={18} />}
+      defaultExpanded={false}
+    >
+      <ProjectsHistorySidebarContent />
+    </SidebarSection>
+  );
+}
+
+function ProjectsHistorySidebarContent() {
   const { organization } = useWorkspaceOrganizationOrThrow();
   const sitemap = useSitemap();
   const { pack } = useI18n();
@@ -35,7 +50,7 @@ export function ProjectsHistorySidebarSection() {
   );
 
   if (value.status !== 'success') {
-    return <SidebarLinksSkeleton />;
+    return <SidebarLinksSkeleton count={5} />;
   }
 
   const links: SidebarLinkItem[] = value.data.items.map(item => ({
@@ -44,16 +59,11 @@ export function ProjectsHistorySidebarSection() {
   }));
 
   return (
-    <SidebarSection
-      id="projects-history"
-      title={pack.sidebar.projects.title}
-      icon={<HistoryIcon size={18} />}
-      defaultExpanded={false}
-    >
+    <>
       <SidebarLinks links={links} />
       <SidebarSectionAllLink href={sitemap.projects.index.generate({})}>
         {pack.sidebar.projects.all}
       </SidebarSectionAllLink>
-    </SidebarSection>
+    </>
   );
 }

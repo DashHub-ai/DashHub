@@ -16,6 +16,21 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
 export function ChatsHistorySidebarSection() {
+  const { pack } = useI18n();
+
+  return (
+    <SidebarSection
+      id="chats-history"
+      title={pack.sidebar.chats.title}
+      icon={<HistoryIcon size={18} />}
+      defaultExpanded
+    >
+      <ChatsHistorySidebarContent />
+    </SidebarSection>
+  );
+}
+
+function ChatsHistorySidebarContent() {
   const { organization } = useWorkspaceOrganizationOrThrow();
   const sitemap = useSitemap();
   const { pack } = useI18n();
@@ -45,16 +60,11 @@ export function ChatsHistorySidebarSection() {
   }));
 
   return (
-    <SidebarSection
-      id="chats-history"
-      title={pack.sidebar.chats.title}
-      icon={<HistoryIcon size={18} />}
-    >
+    <>
       <SidebarLinks links={links} />
-
       <SidebarSectionAllLink href={sitemap.chats.index}>
         {pack.sidebar.chats.all}
       </SidebarSectionAllLink>
-    </SidebarSection>
+    </>
   );
 }

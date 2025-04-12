@@ -16,6 +16,21 @@ import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
 export function AppsHistorySidebarSection() {
+  const { pack } = useI18n();
+
+  return (
+    <SidebarSection
+      id="apps-history"
+      title={pack.sidebar.apps.title}
+      icon={<HistoryIcon size={18} />}
+      defaultExpanded
+    >
+      <AppsHistorySidebarContent />
+    </SidebarSection>
+  );
+}
+
+function AppsHistorySidebarContent() {
   const { organization } = useWorkspaceOrganizationOrThrow();
   const sitemap = useSitemap();
   const { pack } = useI18n();
@@ -55,14 +70,8 @@ export function AppsHistorySidebarSection() {
   }));
 
   return (
-    <SidebarSection
-      id="apps-history"
-      title={pack.sidebar.apps.title}
-      icon={<HistoryIcon size={18} />}
-      defaultExpanded
-    >
+    <>
       <SidebarLinks links={links} />
-
       <SidebarSectionAllLink
         href={sitemap.forceRedirect.generate(
           sitemap.apps.index.generate({ searchParams: { includeRecentChats: true } }),
@@ -70,6 +79,6 @@ export function AppsHistorySidebarSection() {
       >
         {pack.sidebar.favoriteApps.all}
       </SidebarSectionAllLink>
-    </SidebarSection>
+    </>
   );
 }
