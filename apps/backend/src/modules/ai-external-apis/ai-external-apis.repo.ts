@@ -16,7 +16,7 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
-import { AIExternalAPITableRowWithRelations } from './ai-external-api.tables';
+import { AIExternalAPITableRowWithRelations } from './ai-external-apis.tables';
 
 @injectable()
 export class AIExternalAPIsRepo extends createDatabaseRepo('ai_external_apis') {

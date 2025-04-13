@@ -1,6 +1,6 @@
 import type { RecordOfType } from '@llm/commons';
 
-import type { AIExternalAPIsTable } from '../ai-external-api';
+import type { AIExternalAPIsTable } from '../ai-external-apis';
 import type { AIModelsTable } from '../ai-models';
 import type { AppsTable } from '../apps';
 import type { AppsCategoriesTable } from '../apps-categories';
