@@ -1,3 +1,4 @@
+export * from './ai-external-api';
 export * from './ai-models';
 export * from './apps';
 export * from './apps-categories';
