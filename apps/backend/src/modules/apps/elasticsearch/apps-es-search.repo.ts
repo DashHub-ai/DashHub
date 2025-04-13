@@ -275,14 +275,16 @@ export class AppsEsSearchRepo {
       recentIds?: TableId[];
     },
   ) => {
+    const promotionSort = [
+      esb.sort('promotion', 'desc'),
+      createSortFieldQuery('createdAt:desc'),
+    ];
+
     switch (sort) {
       case undefined:
       case null:
       case 'promotion:desc':
-        return [
-          esb.sort('promotion', 'desc'),
-          createSortFieldQuery('createdAt:desc'),
-        ];
+        return promotionSort;
 
       case 'recently-used:desc':
         if (recentIds?.length) {
@@ -291,7 +293,7 @@ export class AppsEsSearchRepo {
           ];
         }
 
-        return createScoredSortFieldQuery('createdAt:desc');
+        return promotionSort;
 
       case 'favorites:desc':
         if (favoriteIds?.length) {
@@ -300,7 +302,7 @@ export class AppsEsSearchRepo {
           ];
         }
 
-        return createScoredSortFieldQuery('createdAt:desc');
+        return promotionSort;
 
       default:
         return createScoredSortFieldQuery(sort);

@@ -34,7 +34,7 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
         favorites: false,
         recent: false,
         offset: 0,
-        sort: 'createdAt:asc',
+        sort: 'score:desc',
       },
     });
   };
@@ -47,7 +47,7 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
         favorites: isSelected,
         recent: false,
         offset: 0,
-        sort: 'createdAt:asc',
+        sort: isSelected ? 'favorites:desc' : 'score:desc',
       },
     });
   };
@@ -60,7 +60,7 @@ export const AppsSidebar = controlled<SdkSearchAppsInputT, Props>((
         favorites: false,
         recent: isSelected,
         offset: 0,
-        sort: 'recently-used:desc',
+        sort: isSelected ? 'recently-used:desc' : 'score:desc',
       },
     });
   };

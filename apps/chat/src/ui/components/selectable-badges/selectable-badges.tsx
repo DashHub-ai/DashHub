@@ -8,6 +8,8 @@ import type { SdkTableRowIdT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
 
+import { SelectableBadgeItem } from './selectable-badge-item';
+
 export type SelectBadgeItem = {
   id: SdkTableRowIdT;
   name: ReactNode;
@@ -18,6 +20,7 @@ export type SelectBadgeItem = {
 export type SelectableBadgesProps = ControlBindProps<SdkTableRowIdT[]> & {
   className?: string;
   items: Array<SelectBadgeItem>;
+  prefix?: ReactNode;
   multiSelect?: boolean;
   visibilityLimit?: number;
 };
@@ -25,6 +28,7 @@ export type SelectableBadgesProps = ControlBindProps<SdkTableRowIdT[]> & {
 export const SelectableBadges = controlled<SdkTableRowIdT[], SelectableBadgesProps>((
   {
     control: { value, setValue },
+    prefix,
     items,
     className,
     multiSelect = false,
@@ -69,28 +73,17 @@ export const SelectableBadges = controlled<SdkTableRowIdT[], SelectableBadgesPro
 
   return (
     <div className={clsx('flex flex-wrap gap-2', className)}>
+      {prefix}
+
       {displayItems.map(({ id, name, icon, disabled }) => (
-        <div
+        <SelectableBadgeItem
           key={String(id)}
-          className={clsx(
-            'px-3 py-1 rounded-full transition-all cursor-pointer',
-            'border border-gray-200 text-sm',
-            {
-              'bg-primary text-white border-primary': isSelected(id),
-              'bg-white text-gray-700 hover:bg-gray-100': !isSelected(id),
-              'opacity-50 cursor-not-allowed': disabled,
-            },
-          )}
+          name={name}
+          icon={icon}
+          disabled={disabled}
+          isSelected={isSelected(id)}
           onClick={onItemClick(id, disabled)}
-          role="button"
-          aria-pressed={isSelected(id)}
-          aria-disabled={disabled}
-        >
-          <div className="flex items-center gap-1">
-            {icon && <span className="flex items-center">{icon}</span>}
-            <span>{name}</span>
-          </div>
-        </div>
+        />
       ))}
 
       {visibilityLimit && items.length > visibilityLimit && (

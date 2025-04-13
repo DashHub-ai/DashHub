@@ -812,8 +812,8 @@ export const I18N_PACK_PL: I18nLangPack = {
   appsCategories: {
     sidebar: {
       allApps: 'Wszyscy agenci',
-      favoriteApps: 'Ulubieni agenci',
-      recentApps: 'Ostatnio używani agenci',
+      favoriteApps: 'Ulubieni',
+      recentApps: 'Ostatnio używani',
       header: 'Kategorie',
       showMore: 'Pokaż wszystkie (%{count} więcej)',
       otherCategoryItems: 'Pozostałe',
