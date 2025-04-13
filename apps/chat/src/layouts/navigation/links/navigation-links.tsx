@@ -6,7 +6,9 @@ import {
   PinIcon,
   WandSparklesIcon,
 } from 'lucide-react';
+import { useState } from 'react';
 
+import { useWindowListener } from '@llm/commons-front';
 import { useI18n } from '~/i18n';
 import { useHasWorkspaceOrganization } from '~/modules';
 import { useSitemap } from '~/routes';
@@ -16,13 +18,28 @@ import { NavigationItem } from './navigation-item';
 type NavigationLinksProps = {
   inMobileMenu?: boolean;
   className?: string;
+  truncated?: boolean;
 };
 
-export function NavigationLinks({ inMobileMenu = false, className }: NavigationLinksProps) {
+export function NavigationLinks({ truncated, inMobileMenu = false, className }: NavigationLinksProps) {
   const t = useI18n().pack.navigation;
 
   const sitemap = useSitemap();
   const hasOrganization = useHasWorkspaceOrganization();
+
+  const [hideTitles, setHideTitles] = useState(getIsHideTitles);
+
+  useWindowListener({
+    resize: () => {
+      setHideTitles(getIsHideTitles());
+    },
+  });
+
+  function getIsHideTitles() {
+    const width = window.innerWidth - (truncated ? 270 : 0);
+
+    return width < 1024;
+  }
 
   return (
     <ul
@@ -31,12 +48,13 @@ export function NavigationLinks({ inMobileMenu = false, className }: NavigationL
         className,
         inMobileMenu
           ? 'flex-col w-full items-start gap-4'
-          : 'flex-wrap justify-center items-center gap-1 sm:gap-2 md:gap-4',
+          : 'flex-nowrap overflow-x-auto xl:justify-center items-center gap-1 sm:gap-2 md:gap-4',
       )}
     >
       <NavigationItem
         path={sitemap.home}
         icon={<HomeIcon size={16} />}
+        withTitle={!hideTitles}
       >
         {t.links.home}
       </NavigationItem>
@@ -45,6 +63,7 @@ export function NavigationLinks({ inMobileMenu = false, className }: NavigationL
         path={sitemap.apps.index.generate({})}
         icon={<WandSparklesIcon size={16} />}
         disabled={!hasOrganization}
+        withTitle={!hideTitles}
       >
         {t.links.apps}
       </NavigationItem>
@@ -53,6 +72,7 @@ export function NavigationLinks({ inMobileMenu = false, className }: NavigationL
         path={sitemap.chats.index}
         icon={<MessageSquareIcon size={16} />}
         disabled={!hasOrganization}
+        withTitle={!hideTitles}
       >
         {t.links.chats}
       </NavigationItem>
@@ -61,6 +81,7 @@ export function NavigationLinks({ inMobileMenu = false, className }: NavigationL
         path={sitemap.pinnedMessages.index.generate({})}
         icon={<PinIcon size={16} />}
         disabled={!hasOrganization}
+        withTitle={!hideTitles}
       >
         {t.links.pinnedMessages}
       </NavigationItem>
@@ -69,6 +90,7 @@ export function NavigationLinks({ inMobileMenu = false, className }: NavigationL
         path={sitemap.projects.index.generate({})}
         icon={<FolderKanbanIcon size={16} />}
         disabled={!hasOrganization}
+        withTitle={!hideTitles}
       >
         {t.links.projects}
       </NavigationItem>

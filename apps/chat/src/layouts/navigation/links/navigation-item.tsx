@@ -10,9 +10,10 @@ export type NavigationItemProps = PropsWithChildren & {
   path: string;
   icon: ReactNode;
   disabled?: boolean;
+  withTitle?: boolean;
 };
 
-export function NavigationItem({ path, icon, children, disabled }: NavigationItemProps) {
+export function NavigationItem({ path, icon, children, disabled, withTitle = true }: NavigationItemProps) {
   const [location] = useLocation();
   const isActive = (
     path === prefixWithBaseRoute('/')
@@ -39,7 +40,9 @@ export function NavigationItem({ path, icon, children, disabled }: NavigationIte
             {icon}
           </span>
 
-          <span>{children}</span>
+          {withTitle && (
+            <span>{children}</span>
+          )}
         </span>
       </Link>
     </li>

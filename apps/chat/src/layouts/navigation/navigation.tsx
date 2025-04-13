@@ -36,16 +36,8 @@ export function Navigation({ withAdditionalUI, className }: NavigationProps) {
         <span>.ai</span>
       </Link>
 
-      <div
-        className={clsx(
-          'hidden lg:flex flex-wrap justify-center overflow-visible',
-          withAdditionalUI
-            ? 'justify-start'
-            : 'justify-center',
-        )}
-      >
-        <NavigationLinks className="hidden xl:flex" />
-        <HamburgerMenu className="xl:hidden" />
+      <div className="hidden lg:flex lg:justify-center overflow-hidden">
+        <NavigationLinks truncated={withAdditionalUI} />
       </div>
 
       <div className="flex flex-row justify-end items-center gap-2 sm:gap-6 md:gap-14">
