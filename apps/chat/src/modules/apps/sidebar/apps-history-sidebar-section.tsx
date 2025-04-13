@@ -70,10 +70,10 @@ function AppsHistorySidebarContent() {
       <SidebarLinks links={links} />
       <SidebarSectionAllLink
         href={sitemap.forceRedirect.generate(
-          sitemap.apps.index.generate({ searchParams: { includeRecentChats: true } }),
+          sitemap.apps.index.generate({ searchParams: { recent: true, sort: 'recently-used:desc' } }),
         )}
       >
-        {pack.sidebar.favoriteApps.all}
+        {pack.sidebar.apps.all}
       </SidebarSectionAllLink>
     </>
   );
