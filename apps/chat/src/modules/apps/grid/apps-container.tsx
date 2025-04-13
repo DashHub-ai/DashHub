@@ -51,7 +51,7 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, contentFoo
 
   const gridClassName = clsx(
     'gap-4 grid grid-cols-1',
-    'lg:grid-cols-2 2xl:grid-cols-3',
+    'lg:grid-cols-2 3xl:grid-cols-3',
   );
 
   return (
