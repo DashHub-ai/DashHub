@@ -128,6 +128,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   sidebar: {
     noLinksAvailable: 'Brak dostępnych linków',
+    startChat: 'Nowy czat',
     chats: {
       title: 'Ostatnie czaty',
       all: 'Wszystkie czaty',
@@ -575,6 +576,7 @@ export const I18N_PACK_PL: I18nLangPack = {
     },
   },
   prompts: {
+    hello: 'Cześć! 👋',
     attachApp: [
       'Pokaż mi, jak używać tej aplikacji',
       'Jakie są główne funkcje tej aplikacji?',

@@ -19,9 +19,10 @@ import type { StartChatFormValueT } from './start-chat-form.types';
 
 type FormProps = {
   project: SdkTableRowWithIdNameT | null;
+  defaultValue?: Partial<Omit<StartChatFormValueT, 'project'>>;
 };
 
-export function useStartChatForm({ project }: FormProps) {
+export function useStartChatForm({ project, defaultValue }: FormProps) {
   const [, navigate] = useLocation();
   const sitemap = useSitemap();
 
@@ -67,6 +68,7 @@ export function useStartChatForm({ project }: FormProps) {
       aiModel: null as any,
       public: false,
       files: [],
+      ...defaultValue,
     },
     onSubmit,
     validation: {

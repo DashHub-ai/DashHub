@@ -126,6 +126,7 @@ export const I18N_PACK_EN = {
   },
   sidebar: {
     noLinksAvailable: 'No links available',
+    startChat: 'New chat',
     chats: {
       title: 'Recent chats',
       all: 'All chats',
@@ -573,6 +574,7 @@ export const I18N_PACK_EN = {
     },
   },
   prompts: {
+    hello: 'Hi! 👋',
     attachApp: [
       'Show me how to use this app',
       'What are the main features of this app?',

@@ -7,6 +7,7 @@ import {
   ChatsHistorySidebarSection,
   FavoriteAppsSidebarSection,
   FavoriteChatsSidebarSection,
+  NewChatSidebarButton,
   ProjectsHistorySidebarSection,
 } from '~/modules';
 import { useWorkspaceOrganization } from '~/modules/workspace/use-workspace-organization';
@@ -46,6 +47,7 @@ export function PageWithSidebarLayout(
     >
       {organization && (
         <Sidebar>
+          <NewChatSidebarButton className="mb-5" />
           <FavoriteAppsSidebarSection />
           <FavoriteChatsSidebarSection />
           <ProjectsHistorySidebarSection />

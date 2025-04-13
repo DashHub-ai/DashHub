@@ -70,7 +70,7 @@ export function Sidebar({ children }: PropsWithChildren) {
         <span>.ai</span>
       </Link>
 
-      <div className="gap-4 grid grid-cols-[170px_auto] mb-7 p-2">
+      <div className="gap-4 grid grid-cols-[170px_auto] mb-4 p-2">
         <SidebarWorkspaceSelector />
         <ChooseLanguageItem />
       </div>
