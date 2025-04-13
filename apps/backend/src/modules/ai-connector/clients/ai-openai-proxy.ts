@@ -12,7 +12,7 @@ import type { SearchEngineResultItem } from '~/modules/search-engines/clients/se
 
 import { flatMapAsyncIterator, rejectFalsyItems, tryOrThrowTE } from '@llm/commons';
 import {
-  createWebSearchFunctionOpenAITool,
+  createWebSearchAIFunction,
   createWebSearchResultsPrompt,
 } from '~/modules/prompts';
 
@@ -101,7 +101,10 @@ export class AIOpenAIProxy extends AIProxy {
           ...DEFAULT_CLIENT_CONFIG,
           model: this.credentials.apiModel,
           tools: [
-            createWebSearchFunctionOpenAITool(),
+            {
+              type: 'function',
+              function: createWebSearchAIFunction(),
+            },
           ],
           tool_choice: 'required',
           messages,

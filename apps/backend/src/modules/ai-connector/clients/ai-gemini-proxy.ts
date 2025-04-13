@@ -5,6 +5,7 @@ import { Buffer } from 'node:buffer';
 import {
   type Content,
   FunctionCallingMode,
+  type FunctionDeclaration,
   type GenerativeModel,
   GoogleGenerativeAI,
 } from '@google/generative-ai';
@@ -15,7 +16,7 @@ import type { SdkAIModelT, SdkMessageT } from '@llm/sdk';
 import type { SearchEnginesService } from '~/modules/search-engines';
 
 import { isDataUrl, rejectFalsyItems, tryOrThrowTE } from '@llm/commons';
-import { createWebSearchFunctionGeminiTool, createWebSearchResultsPrompt } from '~/modules/prompts';
+import { createWebSearchAIFunction, createWebSearchResultsPrompt } from '~/modules/prompts';
 
 import { AIConnectionCreatorError } from '../ai-connector.errors';
 import {
@@ -72,7 +73,7 @@ export class AIGeminiProxy extends AIProxy {
           tools: [
             {
               functionDeclarations: [
-                createWebSearchFunctionGeminiTool(),
+                createWebSearchAIFunction() as FunctionDeclaration,
               ],
             },
           ],
