@@ -12,6 +12,7 @@ import {
   SidebarSection,
   SidebarSectionAllLink,
 } from '~/layouts';
+import { FavoriteStarButton } from '~/modules/favorites';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
@@ -63,6 +64,7 @@ function FavoriteAppsSidebarContent() {
     href: sitemap.forceRedirect.generate(
       sitemap.apps.index.generate({ searchParams: { phrase: item.name } }),
     ),
+    suffix: <FavoriteStarButton favorite={{ type: 'app', id: item.id }} />,
   }));
 
   return (
