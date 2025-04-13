@@ -3,6 +3,7 @@ import type { ColumnType } from 'kysely';
 import type { SdkAIExternalAPISchemaT } from '@llm/sdk';
 
 import type {
+  NormalizeSelectTableRow,
   TableId,
   TableRowWithIdName,
   TableWithArchivedAtColumn,
@@ -21,8 +22,10 @@ export type AIExternalAPIsTable =
     schema: SdkAIExternalAPISchemaT;
   };
 
+export type AIExternalAPITableRow = NormalizeSelectTableRow<AIExternalAPIsTable>;
+
 export type AIExternalAPITableRowWithRelations =
-  & Omit<AIExternalAPIsTable, 'organizationId' | 'logoS3ResourceId'>
+  & Omit<AIExternalAPITableRow, 'organizationId' | 'logoS3ResourceId'>
   & {
     organization: TableRowWithIdName;
     logo: S3ResourcesTableRowWithRelations | null;
