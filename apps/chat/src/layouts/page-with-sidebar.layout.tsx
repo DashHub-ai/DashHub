@@ -47,7 +47,8 @@ export function PageWithSidebarLayout(
     >
       {organization && (
         <Sidebar>
-          <NewChatSidebarButton className="mb-5" />
+          <NewChatSidebarButton />
+          <hr className="my-3" />
           <FavoriteAppsSidebarSection />
           <FavoriteChatsSidebarSection />
           <ProjectsHistorySidebarSection />
