@@ -27,6 +27,10 @@ export function NavigationItem({ path, icon, children, disabled, withTitle = tru
         href={path}
         aria-disabled={disabled}
         className={clsx(disabled && 'pointer-events-none')}
+        {...typeof children === 'string' && {
+          'aria-label': children,
+          'title': children,
+        }}
       >
         <span
           className={clsx(
@@ -36,7 +40,12 @@ export function NavigationItem({ path, icon, children, disabled, withTitle = tru
             disabled && 'text-gray-400',
           )}
         >
-          <span className="size-4">
+          <span
+            className={clsx(
+              'size-4',
+              !withTitle && '[&>svg]:h-full [&>svg]:w-full',
+            )}
+          >
             {icon}
           </span>
 
