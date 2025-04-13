@@ -41,7 +41,7 @@ export function PromotedAppsContainer({ className }: Props) {
   const sitemap = useSitemap();
   const t = useI18n().pack;
 
-  const optimisticFavoritesCount = useSdkOptimisticFavoritesCount();
+  const optimisticFavoritesCount = useSdkOptimisticFavoritesCount('app');
   const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
     storeDataInUrl: false,
     schema: SdkSearchAppsInputV,

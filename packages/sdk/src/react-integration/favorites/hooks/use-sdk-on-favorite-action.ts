@@ -11,7 +11,7 @@ export function useSdkOnFavoriteAction(
     },
 
     'unpinned-favorite': ({ favorite }: FavoriteActionEvent) => {
-      onHandle('pinned-favorite', favorite);
+      onHandle('unpinned-favorite', favorite);
     },
   });
 }

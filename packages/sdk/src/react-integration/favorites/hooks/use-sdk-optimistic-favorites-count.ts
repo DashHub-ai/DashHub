@@ -1,41 +1,50 @@
+import { useMemo } from 'react';
 import { z } from 'zod';
 
 import { useLocalStorageObject } from '@llm/commons-front';
+import { type SdkFavoriteT, type SdkFavoriteTypeT, SdkFavoriteV } from '~/modules';
 
 import { useSdkOnFavoriteAction } from './use-sdk-on-favorite-action';
 
-function useSdkOptimisticFavoritesCountStorage(rerenderOnSet: boolean = false) {
+function useSdkOptimisticFavoritesStorage(rerenderOnSet: boolean = false) {
   return useLocalStorageObject('optimistic-favorites-count', {
-    schema: z.number().default(0).catch(0),
+    schema: z.array(SdkFavoriteV).catch([]).default([]),
     readBeforeMount: true,
     forceParseIfNotSet: true,
     rerenderOnSet,
   });
 }
 
-export function useSdkOptimisticFavoritesCount() {
-  const storage = useSdkOptimisticFavoritesCountStorage();
+export function useSdkOptimisticFavoritesCount(type: SdkFavoriteTypeT) {
+  const storage = useSdkOptimisticFavoritesStorage();
 
-  return storage.getOrNull() ?? 0;
+  return useMemo(
+    () => storage.getOrNull()?.filter(favorite => favorite.type === type).length ?? 0,
+    [storage.revision],
+  );
 };
 
-export function useSdkOptimisticFavoritesCountWatcher() {
-  const storage = useSdkOptimisticFavoritesCountStorage(false);
+export function useSdkOptimisticFavoritesWatcher() {
+  const storage = useSdkOptimisticFavoritesStorage(false);
 
-  useSdkOnFavoriteAction((action) => {
+  useSdkOnFavoriteAction((action, favorite) => {
     switch (action) {
       case 'pinned-favorite':
-        storage.set(Math.max(0, (storage.getOrNull() ?? 0) + 1));
+        storage.set([...storage.getOrNull() ?? [], favorite]);
         break;
 
       case 'unpinned-favorite':
-        storage.set(Math.max((storage.getOrNull() ?? 0) - 1, 0));
+        storage.set(
+          (storage.getOrNull() ?? []).filter(
+            item => item.id !== favorite.id && item.type !== favorite.type,
+          ),
+        );
         break;
     }
   });
 
   return {
-    reset: (newValue: number) => {
+    reset: (newValue: SdkFavoriteT[]) => {
       storage.set(newValue);
     },
   };
