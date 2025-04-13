@@ -7,6 +7,7 @@ import { useLastNonNullValue } from '@llm/commons-front';
 import {
   SdkSearchAppsInputV,
   useSdkForLoggedIn,
+  useSdkOptimisticFavoritesCount,
 } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { LazyIcon } from '~/modules/shared';
@@ -40,6 +41,7 @@ export function PromotedAppsContainer({ className }: Props) {
   const sitemap = useSitemap();
   const t = useI18n().pack;
 
+  const optimisticFavoritesCount = useSdkOptimisticFavoritesCount();
   const { loading, pagination, result, silentReload } = useDebouncedPaginatedSearch({
     storeDataInUrl: false,
     schema: SdkSearchAppsInputV,
@@ -47,6 +49,10 @@ export function PromotedAppsContainer({ className }: Props) {
       limit: 3,
       includeRecentChats: true,
       sort: 'score:desc',
+      ...optimisticFavoritesCount && {
+        favorites: true,
+        sort: 'favorites:desc',
+      },
     },
     fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.apps.search),
   });

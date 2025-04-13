@@ -21,6 +21,7 @@ export type SyncStorageConfig<S extends z.ZodType<unknown>> = {
   storage: AbstractSyncStorage;
   forceParseIfNotSet?: boolean;
   rerenderOnSet?: boolean;
+  rerenderOnExternalChange?: boolean;
   readBeforeMount?: boolean;
 };
 
@@ -31,6 +32,7 @@ export function useSyncStorageObject<S extends z.ZodType<unknown>>(
     storage,
     forceParseIfNotSet,
     rerenderOnSet = true,
+    rerenderOnExternalChange = rerenderOnSet,
     readBeforeMount = true,
   }: SyncStorageConfig<S>,
 ) {
@@ -80,7 +82,7 @@ export function useSyncStorageObject<S extends z.ZodType<unknown>>(
       if (!deepEq(newValue, cache.current)) {
         cache.current = newValue;
 
-        if (rerenderOnSet) {
+        if (rerenderOnExternalChange) {
           forceRerender();
         }
       }

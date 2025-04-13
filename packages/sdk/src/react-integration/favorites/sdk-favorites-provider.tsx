@@ -4,10 +4,13 @@ import { type PropsWithChildren, useEffect, useMemo } from 'react';
 import { createStoreSubscriber, tapTaskEither } from '@llm/commons';
 
 import { useSdk } from '../hooks';
+import { useSdkOptimisticFavoritesCountWatcher } from './hooks';
 import { SdkFavoritesContext, type SdkFavoritesContextT, type SdkFavoritesSnapshotT } from './sdk-favorites-context';
 
 export function SdkFavoritesProvider({ children }: PropsWithChildren) {
   const sdk = useSdk();
+  const optimisticCountWatcher = useSdkOptimisticFavoritesCountWatcher();
+
   const store = useMemo<SdkFavoritesContextT | null>(() => {
     if (!sdk.session.isLoggedIn) {
       return null;
@@ -21,6 +24,7 @@ export function SdkFavoritesProvider({ children }: PropsWithChildren) {
       sdk.sdks.dashboard.favorites.all(),
       tapTaskEither(
         (items) => {
+          optimisticCountWatcher.reset(items.length);
           store.notify({
             loading: false,
             items,
