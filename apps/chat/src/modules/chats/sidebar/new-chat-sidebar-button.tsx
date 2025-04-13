@@ -23,10 +23,9 @@ export function NewChatSidebarButton({ className }: Props) {
       type="button"
       disabled={form.submitState.loading}
       className={clsx(
-        'flex items-center gap-2 px-3 py-2 rounded-md',
-        'hover:bg-gray-100 transition-colors',
-        'text-gray-700 font-medium text-sm',
-        'w-full',
+        'flex justify-center items-center gap-2 px-4 py-2.5 rounded-md w-full font-semibold text-sm transition-all duration-200',
+        'text-slate-800 hover:bg-slate-100',
+        'border border-slate-200',
         form.submitState.loading && 'opacity-50 pointer-events-none',
         className,
       )}
