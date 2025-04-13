@@ -12,6 +12,7 @@ import {
   SidebarSection,
   SidebarSectionAllLink,
 } from '~/layouts';
+import { FavoriteStarButton } from '~/modules/favorites';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 
@@ -63,6 +64,7 @@ function FavoriteChatsSidebarContent() {
   const links: SidebarLinkItem[] = value.data.items.map(item => ({
     href: sitemap.chat.generate({ pathParams: { id: item.id } }),
     label: item.summary.name.value || pack.chat.card.noTitle,
+    suffix: <FavoriteStarButton favorite={{ type: 'chat', id: item.id }} />,
   }));
 
   return (
