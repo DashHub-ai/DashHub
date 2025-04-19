@@ -25,6 +25,7 @@ export class AIExternalAPIsFirewall extends AuthFirewallService {
   get = flow(
     this.apisService.get,
     this.permissionsService.asUser(this.jwt).chainValidateResultOrRaiseUnauthorized,
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPermissionsKeyIfNotCreator),
   );
 
   search = (filters: SdkSearchAIExternalAPIsInputT) => pipe(
@@ -32,6 +33,7 @@ export class AIExternalAPIsFirewall extends AuthFirewallService {
     this.permissionsService.asUser(this.jwt).enforcePermissionsFilters,
     TE.chainEitherKW(this.permissionsService.asUser(this.jwt).enforceOrganizationScopeFilters),
     TE.chainW(this.apisService.search),
+    TE.chainW(this.permissionsService.asUser(this.jwt).dropSdkPaginationPermissionsKeysIfNotCreator),
   );
 
   unarchive = (id: TableId) => pipe(

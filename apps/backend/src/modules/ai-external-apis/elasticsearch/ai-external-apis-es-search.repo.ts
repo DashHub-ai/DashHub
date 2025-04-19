@@ -15,11 +15,18 @@ import {
   createPhraseFieldQuery,
   createScoredSortFieldQuery,
 } from '~/modules/elasticsearch';
+import {
+  createEsPermissionsFilters,
+  mapRawEsDocToSdkPermissions,
+  WithPermissionsInternalFilters,
+} from '~/modules/permissions';
 
 import {
   type AIExternalAPIsEsDocument,
   AIExternalAPIsEsIndexRepo,
 } from './ai-external-apis-es-index.repo';
+
+type EsAIExternalAPIsInternalFilters = WithPermissionsInternalFilters<SdkSearchAIExternalAPIsInputT>;
 
 @injectable()
 export class AIExternalAPIsEsSearchRepo {
@@ -32,7 +39,7 @@ export class AIExternalAPIsEsSearchRepo {
     TE.map(AIExternalAPIsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: SdkSearchAIExternalAPIsInputT) =>
+  search = (dto: EsAIExternalAPIsInternalFilters) =>
     pipe(
       this.indexRepo.search(
         AIExternalAPIsEsSearchRepo.createEsRequestSearchBody(dto).toJSON(),
@@ -47,7 +54,7 @@ export class AIExternalAPIsEsSearchRepo {
       })),
     );
 
-  private static createEsRequestSearchBody = (dto: SdkSearchAIExternalAPIsInputT) =>
+  private static createEsRequestSearchBody = (dto: EsAIExternalAPIsInternalFilters) =>
     createPaginationOffsetSearchQuery(dto)
       .query(AIExternalAPIsEsSearchRepo.createEsRequestSearchFilters(dto))
       .sorts(createScoredSortFieldQuery(dto.sort));
@@ -58,10 +65,12 @@ export class AIExternalAPIsEsSearchRepo {
       ids,
       organizationIds,
       archived,
-    }: SdkSearchAIExternalAPIsInputT,
+      satisfyPermissions,
+    }: EsAIExternalAPIsInternalFilters,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),
         !!phrase && (
@@ -87,6 +96,7 @@ export class AIExternalAPIsEsSearchRepo {
       organization: source.organization,
       description: source.description,
       logo: source.logo && camelcaseKeys(source.logo, { deep: true }),
+      permissions: mapRawEsDocToSdkPermissions(source.permissions),
       schema: camelcaseKeys(source.schema, { deep: true }),
     });
 }

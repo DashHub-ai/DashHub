@@ -198,6 +198,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       experts: 'Eksperci',
       management: 'Administracja',
       pinnedMessages: 'Piny',
+      aiExternalAPIs: 'Integracje',
     },
     loggedIn: {
       logout: 'Wyloguj się',
@@ -412,6 +413,30 @@ export const I18N_PACK_PL: I18nLangPack = {
         users: 'Administratorzy',
       },
     },
+    aiExternalAPIs: {
+      meta: {
+        title: 'Integracje',
+        description: 'Zarządzaj integracjami',
+      },
+      title: 'Integracje',
+      buttons: {
+        create: 'Utwórz integrację',
+      },
+    },
+    editAIExternalAPI: {
+      meta: {
+        title: 'Edytuj integrację',
+        description: 'Edytuj integrację',
+      },
+      title: 'Edytuj integrację',
+    },
+    createAIExternalAPI: {
+      meta: {
+        title: 'Utwórz integrację',
+        description: 'Utwórz integrację',
+      },
+      title: 'Utwórz integrację',
+    },
     management: {
       meta: {
         title: 'Administracja',
@@ -443,6 +468,11 @@ export const I18N_PACK_PL: I18nLangPack = {
   workspace: {
     selectOrganization: 'Wybierz organizację',
     organization: 'Organizacja',
+  },
+  aiExternalAPIs: {
+    grid: {
+      placeholder: 'Brak zewnętrznych API! Utwórz nowe API, aby rozpocząć.',
+    },
   },
   searchBar: {
     viewAll: 'Zobacz wszystkie',

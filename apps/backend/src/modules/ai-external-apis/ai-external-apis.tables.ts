@@ -9,6 +9,7 @@ import type {
   TableWithArchivedAtColumn,
   TableWithDefaultColumns,
 } from '../database';
+import type { PermissionsTableRowRelation } from '../permissions';
 import type { S3ResourcesTableRowWithRelations } from '../s3';
 
 export type AIExternalAPIsTable =
@@ -26,6 +27,7 @@ export type AIExternalAPITableRow = NormalizeSelectTableRow<AIExternalAPIsTable>
 
 export type AIExternalAPITableRowWithRelations =
   & Omit<AIExternalAPITableRow, 'organizationId' | 'logoS3ResourceId'>
+  & PermissionsTableRowRelation
   & {
     organization: TableRowWithIdName;
     logo: S3ResourcesTableRowWithRelations | null;

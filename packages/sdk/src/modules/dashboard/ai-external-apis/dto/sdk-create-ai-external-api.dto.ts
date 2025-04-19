@@ -7,6 +7,7 @@ import {
   ZodOmitDateFields,
 } from '~/shared';
 
+import { SdkUpsertTableRowWithPermissionsInputV } from '../../permissions';
 import { SdkAIExternalApiV } from './sdk-ai-external-api.dto';
 
 export const SdkCreateAIExternalAPIInputV = SdkAIExternalApiV.omit({
@@ -15,6 +16,7 @@ export const SdkCreateAIExternalAPIInputV = SdkAIExternalApiV.omit({
   id: true,
   organization: true,
 })
+  .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({
     organization: SdkTableRowWithIdV,
     logo: SdkOptionalFileUploadV,

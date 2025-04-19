@@ -196,6 +196,7 @@ export const I18N_PACK_EN = {
       experts: 'Experts',
       management: 'Management',
       pinnedMessages: 'Pins',
+      aiExternalAPIs: 'Integrations',
     },
     loggedIn: {
       logout: 'Logout',
@@ -410,6 +411,30 @@ export const I18N_PACK_EN = {
         users: 'Root users',
       },
     },
+    aiExternalAPIs: {
+      meta: {
+        title: 'Integrations',
+        description: 'Manage integrations',
+      },
+      title: 'Integrations',
+      buttons: {
+        create: 'Create integration',
+      },
+    },
+    editAIExternalAPI: {
+      meta: {
+        title: 'Edit integration',
+        description: 'Edit integration',
+      },
+      title: 'Edit integration',
+    },
+    createAIExternalAPI: {
+      meta: {
+        title: 'Create integration',
+        description: 'Create integration',
+      },
+      title: 'Create integration',
+    },
     management: {
       meta: {
         title: 'Management',
@@ -436,6 +461,11 @@ export const I18N_PACK_EN = {
           title: 'Search Engines',
         },
       },
+    },
+  },
+  aiExternalAPIs: {
+    grid: {
+      placeholder: 'No external APIs yet. Feel free to create one!',
     },
   },
   workspace: {

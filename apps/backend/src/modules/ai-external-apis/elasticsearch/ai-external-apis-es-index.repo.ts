@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { Overwrite, tryOrThrowTE } from '@llm/commons';
 import {
   createArchivedRecordMappings,
   createAutocompleteFieldAnalyzeSettings,
@@ -14,6 +14,7 @@ import {
   ElasticsearchRepo,
   type EsDocument,
 } from '~/modules/elasticsearch';
+import { createPermissionsRowEntryMapping, EsPermissionsDocument } from '~/modules/permissions';
 
 import type { AIExternalAPITableRowWithRelations } from '../ai-external-apis.tables';
 
@@ -28,6 +29,7 @@ const AIExternalAPIsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createBaseDatedRecordMappings(),
         ...createBaseAutocompleteFieldMappings(),
         ...createArchivedRecordMappings(),
+        permissions: createPermissionsRowEntryMapping(),
         organization: createIdNameObjectMapping(),
         description: {
           type: 'text',
@@ -42,7 +44,12 @@ const AIExternalAPIsAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type AIExternalAPIsEsDocument = EsDocument<AIExternalAPITableRowWithRelations>;
+export type AIExternalAPIsEsDocument = EsDocument<Overwrite<
+  AIExternalAPITableRowWithRelations,
+  {
+    permissions: EsPermissionsDocument;
+  }
+>>;
 
 @injectable()
 export class AIExternalAPIsEsIndexRepo extends AIExternalAPIsAbstractEsIndexRepo<AIExternalAPIsEsDocument> {

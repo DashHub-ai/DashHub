@@ -16,6 +16,7 @@ import {
   tryReuseTransactionOrSkip,
 } from '~/modules/database';
 
+import { mapRawJSONAggRelationToSdkPermissions, PermissionsRepo } from '../permissions';
 import { AIExternalAPITableRowWithRelations } from './ai-external-apis.tables';
 
 @injectable()
@@ -60,6 +61,13 @@ export class AIExternalAPIsRepo extends createDatabaseRepo('ai_external_apis') {
               // Logo bucket
               's3_resources_buckets.id as logo_s3_resource_bucket_id',
               's3_resources_buckets.name as logo_s3_resource_bucket_name',
+
+              // Permissions
+              eb =>
+                PermissionsRepo
+                  .createPermissionAggQuery(eb)
+                  .where('permissions.ai_external_api_id', '=', eb.ref('ai_external_apis.id'))
+                  .as('permissions_json'),
             ])
             .limit(ids.length)
             .execute(),
@@ -69,6 +77,8 @@ export class AIExternalAPIsRepo extends createDatabaseRepo('ai_external_apis') {
         A.map(({
           organization_id: orgId,
           organization_name: orgName,
+
+          permissions_json: permissions,
 
           logo_s3_resource_id: logoId,
           logo_s3_resource_name: logoName,
@@ -87,6 +97,10 @@ export class AIExternalAPIsRepo extends createDatabaseRepo('ai_external_apis') {
           organization: {
             id: orgId,
             name: orgName,
+          },
+          permissions: {
+            inherited: [],
+            current: (permissions || []).map(mapRawJSONAggRelationToSdkPermissions),
           },
           logo: logoId
             ? {

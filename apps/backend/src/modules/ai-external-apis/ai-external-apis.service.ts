@@ -88,6 +88,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
     {
       organization,
       logo,
+      permissions,
       creator,
       ...values
     }: InternalCreateExternalAPIInputT,
@@ -121,10 +122,22 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
         logoS3ResourceId: s3Resource?.id,
       },
     })),
+    TE.tap(({ id }) => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'ai_external_api', id },
+          permissions,
+        },
+      });
+    }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, logo, ...value }: InternalUpdateExternalAPIInputT) => pipe(
+  update = ({ id, logo, permissions, ...value }: InternalUpdateExternalAPIInputT) => pipe(
     TE.Do,
     TE.bind('originalRecord', () => this.get(id)),
     TE.bindW('s3Resource', ({ originalRecord }) => {
@@ -157,6 +170,18 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
         },
       }),
     )),
+    TE.tap(() => {
+      if (!permissions) {
+        return TE.of(undefined);
+      }
+
+      return this.permissionsService.upsert({
+        value: {
+          resource: { type: 'app', id },
+          permissions,
+        },
+      });
+    }),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
     TE.tap(({ s3Resource, originalRecord }) => {
       // Do it at the end, just in case. Make sure that permissions are updated before deleting the file.

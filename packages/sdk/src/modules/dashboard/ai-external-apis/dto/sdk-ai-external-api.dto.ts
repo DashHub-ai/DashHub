@@ -8,6 +8,7 @@ import {
   SdkTableRowWithIdNameV,
 } from '~/shared';
 
+import { SdkTableRowWithPermissionsV } from '../../permissions';
 import { SdkBaseS3ResourceV } from '../../s3-files';
 import { SdkAIExternalAPISchemaV } from './sdk-ai-external-api-schema.dto';
 
@@ -17,6 +18,7 @@ export const SdkAIExternalApiV = z.strictObject({
   description: NonEmptyOrNullStringV,
   schema: SdkAIExternalAPISchemaV,
 })
+  .merge(SdkTableRowWithPermissionsV)
   .merge(SdkTableRowWithIdNameV)
   .merge(SdkTableRowWithDatesV)
   .merge(SdkTableRowWithArchivedV);
