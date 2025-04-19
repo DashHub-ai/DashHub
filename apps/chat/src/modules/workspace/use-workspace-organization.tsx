@@ -40,7 +40,7 @@ export function useWorkspaceOrganizationOrThrow() {
 
   return {
     organization,
-    assignWorkspaceOrganization: <D extends object>(obj: Omit<D, 'organization'>) => ({
+    assignWorkspaceOrganization: <D extends object>(obj: D) => ({
       ...obj,
       organization,
     }),

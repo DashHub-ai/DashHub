@@ -20,7 +20,7 @@ export function CreateAIExternalAPIRoute() {
   const sitemap = useSitemap();
   const { assignWorkspaceOrganization } = useWorkspaceOrganizationOrThrow();
 
-  const defaultValue = assignWorkspaceOrganization<CreateAIExternalAPIFormValue>({
+  const defaultValue = assignWorkspaceOrganization<Omit<CreateAIExternalAPIFormValue, 'organization'>>({
     name: '',
     description: '',
     permissions: [],
