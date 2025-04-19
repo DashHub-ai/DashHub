@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { BaseController } from '../shared';
+import { AIExternalAPIsController } from './ai-external-apis.controller';
 import { AIModelsController } from './ai-models.controller';
 import { AppsCategoriesController } from './apps-categories.controller';
 import { AppsController } from './apps.controller';
@@ -33,6 +34,7 @@ export class DashboardController extends BaseController {
     @inject(SearchEnginesController) searchEngines: SearchEnginesController,
     @inject(PinnedMessagesController) pinnedMessages: PinnedMessagesController,
     @inject(FavoritesController) favorites: FavoritesController,
+    @inject(AIExternalAPIsController) aiExternalAPIs: AIExternalAPIsController,
   ) {
     super();
 
@@ -47,6 +49,7 @@ export class DashboardController extends BaseController {
       .route('/s3-buckets', s3Buckets.router)
       .route('/chats', chats.router)
       .route('/ai-models', aiModels.router)
+      .route('/ai-external-apis', aiExternalAPIs.router)
       .route('/search-engines', searchEngines.router)
       .route('/share-resource', shareResource.router)
       .route('/pinned-messages', pinnedMessages.router)
