@@ -14,7 +14,7 @@ export type CardBigActionButtonProps = {
   onClick?: () => CanBePromise<void>;
   disabled?: boolean;
   loading?: boolean;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'primary-outline';
   className?: string;
 };
 
@@ -44,8 +44,9 @@ export function CardBigActionButton({
           'shadow-sm',
         ],
         variant === 'secondary' && [
-          'text-slate-800 hover:bg-slate-100',
-          'border border-slate-200',
+          'text-slate-800 bg-slate-50/80 hover:bg-slate-100/80 border border-slate-100',
+          'backdrop-blur-[1px]',
+          'hover:shadow-sm',
         ],
         (disabled || loading || asyncClickState.isLoading) && 'opacity-50 pointer-events-none',
         className,

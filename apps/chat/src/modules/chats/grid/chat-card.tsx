@@ -91,8 +91,6 @@ export function ChatCard({ chat, withProject = true, withPermissions = true, onA
           </span>
         </div>
 
-        <ChatCardBigActions chat={chat} />
-
         <CardFooter>
           <div className="flex flex-col gap-2">
             <time className="text-gray-500 text-xs">
@@ -112,6 +110,8 @@ export function ChatCard({ chat, withProject = true, withPermissions = true, onA
 
           {withPermissions && <CardRecordPermissionsRow record={chat} />}
         </CardFooter>
+
+        <ChatCardBigActions chat={chat} />
       </CardContent>
     </CardBase>
   );

@@ -75,6 +75,14 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive, onAfterUnarc
           </CardDescription>
         )}
 
+        <CardFooter alignEnd={false}>
+          <div className="text-muted-foreground text-xs">
+            {formatDate(project.updatedAt)}
+          </div>
+
+          <CardRecordPermissionsRow record={project} />
+        </CardFooter>
+
         <CardBigActions>
           <CardBigActionButton
             variant="secondary"
@@ -88,14 +96,6 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive, onAfterUnarc
             {pack.buttons.open}
           </CardBigActionButton>
         </CardBigActions>
-
-        <CardFooter alignEnd={false}>
-          <div className="text-muted-foreground text-xs">
-            {formatDate(project.updatedAt)}
-          </div>
-
-          <CardRecordPermissionsRow record={project} />
-        </CardFooter>
       </CardContent>
 
       {!project.archived && (recordGuard.can.write || recordGuard.can.archive) && (

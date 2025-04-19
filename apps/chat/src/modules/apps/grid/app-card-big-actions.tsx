@@ -18,11 +18,11 @@ export function AppCardBigActions({ app, onCreateChat }: Props) {
 
   return (
     <CardBigActions>
+      <CardStartChatButton onClick={onCreateChat} />
+
       {app.recentChats.length > 0 && (
         <CardContinueChatButton href={sitemap.apps.recentChatOrFallback(app)} />
       )}
-
-      <CardStartChatButton onClick={onCreateChat} />
     </CardBigActions>
   );
 }

@@ -1,15 +1,18 @@
 import type { ReactNode } from 'react';
 
-import { WebhookIcon } from 'lucide-react';
+import { FolderOpenIcon, WebhookIcon } from 'lucide-react';
 
 import { formatDate } from '@llm/commons';
 import { type SdkSearchAIExternalAPIItemT, useSdkForLoggedIn } from '@llm/sdk';
+import { useI18n } from '~/i18n';
 import { CardRecordPermissions } from '~/modules/permissions';
 import { useSitemap } from '~/routes';
 import {
   CardActions,
   CardArchiveButton,
   CardBase,
+  CardBigActionButton,
+  CardBigActions,
   CardContent,
   CardDescription,
   CardEditButton,
@@ -28,8 +31,8 @@ export type AIExternalAPICardProps = {
 };
 
 export function AIExternalAPICard({ api, ctaButton, onAfterArchive, onAfterUnarchive }: AIExternalAPICardProps) {
+  const { pack } = useI18n();
   const sitemap = useSitemap();
-
   const { sdks, createRecordGuard } = useSdkForLoggedIn();
 
   const [onUnarchive, unarchiveStatus] = useUnarchiveWithNotifications(
@@ -70,6 +73,20 @@ export function AIExternalAPICard({ api, ctaButton, onAfterArchive, onAfterUnarc
 
           {ctaButton}
         </CardFooter>
+
+        <CardBigActions>
+          <CardBigActionButton
+            variant="secondary"
+            icon={<FolderOpenIcon size={16} />}
+            href={sitemap.projects.show.generate({
+              pathParams: {
+                id: api.id,
+              },
+            })}
+          >
+            {pack.buttons.open}
+          </CardBigActionButton>
+        </CardBigActions>
       </CardContent>
 
       {!ctaButton && !api.archived && (recordGuard.can.write || recordGuard.can.archive) && (

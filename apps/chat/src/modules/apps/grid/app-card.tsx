@@ -74,11 +74,6 @@ export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive, onAf
           {app.description}
         </CardDescription>
 
-        <AppCardBigActions
-          app={app}
-          onCreateChat={() => void createChatWithApp(app)}
-        />
-
         <CardFooter>
           <div className="text-muted-foreground text-xs">
             {formatDate(app.updatedAt)}
@@ -90,6 +85,11 @@ export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive, onAf
 
           {ctaButton}
         </CardFooter>
+
+        <AppCardBigActions
+          app={app}
+          onCreateChat={() => void createChatWithApp(app)}
+        />
       </CardContent>
 
       {!ctaButton && !app.archived && (recordGuard.can.write || recordGuard.can.archive) && (
