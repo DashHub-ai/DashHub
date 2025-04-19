@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react';
 
-import { MessageCirclePlusIcon, RepeatIcon, WandSparklesIcon } from 'lucide-react';
+import { WandSparklesIcon } from 'lucide-react';
 
 import { formatDate } from '@llm/commons';
 import { isSdkAppCreatorApp, type SdkAppT, useSdkForLoggedIn } from '@llm/sdk';
-import { useI18n } from '~/i18n';
 import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
 import { FavoriteStarButton } from '~/modules/favorites';
 import { CardRecordPermissions } from '~/modules/permissions';
@@ -13,9 +12,6 @@ import {
   CardActions,
   CardArchiveButton,
   CardBase,
-  CardBigActionButton,
-  type CardBigActionButtonProps,
-  CardBigActions,
   CardContent,
   CardDescription,
   CardEditButton,
@@ -25,6 +21,8 @@ import {
   useArchiveWithNotifications,
   useUnarchiveWithNotifications,
 } from '~/ui';
+
+import { AppCardBigActions } from './app-card-big-actions';
 
 export type AppCardProps = {
   app: SdkAppT;
@@ -76,18 +74,10 @@ export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive, onAf
           {app.description}
         </CardDescription>
 
-        <CardBigActions>
-          {app.recentChats.length > 0 && (
-            <CardContinueChatButton href={sitemap.apps.recentChatOrFallback(app)} />
-          )}
-
-          <CardStartChatButton
-            onClick={(e) => {
-              e.stopPropagation();
-              void createChatWithApp(app);
-            }}
-          />
-        </CardBigActions>
+        <AppCardBigActions
+          app={app}
+          onCreateChat={() => void createChatWithApp(app)}
+        />
 
         <CardFooter>
           <div className="text-muted-foreground text-xs">
@@ -127,37 +117,5 @@ export function AppCard({ app, ctaButton, onAfterArchive, onAfterUnarchive, onAf
         </CardActions>
       )}
     </CardBase>
-  );
-}
-
-function CardStartChatButton({ disabled, loading, ...props }: Omit<CardBigActionButtonProps, 'children'>) {
-  const t = useI18n().pack.apps.card;
-
-  return (
-    <CardBigActionButton
-      icon={<MessageCirclePlusIcon size={18} />}
-      disabled={disabled}
-      loading={loading}
-      variant="primary"
-      {...props}
-    >
-      {t.startChat}
-    </CardBigActionButton>
-  );
-}
-
-function CardContinueChatButton({ disabled, loading, ...props }: Omit<CardBigActionButtonProps, 'children'>) {
-  const t = useI18n().pack.apps.card;
-
-  return (
-    <CardBigActionButton
-      icon={<RepeatIcon size={18} />}
-      disabled={disabled}
-      loading={loading}
-      variant="secondary"
-      {...props}
-    >
-      {t.continueChat}
-    </CardBigActionButton>
   );
 }

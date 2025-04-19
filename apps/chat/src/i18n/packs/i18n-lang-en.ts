@@ -493,6 +493,7 @@ export const I18N_PACK_EN = {
       noTitle: 'Unnamed Chat',
       noDescription: 'No description',
       totalMessages: 'messages',
+      continueChat: 'Continue chat',
     },
     webSearch: {
       toggle: 'Search the Web',

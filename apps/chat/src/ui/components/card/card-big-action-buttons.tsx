@@ -1,13 +1,17 @@
-import type { MouseEventHandler, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import clsx from 'clsx';
 import { Link } from 'wouter';
+
+import type { CanBePromise } from '@llm/commons';
+
+import { useAsyncCallback } from '@llm/commons-front';
 
 export type CardBigActionButtonProps = {
   href?: string;
   icon?: ReactNode;
   children: ReactNode;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onClick?: () => CanBePromise<void>;
   disabled?: boolean;
   loading?: boolean;
   variant?: 'primary' | 'secondary';
@@ -26,9 +30,13 @@ export function CardBigActionButton({
 }: CardBigActionButtonProps) {
   const Tag: any = href ? Link : 'button';
 
+  const [onAsyncClick, asyncClickState] = useAsyncCallback(async () => {
+    await onClick?.();
+  });
+
   return (
     <Tag
-      disabled={disabled || loading}
+      disabled={disabled || loading || asyncClickState.isLoading}
       className={clsx(
         'flex justify-center items-center gap-2 px-4 py-2.5 rounded-md w-full font-semibold text-sm transition-all duration-200',
         variant === 'primary' && [
@@ -39,10 +47,15 @@ export function CardBigActionButton({
           'text-slate-800 hover:bg-slate-100',
           'border border-slate-200',
         ],
-        (disabled || loading) && 'opacity-50 pointer-events-none',
+        (disabled || loading || asyncClickState.isLoading) && 'opacity-50 pointer-events-none',
         className,
       )}
-      onClick={onClick}
+      onClick={(e: MouseEvent) => {
+        if (onClick && !href) {
+          e.stopPropagation();
+          void onAsyncClick();
+        }
+      }}
       {...href
         ? {
             href,

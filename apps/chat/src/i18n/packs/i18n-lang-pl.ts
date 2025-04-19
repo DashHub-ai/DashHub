@@ -495,6 +495,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       noTitle: 'Czat bez nazwy',
       noDescription: 'Brak opisu',
       totalMessages: 'Wiadomości',
+      continueChat: 'Kontynuuj czat',
     },
     webSearch: {
       toggle: 'Wyszukuj w sieci',
