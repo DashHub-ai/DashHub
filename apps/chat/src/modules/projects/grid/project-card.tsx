@@ -1,16 +1,19 @@
 import { flow } from 'fp-ts/lib/function';
-import { FolderIcon } from 'lucide-react';
+import { FolderIcon, FolderOpenIcon } from 'lucide-react';
 
 import type { SdkProjectT } from '@llm/sdk';
 
 import { formatDate, runTask, tapTaskOption } from '@llm/commons';
 import { useSdkForLoggedIn } from '@llm/sdk';
+import { useI18n } from '~/i18n';
 import { CardRecordPermissionsRow } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';
 import {
   CardActions,
   CardArchiveButton,
   CardBase,
+  CardBigActionButton,
+  CardBigActions,
   CardContent,
   CardDescription,
   CardEditButton,
@@ -30,6 +33,8 @@ type ProjectCardProps = {
 };
 
 export function ProjectCard({ project, onAfterEdit, onAfterArchive, onAfterUnarchive }: ProjectCardProps) {
+  const { pack } = useI18n();
+
   const sitemap = useSitemap();
   const { sdks, createRecordGuard } = useSdkForLoggedIn();
   const { showAsOptional } = useProjectUpdateModal();
@@ -70,7 +75,21 @@ export function ProjectCard({ project, onAfterEdit, onAfterArchive, onAfterUnarc
           </CardDescription>
         )}
 
-        <CardFooter>
+        <CardBigActions>
+          <CardBigActionButton
+            variant="secondary"
+            icon={<FolderOpenIcon size={16} />}
+            href={sitemap.projects.show.generate({
+              pathParams: {
+                id: project.id,
+              },
+            })}
+          >
+            {pack.buttons.open}
+          </CardBigActionButton>
+        </CardBigActions>
+
+        <CardFooter alignEnd={false}>
           <div className="text-muted-foreground text-xs">
             {formatDate(project.updatedAt)}
           </div>
