@@ -3,6 +3,7 @@ import { useLocation } from 'wouter';
 import { useI18n } from '~/i18n';
 import {
   LayoutHeader,
+  PageFormSection,
   PageWithSidebarLayout,
 } from '~/layouts';
 import {
@@ -39,7 +40,7 @@ export function CreateAIExternalAPIRoute() {
     <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <section className="flex flex-col gap-6 mx-auto max-w-4xl">
+      <PageFormSection>
         <LayoutHeader>
           {t.title}
         </LayoutHeader>
@@ -48,7 +49,7 @@ export function CreateAIExternalAPIRoute() {
           defaultValue={defaultValue}
           onAfterSubmit={onAfterSubmit}
         />
-      </section>
+      </PageFormSection>
     </PageWithSidebarLayout>
   );
 }

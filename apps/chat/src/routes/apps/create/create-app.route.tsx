@@ -1,6 +1,7 @@
 import { useI18n } from '~/i18n';
 import {
   LayoutHeader,
+  PageFormSection,
   PageWithSidebarLayout,
 } from '~/layouts';
 import {
@@ -32,7 +33,7 @@ export function CreateAppRoute() {
     <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <section className="flex flex-col gap-6 mx-auto max-w-4xl">
+      <PageFormSection>
         <LayoutHeader>
           {t.title}
         </LayoutHeader>
@@ -43,7 +44,7 @@ export function CreateAppRoute() {
             void createChatWithApp(app);
           }}
         />
-      </section>
+      </PageFormSection>
     </PageWithSidebarLayout>
   );
 }
