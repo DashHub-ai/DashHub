@@ -94,12 +94,12 @@ export function ChatMessage(
         'flex items-start gap-4',
         showAnim && 'animate-messageSlideIn',
         {
-          'mb-8': !repeats.length,
-          'mb-10': repeats.length,
+          'mb-6': !repeats.length,
+          'mb-8': repeats.length,
           'opacity-75': readOnly && archived,
           'opacity-0': showAnim && (!readOnly || !archived),
           'flex-row-reverse': showAnim && (!isAI && isYou),
-          'bg-purple-50/50 p-6 border border-purple-100 rounded-lg': isPinned,
+          'pl-4 border-l-4 border-purple-300': isPinned,
         },
         className,
       )}

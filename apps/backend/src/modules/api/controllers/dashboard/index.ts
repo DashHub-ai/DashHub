@@ -1,3 +1,4 @@
+export * from './ai-external-apis.controller';
 export * from './ai-models.controller';
 export * from './apps-categories.controller';
 export * from './apps.controller';

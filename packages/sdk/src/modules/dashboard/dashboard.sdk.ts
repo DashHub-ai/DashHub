@@ -1,5 +1,6 @@
 import type { AbstractNestedSdkWithAuthConfig } from '../abstract-nested-sdk-with-auth';
 
+import { AIExternalAPIsSdk } from './ai-external-apis';
 import { AIModelsSdk } from './ai-models';
 import { AppsSdk } from './apps';
 import { AppsCategoriesSdk } from './apps-categories';
@@ -41,6 +42,8 @@ export class DashboardSdk {
   public readonly s3Buckets = new S3BucketsSdk(this.config);
 
   public readonly aiModels = new AIModelsSdk(this.config);
+
+  public readonly aiExternalAPIs = new AIExternalAPIsSdk(this.config);
 
   public readonly searchEngines = new SearchEnginesSdk(this.config);
 

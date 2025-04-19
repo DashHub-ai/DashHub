@@ -31,6 +31,11 @@ export function useSitemap() {
         return sitemap.apps.index.generate({ searchParams: { phrase: name } });
       },
     },
+    aiExternalAPIs: {
+      index: defineSitemapRouteGenerator<SearchAppsRouteUrlFiltersT>(prefixWithBaseRoute)('/ai-external-apis'),
+      create: defineSitemapRouteGenerator(prefixWithBaseRoute)('/ai-external-apis/create'),
+      update: defineSitemapRouteGenerator(prefixWithBaseRoute)('/ai-external-apis/edit/:id'),
+    },
     experts: prefixWithBaseRoute('/experts'),
     login: prefixWithBaseRoute('/login'),
     chat: defineSitemapRouteGenerator(prefixWithBaseRoute)('/chat/:id'),

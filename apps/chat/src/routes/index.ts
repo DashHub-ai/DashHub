@@ -1,3 +1,4 @@
+export * from './ai-external-apis';
 export * from './apps';
 export * from './chat';
 export * from './chats';

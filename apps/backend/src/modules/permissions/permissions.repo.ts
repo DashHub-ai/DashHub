@@ -1,3 +1,4 @@
+import camelcase from 'camelcase';
 import { array as A, nonEmptyArray as NEA, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { type ExpressionBuilder, sql } from 'kysely';
@@ -10,7 +11,7 @@ import type {
   SdkUpsertPermissionsT,
 } from '@llm/sdk';
 
-import type { PermissionInsertTableRow } from './permissions.tables';
+import type { PermissionInsertTableRow, PermissionTableRow } from './permissions.tables';
 
 import {
   createProtectedDatabaseRepo,
@@ -94,6 +95,7 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
             projectId: resource.type === 'project' ? resource.id : null,
             appId: resource.type === 'app' ? resource.id : null,
             chatId: resource.type === 'chat' ? resource.id : null,
+            aiExternalApiId: resource.type === 'ai_external_api' ? resource.id : null,
           })),
         );
 
@@ -143,8 +145,10 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
           .deleteFrom(this.table)
           .where('user_id', '=', userId)
           .where(eb => eb.or([
+            eb('chat_id', 'is not', null),
             eb('project_id', 'is not', null),
             eb('app_id', 'is not', null),
+            eb('ai_external_api_id', 'is not', null),
           ]))
           .where(eb => eb.and([
             eb.not(
@@ -167,6 +171,7 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
             'project_id as projectId',
             'app_id as appId',
             'chat_id as chatId',
+            'ai_external_api_id as aiExternalApiId',
           ])
           .execute(),
       ),
@@ -177,12 +182,14 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
             projectsIds: [] as TableId[],
             appsIds: [] as TableId[],
             chatsIds: [] as TableUuid[],
+            aiExternalApiIds: [] as TableId[],
           },
-          (acc, { projectId, appId, chatId }) => ({
+          (acc, { projectId, appId, chatId, aiExternalApiId }) => ({
             ...acc,
             projectsIds: projectId ? [...acc.projectsIds, projectId] : acc.projectsIds,
             appsIds: appId ? [...acc.appsIds, appId] : acc.appsIds,
             chatsIds: chatId ? [...acc.chatsIds, chatId] : acc.chatsIds,
+            aiExternalApiIds: aiExternalApiId ? [...acc.aiExternalApiIds, aiExternalApiId] : acc.aiExternalApiIds,
           }),
         ),
       ),
@@ -203,7 +210,7 @@ export class PermissionsRepo extends createProtectedDatabaseRepo('permissions') 
     this.createIdsIterator({
       chunkSize,
       where: [
-        [`${resource.type}Id`, '=', resource.id],
+        [`${camelcase(resource.type)}Id` as keyof PermissionTableRow, '=', resource.id],
       ],
     });
 }
@@ -218,6 +225,9 @@ function mapResourceTypeToColumn(type: SdkPermissionResourceTypeT) {
 
     case 'chat':
       return 'chat_id';
+
+    case 'ai_external_api':
+      return 'ai_external_api_id';
 
     default: {
       const _: never = type;

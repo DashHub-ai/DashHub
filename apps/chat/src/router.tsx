@@ -2,11 +2,13 @@ import { Redirect, Route, Switch } from 'wouter';
 
 import { type SdkTableRowWithUuidT, useSdkIsLoggedIn } from '@llm/sdk';
 import {
+  AIExternalAPIsRoute,
   AIModelsManagementRoute,
   AppsRoute,
   ChatRoute,
   ChatsRoute,
   ChooseOrganizationRoute,
+  CreateAIExternalAPIRoute,
   CreateAppRoute,
   ExpertsRoute,
   ForceRedirectRoute,
@@ -22,6 +24,7 @@ import {
   S3BucketsManagementRoute,
   SearchEnginesManagementRoute,
   SettingsRoute,
+  UpdateAIExternalAPIRoute,
   UpdateAppRoute,
   UsersGroupsManagementRoute,
   UsersManagementRoute,
@@ -75,12 +78,19 @@ function LoggedInRouter() {
         {params => <ProjectRoute id={+params.id} />}
       </Route>
 
-      <Route path={sitemap.projects.index.raw} component={ProjectsRoute} />
       <Route path={sitemap.apps.create.raw} component={CreateAppRoute} />
       <Route<SdkTableRowWithUuidT> path={sitemap.apps.update.raw}>
         {params => <UpdateAppRoute id={+params.id} />}
       </Route>
       <Route path={sitemap.apps.index.raw} component={AppsRoute} />
+
+      <Route path={sitemap.aiExternalAPIs.create.raw} component={CreateAIExternalAPIRoute} />
+      <Route<SdkTableRowWithUuidT> path={sitemap.aiExternalAPIs.update.raw}>
+        {params => <UpdateAIExternalAPIRoute id={+params.id} />}
+      </Route>
+      <Route path={sitemap.aiExternalAPIs.index.raw} component={AIExternalAPIsRoute} />
+
+      <Route path={sitemap.projects.index.raw} component={ProjectsRoute} />
       <Route path={sitemap.experts} component={ExpertsRoute} />
 
       <Route path={sitemap.settings.me} component={MeSettingsRoute} />
