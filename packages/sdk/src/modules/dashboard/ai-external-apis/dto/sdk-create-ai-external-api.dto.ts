@@ -22,6 +22,6 @@ export const SdkCreateAIExternalAPIInputV = SdkAIExternalApiV.omit({
 
 export type SdkCreateAIExternalAPIInputT = z.infer<typeof SdkCreateAIExternalAPIInputV>;
 
-export const SdkCreateAIExternalAIOutputV = SdkTableRowWithIdV;
+export const SdkCreateAIExternalAPIOutputV = SdkTableRowWithIdV;
 
-export type SdkCreateAIExternalAIOutputT = z.infer<typeof SdkCreateAIExternalAIOutputV>;
+export type SdkCreateAIExternalAPIOutputT = z.infer<typeof SdkCreateAIExternalAPIOutputV>;
