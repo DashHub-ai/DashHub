@@ -42,7 +42,7 @@ export function UpdateAIExternalAPIRoute({ id }: Props) {
     <PageWithSidebarLayout>
       <RouteMetaTags meta={t.meta} />
 
-      <section className="flex flex-col gap-6 mx-auto max-w-6xl">
+      <section className="flex flex-col gap-6 mx-auto max-w-4xl">
         <LayoutHeader>
           {(
             result.status === 'loading'
