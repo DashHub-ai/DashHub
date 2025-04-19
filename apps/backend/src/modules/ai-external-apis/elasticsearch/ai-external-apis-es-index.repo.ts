@@ -19,8 +19,8 @@ import type { AIExternalAPITableRowWithRelations } from '../ai-external-apis.tab
 
 import { AIExternalAPIsRepo } from '../ai-external-apis.repo';
 
-const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
-  indexName: 'dashboard-apps',
+const AIExternalAPIsAbstractEsIndexRepo = createElasticsearchIndexRepo({
+  indexName: 'dashboard-ai-external-apis',
   schema: {
     mappings: {
       dynamic: false,
@@ -45,7 +45,7 @@ const AppsAbstractEsIndexRepo = createElasticsearchIndexRepo({
 export type AIExternalAPIsEsDocument = EsDocument<AIExternalAPITableRowWithRelations>;
 
 @injectable()
-export class AIExternalAPIsEsIndexRepo extends AppsAbstractEsIndexRepo<AIExternalAPIsEsDocument> {
+export class AIExternalAPIsEsIndexRepo extends AIExternalAPIsAbstractEsIndexRepo<AIExternalAPIsEsDocument> {
   constructor(
     @inject(ElasticsearchRepo) elasticsearchRepo: ElasticsearchRepo,
     @inject(AIExternalAPIsRepo) private readonly aiExternalApisRepo: AIExternalAPIsRepo,

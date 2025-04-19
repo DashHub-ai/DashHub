@@ -3,6 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import { tapTaskEitherTE } from '@llm/commons';
+import { AIExternalAPIsEsIndexRepo } from '~/modules/ai-external-apis/elasticsearch/ai-external-apis-es-index.repo';
 import { AIModelsEsIndexRepo } from '~/modules/ai-models/elasticsearch/ai-models-es-index.repo';
 import { AppsCategoriesEsIndexRepo } from '~/modules/apps-categories/elasticsearch/apps-categories-es-index.repo';
 import { AppsEsIndexRepo } from '~/modules/apps/elasticsearch/apps-es-index.repo';
@@ -41,6 +42,7 @@ export class ElasticsearchRegistryBootService {
     @inject(ProjectsEmbeddingsEsIndexRepo) private readonly projectsEmbeddingsEsIndexRepo: ProjectsEmbeddingsEsIndexRepo,
     @inject(SearchEnginesEsIndexRepo) private readonly searchEnginesEsIndexRepo: SearchEnginesEsIndexRepo,
     @inject(PinnedMessagesEsIndexRepo) private readonly pinnedMessagesEsIndexRepo: PinnedMessagesEsIndexRepo,
+    @inject(AIExternalAPIsEsIndexRepo) private readonly aiExternalAPIsEsIndexRepo: AIExternalAPIsEsIndexRepo,
   ) {}
 
   register = TE.fromIO(() => {
@@ -59,6 +61,7 @@ export class ElasticsearchRegistryBootService {
       this.projectsEmbeddingsEsIndexRepo,
       this.searchEnginesEsIndexRepo,
       this.pinnedMessagesEsIndexRepo,
+      this.aiExternalAPIsEsIndexRepo,
     ]);
 
     this.logger.info('Registered elasticsearch repos!');
