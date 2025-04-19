@@ -4,7 +4,6 @@ import { WebhookIcon } from 'lucide-react';
 
 import { formatDate } from '@llm/commons';
 import { type SdkSearchAIExternalAPIItemT, useSdkForLoggedIn } from '@llm/sdk';
-import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
 import { CardRecordPermissions } from '~/modules/permissions';
 import { useSitemap } from '~/routes';
 import {
@@ -32,7 +31,6 @@ export function AIExternalAPICard({ api, ctaButton, onAfterArchive, onAfterUnarc
   const sitemap = useSitemap();
 
   const { sdks, createRecordGuard } = useSdkForLoggedIn();
-  const [createChatWithApp, createStatus] = useCreateChatWithInitialApp();
 
   const [onUnarchive, unarchiveStatus] = useUnarchiveWithNotifications(
     sdks.dashboard.apps.unarchive(api.id),
@@ -46,10 +44,11 @@ export function AIExternalAPICard({ api, ctaButton, onAfterArchive, onAfterUnarc
 
   return (
     <CardBase
-      disabled={createStatus.isLoading}
-      {...!ctaButton && {
-        onClick: () => void createChatWithApp(api),
-      }}
+      href={sitemap.aiExternalAPIs.update.generate({
+        pathParams: {
+          id: api.id,
+        },
+      })}
     >
       <CardTitle icon={<WebhookIcon size={16} />}>
         {api.name}
@@ -76,7 +75,7 @@ export function AIExternalAPICard({ api, ctaButton, onAfterArchive, onAfterUnarc
       {!ctaButton && !api.archived && (recordGuard.can.write || recordGuard.can.archive) && (
         <CardActions>
           {recordGuard.can.write && (
-            <CardEditButton href={sitemap.apps.update.generate({ pathParams: { id: api.id } })} />
+            <CardEditButton href={sitemap.aiExternalAPIs.update.generate({ pathParams: { id: api.id } })} />
           )}
 
           {recordGuard.can.archive && (

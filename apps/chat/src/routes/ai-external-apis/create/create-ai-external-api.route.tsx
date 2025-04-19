@@ -1,30 +1,39 @@
+import { useLocation } from 'wouter';
+
 import { useI18n } from '~/i18n';
 import {
   LayoutHeader,
   PageWithSidebarLayout,
 } from '~/layouts';
 import {
-  AppCreateForm,
+  AIExternalAPICreateForm,
+  type CreateAIExternalAPIFormValue,
   useWorkspaceOrganizationOrThrow,
 } from '~/modules';
-import { RouteMetaTags } from '~/routes';
-import { createFakeSelectItem } from '~/ui';
+import { RouteMetaTags, useSitemap } from '~/routes';
 
 export function CreateAIExternalAPIRoute() {
   const { pack } = useI18n();
   const t = pack.routes.createAIExternalAPI;
 
+  const [, navigate] = useLocation();
+  const sitemap = useSitemap();
   const { assignWorkspaceOrganization } = useWorkspaceOrganizationOrThrow();
 
-  const defaultValue = assignWorkspaceOrganization({
+  const defaultValue = assignWorkspaceOrganization<CreateAIExternalAPIFormValue>({
     name: '',
-    chatContext: '',
     description: '',
     permissions: [],
-    category: createFakeSelectItem(),
-    aiModel: null,
-    promotion: 0,
+    logo: null,
+    schema: {
+      endpoints: [],
+      parameters: [],
+    },
   });
+
+  const onAfterSubmit = () => {
+    navigate(sitemap.aiExternalAPIs.index.generate({}));
+  };
 
   return (
     <PageWithSidebarLayout>
@@ -35,7 +44,10 @@ export function CreateAIExternalAPIRoute() {
           {t.title}
         </LayoutHeader>
 
-        <AppCreateForm defaultValue={defaultValue} />
+        <AIExternalAPICreateForm
+          defaultValue={defaultValue}
+          onAfterSubmit={onAfterSubmit}
+        />
       </section>
     </PageWithSidebarLayout>
   );

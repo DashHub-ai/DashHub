@@ -1,12 +1,12 @@
 import { pipe } from 'fp-ts/lib/function';
-import { Redirect } from 'wouter';
+import { Redirect, useLocation } from 'wouter';
 
 import { tryOrThrowTE } from '@llm/commons';
 import { useAsyncValue } from '@llm/commons-front';
 import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
-import { AppUpdateForm, useCreateChatWithInitialApp } from '~/modules';
+import { AIExternalAPIUpdateForm } from '~/modules';
 import { RouteMetaTags, useSitemap } from '~/routes';
 import { SpinnerContainer } from '~/ui';
 
@@ -18,24 +18,24 @@ export function UpdateAIExternalAPIRoute({ id }: Props) {
   const { pack } = useI18n();
   const t = pack.routes.editAIExternalAPI;
 
+  const [, navigate] = useLocation();
   const sitemap = useSitemap();
   const { sdks } = useSdkForLoggedIn();
-  const [createChatWithApp] = useCreateChatWithInitialApp();
 
   const result = useAsyncValue(
     pipe(
-      sdks.dashboard.apps.get(id),
+      sdks.dashboard.aiExternalAPIs.get(id),
       tryOrThrowTE,
     ),
     [id],
   );
 
   if (result.status === 'error') {
-    return <Redirect to={sitemap.projects.index.generate({})} replace />;
+    return <Redirect to={sitemap.aiExternalAPIs.index.generate({})} replace />;
   }
 
   const onAfterSubmit = () => {
-    void createChatWithApp({ id });
+    navigate(sitemap.aiExternalAPIs.index.generate({}));
   };
 
   return (
@@ -54,7 +54,7 @@ export function UpdateAIExternalAPIRoute({ id }: Props) {
         {(
           result.status === 'loading'
             ? <SpinnerContainer loading />
-            : <AppUpdateForm app={result.data} onAfterSubmit={onAfterSubmit} />
+            : <AIExternalAPIUpdateForm api={result.data} onAfterSubmit={onAfterSubmit} />
         )}
       </section>
     </PageWithSidebarLayout>

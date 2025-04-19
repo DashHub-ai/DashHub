@@ -467,6 +467,36 @@ export const I18N_PACK_EN = {
     grid: {
       placeholder: 'No external APIs yet. Feel free to create one!',
     },
+    fields: {
+      name: {
+        label: 'Name',
+        placeholder: 'Enter integration name',
+      },
+      description: {
+        label: 'Description',
+        placeholder: 'Enter integration description',
+      },
+      organization: {
+        label: 'Organization',
+      },
+      logo: {
+        label: 'Logo',
+        placeholder: 'Enter integration logo URL',
+      },
+      permissions: {
+        label: 'Permissions',
+      },
+      schema: {
+        endpoints: {
+          label: 'Endpoints',
+          placeholder: 'Enter endpoints',
+        },
+        parameters: {
+          label: 'Parameters',
+          placeholder: 'Enter parameters',
+        },
+      },
+    },
   },
   workspace: {
     selectOrganization: 'Select organization',

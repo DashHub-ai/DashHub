@@ -177,7 +177,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
 
       return this.permissionsService.upsert({
         value: {
-          resource: { type: 'app', id },
+          resource: { type: 'ai_external_api', id },
           permissions,
         },
       });
