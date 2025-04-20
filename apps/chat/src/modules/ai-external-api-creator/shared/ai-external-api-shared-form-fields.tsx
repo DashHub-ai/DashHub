@@ -79,7 +79,10 @@ export const AIExternalAPISharedFormFields = controlled<Value, AIExternalAPIShar
         label={t.fields.schema.label}
         {...validation.extract('schema')}
       >
-        <AISchemaCreator {...bind.path('schema')} />
+        <AISchemaCreator
+          {...bind.path('schema')}
+          {...validation.extract('schema', { nested: true })}
+        />
       </FormField>
     </>
   );

@@ -494,6 +494,9 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
       schema: {
         label: 'Schemat',
+        endpoint: {
+          add: 'Dodaj endpoint',
+        },
         endpoints: {
           label: 'Endpointy',
           placeholder: 'Wpisz endpointy integracji',

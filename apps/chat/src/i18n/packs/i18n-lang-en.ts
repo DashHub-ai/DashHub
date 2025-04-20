@@ -488,6 +488,9 @@ export const I18N_PACK_EN = {
       },
       schema: {
         label: 'Schema',
+        endpoint: {
+          add: 'Add endpoint',
+        },
         endpoints: {
           label: 'Endpoints',
           placeholder: 'Enter endpoints',
