@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import { useLocation } from 'wouter';
 
 import { useI18n } from '~/i18n';
@@ -28,7 +29,19 @@ export function CreateAIExternalAPIRoute() {
     logo: null,
     schema: {
       endpoints: [],
-      parameters: [],
+      parameters: [
+        {
+          id: v4(),
+          name: 'Authorization',
+          ai: {
+            required: true,
+            generated: false,
+          },
+          placement: 'header',
+          type: 'string',
+          value: null,
+        },
+      ],
     },
   });
 

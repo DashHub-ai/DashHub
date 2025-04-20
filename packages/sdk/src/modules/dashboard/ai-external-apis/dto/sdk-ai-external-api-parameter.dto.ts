@@ -22,19 +22,21 @@ export type SdkAIExternalAPIParameterTypeT = z.infer<
   typeof SdkAIExternalAPIParameterTypeV
 >;
 
-export const SdkAIExternalAPIParameterValueV = z.object({
-  type: SdkAIExternalAPIParameterTypeV,
-  default: z.any().nullable(),
+export const SdkAIExternalAPIParameterAIInstructV = z.object({
+  generated: z.boolean(),
+  required: z.boolean(),
 });
 
-export type SdkAIExternalAPIParameterValueT = z.infer<
-  typeof SdkAIExternalAPIParameterValueV
+export type SdkAIExternalAPIParameterAIInstructT = z.infer<
+  typeof SdkAIExternalAPIParameterAIInstructV
 >;
 
 export const SdkAIExternalAPIParameterV = z.object({
-  required: z.boolean(),
+  name: z.string(),
+  type: SdkAIExternalAPIParameterTypeV,
+  value: z.any().nullable(),
   placement: SdkAIExternalAPIParameterPlacementV,
-  value: SdkAIExternalAPIParameterValueV,
+  ai: SdkAIExternalAPIParameterAIInstructV.nullable(),
 })
   .merge(SdkTableRowWithUuidV);
 

@@ -40,14 +40,16 @@ export const AISchemaEndpoints = controlled<SdkAIExternalAPIEndpointT[]>(({ cont
 
   return (
     <>
-      <button
-        type="button"
-        className="w-full uk-button uk-button-default"
-        onClick={onAddEndpoint}
-      >
-        <PlusIcon className="mr-2 w-4 h-4" />
-        {t.endpoint.add}
-      </button>
+      <div className="flex justify-start">
+        <button
+          type="button"
+          className="uk-button uk-button-default uk-button-small"
+          onClick={onAddEndpoint}
+        >
+          <PlusIcon className="mr-2 w-4 h-4" />
+          {t.endpoint.add}
+        </button>
+      </div>
 
       {value.length > 0 && (
         <div className="my-8 border-gray-200 border-t border-dashed" />

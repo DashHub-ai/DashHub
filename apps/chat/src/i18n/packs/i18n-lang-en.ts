@@ -500,6 +500,22 @@ export const I18N_PACK_EN = {
             placeholder: 'Describe what this endpoint does and what information it provides',
           },
         },
+        parameter: {
+          add: 'Add parameter',
+          columns: {
+            name: 'Name',
+            type: 'Type',
+            placement: 'Placement',
+            generated: 'Generated',
+            required: 'Required',
+            value: 'Value',
+            actions: 'Actions',
+          },
+          placeholders: {
+            numberValue: 'Enter number value',
+            textValue: 'Enter text value',
+          },
+        },
         endpoints: {
           label: 'Endpoints',
           placeholder: 'Enter endpoints',

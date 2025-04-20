@@ -8,6 +8,7 @@ import { useI18n } from '~/i18n';
 import { FormField } from '~/ui';
 
 import { AISchemaEndpoints } from './endpoints';
+import { AISchemaParameters } from './parameters';
 
 type Props = ValidationErrorsListProps<SdkAIExternalAPISchemaT>;
 
@@ -16,12 +17,25 @@ export const AISchemaCreator = controlled<SdkAIExternalAPISchemaT, Props>(({ con
   const validation = useFormValidatorMessages({ errors });
 
   return (
-    <FormField
-      className="uk-margin"
-      label={t.fields.schema.endpoints.label}
-      {...validation.extract('schema')}
-    >
-      <AISchemaEndpoints {...bind.path('endpoints', { input: val => val ?? [] })} />
-    </FormField>
+    <>
+      <FormField
+        className="uk-margin"
+        label={t.fields.schema.parameters.label}
+        {...validation.extract('schema')}
+      >
+        <AISchemaParameters
+          {...bind.path('parameters', { input: val => val ?? [] })}
+          enforcedConstantValues
+        />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.schema.endpoints.label}
+        {...validation.extract('schema')}
+      >
+        <AISchemaEndpoints {...bind.path('endpoints', { input: val => val ?? [] })} />
+      </FormField>
+    </>
   );
 });

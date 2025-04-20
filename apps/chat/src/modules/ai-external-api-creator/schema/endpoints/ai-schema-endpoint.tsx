@@ -6,6 +6,7 @@ import type { SdkAIExternalAPIEndpointT } from '@llm/sdk';
 import { useI18n } from '~/i18n';
 import { FormField, Input, TextArea } from '~/ui';
 
+import { AISchemaParameters } from '../parameters';
 import { AISchemaEndpointMethod } from './ai-schema-endpoint-method';
 
 type Props = {
@@ -55,6 +56,12 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
             />
           </FormField>
         </div>
+      </div>
+
+      <div className="mt-4">
+        <FormField label="Parameters">
+          <AISchemaParameters {...bind.path('parameters', { input: val => val ?? [] })} />
+        </FormField>
       </div>
 
       <div className="flex justify-end mt-4">

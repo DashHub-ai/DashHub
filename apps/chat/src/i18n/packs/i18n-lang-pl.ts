@@ -506,6 +506,22 @@ export const I18N_PACK_PL: I18nLangPack = {
             placeholder: 'Opisz, co robi ten endpoint i jakie informacje udostępnia',
           },
         },
+        parameter: {
+          add: 'Dodaj parametr',
+          columns: {
+            name: 'Nazwa',
+            type: 'Typ',
+            placement: 'Umiejscowienie',
+            generated: 'Generowany',
+            required: 'Wymagany',
+            value: 'Wartość',
+            actions: 'Akcje',
+          },
+          placeholders: {
+            numberValue: 'Wpisz wartość liczbową',
+            textValue: 'Wpisz wartość tekstową',
+          },
+        },
         endpoints: {
           label: 'Endpointy',
           placeholder: 'Wpisz endpointy integracji',
