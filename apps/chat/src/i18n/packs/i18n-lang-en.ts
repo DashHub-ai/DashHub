@@ -474,7 +474,7 @@ export const I18N_PACK_EN = {
       },
       description: {
         label: 'Description',
-        placeholder: 'Enter integration description',
+        placeholder: 'Enter integration description, it\'ll be used by AI to generate responses.',
       },
       organization: {
         label: 'Organization',
@@ -488,6 +488,7 @@ export const I18N_PACK_EN = {
       },
       schema: {
         label: 'Schema',
+        globalApiSettings: 'Global API settings',
         endpoint: {
           add: 'Add endpoint',
           path: {
@@ -517,12 +518,14 @@ export const I18N_PACK_EN = {
           },
         },
         endpoints: {
-          label: 'Endpoints',
+          label: 'API Endpoints',
           placeholder: 'Enter endpoints',
+          empty: 'No endpoints yet',
         },
         parameters: {
           label: 'Parameters',
           placeholder: 'Enter parameters',
+          empty: 'No parameters yet',
         },
       },
     },

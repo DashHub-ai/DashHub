@@ -19,14 +19,14 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
 
   return (
     <li className="mb-8 pb-6 border-gray-200 border-b">
-      <div className="flex items-center gap-4 mb-4">
-        <div className="w-1/4">
+      <div className="items-center gap-4 grid grid-cols-[100px_1fr_auto] mb-4">
+        <div>
           <FormField label="Method">
             <AISchemaEndpointMethod {...bind.path('method')} required />
           </FormField>
         </div>
 
-        <div className="w-3/4">
+        <div>
           <FormField label="Path">
             <Input
               {...bind.path('path')}
@@ -35,6 +35,15 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
             />
           </FormField>
         </div>
+
+        <button
+          type="button"
+          className="self-end uk-button uk-button-danger"
+          onClick={onRemove}
+        >
+          <TrashIcon className="mr-2 w-4 h-4" />
+          {pack.buttons.delete}
+        </button>
       </div>
 
       <div className="w-full">
@@ -62,17 +71,6 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
         <FormField label="Parameters">
           <AISchemaParameters {...bind.path('parameters', { input: val => val ?? [] })} />
         </FormField>
-      </div>
-
-      <div className="flex justify-end mt-4">
-        <button
-          type="button"
-          className="uk-button uk-button-danger"
-          onClick={onRemove}
-        >
-          <TrashIcon className="mr-2 w-4 h-4" />
-          {pack.buttons.delete}
-        </button>
       </div>
     </li>
   );

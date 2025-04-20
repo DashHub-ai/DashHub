@@ -28,7 +28,29 @@ export function CreateAIExternalAPIRoute() {
     permissions: [],
     logo: null,
     schema: {
-      endpoints: [],
+      apiUrl: 'https://api.example.com',
+      endpoints: [
+        {
+          id: v4(),
+          method: 'GET',
+          functionName: '',
+          description: '',
+          path: '',
+          parameters: [
+            {
+              id: v4(),
+              name: 'q',
+              ai: {
+                required: false,
+                generated: true,
+              },
+              placement: 'query',
+              type: 'string',
+              value: null,
+            },
+          ],
+        },
+      ],
       parameters: [
         {
           id: v4(),

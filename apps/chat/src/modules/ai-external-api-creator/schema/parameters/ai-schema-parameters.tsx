@@ -7,6 +7,7 @@ import type { SdkAIExternalAPIParameterT, SdkTableRowUuidT } from '@llm/sdk';
 
 import { rejectById } from '@llm/commons';
 import { useI18n } from '~/i18n';
+import { GhostPlaceholder } from '~/modules/shared';
 
 import { AISchemaParameterRow } from './ai-schema-parameter-row';
 
@@ -56,9 +57,9 @@ export const AISchemaParameters = controlled<SdkAIExternalAPIParameterT[], Props
     <div className="mt-4">
       {value.length > 0 && (
         <div className="border rounded-md">
-          <table className="w-full">
+          <table className="bg-white w-full">
             <thead>
-              <tr className="bg-gray-50">
+              <tr className="text-sm">
                 <th className="px-4 py-2 text-left">{t.parameter.columns.name}</th>
                 <th className="px-4 py-2 text-left">{t.parameter.columns.type}</th>
                 <th className="px-4 py-2 text-left">{t.parameter.columns.placement}</th>
@@ -88,7 +89,13 @@ export const AISchemaParameters = controlled<SdkAIExternalAPIParameterT[], Props
         </div>
       )}
 
-      <div className="flex justify-start mt-4">
+      {!value.length && (
+        <GhostPlaceholder spaced={false}>
+          {t.parameters.empty}
+        </GhostPlaceholder>
+      )}
+
+      <div className="flex justify-center mt-4">
         <button
           type="button"
           className="uk-button uk-button-default uk-button-small"

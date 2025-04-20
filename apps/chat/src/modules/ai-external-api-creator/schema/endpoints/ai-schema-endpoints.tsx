@@ -7,6 +7,7 @@ import type { SdkAIExternalAPIEndpointT, SdkTableRowUuidT } from '@llm/sdk';
 
 import { rejectById } from '@llm/commons';
 import { useI18n } from '~/i18n';
+import { GhostPlaceholder } from '~/modules/shared';
 
 import { AISchemaEndpoint } from './ai-schema-endpoint';
 
@@ -32,7 +33,19 @@ export const AISchemaEndpoints = controlled<SdkAIExternalAPIEndpointT[]>(({ cont
           functionName: '',
           description: '',
           path: '',
-          parameters: [],
+          parameters: [
+            {
+              id: v4(),
+              name: 'q',
+              ai: {
+                required: false,
+                generated: true,
+              },
+              placement: 'query',
+              type: 'string',
+              value: null,
+            },
+          ],
         },
       ],
     });
@@ -40,22 +53,7 @@ export const AISchemaEndpoints = controlled<SdkAIExternalAPIEndpointT[]>(({ cont
 
   return (
     <>
-      <div className="flex justify-start">
-        <button
-          type="button"
-          className="uk-button uk-button-default uk-button-small"
-          onClick={onAddEndpoint}
-        >
-          <PlusIcon className="mr-2 w-4 h-4" />
-          {t.endpoint.add}
-        </button>
-      </div>
-
-      {value.length > 0 && (
-        <div className="my-8 border-gray-200 border-t border-dashed" />
-      )}
-
-      <ol className="list-none">
+      <ol className="empty:hidden mb-4 list-none">
         {value.map((endpoint, index) => (
           <AISchemaEndpoint
             {...bind.path(`[${index}]`)}
@@ -64,6 +62,23 @@ export const AISchemaEndpoints = controlled<SdkAIExternalAPIEndpointT[]>(({ cont
           />
         ))}
       </ol>
+
+      {!value.length && (
+        <GhostPlaceholder spaced={false}>
+          {t.endpoints.empty}
+        </GhostPlaceholder>
+      )}
+
+      <div className="flex justify-center mt-4">
+        <button
+          type="button"
+          className="uk-button uk-button-primary uk-button-small"
+          onClick={onAddEndpoint}
+        >
+          <PlusIcon className="mr-2 w-4 h-4" />
+          {t.endpoint.add}
+        </button>
+      </div>
     </>
   );
 });

@@ -480,7 +480,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
       description: {
         label: 'Opis',
-        placeholder: 'Wpisz opis integracji',
+        placeholder: 'Wpisz opis integracji, będzie on używany przez AI do analizy narzędzia.',
       },
       organization: {
         label: 'Organizacja',
@@ -494,6 +494,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
       schema: {
         label: 'Schemat',
+        globalApiSettings: 'Ustawienia globalne API',
         endpoint: {
           add: 'Dodaj endpoint',
           path: {
@@ -523,12 +524,14 @@ export const I18N_PACK_PL: I18nLangPack = {
           },
         },
         endpoints: {
-          label: 'Endpointy',
+          label: 'Endpointy API',
           placeholder: 'Wpisz endpointy integracji',
+          empty: 'Brak endpointów API',
         },
         parameters: {
           label: 'Parametry',
           placeholder: 'Wpisz parametry integracji',
+          empty: 'Brak parametrów',
         },
       },
     },
