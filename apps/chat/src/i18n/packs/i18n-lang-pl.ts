@@ -495,6 +495,9 @@ export const I18N_PACK_PL: I18nLangPack = {
       schema: {
         label: 'Schemat',
         globalApiSettings: 'Ustawienia globalne API',
+        apiUrl: {
+          label: 'Base API URL',
+        },
         endpoint: {
           add: 'Dodaj endpoint',
           path: {

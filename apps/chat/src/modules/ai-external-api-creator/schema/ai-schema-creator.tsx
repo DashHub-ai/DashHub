@@ -27,7 +27,7 @@ export const AISchemaCreator = controlled<SdkAIExternalAPISchemaT, Props>(({ con
 
         <FormField
           className="uk-margin"
-          label="API Base URL"
+          label={t.fields.schema.apiUrl.label}
           {...validation.extract('apiUrl')}
         >
           <Input

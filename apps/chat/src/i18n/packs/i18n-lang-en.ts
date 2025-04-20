@@ -489,6 +489,9 @@ export const I18N_PACK_EN = {
       schema: {
         label: 'Schema',
         globalApiSettings: 'Global API settings',
+        apiUrl: {
+          label: 'Base API URL',
+        },
         endpoint: {
           add: 'Add endpoint',
           path: {
