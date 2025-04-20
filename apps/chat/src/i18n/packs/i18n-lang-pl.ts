@@ -493,6 +493,7 @@ export const I18N_PACK_PL: I18nLangPack = {
         placeholder: 'Wybierz logo integracji',
       },
       schema: {
+        label: 'Schemat',
         endpoints: {
           label: 'Endpointy',
           placeholder: 'Wpisz endpointy integracji',

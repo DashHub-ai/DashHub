@@ -487,6 +487,7 @@ export const I18N_PACK_EN = {
         label: 'Permissions',
       },
       schema: {
+        label: 'Schema',
         endpoints: {
           label: 'Endpoints',
           placeholder: 'Enter endpoints',

@@ -9,9 +9,11 @@ import { useI18n } from '~/i18n';
 import { ShareResourceFormGroup } from '~/modules/permissions';
 import { FormField, Input, SelectGenericFileInput, TextArea } from '~/ui';
 
+import { AISchemaCreator } from '../schema';
+
 type Value = Pick<
   SdkUpdateAIExternalAPIInputT,
-  'name' | 'description' | 'logo'
+  'name' | 'description' | 'logo' | 'schema'
 > & {
   permissions?: SdkPermissionT[] | null;
 };
@@ -70,6 +72,14 @@ export const AIExternalAPISharedFormFields = controlled<Value, AIExternalAPIShar
         {...validation.extract('permissions')}
       >
         <ShareResourceFormGroup {...bind.path('permissions', { input: val => val ?? [] })} />
+      </FormField>
+
+      <FormField
+        className="uk-margin"
+        label={t.fields.schema.label}
+        {...validation.extract('schema')}
+      >
+        <AISchemaCreator {...bind.path('schema')} />
       </FormField>
     </>
   );
