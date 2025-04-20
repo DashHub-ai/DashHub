@@ -490,6 +490,15 @@ export const I18N_PACK_EN = {
         label: 'Schema',
         endpoint: {
           add: 'Add endpoint',
+          path: {
+            placeholder: 'Path only (e.g., /api/resource), not full URL',
+          },
+          functionName: {
+            placeholder: 'Name of the function (e.g., getUserData)',
+          },
+          description: {
+            placeholder: 'Describe what this endpoint does and what information it provides',
+          },
         },
         endpoints: {
           label: 'Endpoints',

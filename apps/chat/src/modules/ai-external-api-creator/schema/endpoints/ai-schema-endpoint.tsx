@@ -14,6 +14,7 @@ type Props = {
 
 export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ control: { bind }, onRemove }) => {
   const { pack } = useI18n();
+  const t = pack.aiExternalAPIs.fields.schema.endpoint;
 
   return (
     <li className="mb-8 pb-6 border-gray-200 border-b">
@@ -29,7 +30,7 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
             <Input
               {...bind.path('path')}
               required
-              placeholder="Path only (e.g., /api/resource), not full URL"
+              placeholder={t.path.placeholder}
             />
           </FormField>
         </div>
@@ -40,7 +41,7 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
           <Input
             {...bind.path('functionName')}
             required
-            placeholder="Name of the function (e.g., getUserData)"
+            placeholder={t.functionName.placeholder}
           />
         </FormField>
 
@@ -50,7 +51,7 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
               {...bind.path('description')}
               required
               rows={2}
-              placeholder="Describe what this endpoint does and what information it provides"
+              placeholder={t.description.placeholder}
             />
           </FormField>
         </div>

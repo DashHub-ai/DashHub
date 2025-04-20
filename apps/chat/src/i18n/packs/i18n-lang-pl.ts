@@ -496,6 +496,15 @@ export const I18N_PACK_PL: I18nLangPack = {
         label: 'Schemat',
         endpoint: {
           add: 'Dodaj endpoint',
+          path: {
+            placeholder: 'Tylko ścieżka (np. /api/zasób), nie pełny URL',
+          },
+          functionName: {
+            placeholder: 'Nazwa funkcji (np. pobierzDaneUżytkownika)',
+          },
+          description: {
+            placeholder: 'Opisz, co robi ten endpoint i jakie informacje udostępnia',
+          },
         },
         endpoints: {
           label: 'Endpointy',
