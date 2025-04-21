@@ -57,24 +57,18 @@ export const AISchemaParameters = controlled<SdkAIExternalAPIParameterT[], Props
   return (
     <div className="mt-4">
       {value.length > 0 && (
-        <div className="border rounded-md">
-          <table className="bg-white w-full">
-            <thead>
-              <tr className="text-sm">
-                <th className="px-4 py-2 text-left">{t.parameter.columns.name}</th>
-                <th className="px-4 py-2 text-left">{t.parameter.columns.type}</th>
-                <th className="px-4 py-2 text-left">{t.parameter.columns.placement}</th>
-
+        <div className="uk-table uk-table-divider uk-table-middle uk-table-responsive uk-table-small">
+          <table className="w-full">
+            <thead className="bg-gray-50 text-gray-700 text-xs uppercase">
+              <tr>
+                <th scope="col" className="px-6 py-3 w-[150px]">{t.parameter.columns.name}</th>
+                <th scope="col" className="px-6 py-3 w-[150px]">{t.parameter.columns.type}</th>
+                <th scope="col" className="px-6 py-3 w-[150px]">{t.parameter.columns.placement}</th>
                 {!enforcedConstantValues && (
-                  <>
-                    <th className="px-4 py-2 text-left">{t.parameter.columns.generated}</th>
-                    <th className="px-4 py-2 text-left">{t.parameter.columns.required}</th>
-                  </>
+                  <th scope="col" className="px-6 py-3 w-[150px]">{t.parameter.columns.ai}</th>
                 )}
-
-                <th className="px-4 py-2 text-left">{t.parameter.columns.value}</th>
-                <th className="px-4 py-2 text-left">{t.parameter.columns.description}</th>
-                <th className="px-4 py-2 text-right">{t.parameter.columns.actions}</th>
+                <th scope="col" className="px-6 py-3 w-[150px]">{t.parameter.columns.value}</th>
+                <th scope="col" className="px-6 py-3 w-[50px]"></th>
               </tr>
             </thead>
             <tbody>

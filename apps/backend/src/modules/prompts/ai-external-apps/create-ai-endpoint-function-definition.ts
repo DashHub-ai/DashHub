@@ -7,7 +7,7 @@ import type {
 
 import { isDangerousObjectKey } from '@llm/commons';
 
-export function createEndpointAIFunctionDefinition(endpoint: SdkAIExternalAPIEndpointT) {
+export function createExternalAIEndpointFunctionDefinition(endpoint: SdkAIExternalAPIEndpointT) {
   const aiParameters = endpoint.parameters.filter(param => param.ai?.generated === true);
 
   const { properties, required } = aiParameters.reduce(

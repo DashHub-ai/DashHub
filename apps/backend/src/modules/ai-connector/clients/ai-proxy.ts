@@ -1,8 +1,8 @@
 import type { taskEither as TE } from 'fp-ts';
 import type { z } from 'zod';
 
-import type { SdkAIModelT, SdkCreateMessageInputT, SdkMessageRoleT, SdkMessageT, SdkTableRowWithIdT } from '@llm/sdk';
-import type { TableId } from '~/modules/database';
+import type { SdkAIExternalAPIEndpointT, SdkAIModelT, SdkCreateMessageInputT, SdkMessageRoleT, SdkMessageT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { TableId, TableRowWithId } from '~/modules/database';
 import type { SearchEnginesService } from '~/modules/search-engines';
 import type { SearchEngineResultItem } from '~/modules/search-engines/clients/search-engine-proxy';
 
@@ -34,13 +34,15 @@ export abstract class AIProxy {
 };
 
 export type AIProxyAsyncFunction = {
-  externalApiId: TableId;
+  externalApi: TableRowWithId & {
+    endpoint: SdkAIExternalAPIEndpointT;
+  };
   definition: {
     name: string;
     description: string;
     parameters: object;
   };
-  executor: () => Promise<object>;
+  executor: (params: Record<string, any>) => Promise<object>;
 };
 
 export type AIProxyAsyncFunctionResult = {

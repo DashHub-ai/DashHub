@@ -501,13 +501,19 @@ export const I18N_PACK_PL: I18nLangPack = {
         endpoint: {
           add: 'Dodaj endpoint',
           path: {
+            label: 'Ścieżka',
             placeholder: 'Tylko ścieżka (np. /api/zasób), nie pełny URL',
           },
           functionName: {
+            label: 'Nazwa funkcji',
             placeholder: 'Nazwa funkcji (np. pobierzDaneUżytkownika)',
           },
           description: {
+            label: 'Opis',
             placeholder: 'Opisz, co robi ten endpoint i jakie informacje udostępnia',
+          },
+          parameters: {
+            label: 'Parametry',
           },
         },
         parameter: {
@@ -521,8 +527,11 @@ export const I18N_PACK_PL: I18nLangPack = {
             required: 'Wymagany',
             value: 'Wartość',
             actions: 'Akcje',
+            ai: 'AI',
           },
           placeholders: {
+            name: 'Wpisz nazwę parametru',
+            description: 'Wpisz opis parametru',
             numberValue: 'Wpisz wartość liczbową',
             textValue: 'Wpisz wartość tekstową',
           },

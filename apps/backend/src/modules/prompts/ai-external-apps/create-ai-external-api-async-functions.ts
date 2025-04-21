@@ -1,4 +1,4 @@
-import { array as A } from 'fp-ts';
+import { array as A, record as R } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
 import type {
@@ -9,9 +9,16 @@ import type {
 import type { AIProxyAsyncFunction } from '~/modules/ai-connector/clients';
 import type { TableId } from '~/modules/database';
 
-import { concatUrls, isNil, parameterizePath, withSearchParams } from '@llm/commons';
+import {
+  concatUrls,
+  isDangerousObjectKey,
+  isNil,
+  parameterizePath,
+  withSearchParams,
+} from '@llm/commons';
+import { LoggerService } from '~/modules/logger';
 
-import { createEndpointAIFunctionDefinition } from './create-endpoint-ai-function-definition';
+import { createExternalAIEndpointFunctionDefinition } from './create-ai-endpoint-function-definition';
 
 /**
  * Creates a map of executable API functions from an external API schema.
@@ -27,8 +34,11 @@ export function createAIExternalApiAsyncFunctions(
   return pipe(
     schema.endpoints,
     A.map((endpoint): AIProxyAsyncFunction => ({
-      externalApiId,
-      definition: createEndpointAIFunctionDefinition(endpoint),
+      externalApi: {
+        id: externalApiId,
+        endpoint,
+      },
+      definition: createExternalAIEndpointFunctionDefinition(endpoint),
       executor: createApiRequestExecutor({
         context: schema,
         timeout: 3000,
@@ -111,51 +121,262 @@ function createApiRequestExecutor(
     endpoint: SdkAIExternalAPIEndpointT;
   },
 ) {
-  const groupedParams = groupParametersByLocation([
-    ...context.parameters,
-    ...endpoint.parameters,
-  ]);
+  const logger = LoggerService.of('createApiRequestExecutor');
 
-  const url = pipe(
-    concatUrls(context.apiUrl, endpoint.path),
-    parameterizePath(groupedParams.path),
-    withSearchParams(groupedParams.query),
+  // Pre-create parameter definitions map for lookup efficiency
+  const paramDefinitions = pipe(
+    endpoint.parameters,
+    A.reduce({} as Record<string, SdkAIExternalAPIParameterT>, (acc, param) => ({
+      ...acc,
+      [param.name]: param,
+    })),
   );
 
-  return async () => {
+  return async (args: Record<string, any>) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-      const fetchOptions: RequestInit = {
+      // Process all parameters and prepare request configuration
+      const requestConfig = prepareRequestConfiguration({
+        args,
+        context,
+        endpoint,
+        paramDefinitions,
+        logger,
+      });
+
+      // Build URL with path params and query string
+      const url = pipe(
+        concatUrls(context.apiUrl, endpoint.path),
+        parameterizePath(requestConfig.path),
+        withSearchParams(requestConfig.query),
+      );
+
+      // Prepare fetch options
+      const fetchOptions: RequestInit = buildFetchOptions({
+        requestConfig,
         method: endpoint.method,
-        headers: {
-          ...groupedParams.header,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        ...(groupedParams.body && {
-          body: JSON.stringify(groupedParams.body),
-        }),
-        signal: controller.signal,
-      };
+        controller,
+      });
 
-      const response = await fetch(url, fetchOptions);
+      logger.info('Executing API request', {
+        url,
+        method: endpoint.method,
+        headers: fetchOptions.headers,
+        body: fetchOptions.body,
+        dynamicArgs: args,
+      });
 
-      if (!response.ok) {
-        throw new Error(`Request to ${endpoint.functionName} failed: ${response.status} ${response.statusText}`);
-      }
-
-      return response.json();
+      return await executeRequest({
+        url,
+        fetchOptions,
+        functionName: endpoint.functionName,
+        logger,
+      });
     }
     catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
-        throw new Error(`Request to ${endpoint.functionName} timed out after 3 seconds`);
-      }
-      throw error;
+      handleRequestError({
+        error,
+        functionName: endpoint.functionName,
+        timeout,
+        logger,
+      });
+      throw error; // Re-throw after logging
     }
     finally {
       clearTimeout(timeoutId);
     }
   };
+}
+
+/**
+ * Processes and combines static and dynamic parameters for an API request
+ */
+function prepareRequestConfiguration(
+  {
+    args,
+    context,
+    endpoint,
+    paramDefinitions,
+    logger,
+  }: {
+    args: Record<string, any>;
+    context: Omit<SdkAIExternalAPISchemaT, 'endpoints'>;
+    endpoint: SdkAIExternalAPIEndpointT;
+    paramDefinitions: Record<string, SdkAIExternalAPIParameterT>;
+    logger: ReturnType<typeof LoggerService.of>;
+  },
+) {
+  // Start with static/required parameters from the schema
+  const requestParams = groupParametersByLocation([
+    ...context.parameters,
+    ...endpoint.parameters,
+  ]);
+
+  // Process dynamic arguments from the AI
+  pipe(
+    args,
+    R.mapWithIndex((argName, argValue) => {
+      const paramDef = paramDefinitions[argName];
+
+      if (isNil(argValue) || !paramDef) {
+        if (!paramDef) {
+          logger.warn(`Argument '${argName}' provided by AI but not found in endpoint definition. Skipping.`);
+        }
+        return;
+      }
+
+      applyParameterToRequest({
+        placement: paramDef.placement,
+        name: argName,
+        value: argValue,
+        requestParams,
+        logger,
+      });
+    }),
+  );
+
+  return requestParams;
+}
+
+/**
+ * Applies a parameter to the appropriate section of the request configuration
+ */
+function applyParameterToRequest(
+  {
+    placement,
+    name,
+    value,
+    requestParams,
+    logger,
+  }: {
+    placement: SdkAIExternalAPIParameterT['placement'];
+    name: string;
+    value: any;
+    requestParams: ReturnType<typeof groupParametersByLocation>;
+    logger: ReturnType<typeof LoggerService.of>;
+  },
+) {
+  if (isDangerousObjectKey(name)) {
+    logger.warn(`Skipping dangerous object key: ${name}`);
+    return;
+  }
+
+  switch (placement) {
+    case 'path':
+      requestParams.path[name] = String(value);
+      break;
+
+    case 'query':
+      requestParams.query[name] = value;
+      break;
+
+    case 'header':
+      requestParams.header[name] = String(value);
+      break;
+
+    case 'body':
+      requestParams.body = { ...(requestParams.body || {}), [name]: value };
+      break;
+
+    default: {
+      const _: never = placement;
+      logger.error(`Unknown parameter placement: ${placement} for argument ${name}`);
+    }
+  }
+}
+
+/**
+ * Builds fetch options object from request configuration
+ */
+function buildFetchOptions(
+  {
+    requestConfig,
+    method,
+    controller,
+  }: {
+    requestConfig: ReturnType<typeof groupParametersByLocation>;
+    method: string;
+    controller: AbortController;
+  },
+): RequestInit {
+  return {
+    method,
+    headers: {
+      ...requestConfig.header,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    ...(requestConfig.body && {
+      body: JSON.stringify(requestConfig.body),
+    }),
+    signal: controller.signal,
+  };
+}
+
+/**
+ * Executes the fetch request and processes the response
+ */
+async function executeRequest(
+  {
+    url,
+    fetchOptions,
+    functionName,
+    logger,
+  }: {
+    url: string;
+    fetchOptions: RequestInit;
+    functionName: string;
+    logger: ReturnType<typeof LoggerService.of>;
+  },
+) {
+  const response = await fetch(url, fetchOptions);
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+
+    logger.error(`Request to ${functionName} failed`, {
+      status: response.status,
+      statusText: response.statusText,
+      body: errorBody,
+    });
+
+    throw new Error(`Request to ${functionName} failed: ${response.status} ${response.statusText}. Body: ${errorBody}`);
+  }
+
+  // Handle cases where the response might be empty or not JSON
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    return response.json();
+  }
+  else {
+    const textResponse = await response.text();
+    logger.info(`Request to ${functionName} returned non-JSON response`, { contentType, textResponse });
+    return { response: textResponse };
+  }
+}
+
+/**
+ * Handles request errors with appropriate logging
+ */
+function handleRequestError(
+  {
+    error,
+    functionName,
+    timeout,
+    logger,
+  }: {
+    error: unknown;
+    functionName: string;
+    timeout: number;
+    logger: ReturnType<typeof LoggerService.of>;
+  },
+) {
+  if (error instanceof DOMException && error.name === 'AbortError') {
+    logger.error(`Request to ${functionName} timed out after ${timeout}ms`);
+    throw new Error(`Request to ${functionName} timed out after ${timeout / 1000} seconds`);
+  }
+
+  logger.error(`Error during request to ${functionName}:`, error);
 }

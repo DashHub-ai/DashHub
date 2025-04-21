@@ -27,7 +27,7 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
         </div>
 
         <div>
-          <FormField label="Path">
+          <FormField label={t.path.label}>
             <Input
               {...bind.path('path')}
               required
@@ -47,7 +47,7 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
       </div>
 
       <div className="w-full">
-        <FormField label="Function Name">
+        <FormField label={t.functionName.label}>
           <Input
             {...bind.path('functionName')}
             required
@@ -56,7 +56,7 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
         </FormField>
 
         <div className="mt-4">
-          <FormField label="Description">
+          <FormField label={t.description.label}>
             <TextArea
               {...bind.path('description')}
               required
@@ -68,7 +68,7 @@ export const AISchemaEndpoint = controlled<SdkAIExternalAPIEndpointT, Props>(({ 
       </div>
 
       <div className="mt-4">
-        <FormField label="Parameters">
+        <FormField label={t.parameters.label}>
           <AISchemaParameters {...bind.path('parameters', { input: val => val ?? [] })} />
         </FormField>
       </div>

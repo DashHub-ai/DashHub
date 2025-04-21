@@ -495,13 +495,19 @@ export const I18N_PACK_EN = {
         endpoint: {
           add: 'Add endpoint',
           path: {
+            label: 'Path',
             placeholder: 'Path only (e.g., /api/resource), not full URL',
           },
           functionName: {
+            label: 'Function name',
             placeholder: 'Name of the function (e.g., getUserData)',
           },
           description: {
+            label: 'Description',
             placeholder: 'Describe what this endpoint does and what information it provides',
+          },
+          parameters: {
+            label: 'Parameters',
           },
         },
         parameter: {
@@ -515,8 +521,11 @@ export const I18N_PACK_EN = {
             required: 'Required',
             value: 'Value',
             actions: 'Actions',
+            ai: 'AI',
           },
           placeholders: {
+            name: 'Enter parameter name',
+            description: 'Enter parameter description',
             numberValue: 'Enter number value',
             textValue: 'Enter text value',
           },

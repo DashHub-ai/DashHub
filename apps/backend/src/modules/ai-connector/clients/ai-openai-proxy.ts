@@ -334,7 +334,10 @@ async function* handleStreamingAndToolCalls(
     const { toolResultMessages, functionResults } = await executeToolCallsHelper(accumulatedToolCalls, asyncFunctions);
 
     if (functionResults.length > 0) {
-      yield { webSearchResults: [], asyncFunctionsResults: functionResults };
+      yield {
+        webSearchResults: [],
+        asyncFunctionsResults: functionResults,
+      };
     }
 
     currentMessages.push(...toolResultMessages);
@@ -414,13 +417,15 @@ async function executeToolCallsHelper(
     if (asyncFunction) {
       try {
         logger.info(`Executing tool call: ${name} with args: ${argsString}`);
-        const result = await asyncFunction.executor();
+
+        const args = JSON.parse(argsString || '{}');
+        const result = await asyncFunction.executor(args);
         const resultString = JSON.stringify(result);
 
         functionResults.push({
-          externalApiId: asyncFunction.externalApiId,
+          externalApiId: asyncFunction.externalApi.id,
           functionName: name,
-          args: JSON.parse(argsString || '{}'),
+          args,
           result,
         });
 
@@ -442,7 +447,7 @@ async function executeToolCallsHelper(
         });
 
         functionResults.push({
-          externalApiId: asyncFunction.externalApiId,
+          externalApiId: asyncFunction.externalApi.id,
           functionName: name,
           args: JSON.parse(argsString || '{}'),
           result: { error: `Function execution failed: ${error.message || 'Unknown error'}` },
