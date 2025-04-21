@@ -42,6 +42,7 @@ export const AISchemaEndpoints = controlled<SdkAIExternalAPIEndpointT[]>(({ cont
                 generated: true,
               },
               placement: 'query',
+              description: '',
               type: 'string',
               value: null,
             },

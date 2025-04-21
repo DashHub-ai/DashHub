@@ -1,7 +1,7 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import type { SdkJwtTokenT, SdkSearchAIExternalAPIsInputT } from '@llm/sdk';
+import type { SdkJwtTokenT, SdkSearchAIExternalAPIsInputT, SdkTableRowIdT } from '@llm/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
@@ -65,5 +65,11 @@ export class AIExternalAPIsFirewall extends AuthFirewallService {
     TE.fromEither,
     TE.chainW(this.apisService.create),
     this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
+  );
+
+  getAIFunctions = (organizationId: SdkTableRowIdT) => pipe(
+    this.permissionsService.asUser(this.jwt).enforcePermissionsFilters({}),
+    TE.bindW('organizationId', () => TE.of(organizationId)),
+    TE.chainW(this.apisService.getCachedAIFunctionsForPermissions),
   );
 }

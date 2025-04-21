@@ -14,7 +14,10 @@ import {
   type Overwrite,
   runTaskAsVoid,
   tapAsyncIterator,
+  tapTask,
+  Time,
   tryOrThrowTE,
+  wrapWithCache,
 } from '@llm/commons';
 
 import type { ExtractedFile } from '../api/helpers';
@@ -22,7 +25,8 @@ import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
 
 import { OrganizationsS3BucketsRepo } from '../organizations/s3-buckets';
-import { PermissionsService } from '../permissions';
+import { PermissionsService, WithPermissionsInternalFilters } from '../permissions';
+import { convertAIExternalSchemaToAIFunction } from '../prompts/ai-external-apps';
 import { S3Service } from '../s3';
 import { AIExternalAPIsFirewall } from './ai-external-apis.firewall';
 import { AIExternalAPIsRepo } from './ai-external-apis.repo';
@@ -135,6 +139,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
       });
     }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
+    tapTask(this.getCachedAIFunctionsForPermissions.clear),
   );
 
   update = ({ id, logo, permissions, ...value }: InternalUpdateExternalAPIInputT) => pipe(
@@ -194,7 +199,34 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
 
       return TE.of(undefined);
     }),
+    tapTask(this.getCachedAIFunctionsForPermissions.clear),
     TE.map(({ record }) => record),
+  );
+
+  getCachedAIFunctionsForPermissions = wrapWithCache(
+    (
+      {
+        satisfyPermissions,
+        organizationId,
+      }: WithPermissionsInternalFilters<{
+        organizationId: SdkTableRowIdT;
+      }>,
+    ) => pipe(
+      this.search({
+        offset: 0,
+        limit: 30,
+        satisfyPermissions,
+        archived: false,
+        organizationIds: [organizationId],
+      }),
+      TE.map(({ items }) => items.map(
+        ({ schema }) => convertAIExternalSchemaToAIFunction(schema),
+      )),
+    ),
+    {
+      ttlMs: Time.toMilliseconds.hours(48),
+      getKey: permissions => JSON.stringify(permissions),
+    },
   );
 }
 

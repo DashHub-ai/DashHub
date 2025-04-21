@@ -17,7 +17,7 @@ function generateEndpointFunction(endpoint: SdkAIExternalAPIEndpointT) {
 
   const { properties, required } = aiParameters.reduce(
     (acc, param) => {
-      if (isDangerousObjectKey(param.name)) {
+      if (isDangerousObjectKey(param.name) || !param.ai?.generated) {
         return acc;
       }
 
