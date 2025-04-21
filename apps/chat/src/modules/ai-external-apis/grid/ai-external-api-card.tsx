@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { FolderOpenIcon, WebhookIcon } from 'lucide-react';
+import { FolderOpenIcon, ZapIcon } from 'lucide-react';
 
 import { formatDate } from '@llm/commons';
 import { type SdkSearchAIExternalAPIItemT, useSdkForLoggedIn } from '@llm/sdk';
@@ -53,7 +53,7 @@ export function AIExternalAPICard({ api, ctaButton, onAfterArchive, onAfterUnarc
         },
       })}
     >
-      <CardTitle icon={<WebhookIcon size={16} />}>
+      <CardTitle icon={<ZapIcon size={16} />}>
         {api.name}
       </CardTitle>
 

@@ -14,6 +14,7 @@ import {
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+import { ExternalApiChatBadge } from '~/modules/ai-external-apis/chat';
 
 import type { AIStreamObservable } from '../hooks';
 
@@ -211,6 +212,14 @@ export function ChatMessage(
               'items-end w-full': !isAI && isYou,
             })}
           >
+            {message.asyncFunctionsResults && message.asyncFunctionsResults.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-1">
+                {Array.from(new Set(message.asyncFunctionsResults.map(afr => afr.externalApiId))).map(apiId => (
+                  <ExternalApiChatBadge key={apiId} id={apiId} />
+                ))}
+              </div>
+            )}
+
             {files.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 mt-1">
                 <FilesCardsList

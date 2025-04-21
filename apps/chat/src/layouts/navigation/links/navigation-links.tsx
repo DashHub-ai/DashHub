@@ -5,7 +5,7 @@ import {
   MessageSquareIcon,
   PinIcon,
   WandSparklesIcon,
-  WebhookIcon,
+  ZapIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -98,7 +98,7 @@ export function NavigationLinks({ truncated, inMobileMenu = false, className }: 
 
       <NavigationItem
         path={sitemap.aiExternalAPIs.index.generate({})}
-        icon={<WebhookIcon size={16} />}
+        icon={<ZapIcon size={16} />}
         disabled={!hasOrganization}
         withTitle={!hideTitles}
       >
