@@ -511,6 +511,7 @@ export const I18N_PACK_EN = {
             type: 'Type',
             placement: 'Placement',
             generated: 'Generated',
+            description: 'Description',
             required: 'Required',
             value: 'Value',
             actions: 'Actions',

@@ -517,6 +517,7 @@ export const I18N_PACK_PL: I18nLangPack = {
             type: 'Typ',
             placement: 'Umiejscowienie',
             generated: 'Generowany',
+            description: 'Opis',
             required: 'Wymagany',
             value: 'Wartość',
             actions: 'Akcje',

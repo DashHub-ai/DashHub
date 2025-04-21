@@ -35,6 +35,7 @@ export type SdkAIExternalAPIParameterAIInstructT = z.infer<
 
 export const SdkAIExternalAPIParameterV = z.object({
   name: z.string(),
+  description: z.string(),
   type: SdkAIExternalAPIParameterTypeV,
   value: z.any().nullable(),
   placement: SdkAIExternalAPIParameterPlacementV,

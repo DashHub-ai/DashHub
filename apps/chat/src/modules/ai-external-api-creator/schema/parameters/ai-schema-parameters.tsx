@@ -46,6 +46,7 @@ export const AISchemaParameters = controlled<SdkAIExternalAPIParameterT[], Props
                 generated: true,
               },
           placement: 'query',
+          description: '',
           type: 'string',
           value: null,
         },
@@ -72,6 +73,7 @@ export const AISchemaParameters = controlled<SdkAIExternalAPIParameterT[], Props
                 )}
 
                 <th className="px-4 py-2 text-left">{t.parameter.columns.value}</th>
+                <th className="px-4 py-2 text-left">{t.parameter.columns.description}</th>
                 <th className="px-4 py-2 text-right">{t.parameter.columns.actions}</th>
               </tr>
             </thead>

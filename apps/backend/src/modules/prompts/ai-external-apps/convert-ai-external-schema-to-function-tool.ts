@@ -1,6 +1,12 @@
-import type { SdkAIExternalAPIEndpointT, SdkAIExternalAPIParameterT, SdkAIExternalAPISchemaT } from '@llm/sdk';
+import { identity } from 'fp-ts/lib/function';
 
-const DANGEROUS_PROPS = new Set(['__proto__', 'constructor', 'prototype']);
+import type {
+  SdkAIExternalAPIEndpointT,
+  SdkAIExternalAPIParameterT,
+  SdkAIExternalAPISchemaT,
+} from '@llm/sdk';
+
+import { isDangerousObjectKey } from '@llm/commons';
 
 export function convertAIExternalSchemaToAIFunction(app: SdkAIExternalAPISchemaT) {
   return app.endpoints.map(generateEndpointFunction);
@@ -11,7 +17,7 @@ function generateEndpointFunction(endpoint: SdkAIExternalAPIEndpointT) {
 
   const { properties, required } = aiParameters.reduce(
     (acc, param) => {
-      if (DANGEROUS_PROPS.has(param.name)) {
+      if (isDangerousObjectKey(param.name)) {
         return acc;
       }
 
@@ -44,7 +50,7 @@ function generateEndpointFunction(endpoint: SdkAIExternalAPIEndpointT) {
 
 function generateParameterDefinition(param: SdkAIExternalAPIParameterT) {
   const baseDefinition = {
-    description: `Parameter for ${param.name}`,
+    description: param.description || `Parameter for ${param.name}`,
   };
 
   switch (param.type) {
@@ -61,17 +67,34 @@ function generateParameterDefinition(param: SdkAIExternalAPIParameterT) {
       return {
         ...baseDefinition,
         type: 'string',
-        ...(Array.isArray(param.value) && { enum: [...param.value] }),
+        enum: parseEnumValues(identity, param.value),
       };
 
     case 'enum-number':
       return {
         ...baseDefinition,
         type: 'number',
-        ...(Array.isArray(param.value) && { enum: [...param.value] }),
+        enum: parseEnumValues(Number, param.value),
       };
 
     default:
       return { ...baseDefinition, type: 'string' };
   }
+}
+
+function parseEnumValues<T>(mapper: (value: string) => T, value: any): T[] {
+  if (typeof value === 'string') {
+    if (value.trim() === '') {
+      return [];
+    }
+    return value.split(',')
+      .map(item => item.trim())
+      .map(mapper);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(item => mapper(String(item)));
+  }
+
+  return [];
 }

@@ -69,6 +69,14 @@ export const AISchemaParameterRow = controlled<SdkAIExternalAPIParameterT, Props
         />
       </td>
 
+      <td className="px-4 py-2">
+        <Input
+          {...bind.path('description')}
+          placeholder="Parameter description"
+          required
+        />
+      </td>
+
       <td className="px-4 py-2 text-right">
         <button
           type="button"
