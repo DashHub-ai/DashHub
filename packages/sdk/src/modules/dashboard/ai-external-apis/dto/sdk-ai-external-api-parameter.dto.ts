@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { SdkTableRowWithUuidV } from '~/shared';
 
 export const SdkAIExternalAPIParameterPlacementV = z.enum([
+  'path',
   'query',
   'header',
   'body',

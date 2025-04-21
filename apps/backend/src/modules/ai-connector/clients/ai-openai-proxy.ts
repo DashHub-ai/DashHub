@@ -78,6 +78,7 @@ export class AIOpenAIProxy extends AIProxy {
       message,
       organization,
       signal,
+      functions,
     }: AIProxyStreamPromptAttrs,
   ) {
     const { webSearch } = message;
@@ -101,6 +102,7 @@ export class AIOpenAIProxy extends AIProxy {
           ...DEFAULT_CLIENT_CONFIG,
           model: this.credentials.apiModel,
           tools: [
+            ...functions as unknown as any ?? [],
             {
               type: 'function',
               function: createWebSearchAIFunction(),

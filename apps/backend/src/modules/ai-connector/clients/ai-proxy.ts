@@ -42,6 +42,7 @@ export type AIProxyStreamPromptAttrs = {
   message: SdkCreateMessageInputT;
   signal?: AbortSignal;
   context?: string;
+  functions?: object[];
 };
 
 export type AIProxyInstructedAttrs<Z extends z.AnyZodObject> = {
