@@ -75,6 +75,9 @@ export class PinnedMessagesEsSearchRepo {
       id: +casted.id,
       message: {
         ...camelcaseKeys(message, { deep: true }),
+        asyncFunctionsResults: (message.metadata.async_functions_results as any || []).map(
+          (result: any) => camelcaseKeys(result, { deep: false }),
+        ),
         webSearch: {
           enabled: message.web_search,
           results: camelcaseKeys(message.metadata.web_search_results || [] as any, { deep: true }),
