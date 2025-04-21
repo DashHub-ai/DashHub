@@ -285,11 +285,11 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         }
 
         if (typeof item === 'object') {
-          if ('webSearchResults' in item) {
+          if (item.webSearchResults) {
             webSearchResults = item.webSearchResults;
           }
 
-          if ('asyncFunctionsResults' in item) {
+          if (item.asyncFunctionsResults) {
             asyncFunctionsResults = item.asyncFunctionsResults;
           }
         }
