@@ -55,8 +55,8 @@ export type AIProxyAsyncFunctionResult = {
 export type AIProxyStreamChunk =
   | string
   | {
-    webSearchResults: SearchEngineResultItem[];
-    asyncFunctionsResults: AIProxyAsyncFunctionResult[];
+    webSearchResults?: SearchEngineResultItem[];
+    asyncFunctionsResults?: AIProxyAsyncFunctionResult[];
   };
 
 export type AIProxyStreamPromptAttrs = {
