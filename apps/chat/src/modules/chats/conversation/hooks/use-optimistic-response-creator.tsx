@@ -48,6 +48,7 @@ export function useOptimisticResponseCreator() {
       app: null,
       files: (files ?? []).map(createOptimisticResponseFile),
       corrupted: false,
+      asyncFunctionsResults: [],
       webSearch: {
         enabled: !!webSearch,
         results: [],
@@ -78,6 +79,7 @@ export function useOptimisticResponseCreator() {
       aiModel,
       creator: null,
       repliedMessage: null,
+      asyncFunctionsResults: [],
       corrupted: false,
       app: null,
       webSearch: {
@@ -93,6 +95,7 @@ export function useOptimisticResponseCreator() {
       content: 'System message',
       role: 'assistant',
       creator: null,
+      asyncFunctionsResults: [],
       repliedMessage: null,
       aiModel: null,
       corrupted: false,
