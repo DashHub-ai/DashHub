@@ -2,6 +2,7 @@ export * from './async-iterator-to-void-promise';
 export * from './create-async-stream-iterator';
 export * from './create-chunk-async-iterator';
 export * from './decode-text-async-stream';
+export * from './filter-map-async-iterator';
 export * from './flat-map-async-iterator';
 export * from './map-async-iterator';
 export * from './partition-async-iterator';

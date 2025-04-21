@@ -3,16 +3,11 @@ import { identity } from 'fp-ts/lib/function';
 import type {
   SdkAIExternalAPIEndpointT,
   SdkAIExternalAPIParameterT,
-  SdkAIExternalAPISchemaT,
 } from '@llm/sdk';
 
 import { isDangerousObjectKey } from '@llm/commons';
 
-export function convertAIExternalSchemaToAIFunction(app: SdkAIExternalAPISchemaT) {
-  return app.endpoints.map(generateEndpointFunction);
-}
-
-function generateEndpointFunction(endpoint: SdkAIExternalAPIEndpointT) {
+export function createEndpointAIFunctionDefinition(endpoint: SdkAIExternalAPIEndpointT) {
   const aiParameters = endpoint.parameters.filter(param => param.ai?.generated === true);
 
   const { properties, required } = aiParameters.reduce(

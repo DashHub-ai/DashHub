@@ -1,2 +1,2 @@
-export * from './convert-ai-external-schema-to-function-tool';
-export * from './create-ai-external-api-functions';
+export * from './create-ai-external-api-async-functions';
+export * from './create-endpoint-ai-function-definition';

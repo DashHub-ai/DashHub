@@ -54,7 +54,7 @@ export class SearchEnginesService implements WithAuthFirewall<SearchEnginesFirew
   archiveSeqStream = (stream: AsyncIterableIterator<TableId[]>) => async () =>
     pipe(
       stream,
-      tapAsyncIterator<TableId[], void>(async ids =>
+      tapAsyncIterator<TableId[]>(async ids =>
         pipe(
           this.repo.archiveRecords({
             where: [

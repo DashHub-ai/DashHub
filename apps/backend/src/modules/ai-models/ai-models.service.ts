@@ -48,7 +48,7 @@ export class AIModelsService implements WithAuthFirewall<AIModelsFirewall> {
   archiveSeqStream = (stream: AsyncIterableIterator<TableId[]>) => async () =>
     pipe(
       stream,
-      tapAsyncIterator<TableId[], void>(async ids =>
+      tapAsyncIterator<TableId[]>(async ids =>
         pipe(
           this.repo.archiveRecords({
             where: [

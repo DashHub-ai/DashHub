@@ -1,5 +1,3 @@
-import type { Task } from 'fp-ts/lib/Task';
-
 import { array as A } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
@@ -8,25 +6,30 @@ import type {
   SdkAIExternalAPIParameterT,
   SdkAIExternalAPISchemaT,
 } from '@llm/sdk';
+import type { AIProxyAsyncFunction } from '~/modules/ai-connector/clients';
+import type { TableId } from '~/modules/database';
 
 import { concatUrls, isNil, parameterizePath, withSearchParams } from '@llm/commons';
 
-type ExternalApiTask = Task<any>;
-
-type ExternalApiFunctionMap = Record<string, ExternalApiTask>;
+import { createEndpointAIFunctionDefinition } from './create-endpoint-ai-function-definition';
 
 /**
  * Creates a map of executable API functions from an external API schema.
  *
+ * @param externalApiId The ID of the external API.
  * @param schema The external API schema.
  * @returns An object with function names as keys and executable API functions as values.
  */
-export function createAIExternalApiFunctions(schema: SdkAIExternalAPISchemaT): ExternalApiFunctionMap {
+export function createAIExternalApiAsyncFunctions(
+  externalApiId: TableId,
+  schema: SdkAIExternalAPISchemaT,
+): AIProxyAsyncFunction[] {
   return pipe(
     schema.endpoints,
-    A.reduce({} as ExternalApiFunctionMap, (acc, endpoint) => ({
-      ...acc,
-      [endpoint.functionName]: createApiRequestExecutor({
+    A.map((endpoint): AIProxyAsyncFunction => ({
+      externalApiId,
+      definition: createEndpointAIFunctionDefinition(endpoint),
+      executor: createApiRequestExecutor({
         context: schema,
         timeout: 3000,
         endpoint,
@@ -108,7 +111,11 @@ function createApiRequestExecutor(
     endpoint: SdkAIExternalAPIEndpointT;
   },
 ) {
-  const groupedParams = groupParametersByLocation(endpoint.parameters);
+  const groupedParams = groupParametersByLocation([
+    ...context.parameters,
+    ...endpoint.parameters,
+  ]);
+
   const url = pipe(
     concatUrls(context.apiUrl, endpoint.path),
     parameterizePath(groupedParams.path),

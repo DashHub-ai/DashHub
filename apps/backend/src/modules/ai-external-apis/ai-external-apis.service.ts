@@ -20,13 +20,14 @@ import {
   wrapWithCache,
 } from '@llm/commons';
 
+import type { AIProxyAsyncFunction } from '../ai-connector/clients';
 import type { ExtractedFile } from '../api/helpers';
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
 
 import { OrganizationsS3BucketsRepo } from '../organizations/s3-buckets';
 import { PermissionsService, WithPermissionsInternalFilters } from '../permissions';
-import { convertAIExternalSchemaToAIFunction } from '../prompts/ai-external-apps';
+import { createAIExternalApiAsyncFunctions } from '../prompts/ai-external-apps';
 import { S3Service } from '../s3';
 import { AIExternalAPIsFirewall } from './ai-external-apis.firewall';
 import { AIExternalAPIsRepo } from './ai-external-apis.repo';
@@ -60,7 +61,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
   archiveSeqStream = (stream: AsyncIterableIterator<TableId[]>) => async () =>
     pipe(
       stream,
-      tapAsyncIterator<TableId[], void>(async ids =>
+      tapAsyncIterator<TableId[]>(async ids =>
         pipe(
           this.repo.archiveRecords({
             where: [
@@ -139,7 +140,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
       });
     }),
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
-    tapTask(this.getCachedAIFunctionsForPermissions.clear),
+    tapTask(this.getCachedAIAsyncFunctionsForPermissions.clear),
   );
 
   update = ({ id, logo, permissions, ...value }: InternalUpdateExternalAPIInputT) => pipe(
@@ -199,11 +200,11 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
 
       return TE.of(undefined);
     }),
-    tapTask(this.getCachedAIFunctionsForPermissions.clear),
+    tapTask(this.getCachedAIAsyncFunctionsForPermissions.clear),
     TE.map(({ record }) => record),
   );
 
-  getCachedAIFunctionsForPermissions = wrapWithCache(
+  getCachedAIAsyncFunctionsForPermissions = wrapWithCache(
     (
       {
         satisfyPermissions,
@@ -219,8 +220,8 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
         archived: false,
         organizationIds: [organizationId],
       }),
-      TE.map(({ items }) => items.map(
-        ({ schema }) => convertAIExternalSchemaToAIFunction(schema),
+      TE.map(({ items }) => items.flatMap(
+        ({ id, schema }): AIProxyAsyncFunction[] => createAIExternalApiAsyncFunctions(id, schema),
       )),
     ),
     {
