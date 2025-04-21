@@ -67,9 +67,16 @@ export class AIExternalAPIsFirewall extends AuthFirewallService {
     this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
 
-  getAIFunctions = (organizationId: SdkTableRowIdT) => pipe(
-    this.permissionsService.asUser(this.jwt).enforcePermissionsFilters({}),
-    TE.bindW('organizationId', () => TE.of(organizationId)),
-    TE.chainW(this.apisService.getCachedAIFunctionsForPermissions),
-  );
+  getAIFunctions = (organizationId: SdkTableRowIdT) => {
+    const asUser = this.permissionsService.asUser(this.jwt);
+
+    return pipe(
+      asUser.enforcePermissionsFilters({}),
+      TE.bindW('organizationId', () => pipe(
+        asUser.enforceMatchingOrganizationId(organizationId),
+        TE.fromEither,
+      )),
+      TE.chainW(this.apisService.getCachedAIFunctionsForPermissions),
+    );
+  };
 }
