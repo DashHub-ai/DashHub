@@ -13,6 +13,8 @@ export type SdkAIExternalAPIParameterPlacementT = z.infer<
 >;
 
 export const SdkAIExternalAPIParameterTypeV = z.enum([
+  'enum-string',
+  'enum-number',
   'string',
   'number',
   'boolean',
