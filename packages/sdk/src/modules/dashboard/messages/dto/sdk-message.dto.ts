@@ -7,6 +7,7 @@ import {
 } from '~/shared';
 
 import { SdkUserListItemV } from '../../users/dto/sdk-user-list-item.dto';
+import { SdkMessageAsyncFunctionResultV } from './sdk-message-async-function-result.dto';
 import { SdkMessageFileV } from './sdk-message-file.dto';
 import { SdkMessageWebSearchV } from './sdk-message-websearch.dto';
 
@@ -38,6 +39,7 @@ export const SdkMessageV = z
     files: z.array(SdkMessageFileV),
     corrupted: z.boolean(),
     webSearch: SdkMessageWebSearchV,
+    asyncFunctionsResults: z.array(SdkMessageAsyncFunctionResultV),
   })
   .merge(SdkTableRowWithUuidV)
   .merge(SdkTableRowWithDatesV);
