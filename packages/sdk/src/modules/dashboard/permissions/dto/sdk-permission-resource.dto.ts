@@ -16,6 +16,10 @@ export const SdkPermissionResourceV = z.discriminatedUnion('type', [
     type: z.literal('app'),
     id: SdkTableRowIdV,
   }),
+  z.object({
+    type: z.literal('ai_external_api'),
+    id: SdkTableRowIdV,
+  }),
 ]);
 
 export type SdkPermissionResourceT = z.infer<typeof SdkPermissionResourceV>;
@@ -24,6 +28,7 @@ export const SdkPermissionResourceTypeV = z.union([
   z.literal('chat'),
   z.literal('project'),
   z.literal('app'),
+  z.literal('ai_external_api'),
 ]);
 
 export type SdkPermissionResourceTypeT = z.infer<typeof SdkPermissionResourceTypeV>;

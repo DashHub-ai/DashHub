@@ -1,7 +1,8 @@
 import type { taskEither as TE } from 'fp-ts';
 import type { z } from 'zod';
 
-import type { SdkAIModelT, SdkCreateMessageInputT, SdkMessageRoleT, SdkMessageT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkAIExternalAPIEndpointT, SdkAIModelT, SdkCreateMessageInputT, SdkMessageRoleT, SdkMessageT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { TableId, TableRowWithId } from '~/modules/database';
 import type { SearchEnginesService } from '~/modules/search-engines';
 import type { SearchEngineResultItem } from '~/modules/search-engines/clients/search-engine-proxy';
 
@@ -32,9 +33,31 @@ export abstract class AIProxy {
   abstract executePrompt(attrs: AIProxyPromptAttrs): TE.TaskEither<AIConnectionCreatorError, string>;
 };
 
-export type AIProxyStreamChunk = string | {
-  webSearchResults: SearchEngineResultItem[];
+export type AIProxyAsyncFunction = {
+  externalApi: TableRowWithId & {
+    endpoint: SdkAIExternalAPIEndpointT;
+  };
+  definition: {
+    name: string;
+    description: string;
+    parameters: object;
+  };
+  executor: (params: Record<string, any>) => Promise<object>;
 };
+
+export type AIProxyAsyncFunctionResult = {
+  externalApiId: TableId;
+  functionName: string;
+  args: object;
+  result: object;
+};
+
+export type AIProxyStreamChunk =
+  | string
+  | {
+    webSearchResults?: SearchEngineResultItem[];
+    asyncFunctionsResults?: AIProxyAsyncFunctionResult[];
+  };
 
 export type AIProxyStreamPromptAttrs = {
   history: SdkMessageT[];
@@ -42,6 +65,7 @@ export type AIProxyStreamPromptAttrs = {
   message: SdkCreateMessageInputT;
   signal?: AbortSignal;
   context?: string;
+  asyncFunctions?: AIProxyAsyncFunction[];
 };
 
 export type AIProxyInstructedAttrs<Z extends z.AnyZodObject> = {

@@ -12,6 +12,7 @@ export * from './gen-random-password';
 export * from './get-first-obj-key-value';
 export * from './group-by-flat';
 export * from './invert';
+export * from './is-dangerous-object-key';
 export * from './is-nil';
 export * from './is-object-with-fake-id';
 export * from './is-object-with-id';

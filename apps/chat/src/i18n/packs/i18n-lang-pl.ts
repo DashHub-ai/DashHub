@@ -198,6 +198,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       experts: 'Eksperci',
       management: 'Administracja',
       pinnedMessages: 'Piny',
+      aiExternalAPIs: 'Integracje',
     },
     loggedIn: {
       logout: 'Wyloguj się',
@@ -412,6 +413,30 @@ export const I18N_PACK_PL: I18nLangPack = {
         users: 'Administratorzy',
       },
     },
+    aiExternalAPIs: {
+      meta: {
+        title: 'Integracje',
+        description: 'Zarządzaj integracjami',
+      },
+      title: 'Integracje',
+      buttons: {
+        create: 'Utwórz integrację',
+      },
+    },
+    editAIExternalAPI: {
+      meta: {
+        title: 'Edytuj integrację',
+        description: 'Edytuj integrację',
+      },
+      title: 'Edytuj integrację',
+    },
+    createAIExternalAPI: {
+      meta: {
+        title: 'Utwórz integrację',
+        description: 'Utwórz integrację',
+      },
+      title: 'Utwórz integrację',
+    },
     management: {
       meta: {
         title: 'Administracja',
@@ -443,6 +468,86 @@ export const I18N_PACK_PL: I18nLangPack = {
   workspace: {
     selectOrganization: 'Wybierz organizację',
     organization: 'Organizacja',
+  },
+  aiExternalAPIs: {
+    grid: {
+      placeholder: 'Brak zewnętrznych API! Utwórz nowe API, aby rozpocząć.',
+    },
+    fields: {
+      name: {
+        label: 'Nazwa',
+        placeholder: 'Wpisz nazwę integracji',
+      },
+      description: {
+        label: 'Opis',
+        placeholder: 'Wpisz opis integracji, będzie on używany przez AI do analizy narzędzia.',
+      },
+      organization: {
+        label: 'Organizacja',
+      },
+      permissions: {
+        label: 'Uprawnienia',
+      },
+      logo: {
+        label: 'Logo',
+        placeholder: 'Wybierz logo integracji',
+      },
+      schema: {
+        label: 'Schemat',
+        globalApiSettings: 'Ustawienia globalne API',
+        apiUrl: {
+          label: 'Base API URL',
+        },
+        endpoint: {
+          add: 'Dodaj endpoint',
+          path: {
+            label: 'Ścieżka',
+            placeholder: 'Tylko ścieżka (np. /api/zasób), nie pełny URL',
+          },
+          functionName: {
+            label: 'Nazwa funkcji',
+            placeholder: 'Nazwa funkcji (np. pobierzDaneUżytkownika)',
+          },
+          description: {
+            label: 'Opis',
+            placeholder: 'Opisz, co robi ten endpoint i jakie informacje udostępnia',
+          },
+          parameters: {
+            label: 'Parametry',
+          },
+        },
+        parameter: {
+          add: 'Dodaj parametr',
+          columns: {
+            name: 'Nazwa',
+            type: 'Typ',
+            placement: 'Umiejscowienie',
+            generated: 'Generowany',
+            description: 'Opis',
+            required: 'Wymagany',
+            value: 'Wartość',
+            actions: 'Akcje',
+            ai: 'AI',
+          },
+          placeholders: {
+            name: 'Wpisz nazwę parametru',
+            description: 'Wpisz opis parametru',
+            numberValue: 'Wpisz wartość liczbową',
+            textValue: 'Wpisz wartość tekstową',
+          },
+        },
+        endpoints: {
+          label: 'Endpointy API',
+          placeholder: 'Wpisz endpointy integracji',
+          empty: 'Brak endpointów API',
+        },
+        parameters: {
+          label: 'Parametry',
+          placeholder: 'Wpisz parametry integracji',
+          empty: 'Brak parametrów',
+        },
+      },
+    },
   },
   searchBar: {
     viewAll: 'Zobacz wszystkie',
@@ -495,6 +600,7 @@ export const I18N_PACK_PL: I18nLangPack = {
       noTitle: 'Czat bez nazwy',
       noDescription: 'Brak opisu',
       totalMessages: 'Wiadomości',
+      continueChat: 'Kontynuuj czat',
     },
     webSearch: {
       toggle: 'Wyszukuj w sieci',

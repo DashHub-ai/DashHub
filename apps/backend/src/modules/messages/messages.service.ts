@@ -18,11 +18,12 @@ import {
   wrapUserPromptWithAiTags,
 } from '~/modules/prompts';
 
-import type { AIProxyStreamChunk } from '../ai-connector/clients';
+import type { AIProxyAsyncFunction, AIProxyAsyncFunctionResult, AIProxyStreamChunk } from '../ai-connector/clients';
 import type { ExtractedFile } from '../api/helpers';
 import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../database';
 
 import { AIConnectorService } from '../ai-connector';
+import { AIExternalAPIsService } from '../ai-external-apis';
 import { AppsService } from '../apps';
 import { WithAuthFirewall } from '../auth';
 import { ChatsService } from '../chats';
@@ -69,9 +70,16 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
     @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
     @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
+    @inject(delay(() => AIExternalAPIsService)) private readonly aiExternalAPIsService: Readonly<AIExternalAPIsService>,
   ) {}
 
-  asUser = (jwt: SdkJwtTokenT) => new MessagesFirewall(jwt, this, this.chatsService, this.permissionsService);
+  asUser = (jwt: SdkJwtTokenT) => new MessagesFirewall(
+    jwt,
+    this,
+    this.chatsService,
+    this.permissionsService,
+    this.aiExternalAPIsService,
+  );
 
   get = this.esSearchRepo.get;
 
@@ -130,7 +138,14 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     );
 
   aiReply = (
-    { id, aiModel, preferredLanguageCode }: TableRowWithUuid & SdkRequestAIReplyInputT,
+    {
+      id,
+      aiModel,
+      asyncFunctions,
+      preferredLanguageCode,
+    }: TableRowWithUuid & SdkRequestAIReplyInputT & {
+      asyncFunctions?: AIProxyAsyncFunction[];
+    },
     signal?: AbortSignal,
   ) => pipe(
     TE.Do,
@@ -200,6 +215,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
             signal,
             aiModel,
             history,
+            asyncFunctions,
             organization: chat.organization,
             context: createContextPrompt({
               personalities,
@@ -253,7 +269,9 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
   ) {
     let content = '';
     let corrupted = false;
+
     let webSearchResults: SearchEngineResultItem[] | null = null;
+    let asyncFunctionsResults: AIProxyAsyncFunctionResult[] | null = null;
 
     try {
       for await (const item of stream) {
@@ -266,8 +284,14 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
           yield item;
         }
 
-        if (typeof item === 'object' && 'webSearchResults' in item) {
-          webSearchResults = item.webSearchResults;
+        if (typeof item === 'object') {
+          if (item.webSearchResults) {
+            webSearchResults = item.webSearchResults;
+          }
+
+          if (item.asyncFunctionsResults) {
+            asyncFunctionsResults = item.asyncFunctionsResults;
+          }
         }
       }
 
@@ -293,6 +317,9 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         aiModelId,
         content,
         metadata: {
+          ...asyncFunctionsResults && {
+            asyncFunctionsResults,
+          },
           ...webSearch && {
             webSearchResults: filteredWebSearchResults,
           },

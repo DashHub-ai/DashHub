@@ -14,7 +14,7 @@ export const NumericInput = controlled<number, NumericInputProps>(
   ({ control: { value, bind }, clampOnChange, ...props }) => {
     const { min, max } = props;
     const [unparsedValue, setUnparsedValue] = useState<string>(
-      value.toString(),
+      value?.toString() ?? '',
     );
 
     const onChange: ChangeEventHandler<HTMLElement> = (event) => {

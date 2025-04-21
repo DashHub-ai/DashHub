@@ -101,7 +101,7 @@ export class ProjectsService implements WithAuthFirewall<ProjectsFirewall> {
   archiveSeqStream = (stream: AsyncIterableIterator<TableId[]>) => async () =>
     pipe(
       stream,
-      tapAsyncIterator<TableId[], void>(async ids =>
+      tapAsyncIterator<TableId[]>(async ids =>
         pipe(
           this.repo.archiveRecords({
             where: [

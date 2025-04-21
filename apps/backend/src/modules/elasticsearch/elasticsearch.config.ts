@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { StrictBooleanV } from '@llm/commons';
 
 export const ElasticsearchConfigV = z.object({
+  noLogs: StrictBooleanV.default(false),
   hostname: z.string().default('0.0.0.0'),
   port: z.coerce.number().default(9200),
   auth: (

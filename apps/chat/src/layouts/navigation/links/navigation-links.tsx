@@ -5,6 +5,7 @@ import {
   MessageSquareIcon,
   PinIcon,
   WandSparklesIcon,
+  ZapIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -93,6 +94,15 @@ export function NavigationLinks({ truncated, inMobileMenu = false, className }: 
         withTitle={!hideTitles}
       >
         {t.links.projects}
+      </NavigationItem>
+
+      <NavigationItem
+        path={sitemap.aiExternalAPIs.index.generate({})}
+        icon={<ZapIcon size={16} />}
+        disabled={!hasOrganization}
+        withTitle={!hideTitles}
+      >
+        {t.links.aiExternalAPIs}
       </NavigationItem>
     </ul>
   );

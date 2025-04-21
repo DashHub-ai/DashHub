@@ -9,6 +9,8 @@ import { CardRecordPermissionsRow } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';
 import { CardBase, CardContent, CardDescription, CardFooter, CardTitle } from '~/ui';
 
+import { ChatCardBigActions } from './chat-card-big-actions';
+
 export type ChatCardProps = {
   chat: SdkSearchChatItemT;
   withProject?: boolean;
@@ -108,6 +110,8 @@ export function ChatCard({ chat, withProject = true, withPermissions = true, onA
 
           {withPermissions && <CardRecordPermissionsRow record={chat} />}
         </CardFooter>
+
+        <ChatCardBigActions chat={chat} />
       </CardContent>
     </CardBase>
   );

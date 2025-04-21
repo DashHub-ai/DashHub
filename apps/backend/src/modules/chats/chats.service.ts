@@ -93,7 +93,7 @@ export class ChatsService implements WithAuthFirewall<ChatsFirewall> {
   archiveSeqStream = (stream: AsyncIterableIterator<TableUuid[]>) => async () =>
     pipe(
       stream,
-      tapAsyncIterator<TableUuid[], void>(async ids =>
+      tapAsyncIterator<TableUuid[]>(async ids =>
         pipe(
           this.repo.archiveRecords({
             where: [

@@ -1,5 +1,6 @@
 import type { RecordOfType } from '@llm/commons';
 
+import type { AIExternalAPIsTable } from '../ai-external-apis';
 import type { AIModelsTable } from '../ai-models';
 import type { AppsTable } from '../apps';
 import type { AppsCategoriesTable } from '../apps-categories';
@@ -89,6 +90,9 @@ export type DatabaseTables = {
 
   // Search engines
   search_engines: SearchEnginesTable;
+
+  // External APIs
+  ai_external_apis: AIExternalAPIsTable;
 };
 
 export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn | TableWithUuidColumn>;

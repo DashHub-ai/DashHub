@@ -4,7 +4,13 @@ import { injectable } from 'tsyringe';
 
 import type { SdkTableRowIdT } from '@llm/sdk';
 
-import { pluckTyped, tapTask, Time, wrapWithCache } from '@llm/commons';
+import {
+  type CacheWrapperStorageMap,
+  pluckTyped,
+  tapTask,
+  Time,
+  wrapWithCache,
+} from '@llm/commons';
 import {
   AbstractDatabaseRepo,
   DatabaseError,
@@ -16,6 +22,8 @@ import {
 
 @injectable()
 export class UsersGroupsUsersRepo extends AbstractDatabaseRepo {
+  static readonly ALL_USERS_GROUPS_CACHE: CacheWrapperStorageMap = new Map();
+
   updateGroupUsers = (
     {
       forwardTransaction,
@@ -79,6 +87,7 @@ export class UsersGroupsUsersRepo extends AbstractDatabaseRepo {
       );
     },
     {
+      storage: UsersGroupsUsersRepo.ALL_USERS_GROUPS_CACHE,
       getKey: ({ userId }) => userId,
       ttlMs: Time.toMilliseconds.hours(3),
     },

@@ -8,6 +8,7 @@ import type {
   SdkSearchMessagesInputT,
 } from '@llm/sdk';
 
+import type { AIExternalAPIsService } from '../ai-external-apis';
 import type { ChatsService } from '../chats';
 import type { TableRowWithUuid, TableUuid } from '../database';
 import type { PermissionsService } from '../permissions';
@@ -21,6 +22,7 @@ export class MessagesFirewall extends AuthFirewallService {
     private readonly messagesService: MessagesService,
     private readonly chatsService: Readonly<ChatsService>,
     private readonly permissionsService: Readonly<PermissionsService>,
+    private readonly externalAPIsService: Readonly<AIExternalAPIsService>,
   ) {
     super(jwt);
   }
@@ -48,14 +50,25 @@ export class MessagesFirewall extends AuthFirewallService {
     attrs: TableRowWithUuid & SdkRequestAIReplyInputT,
     signal?: AbortSignal,
   ) => pipe(
-    this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
+    TE.Do,
+    TE.bindW('permissionsCheck', () => this.permissionsService.asUser(this.jwt).findRecordAndCheckPermissions({
       accessLevel: 'write',
       findRecord: pipe(
         this.messagesService.get(attrs.id),
         TE.chain(message => this.chatsService.get(message.chat.id)),
       ),
-    }),
-    TE.chainW(() => this.messagesService.aiReply(attrs, signal)),
+    })),
+    TE.bindW('asyncFunctions', ({ permissionsCheck }) =>
+      this.externalAPIsService
+        .asUser(this.jwt)
+        .getAIAsyncFunctions(permissionsCheck.organization.id)),
+    TE.chainW(({ asyncFunctions }) => this.messagesService.aiReply(
+      {
+        ...attrs,
+        asyncFunctions,
+      },
+      signal,
+    )),
   );
 
   attachApp = (dto: Omit<AttachAppInputT, 'creator'>) =>

@@ -196,6 +196,7 @@ export const I18N_PACK_EN = {
       experts: 'Experts',
       management: 'Management',
       pinnedMessages: 'Pins',
+      aiExternalAPIs: 'Integrations',
     },
     loggedIn: {
       logout: 'Logout',
@@ -410,6 +411,30 @@ export const I18N_PACK_EN = {
         users: 'Root users',
       },
     },
+    aiExternalAPIs: {
+      meta: {
+        title: 'Integrations',
+        description: 'Manage integrations',
+      },
+      title: 'Integrations',
+      buttons: {
+        create: 'Create integration',
+      },
+    },
+    editAIExternalAPI: {
+      meta: {
+        title: 'Edit integration',
+        description: 'Edit integration',
+      },
+      title: 'Edit integration',
+    },
+    createAIExternalAPI: {
+      meta: {
+        title: 'Create integration',
+        description: 'Create integration',
+      },
+      title: 'Create integration',
+    },
     management: {
       meta: {
         title: 'Management',
@@ -434,6 +459,86 @@ export const I18N_PACK_EN = {
         },
         searchEngines: {
           title: 'Search Engines',
+        },
+      },
+    },
+  },
+  aiExternalAPIs: {
+    grid: {
+      placeholder: 'No external APIs yet. Feel free to create one!',
+    },
+    fields: {
+      name: {
+        label: 'Name',
+        placeholder: 'Enter integration name',
+      },
+      description: {
+        label: 'Description',
+        placeholder: 'Enter integration description, it\'ll be used by AI to generate responses.',
+      },
+      organization: {
+        label: 'Organization',
+      },
+      logo: {
+        label: 'Logo',
+        placeholder: 'Enter integration logo URL',
+      },
+      permissions: {
+        label: 'Permissions',
+      },
+      schema: {
+        label: 'Schema',
+        globalApiSettings: 'Global API settings',
+        apiUrl: {
+          label: 'Base API URL',
+        },
+        endpoint: {
+          add: 'Add endpoint',
+          path: {
+            label: 'Path',
+            placeholder: 'Path only (e.g., /api/resource), not full URL',
+          },
+          functionName: {
+            label: 'Function name',
+            placeholder: 'Name of the function (e.g., getUserData)',
+          },
+          description: {
+            label: 'Description',
+            placeholder: 'Describe what this endpoint does and what information it provides',
+          },
+          parameters: {
+            label: 'Parameters',
+          },
+        },
+        parameter: {
+          add: 'Add parameter',
+          columns: {
+            name: 'Name',
+            type: 'Type',
+            placement: 'Placement',
+            generated: 'Generated',
+            description: 'Description',
+            required: 'Required',
+            value: 'Value',
+            actions: 'Actions',
+            ai: 'AI',
+          },
+          placeholders: {
+            name: 'Enter parameter name',
+            description: 'Enter parameter description',
+            numberValue: 'Enter number value',
+            textValue: 'Enter text value',
+          },
+        },
+        endpoints: {
+          label: 'API Endpoints',
+          placeholder: 'Enter endpoints',
+          empty: 'No endpoints yet',
+        },
+        parameters: {
+          label: 'Parameters',
+          placeholder: 'Enter parameters',
+          empty: 'No parameters yet',
         },
       },
     },
@@ -493,6 +598,7 @@ export const I18N_PACK_EN = {
       noTitle: 'Unnamed Chat',
       noDescription: 'No description',
       totalMessages: 'messages',
+      continueChat: 'Continue chat',
     },
     webSearch: {
       toggle: 'Search the Web',

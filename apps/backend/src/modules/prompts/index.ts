@@ -1,3 +1,4 @@
+export * from './ai-external-apps';
 export * from './context';
 export * from './embeddings';
 export * from './message';

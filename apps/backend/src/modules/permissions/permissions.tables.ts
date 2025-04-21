@@ -23,6 +23,7 @@ export type PermissionsTable =
     project_id: ColumnType<TableId | null, TableId | null, never>;
     app_id: ColumnType<TableId | null, TableId | null, never>;
     chat_id: ColumnType<TableUuid | null, TableUuid | null, never>;
+    ai_external_api_id: ColumnType<TableId | null, TableId | null, never>;
   };
 
 export type PermissionInsertTableRow = NormalizeInsertTableRow<PermissionsTable>;

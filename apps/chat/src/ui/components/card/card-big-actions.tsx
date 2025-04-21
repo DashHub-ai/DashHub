@@ -6,7 +6,7 @@ type CardBigActionsProps = {
 
 export function CardBigActions({ children }: CardBigActionsProps) {
   return (
-    <div className="flex flex-col gap-2 mt-3">
+    <div className="flex flex-col gap-2 mt-auto">
       {children}
     </div>
   );

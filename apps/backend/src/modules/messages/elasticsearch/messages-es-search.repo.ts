@@ -98,6 +98,9 @@ export class MessagesEsSearchRepo {
       enabled: source.web_search,
       results: camelcaseKeys(source.metadata.web_search_results || [] as any, { deep: true }),
     },
+    asyncFunctionsResults: (source.metadata.async_functions_results as any || []).map(
+      (result: any) => camelcaseKeys(result, { deep: false }),
+    ),
     creator: source.creator && {
       id: source.creator.id,
       email: source.creator.email,

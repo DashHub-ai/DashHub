@@ -14,6 +14,7 @@ import {
   useSdkForLoggedIn,
 } from '@llm/sdk';
 import { useI18n } from '~/i18n';
+import { ExternalApiChatBadge } from '~/modules/ai-external-apis/chat';
 
 import type { AIStreamObservable } from '../hooks';
 
@@ -94,12 +95,12 @@ export function ChatMessage(
         'flex items-start gap-4',
         showAnim && 'animate-messageSlideIn',
         {
-          'mb-8': !repeats.length,
-          'mb-10': repeats.length,
+          'mb-6': !repeats.length,
+          'mb-8': repeats.length,
           'opacity-75': readOnly && archived,
           'opacity-0': showAnim && (!readOnly || !archived),
           'flex-row-reverse': showAnim && (!isAI && isYou),
-          'bg-purple-50/50 p-6 border border-purple-100 rounded-lg': isPinned,
+          'pl-4 border-l-4 border-purple-300': isPinned,
         },
         className,
       )}
@@ -211,6 +212,14 @@ export function ChatMessage(
               'items-end w-full': !isAI && isYou,
             })}
           >
+            {message.asyncFunctionsResults && message.asyncFunctionsResults.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-1">
+                {Array.from(new Set(message.asyncFunctionsResults.map(afr => afr.externalApiId))).map(apiId => (
+                  <ExternalApiChatBadge key={apiId} id={apiId} />
+                ))}
+              </div>
+            )}
+
             {files.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 mt-1">
                 <FilesCardsList
