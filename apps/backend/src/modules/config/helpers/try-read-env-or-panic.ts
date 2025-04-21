@@ -27,6 +27,7 @@ export function tryReadEnvOrPanic() {
     SERVER_PORT,
 
     // DB
+    DATABASE_NO_LOGS,
     DATABASE_HOST,
     DATABASE_PORT,
     DATABASE_NAME,
@@ -35,6 +36,7 @@ export function tryReadEnvOrPanic() {
     DATABASE_CHECK_MIGRATIONS_ON_STARTUP,
 
     // ES
+    ELASTICSEARCH_NO_LOGS,
     ELASTICSEARCH_HOST,
     ELASTICSEARCH_PORT,
     ELASTICSEARCH_USER,
@@ -68,6 +70,7 @@ export function tryReadEnvOrPanic() {
       port: SERVER_PORT,
     },
     elasticsearch: {
+      noLogs: ELASTICSEARCH_NO_LOGS,
       hostname: ELASTICSEARCH_HOST,
       port: ELASTICSEARCH_PORT,
       syncMappings: {
@@ -83,6 +86,7 @@ export function tryReadEnvOrPanic() {
       },
     },
     database: {
+      noLogs: DATABASE_NO_LOGS,
       hostname: DATABASE_HOST,
       port: DATABASE_PORT,
       name: DATABASE_NAME,

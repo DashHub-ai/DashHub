@@ -71,7 +71,11 @@ export function createElasticsearchIndexRepo<
 
     constructor(
       @inject(ElasticsearchRepo) readonly elasticsearchRepo: ElasticsearchRepo,
-    ) {}
+    ) {
+      if (elasticsearchRepo.isLoggingDisabled()) {
+        this.logger.pause();
+      }
+    }
 
     /**
      * Find all entities by ids. It's executed to get document to be re-indexed on the temp index.

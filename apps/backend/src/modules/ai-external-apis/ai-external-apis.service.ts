@@ -11,6 +11,7 @@ import type {
 
 import {
   asyncIteratorToVoidPromise,
+  type CacheWrapperStorageMap,
   type Overwrite,
   runTaskAsVoid,
   tapAsyncIterator,
@@ -35,6 +36,8 @@ import { AIExternalAPIsEsIndexRepo, AIExternalAPIsEsSearchRepo } from './elastic
 
 @injectable()
 export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFirewall> {
+  static readonly AI_EXTERNAL_APIS_CACHE: CacheWrapperStorageMap = new Map();
+
   constructor(
     @inject(AIExternalAPIsRepo) private readonly repo: AIExternalAPIsRepo,
     @inject(AIExternalAPIsEsSearchRepo) private readonly esSearchRepo: AIExternalAPIsEsSearchRepo,
@@ -188,6 +191,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
         },
       });
     }),
+    tapTask(this.getCachedAIAsyncFunctionsForPermissions.clear),
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
     TE.tap(({ s3Resource, originalRecord }) => {
       // Do it at the end, just in case. Make sure that permissions are updated before deleting the file.
@@ -200,7 +204,6 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
 
       return TE.of(undefined);
     }),
-    tapTask(this.getCachedAIAsyncFunctionsForPermissions.clear),
     TE.map(({ record }) => record),
   );
 
@@ -225,7 +228,8 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
       )),
     ),
     {
-      ttlMs: Time.toMilliseconds.hours(48),
+      storage: AIExternalAPIsService.AI_EXTERNAL_APIS_CACHE,
+      ttlMs: Time.toMilliseconds.minutes(15),
       getKey: permissions => JSON.stringify(permissions),
     },
   );

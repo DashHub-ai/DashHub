@@ -48,6 +48,10 @@ export class DatabaseConnectionRepo {
         cursor: Cursor,
       }),
       log: (event) => {
+        if (config.noLogs) {
+          return;
+        }
+
         if (event.level === 'error') {
           this.logger.error(event.error);
         }

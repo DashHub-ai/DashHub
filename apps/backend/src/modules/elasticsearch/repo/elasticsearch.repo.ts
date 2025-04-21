@@ -42,7 +42,7 @@ export class ElasticsearchRepo {
   constructor(
     @inject(ConfigService) configService: ConfigService,
   ) {
-    const { hostname, port, auth } = configService.config.elasticsearch;
+    const { hostname, port, auth, noLogs } = configService.config.elasticsearch;
     const options: es.ClientOptions = {
       node: pipe(
         `${hostname}:${port}`,
@@ -61,8 +61,20 @@ export class ElasticsearchRepo {
     };
 
     this.client = new es.Client(options);
+
+    if (noLogs) {
+      this.logger.pause();
+    }
+
     this.logger.info('Elasticsearch client initialized with options:', options);
   }
+
+  /**
+   * Checks if the Elasticsearch client is paused.
+   *
+   * @returns True if the client is paused, false otherwise.
+   */
+  isLoggingDisabled = () => this.logger.isPaused();
 
   /**
    * Closes the Elasticsearch client.
