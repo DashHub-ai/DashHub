@@ -3,6 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import {
   type FavoritesSdk,
+  SdkSearchAllFavoritesInputV,
   SdkUpsertFavoriteInputV,
 } from '@llm/sdk';
 import { ConfigService } from '~/modules/config';
@@ -26,8 +27,10 @@ export class FavoritesController extends AuthorizedController {
     this.router
       .get(
         '/all',
+        sdkSchemaValidator('query', SdkSearchAllFavoritesInputV),
         async context => pipe(
-          favoritesService.asUser(context.var.jwt).findAll(),
+          context.req.valid('query'),
+          favoritesService.asUser(context.var.jwt).findAll,
           rejectUnsafeSdkErrors,
           serializeSdkResponseTE<ReturnType<FavoritesSdk['all']>>(context),
         ),

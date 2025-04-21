@@ -9,6 +9,8 @@ import { type SdkFavoriteT, useIsSdkFavoriteToggled, useSdkToggleFavorite } from
 import { useI18n } from '~/i18n';
 import { useSaveErrorNotification } from '~/ui';
 
+import { useWorkspaceOrganization } from '../workspace';
+
 type Props = {
   favorite: SdkFavoriteT;
   className?: string;
@@ -18,7 +20,8 @@ type Props = {
 export function FavoriteStarButton({ favorite, className, onAfterToggleFavorite }: Props) {
   const t = useI18n().pack;
   const isPinned = useIsSdkFavoriteToggled(favorite);
-  const { pin, unpin } = useSdkToggleFavorite();
+  const { organization } = useWorkspaceOrganization();
+  const { pin, unpin } = useSdkToggleFavorite(organization?.id);
 
   const showErrorNotification = useSaveErrorNotification();
   const [handlePin, pinState] = useAsyncCallback(

@@ -1,3 +1,5 @@
+import type { PropsWithChildren } from 'react';
+
 import { HelmetProvider } from 'react-helmet-async';
 
 import { ModalsContextProvider } from '@llm/commons-front';
@@ -6,7 +8,7 @@ import { useConfig } from '~/config';
 import { I18nProvider } from '~/i18n';
 import { Router } from '~/router';
 
-import { WorkspaceProvider } from './modules';
+import { useWorkspace, WorkspaceProvider } from './modules';
 
 export function App() {
   const config = useConfig();
@@ -21,18 +23,28 @@ export function App() {
       >
         <SdkMeProvider>
           <SdkPinnedMessagesProvider>
-            <SdkFavoritesProvider>
-              <I18nProvider>
-                <WorkspaceProvider>
-                  <ModalsContextProvider>
+            <I18nProvider>
+              <WorkspaceProvider>
+                <ModalsContextProvider>
+                  <FavoritesWithReloader>
                     <Router />
-                  </ModalsContextProvider>
-                </WorkspaceProvider>
-              </I18nProvider>
-            </SdkFavoritesProvider>
+                  </FavoritesWithReloader>
+                </ModalsContextProvider>
+              </WorkspaceProvider>
+            </I18nProvider>
           </SdkPinnedMessagesProvider>
         </SdkMeProvider>
       </SdkProvider>
     </HelmetProvider>
+  );
+}
+
+function FavoritesWithReloader({ children }: PropsWithChildren) {
+  const workspace = useWorkspace();
+
+  return (
+    <SdkFavoritesProvider organizationId={workspace.organization?.id}>
+      {children}
+    </SdkFavoritesProvider>
   );
 }

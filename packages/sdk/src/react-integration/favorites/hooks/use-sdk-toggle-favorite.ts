@@ -3,8 +3,15 @@ import { pipe } from 'fp-ts/lib/function';
 import { useRef, useState } from 'react';
 
 import type { SdkFavoriteT, SdkUpsertFavoriteInputT } from '~/modules';
+import type { SdkTableRowIdT } from '~/shared';
 
-import { isNil, TaggedError, tapTaskEither, tapTaskEitherError } from '@llm/commons';
+import {
+  isNil,
+  type Nullable,
+  TaggedError,
+  tapTaskEither,
+  tapTaskEitherError,
+} from '@llm/commons';
 import { useSdkForLoggedIn } from '~/react-integration/hooks';
 
 import { useSdkFavoritesContextOrThrow } from '../sdk-favorites-context';
@@ -12,7 +19,7 @@ import { FavoriteActionEvent } from './use-sdk-on-favorite-action';
 
 export class SdkFavoritesStillLoadingError extends TaggedError.ofLiteral()('favorites-list-still-loading') {}
 
-export function useSdkToggleFavorite() {
+export function useSdkToggleFavorite(organizationId?: Nullable<SdkTableRowIdT>) {
   const store = useSdkFavoritesContextOrThrow();
   const { sdks } = useSdkForLoggedIn();
 
@@ -52,7 +59,7 @@ export function useSdkToggleFavorite() {
     }),
     TE.bindW('result', ({ migrationId, initialMessages }) => pipe(
       asyncExecutor(),
-      TE.chainW(() => sdks.dashboard.favorites.all()),
+      TE.chainW(() => sdks.dashboard.favorites.all({ organizationId })),
       tapTaskEither((newItems) => {
         if (currentMigrationId.current !== migrationId) {
           return;

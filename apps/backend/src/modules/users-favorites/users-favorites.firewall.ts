@@ -1,10 +1,14 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
+import type { Nullable } from '@llm/commons';
+
 import {
   ofSdkSuccess,
   ofSdkUnauthorizedErrorTE,
   type SdkJwtTokenT,
+  type SdkSearchAllFavoritesInputT,
+  type SdkTableRowIdT,
   type SdkUnauthorizedError,
   type SdkUpsertFavoriteInputT,
 } from '@llm/sdk';
@@ -51,12 +55,34 @@ export class UsersFavoritesFirewall extends AuthFirewallService {
     );
   };
 
-  findAll = () => this.usersFavoritesService.findAll({
-    userId: this.userId,
-    ...this.jwt.role !== 'root' && {
-      organizationId: this.jwt.organization.id,
-    },
-  });
+  findAll = ({ organizationId, ...filters }: SdkSearchAllFavoritesInputT) => {
+    const { enforceMatchingOrganizationId } = this.permissionsService.asUser(this.jwt);
+
+    return pipe(
+      TE.Do,
+      TE.bind('organizationId', (): TE.TaskEither<SdkUnauthorizedError, Nullable<SdkTableRowIdT>> => {
+        if (this.jwt.role === 'root') {
+          return TE.right(organizationId);
+        }
+
+        if (!organizationId) {
+          return ofSdkUnauthorizedErrorTE();
+        }
+
+        return pipe(
+          enforceMatchingOrganizationId(organizationId),
+          TE.fromEither,
+        );
+      }),
+      TE.chainW(({ organizationId }) =>
+        this.usersFavoritesService.findAll({
+          ...filters,
+          userId: this.userId,
+          ...organizationId && { organizationId },
+        }),
+      ),
+    );
+  };
 
   private guardFavoriteAccess = (favorite: SdkUpsertFavoriteInputT): TE.TaskEither<
     SdkUnauthorizedError | DatabaseError | EsDocumentNotFoundError,

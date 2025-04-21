@@ -1,18 +1,25 @@
 import { pipe } from 'fp-ts/lib/function';
 import { type PropsWithChildren, useEffect, useMemo } from 'react';
 
-import { createStoreSubscriber, tapTaskEither } from '@llm/commons';
+import type { SdkTableRowIdT } from '~/shared';
+
+import { createStoreSubscriber, type Nullable, tapTaskEither } from '@llm/commons';
 
 import { useSdk } from '../hooks';
 import { useSdkOptimisticFavoritesWatcher } from './hooks';
 import { SdkFavoritesContext, type SdkFavoritesContextT, type SdkFavoritesSnapshotT } from './sdk-favorites-context';
 
-export function SdkFavoritesProvider({ children }: PropsWithChildren) {
+type Props = PropsWithChildren & {
+  organizationId?: Nullable<SdkTableRowIdT>;
+};
+
+export function SdkFavoritesProvider({ children, organizationId }: Props) {
   const sdk = useSdk();
   const optimisticCountWatcher = useSdkOptimisticFavoritesWatcher();
 
   const store = useMemo<SdkFavoritesContextT | null>(() => {
     if (!sdk.session.isLoggedIn) {
+      optimisticCountWatcher.reset([]);
       return null;
     }
 
@@ -21,7 +28,7 @@ export function SdkFavoritesProvider({ children }: PropsWithChildren) {
     });
 
     const reload = pipe(
-      sdk.sdks.dashboard.favorites.all(),
+      sdk.sdks.dashboard.favorites.all({ organizationId }),
       tapTaskEither(
         (items) => {
           optimisticCountWatcher.reset(items);
@@ -40,11 +47,11 @@ export function SdkFavoritesProvider({ children }: PropsWithChildren) {
       ...store,
       reload,
     };
-  }, [sdk.session.isLoggedIn]);
+  }, [sdk.session.isLoggedIn, organizationId]);
 
   useEffect(() => {
     store?.reload();
-  }, [sdk.session.isLoggedIn]);
+  }, [sdk.session.isLoggedIn, organizationId]);
 
   return (
     <SdkFavoritesContext value={store}>

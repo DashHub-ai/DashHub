@@ -119,8 +119,10 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
         if (type === 'app' || type === undefined) {
           query = query
             .leftJoin('apps', 'apps.id', 'users_favorites.app_id')
-            .leftJoin('organizations as app_orgs', 'app_orgs.id', 'apps.organization_id')
-            .$if(!!organizationId, q => q.where('app_orgs.id', '=', organizationId!))
+            .$if(!!organizationId, q => q.where(eb => eb.or([
+              eb('users_favorites.app_id', 'is', null),
+              eb('apps.organization_id', '=', organizationId!),
+            ])))
             .where(eb => eb.or(
               rejectFalsyItems([
                 !type && eb('users_favorites.app_id', 'is', null),
@@ -133,8 +135,10 @@ export class UsersFavoritesRepo extends AbstractDatabaseRepo {
         if (type === 'chat' || type === undefined) {
           query = query
             .leftJoin('chats', 'chats.id', 'users_favorites.chat_id')
-            .leftJoin('organizations as chat_orgs', 'chat_orgs.id', 'chats.organization_id')
-            .$if(!!organizationId, q => q.where('chat_orgs.id', '=', organizationId!))
+            .$if(!!organizationId, q => q.where(eb => eb.or([
+              eb('users_favorites.chat_id', 'is', null),
+              eb('chats.organization_id', '=', organizationId!),
+            ])))
             .where(eb => eb.or(
               rejectFalsyItems([
                 !type && eb('users_favorites.chat_id', 'is', null),
