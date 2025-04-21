@@ -36,11 +36,11 @@ export function AIExternalAPICard({ api, ctaButton, onAfterArchive, onAfterUnarc
   const { sdks, createRecordGuard } = useSdkForLoggedIn();
 
   const [onUnarchive, unarchiveStatus] = useUnarchiveWithNotifications(
-    sdks.dashboard.apps.unarchive(api.id),
+    sdks.dashboard.aiExternalAPIs.unarchive(api.id),
   );
 
   const [onArchive, archiveStatus] = useArchiveWithNotifications(
-    sdks.dashboard.apps.archive(api.id),
+    sdks.dashboard.aiExternalAPIs.archive(api.id),
   );
 
   const recordGuard = createRecordGuard(api);
