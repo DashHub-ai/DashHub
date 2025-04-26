@@ -70,6 +70,7 @@ export class AIExternalAPIsEsSearchRepo {
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        esb.termsQuery('internal', false),
         !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),

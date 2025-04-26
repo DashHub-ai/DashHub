@@ -98,6 +98,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
       logo,
       permissions,
       creator,
+      internal = false,
       ...values
     }: InternalCreateExternalAPIInputT,
   ) => pipe(
@@ -126,6 +127,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
     TE.chainW(({ s3Resource }) => this.repo.create({
       value: {
         ...values,
+        internal,
         organizationId: organization.id,
         logoS3ResourceId: s3Resource?.id,
       },
@@ -238,6 +240,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
 export type InternalCreateExternalAPIInputT = Overwrite<SdkCreateAIExternalAPIInputT, {
   logo: TableRowWithId | ExtractedFile | null;
   creator: TableRowWithId;
+  internal?: boolean;
 }>;
 
 export type InternalUpdateExternalAPIInputT = Overwrite<SdkUpdateAIExternalAPIInputT & TableRowWithId, {

@@ -21,6 +21,7 @@ export type AIExternalAPIsTable =
     logo_s3_resource_id: TableId | null;
     description: string | null;
     schema: SdkAIExternalAPISchemaT;
+    internal: boolean;
   };
 
 export type AIExternalAPITableRow = NormalizeSelectTableRow<AIExternalAPIsTable>;
@@ -32,3 +33,5 @@ export type AIExternalAPITableRowWithRelations =
     organization: TableRowWithIdName;
     logo: S3ResourcesTableRowWithRelations | null;
   };
+
+export type AIExternalAPITableSchemaRelationRow = Pick<AIExternalAPITableRow, 'id' | 'schema'>;

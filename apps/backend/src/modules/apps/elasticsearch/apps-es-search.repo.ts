@@ -330,6 +330,11 @@ export class AppsEsSearchRepo {
       permissions: mapRawEsDocToSdkPermissions(source.permissions),
       logo: source.logo && camelcaseKeys(source.logo),
       aiModel: source.ai_model,
+      aiExternalAPI: (
+        source.ai_external_api
+          ? camelcaseKeys(source.ai_external_api, { deep: true })
+          : null
+      ),
       promotion: source.promotion,
       recentChats: [],
     });

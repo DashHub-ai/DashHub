@@ -81,7 +81,9 @@ export class AppsRepo extends createDatabaseRepo('apps') {
 
             .leftJoin('s3_resources', 's3_resources.id', 'apps.logo_s3_resource_id')
             .leftJoin('s3_resources_buckets', 's3_resources_buckets.id', 's3_resources.bucket_id')
+
             .leftJoin('ai_models', 'ai_models.id', 'apps.ai_model_id')
+            .leftJoin('ai_external_apis', 'ai_external_apis.id', 'apps.ai_external_api_id')
 
             .innerJoin('projects', 'projects.id', 'apps.project_id')
 
@@ -96,6 +98,10 @@ export class AppsRepo extends createDatabaseRepo('apps') {
               // AI model
               'ai_models.id as ai_model_id',
               'ai_models.name as ai_model_name',
+
+              // AI external API
+              'ai_external_apis.id as ai_external_api_id',
+              'ai_external_apis.schema as ai_external_api_schema',
 
               // Logo
               's3_resources.id as logo_s3_resource_id',
@@ -149,6 +155,9 @@ export class AppsRepo extends createDatabaseRepo('apps') {
           ai_model_id: aiModelId,
           ai_model_name: aiModelName,
 
+          ai_external_api_id: aiExternalApiId,
+          ai_external_api_schema: aiExternalApiSchema,
+
           ...item
         }): AppTableRowWithRelations => ({
           ...camelcaseKeys(item),
@@ -172,6 +181,12 @@ export class AppsRepo extends createDatabaseRepo('apps') {
             ? {
                 id: aiModelId,
                 name: aiModelName!,
+              }
+            : null,
+          aiExternalApi: aiExternalApiId
+            ? {
+                id: aiExternalApiId!,
+                schema: aiExternalApiSchema!,
               }
             : null,
           logo: logoId
