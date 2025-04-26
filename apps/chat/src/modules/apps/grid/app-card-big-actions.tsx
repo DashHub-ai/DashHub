@@ -35,7 +35,7 @@ function CardStartChatButton({ disabled, loading, ...props }: Omit<CardBigAction
       icon={<MessageCirclePlusIcon size={18} />}
       disabled={disabled}
       loading={loading}
-      variant="primary"
+      variant="secondary"
       {...props}
     >
       {t.startChat}
