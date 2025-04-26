@@ -23,6 +23,7 @@ import type { ExtractedFile } from '../api/helpers';
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId, TableUuid } from '../database';
 
+import { AIExternalAPIsService } from '../ai-external-apis';
 import { ChatsService } from '../chats';
 import { OrganizationsS3BucketsRepo } from '../organizations/s3-buckets';
 import { PermissionsService } from '../permissions';
@@ -74,6 +75,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     @inject(delay(() => ChatsSummariesService)) private readonly chatsSummariesService: Readonly<ChatsSummariesService>,
     @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
     @inject(delay(() => ProjectsService)) private readonly projectsService: Readonly<ProjectsService>,
+    @inject(delay(() => AIExternalAPIsService)) private readonly aiExternalAPIsService: Readonly<AIExternalAPIsService>,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new AppsFirewall(jwt, this, this.permissionsService, this.chatsService);
@@ -136,6 +138,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
       logo,
       creator,
       aiModel,
+      aiExternalAPI,
       ...values
     }: InternalCreateAppInputT,
   ) => pipe(
@@ -165,7 +168,21 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
       creator,
       organization,
     })),
-    TE.chainW(({ s3Resource, project }) => pipe(
+    TE.bindW('aiExternalAPI', () => {
+      if (!aiExternalAPI) {
+        return TE.of(undefined);
+      }
+
+      return this.aiExternalAPIsService.create({
+        organization,
+        description: null,
+        name: values.name,
+        internal: true,
+        logo: null,
+        schema: aiExternalAPI.schema,
+      });
+    }),
+    TE.chainW(({ s3Resource, project, aiExternalAPI }) => pipe(
       this.repo.create({
         value: {
           ...values,
@@ -174,6 +191,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
           logoS3ResourceId: s3Resource?.id,
           projectId: project.id,
           aiModelId: aiModel?.id ?? null,
+          aiExternalApiId: aiExternalAPI?.id,
         },
       }),
       tapTaskEitherErrorTE(() => this.projectsService.deleteEmptyProject(project.id)),
@@ -193,7 +211,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
     TE.tap(({ id }) => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
-  update = ({ id, category, permissions, logo, aiModel, ...value }: InternalUpdateInputT) => pipe(
+  update = ({ id, category, permissions, logo, aiModel, aiExternalAPI, ...value }: InternalUpdateInputT) => pipe(
     TE.Do,
     TE.bind('originalRecord', () => this.get(id)),
     TE.bindW('s3Resource', ({ originalRecord }) => {
@@ -217,7 +235,38 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
         })),
       );
     }),
-    TE.bindW('record', ({ s3Resource }) => pipe(
+    TE.tap(({ originalRecord }) => {
+      if (aiExternalAPI || !originalRecord.aiExternalAPI?.id) {
+        return TE.of(undefined);
+      }
+
+      return this.aiExternalAPIsService.delete(originalRecord.aiExternalAPI.id);
+    }),
+    TE.bindW('aiExternalAPI', ({ originalRecord }) => {
+      if (!aiExternalAPI) {
+        return TE.of(undefined);
+      }
+
+      if (!originalRecord.aiExternalAPI) {
+        return this.aiExternalAPIsService.create({
+          organization: originalRecord.organization,
+          name: value.name,
+          schema: aiExternalAPI.schema,
+          description: null,
+          internal: true,
+          logo: null,
+        });
+      }
+
+      return this.aiExternalAPIsService.update({
+        id: originalRecord.aiExternalAPI.id,
+        name: value.name,
+        schema: aiExternalAPI.schema,
+        logo: null,
+        description: null,
+      });
+    }),
+    TE.bindW('record', ({ s3Resource, aiExternalAPI }) => pipe(
       this.repo.update({
         id,
         value: {
@@ -225,6 +274,7 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
           categoryId: category.id,
           logoS3ResourceId: s3Resource?.id ?? null,
           aiModelId: aiModel?.id ?? null,
+          aiExternalApiId: aiExternalAPI?.id ?? null,
         },
       }),
     )),

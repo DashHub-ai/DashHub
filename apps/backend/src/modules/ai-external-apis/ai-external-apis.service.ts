@@ -90,6 +90,11 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
+  delete = (id: SdkTableRowIdT) => pipe(
+    this.repo.delete({ id }),
+    TE.tap(() => this.esIndexRepo.deleteDocument(id)),
+  );
+
   search = this.esSearchRepo.search;
 
   create = (
@@ -97,7 +102,6 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
       organization,
       logo,
       permissions,
-      creator,
       internal = false,
       ...values
     }: InternalCreateExternalAPIInputT,
@@ -239,7 +243,6 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
 
 export type InternalCreateExternalAPIInputT = Overwrite<SdkCreateAIExternalAPIInputT, {
   logo: TableRowWithId | ExtractedFile | null;
-  creator: TableRowWithId;
   internal?: boolean;
 }>;
 
