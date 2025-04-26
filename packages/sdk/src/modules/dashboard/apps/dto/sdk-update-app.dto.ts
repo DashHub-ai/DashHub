@@ -1,4 +1,4 @@
-import type { z } from 'zod';
+import { z } from 'zod';
 
 import {
   SdkOptionalFileUploadV,
@@ -7,6 +7,7 @@ import {
   ZodOmitDateFields,
 } from '~/shared';
 
+import { SdkAIExternalAPISchemaV } from '../../ai-external-apis';
 import { SdkUpsertTableRowWithPermissionsInputV } from '../../permissions/dto/sdk-upsert-table-row-with-permissions.dto';
 import { SdkAppV } from './sdk-app.dto';
 
@@ -19,13 +20,19 @@ export const SdkUpdateAppInputV = SdkAppV
     project: true,
     category: true,
     aiModel: true,
+    aiExternalAPI: true,
     recentChats: true,
   })
   .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({
     category: SdkTableRowWithIdV,
-    aiModel: SdkTableRowWithIdV.nullable(),
     logo: SdkOptionalFileUploadV,
+    aiModel: SdkTableRowWithIdV.nullable(),
+    aiExternalAPI: z
+      .object({
+        schema: SdkAIExternalAPISchemaV,
+      })
+      .nullable(),
   });
 
 export type SdkUpdateAppInputT = z.infer<typeof SdkUpdateAppInputV>;
