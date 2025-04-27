@@ -203,18 +203,31 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     )),
     TE.bindW('mappedContent', ({ message, chat, history }) => pipe(
       TE.Do,
-      TE.bind('embeddings', () => this.projectsEmbeddingsService.createEmbeddingsAITag({
-        chat,
-        history,
-        message: rejectFalsyItems(
-          [
-            message.content,
-            message.repliedMessage?.content,
-          ],
-        ).join('\n'),
-      })),
-      TE.bind('reply', () => TE.of(createAIQuoteTag(message.repliedMessage))),
-      TE.bind('attachedFiles', () => TE.of(createAIAttachedFilesTag(message.files))),
+      TE.bind('embeddings', () => pipe(
+        this.projectsEmbeddingsService.createEmbeddingsAITag({
+          chat,
+          history,
+          message: rejectFalsyItems(
+            [
+              message.content,
+              message.repliedMessage?.content,
+            ],
+          ).join('\n'),
+        }),
+        tapTaskEitherErrorTE(() => this.createAndIndexMessage({
+          chatId: message.chat.id,
+          content: 'Cannot vectorize prompt. Check connection with AI model.',
+          metadata: {},
+          aiModelId: aiModel.id,
+          repliedMessageId: message.id,
+          creatorUserId: null,
+          role: 'assistant',
+          corrupted: true,
+          webSearch: message.webSearch.enabled,
+        })),
+      )),
+      TE.bindW('reply', () => TE.of(createAIQuoteTag(message.repliedMessage))),
+      TE.bindW('attachedFiles', () => TE.of(createAIAttachedFilesTag(message.files))),
       TE.map(({ reply, attachedFiles, embeddings }) =>
         wrapUserPromptWithAiTags({
           preferredLanguageCode,
