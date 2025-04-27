@@ -21,17 +21,9 @@ export function hydrateWithAppChatBadges(
       return '';
     });
 
-    const badgesToolbar = badges.length
-      ? (
-          <div key="badges-toolbar" className="flex flex-wrap gap-1 mt-1 mb-2">
-            {badges}
-          </div>
-        )
-      : null;
-
     return {
       content: cleanContent.trim(),
-      prependToolbars: rejectFalsyItems([badgesToolbar]),
+      prependToolbars: rejectFalsyItems(badges),
       appendToolbars: [],
     };
   };
