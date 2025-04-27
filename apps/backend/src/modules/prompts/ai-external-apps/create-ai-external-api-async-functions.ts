@@ -58,7 +58,6 @@ export function createAIExternalApiAsyncFunctions(
 function groupParametersByLocation(parameters: SdkAIExternalAPIParameterT[]) {
   return pipe(
     parameters,
-    A.filter(param => !!param.ai?.required),
     A.reduce(
       {
         path: {},
@@ -133,14 +132,14 @@ function createApiRequestExecutor(
     })),
   );
 
-  return async (args: Record<string, any>) => {
+  return async (dynamicAIArgs: Record<string, any>) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
       // Process all parameters and prepare request configuration
       const requestConfig = prepareRequestConfiguration({
-        args,
+        dynamicAIArgs,
         context,
         endpoint,
         paramDefinitions,
@@ -166,7 +165,7 @@ function createApiRequestExecutor(
         method: endpoint.method,
         headers: fetchOptions.headers,
         body: fetchOptions.body,
-        dynamicArgs: args,
+        dynamicAIArgs,
       });
 
       return await executeRequest({
@@ -196,13 +195,13 @@ function createApiRequestExecutor(
  */
 function prepareRequestConfiguration(
   {
-    args,
+    dynamicAIArgs,
     context,
     endpoint,
     paramDefinitions,
     logger,
   }: {
-    args: Record<string, any>;
+    dynamicAIArgs: Record<string, any>;
     context: Omit<SdkAIExternalAPISchemaT, 'endpoints'>;
     endpoint: SdkAIExternalAPIEndpointT;
     paramDefinitions: Record<string, SdkAIExternalAPIParameterT>;
@@ -217,7 +216,7 @@ function prepareRequestConfiguration(
 
   // Process dynamic arguments from the AI
   pipe(
-    args,
+    dynamicAIArgs,
     R.mapWithIndex((argName, argValue) => {
       const paramDef = paramDefinitions[argName];
 
