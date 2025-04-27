@@ -235,13 +235,6 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
         })),
       );
     }),
-    TE.tap(({ originalRecord }) => {
-      if (aiExternalAPI || !originalRecord.aiExternalAPI?.id) {
-        return TE.of(undefined);
-      }
-
-      return this.aiExternalAPIsService.delete(originalRecord.aiExternalAPI.id);
-    }),
     TE.bindW('aiExternalAPI', ({ originalRecord }) => {
       if (!aiExternalAPI) {
         return TE.of(undefined);
@@ -278,6 +271,13 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
         },
       }),
     )),
+    TE.tap(({ originalRecord }) => {
+      if (aiExternalAPI || !originalRecord.aiExternalAPI?.id) {
+        return TE.of(undefined);
+      }
+
+      return this.aiExternalAPIsService.delete(originalRecord.aiExternalAPI.id);
+    }),
     TE.tap(() => {
       if (!permissions) {
         return TE.of(undefined);
