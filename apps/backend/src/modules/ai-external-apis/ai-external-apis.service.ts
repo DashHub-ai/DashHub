@@ -21,7 +21,6 @@ import {
   wrapWithCache,
 } from '@llm/commons';
 
-import type { AIProxyAsyncFunction } from '../ai-connector/clients';
 import type { ExtractedFile } from '../api/helpers';
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
@@ -229,9 +228,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
         archived: false,
         organizationIds: [organizationId],
       }),
-      TE.map(({ items }) => items.flatMap(
-        ({ id, schema }): AIProxyAsyncFunction[] => createAIExternalApiAsyncFunctions(id, schema),
-      )),
+      TE.map(({ items }) => items.flatMap(createAIExternalApiAsyncFunctions)),
     ),
     {
       storage: AIExternalAPIsService.AI_EXTERNAL_APIS_CACHE,
