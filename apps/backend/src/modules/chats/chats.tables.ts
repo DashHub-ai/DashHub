@@ -37,13 +37,17 @@ type ChatProjectTableRowRelation = TableRowWithIdName & {
   internal: boolean;
 };
 
+type ChatAppTableRow = TableRowWithId & {
+  aiExternalApi: TableRowWithId | null;
+};
+
 export type ChatTableRowWithRelations =
   & Omit<ChatTableRow, 'organizationId' | 'creatorUserId' | 'projectId'>
   & PermissionsTableRowRelation
   & {
     summary: ChatSummaryTableRowRelation;
     organization: TableRowWithIdName;
-    apps: TableRowWithId[];
+    apps: ChatAppTableRow[];
     project: ChatProjectTableRowRelation | null;
     creator: UserTableRowBaseRelation;
     stats: SdkChatStatsT;

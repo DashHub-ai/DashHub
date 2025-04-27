@@ -20,6 +20,7 @@ export const SdkCreateChatInputV = SdkChatV.pick({
   internal: true,
   project: true,
   permissions: true,
+  apps: true,
 })
   .merge(SdkUpsertTableRowWithPermissionsInputV)
   .extend({

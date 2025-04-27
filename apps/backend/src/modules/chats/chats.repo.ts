@@ -1,6 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import { array as A, taskEither as TE } from 'fp-ts';
 import { identity, pipe } from 'fp-ts/lib/function';
+import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { inject, injectable } from 'tsyringe';
 
 import type { RequiredBy } from '@llm/commons';
@@ -186,7 +187,15 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
                   .where('messages.chat_id', '=', eb.ref('chats.id'))
                   .where('messages.role', '=', 'system')
                   .where('app_id', 'is not', null)
-                  .select(({ fn }) => fn.agg<TableId[]>('array_agg', ['app_id']).as('ids'))
+                  .leftJoin('apps', 'apps.id', 'messages.app_id')
+                  .select(({ fn, eb }) =>
+                    fn.jsonAgg(
+                      jsonBuildObject({
+                        id: eb.ref('messages.app_id').$notNull(),
+                        aiExternalApiId: eb.ref('apps.ai_external_api_id'),
+                      }),
+                    ).as('app_data'),
+                  )
                   .as('apps'),
             ])
             .limit(ids.length)
@@ -243,8 +252,13 @@ export class ChatsRepo extends createProtectedDatabaseRepo('chats') {
 
           return {
             ...camelcaseKeys(item),
-            apps: (apps ?? []).map(id => ({
-              id,
+            apps: (apps ?? []).map(app => ({
+              id: app.id,
+              aiExternalApi: app.aiExternalApiId
+                ? {
+                    id: app.aiExternalApiId,
+                  }
+                : null,
             })),
             project: projectId && projectName
               ? {
