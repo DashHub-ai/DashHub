@@ -62,7 +62,7 @@ export const ExternalApiChatBadge = memo(({ id, onClick, className, disabled }: 
         : (
             <ZapIcon size={12} className={colors.icon} />
           )}
-      <span>{value.status === 'success' ? value.data?.name : '...'}</span>
+      <span>{value.status === 'success' ? `API: ${value.data?.name}` : '...'}</span>
     </span>
   );
 });

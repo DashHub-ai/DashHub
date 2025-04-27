@@ -45,6 +45,7 @@ export function AppsContainer({ storeDataInUrl, toolbar, itemPropsFn, contentFoo
       favoritesAgg: true,
       recentAgg: true,
       includeRecentChats: true,
+      categoriesAgg: true,
     },
     fetchResultsTask: flow(assignWorkspaceToFilters, sdks.dashboard.apps.search),
   });

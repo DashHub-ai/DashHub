@@ -5,6 +5,7 @@ import {
   SdkIdNameUrlEntryV,
   SdkTableRowWithArchivedV,
   SdkTableRowWithDatesV,
+  SdkTableRowWithIdV,
   SdkTableRowWithUuidV,
 } from '~/shared';
 
@@ -34,6 +35,12 @@ export const SdkChatStatsV = z.object({
 
 export type SdkChatStatsT = z.infer<typeof SdkChatStatsV>;
 
+export const SdkSearchChatAppRelationV = SdkTableRowWithIdV.extend({
+  aiExternalAPI: SdkTableRowWithIdV.nullable(),
+});
+
+export type SdkSearchChatAppRelationT = z.infer<typeof SdkSearchChatAppRelationV>;
+
 export const SdkChatV = z.object({
   creator: SdkUserListItemV,
   organization: SdkIdNameUrlEntryV,
@@ -41,6 +48,7 @@ export const SdkChatV = z.object({
   internal: z.boolean(),
   summary: SdkChatSummaryV,
   stats: SdkChatStatsV,
+  apps: SdkSearchChatAppRelationV.array(),
 })
   .merge(SdkTableRowWithPermissionsV)
   .merge(SdkTableRowWithUuidV)

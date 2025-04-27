@@ -743,6 +743,10 @@ export const I18N_PACK_EN = {
         label: 'Chat prompt',
         placeholder: 'Enter app chat prompt description, it will help AI generate responses',
       },
+      aiExternalAPI: {
+        label: 'External API',
+        toggle: 'Enable external integration',
+      },
     },
   },
   searchEngines: {

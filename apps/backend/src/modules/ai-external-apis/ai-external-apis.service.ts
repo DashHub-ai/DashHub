@@ -21,7 +21,6 @@ import {
   wrapWithCache,
 } from '@llm/commons';
 
-import type { AIProxyAsyncFunction } from '../ai-connector/clients';
 import type { ExtractedFile } from '../api/helpers';
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';
@@ -90,6 +89,11 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
     TE.tap(() => this.esIndexRepo.findAndIndexDocumentById(id)),
   );
 
+  delete = (id: SdkTableRowIdT) => pipe(
+    this.repo.delete({ id }),
+    TE.tap(() => this.esIndexRepo.deleteDocument(id)),
+  );
+
   search = this.esSearchRepo.search;
 
   create = (
@@ -97,7 +101,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
       organization,
       logo,
       permissions,
-      creator,
+      internal = false,
       ...values
     }: InternalCreateExternalAPIInputT,
   ) => pipe(
@@ -126,6 +130,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
     TE.chainW(({ s3Resource }) => this.repo.create({
       value: {
         ...values,
+        internal,
         organizationId: organization.id,
         logoS3ResourceId: s3Resource?.id,
       },
@@ -223,9 +228,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
         archived: false,
         organizationIds: [organizationId],
       }),
-      TE.map(({ items }) => items.flatMap(
-        ({ id, schema }): AIProxyAsyncFunction[] => createAIExternalApiAsyncFunctions(id, schema),
-      )),
+      TE.map(({ items }) => items.flatMap(createAIExternalApiAsyncFunctions)),
     ),
     {
       storage: AIExternalAPIsService.AI_EXTERNAL_APIS_CACHE,
@@ -237,7 +240,7 @@ export class AIExternalAPIsService implements WithAuthFirewall<AIExternalAPIsFir
 
 export type InternalCreateExternalAPIInputT = Overwrite<SdkCreateAIExternalAPIInputT, {
   logo: TableRowWithId | ExtractedFile | null;
-  creator: TableRowWithId;
+  internal?: boolean;
 }>;
 
 export type InternalUpdateExternalAPIInputT = Overwrite<SdkUpdateAIExternalAPIInputT & TableRowWithId, {

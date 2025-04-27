@@ -6,7 +6,7 @@ import { takeRight } from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
 import { AlertCircle, Bookmark, Bot, Globe, ReplyIcon, User } from 'lucide-react';
 
-import { type Overwrite, pluckTyped } from '@llm/commons';
+import { type Overwrite, pluckTyped, uniq } from '@llm/commons';
 import {
   type SdkRepeatedMessageLike,
   type SdkSearchMessageItemT,
@@ -88,6 +88,13 @@ export function ChatMessage(
 
   const isCorrupted = message.corrupted;
   const hasWebSearch = message.webSearch?.enabled;
+
+  const asyncFunctionToolbars = pipe(
+    message.asyncFunctionsResults.map(api => (
+      <ExternalApiChatBadge key={api.externalApiId} id={api.externalApiId} />
+    )),
+    uniq,
+  );
 
   return (
     <div
@@ -202,6 +209,7 @@ export function ChatMessage(
                 disabled={!isLast || readOnly}
                 showToolbars={showToolbars && isAI}
                 searchResults={message.webSearch.results ?? []}
+                appendToolbars={asyncFunctionToolbars}
                 onAction={onAction}
               />
             </div>
@@ -212,14 +220,6 @@ export function ChatMessage(
               'items-end w-full': !isAI && isYou,
             })}
           >
-            {message.asyncFunctionsResults && message.asyncFunctionsResults.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-1">
-                {Array.from(new Set(message.asyncFunctionsResults.map(afr => afr.externalApiId))).map(apiId => (
-                  <ExternalApiChatBadge key={apiId} id={apiId} />
-                ))}
-              </div>
-            )}
-
             {files.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 mt-1">
                 <FilesCardsList

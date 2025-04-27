@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { memo, useMemo, useSyncExternalStore } from 'react';
+import { memo, type ReactNode, useMemo, useSyncExternalStore } from 'react';
 
 import type { SdkMessageWebSearchItemT } from '@llm/sdk';
 
@@ -17,6 +17,7 @@ type Props = {
   truncate?: number;
   disabled?: boolean;
   showToolbars?: boolean;
+  appendToolbars?: ReactNode[];
   className?: string;
   textClassName?: string;
   onAction?: (action: string) => void;
@@ -29,6 +30,7 @@ export const ChatMessageContent = memo((
     truncate,
     disabled,
     showToolbars = true,
+    appendToolbars,
     className,
     textClassName,
     onAction,
@@ -74,7 +76,12 @@ export const ChatMessageContent = memo((
 
   return (
     <div className={className}>
-      {!truncate && showToolbars && hydrationResult.prependToolbars}
+      {!truncate && showToolbars && (!!appendToolbars?.length || !!hydrationResult.prependToolbars.length) && (
+        <div key="badges-toolbar" className="flex flex-wrap gap-1 mt-1 mb-2">
+          {hydrationResult.prependToolbars}
+          {appendToolbars}
+        </div>
+      )}
 
       <div className={clsx('max-w-[750px]', textClassName)}>
         <ChatMessageMarkdown

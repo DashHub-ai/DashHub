@@ -33,6 +33,7 @@ import {
 type EsChatsInternalFilters =
   & WithPermissionsInternalFilters<SdkSearchChatsInputT>
   & {
+    internal?: boolean;
     customization?: {
       userId: TableId;
     };
@@ -115,11 +116,12 @@ export class ChatsEsSearchRepo {
       archived,
       excludeEmpty,
       satisfyPermissions,
+      internal,
     }: EsChatsInternalFilters,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
-        esb.termsQuery('internal', false),
+        esb.termsQuery('internal', internal ?? false),
         !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!projectsIds?.length && esb.termsQuery('project.id', projectsIds),
@@ -173,6 +175,10 @@ export class ChatsEsSearchRepo {
       project: source.project,
       stats: source.stats,
       permissions: mapRawEsDocToSdkPermissions(source.permissions),
+      apps: source.apps.map(app => ({
+        id: app.id,
+        aiExternalAPI: app.ai_external_api,
+      })),
       summary: {
         content: {
           generated: summary.content.generated,

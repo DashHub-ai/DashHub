@@ -1,8 +1,12 @@
+import clsx from 'clsx';
+
 import type { SdkAppT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
+import { useAIExternalAPIDefaultValue } from '~/modules/ai-external-api-creator';
+import { AISchemaCreator } from '~/modules/ai-external-api-creator/schema';
 import { ProjectFilesListContainer } from '~/modules/projects';
-import { FormErrorAlert, SaveButton } from '~/ui';
+import { Checkbox, FormErrorAlert, FormField, SaveButton } from '~/ui';
 
 import { AppSharedFormFields } from '../shared';
 import { useAppUpdateForm } from './use-app-update-form';
@@ -20,14 +24,24 @@ export function AppUpdateForm(
     onAfterSubmit,
   }: Props,
 ) {
-  const t = useI18n().pack.appsCreator.files;
-  const { handleSubmitEvent, validator, submitState, bind } = useAppUpdateForm({
+  const t = useI18n().pack.appsCreator;
+  const { handleSubmitEvent, validator, submitState, bind, value } = useAppUpdateForm({
     defaultValue: {
       ...app,
       permissions: app.permissions?.current ?? [],
     },
     onAfterSubmit,
   });
+
+  const externalAPIDefaultValue = useAIExternalAPIDefaultValue();
+
+  const onToggleExternalAPI = () => {
+    bind.path('aiExternalAPI').onChange(
+      value.aiExternalAPI
+        ? null
+        : { schema: externalAPIDefaultValue.schema },
+    );
+  };
 
   return (
     <form
@@ -43,22 +57,47 @@ export function AppUpdateForm(
           />
 
           <FormErrorAlert result={submitState.result} />
-
-          <div className="flex flex-row justify-end">
-            <SaveButton
-              type="submit"
-              loading={submitState.loading}
-            />
-          </div>
         </div>
 
         <div>
           <h2 className="mb-6 font-semibold text-2xl">
-            {t.title}
+            {t.files.title}
           </h2>
 
           <ProjectFilesListContainer projectId={app.project.id} />
         </div>
+      </div>
+
+      <FormField
+        label={t.fields.aiExternalAPI.label}
+        {...validator.errors.extract('aiExternalAPI')}
+      >
+        <Checkbox
+          value={!!value.aiExternalAPI}
+          onChange={onToggleExternalAPI}
+        >
+          {t.fields.aiExternalAPI.toggle}
+        </Checkbox>
+
+        {!!value.aiExternalAPI && (
+          <AISchemaCreator
+            {...bind.path('aiExternalAPI.schema')}
+            {...validator.errors.extract('aiExternalAPI', { nested: true })}
+            className="mt-4"
+          />
+        )}
+      </FormField>
+
+      <div
+        className={clsx(
+          'flex justify-end mt-6',
+          !value.aiExternalAPI && 'md:w-[calc(100%-26rem-4rem)]',
+        )}
+      >
+        <SaveButton
+          type="submit"
+          loading={submitState.loading}
+        />
       </div>
     </form>
   );

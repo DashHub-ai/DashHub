@@ -25,6 +25,7 @@ export const AISchemaCreator = controlled<SdkAIExternalAPISchemaT, Props>(({ con
           {t.fields.schema.globalApiSettings}
         </h3>
 
+        {/* It's optional, as endpoints might be absolute URLs */}
         <FormField
           className="uk-margin"
           label={t.fields.schema.apiUrl.label}
@@ -33,7 +34,6 @@ export const AISchemaCreator = controlled<SdkAIExternalAPISchemaT, Props>(({ con
           <Input
             {...bind.path('apiUrl')}
             placeholder="https://api.example.com"
-            required
           />
         </FormField>
 

@@ -12,6 +12,7 @@ import {
 } from '@llm/sdk';
 import {
   createAIAttachedFilesTag,
+  createAIExternalApiAsyncFunctions,
   createAIQuoteTag,
   createAttachAppSystemMessage,
   createContextPrompt,
@@ -151,6 +152,24 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     TE.Do,
     TE.bind('message', () => this.get(id)),
     TE.bind('chat', ({ message }) => this.chatsService.get(message.chat.id)),
+    TE.bindW('appsAsyncFunctions', ({ chat }) => {
+      const externalAPIsIds = chat.apps.map(app => app.aiExternalAPI?.id).filter(Boolean) as TableId[];
+
+      if (externalAPIsIds.length === 0) {
+        return TE.of([]);
+      }
+
+      return pipe(
+        this.aiExternalAPIsService.search({
+          ids: externalAPIsIds,
+          offset: 0,
+          limit: externalAPIsIds.length,
+          archived: false,
+          internal: true,
+        }),
+        TE.map(({ items }) => items.flatMap(createAIExternalApiAsyncFunctions)),
+      );
+    }),
     TE.bindW('personalities', ({ message, chat }) => apply.sequenceS(TE.ApplicativePar)({
       user: (() => {
         if (!message.creator) {
@@ -184,18 +203,31 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     )),
     TE.bindW('mappedContent', ({ message, chat, history }) => pipe(
       TE.Do,
-      TE.bind('embeddings', () => this.projectsEmbeddingsService.createEmbeddingsAITag({
-        chat,
-        history,
-        message: rejectFalsyItems(
-          [
-            message.content,
-            message.repliedMessage?.content,
-          ],
-        ).join('\n'),
-      })),
-      TE.bind('reply', () => TE.of(createAIQuoteTag(message.repliedMessage))),
-      TE.bind('attachedFiles', () => TE.of(createAIAttachedFilesTag(message.files))),
+      TE.bind('embeddings', () => pipe(
+        this.projectsEmbeddingsService.createEmbeddingsAITag({
+          chat,
+          history,
+          message: rejectFalsyItems(
+            [
+              message.content,
+              message.repliedMessage?.content,
+            ],
+          ).join('\n'),
+        }),
+        tapTaskEitherErrorTE(() => this.createAndIndexMessage({
+          chatId: message.chat.id,
+          content: 'Cannot vectorize prompt. Check connection with AI model.',
+          metadata: {},
+          aiModelId: aiModel.id,
+          repliedMessageId: message.id,
+          creatorUserId: null,
+          role: 'assistant',
+          corrupted: true,
+          webSearch: message.webSearch.enabled,
+        })),
+      )),
+      TE.bindW('reply', () => TE.of(createAIQuoteTag(message.repliedMessage))),
+      TE.bindW('attachedFiles', () => TE.of(createAIAttachedFilesTag(message.files))),
       TE.map(({ reply, attachedFiles, embeddings }) =>
         wrapUserPromptWithAiTags({
           preferredLanguageCode,
@@ -208,14 +240,17 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
         }),
       ),
     )),
-    TE.chainW(({ mappedContent, history, message, chat, personalities }) =>
+    TE.chainW(({ mappedContent, history, message, chat, personalities, appsAsyncFunctions }) =>
       pipe(
         this.aiConnectorService.executeStreamPrompt(
           {
             signal,
             aiModel,
             history,
-            asyncFunctions,
+            asyncFunctions: [
+              ...appsAsyncFunctions ?? [],
+              ...asyncFunctions ?? [],
+            ],
             organization: chat.organization,
             context: createContextPrompt({
               personalities,

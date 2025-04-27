@@ -114,19 +114,25 @@ export class ProjectsEmbeddingsService implements WithAuthFirewall<ProjectsEmbed
         limit: appsIds.length,
         offset: 0,
         sort: 'createdAt:desc',
+        recentAgg: false,
+        favoritesAgg: false,
+        categoriesAgg: false,
       })),
       TE.chainW(({ apps, fileEmbeddingModel: { id, projectId }, organizationProjectId }) => {
         if (isNil(projectId) && !apps.items.length && isNil(organizationProjectId)) {
           return TE.of(null);
         }
 
+        const appsProjectIds = new Set(apps.items.map(({ project }) => project.id));
         const projectsIds = rejectFalsyItems([
           projectId,
           organizationProjectId,
-          ...apps.items.map(({ project }) => project.id),
+          ...appsProjectIds,
         ]);
 
-        const appsProjectIds = new Set(apps.items.map(({ project }) => project.id));
+        if (!projectsIds.length) {
+          return TE.of(null);
+        }
 
         return pipe(
           this.aiModelsService.get(id),

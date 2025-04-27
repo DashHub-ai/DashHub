@@ -48,6 +48,7 @@ export function PromotedAppsContainer({ className }: Props) {
     fallbackSearchParams: {
       limit: 3,
       includeRecentChats: true,
+      categoriesAgg: true,
       sort: 'score:desc',
       ...optimisticFavoritesCount && {
         favorites: true,

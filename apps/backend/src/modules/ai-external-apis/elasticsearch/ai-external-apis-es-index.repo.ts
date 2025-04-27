@@ -31,6 +31,7 @@ const AIExternalAPIsAbstractEsIndexRepo = createElasticsearchIndexRepo({
         ...createArchivedRecordMappings(),
         permissions: createPermissionsRowEntryMapping(),
         organization: createIdNameObjectMapping(),
+        internal: { type: 'boolean' },
         description: {
           type: 'text',
           analyzer: 'folded_lowercase_analyzer',

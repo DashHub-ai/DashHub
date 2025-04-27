@@ -22,20 +22,21 @@ import { createExternalAIEndpointFunctionDefinition } from './create-ai-endpoint
 
 /**
  * Creates a map of executable API functions from an external API schema.
- *
- * @param externalApiId The ID of the external API.
- * @param schema The external API schema.
- * @returns An object with function names as keys and executable API functions as values.
  */
 export function createAIExternalApiAsyncFunctions(
-  externalApiId: TableId,
-  schema: SdkAIExternalAPISchemaT,
+  {
+    id,
+    schema,
+  }: {
+    id: TableId;
+    schema: SdkAIExternalAPISchemaT;
+  },
 ): AIProxyAsyncFunction[] {
   return pipe(
     schema.endpoints,
     A.map((endpoint): AIProxyAsyncFunction => ({
       externalApi: {
-        id: externalApiId,
+        id,
         endpoint,
       },
       definition: createExternalAIEndpointFunctionDefinition(endpoint),

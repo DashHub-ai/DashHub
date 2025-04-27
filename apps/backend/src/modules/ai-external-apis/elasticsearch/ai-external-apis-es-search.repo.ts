@@ -26,7 +26,9 @@ import {
   AIExternalAPIsEsIndexRepo,
 } from './ai-external-apis-es-index.repo';
 
-type EsAIExternalAPIsInternalFilters = WithPermissionsInternalFilters<SdkSearchAIExternalAPIsInputT>;
+type EsAIExternalAPIsInternalFilters = WithPermissionsInternalFilters<SdkSearchAIExternalAPIsInputT> & {
+  internal?: boolean;
+};
 
 @injectable()
 export class AIExternalAPIsEsSearchRepo {
@@ -66,10 +68,12 @@ export class AIExternalAPIsEsSearchRepo {
       organizationIds,
       archived,
       satisfyPermissions,
+      internal,
     }: EsAIExternalAPIsInternalFilters,
   ): esb.Query =>
     esb.boolQuery().must(
       rejectFalsyItems([
+        esb.termsQuery('internal', internal ?? false),
         !!satisfyPermissions && createEsPermissionsFilters(satisfyPermissions),
         !!ids?.length && esb.termsQuery('id', ids),
         !!organizationIds?.length && esb.termsQuery('organization.id', organizationIds),

@@ -48,6 +48,7 @@ import * as addProjectsToOrganizationsAISettings from './0046-add-projects-to-or
 import * as addUsersFavoritesTable from './0047-add-users-favorites-table';
 import * as addTimestampToFavorites from './0048-add-timestamp-to-favorites';
 import * as addExternalAPIsTable from './0049-add-external-apis-table';
+import * as addExternalAPIToApps from './0050-add-external-api-to-apps';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -100,4 +101,5 @@ export const DB_MIGRATIONS = {
   '0047-add-users-favorites-table': addUsersFavoritesTable,
   '0048-add-timestamp-to-favorites': addTimestampToFavorites,
   '0049-add-external-apis-table': addExternalAPIsTable,
+  '0050-add-external-api-to-apps': addExternalAPIToApps,
 };

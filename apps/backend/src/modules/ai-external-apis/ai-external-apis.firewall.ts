@@ -61,7 +61,7 @@ export class AIExternalAPIsFirewall extends AuthFirewallService {
   );
 
   create = (dto: Omit<InternalCreateExternalAPIInputT, 'creator'>) => pipe(
-    this.permissionsService.asUser(this.jwt).enforceOrganizationCreatorScope(dto),
+    this.permissionsService.asUser(this.jwt).enforceOrganizationScope(dto),
     TE.fromEither,
     TE.chainW(this.apisService.create),
     this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),

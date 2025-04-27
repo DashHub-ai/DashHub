@@ -10,6 +10,7 @@ import {
   SdkTableRowWithUuidV,
 } from '~/shared';
 
+import { SdkAIExternalAPISchemaOnlyRelationV } from '../../ai-external-apis';
 import { SdkTableRowWithPermissionsV } from '../../permissions/dto/sdk-table-row-with-permissions.dto';
 import { SdkBaseS3ResourceV } from '../../s3-files';
 
@@ -20,6 +21,7 @@ export const SdkAppV = z.strictObject({
   category: SdkTableRowWithIdNameV,
   project: SdkTableRowWithIdV,
   aiModel: SdkTableRowWithIdNameV.nullable(),
+  aiExternalAPI: SdkAIExternalAPISchemaOnlyRelationV.nullable(),
   logo: SdkBaseS3ResourceV.nullable(),
   promotion: z.number(),
   recentChats: z.array(SdkTableRowWithUuidV),

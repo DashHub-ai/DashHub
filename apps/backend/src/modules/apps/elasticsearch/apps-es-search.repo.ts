@@ -67,14 +67,16 @@ export class AppsEsSearchRepo {
     TE.map(AppsEsSearchRepo.mapOutputHit),
   );
 
-  search = (dto: EsAppsInternalFilters) => pipe(
+  search = ({ categoriesAgg, ...dto }: EsAppsInternalFilters) => pipe(
     this.createEsRequestSearchBody(dto),
     TE.bindW('query', ({ searchBody }) => this.indexRepo.search(searchBody.toJSON())),
     TE.bindW('categoriesAggs', ({ query: { aggregations } }) =>
-      this.categoriesTreeRepo.createCountedTree({
-        countedAggs: AppsEsSearchRepo.mapCategoriesAggregations(aggregations),
-        organizationIds: dto.organizationIds,
-      })),
+      categoriesAgg
+        ? this.categoriesTreeRepo.createCountedTree({
+            countedAggs: AppsEsSearchRepo.mapCategoriesAggregations(aggregations),
+            organizationIds: dto.organizationIds,
+          })
+        : TE.right(null)),
     TE.map((
       {
         recentlyUsedApps,
@@ -100,7 +102,7 @@ export class AppsEsSearchRepo {
         ),
         total: total.value,
         aggs: {
-          categories: categoriesAggs,
+          categories: categoriesAggs ?? [],
           favorites: {
             count: (aggregations as any)?.total_favorites?.filtered?.doc_count ?? 0,
           },
@@ -330,6 +332,11 @@ export class AppsEsSearchRepo {
       permissions: mapRawEsDocToSdkPermissions(source.permissions),
       logo: source.logo && camelcaseKeys(source.logo),
       aiModel: source.ai_model,
+      aiExternalAPI: (
+        source.ai_external_api
+          ? camelcaseKeys(source.ai_external_api, { deep: true })
+          : null
+      ),
       promotion: source.promotion,
       recentChats: [],
     });
