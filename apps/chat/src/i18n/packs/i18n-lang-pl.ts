@@ -745,6 +745,10 @@ export const I18N_PACK_PL: I18nLangPack = {
         label: 'Prompt',
         placeholder: 'Wpisz opis prompt agenta, to pomoże AI w generowaniu odpowiedzi',
       },
+      aiExternalAPI: {
+        label: 'Zewnętrzne API',
+        toggle: 'Użyj zewnętrznego API',
+      },
     },
   },
   s3Buckets: {
