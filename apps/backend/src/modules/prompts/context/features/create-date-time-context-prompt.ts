@@ -14,12 +14,13 @@ export function createDateTimeContextPrompt(): string {
     children: [
       xml('current-date', { children: [date] }),
       xml('day-of-week', { children: [dayOfWeek] }),
+      xml('time-zone', { children: [timeZone] }),
+      xml('current-time', { children: [new Date().toLocaleTimeString()] }),
       xml('instructions', {
         children: [
           'Use this information when the user asks about the current date or day of the week.',
           'Do not mention this information unless specifically relevant to the conversation.',
           'Use this for tasks that require date or time context.',
-          `It's ${timeZone} timezone.`,
         ],
       }),
     ],
