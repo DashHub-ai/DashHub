@@ -1,6 +1,7 @@
 import { xml } from '../xml';
 import {
   createActionButtonsContextPrompt,
+  createDateTimeContextPrompt,
   createHtmlPreviewContextPrompt,
   createQuotesContextPrompt,
 } from './features';
@@ -28,6 +29,7 @@ export function createContextPrompt({ personalities }: Attrs) {
       createQuotesContextPrompt(),
       createActionButtonsContextPrompt(),
       createHtmlPreviewContextPrompt(),
+      createDateTimeContextPrompt(),
     ],
   });
 }
