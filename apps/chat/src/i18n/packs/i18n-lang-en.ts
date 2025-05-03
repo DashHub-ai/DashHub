@@ -1016,10 +1016,6 @@ export const I18N_PACK_EN = {
           label: 'Name',
           placeholder: 'Enter organization name',
         },
-        maxNumberOfUsers: {
-          label: 'Max number of users',
-          placeholder: 'Enter max number of users',
-        },
         aiSettings: {
           chatContext: {
             label: 'Chat personalization',

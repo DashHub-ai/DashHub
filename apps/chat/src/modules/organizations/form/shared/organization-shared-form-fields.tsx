@@ -3,11 +3,11 @@ import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } 
 import type { SdkOrganizationT, SdkUpsertUserAISettingsInputT } from '@llm/sdk';
 
 import { useI18n } from '~/i18n';
-import { FormField, Input, NumericInput } from '~/ui';
+import { FormField, Input } from '~/ui';
 
 import { OrganizationAISettingsFormField } from './organization-ai-settings-form-field';
 
-type Value = Pick<SdkOrganizationT, 'maxNumberOfUsers' | 'name'> & {
+type Value = Pick<SdkOrganizationT, 'name'> & {
   aiSettings: SdkUpsertUserAISettingsInputT;
 };
 
@@ -29,20 +29,6 @@ export const OrganizationSharedFormFields = controlled<Value, Props>(({ errors, 
           placeholder={t.fields.name.placeholder}
           required
           {...bind.path('name')}
-        />
-      </FormField>
-
-      <FormField
-        className="uk-margin"
-        label={t.fields.maxNumberOfUsers.label}
-        {...validation.extract('maxNumberOfUsers')}
-      >
-        <NumericInput
-          name="maxNumberOfUsers"
-          placeholder={t.fields.maxNumberOfUsers.placeholder}
-          required
-          min={1}
-          {...bind.path('maxNumberOfUsers')}
         />
       </FormField>
 

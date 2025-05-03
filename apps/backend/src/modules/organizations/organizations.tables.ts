@@ -8,7 +8,6 @@ import type { OrganizationsAISettingsTableRelationRow } from '../organizations-a
 export type OrganizationsTable = TableWithDefaultColumns &
   TableWithArchivedAtColumn & {
     name: string;
-    max_number_of_users: number;
   };
 
 export type OrganizationTableRow = NormalizeSelectTableRow<OrganizationsTable>;

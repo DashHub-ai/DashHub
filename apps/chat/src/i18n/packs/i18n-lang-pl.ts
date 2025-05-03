@@ -1018,10 +1018,6 @@ export const I18N_PACK_PL: I18nLangPack = {
           label: 'Nazwa',
           placeholder: 'Wpisz nazwę organizacji',
         },
-        maxNumberOfUsers: {
-          label: 'Maksymalna liczba użytkowników',
-          placeholder: 'Wpisz maksymalną liczbę użytkowników',
-        },
         aiSettings: {
           chatContext: {
             label: 'Personalizacja czatu',

@@ -10,7 +10,6 @@ import { SdkOrganizationAISettingsV } from './ai-settings';
 
 export const SdkOrganizationV = z.object({
   name: z.string(),
-  maxNumberOfUsers: z.number().int().positive(),
   aiSettings: SdkOrganizationAISettingsV,
 })
   .merge(SdkTableRowWithIdV)

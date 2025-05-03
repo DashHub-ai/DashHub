@@ -38,7 +38,6 @@ export function OrganizationsTableContainer() {
       createModal.showAsOptional({
         defaultValue: {
           name: '',
-          maxNumberOfUsers: 1,
           aiSettings: {
             chatContext: null,
           },
