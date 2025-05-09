@@ -31,7 +31,7 @@
     "@commitlint/ensure": "^19.5.0",
     "@commitlint/message": "^19.5.0",
     "@commitlint/types": "^19.5.0",
-    "@eslint-react/eslint-plugin": "^1.23.2",
+    "@eslint-react/eslint-plugin": "^1.47.2",
     "@manypkg/get-packages": "^2.2.2",
     "@swc/core": "^1.10.7",
     "@vitejs/plugin-react": "^4.3.3",
