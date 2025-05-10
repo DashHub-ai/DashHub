@@ -147,3 +147,5 @@ bun.lockb
 
 config/vite.config.pkg.ts.*
 config/vite.config.ts.*
+
+externals/commercial/
