@@ -9,7 +9,7 @@
     "es:reindex:all": "node dist/run-reindex-all.cli.mjs",
     "chats:summarize:all": "node dist/run-summarize-chats.cli.mjs",
     "projects:summarize:all": "node dist/run-summarize-projects.cli.mjs",
-    "dev": "npm run clean && nodemon --watch src -e ts --exec \"vite build --mode production && node --stack-trace-limit=1000 --enable-source-maps ./dist/index.mjs\"",
+    "dev": "npm run clean && nodemon --watch src --watch ../../externals/commercial/backend/src/ -e ts --exec \"vite build --mode production && node --stack-trace-limit=1000 --enable-source-maps ./dist/index.mjs\"",
     "lint": "eslint . --config ./eslint.config.mjs",
     "clean": "rm -rf ./dist 2>/dev/null",
     "check:types": "tsc"
