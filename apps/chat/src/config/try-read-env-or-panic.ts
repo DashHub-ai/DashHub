@@ -6,7 +6,7 @@ import {
   tryOrThrowEither,
   tryParseUsingZodSchema,
   type UnparsedEnvObject,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import { type ConfigT, ConfigV } from './config.dto';
 

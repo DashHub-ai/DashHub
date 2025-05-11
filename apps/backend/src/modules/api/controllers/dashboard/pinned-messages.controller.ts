@@ -7,7 +7,7 @@ import {
   type PinnedMessagesSdk,
   SdkPinMessageInputV,
   SdkSearchPinnedMessagesInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { PinnedMessagesService } from '~/modules/pinned-messages';
 

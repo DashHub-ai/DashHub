@@ -2,9 +2,9 @@ import { pipe } from 'fp-ts/lib/function';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { useLocation } from 'wouter';
 
-import { runTaskAsVoid, tapTaskEither, tryOrThrowTE } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
-import { type SdkTableRowWithIdT, useSdkForLoggedIn } from '@llm/sdk';
+import { runTaskAsVoid, tapTaskEither, tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
+import { type SdkTableRowWithIdT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';
 import { useSaveErrorNotification } from '~/ui';

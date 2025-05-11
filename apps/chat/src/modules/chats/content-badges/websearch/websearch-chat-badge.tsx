@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import { CheckIcon, SearchIcon } from 'lucide-react';
 import { memo } from 'react';
 
-import type { SdkMessageWebSearchItemT } from '@llm/sdk';
+import type { SdkMessageWebSearchItemT } from '@dashhub/sdk';
 
-import { type Nullable, truncateText } from '@llm/commons';
+import { type Nullable, truncateText } from '@dashhub/commons';
 import { useBalloon } from '~/ui';
 
 import { WebSearchPreview } from './websearch-preview';

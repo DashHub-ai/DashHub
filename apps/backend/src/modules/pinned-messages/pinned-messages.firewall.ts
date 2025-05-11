@@ -1,8 +1,8 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
-import type { PartialBy } from '@llm/commons';
-import type { SdkJwtTokenT, SdkSearchPinnedMessagesInputT } from '@llm/sdk';
+import type { PartialBy } from '@dashhub/commons';
+import type { SdkJwtTokenT, SdkSearchPinnedMessagesInputT } from '@dashhub/sdk';
 
 import type { TableId } from '../database';
 import type { MessagesService } from '../messages';

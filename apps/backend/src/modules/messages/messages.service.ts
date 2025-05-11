@@ -2,14 +2,14 @@ import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
-import { findItemIndexById, rejectFalsyItems, tapTaskEitherErrorTE, tryOrThrowTE } from '@llm/commons';
+import { findItemIndexById, rejectFalsyItems, tapTaskEitherErrorTE, tryOrThrowTE } from '@dashhub/commons';
 import {
   groupSdkAIMessagesByRepeats,
   type SdkCreateMessageInputT,
   type SdkJwtTokenT,
   type SdkRequestAIReplyInputT,
   type SdkSearchMessageItemT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import {
   createAIAttachedFilesTag,
   createAIExternalApiAsyncFunctions,

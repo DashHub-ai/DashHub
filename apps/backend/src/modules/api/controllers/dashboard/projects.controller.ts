@@ -12,7 +12,7 @@ import {
   SdkSearchProjectFilesInputV,
   SdkSearchProjectsInputV,
   SdkUpdateProjectInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { ProjectsService } from '~/modules/projects';
 import { ProjectsEmbeddingsService } from '~/modules/projects-embeddings';

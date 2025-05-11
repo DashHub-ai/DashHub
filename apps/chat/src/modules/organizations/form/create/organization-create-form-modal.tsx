@@ -1,4 +1,4 @@
-import type { SdkCreateOrganizationInputT } from '@llm/sdk';
+import type { SdkCreateOrganizationInputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

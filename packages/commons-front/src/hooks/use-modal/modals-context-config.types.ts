@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { Nullable } from '@llm/commons';
+import type { Nullable } from '@dashhub/commons';
 
 export type ModalShowRenderAttrs<Result, ShowProps> = {
   showProps: ShowProps;

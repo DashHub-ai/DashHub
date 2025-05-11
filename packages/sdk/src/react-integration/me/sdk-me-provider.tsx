@@ -1,7 +1,7 @@
 import { pipe } from 'fp-ts/lib/function';
 import { type PropsWithChildren, useEffect, useMemo } from 'react';
 
-import { createStoreSubscriber, tapTaskEither } from '@llm/commons';
+import { createStoreSubscriber, tapTaskEither } from '@dashhub/commons';
 
 import { useSdk } from '../hooks';
 import { SdkMeContext, type SdkMeContextT, type SdkMeSnapshotT } from './sdk-me-context';

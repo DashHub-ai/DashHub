@@ -5,7 +5,7 @@ import type {
   SdkAIExternalAPIEndpointT,
   SdkAIExternalAPIParameterT,
   SdkAIExternalAPISchemaT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import type { AIProxyAsyncFunction } from '~/modules/ai-connector/clients';
 import type { TableId } from '~/modules/database';
 
@@ -15,7 +15,7 @@ import {
   isNil,
   parameterizePath,
   withSearchParams,
-} from '@llm/commons';
+} from '@dashhub/commons';
 import { LoggerService } from '~/modules/logger';
 
 import { createExternalAIEndpointFunctionDefinition } from './create-ai-endpoint-function-definition';

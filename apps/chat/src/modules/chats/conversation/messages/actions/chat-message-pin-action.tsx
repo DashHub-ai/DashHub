@@ -1,9 +1,9 @@
 import { pipe } from 'fp-ts/lib/function';
 import { Pin } from 'lucide-react';
 
-import { tapTaskEitherError, toVoidTE, tryOrThrowTE } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
-import { useIsSdkPinnedMessageToggled, useSdkTogglePinnedMessage } from '@llm/sdk';
+import { tapTaskEitherError, toVoidTE, tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
+import { useIsSdkPinnedMessageToggled, useSdkTogglePinnedMessage } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useSaveErrorNotification } from '~/ui';
 

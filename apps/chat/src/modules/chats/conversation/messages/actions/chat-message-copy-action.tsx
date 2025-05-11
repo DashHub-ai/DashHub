@@ -1,8 +1,8 @@
 import { CheckIcon, CopyIcon } from 'lucide-react';
 import { memo, useState } from 'react';
 
-import { timeout } from '@llm/commons';
-import { useIsMountedRef } from '@llm/commons-front';
+import { timeout } from '@dashhub/commons';
+import { useIsMountedRef } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 
 import type { AIStreamObservable } from '../../hooks';

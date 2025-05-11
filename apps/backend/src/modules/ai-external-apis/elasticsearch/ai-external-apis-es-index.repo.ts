@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
-import { Overwrite, tryOrThrowTE } from '@llm/commons';
+import { Overwrite, tryOrThrowTE } from '@dashhub/commons';
 import {
   createArchivedRecordMappings,
   createAutocompleteFieldAnalyzeSettings,

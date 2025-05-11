@@ -1,6 +1,6 @@
 import { RepeatIcon } from 'lucide-react';
 
-import type { SdkSearchChatItemT } from '@llm/sdk';
+import type { SdkSearchChatItemT } from '@dashhub/sdk';
 import type { CardBigActionButtonProps } from '~/ui';
 
 import { useI18n } from '~/i18n';

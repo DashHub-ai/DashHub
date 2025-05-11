@@ -1,4 +1,4 @@
-import type { SdkPermissionAccessLevelT, SdkUserListItemT } from '@llm/sdk';
+import type { SdkPermissionAccessLevelT, SdkUserListItemT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { Avatar, ColorizedAvatar, type ColorizedAvatarSize, Tooltip } from '~/ui';

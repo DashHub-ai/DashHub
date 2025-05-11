@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { UserIcon } from 'lucide-react';
 
-import type { SdkUserListItemT } from '@llm/sdk';
+import type { SdkUserListItemT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { ColorizedAvatar, Tooltip } from '~/ui';

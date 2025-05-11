@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { UsersIcon } from 'lucide-react';
 
-import type { SdkPermissionT } from '@llm/sdk';
+import type { SdkPermissionT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 

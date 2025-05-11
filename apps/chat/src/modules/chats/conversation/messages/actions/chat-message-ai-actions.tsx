@@ -1,6 +1,6 @@
 import { RefreshCwIcon, WandSparklesIcon } from 'lucide-react';
 
-import type { SdkSearchMessageItemT } from '@llm/sdk';
+import type { SdkSearchMessageItemT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 

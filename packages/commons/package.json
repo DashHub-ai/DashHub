@@ -1,5 +1,5 @@
 {
-  "name": "@llm/commons",
+  "name": "@dashhub/commons",
   "type": "module",
   "version": "1.0.0",
   "private": true,

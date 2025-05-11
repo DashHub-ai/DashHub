@@ -1,6 +1,6 @@
 import * as E from 'fp-ts/lib/Either';
 
-import type { Nullable, TaggedError } from '@llm/commons';
+import type { Nullable, TaggedError } from '@dashhub/commons';
 
 import { useI18n } from '~/i18n';
 

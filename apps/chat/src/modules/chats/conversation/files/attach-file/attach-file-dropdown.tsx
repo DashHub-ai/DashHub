@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { pipe } from 'fp-ts/lib/function';
 import { UploadIcon } from 'lucide-react';
 
-import { tapTaskOption } from '@llm/commons';
+import { tapTaskOption } from '@dashhub/commons';
 import { useConfig } from '~/config';
 import { useI18n } from '~/i18n';
 import { useGoogleDriveFilePicker } from '~/modules/google-drive';

@@ -1,6 +1,6 @@
-import type { SdkUserListItemT } from '@llm/sdk';
+import type { SdkUserListItemT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   ChooseUsersModal,

@@ -11,8 +11,8 @@ import {
   useState,
 } from 'react';
 
-import { findItemById, type Nullable, rejectFalsyItems, runTask } from '@llm/commons';
-import { useAfterMount, useInterval, useRefSafeCallback } from '@llm/commons-front';
+import { findItemById, type Nullable, rejectFalsyItems, runTask } from '@dashhub/commons';
+import { useAfterMount, useInterval, useRefSafeCallback } from '@dashhub/commons-front';
 import {
   getLastUsedSdkMessagesAIModel,
   groupSdkAIMessagesByRepeats,
@@ -20,7 +20,7 @@ import {
   type SdkSearchMessagesOutputT,
   type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import type { SdkRepeatedMessageItemT } from './messages/chat-message';

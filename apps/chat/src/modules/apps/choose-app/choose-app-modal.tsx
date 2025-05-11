@@ -1,8 +1,8 @@
 import { suppressEvent } from '@under-control/forms';
 
-import type { SdkAppT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkAppT, SdkTableRowWithIdT } from '@dashhub/sdk';
 
-import { findItemById } from '@llm/commons';
+import { findItemById } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { Modal, type ModalProps, ModalTitle, SelectRecordButton } from '~/ui';
 

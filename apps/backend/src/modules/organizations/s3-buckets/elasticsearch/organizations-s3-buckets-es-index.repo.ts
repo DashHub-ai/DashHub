@@ -6,7 +6,7 @@ import { inject, injectable } from 'tsyringe';
 import type { NormalizeSelectTableRow, TableId, TableWithIdNameColumn } from '~/modules/database';
 import type { S3ResourcesBucketTableRow } from '~/modules/s3';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { tryOrThrowTE } from '@dashhub/commons';
 import {
   createArchivedRecordMappings,
   createAutocompleteFieldAnalyzeSettings,

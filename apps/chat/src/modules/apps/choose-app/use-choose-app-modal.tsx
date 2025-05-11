@@ -1,6 +1,6 @@
-import type { SdkAppT } from '@llm/sdk';
+import type { SdkAppT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   ChooseAppModal,

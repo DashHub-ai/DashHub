@@ -1,4 +1,4 @@
-import type { SdkTableRowWithIdNameT } from '@llm/sdk';
+import type { SdkTableRowWithIdNameT } from '@dashhub/sdk';
 
 import { ChooseButton } from './choose-button';
 

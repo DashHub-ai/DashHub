@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import type { Nullable } from '@llm/commons';
+import type { Nullable } from '@dashhub/commons';
 
 import { useRefSafeCallback } from './use-ref-safe-callback';
 import {

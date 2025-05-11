@@ -2,7 +2,7 @@ import { ArrowRight, Send, Sparkles, Wand2 } from 'lucide-react';
 import { memo } from 'react';
 import { Link } from 'wouter';
 
-import { getSdkAppMentionInChat, type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@llm/sdk';
+import { getSdkAppMentionInChat, type SdkTableRowWithIdNameT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useCachedAppLookup } from '~/modules/apps/use-cached-app-lookup';
 import { useSitemap } from '~/routes/use-sitemap';

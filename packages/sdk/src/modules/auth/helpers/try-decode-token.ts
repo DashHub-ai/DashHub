@@ -2,7 +2,7 @@ import { either as E } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { jwtDecode } from 'jwt-decode';
 
-import { TaggedError, tryParseUsingZodSchema } from '@llm/commons';
+import { TaggedError, tryParseUsingZodSchema } from '@dashhub/commons';
 
 import { SdkJwtTokenV } from '../dto';
 

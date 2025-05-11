@@ -7,7 +7,7 @@ import type {
   SdkOffsetPaginationOutputT,
   SdkTableRowWithIdT,
   SdkTableRowWithUuidT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { PaginationFooter, type PaginationFooterProps } from '../pagination';
 import { SpinnerContainer } from '../spinner-container';

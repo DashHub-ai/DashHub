@@ -1,6 +1,6 @@
-import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
+import type { SdkPermissionT, SdkUserListItemT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import { ShareResourceFormModal } from './share-resource-form-modal';
 

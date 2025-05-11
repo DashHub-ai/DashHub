@@ -6,7 +6,7 @@ import type {
   SdkJwtTokenT,
   SdkSearchChatsInputT,
   SdkUpdateChatInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import type { PermissionsService } from '~/modules/permissions';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';

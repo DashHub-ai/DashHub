@@ -1,7 +1,7 @@
 import type { TaskEither } from 'fp-ts/lib/TaskEither';
 
-import type { TaggedError } from '@llm/commons';
-import type { SdkSearchAIModelItemT } from '@llm/sdk';
+import type { TaggedError } from '@dashhub/commons';
+import type { SdkSearchAIModelItemT } from '@dashhub/sdk';
 import type { UploadFilePayload } from '~/modules/s3';
 
 import type { ProjectEmbeddingsInsertTableRow } from '../../projects-embeddings.tables';

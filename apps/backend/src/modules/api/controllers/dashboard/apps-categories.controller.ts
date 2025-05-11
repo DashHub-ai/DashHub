@@ -6,7 +6,7 @@ import {
   SdkCreateAppCategoryInputV,
   SdkSearchAppsCategoriesInputV,
   SdkUpdateAppCategoryInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { AppsCategoriesService } from '~/modules/apps-categories';
 import { ConfigService } from '~/modules/config';
 

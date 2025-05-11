@@ -1,7 +1,7 @@
 import * as E from 'fp-ts/lib/Either';
 import { flow } from 'fp-ts/lib/function';
 
-import { Time } from '@llm/commons';
+import { Time } from '@dashhub/commons';
 
 import { ofUnsafeToken } from './of-unsafe-token';
 

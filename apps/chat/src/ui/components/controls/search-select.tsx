@@ -8,8 +8,8 @@ import { pipe } from 'fp-ts/lib/function';
 import { SearchIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 
-import { type CanBePromise, isObjectWithFakeID, rejectById } from '@llm/commons';
-import { useAsyncDebounce, useAsyncValue, useUpdateEffect } from '@llm/commons-front';
+import { type CanBePromise, isObjectWithFakeID, rejectById } from '@dashhub/commons';
+import { useAsyncDebounce, useAsyncValue, useUpdateEffect } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 
 import { SpinnerContainer } from '../spinner-container';

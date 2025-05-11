@@ -5,7 +5,7 @@ import {
   SdkSearchProjectsInputV,
   useSdkForLoggedIn,
   useSdkSubscribePinnedMessagesOrThrow,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   PaginatedList,

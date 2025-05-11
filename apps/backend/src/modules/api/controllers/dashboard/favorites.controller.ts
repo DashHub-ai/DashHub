@@ -5,7 +5,7 @@ import {
   type FavoritesSdk,
   SdkSearchAllFavoritesInputV,
   SdkUpsertFavoriteInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { UsersFavoritesService } from '~/modules/users-favorites';
 

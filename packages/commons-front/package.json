@@ -1,5 +1,5 @@
 {
-  "name": "@llm/commons-front",
+  "name": "@dashhub/commons-front",
   "type": "module",
   "version": "1.0.0",
   "private": true,
@@ -25,7 +25,7 @@
     "check:types": "tsc"
   },
   "dependencies": {
-    "@llm/commons": "*",
+    "@dashhub/commons": "*",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
     "react": "^19.0.0",

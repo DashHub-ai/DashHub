@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 
 import { ZapIcon } from 'lucide-react';
 
-import { formatDate } from '@llm/commons';
-import { type SdkSearchAIExternalAPIItemT, useSdkForLoggedIn } from '@llm/sdk';
+import { formatDate } from '@dashhub/commons';
+import { type SdkSearchAIExternalAPIItemT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { CardRecordPermissions } from '~/modules/permissions';
 import { useSitemap } from '~/routes';
 import {

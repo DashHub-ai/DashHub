@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { z } from 'zod';
 
-import { useLocalStorageObject } from '@llm/commons-front';
+import { useLocalStorageObject } from '@dashhub/commons-front';
 import { type SdkFavoriteT, type SdkFavoriteTypeT, SdkFavoriteV } from '~/modules';
 
 import { useSdkOnFavoriteAction } from './use-sdk-on-favorite-action';

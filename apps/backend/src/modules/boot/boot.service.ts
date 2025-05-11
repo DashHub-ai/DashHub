@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { runTask, tapTaskEither, tryOrThrowTE } from '@llm/commons';
+import { runTask, tapTaskEither, tryOrThrowTE } from '@dashhub/commons';
 import { isPremiumEnabled } from '~/commercial/index';
 
 import { HttpServerService } from '../api';

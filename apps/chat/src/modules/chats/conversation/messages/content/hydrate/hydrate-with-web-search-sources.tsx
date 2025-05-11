@@ -1,6 +1,6 @@
-import type { SdkMessageWebSearchItemT } from '@llm/sdk';
+import type { SdkMessageWebSearchItemT } from '@dashhub/sdk';
 
-import { decodeHtmlEntities } from '@llm/commons';
+import { decodeHtmlEntities } from '@dashhub/commons';
 import { WebSearchChatBadge } from '~/modules/chats/content-badges';
 
 import {

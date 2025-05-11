@@ -8,7 +8,7 @@ import {
   getFirstObjKeyValue,
   TaggedError,
   tapTaskEitherTE,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import type {
   EsBaseDocument,

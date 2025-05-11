@@ -1,4 +1,4 @@
-import type { SdkSearchEngineT } from '@llm/sdk';
+import type { SdkSearchEngineT } from '@dashhub/sdk';
 
 import { SerperProxy } from './serper-proxy';
 

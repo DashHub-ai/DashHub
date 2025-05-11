@@ -1,4 +1,4 @@
-import type { SdkUserAccessPermissionsDescriptor } from '@llm/sdk';
+import type { SdkUserAccessPermissionsDescriptor } from '@dashhub/sdk';
 
 export type WithPermissionsInternalFilters<O = unknown> = O & {
   satisfyPermissions?: SdkUserAccessPermissionsDescriptor;

@@ -3,9 +3,9 @@ import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import { Link } from 'wouter';
 
-import type { CanBePromise } from '@llm/commons';
+import type { CanBePromise } from '@dashhub/commons';
 
-import { useAsyncCallback } from '@llm/commons-front';
+import { useAsyncCallback } from '@dashhub/commons-front';
 
 export type CardBigActionButtonProps = {
   href?: string;

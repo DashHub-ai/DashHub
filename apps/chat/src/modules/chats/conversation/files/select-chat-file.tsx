@@ -1,4 +1,4 @@
-import { selectFile } from '@llm/commons';
+import { selectFile } from '@dashhub/commons';
 
 export const ACCEPTED_CHAT_FILE_TYPES = [
   '.pdf',

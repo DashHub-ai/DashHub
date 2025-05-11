@@ -14,11 +14,11 @@ import {
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
-import type { SdkAIModelT, SdkMessageT } from '@llm/sdk';
+import type { SdkAIModelT, SdkMessageT } from '@dashhub/sdk';
 import type { TableId } from '~/modules/database';
 import type { SearchEnginesService } from '~/modules/search-engines';
 
-import { isDataUrl, rejectFalsyItems, tryOrThrowTE } from '@llm/commons';
+import { isDataUrl, rejectFalsyItems, tryOrThrowTE } from '@dashhub/commons';
 import { LoggerService } from '~/modules/logger';
 import { createWebSearchAIFunction, createWebSearchResultsPrompt } from '~/modules/prompts';
 

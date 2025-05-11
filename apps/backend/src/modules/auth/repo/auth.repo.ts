@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkCreateUserAuthMethodsT, SdkTableRowWithIdT, SdkUpdateUserAuthMethodsT } from '@llm/sdk';
+import type { SdkCreateUserAuthMethodsT, SdkTableRowWithIdT, SdkUpdateUserAuthMethodsT } from '@dashhub/sdk';
 
 import { DatabaseConnectionRepo, type TransactionalAttrs, tryReuseOrCreateTransaction } from '~/modules/database';
 

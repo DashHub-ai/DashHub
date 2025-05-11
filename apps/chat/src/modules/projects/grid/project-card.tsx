@@ -1,10 +1,10 @@
 import { flow } from 'fp-ts/lib/function';
 import { FolderIcon, FolderOpenIcon } from 'lucide-react';
 
-import type { SdkProjectT } from '@llm/sdk';
+import type { SdkProjectT } from '@dashhub/sdk';
 
-import { formatDate, runTask, tapTaskOption } from '@llm/commons';
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { formatDate, runTask, tapTaskOption } from '@dashhub/commons';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { CardRecordPermissionsRow } from '~/modules/permissions/card';
 import { useSitemap } from '~/routes';

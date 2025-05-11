@@ -5,8 +5,8 @@ RUN apk add --no-cache python3 make g++ gcc \
 
 WORKDIR /app
 
-COPY yarn.lock .
+COPY package-lock.json .
 
-RUN yarn install
+RUN npm install --no-audit --no-fund
 
 CMD ["yarn", "dev"]

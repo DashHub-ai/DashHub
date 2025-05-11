@@ -1,6 +1,6 @@
 import type { ColumnType } from 'kysely';
 
-import type { SdkAIExternalAPISchemaT } from '@llm/sdk';
+import type { SdkAIExternalAPISchemaT } from '@dashhub/sdk';
 
 import type {
   NormalizeSelectTableRow,

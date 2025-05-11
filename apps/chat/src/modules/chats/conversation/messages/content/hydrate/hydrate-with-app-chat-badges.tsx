@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { rejectFalsyItems } from '@llm/commons';
+import { rejectFalsyItems } from '@dashhub/commons';
 import { AppChatBadge, type AppChatBadgeProps } from '~/modules/apps/chat/app-chat-badge';
 
 import type { ContentHydrator } from './hydrate-result';

@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { SdkUpsertOrganizationAISettingsInputT } from '@llm/sdk';
+import { SdkUpsertOrganizationAISettingsInputT } from '@dashhub/sdk';
 
 import { TableRowWithId } from '../database';
 import { ProjectsService } from '../projects';

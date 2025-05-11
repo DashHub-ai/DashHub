@@ -2,14 +2,14 @@ import type { TaskEither } from 'fp-ts/lib/TaskEither';
 
 import { pipe } from 'fp-ts/lib/function';
 
-import { createStoreSubscriber, type StoreSubscriber, tryOrThrowTE } from '@llm/commons';
-import { useRefSafeCallback } from '@llm/commons-front';
+import { createStoreSubscriber, type StoreSubscriber, tryOrThrowTE } from '@dashhub/commons';
+import { useRefSafeCallback } from '@dashhub/commons-front';
 import {
   type SdkChatT,
   type SdkRequestAIReplyInputT,
   type SdkTableRowWithUuidT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 
 export type AIStreamContent = {

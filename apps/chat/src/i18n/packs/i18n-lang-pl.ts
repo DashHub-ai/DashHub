@@ -4,7 +4,7 @@ import type {
   SdkPermissionAccessLevelT,
   SdkSearchEngineProviderT,
   SdkTranslatedErrors,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import type { I18nLangPack } from './i18n-packs';
 

@@ -1,6 +1,6 @@
 import type { SdkUpsertFavoriteInputT } from '~/modules';
 
-import { useWindowListener } from '@llm/commons-front';
+import { useWindowListener } from '@dashhub/commons-front';
 
 export function useSdkOnFavoriteAction(
   onHandle: (action: FavoriteActionName, favorite: SdkUpsertFavoriteInputT) => void,

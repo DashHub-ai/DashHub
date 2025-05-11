@@ -4,10 +4,10 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkSearchProjectEmbeddingItemT, SdkSearchProjectEmbeddingsInputT } from '@llm/sdk';
+import type { SdkSearchProjectEmbeddingItemT, SdkSearchProjectEmbeddingsInputT } from '@dashhub/sdk';
 import type { TableId, TableRowWithId, TableUuid } from '~/modules/database';
 
-import { pluck, rejectFalsyItems } from '@llm/commons';
+import { pluck, rejectFalsyItems } from '@dashhub/commons';
 import { createMagicNullIdEsValue, createPaginationOffsetSearchQuery, createScoredSortFieldQuery } from '~/modules/elasticsearch';
 import { createEsPermissionsFilters, mapRawEsDocToSdkPermissions, type WithPermissionsInternalFilters } from '~/modules/permissions';
 

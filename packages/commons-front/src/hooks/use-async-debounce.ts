@@ -5,7 +5,7 @@ import {
   asyncDebounce,
   type AsyncDebounceConfig,
   type AsyncDebouncedCallback,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import { useRefSafeCallback } from './use-ref-safe-callback';
 

@@ -1,7 +1,7 @@
 import type { taskEither as TE } from 'fp-ts';
 import type { z } from 'zod';
 
-import type { SdkAIExternalAPIEndpointT, SdkAIModelT, SdkCreateMessageInputT, SdkMessageRoleT, SdkMessageT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkAIExternalAPIEndpointT, SdkAIModelT, SdkCreateMessageInputT, SdkMessageRoleT, SdkMessageT, SdkTableRowWithIdT } from '@dashhub/sdk';
 import type { TableId, TableRowWithId } from '~/modules/database';
 import type { SearchEnginesService } from '~/modules/search-engines';
 import type { SearchEngineResultItem } from '~/modules/search-engines/clients/search-engine-proxy';

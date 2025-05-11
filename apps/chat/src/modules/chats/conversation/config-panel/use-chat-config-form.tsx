@@ -1,14 +1,14 @@
 import { type FormHookAttrs, type Overwrite, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
-import { runTask, tapTaskEither } from '@llm/commons';
+import { runTask, tapTaskEither } from '@dashhub/commons';
 import {
   castSdkChatSummaryToUpdateInput,
   type SdkChatT,
   type SdkPermissionT,
   type SdkTableRowWithUuidT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useSaveTaskEitherNotification } from '~/ui';
 
 type UpdateChatFormValue = Overwrite<SdkChatT & SdkTableRowWithUuidT, {

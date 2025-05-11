@@ -1,7 +1,7 @@
 import { type either as E, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
-import { type TaggedError, tapTaskEither } from '@llm/commons';
+import { type TaggedError, tapTaskEither } from '@dashhub/commons';
 import { type APIRequestAttrs, performApiRequest, type SdkApiRequestErrors } from '~/shared';
 
 import type { AuthSdk } from './auth.sdk';

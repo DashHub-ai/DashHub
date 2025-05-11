@@ -1,5 +1,5 @@
 {
-  "name": "@llm/backend",
+  "name": "@dashhub/backend",
   "type": "module",
   "version": "1.0.0",
   "scripts": {
@@ -23,7 +23,7 @@
     "@google/generative-ai": "^0.24.0",
     "@hono/node-server": "^1.13.7",
     "@instructor-ai/instructor": "^1.6.0",
-    "@llm/sdk": "*",
+    "@dashhub/sdk": "*",
     "@types/bcryptjs": "^2.4.6",
     "@types/mime-types": "^2.1.0",
     "@types/object-hash": "^3.0.6",

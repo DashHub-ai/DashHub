@@ -1,4 +1,4 @@
-import type { Nullable } from '@llm/commons';
+import type { Nullable } from '@dashhub/commons';
 
 type Props = {
   isFilled: Nullable<boolean>;
@@ -11,7 +11,7 @@ export function HiddenRequiredInput({ isFilled }: Props) {
 
   return (
     <input
-      className="opacity-0 h-[1px] border-none block pointer-events-none"
+      className="block opacity-0 border-none h-[1px] pointer-events-none"
       required
     />
   );

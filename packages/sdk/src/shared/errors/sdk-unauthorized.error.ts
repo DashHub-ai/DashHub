@@ -1,6 +1,6 @@
 import { either as E, taskEither as TE } from 'fp-ts';
 
-import { TaggedError } from '@llm/commons';
+import { TaggedError } from '@dashhub/commons';
 
 export class SdkUnauthorizedError extends TaggedError.ofLiteral<any>()('SdkUnauthorizedError') {
   readonly httpCode = 401;

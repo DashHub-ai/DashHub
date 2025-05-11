@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { StrictNullableBooleanV } from '@llm/commons';
+import { StrictNullableBooleanV } from '@dashhub/commons';
 
 import { SdkIdsArrayV } from './sdk-ids-array.dto';
 import { SdkUuidsArrayV } from './sdk-uuids-array.dto';

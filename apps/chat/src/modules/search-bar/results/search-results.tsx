@@ -1,6 +1,6 @@
 import { BotIcon, FolderIcon, MessageSquareTextIcon } from 'lucide-react';
 
-import { useDebounceValue } from '@llm/commons-front';
+import { useDebounceValue } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
 import { NoItemsPlaceholder, SpinnerContainer } from '~/ui';

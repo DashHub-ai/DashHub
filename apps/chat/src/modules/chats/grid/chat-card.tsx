@@ -1,8 +1,8 @@
 import { ArchiveIcon, FolderIcon, Loader2Icon, MessageSquareIcon } from 'lucide-react';
 import { Link } from 'wouter';
 
-import { formatDate } from '@llm/commons';
-import { isSdkAIGeneratingString, type SdkSearchChatItemT } from '@llm/sdk';
+import { formatDate } from '@dashhub/commons';
+import { isSdkAIGeneratingString, type SdkSearchChatItemT } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { FavoriteStarButton } from '~/modules/favorites';
 import { CardRecordPermissionsRow } from '~/modules/permissions/card';

@@ -6,9 +6,9 @@ import {
   StarIcon,
 } from 'lucide-react';
 
-import type { SdkExpertT } from '@llm/sdk';
+import type { SdkExpertT } from '@dashhub/sdk';
 
-import { formatDate } from '@llm/commons';
+import { formatDate } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 
 type ExpertCardProps = {
@@ -45,7 +45,7 @@ export function ExpertCard({ expert }: ExpertCardProps) {
         </div>
         <h3 className="font-medium">{expert.name}</h3>
       </div>
-      <p className="flex-1 mb-2 line-clamp-2 text-muted-foreground text-sm">
+      <p className="flex-1 mb-2 text-muted-foreground text-sm line-clamp-2">
         {expert.description}
       </p>
 

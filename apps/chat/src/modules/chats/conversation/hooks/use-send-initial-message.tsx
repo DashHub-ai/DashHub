@@ -2,9 +2,9 @@ import type { z } from 'zod';
 
 import { pipe } from 'fp-ts/lib/function';
 
-import { tapEither, tryParseUsingZodSchema } from '@llm/commons';
-import { useAfterMount } from '@llm/commons-front';
-import { SdkCreateMessageInputV, SdkTableRowWithIdNameV } from '@llm/sdk';
+import { tapEither, tryParseUsingZodSchema } from '@dashhub/commons';
+import { useAfterMount } from '@dashhub/commons-front';
+import { SdkCreateMessageInputV, SdkTableRowWithIdNameV } from '@dashhub/sdk';
 
 const InitialChatMessageV = SdkCreateMessageInputV
   .omit({

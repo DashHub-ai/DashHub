@@ -1,6 +1,6 @@
-import type { SdkAIModelT } from '@llm/sdk';
+import type { SdkAIModelT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   AIModelUpdateFormModal,

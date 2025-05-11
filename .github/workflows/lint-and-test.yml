@@ -19,9 +19,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: yarn
+          cache: npm
 
-      - run: yarn install --frozen-lockfile
+      - run: npm ci
 
       - uses: actions/cache@v4
         with:
@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             turbo-${{ github.job }}-${{ github.ref_name }}-
 
-      - run: yarn run build
-      - run: yarn run check:types
-      - run: yarn run lint
-      - run: yarn run test
+      - run: npm run build
+      - run: npm run check:types
+      - run: npm run lint
+      - run: npm run test

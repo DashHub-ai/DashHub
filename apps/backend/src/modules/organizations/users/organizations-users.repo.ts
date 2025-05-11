@@ -1,9 +1,9 @@
 import { flow, pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
 
-import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+import type { SdkOrganizationUserRoleT } from '@dashhub/sdk';
 
-import { mapAsyncIterator, pluck } from '@llm/commons';
+import { mapAsyncIterator, pluck } from '@dashhub/commons';
 import { createDatabaseRepo, type TableId, type TransactionalAttrs } from '~/modules/database';
 
 type OrganizationUsersIteratorAttrs = {

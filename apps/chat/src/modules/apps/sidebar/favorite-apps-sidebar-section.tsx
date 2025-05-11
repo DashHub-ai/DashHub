@@ -1,9 +1,9 @@
 import { pipe } from 'fp-ts/lib/function';
 import { HeartIcon } from 'lucide-react';
 
-import { tryOrThrowTE } from '@llm/commons';
-import { useAsyncValue } from '@llm/commons-front';
-import { useSdkForLoggedIn, useSdkOnFavoriteAction } from '@llm/sdk';
+import { tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncValue } from '@dashhub/commons-front';
+import { useSdkForLoggedIn, useSdkOnFavoriteAction } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import {
   type SidebarLinkItem,

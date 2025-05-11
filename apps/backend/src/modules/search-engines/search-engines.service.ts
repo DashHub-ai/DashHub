@@ -7,14 +7,14 @@ import type {
   SdkJwtTokenT,
   SdkTableRowIdT,
   SdkUpdateSearchEngineInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import {
   asyncIteratorToVoidPromise,
   runTaskAsVoid,
   tapAsyncIterator,
   tryOrThrowTE,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId } from '../database';

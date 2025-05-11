@@ -1,6 +1,6 @@
-import type { SdkCreateOrganizationInputT } from '@llm/sdk';
+import type { SdkCreateOrganizationInputT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   OrganizationCreateFormModal,

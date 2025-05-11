@@ -5,7 +5,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { OpenAI } from 'openai';
 
-import type { SdkAIModelT, SdkMessageT } from '@llm/sdk';
+import type { SdkAIModelT, SdkMessageT } from '@dashhub/sdk';
 import type { TableId } from '~/modules/database';
 import type { SearchEnginesService } from '~/modules/search-engines';
 import type { SearchEngineResultItem } from '~/modules/search-engines/clients/search-engine-proxy';
@@ -17,7 +17,7 @@ import {
   rejectFalsyItems,
   tapAsyncIterator,
   tryOrThrowTE,
-} from '@llm/commons';
+} from '@dashhub/commons';
 import { LoggerService } from '~/modules/logger';
 import {
   createWebSearchAIFunction,

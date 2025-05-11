@@ -2,7 +2,7 @@ import { option as O, task as T, type taskOption as TO } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { useContext, useRef, useState } from 'react';
 
-import type { Nullable } from '@llm/commons';
+import type { Nullable } from '@dashhub/commons';
 
 import type { ModalShowConfig } from './modals-context-config.types';
 

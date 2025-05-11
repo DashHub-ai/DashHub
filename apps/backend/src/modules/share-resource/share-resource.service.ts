@@ -6,9 +6,9 @@ import type {
   SdkJwtTokenT,
   SdkSearchShareResourceUsersGroupsInputT,
   SdkSearchShareResourceUsersGroupsOutputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { pluckTyped, rejectById } from '@llm/commons';
+import { pluckTyped, rejectById } from '@dashhub/commons';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableRowWithId } from '../database';

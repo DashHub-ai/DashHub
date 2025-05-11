@@ -1,10 +1,10 @@
 import { controlled, useControlStrict } from '@under-control/forms';
 import { pipe } from 'fp-ts/lib/function';
 
-import type { SdkOffsetPaginationInputT, SdkUserListItemT } from '@llm/sdk';
+import type { SdkOffsetPaginationInputT, SdkUserListItemT } from '@dashhub/sdk';
 
-import { tapTaskOption } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
+import { tapTaskOption } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 import { GhostPlaceholder } from '~/modules/shared';
 import { useChooseUsersModal } from '~/modules/users/choose-users';

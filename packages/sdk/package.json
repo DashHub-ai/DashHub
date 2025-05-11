@@ -1,5 +1,5 @@
 {
-  "name": "@llm/sdk",
+  "name": "@dashhub/sdk",
   "type": "module",
   "version": "1.0.0",
   "private": true,
@@ -25,8 +25,8 @@
     "check:types": "tsc"
   },
   "dependencies": {
-    "@llm/commons": "*",
-    "@llm/commons-front": "*",
+    "@dashhub/commons": "*",
+    "@dashhub/commons-front": "*",
     "fp-ts": "^2.16.1",
     "jwt-decode": "^4.0.0",
     "react": "^19.0.0",

@@ -1,4 +1,4 @@
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import type { CreateUsersGroupValue } from './types';

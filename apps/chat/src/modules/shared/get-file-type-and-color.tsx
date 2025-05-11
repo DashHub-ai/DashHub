@@ -12,7 +12,7 @@ import {
   isPDFFileUrl,
   isSpreadsheetFileUrl,
   isWordFileUrl,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 export function getFileTypeAndColor(url: string) {
   if (isSpreadsheetFileUrl(url)) {

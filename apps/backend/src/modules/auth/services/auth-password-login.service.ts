@@ -2,8 +2,8 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { catchTaskEitherTagError } from '@llm/commons';
-import { SdkIncorrectUsernameOrPasswordError, type SdkPasswordLoginInputT } from '@llm/sdk';
+import { catchTaskEitherTagError } from '@dashhub/commons';
+import { SdkIncorrectUsernameOrPasswordError, type SdkPasswordLoginInputT } from '@dashhub/sdk';
 import { UsersRepo } from '~/modules/users';
 
 import { tryComparePasswords } from '../helpers';

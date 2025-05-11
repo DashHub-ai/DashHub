@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 
-import type { SdkSearchProjectsInputT, SdkSearchProjectsOutputT } from '@llm/sdk';
+import type { SdkSearchProjectsInputT, SdkSearchProjectsOutputT } from '@dashhub/sdk';
 
 import { useWorkspaceOrganization } from '~/modules/workspace';
 import { createSdkAutocomplete } from '~/ui';

@@ -11,7 +11,7 @@ import {
   TaggedError,
   tapTaskEither,
   tapTaskEitherError,
-} from '@llm/commons';
+} from '@dashhub/commons';
 import { useSdkForLoggedIn } from '~/react-integration/hooks';
 
 import { useSdkFavoritesContextOrThrow } from '../sdk-favorites-context';

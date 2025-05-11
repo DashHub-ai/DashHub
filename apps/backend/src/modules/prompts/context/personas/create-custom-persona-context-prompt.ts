@@ -1,4 +1,4 @@
-import { type Nullable, rejectFalsyItems } from '@llm/commons';
+import { type Nullable, rejectFalsyItems } from '@dashhub/commons';
 
 import { xml } from '../../xml';
 import { personaXML } from './persona-xml-tag';

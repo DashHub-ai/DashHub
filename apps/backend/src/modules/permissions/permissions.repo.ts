@@ -9,7 +9,7 @@ import type {
   SdkPermissionResourceT,
   SdkPermissionResourceTypeT,
   SdkUpsertPermissionsT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import type { PermissionInsertTableRow, PermissionTableRow } from './permissions.tables';
 

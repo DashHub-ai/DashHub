@@ -6,7 +6,7 @@ import * as O from 'fp-ts/lib/Option';
 import { CheckIcon } from 'lucide-react';
 import { z } from 'zod';
 
-import { useLocalStorageObject } from '@llm/commons-front';
+import { useLocalStorageObject } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 
 type TutorialBoxVariant = 'amber' | 'blue' | 'green' | 'red';
@@ -116,7 +116,7 @@ export function TutorialBox(
         {title}
       </h2>
 
-      <div className="relative z-10 space-y-2 text-gray-600 text-sm">
+      <div className="z-10 relative space-y-2 text-gray-600 text-sm">
         {children}
       </div>
 
@@ -130,7 +130,7 @@ export function TutorialBox(
               BUTTON_STYLES[variant],
             )}
           >
-            <CheckIcon size={16} className="relative top-[2px] mr-2" />
+            <CheckIcon size={16} className="top-[2px] relative mr-2" />
             {t.gotIt}
           </button>
         </div>

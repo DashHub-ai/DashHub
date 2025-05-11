@@ -1,4 +1,4 @@
-import type { SdkJwtTokenT, SdkSearchShareResourceUsersGroupsInputT } from '@llm/sdk';
+import type { SdkJwtTokenT, SdkSearchShareResourceUsersGroupsInputT } from '@dashhub/sdk';
 
 import type { ShareResourceService } from './share-resource.service';
 

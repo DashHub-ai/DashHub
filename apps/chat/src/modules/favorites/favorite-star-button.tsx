@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import { pipe } from 'fp-ts/lib/function';
 import { StarIcon } from 'lucide-react';
 
-import { tapTaskEither, toVoidTE, tryOrThrowTE } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
-import { type SdkFavoriteT, useIsSdkFavoriteToggled, useSdkToggleFavorite } from '@llm/sdk';
+import { tapTaskEither, toVoidTE, tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
+import { type SdkFavoriteT, useIsSdkFavoriteToggled, useSdkToggleFavorite } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useSaveErrorNotification } from '~/ui';
 

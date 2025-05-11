@@ -1,4 +1,4 @@
-import type { CamelCaseToSnakeCaseObject } from '@llm/commons';
+import type { CamelCaseToSnakeCaseObject } from '@dashhub/commons';
 
 /**
  * Elasticsearch document id

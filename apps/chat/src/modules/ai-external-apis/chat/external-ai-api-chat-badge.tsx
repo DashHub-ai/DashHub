@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { ZapIcon } from 'lucide-react';
 import { memo, useMemo } from 'react';
 
-import type { SdkTableRowIdT } from '@llm/sdk';
+import type { SdkTableRowIdT } from '@dashhub/sdk';
 
 import { useCachedExternalAIApiLookup } from '../use-cached-external-api-lookup';
 

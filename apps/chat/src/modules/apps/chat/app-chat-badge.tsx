@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { CheckIcon, WandSparklesIcon } from 'lucide-react';
 import { memo } from 'react';
 
-import type { SdkTableRowIdT } from '@llm/sdk';
+import type { SdkTableRowIdT } from '@dashhub/sdk';
 
 import { useCachedAppLookup } from '../use-cached-app-lookup';
 

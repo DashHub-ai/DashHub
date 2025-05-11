@@ -8,10 +8,10 @@ import type {
   SdkChatsSortT,
   SdkSearchChatItemT,
   SdkSearchChatsInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import type { TableId, TableUuid } from '~/modules/database';
 
-import { isNil, pluck, pluckIds, rejectFalsyItems } from '@llm/commons';
+import { isNil, pluck, pluckIds, rejectFalsyItems } from '@dashhub/commons';
 import {
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,

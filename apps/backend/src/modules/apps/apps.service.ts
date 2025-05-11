@@ -9,14 +9,14 @@ import {
   tapAsyncIterator,
   tapTaskEitherErrorTE,
   tryOrThrowTE,
-} from '@llm/commons';
+} from '@dashhub/commons';
 import {
   SdkAppFromChatV,
   type SdkCreateAppInputT,
   type SdkJwtTokenT,
   type SdkTableRowIdT,
   type SdkUpdateAppInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ChatsSummariesService } from '~/modules/chats-summaries';
 
 import type { ExtractedFile } from '../api/helpers';

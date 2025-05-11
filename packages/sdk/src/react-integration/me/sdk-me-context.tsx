@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
-import type { StoreSubscriber } from '@llm/commons';
+import type { StoreSubscriber } from '@dashhub/commons';
 import type { SdkUserT, UsersMeSdk } from '~/modules';
 
-import { useContextOrThrow } from '@llm/commons-front';
+import { useContextOrThrow } from '@dashhub/commons-front';
 
 export type SdkMeSnapshotT =
   | { loading: true; }

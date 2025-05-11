@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import { pipe } from 'fp-ts/lib/function';
 import { KeyRoundIcon, MailIcon } from 'lucide-react';
 
-import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
-import { type SdkSearchUserItemT, useSdkForLoggedIn } from '@llm/sdk';
+import { formatDate, tapTaskEither, tapTaskOption } from '@dashhub/commons';
+import { type SdkSearchUserItemT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { OrganizationUserRoleBadge } from '~/modules/organizations';
 import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/ui';

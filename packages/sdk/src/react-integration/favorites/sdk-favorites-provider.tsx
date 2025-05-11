@@ -3,7 +3,7 @@ import { type PropsWithChildren, useEffect, useMemo } from 'react';
 
 import type { SdkTableRowIdT } from '~/shared';
 
-import { createStoreSubscriber, type Nullable, tapTaskEither } from '@llm/commons';
+import { createStoreSubscriber, type Nullable, tapTaskEither } from '@dashhub/commons';
 
 import { useSdk } from '../hooks';
 import { useSdkOptimisticFavoritesWatcher } from './hooks';

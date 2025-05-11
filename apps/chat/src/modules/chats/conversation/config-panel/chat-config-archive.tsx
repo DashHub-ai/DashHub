@@ -3,10 +3,10 @@ import { Trash2Icon } from 'lucide-react';
 import { memo } from 'react';
 import { useLocation } from 'wouter';
 
-import type { SdkChatT } from '@llm/sdk';
+import type { SdkChatT } from '@dashhub/sdk';
 
-import { tapTaskEither } from '@llm/commons';
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { tapTaskEither } from '@dashhub/commons';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useSitemap } from '~/routes';
 import { TutorialBox, useArchiveWithNotifications } from '~/ui';

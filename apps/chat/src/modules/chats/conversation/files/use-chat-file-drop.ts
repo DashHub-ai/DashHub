@@ -1,4 +1,4 @@
-import { useFileDrop, type UseFileDropProps } from '@llm/commons-front';
+import { useFileDrop, type UseFileDropProps } from '@dashhub/commons-front';
 
 import { ACCEPTED_CHAT_FILE_TYPES } from './select-chat-file';
 

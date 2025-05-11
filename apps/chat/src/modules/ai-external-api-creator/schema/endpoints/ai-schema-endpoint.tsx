@@ -1,7 +1,7 @@
 import { controlled } from '@under-control/forms';
 import { TrashIcon } from 'lucide-react';
 
-import type { SdkAIExternalAPIEndpointT } from '@llm/sdk';
+import type { SdkAIExternalAPIEndpointT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { FormField, Input, TextArea } from '~/ui';

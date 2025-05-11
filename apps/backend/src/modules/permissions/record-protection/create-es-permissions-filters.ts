@@ -1,8 +1,8 @@
 import esb from 'elastic-builder';
 
-import type { SdkUserAccessPermissionsDescriptor } from '@llm/sdk';
+import type { SdkUserAccessPermissionsDescriptor } from '@dashhub/sdk';
 
-import { rejectFalsyItems } from '@llm/commons';
+import { rejectFalsyItems } from '@dashhub/commons';
 
 export function createEsPermissionsFilters(
   descriptor: SdkUserAccessPermissionsDescriptor,

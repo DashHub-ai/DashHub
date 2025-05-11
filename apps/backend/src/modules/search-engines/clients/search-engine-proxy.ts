@@ -1,6 +1,6 @@
 import type { taskEither as TE } from 'fp-ts';
 
-import type { SdkSearchEngineT } from '@llm/sdk';
+import type { SdkSearchEngineT } from '@dashhub/sdk';
 
 import type { SearchEngineProxyError } from './search-engine-proxy.error';
 

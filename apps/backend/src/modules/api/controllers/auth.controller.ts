@@ -1,7 +1,7 @@
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { type AuthSdk, SdkPasswordLoginInputV, SdkRefreshJWTInputV } from '@llm/sdk';
+import { type AuthSdk, SdkPasswordLoginInputV, SdkRefreshJWTInputV } from '@dashhub/sdk';
 import { AuthJWTService, AuthPasswordLoginService } from '~/modules/auth';
 
 import { rejectUnsafeSdkErrors, sdkSchemaValidator, serializeSdkResponseTE } from '../helpers';

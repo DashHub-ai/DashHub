@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/lib/function';
 
-import { toVoidTE } from '@llm/commons';
+import { toVoidTE } from '@dashhub/commons';
 
 import type { DatabaseTablesWithId } from '../database.tables';
 import type { QueryBasicFactoryAttrs } from './query-basic-factory-attrs.type';

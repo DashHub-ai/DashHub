@@ -1,4 +1,4 @@
-import { TaggedError } from '@llm/commons';
+import { TaggedError } from '@dashhub/commons';
 
 export class SdkServerError extends TaggedError.ofLiteral<
   {

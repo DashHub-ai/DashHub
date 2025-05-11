@@ -8,7 +8,7 @@ import {
   type SdkAppT,
   SdkSearchAppsInputV,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,

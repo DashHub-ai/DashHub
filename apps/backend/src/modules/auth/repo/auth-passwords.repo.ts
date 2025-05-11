@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
 
-import type { SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkTableRowWithIdT } from '@dashhub/sdk';
 
 import {
   createDatabaseRepo,

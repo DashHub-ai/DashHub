@@ -7,7 +7,7 @@ import { identity, pipe } from 'fp-ts/lib/function';
 import hash from 'object-hash';
 import { inject } from 'tsyringe';
 
-import type { RelaxedId } from '@llm/commons';
+import type { RelaxedId } from '@dashhub/commons';
 
 import {
   delayTaskEither,
@@ -15,7 +15,7 @@ import {
   tapTaskEitherErrorTE,
   tapTaskEitherTE,
   tryOrThrowTE,
-} from '@llm/commons';
+} from '@dashhub/commons';
 import { LoggerService } from '~/modules/logger';
 
 import type { EsBaseDocument } from '../elasticsearch.type';
