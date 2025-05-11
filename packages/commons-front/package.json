@@ -23,7 +23,8 @@
     "test": "vitest --run --passWithNoTests --config ../../config/vite.config.pkg.ts",
     "test:watch": "vitest --watch --passWithNoTests --config ../../config/vite.config.pkg.ts",
     "lint": "eslint . --config ./eslint.config.mjs",
-    "check:types": "tsc"
+    "check:types": "tsc",
+    "publish:package": "npm run build && npm publish"
   },
   "dependencies": {
     "@dashhub/commons": "*",
@@ -33,6 +34,6 @@
     "react-dom": "^19.0.0"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }

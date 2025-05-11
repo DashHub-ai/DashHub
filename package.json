@@ -23,7 +23,7 @@
     "prepare": "husky",
     "test": "turbo run test --parallel",
     "test:watch": "turbo run test:watch --parallel",
-    "prepublishOnly": "npm run build"
+    "publish:packages": "turbo run publish:package"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.14.0",
