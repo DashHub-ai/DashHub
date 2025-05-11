@@ -19,11 +19,11 @@
     "pg-native": ">=3.0.1"
   },
   "devDependencies": {
+    "@dashhub/sdk": "*",
     "@elastic/elasticsearch": "^8.17.0",
     "@google/generative-ai": "^0.24.0",
     "@hono/node-server": "^1.13.7",
     "@instructor-ai/instructor": "^1.6.0",
-    "@dashhub/sdk": "*",
     "@types/bcryptjs": "^2.4.6",
     "@types/mime-types": "^2.1.0",
     "@types/object-hash": "^3.0.6",
