@@ -22,7 +22,8 @@
     "lint": "turbo lint --parallel",
     "prepare": "husky",
     "test": "turbo run test --parallel",
-    "test:watch": "turbo run test:watch --parallel"
+    "test:watch": "turbo run test:watch --parallel",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.14.0",

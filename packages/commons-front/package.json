@@ -2,7 +2,6 @@
   "name": "@dashhub/commons-front",
   "type": "module",
   "version": "1.0.0",
-  "private": true,
   "license": "Apache License 2.0",
   "exports": {
     ".": {
