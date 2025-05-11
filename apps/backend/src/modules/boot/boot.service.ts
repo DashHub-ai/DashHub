@@ -3,6 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import { runTask, tapTaskEither, tryOrThrowTE } from '@llm/commons';
+import { isPremiumEnabled } from '~/commercial/index';
 
 import { HttpServerService } from '../api';
 import { ChatSummariesCronJob } from '../chats-summaries';
@@ -44,6 +45,10 @@ export class BootService {
     const { config } = this.configService;
 
     logger.info('Booting application...');
+
+    if (isPremiumEnabled()) {
+      logger.info('✨ Thank you for using our premium version! We appreciate your support!');
+    }
 
     await pipe(
       config.database.migration.checkMigrationsOnStartup
