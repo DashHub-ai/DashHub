@@ -21,7 +21,7 @@ jobs:
           node-version: 22.x
           cache: npm
 
-      - run: npm ci
+      - run: npm ci --prefer-offline --no-audit
 
       - uses: actions/cache@v4
         with:
