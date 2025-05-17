@@ -148,7 +148,9 @@ function createApiRequestExecutor(
 
       // Build URL with path params and query string
       const url = pipe(
-        concatUrls(context.apiUrl, endpoint.path),
+        context.apiUrl
+          ? concatUrls(context.apiUrl, endpoint.path)
+          : endpoint.path,
         parameterizePath(requestConfig.path),
         withSearchParams(requestConfig.query),
       );
