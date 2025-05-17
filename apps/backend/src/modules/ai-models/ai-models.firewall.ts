@@ -9,7 +9,7 @@ import {
   type SdkJwtTokenT,
   type SdkSearchAIModelsInputT,
   type SdkUpdateAIModelInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { TableId, TableRowWithId } from '../database';

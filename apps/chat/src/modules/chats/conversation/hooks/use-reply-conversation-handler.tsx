@@ -1,8 +1,8 @@
 import { taskEither as TE } from 'fp-ts';
 import { identity, pipe } from 'fp-ts/lib/function';
 
-import { type Overwrite, timeoutTE, tryOrThrowTE } from '@llm/commons';
-import { usePromiseOptimisticResponse } from '@llm/commons-front';
+import { type Overwrite, timeoutTE, tryOrThrowTE } from '@dashhub/commons';
+import { usePromiseOptimisticResponse } from '@dashhub/commons-front';
 import {
   type SdkChatT,
   type SdkCreateMessageInputT,
@@ -11,7 +11,7 @@ import {
   type SdkSearchMessagesOutputT,
   type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { type AIStreamObservable, useAIResponseObservable } from './use-ai-response-observable';
 import {

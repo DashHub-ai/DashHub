@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
 
-import type { SdkTableRowIdT } from '@llm/sdk';
+import type { SdkTableRowIdT } from '@dashhub/sdk';
 
 import {
   type CacheWrapperStorageMap,
@@ -10,7 +10,7 @@ import {
   tapTask,
   Time,
   wrapWithCache,
-} from '@llm/commons';
+} from '@dashhub/commons';
 import {
   AbstractDatabaseRepo,
   DatabaseError,

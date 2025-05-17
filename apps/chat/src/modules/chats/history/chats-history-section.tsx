@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 
 import { ChatsContainer } from '../grid';
 

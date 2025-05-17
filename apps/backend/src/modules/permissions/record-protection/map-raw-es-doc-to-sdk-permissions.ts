@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 
-import type { CamelCaseToSnakeCaseObject } from '@llm/commons';
-import type { SdkPermissionsT, SdkPermissionT } from '@llm/sdk';
+import type { CamelCaseToSnakeCaseObject } from '@dashhub/commons';
+import type { SdkPermissionsT, SdkPermissionT } from '@dashhub/sdk';
 
 export type EsPermissionsDocument = CamelCaseToSnakeCaseObject<{
   inherited: SdkPermissionT[];

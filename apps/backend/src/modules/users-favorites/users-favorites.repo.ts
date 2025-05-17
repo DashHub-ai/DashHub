@@ -6,9 +6,9 @@ import type {
   SdkFavoriteT,
   SdkFavoriteTypeT,
   SdkUpsertFavoriteInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { rejectFalsyItems } from '@llm/commons';
+import { rejectFalsyItems } from '@dashhub/commons';
 import {
   AbstractDatabaseRepo,
   DatabaseError,

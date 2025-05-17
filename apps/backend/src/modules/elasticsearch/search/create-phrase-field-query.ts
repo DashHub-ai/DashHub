@@ -1,6 +1,6 @@
 import * as esb from 'elastic-builder';
 
-import { rejectFalsyItems } from '@llm/commons';
+import { rejectFalsyItems } from '@dashhub/commons';
 
 export function createPhraseFieldQuery(field: string = 'name') {
   return (phrase: string): esb.BoolQuery => {

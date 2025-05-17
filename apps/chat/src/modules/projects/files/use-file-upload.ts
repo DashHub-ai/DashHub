@@ -1,11 +1,11 @@
 import { taskEither as TE, taskOption as TO } from 'fp-ts';
 import { pipe } from 'fp-ts/function';
 
-import type { SdkTableRowIdT } from '@llm/sdk';
+import type { SdkTableRowIdT } from '@dashhub/sdk';
 
-import { tryOrThrowTE } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 import { selectChatFile } from '~/modules/chats/conversation/files/select-chat-file';
 import { useSaveTaskEitherNotification } from '~/ui';
 

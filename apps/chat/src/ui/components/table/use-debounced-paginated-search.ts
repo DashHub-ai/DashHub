@@ -10,16 +10,16 @@ import { pipe } from 'fp-ts/lib/function';
 
 import type {
   SdkOffsetPaginationInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { tryOrThrowTE } from '@dashhub/commons';
 import {
   type StateInUrlProps,
   useAsyncValue,
   useDebounceValue,
   useStateInUrl,
   useUpdateEffect,
-} from '@llm/commons-front';
+} from '@dashhub/commons-front';
 
 type OffsetPaginationWithPhrase = SdkOffsetPaginationInputT & {
   phrase?: string;

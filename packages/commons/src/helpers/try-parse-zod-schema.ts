@@ -24,3 +24,16 @@ export function tryParseUsingZodSchemaTE<S extends z.ZodType<unknown>>(schema: S
   return <E>(task: TE.TaskEither<any, E>): TE.TaskEither<ValidationError, z.infer<S>> =>
     pipe(task, TE.chainEitherKW(tryParseUsingZodSchema(schema)));
 }
+
+/**
+ * Try to parse a value using a Zod schema asynchronously.
+ *
+ * @param schema - The Zod schema to use.
+ */
+export function tryParseUsingZodSchemaAsync<S extends z.ZodType<unknown>>(schema: S) {
+  return (value: unknown): TE.TaskEither<ValidationError, z.infer<S>> =>
+    TE.tryCatch(
+      () => schema.parseAsync(value) as Promise<z.infer<S>>,
+      (error: any) => new ValidationError(error),
+    );
+}

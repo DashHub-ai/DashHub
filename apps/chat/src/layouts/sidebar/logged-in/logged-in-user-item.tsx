@@ -1,7 +1,7 @@
 import { Building2Icon, LogOut, Settings } from 'lucide-react';
 import { Link } from 'wouter';
 
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useHasWorkspaceOrganization } from '~/modules';
 import { useSitemap } from '~/routes';

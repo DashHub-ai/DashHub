@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 
 import type { SdkPinMessageInputT, SdkPinMessageListItemT } from '~/modules';
 
-import { isNil, TaggedError, tapTaskEither, tapTaskEitherError } from '@llm/commons';
+import { isNil, TaggedError, tapTaskEither, tapTaskEitherError } from '@dashhub/commons';
 import { useSdkForLoggedIn } from '~/react-integration/hooks';
 
 import { useSdkPinnedMessagesContextOrThrow } from '../sdk-pinned-messages-context';

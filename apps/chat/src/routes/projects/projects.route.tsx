@@ -1,8 +1,8 @@
 import { pipe } from 'fp-ts/lib/function';
 import { FolderPlusIcon } from 'lucide-react';
 
-import { tapTaskOption } from '@llm/commons';
-import { useAsyncCallback, useForceRerender } from '@llm/commons-front';
+import { tapTaskOption } from '@dashhub/commons';
+import { useAsyncCallback, useForceRerender } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { ProjectsContainer } from '~/modules';

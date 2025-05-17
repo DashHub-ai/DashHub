@@ -1,12 +1,12 @@
 import { pipe } from 'fp-ts/lib/function';
 
-import { tapTaskEither } from '@llm/commons';
+import { tapTaskEither } from '@dashhub/commons';
 import {
   castSdkProjectToUpdateInput,
   type SdkPermissionT,
   type SdkProjectT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import {
   PermissionAvatarsList,
   ShareResourceButton,

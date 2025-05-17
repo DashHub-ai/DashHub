@@ -1,9 +1,9 @@
 import { pipe } from 'fp-ts/lib/function';
 import { Redirect } from 'wouter';
 
-import { tryOrThrowTE } from '@llm/commons';
-import { useAsyncValue } from '@llm/commons-front';
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncValue } from '@dashhub/commons-front';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { MyOrganizationForm, useWorkspaceOrganizationOrThrow } from '~/modules';
 import { useSitemap } from '~/routes/use-sitemap';

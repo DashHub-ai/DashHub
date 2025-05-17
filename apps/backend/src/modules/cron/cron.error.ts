@@ -1,4 +1,4 @@
-import { TaggedError } from '@llm/commons';
+import { TaggedError } from '@dashhub/commons';
 
 /**
  * Error that occurs when a cron job fails.

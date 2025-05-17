@@ -1,6 +1,6 @@
 import bcryptjs from 'bcryptjs';
 
-import { TaggedError } from '@llm/commons';
+import { TaggedError } from '@dashhub/commons';
 
 export const SALT_ROUNDS = 10;
 

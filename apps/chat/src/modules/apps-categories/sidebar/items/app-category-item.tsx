@@ -1,9 +1,9 @@
 import { EllipsisIcon } from 'lucide-react';
 import { useState } from 'react';
 
-import type { SdkCountedAppCategoryTreeNodeT, SdkTableRowIdT } from '@llm/sdk';
+import type { SdkCountedAppCategoryTreeNodeT, SdkTableRowIdT } from '@dashhub/sdk';
 
-import { format } from '@llm/commons';
+import { format } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { LazyIcon } from '~/modules/shared';
 
@@ -92,7 +92,7 @@ export function AppCategoryItem(
             <button
               type="button"
               onClick={() => setShowAll(true)}
-              className="px-3 py-1 w-full text-left text-muted-foreground text-xs hover:text-foreground"
+              className="px-3 py-1 w-full text-muted-foreground hover:text-foreground text-xs text-left"
             >
               {format(t.showMore, {
                 count: children.length - itemsLimit,

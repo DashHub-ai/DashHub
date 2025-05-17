@@ -1,6 +1,6 @@
-import type { SdkS3BucketT } from '@llm/sdk';
+import type { SdkS3BucketT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   S3BucketUpdateFormModal,

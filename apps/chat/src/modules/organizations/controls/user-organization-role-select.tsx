@@ -1,8 +1,8 @@
 import { controlled, type OmitControlStateAttrs } from '@under-control/forms';
 
-import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+import type { SdkOrganizationUserRoleT } from '@dashhub/sdk';
 
-import { findItemById } from '@llm/commons';
+import { findItemById } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { Select, type SelectProps } from '~/ui';
 

@@ -1,6 +1,6 @@
 import { flow } from 'fp-ts/lib/function';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type { SdkJwtTokenT } from '@dashhub/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 

@@ -2,7 +2,7 @@ import type { TaskEither } from 'fp-ts/TaskEither';
 
 import { pipe } from 'fp-ts/lib/function';
 
-import { type TaggedError, tapTaskEither } from '@llm/commons';
+import { type TaggedError, tapTaskEither } from '@dashhub/commons';
 
 import { useSaveErrorNotification } from './use-save-error-notification';
 import { useSaveSuccessNotification } from './use-save-success-notification';

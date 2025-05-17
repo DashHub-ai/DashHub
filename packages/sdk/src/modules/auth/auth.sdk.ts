@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/lib/function';
 
-import { tapTaskEither } from '@llm/commons';
+import { tapTaskEither } from '@dashhub/commons';
 import { performApiRequest, postPayload } from '~/shared';
 
 import type {

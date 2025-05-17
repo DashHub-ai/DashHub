@@ -7,7 +7,7 @@ import { inject } from 'tsyringe';
 import {
   createChunkAsyncIterator,
   mapAsyncIterator,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import type { DatabaseTables, DatabaseTablesWithId } from './database.tables';
 

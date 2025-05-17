@@ -6,7 +6,7 @@ import type {
   SdkJwtTokenT,
   SdkSearchUsersGroupsInputT,
   SdkUpdateUsersGroupInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 

@@ -1,12 +1,12 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
-import type { TaggedError } from '@llm/commons';
+import type { TaggedError } from '@dashhub/commons';
 
 import {
   isSdkTaggedError,
   SdkServerError,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { LoggerService } from '~/modules/logger';
 
 export function rejectUnsafeSdkErrors<T, E extends TaggedError<string, any>>(task: TE.TaskEither<E, T>) {

@@ -6,7 +6,7 @@ import {
   SdkSearchUsersGroupsInputV,
   SdkUpdateUsersGroupInputV,
   type UsersGroupsSdk,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { UsersGroupsService } from '~/modules/users-groups';
 

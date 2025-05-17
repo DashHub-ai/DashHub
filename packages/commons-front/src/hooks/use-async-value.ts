@@ -1,6 +1,6 @@
 import { type DependencyList, useLayoutEffect, useRef } from 'react';
 
-import type { Nullable } from '@llm/commons';
+import type { Nullable } from '@dashhub/commons';
 
 import { type AsyncCallbackStateHookResult, useAsyncCallback } from './use-async-callback';
 

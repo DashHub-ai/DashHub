@@ -7,7 +7,7 @@ import type {
   SdkJwtTokenT,
   SdkTableRowIdT,
   SdkUpdateOrganizationInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableRowWithId } from '../database';

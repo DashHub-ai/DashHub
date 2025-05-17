@@ -2,9 +2,9 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type { SdkJwtTokenT } from '@dashhub/sdk';
 
-import { type PartialBy, tapTaskEitherTE } from '@llm/commons';
+import { type PartialBy, tapTaskEitherTE } from '@dashhub/commons';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableUuid } from '../database';

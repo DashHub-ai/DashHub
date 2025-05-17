@@ -1,4 +1,4 @@
-import type { SdkExpertT } from '@llm/sdk';
+import type { SdkExpertT } from '@dashhub/sdk';
 
 import { ExpertCard } from './expert-card';
 

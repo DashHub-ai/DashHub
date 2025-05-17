@@ -3,7 +3,7 @@ import type { Context } from 'hono';
 import {
   SdkEndpointNotFoundError,
   type SdkErrorResponseT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 export function notFoundMiddleware(context: Context<any, any>) {
   const error = new SdkEndpointNotFoundError(

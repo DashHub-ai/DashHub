@@ -4,9 +4,9 @@ import { pipe } from 'fp-ts/lib/function';
 import { sql } from 'kysely';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkCreateUserInputT, SdkTableRowWithIdT, SdkUpdateUserInputT } from '@llm/sdk';
+import type { SdkCreateUserInputT, SdkTableRowWithIdT, SdkUpdateUserInputT } from '@dashhub/sdk';
 
-import { catchTaskEitherTagError, DistributiveOverwrite, isNil, panicError } from '@llm/commons';
+import { catchTaskEitherTagError, DistributiveOverwrite, isNil, panicError } from '@dashhub/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,

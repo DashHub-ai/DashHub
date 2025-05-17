@@ -9,7 +9,7 @@ import {
   type SdkAccessLevelGuards,
   type SdkJwtTokenT,
   type SdkUnauthorizedError,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 export function checkIfUserCanSeeFetchedContentTE(token: SdkJwtTokenT) {
   const check = createAccessLevelGuard(token);

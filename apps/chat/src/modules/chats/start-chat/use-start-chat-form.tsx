@@ -2,14 +2,14 @@ import { useForm } from '@under-control/forms';
 import { pipe } from 'fp-ts/lib/function';
 import { useLocation } from 'wouter';
 
-import { runTask, tapTaskEither, tryOrThrowTE } from '@llm/commons';
-import { useAsyncSetter } from '@llm/commons-front';
+import { runTask, tapTaskEither, tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncSetter } from '@dashhub/commons-front';
 import {
   createSDKPermissionUserAccessLevel,
   type SdkCreateChatInputT,
   type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { usePredefinedFormValidators } from '~/hooks';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import { useSitemap } from '~/routes';

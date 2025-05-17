@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { useAfterMount, useTimeout } from '@llm/commons-front';
+import { useAfterMount, useTimeout } from '@dashhub/commons-front';
 
 export function useAutoFocusConversationInput() {
   const inputRef = useRef<HTMLInputElement>(null);

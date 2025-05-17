@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import type { SdkUserT } from '@llm/sdk';
+import type { SdkUserT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

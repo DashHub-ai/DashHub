@@ -1,9 +1,9 @@
 import { DownloadIcon } from 'lucide-react';
 import Markdown from 'react-markdown';
 
-import type { SdkSearchProjectEmbeddingItemT } from '@llm/sdk';
+import type { SdkSearchProjectEmbeddingItemT } from '@dashhub/sdk';
 
-import { isImageFileUrl } from '@llm/commons';
+import { isImageFileUrl } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { BalloonButton } from '~/ui';
 
@@ -26,7 +26,7 @@ export function ProjectEmbeddingPreview({ embedding }: ProjectEmbeddingPreviewPr
           />
         )}
 
-        <div className="max-w-[320px] max-h-[150px] whitespace-break-spaces overflow-auto">
+        <div className="max-w-[320px] max-h-[150px] overflow-auto whitespace-break-spaces">
           <strong>...</strong>
           <Markdown>{embedding.text}</Markdown>
           <strong>...</strong>

@@ -3,7 +3,7 @@ import type { ControlValue } from '@under-control/inputs';
 
 import { error, type PathValidator } from '@under-control/validate';
 
-import { EMAIL_REGEX } from '@llm/commons';
+import { EMAIL_REGEX } from '@dashhub/commons';
 
 type EmailHookAttrs = {
   messages: {

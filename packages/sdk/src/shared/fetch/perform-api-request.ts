@@ -6,7 +6,7 @@ import {
   type SearchParamsMap,
   TaggedError,
   withSearchParams,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import {
   type SdkEndpointNotFoundError,

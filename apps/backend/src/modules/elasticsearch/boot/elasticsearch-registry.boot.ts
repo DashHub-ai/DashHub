@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { tapTaskEitherTE } from '@llm/commons';
+import { tapTaskEitherTE } from '@dashhub/commons';
 import { AIExternalAPIsEsIndexRepo } from '~/modules/ai-external-apis/elasticsearch/ai-external-apis-es-index.repo';
 import { AIModelsEsIndexRepo } from '~/modules/ai-models/elasticsearch/ai-models-es-index.repo';
 import { AppsCategoriesEsIndexRepo } from '~/modules/apps-categories/elasticsearch/apps-categories-es-index.repo';

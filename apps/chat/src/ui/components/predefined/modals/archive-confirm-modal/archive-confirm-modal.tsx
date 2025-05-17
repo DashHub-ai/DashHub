@@ -1,7 +1,7 @@
 import { useControlStrict } from '@under-control/forms';
 
-import { type CanBePromise, format } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
+import { type CanBePromise, format } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 import { Checkbox } from '~/ui/components/controls';
 import { Modal, type ModalProps, ModalTitle } from '~/ui/components/modal';

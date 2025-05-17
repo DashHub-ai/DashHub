@@ -2,8 +2,8 @@ import type { PropsWithChildren } from 'react';
 
 import { HelmetProvider } from 'react-helmet-async';
 
-import { ModalsContextProvider } from '@llm/commons-front';
-import { SdkFavoritesProvider, SdkMeProvider, SdkPinnedMessagesProvider, SdkProvider } from '@llm/sdk';
+import { ModalsContextProvider } from '@dashhub/commons-front';
+import { SdkFavoritesProvider, SdkMeProvider, SdkPinnedMessagesProvider, SdkProvider } from '@dashhub/sdk';
 import { useConfig } from '~/config';
 import { I18nProvider } from '~/i18n';
 import { Router } from '~/router';

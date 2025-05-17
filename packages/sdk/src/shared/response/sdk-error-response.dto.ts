@@ -1,4 +1,4 @@
-import type { SerializedTaggedError } from '@llm/commons';
+import type { SerializedTaggedError } from '@dashhub/commons';
 
 export type SdkErrorResponseT = {
   error: SerializedTaggedError;

@@ -1,6 +1,6 @@
 import { useLocation } from 'wouter';
 
-import { arePathsEqual } from '@llm/commons';
+import { arePathsEqual } from '@dashhub/commons';
 
 export function useCheckReplaceableLinkPath() {
   const [location] = useLocation();

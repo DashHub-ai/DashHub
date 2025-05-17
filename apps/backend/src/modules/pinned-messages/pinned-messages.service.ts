@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type { SdkJwtTokenT } from '@dashhub/sdk';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableRowWithId } from '../database';

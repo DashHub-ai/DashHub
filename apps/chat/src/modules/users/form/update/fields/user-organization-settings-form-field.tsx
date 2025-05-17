@@ -4,7 +4,7 @@ import {
   type ValidationErrorsListProps,
 } from '@under-control/forms';
 
-import type { SdkUpdateUserOrganizationInputT } from '@llm/sdk';
+import type { SdkUpdateUserOrganizationInputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { UserOrganizationRoleSelect } from '~/modules/organizations';

@@ -1,6 +1,6 @@
-import type { SdkAppCategoryT } from '@llm/sdk';
+import type { SdkAppCategoryT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   AppCategoryUpdateFormModal,

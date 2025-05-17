@@ -1,7 +1,7 @@
 import { controlled } from '@under-control/forms';
 import clsx from 'clsx';
 
-import type { SdkTableRowWithIdNameT } from '@llm/sdk';
+import type { SdkTableRowWithIdNameT } from '@dashhub/sdk';
 
 import { AppChatBadge } from '~/modules/apps/chat/app-chat-badge';
 

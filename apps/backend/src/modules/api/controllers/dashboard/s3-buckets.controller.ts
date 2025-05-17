@@ -6,7 +6,7 @@ import {
   SdkCreateS3BucketInputV,
   SdkSearchS3BucketsInputV,
   SdkUpdateS3BucketInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { OrganizationsS3BucketsService } from '~/modules/organizations/s3-buckets';
 

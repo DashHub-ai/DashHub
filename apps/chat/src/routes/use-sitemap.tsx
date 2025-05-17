@@ -1,12 +1,12 @@
 import { pipe } from 'fp-ts/lib/function';
 
-import type { SdkAppT } from '@llm/sdk';
+import type { SdkAppT } from '@dashhub/sdk';
 import type {
   SearchAppsRouteUrlFiltersT,
   SearchProjectsRouteUrlFiltersT,
 } from '~/modules';
 
-import { concatUrls, withSearchParams } from '@llm/commons';
+import { concatUrls, withSearchParams } from '@dashhub/commons';
 import { defineSitemapRouteGenerator } from '~/ui';
 
 export function useSitemap() {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { isNil } from '@llm/commons';
+import { isNil } from '@dashhub/commons';
 
 import type { SdkTableRowIdT } from './sdk-table-row-id.dto';
 

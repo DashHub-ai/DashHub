@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useTimeout } from '@llm/commons-front';
+import { useTimeout } from '@dashhub/commons-front';
 
 export function useScrollFlickeringIndicator() {
   const [visible, setVisible] = useState(false);

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { fallback } from '@llm/commons';
+import { fallback } from '@dashhub/commons';
 
 export const I18nLangV = z.enum(['en', 'pl']).or(fallback('en'));
 

@@ -1,7 +1,7 @@
 import { LinkIcon } from 'lucide-react';
 import { useLocation } from 'wouter';
 
-import type { SdkSearchPinnedMessageItemT } from '@llm/sdk';
+import type { SdkSearchPinnedMessageItemT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { ChatMessage } from '~/modules/chats';

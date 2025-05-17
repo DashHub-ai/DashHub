@@ -6,14 +6,14 @@ import {
   type RequiredOnlyBy,
   runTask,
   tryOrThrowTE,
-} from '@llm/commons';
+} from '@dashhub/commons';
 import {
   type SdkContextT,
   type SdkInferOffsetPaginationItemType,
   type SdkOffsetPaginationOutputT,
   type SdkOmitOffsetPaginationInputT,
   useSdk,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import {
   SearchSelect,

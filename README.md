@@ -77,14 +77,14 @@ To run the migrations, follow these steps:
 
  ```bash
  cd apps/backend
- yarn run db:migrate
+ npm run db:migrate
  ```
 
 To rollback the migrations, follow these steps:
 
  ```bash
  cd apps/backend
- yarn run db:migrate --down
+ npm run db:migrate --down
  ```
 
 ## Elasticsearch
@@ -92,7 +92,7 @@ To rollback the migrations, follow these steps:
 To reindex all the data in Elasticsearch, run the following command:
 
  ```bash
- yarn run es:reindex:all
+ npm run es:reindex:all
  ```
 
 ## Deployment 🚀

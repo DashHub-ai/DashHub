@@ -7,7 +7,7 @@ import type {
 
 import { snakeCase } from 'snake-case';
 
-import type { SnakeToCamelCase } from '@llm/commons';
+import type { SnakeToCamelCase } from '@dashhub/commons';
 
 import type { DatabaseTables } from '../database.tables';
 

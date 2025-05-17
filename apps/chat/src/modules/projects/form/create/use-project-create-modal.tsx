@@ -1,6 +1,6 @@
-import type { SdkCreateProjectInputT } from '@llm/sdk';
+import type { SdkCreateProjectInputT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 
 import {

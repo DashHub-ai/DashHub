@@ -1,3 +1,3 @@
-import { TaggedError } from '@llm/commons';
+import { TaggedError } from '@dashhub/commons';
 
 export class SdkRequestError extends TaggedError.ofLiteral<any>()('SdkRequestError') {}

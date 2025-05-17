@@ -1,4 +1,4 @@
-import type { SdkCreateS3BucketInputT } from '@llm/sdk';
+import type { SdkCreateS3BucketInputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

@@ -9,7 +9,7 @@ import {
   type StrictParametrizeParams,
   withHash,
   withSearchParams,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 export function defineSitemapRouteGenerator<
   S extends SearchParamsMap = SearchParamsMap,

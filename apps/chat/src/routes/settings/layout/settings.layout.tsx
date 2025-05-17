@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 
 import { BuildingIcon, UserCircleIcon } from 'lucide-react';
 
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { useHasWorkspaceOrganization } from '~/modules';

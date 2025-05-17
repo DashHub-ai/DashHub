@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 import isValidUTF8 from 'utf-8-validate';
 
-import type { SdkJwtTokenT, SdkRepeatedMessageLike, SdkSearchMessageItemT } from '@llm/sdk';
+import type { SdkJwtTokenT, SdkRepeatedMessageLike, SdkSearchMessageItemT } from '@dashhub/sdk';
 
 import {
   isCSVMimeType,
@@ -14,7 +14,7 @@ import {
   isPDFMimeType,
   isXmlOfficeMimetype,
   rejectFalsyItems,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId, TableRowWithUuid } from '../database';

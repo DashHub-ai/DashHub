@@ -1,6 +1,6 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkOptionalFileUploadT, SdkUserT } from '@llm/sdk';
+import type { SdkOptionalFileUploadT, SdkUserT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { Checkbox, FormField, Input, SelectGenericFileInput } from '~/ui';

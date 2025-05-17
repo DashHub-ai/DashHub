@@ -1,7 +1,7 @@
 import { controlled } from '@under-control/forms';
 import clsx from 'clsx';
 
-import { without } from '@llm/commons';
+import { without } from '@dashhub/commons';
 
 import type { FileCardFile } from './file-card';
 

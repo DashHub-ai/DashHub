@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import { ChevronDownIcon } from 'lucide-react';
 
-import { isNil } from '@llm/commons';
+import { isNil } from '@dashhub/commons';
 
 type Props = {
   onClick: () => void;

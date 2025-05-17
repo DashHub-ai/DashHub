@@ -1,4 +1,4 @@
-import type { SdkAppT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkAppT, SdkTableRowWithIdT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { Modal, type ModalProps, ModalTitle } from '~/ui';

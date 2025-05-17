@@ -2,7 +2,7 @@ import { Buffer } from 'node:buffer';
 
 import { taskEither as TE } from 'fp-ts';
 
-import { SdkInvalidFileFormatError } from '@llm/sdk';
+import { SdkInvalidFileFormatError } from '@dashhub/sdk';
 
 export type ExtractedFile = {
   buffer: Buffer;

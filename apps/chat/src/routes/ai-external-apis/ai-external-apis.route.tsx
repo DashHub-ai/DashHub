@@ -1,7 +1,7 @@
 import { WandSparklesIcon } from 'lucide-react';
 import { Link } from 'wouter';
 
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageWithSidebarLayout } from '~/layouts';
 import { AIExternalAPIsContainer } from '~/modules/ai-external-apis';

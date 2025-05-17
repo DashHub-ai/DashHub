@@ -5,7 +5,7 @@ import type {
   SdkTableRowWithIdNameT,
   SdkTableRowWithIdT,
   SdkUpdateAppInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';

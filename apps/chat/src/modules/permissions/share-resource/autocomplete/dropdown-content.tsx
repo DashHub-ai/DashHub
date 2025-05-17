@@ -3,8 +3,8 @@ import type { CSSProperties } from 'react';
 import clsx from 'clsx';
 import { createPortal } from 'react-dom';
 
-import type { AsyncValueHookResult } from '@llm/commons-front';
-import type { SdkPermissionT, SdkSearchShareResourceUsersGroupsOutputT } from '@llm/sdk';
+import type { AsyncValueHookResult } from '@dashhub/commons-front';
+import type { SdkPermissionT, SdkSearchShareResourceUsersGroupsOutputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 

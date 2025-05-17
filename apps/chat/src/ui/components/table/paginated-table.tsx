@@ -4,7 +4,7 @@ import type {
   SdkOffsetPaginationInputT,
   SdkTableRowWithIdT,
   SdkTableRowWithUuidT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { PaginatedList, type PaginatedListProps } from '../list';
 import { Table, type Props as TableProps } from './table';

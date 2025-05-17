@@ -1,9 +1,9 @@
 import { controlled } from '@under-control/forms';
 import { HeartIcon, HistoryIcon } from 'lucide-react';
 
-import type { SdkIdsArrayT, SdkSearchAppsInputT, SdkSearchAppsOutputT } from '@llm/sdk';
+import type { SdkIdsArrayT, SdkSearchAppsInputT, SdkSearchAppsOutputT } from '@dashhub/sdk';
 
-import { useLastNonNullValue } from '@llm/commons-front';
+import { useLastNonNullValue } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 import { AppsCategoriesSidebar, AppsCategoriesSidebarLoader } from '~/modules/apps-categories';
 import { AppCategoryButton } from '~/modules/apps-categories/sidebar/items';

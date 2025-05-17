@@ -2,8 +2,8 @@ import { either as E } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import jwtSimple from 'jwt-simple';
 
-import { tryParseUsingZodSchema } from '@llm/commons';
-import { SdkInvalidJwtTokenError, SdkJwtTokenV } from '@llm/sdk';
+import { tryParseUsingZodSchema } from '@dashhub/commons';
+import { SdkInvalidJwtTokenError, SdkJwtTokenV } from '@dashhub/sdk';
 
 export function tryVerifyAndDecodeToken(secret: string, token: string) {
   if (!token) {

@@ -1,6 +1,6 @@
-import type { SdkTableRowWithIdT, SdkUpdateOrganizationInputT } from '@llm/sdk';
+import type { SdkTableRowWithIdT, SdkUpdateOrganizationInputT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   OrganizationUpdateFormModal,

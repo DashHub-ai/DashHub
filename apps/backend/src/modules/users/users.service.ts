@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
-import type { SdkCreateUserInputT, SdkJwtTokenT, SdkTableRowIdT, SdkUpdateUserInputT } from '@llm/sdk';
+import type { SdkCreateUserInputT, SdkJwtTokenT, SdkTableRowIdT, SdkUpdateUserInputT } from '@dashhub/sdk';
 
 import {
   asyncIteratorToVoidPromise,
@@ -10,7 +10,7 @@ import {
   runTaskAsVoid,
   tapAsyncIterator,
   tryOrThrowTE,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import type { ExtractedFile } from '../api/helpers';
 import type { WithAuthFirewall } from '../auth';

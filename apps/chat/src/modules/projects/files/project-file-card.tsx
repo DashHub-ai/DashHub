@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import { pipe } from 'fp-ts/lib/function';
 import { Download, Trash2 } from 'lucide-react';
 
-import { isImageFileUrl, tapTaskEither } from '@llm/commons';
-import { type SdkSearchProjectFileItemT, useSdkForLoggedIn } from '@llm/sdk';
+import { isImageFileUrl, tapTaskEither } from '@dashhub/commons';
+import { type SdkSearchProjectFileItemT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { getFileTypeAndColor } from '~/modules/shared/get-file-type-and-color';
 import { CardDescription, useDeleteWithNotifications } from '~/ui';

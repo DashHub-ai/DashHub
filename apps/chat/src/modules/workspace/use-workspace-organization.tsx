@@ -1,4 +1,4 @@
-import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkTableRowIdT, useSdkForLoggedIn } from '@dashhub/sdk';
 
 import { useWorkspace } from './workspace-context';
 

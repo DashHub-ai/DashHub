@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { AlertTriangle, CheckCircle, X } from 'lucide-react';
 import { type ReactNode, useState } from 'react';
 
-import { useTimeout } from '@llm/commons-front';
+import { useTimeout } from '@dashhub/commons-front';
 
 type AlertVariant = 'success' | 'error';
 

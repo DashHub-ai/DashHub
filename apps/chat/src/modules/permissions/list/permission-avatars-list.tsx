@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import type { SdkPermissionT } from '@llm/sdk';
+import type { SdkPermissionT } from '@dashhub/sdk';
 import type { ColorizedAvatarSize } from '~/ui';
 
 import { PermissionGroupAvatar } from './permission-group-avatar';

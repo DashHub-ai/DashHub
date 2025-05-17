@@ -4,7 +4,7 @@ import type {
   SdkEnabledUserAuthMethodsT,
   SdkOrganizationUserRoleT,
   SdkUserRoleT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import type {
   NormalizeSelectTableRow,
   TableId,

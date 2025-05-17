@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { Overwrite } from '@llm/commons';
+import type { Overwrite } from '@dashhub/commons';
 
 import type {
   SdkPermissionTargetByType,

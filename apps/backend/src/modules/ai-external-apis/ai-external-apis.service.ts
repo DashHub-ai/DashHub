@@ -7,7 +7,7 @@ import type {
   SdkJwtTokenT,
   SdkTableRowIdT,
   SdkUpdateAIExternalAPIInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import {
   asyncIteratorToVoidPromise,
@@ -19,7 +19,7 @@ import {
   Time,
   tryOrThrowTE,
   wrapWithCache,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import type { ExtractedFile } from '../api/helpers';
 import type { WithAuthFirewall } from '../auth';

@@ -5,9 +5,9 @@ import {
 } from '@under-control/forms';
 import { useMemo } from 'react';
 
-import type { SdkUpdateUserAuthMethodsT } from '@llm/sdk';
+import type { SdkUpdateUserAuthMethodsT } from '@dashhub/sdk';
 
-import { genRandomPassword } from '@llm/commons';
+import { genRandomPassword } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { Checkbox, FormField, Input } from '~/ui';
 

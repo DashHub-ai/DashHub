@@ -2,9 +2,9 @@ import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { Redirect } from 'wouter';
 
-import { tryOrThrowTE } from '@llm/commons';
-import { useAsyncValue } from '@llm/commons-front';
-import { type SdkTableRowUuidT, useSdkForLoggedIn } from '@llm/sdk';
+import { tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncValue } from '@dashhub/commons-front';
+import { type SdkTableRowUuidT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { PageWithSidebarLayout } from '~/layouts';
 import { ChatConversationWithSidebar } from '~/modules';

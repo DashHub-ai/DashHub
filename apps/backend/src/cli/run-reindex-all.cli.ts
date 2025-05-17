@@ -5,7 +5,7 @@ import process from 'node:process';
 import { pipe } from 'fp-ts/lib/function';
 import { container } from 'tsyringe';
 
-import { runTaskAsVoid, tapTaskEither, tapTaskEitherTE, tryOrThrowTE } from '@llm/commons';
+import { runTaskAsVoid, tapTaskEither, tapTaskEitherTE, tryOrThrowTE } from '@dashhub/commons';
 import { ElasticsearchIndicesRegistryRepo, ElasticsearchRepo } from '~/modules';
 import { ElasticsearchRegistryBootService } from '~/modules/elasticsearch/boot';
 

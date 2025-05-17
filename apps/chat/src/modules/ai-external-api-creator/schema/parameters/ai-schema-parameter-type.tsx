@@ -1,10 +1,10 @@
 import { controlled, type OmitControlStateAttrs } from '@under-control/forms';
 
-import { findItemById } from '@llm/commons';
+import { findItemById } from '@dashhub/commons';
 import {
   type SdkAIExternalAPIParameterTypeT,
   SdkAIExternalAPIParameterTypeV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { Select, type SelectProps } from '~/ui';
 
 type Props = Omit<OmitControlStateAttrs<SelectProps>, 'items'>;

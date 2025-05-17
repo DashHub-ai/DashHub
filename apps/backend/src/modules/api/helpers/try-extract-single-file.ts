@@ -2,10 +2,10 @@ import { either as E, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { z } from 'zod';
 
-import type { SdkInvalidFileFormatError } from '@llm/sdk';
+import type { SdkInvalidFileFormatError } from '@dashhub/sdk';
 
-import { tryParseUsingZodSchema } from '@llm/commons';
-import { SdkInvalidRequestError } from '@llm/sdk';
+import { tryParseUsingZodSchema } from '@dashhub/commons';
+import { SdkInvalidRequestError } from '@dashhub/sdk';
 
 import { type ExtractedFile, extractFileTE } from './extract-file';
 

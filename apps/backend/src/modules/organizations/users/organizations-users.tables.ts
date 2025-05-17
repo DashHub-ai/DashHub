@@ -1,4 +1,4 @@
-import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+import type { SdkOrganizationUserRoleT } from '@dashhub/sdk';
 import type { TableId, TableWithDefaultColumns } from '~/modules/database';
 
 export type OrganizationsUsersTable = TableWithDefaultColumns & {

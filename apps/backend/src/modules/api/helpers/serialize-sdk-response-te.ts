@@ -3,9 +3,9 @@ import type { Context } from 'hono';
 
 import { either as E } from 'fp-ts';
 
-import type { TaggedError } from '@llm/commons';
+import type { TaggedError } from '@dashhub/commons';
 
-import { SdkServerError } from '@llm/sdk';
+import { SdkServerError } from '@dashhub/sdk';
 import { LoggerService } from '~/modules/logger';
 
 import { respondWithTaggedError } from './respond-with-tagged-error';

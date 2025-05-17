@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import { PaperclipIcon } from 'lucide-react';
 
-import { SdkSearchProjectFilesInputV, type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
+import { SdkSearchProjectFilesInputV, type SdkTableRowIdT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useChatFileDrop } from '~/modules/chats';
 import { FormSpinnerCTA, PaginatedList, useDebouncedPaginatedSearch } from '~/ui';

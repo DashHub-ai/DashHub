@@ -4,7 +4,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkSearchAIModelItemT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkSearchAIModelItemT, SdkTableRowWithIdT } from '@dashhub/sdk';
 
 import type { AIProxyInstructedAttrs, AIProxyPromptAttrs, AIProxyStreamPromptAttrs } from './clients/ai-proxy';
 

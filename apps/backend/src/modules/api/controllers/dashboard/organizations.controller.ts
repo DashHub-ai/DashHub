@@ -6,7 +6,7 @@ import {
   SdkCreateOrganizationInputV,
   SdkSearchOrganizationsInputV,
   SdkUpdateOrganizationInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { OrganizationsService } from '~/modules/organizations';
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { AppEnvV } from '@llm/commons';
+import { AppEnvV } from '@dashhub/commons';
 import { HttpServerConfigV } from '~/modules/api/http-server.config';
 import { AuthConfigV } from '~/modules/auth/auth.config';
 import { ChatsSummariesConfigV } from '~/modules/chats-summaries/chats-summaries.config';

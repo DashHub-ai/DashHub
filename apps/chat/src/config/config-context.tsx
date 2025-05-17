@@ -1,6 +1,6 @@
 import { createContext, type PropsWithChildren, useMemo } from 'react';
 
-import { useContextOrThrow } from '@llm/commons-front';
+import { useContextOrThrow } from '@dashhub/commons-front';
 
 import type { ConfigT } from './config.dto';
 

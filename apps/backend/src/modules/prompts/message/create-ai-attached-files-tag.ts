@@ -1,4 +1,4 @@
-import type { SdkMessageFileT } from '@llm/sdk';
+import type { SdkMessageFileT } from '@dashhub/sdk';
 
 import { xml } from '../xml';
 

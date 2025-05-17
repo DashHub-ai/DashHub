@@ -1,6 +1,6 @@
 import type { Context } from 'hono';
 
-import type { TaggedError } from '@llm/commons';
+import type { TaggedError } from '@dashhub/commons';
 
 export function respondWithTaggedError(
   context: Context,

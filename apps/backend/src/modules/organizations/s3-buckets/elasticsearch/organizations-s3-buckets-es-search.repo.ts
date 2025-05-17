@@ -7,9 +7,9 @@ import { inject, injectable } from 'tsyringe';
 import type {
   SdkSearchS3BucketItemT,
   SdkSearchS3BucketsInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
+import { isNil, pluck, rejectFalsyItems } from '@dashhub/commons';
 import {
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,

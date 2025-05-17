@@ -4,7 +4,7 @@ import {
   type SdkChatT,
   type SdkSearchMessagesOutputT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { ChatConversationPanel } from './chat-conversation-panel';
 import { ChatConfigPanel } from './config-panel';

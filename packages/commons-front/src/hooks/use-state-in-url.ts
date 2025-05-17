@@ -9,7 +9,7 @@ import {
   tryOrThrowEither,
   tryParseUsingZodSchema,
   withSearchParams,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import { useVanillaHistory } from './use-vanilla-history';
 

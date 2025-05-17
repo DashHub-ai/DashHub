@@ -3,7 +3,7 @@ import type { ControlValue } from '@under-control/inputs';
 
 import { error, type PathValidator } from '@under-control/validate';
 
-import { format } from '@llm/commons';
+import { format } from '@dashhub/commons';
 
 type NumericHookAttrs = {
   messages: {

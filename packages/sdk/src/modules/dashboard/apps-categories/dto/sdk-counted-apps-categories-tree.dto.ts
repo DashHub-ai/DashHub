@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { CountedTreeNode } from '@llm/commons';
+import type { CountedTreeNode } from '@dashhub/commons';
 
 import { type SdkAppCategoryT, SdkAppCategoryV } from './sdk-app-category.dto';
 

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { Overwrite } from '@llm/commons';
+import type { Overwrite } from '@dashhub/commons';
 
 import type { ModalShowConfig, ModalShowRenderAttrs } from './modals-context-config.types';
 

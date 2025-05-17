@@ -1,6 +1,6 @@
 import type { ColumnType } from 'kysely';
 
-import type { SdkPermissionAccessLevelT } from '@llm/sdk';
+import type { SdkPermissionAccessLevelT } from '@dashhub/sdk';
 
 import type {
   NormalizeInsertTableRow,

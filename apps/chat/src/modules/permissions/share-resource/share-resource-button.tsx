@@ -1,10 +1,10 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
+import type { SdkPermissionT, SdkUserListItemT } from '@dashhub/sdk';
 
-import { type TaggedError, tapTaskEitherError } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
+import { type TaggedError, tapTaskEitherError } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 import { FormSpinnerCTA, useSaveErrorNotification } from '~/ui';
 

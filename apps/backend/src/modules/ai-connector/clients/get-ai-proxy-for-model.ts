@@ -1,4 +1,4 @@
-import type { SdkAIModelT } from '@llm/sdk';
+import type { SdkAIModelT } from '@dashhub/sdk';
 import type { SearchEnginesService } from '~/modules/search-engines';
 
 import type { AIProxy } from './ai-proxy';

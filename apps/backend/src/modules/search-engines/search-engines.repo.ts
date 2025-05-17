@@ -7,7 +7,7 @@ import {
   isSDKCredentialsMasked,
   SdkCreateSearchEngineInputT,
   SdkUpdateSearchEngineInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,

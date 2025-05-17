@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import { pipe } from 'fp-ts/lib/function';
 import { container } from 'tsyringe';
 
-import { runTaskAsVoid, tapTaskEitherTE, tryOrThrowTE } from '@llm/commons';
+import { runTaskAsVoid, tapTaskEitherTE, tryOrThrowTE } from '@dashhub/commons';
 import { DatabaseConnectionRepo, ElasticsearchRepo } from '~/modules';
 import { ProjectsSummariesService } from '~/modules/projects-summaries';
 

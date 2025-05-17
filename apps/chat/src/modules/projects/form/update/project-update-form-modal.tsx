@@ -1,4 +1,4 @@
-import { castSdkProjectToUpdateInput, type SdkProjectT } from '@llm/sdk';
+import { castSdkProjectToUpdateInput, type SdkProjectT } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import {
   CancelButton,

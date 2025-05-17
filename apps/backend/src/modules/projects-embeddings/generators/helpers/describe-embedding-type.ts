@@ -4,7 +4,7 @@ import {
   isMarkdownFileUrl,
   isPresentationFileUrl,
   isSpreadsheetFileUrl,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 export function describeEmbeddingType(fileUrl: string): string {
   switch (true) {

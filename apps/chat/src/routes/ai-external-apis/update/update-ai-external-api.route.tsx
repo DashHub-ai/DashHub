@@ -1,9 +1,9 @@
 import { pipe } from 'fp-ts/lib/function';
 import { Redirect, useLocation } from 'wouter';
 
-import { tryOrThrowTE } from '@llm/commons';
-import { useAsyncValue } from '@llm/commons-front';
-import { type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
+import { tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncValue } from '@dashhub/commons-front';
+import { type SdkTableRowIdT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { LayoutHeader, PageFormSection, PageWithSidebarLayout } from '~/layouts';
 import { AIExternalAPIUpdateForm } from '~/modules';

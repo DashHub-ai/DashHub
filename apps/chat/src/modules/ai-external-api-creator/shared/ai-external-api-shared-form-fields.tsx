@@ -3,7 +3,7 @@ import { type ControlBindProps, controlled, useFormValidatorMessages, type Valid
 import type {
   SdkPermissionT,
   SdkUpdateAIExternalAPIInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { ShareResourceFormGroup } from '~/modules/permissions';

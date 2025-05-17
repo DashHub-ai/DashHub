@@ -5,7 +5,7 @@ import { flow, identity, pipe } from 'fp-ts/lib/function';
 import * as O from 'fp-ts/lib/Option';
 import { useRef } from 'react';
 
-import { tryParseJSON, tryParseUsingZodSchema } from '@llm/commons';
+import { tryParseJSON, tryParseUsingZodSchema } from '@dashhub/commons';
 
 import { useForceRerender } from './use-force-rerender';
 import { useWindowListener } from './use-window-listener';

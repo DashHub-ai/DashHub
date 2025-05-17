@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { LayersIcon, SettingsIcon } from 'lucide-react';
 
-import { type SdkCountedAppsCategoriesTreeT, useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkCountedAppsCategoriesTreeT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { GhostPlaceholder } from '~/modules/shared';
 

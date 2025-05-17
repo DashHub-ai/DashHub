@@ -1,4 +1,4 @@
-import type { SdkCreateUsersGroupInputT, SdkUserListItemT } from '@llm/sdk';
+import type { SdkCreateUsersGroupInputT, SdkUserListItemT } from '@dashhub/sdk';
 
 export type CreateUsersGroupValue = Omit<SdkCreateUsersGroupInputT, 'users'> & {
   users: SdkUserListItemT[];

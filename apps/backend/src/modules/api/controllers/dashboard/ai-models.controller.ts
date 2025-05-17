@@ -6,7 +6,7 @@ import {
   SdkCreateAIModelInputV,
   SdkSearchAIModelsInputV,
   SdkUpdateAIModelInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { AIModelsService } from '~/modules/ai-models';
 import { ConfigService } from '~/modules/config';
 

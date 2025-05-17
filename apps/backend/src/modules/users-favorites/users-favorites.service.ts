@@ -1,6 +1,6 @@
 import { delay, inject, injectable } from 'tsyringe';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type { SdkJwtTokenT } from '@dashhub/sdk';
 
 import { AppsService } from '../apps';
 import { ChatsService } from '../chats';

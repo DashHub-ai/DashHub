@@ -1,7 +1,7 @@
 import * as esb from 'elastic-builder';
 
-import type { Nullable } from '@llm/commons';
-import type { SdkSortItemT } from '@llm/sdk';
+import type { Nullable } from '@dashhub/commons';
+import type { SdkSortItemT } from '@dashhub/sdk';
 
 import { createSortFieldQuery, type SortQueryAttrs } from './create-sort-field-query';
 

@@ -1,6 +1,6 @@
-import type { SdkSearchMessagesOutputT } from '@llm/sdk';
+import type { SdkSearchMessagesOutputT } from '@dashhub/sdk';
 
-import { TaggedError } from '@llm/commons';
+import { TaggedError } from '@dashhub/commons';
 
 export class MissingAIModelInChatError
   extends TaggedError.ofLiteral<SdkSearchMessagesOutputT>()('MissingAIModelInChat') {

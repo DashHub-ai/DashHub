@@ -1,11 +1,11 @@
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import { tapTaskOption } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
+import { tapTaskOption } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
 import {
   SdkSearchSearchEnginesInputV,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {

@@ -1,8 +1,8 @@
 import { controlled, pickEventValue } from '@under-control/inputs';
 import { type ChangeEventHandler, useState } from 'react';
 
-import { clamp, isNil } from '@llm/commons';
-import { useUpdateEffect } from '@llm/commons-front';
+import { clamp, isNil } from '@dashhub/commons';
+import { useUpdateEffect } from '@dashhub/commons-front';
 
 import { Input, type InputProps } from './input';
 

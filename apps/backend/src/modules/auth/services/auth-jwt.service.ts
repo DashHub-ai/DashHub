@@ -8,7 +8,7 @@ import {
   SdkInvalidJwtRefreshTokenError,
   type SdkJwtTokenRoleSpecificT,
   type SdkJwtTokenT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { UsersRepo } from '~/modules/users/users.repo';
 

@@ -10,7 +10,7 @@ import {
   SdkStrictJsonV,
   SdkUpdateUserInputV,
   type UsersSdk,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { UsersService } from '~/modules/users';
 

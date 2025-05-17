@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 import { z } from 'zod';
 
-import { SdkOptionalFileUploadV, SdkStrictJsonV, SdkUpdateUserInputV, type UsersMeSdk } from '@llm/sdk';
+import { SdkOptionalFileUploadV, SdkStrictJsonV, SdkUpdateUserInputV, type UsersMeSdk } from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { UsersService } from '~/modules/users';
 

@@ -1,4 +1,4 @@
-import { type SdkProjectT, useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkProjectT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { NavigationToolbarPortal } from '~/layouts/navigation/navigation-toolbar-portal';
 import { ChatsContainer, StartChatForm } from '~/modules';

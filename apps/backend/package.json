@@ -1,7 +1,8 @@
 {
-  "name": "@llm/backend",
+  "name": "@dashhub/backend",
   "type": "module",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "build": "vite build --mode production",
     "build:wait": "while [ ! -f ./dist/index.mjs ]; do sleep 0.5; done",
@@ -9,7 +10,7 @@
     "es:reindex:all": "node dist/run-reindex-all.cli.mjs",
     "chats:summarize:all": "node dist/run-summarize-chats.cli.mjs",
     "projects:summarize:all": "node dist/run-summarize-projects.cli.mjs",
-    "dev": "npm run clean && nodemon --watch src -e ts --exec \"vite build --mode production && node --stack-trace-limit=1000 --enable-source-maps ./dist/index.mjs\"",
+    "dev": "npm run clean && nodemon --watch src --watch ../../externals/commercial/backend/src/ -e ts --exec \"vite build --mode production && node --stack-trace-limit=1000 --enable-source-maps ./dist/index.mjs\"",
     "lint": "eslint . --config ./eslint.config.mjs",
     "clean": "rm -rf ./dist 2>/dev/null",
     "check:types": "tsc"
@@ -19,11 +20,11 @@
     "pg-native": ">=3.0.1"
   },
   "devDependencies": {
+    "@dashhub/sdk": "*",
     "@elastic/elasticsearch": "^8.17.0",
     "@google/generative-ai": "^0.24.0",
     "@hono/node-server": "^1.13.7",
     "@instructor-ai/instructor": "^1.6.0",
-    "@llm/sdk": "*",
     "@types/bcryptjs": "^2.4.6",
     "@types/mime-types": "^2.1.0",
     "@types/object-hash": "^3.0.6",

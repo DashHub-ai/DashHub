@@ -9,7 +9,7 @@ import {
   isTaggedError,
   type Nullable,
   type TaggedError,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import type { DatabaseTables } from '../database.tables';
 import type { KyselyDatabase } from '../types';

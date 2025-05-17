@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 import type { TableId } from '~/modules/database';
 
-import { tryOrThrowTE } from '@llm/commons';
+import { tryOrThrowTE } from '@dashhub/commons';
 import {
   createArchivedRecordMappings,
   createAutocompleteFieldAnalyzeSettings,

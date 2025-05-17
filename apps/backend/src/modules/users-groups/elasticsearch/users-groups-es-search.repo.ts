@@ -7,9 +7,9 @@ import type {
   SdkSearchUsersGroupItemT,
   SdkSearchUsersGroupsInputT,
   SdkSearchUsersGroupsOutputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
+import { isNil, pluck, rejectFalsyItems } from '@dashhub/commons';
 import {
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,

@@ -1,4 +1,4 @@
-import { isNil } from '@llm/commons';
+import { isNil } from '@dashhub/commons';
 
 export function getPayload() {
   return {

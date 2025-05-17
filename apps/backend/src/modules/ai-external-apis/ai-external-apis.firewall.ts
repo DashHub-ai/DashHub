@@ -1,7 +1,7 @@
 import { taskEither as TE } from 'fp-ts';
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import type { SdkJwtTokenT, SdkSearchAIExternalAPIsInputT, SdkTableRowIdT } from '@llm/sdk';
+import type { SdkJwtTokenT, SdkSearchAIExternalAPIsInputT, SdkTableRowIdT } from '@dashhub/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 

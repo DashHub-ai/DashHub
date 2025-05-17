@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import { Cog } from 'lucide-react';
 
-import { StrictBooleanV } from '@llm/commons';
-import { useLocalStorageObject } from '@llm/commons-front';
+import { StrictBooleanV } from '@dashhub/commons';
+import { useLocalStorageObject } from '@dashhub/commons-front';
 
 type Props = {
   storageKey: string;

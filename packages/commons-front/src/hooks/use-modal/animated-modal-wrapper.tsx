@@ -1,6 +1,6 @@
 import { type ReactNode, useState } from 'react';
 
-import { type Nullable, timeout } from '@llm/commons';
+import { type Nullable, timeout } from '@dashhub/commons';
 
 export type AnimatedModalChildrenAttrs<Result> = {
   hiding: boolean;

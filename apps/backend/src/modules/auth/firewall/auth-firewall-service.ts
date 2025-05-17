@@ -1,4 +1,4 @@
-import { createAccessLevelGuard, type SdkJwtTokenT } from '@llm/sdk';
+import { createAccessLevelGuard, type SdkJwtTokenT } from '@dashhub/sdk';
 
 import { checkIfUserCanSeeFetchedContentTE } from './check-if-user-can-see-fetched-content-te';
 import { tryTaskEitherIfUser } from './try-task-either-if-user';

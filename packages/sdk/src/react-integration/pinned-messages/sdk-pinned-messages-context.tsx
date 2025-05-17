@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
-import type { StoreSubscriber } from '@llm/commons';
+import type { StoreSubscriber } from '@dashhub/commons';
 import type { PinnedMessagesSdk, SdkPinMessageListItemT } from '~/modules';
 
-import { useContextOrThrow } from '@llm/commons-front';
+import { useContextOrThrow } from '@dashhub/commons-front';
 
 export type SdkPinnedMessagesSnapshotT =
   | { loading: true; }

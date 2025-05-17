@@ -5,7 +5,7 @@ import type {
   SdkCreateProjectInputT,
   SdkJwtTokenT,
   SdkUpdateProjectInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 

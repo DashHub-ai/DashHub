@@ -1,7 +1,7 @@
 import { flow } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { runTaskAsVoid, tryOrThrowTE } from '@llm/commons';
+import { runTaskAsVoid, tryOrThrowTE } from '@dashhub/commons';
 import { ConfigService } from '~/modules/config';
 
 import { CronJob, CronService } from '../cron';

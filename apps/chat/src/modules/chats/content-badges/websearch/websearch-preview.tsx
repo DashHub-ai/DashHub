@@ -1,6 +1,6 @@
 import { ExternalLinkIcon } from 'lucide-react';
 
-import type { SdkMessageWebSearchItemT } from '@llm/sdk';
+import type { SdkMessageWebSearchItemT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { BalloonButton } from '~/ui';

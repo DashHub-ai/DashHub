@@ -1,4 +1,4 @@
-import type { SdkTableRowWithIdT, SdkUpdateOrganizationInputT } from '@llm/sdk';
+import type { SdkTableRowWithIdT, SdkUpdateOrganizationInputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

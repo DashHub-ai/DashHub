@@ -7,7 +7,7 @@ import type {
   SdkJwtTokenT,
   SdkPermissionT,
   SdkUpdateProjectInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import {
   asyncIteratorToVoidPromise,
@@ -15,7 +15,7 @@ import {
   tapAsyncIterator,
   tapTaskEitherTE,
   tryOrThrowTE,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import type { WithAuthFirewall } from '../auth';
 import type { TableId, TableRowWithId, TableRowWithUuid } from '../database';

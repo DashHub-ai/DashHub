@@ -1,6 +1,6 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkS3BucketT } from '@llm/sdk';
+import type { SdkS3BucketT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { Checkbox, FormField, Input, NumericInput } from '~/ui';

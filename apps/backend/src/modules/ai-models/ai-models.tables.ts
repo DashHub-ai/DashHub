@@ -1,6 +1,6 @@
 import type { ColumnType } from 'kysely';
 
-import type { SdkAICredentialsT, SdkAIProviderT } from '@llm/sdk';
+import type { SdkAICredentialsT, SdkAIProviderT } from '@dashhub/sdk';
 
 import type {
   NormalizeSelectTableRow,

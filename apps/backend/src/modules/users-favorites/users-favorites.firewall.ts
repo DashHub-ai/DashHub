@@ -1,7 +1,7 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
-import type { Nullable } from '@llm/commons';
+import type { Nullable } from '@dashhub/commons';
 
 import {
   ofSdkSuccess,
@@ -11,7 +11,7 @@ import {
   type SdkTableRowIdT,
   type SdkUnauthorizedError,
   type SdkUpsertFavoriteInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import type { AppsService } from '../apps';
 import type { ChatsService } from '../chats';

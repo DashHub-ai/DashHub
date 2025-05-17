@@ -10,7 +10,7 @@ import {
   tapAsyncIterator,
   tapTaskEither,
   tapTaskEitherError,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import { AIConnectorService } from '../ai-connector';
 import { AIModelsService } from '../ai-models';

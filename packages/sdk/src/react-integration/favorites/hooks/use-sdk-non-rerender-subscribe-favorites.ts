@@ -1,4 +1,4 @@
-import { useNonRerenderSubscribeStore } from '@llm/commons-front';
+import { useNonRerenderSubscribeStore } from '@dashhub/commons-front';
 
 import {
   type SdkFavoritesSnapshotT,

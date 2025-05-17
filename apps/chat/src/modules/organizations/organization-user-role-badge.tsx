@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 
-import type { SdkOrganizationUserRoleT } from '@llm/sdk';
+import type { SdkOrganizationUserRoleT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 

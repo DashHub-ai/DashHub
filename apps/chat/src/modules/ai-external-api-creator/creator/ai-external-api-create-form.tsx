@@ -1,4 +1,4 @@
-import type { SdkCreateAIExternalAPIOutputT } from '@llm/sdk';
+import type { SdkCreateAIExternalAPIOutputT } from '@dashhub/sdk';
 
 import { FormErrorAlert, SaveButton } from '~/ui';
 

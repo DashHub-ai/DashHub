@@ -1,6 +1,6 @@
 import { singleton } from 'tsyringe';
 
-import type { AppEnvT } from '@llm/commons';
+import type { AppEnvT } from '@dashhub/commons';
 
 import { LoggerService } from '../logger';
 import { tryReadEnvOrPanic } from './helpers';

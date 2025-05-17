@@ -1,6 +1,6 @@
 import { Users2 } from 'lucide-react';
 
-import type { SdkTableRowWithIdNameT } from '@llm/sdk';
+import type { SdkTableRowWithIdNameT } from '@dashhub/sdk';
 
 import { Avatar, type AvatarSize, Tooltip } from '~/ui';
 
@@ -13,12 +13,12 @@ type Props = {
 export function PermissionGroupAvatar({ group, accessLevel, size = 'sm' }: Props) {
   return (
     <Tooltip content={`${group.name} (${accessLevel})`}>
-      <span className="inline-block transform transition-transform hover:-translate-y-1">
+      <span className="inline-block transition-transform hover:-translate-y-1 transform">
         <Avatar
           size={size}
           name={group.name}
           fallback={<Users2 size={16} />}
-          className="border-2 border-gray-300 shadow-sm"
+          className="shadow-sm border-2 border-gray-300"
         />
       </span>
     </Tooltip>

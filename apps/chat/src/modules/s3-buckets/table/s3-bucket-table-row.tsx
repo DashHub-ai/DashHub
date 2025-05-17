@@ -1,7 +1,7 @@
 import { pipe } from 'fp-ts/lib/function';
 
-import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
-import { type SdkSearchS3BucketItemT, useSdkForLoggedIn } from '@llm/sdk';
+import { formatDate, tapTaskEither, tapTaskOption } from '@dashhub/commons';
+import { type SdkSearchS3BucketItemT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { ArchivedBadge, BooleanBadge, EllipsisCrudDropdownButton } from '~/ui';
 
 import { useS3BucketUpdateModal } from '../form/update';

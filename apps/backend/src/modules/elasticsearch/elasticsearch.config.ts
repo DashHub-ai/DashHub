@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { StrictBooleanV } from '@llm/commons';
+import { StrictBooleanV } from '@dashhub/commons';
 
 export const ElasticsearchConfigV = z.object({
   noLogs: StrictBooleanV.default(false),

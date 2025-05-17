@@ -3,9 +3,9 @@ import { pipe } from 'fp-ts/lib/function';
 import { PlusIcon } from 'lucide-react';
 import { v4 } from 'uuid';
 
-import type { SdkAIExternalAPIParameterT, SdkTableRowUuidT } from '@llm/sdk';
+import type { SdkAIExternalAPIParameterT, SdkTableRowUuidT } from '@dashhub/sdk';
 
-import { rejectById } from '@llm/commons';
+import { rejectById } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { GhostPlaceholder } from '~/modules/shared';
 

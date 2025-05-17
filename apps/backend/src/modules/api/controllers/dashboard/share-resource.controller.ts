@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import {
   SdkSearchShareResourceUsersGroupsInputV,
   type ShareResourceSdk,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { ShareResourceService } from '~/modules/share-resource';
 

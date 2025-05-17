@@ -1,7 +1,7 @@
 import { controlled } from '@under-control/forms';
 import { useMemo } from 'react';
 
-import { findItemById, uniq } from '@llm/commons';
+import { findItemById, uniq } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 
 import { Select, type SelectItem } from '../controls';

@@ -9,7 +9,7 @@ import type {
   SdkTableRowWithUuidT,
 } from '~/shared';
 
-import { decodeTextAsyncStream } from '@llm/commons';
+import { decodeTextAsyncStream } from '@dashhub/commons';
 import { AbstractNestedSdkWithAuth } from '~/modules/abstract-nested-sdk-with-auth';
 import {
   formDataPayload,

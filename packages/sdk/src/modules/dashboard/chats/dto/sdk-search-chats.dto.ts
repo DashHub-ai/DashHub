@@ -1,6 +1,6 @@
 import type { z } from 'zod';
 
-import { StrictBooleanV } from '@llm/commons';
+import { StrictBooleanV } from '@dashhub/commons';
 import {
   DEFAULT_SDK_SORT,
   SdkArchivedFiltersInputV,

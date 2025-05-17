@@ -1,4 +1,4 @@
-import type { SdkUserListItemT } from '@llm/sdk';
+import type { SdkUserListItemT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { Avatar } from '~/ui';

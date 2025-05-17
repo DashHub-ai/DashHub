@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { z } from 'zod';
 
-import { useLocalStorageObject } from '@llm/commons-front';
+import { useLocalStorageObject } from '@dashhub/commons-front';
 
 const SectionStatesSchema = z.record(z.string(), z.boolean());
 

@@ -1,7 +1,7 @@
 import { pipe } from 'fp-ts/lib/function';
 
-import { formatDate, tapTaskEither, tapTaskOption } from '@llm/commons';
-import { type SdkSearchAppCategoryItemT, useSdkForLoggedIn } from '@llm/sdk';
+import { formatDate, tapTaskEither, tapTaskOption } from '@dashhub/commons';
+import { type SdkSearchAppCategoryItemT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { EllipsisCrudDropdownButton } from '~/ui';
 
 import { useAppCategoryUpdateModal } from '../form/update';

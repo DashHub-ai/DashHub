@@ -5,7 +5,7 @@ import {
   preloadResources,
   useAfterMount,
   useAsyncCallback,
-} from '@llm/commons-front';
+} from '@dashhub/commons-front';
 import { useConfig } from '~/config';
 
 const DEFAULT_SCOPES = [

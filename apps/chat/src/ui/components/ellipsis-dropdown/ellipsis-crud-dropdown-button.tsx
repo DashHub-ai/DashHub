@@ -1,6 +1,6 @@
 import * as TE from 'fp-ts/lib/TaskEither';
 
-import { rejectFalsyItems } from '@llm/commons';
+import { rejectFalsyItems } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 
 import {

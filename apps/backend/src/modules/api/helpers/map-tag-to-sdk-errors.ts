@@ -1,9 +1,9 @@
 import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
-import type { TaggedError } from '@llm/commons';
+import type { TaggedError } from '@dashhub/commons';
 
-import { isSdkTaggedError, SdkRecordAlreadyExistsError, SdkRecordNotFoundError } from '@llm/sdk';
+import { isSdkTaggedError, SdkRecordAlreadyExistsError, SdkRecordNotFoundError } from '@dashhub/sdk';
 import { DatabaseRecordAlreadyExists, DatabaseRecordNotExists } from '~/modules/database';
 import { EsDocumentNotFoundError } from '~/modules/elasticsearch';
 import { LoggerService } from '~/modules/logger';

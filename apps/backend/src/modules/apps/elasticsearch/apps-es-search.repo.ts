@@ -10,7 +10,7 @@ import type {
   SdkSearchAppItemT,
   SdkSearchAppsInputT,
   SdkSearchAppsOutputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import type { TableId } from '~/modules/database';
 
 import {
@@ -22,7 +22,7 @@ import {
   pluckIds,
   rejectFalsyItems,
   uniq,
-} from '@llm/commons';
+} from '@dashhub/commons';
 import { AppsCategoriesEsTreeRepo } from '~/modules/apps-categories/elasticsearch';
 import {
   createPaginationOffsetSearchQuery,

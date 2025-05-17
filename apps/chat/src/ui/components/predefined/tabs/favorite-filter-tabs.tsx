@@ -2,7 +2,7 @@ import { controlled, type OmitControlStateAttrs } from '@under-control/forms';
 import clsx from 'clsx';
 import { LayoutGrid, List, Star } from 'lucide-react';
 
-import { rejectFalsyItems } from '@llm/commons';
+import { rejectFalsyItems } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { Tabs, type TabsProps } from '~/ui/components/tabs';
 
@@ -30,7 +30,7 @@ export const FavoriteFiltersTabs = controlled<boolean | null, Props>((
           {totalFavorites > 0 && (
             <span
               className={clsx(
-                'px-1.5 rounded-md min-w-[1.2rem] text-center text-white text-xs',
+                'px-1.5 rounded-md min-w-[1.2rem] text-white text-xs text-center',
                 value === true ? 'bg-yellow-500' : 'bg-gray-500',
               )}
             >

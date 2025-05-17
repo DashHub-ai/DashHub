@@ -10,8 +10,8 @@ import {
   useState,
 } from 'react';
 
-import { FAKE_OBJECT_ID, isObjectWithFakeID } from '@llm/commons';
-import { useOutsideClickRef, useUpdateEffect } from '@llm/commons-front';
+import { FAKE_OBJECT_ID, isObjectWithFakeID } from '@dashhub/commons';
+import { useOutsideClickRef, useUpdateEffect } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 import { SelectExpandSVG } from '~/ui/icons';
 

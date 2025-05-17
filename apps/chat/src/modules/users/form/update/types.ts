@@ -1,7 +1,7 @@
 import type {
   SdkTableRowWithIdT,
   SdkUpdateUserInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 export type UpdateUserFormValue =
   SdkTableRowWithIdT &

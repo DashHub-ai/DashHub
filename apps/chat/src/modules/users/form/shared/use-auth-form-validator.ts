@@ -6,8 +6,8 @@ import {
   type PathValidator,
 } from '@under-control/forms';
 
-import { format } from '@llm/commons';
-import { SDK_MIN_PASSWORD_LENGTH, type SdkCreateUserAuthMethodsT } from '@llm/sdk';
+import { format } from '@dashhub/commons';
+import { SDK_MIN_PASSWORD_LENGTH, type SdkCreateUserAuthMethodsT } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 
 type AllAuthObjectPaths<V extends ControlValue> = Extract<GetAllObjectPathsEntries<V>, {

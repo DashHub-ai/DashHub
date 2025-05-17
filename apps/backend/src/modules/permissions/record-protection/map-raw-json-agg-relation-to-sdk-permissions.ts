@@ -1,4 +1,4 @@
-import type { SdkPermissionAccessLevelT, SdkPermissionT } from '@llm/sdk';
+import type { SdkPermissionAccessLevelT, SdkPermissionT } from '@dashhub/sdk';
 import type { TableId } from '~/modules/database';
 
 export type PermissionsTableRowRawAggRelation = {

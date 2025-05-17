@@ -3,7 +3,10 @@
   "compilerOptions": {
     "baseUrl": "src/",
     "paths": {
-      "~/*": ["*"]
+      "~/*": ["./*"],
+      "~/commercial-commons": ["../../../externals/commercial/commons/src"],
+      "~/commercial-commons/*": ["../../../externals/commercial/commons/src/*"],
+      "~/commercial/*": ["../../../externals/commercial/chat/src/*", "commercial.stub/*"]
     },
     "types": [
       "vite/client",

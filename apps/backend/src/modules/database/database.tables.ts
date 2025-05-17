@@ -1,4 +1,4 @@
-import type { RecordOfType } from '@llm/commons';
+import type { RecordOfType } from '@dashhub/commons';
 
 import type { AIExternalAPIsTable } from '../ai-external-apis';
 import type { AIModelsTable } from '../ai-models';

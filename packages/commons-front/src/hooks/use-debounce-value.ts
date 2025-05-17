@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { AsyncDebounceConfig } from '@llm/commons';
+import type { AsyncDebounceConfig } from '@dashhub/commons';
 
 import { useAsyncCallback } from './use-async-callback';
 import { useAsyncDebounce } from './use-async-debounce';

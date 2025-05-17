@@ -1,6 +1,6 @@
-import { AsyncTaskCache } from '@llm/commons';
-import { useAsyncValue } from '@llm/commons-front';
-import { type AppsSdk, type SdkAppT, type SdkTableRowIdT, useSdkForLoggedIn } from '@llm/sdk';
+import { AsyncTaskCache } from '@dashhub/commons';
+import { useAsyncValue } from '@dashhub/commons-front';
+import { type AppsSdk, type SdkAppT, type SdkTableRowIdT, useSdkForLoggedIn } from '@dashhub/sdk';
 
 const APPS_CACHE = new AsyncTaskCache<SdkTableRowIdT, AppsSdk, SdkAppT>(
   (id, sdk) => sdk.get(id),

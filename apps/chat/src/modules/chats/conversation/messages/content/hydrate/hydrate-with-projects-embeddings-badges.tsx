@@ -1,4 +1,4 @@
-import type { SdkTableRowIdT } from '@llm/sdk';
+import type { SdkTableRowIdT } from '@dashhub/sdk';
 
 import {
   ProjectEmbeddingChatBadge,

@@ -2,7 +2,7 @@ import { useControlStrict } from '@under-control/forms';
 import clsx from 'clsx';
 import { type KeyboardEventHandler, useState } from 'react';
 
-import { useOutsideClickRef, useUpdateEffect } from '@llm/commons-front';
+import { useOutsideClickRef, useUpdateEffect } from '@dashhub/commons-front';
 
 import { SearchResults } from './results';
 import { SearchBarInput } from './search-bar-input';

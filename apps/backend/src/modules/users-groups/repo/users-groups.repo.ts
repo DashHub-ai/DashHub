@@ -7,7 +7,7 @@ import { inject, injectable } from 'tsyringe';
 import type {
   SdkCreateUsersGroupInputT,
   SdkUpdateUsersGroupInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import type { UsersGroupTableRowWithRelations } from '../users-groups.tables';
 

@@ -1,13 +1,13 @@
 import { type FormHookAttrs, type Overwrite, useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 
-import { runTask, tapTaskEither } from '@llm/commons';
+import { runTask, tapTaskEither } from '@dashhub/commons';
 import {
   type SdkPermissionT,
   type SdkTableRowWithIdT,
   type SdkUpdateAIExternalAPIInputT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { usePredefinedFormValidators } from '~/hooks';
 import { useSaveTaskEitherNotification } from '~/ui';
 

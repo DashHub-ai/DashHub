@@ -1,6 +1,6 @@
 import type { Insertable, Selectable, Updateable } from 'kysely';
 
-import type { SnakeCaseToCamelCaseObject } from '@llm/commons';
+import type { SnakeCaseToCamelCaseObject } from '@dashhub/commons';
 
 export type NormalizeSelectTableRow<T> = SnakeCaseToCamelCaseObject<
   Selectable<T>

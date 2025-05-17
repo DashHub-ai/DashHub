@@ -1,4 +1,4 @@
-import { waitFor, type WaitForConfig } from '@llm/commons';
+import { waitFor, type WaitForConfig } from '@dashhub/commons';
 
 export async function waitForWindowEntry<
   N extends keyof Window,

@@ -1,6 +1,6 @@
 import { Loader2, UserIcon } from 'lucide-react';
 
-import { useSdkSubscribeMeOrThrow } from '@llm/sdk';
+import { useSdkSubscribeMeOrThrow } from '@dashhub/sdk';
 
 export function LoggedInButton() {
   const data = useSdkSubscribeMeOrThrow();

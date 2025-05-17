@@ -3,7 +3,7 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { injectable } from 'tsyringe';
 
-import { isSDKCredentialsMasked, SdkCreateAIModelInputT, SdkUpdateAIModelInputT } from '@llm/sdk';
+import { isSDKCredentialsMasked, SdkCreateAIModelInputT, SdkUpdateAIModelInputT } from '@dashhub/sdk';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,

@@ -2,13 +2,13 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { delay, inject, injectable } from 'tsyringe';
 
-import { asyncIteratorToVoidPromise, type RequiredBy, runTaskAsVoid, tapAsyncIterator, tryOrThrowTE } from '@llm/commons';
+import { asyncIteratorToVoidPromise, type RequiredBy, runTaskAsVoid, tapAsyncIterator, tryOrThrowTE } from '@dashhub/commons';
 import {
   SdkCreateChatInputT,
   SdkJwtTokenT,
   SdkTableRowUuidT,
   SdkUpdateChatInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { WithAuthFirewall } from '../auth';
 import { TableId, TableRowWithUuid, TableUuid } from '../database';

@@ -1,4 +1,4 @@
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 
 import { useWorkspaceOrganization } from './use-workspace-organization';
 

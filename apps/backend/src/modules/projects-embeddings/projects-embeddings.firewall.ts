@@ -4,7 +4,7 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import type {
   SdkJwtTokenT,
   SdkSearchProjectEmbeddingsInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import { AuthFirewallService } from '~/modules/auth/firewall';
 

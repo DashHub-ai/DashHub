@@ -1,6 +1,6 @@
 import type { ColumnType } from 'kysely';
 
-import type { SdkChatStatsT } from '@llm/sdk';
+import type { SdkChatStatsT } from '@dashhub/sdk';
 import type {
   DropTableRowAccessTime,
   NormalizeSelectTableRow,

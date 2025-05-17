@@ -3,7 +3,7 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkCreateProjectInputT, SdkUpdateProjectInputT } from '@llm/sdk';
+import type { SdkCreateProjectInputT, SdkUpdateProjectInputT } from '@dashhub/sdk';
 
 import {
   createArchiveRecordQuery,

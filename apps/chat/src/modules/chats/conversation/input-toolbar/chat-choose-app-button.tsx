@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import { pipe } from 'fp-ts/lib/function';
 import { Plus } from 'lucide-react';
 
-import type { SdkAppT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkAppT, SdkTableRowWithIdT } from '@dashhub/sdk';
 
-import { tapTaskOption } from '@llm/commons';
+import { tapTaskOption } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { useChooseAppModal } from '~/modules/apps/choose-app';
 

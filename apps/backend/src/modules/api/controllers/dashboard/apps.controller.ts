@@ -10,7 +10,7 @@ import {
   SdkSearchAppsInputV,
   SdkStrictJsonV,
   SdkUpdateAppInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { AppsService } from '~/modules/apps';
 import { ConfigService } from '~/modules/config';
 

@@ -8,7 +8,7 @@ import {
   SdkSearchChatsInputV,
   type SdkTableRowWithIdT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,

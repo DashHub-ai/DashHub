@@ -4,9 +4,9 @@ import { type CanBePromise, suppressEvent, useControlStrict, useForm } from '@un
 import clsx from 'clsx';
 import { CircleStopIcon, SendIcon } from 'lucide-react';
 
-import { StrictBooleanV } from '@llm/commons';
-import { useAfterMount, useLocalStorageObject, useUpdateEffect } from '@llm/commons-front';
-import { getSdkAppMentionInChat, type SdkCreateMessageInputT, type SdkTableRowWithIdNameT } from '@llm/sdk';
+import { StrictBooleanV } from '@dashhub/commons';
+import { useAfterMount, useLocalStorageObject, useUpdateEffect } from '@dashhub/commons-front';
+import { getSdkAppMentionInChat, type SdkCreateMessageInputT, type SdkTableRowWithIdNameT } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { Checkbox } from '~/ui';
 

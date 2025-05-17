@@ -1,4 +1,4 @@
-import type { SdkCreateAppOutputT } from '@llm/sdk';
+import type { SdkCreateAppOutputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { useAIExternalAPIDefaultValue } from '~/modules/ai-external-api-creator';

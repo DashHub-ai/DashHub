@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { useInterval } from '@llm/commons-front';
-import { isSdkAIGeneratingString, type SdkSearchChatsOutputT } from '@llm/sdk';
+import { useInterval } from '@dashhub/commons-front';
+import { isSdkAIGeneratingString, type SdkSearchChatsOutputT } from '@dashhub/sdk';
 
 export function useReloadIntervalIfGenerating(
   reload: VoidFunction,

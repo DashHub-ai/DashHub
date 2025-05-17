@@ -1,4 +1,4 @@
-import type { SdkCreateAppCategoryInputT } from '@llm/sdk';
+import type { SdkCreateAppCategoryInputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

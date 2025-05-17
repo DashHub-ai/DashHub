@@ -6,7 +6,7 @@ import {
   type SdkPermissionT,
   type SdkTableRowWithIdNameT,
   type SdkUserListItemT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 
 import {

@@ -1,5 +1,5 @@
-import type { Nullable } from '@llm/commons';
-import type { SdkMessageRoleT } from '@llm/sdk';
+import type { Nullable } from '@dashhub/commons';
+import type { SdkMessageRoleT } from '@dashhub/sdk';
 
 import { xml } from '../xml';
 

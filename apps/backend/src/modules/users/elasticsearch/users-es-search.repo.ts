@@ -7,10 +7,10 @@ import { inject, injectable } from 'tsyringe';
 import type {
   SdkSearchUserItemT,
   SdkSearchUsersInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import type { TableId } from '~/modules/database';
 
-import { isNil, pluck, rejectFalsyItems } from '@llm/commons';
+import { isNil, pluck, rejectFalsyItems } from '@dashhub/commons';
 import {
   createPaginationOffsetSearchQuery,
   createPhraseFieldQuery,

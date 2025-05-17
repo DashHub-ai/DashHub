@@ -4,7 +4,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { sql } from 'kysely';
 import { injectable } from 'tsyringe';
 
-import { uniq } from '@llm/commons';
+import { uniq } from '@dashhub/commons';
 import {
   createArchiveRecordQuery,
   createArchiveRecordsQuery,

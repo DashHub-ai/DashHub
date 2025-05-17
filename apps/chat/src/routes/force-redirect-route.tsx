@@ -1,6 +1,6 @@
 import { Redirect, useSearch } from 'wouter';
 
-import { decodeSearchParams } from '@llm/commons';
+import { decodeSearchParams } from '@dashhub/commons';
 
 import { useSitemap } from './use-sitemap';
 

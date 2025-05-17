@@ -2,7 +2,7 @@ import type { DependencyList } from 'react';
 
 import { useState } from 'react';
 
-import { shallowCompareArrays } from '@llm/commons';
+import { shallowCompareArrays } from '@dashhub/commons';
 
 export function useInstantUpdateEffect(fn: VoidFunction, deps: DependencyList) {
   const [prevDeps, setPrevDeps] = useState(deps);

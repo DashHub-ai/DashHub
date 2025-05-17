@@ -2,14 +2,14 @@ import clsx from 'clsx';
 import { CheckIcon, FileIcon } from 'lucide-react';
 import { memo } from 'react';
 
-import { AsyncTaskCache, truncateText } from '@llm/commons';
-import { useAsyncValue } from '@llm/commons-front';
+import { AsyncTaskCache, truncateText } from '@dashhub/commons';
+import { useAsyncValue } from '@dashhub/commons-front';
 import {
   type ProjectsEmbeddingsSdk,
   type SdkSearchProjectEmbeddingItemT,
   type SdkTableRowIdT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useBalloon } from '~/ui';
 
 import { ProjectEmbeddingPreview } from './project-embedding-preview';

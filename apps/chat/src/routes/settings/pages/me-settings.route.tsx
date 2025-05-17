@@ -1,4 +1,4 @@
-import { useSdkSubscribeMeOrThrow } from '@llm/sdk';
+import { useSdkSubscribeMeOrThrow } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { UpdateMeForm } from '~/modules';
 import { ContentCard, SpinnerContainer } from '~/ui';

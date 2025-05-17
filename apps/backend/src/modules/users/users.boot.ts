@@ -2,9 +2,9 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkCreateUserInputT } from '@llm/sdk';
+import type { SdkCreateUserInputT } from '@dashhub/sdk';
 
-import { type DistributiveOmit, tapTaskEither, toVoidTE } from '@llm/commons';
+import { type DistributiveOmit, tapTaskEither, toVoidTE } from '@dashhub/commons';
 import { genRandomToken } from '~/helpers';
 import { ConfigService } from '~/modules/config';
 

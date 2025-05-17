@@ -1,6 +1,6 @@
 import type { ColumnType } from 'kysely';
 
-import type { SnakeToCamelCase } from '@llm/commons';
+import type { SnakeToCamelCase } from '@dashhub/commons';
 
 export type TableWithAccessTimeColumns = {
   created_at: ColumnType<Date, never, never>;

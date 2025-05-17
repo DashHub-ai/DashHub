@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import * as O from 'fp-ts/lib/Option';
 import * as TE from 'fp-ts/lib/TaskEither';
 
-import { type Nullable, TaggedError } from '@llm/commons';
+import { type Nullable, TaggedError } from '@dashhub/commons';
 
 import type { SdkJwtTokensPairT } from '../dto';
 

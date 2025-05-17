@@ -1,6 +1,6 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkAICredentialsT, SdkSearchEngineCredentialsT } from '@llm/sdk';
+import type { SdkAICredentialsT, SdkSearchEngineCredentialsT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { FormField, Input } from '~/ui';

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import type { SdkAppT } from '@llm/sdk';
+import type { SdkAppT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { useAIExternalAPIDefaultValue } from '~/modules/ai-external-api-creator';

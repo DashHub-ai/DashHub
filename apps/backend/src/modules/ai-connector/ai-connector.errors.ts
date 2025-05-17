@@ -2,7 +2,7 @@ import type { Task } from 'fp-ts/lib/Task';
 
 import { taskEither as TE } from 'fp-ts';
 
-import { TaggedError } from '@llm/commons';
+import { TaggedError } from '@dashhub/commons';
 
 export class AIConnectionCreatorError extends TaggedError.ofLiteral<any>()('AIConnectionCreatorError') {
   static tryCatch<R>(task: Task<R>) {
