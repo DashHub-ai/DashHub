@@ -2,6 +2,7 @@
   "name": "@dashhub/backend",
   "type": "module",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "build": "vite build --mode production",
     "build:wait": "while [ ! -f ./dist/index.mjs ]; do sleep 0.5; done",
