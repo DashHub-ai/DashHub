@@ -23,8 +23,7 @@
     "test": "vitest --run --passWithNoTests --config ../../config/vite.config.pkg.ts",
     "test:watch": "vitest --watch --passWithNoTests --config ../../config/vite.config.pkg.ts",
     "lint": "eslint . --config ./eslint.config.mjs",
-    "check:types": "tsc",
-    "publish:package": "npm run build && npm publish"
+    "check:types": "tsc"
   },
   "dependencies": {
     "@dashhub/commons": "*",

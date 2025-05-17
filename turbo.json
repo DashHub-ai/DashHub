@@ -2,10 +2,6 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "stream",
   "tasks": {
-    "publish:package": {
-      "dependsOn": ["^publish:package"],
-      "cache": false
-    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**"],

@@ -23,10 +23,11 @@
     "prepare": "husky",
     "test": "turbo run test --parallel",
     "test:watch": "turbo run test:watch --parallel",
-    "publish:packages": "turbo run publish:package"
+    "publish:packages": "npx npm run build && npx npm run check:types && npx changeset && npx changeset version && npx changeset publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.14.0",
+    "@changesets/cli": "^2.29.4",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@commitlint/ensure": "^19.5.0",
