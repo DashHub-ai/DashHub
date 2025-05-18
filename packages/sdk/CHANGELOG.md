@@ -1,5 +1,11 @@
 # @dashhub/sdk
 
+## 1.0.5
+
+### Patch Changes
+
+- Add sort pagination utility
+
 ## 1.0.4
 
 ### Patch Changes
