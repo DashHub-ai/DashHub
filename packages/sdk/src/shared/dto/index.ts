@@ -6,6 +6,7 @@ export * from './sdk-ids-array.dto';
 export * from './sdk-offset-pagination.dto';
 export * from './sdk-optional-file-upload.dto';
 export * from './sdk-search-filters.dto';
+export * from './sdk-search-phrase-filters.dto';
 export * from './sdk-search-sort.dto';
 export * from './sdk-strict-json.dto';
 export * from './sdk-success.dto';

@@ -20,7 +20,3 @@ export const SdkExcludeIdsFiltersInputV = z.object({
 export const SdkUuidsFiltersInputV = z.object({
   ids: SdkUuidsArrayV.optional(),
 });
-
-export const SdkFilteredPhraseInputV = z.object({
-  phrase: z.string().optional(),
-});

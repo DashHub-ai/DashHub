@@ -1,5 +1,23 @@
 # @dashhub/sdk
 
+## 1.0.8
+
+### Patch Changes
+
+- Adjust typing
+
+## 1.0.7
+
+### Patch Changes
+
+- Fix typing
+
+## 1.0.6
+
+### Patch Changes
+
+- Add search phrase utils to sdk pagination filters
+
 ## 1.0.5
 
 ### Patch Changes

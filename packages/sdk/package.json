@@ -1,7 +1,7 @@
 {
   "name": "@dashhub/sdk",
   "type": "module",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "license": "Apache License 2.0",
   "exports": {
     ".": {
@@ -28,6 +28,8 @@
   "dependencies": {
     "@dashhub/commons": "*",
     "@dashhub/commons-front": "*",
+    "@types/fast-levenshtein": "^0.0.4",
+    "fast-levenshtein": "^3.0.0",
     "fp-ts": "^2.16.1",
     "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
