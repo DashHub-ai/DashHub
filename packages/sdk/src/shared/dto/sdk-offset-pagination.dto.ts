@@ -43,3 +43,15 @@ export function mapSdkOffsetPaginationItems<
     items: items.map(mapperFn),
   });
 }
+
+export function offsetSdkPaginateArray<T>(pagination: SdkOffsetPaginationInputT) {
+  return (array: T[]): SdkOffsetPaginationOutputT<T> => {
+    const { offset, limit } = pagination;
+    const paginatedArray = array.slice(offset, offset + limit);
+
+    return {
+      items: paginatedArray,
+      total: array.length,
+    };
+  };
+}
