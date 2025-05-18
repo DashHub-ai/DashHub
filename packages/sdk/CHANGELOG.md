@@ -1,5 +1,11 @@
 # @dashhub/sdk
 
+## 1.0.3
+
+### Patch Changes
+
+- Add translated strings typings.
+
 ## 1.0.2
 
 ### Patch Changes
