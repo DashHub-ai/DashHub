@@ -65,19 +65,48 @@ export function sdkGetTranslation(
 }
 
 /**
+ * Parameters for the boost function
+ */
+export type SdkBoostFunctionParamsT<T> = {
+  item: T;
+  distance: number;
+  fieldText: string;
+  phrase: string;
+};
+
+/**
+ * Default boost function that converts distance to score and boosts items containing the search phrase
+ */
+export function sdkDefaultBoostFunction<T>(
+  { distance, fieldText, phrase }: SdkBoostFunctionParamsT<T>,
+): number {
+  // Convert distance to a base score (lower distance = higher score)
+  let score = 1 / (distance + 1);
+
+  // Significantly boost if field contains the search phrase
+  if (fieldText.toLowerCase().includes(phrase.toLowerCase())) {
+    score *= 10; // Increased boost for substring matches
+  }
+
+  return score;
+}
+
+/**
  * Searches for items in an array that have matching translations in the specified field
  */
 export function sdkSearchByTranslatedField<T>(
   {
     phrase,
-    langCode = '',
+    langCode,
     translatedFieldGetter,
     threshold = 3,
+    boostFunction = sdkDefaultBoostFunction,
   }: {
     phrase: string;
-    langCode?: string;
+    langCode: string;
     translatedFieldGetter: (item: T) => SdkTranslatedStringT | undefined;
     threshold?: number;
+    boostFunction?: (params: SdkBoostFunctionParamsT<T>) => number;
   },
 ) {
   return (items: T[]): T[] => {
@@ -85,36 +114,53 @@ export function sdkSearchByTranslatedField<T>(
       return items;
     }
 
-    const searchTranslation = sdkParseTranslatedPhrase(phrase);
-    const searchLangCode = Object.keys(searchTranslation)[0] || '';
-    const searchText = Object.values(searchTranslation)[0] || '';
-
-    // Use the language from the search phrase or fall back to provided langCode
-    const effectiveLangCode = searchLangCode || langCode;
-
-    // Filter and calculate distances
-    const itemsWithDistance = items
+    // Calculate scores for each item
+    const itemsWithScore = items
       .map((item) => {
         const fieldTranslations = translatedFieldGetter(item);
-        if (!fieldTranslations)
-          return { item, distance: Infinity };
+        if (!fieldTranslations) {
+          return {
+            item,
+            score: 0,
+          };
+        }
 
         const fieldText = sdkGetTranslation({
           translations: fieldTranslations,
-          langCode: effectiveLangCode,
+          langCode,
         });
 
-        if (!fieldText)
-          return { item, distance: Infinity };
+        if (!fieldText) {
+          return { item, score: 0 };
+        }
 
-        const distance = levenshtein.get(searchText.toLowerCase(), fieldText.toLowerCase());
-        return { item, distance };
+        const distance = levenshtein.get(phrase.toLowerCase(), fieldText.toLowerCase());
+        const containsSearchTerm = fieldText.toLowerCase().includes(phrase.toLowerCase());
+
+        // Always include exact matches regardless of distance
+        // Only apply threshold to items without the search term
+        if (distance > threshold && !containsSearchTerm) {
+          return { item, score: 0 };
+        }
+
+        // Apply boost function to get the final score
+        const score = boostFunction({
+          item,
+          distance,
+          fieldText,
+          phrase,
+        });
+
+        return {
+          item,
+          score,
+        };
       })
-      .filter(({ distance }) => distance <= threshold);
+      .filter(({ score }) => score > 0);
 
-    // Sort by distance (closest match first)
-    return itemsWithDistance
-      .sort((a, b) => a.distance - b.distance)
+    // Sort by score (highest first)
+    return itemsWithScore
+      .sort((a, b) => b.score - a.score)
       .map(({ item }) => item);
   };
 }

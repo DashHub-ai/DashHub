@@ -1,5 +1,23 @@
 # @dashhub/sdk
 
+## 1.0.11
+
+### Patch Changes
+
+- Improve search
+
+## 1.0.10
+
+### Patch Changes
+
+- Adjust search
+
+## 1.0.9
+
+### Patch Changes
+
+- Add advanced search boost functions
+
 ## 1.0.8
 
 ### Patch Changes
