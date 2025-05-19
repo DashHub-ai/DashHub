@@ -6,9 +6,9 @@ RUN apk add --no-cache python3 make g++ gcc \
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-COPY apps/* ./apps/
-COPY packages/* ./packages/
-COPY externals/* ./externals/
+COPY apps ./apps/
+COPY packages ./packages/
+COPY externals ./externals/
 
 RUN npm install --no-audit --no-fund
 
