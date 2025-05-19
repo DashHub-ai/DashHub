@@ -25,10 +25,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: yarn
+          cache: npm
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --prefer-offline --production=false
+        run: npm ci
 
       - name: Turbo Cache
         uses: actions/cache@v4
@@ -39,7 +39,7 @@ jobs:
             turbo-build-${{ github.job }}-${{ github.ref_name }}-
 
       - name: Build packages
-        run: yarn build
+        run: npm run build
         env:
           PUBLIC_VITE_APP_ENV: staging
           PUBLIC_VITE_API_URL: https://dev.dashhub.ai/api

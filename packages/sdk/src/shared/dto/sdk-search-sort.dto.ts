@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import type { SdkTableRowWithDatesT } from './sdk-table-row-with-dates.dto';
+
 export type SdkSearchSortDirectionT = 'asc' | 'desc';
 
 export type SdkSortItemT<N extends string = string> = `${N}:${SdkSearchSortDirectionT}`;
@@ -37,4 +39,32 @@ export function destructSdkSortItem<S extends string>(sort: SdkSortItemT<S>) {
     name,
     direction,
   } as { name: S; direction: SdkSearchSortDirectionT; };
+}
+
+export function sortSdkRecordsWithDates<T extends SdkTableRowWithDatesT & { id?: string | number; }>(
+  sort: SdkSortItemT<'createdAt' | 'updatedAt' | 'id'>,
+) {
+  const { name, direction } = destructSdkSortItem(sort);
+
+  return (records: T[]) => [...records].sort((a, b) => {
+    let comparison = 0;
+
+    switch (name) {
+      case 'createdAt':
+        comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        break;
+
+      case 'updatedAt':
+        comparison = new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+        break;
+
+      case 'id':
+        if (a.id !== undefined && b.id !== undefined) {
+          comparison = String(a.id).localeCompare(String(b.id));
+        }
+        break;
+    }
+
+    return direction === 'asc' ? comparison : -comparison;
+  });
 }

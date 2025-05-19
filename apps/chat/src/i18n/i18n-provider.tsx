@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { type PropsWithChildren, useMemo } from 'react';
 import { z } from 'zod';
 
-import { useLocalStorageObject } from '@llm/commons-front';
+import { useLocalStorageObject } from '@dashhub/commons-front';
 
 import { I18N_DEFAULT_LANG, type I18nLangT, I18nLangV } from './dto';
 import { I18nContext, type I18nContextValue } from './i18n-context';

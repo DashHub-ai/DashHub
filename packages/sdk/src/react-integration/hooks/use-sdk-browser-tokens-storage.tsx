@@ -1,7 +1,7 @@
 import { option as O } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
-import { useLocalStorageObject, useRefSafeCallback } from '@llm/commons-front';
+import { useLocalStorageObject, useRefSafeCallback } from '@dashhub/commons-front';
 import { type SdkJwtTokensPairT, SdkJwtTokensPairV, type SessionTokensSetterAttrs } from '~/modules';
 import { TokensStorage } from '~/modules/auth/storage';
 

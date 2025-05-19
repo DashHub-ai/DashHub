@@ -1,4 +1,4 @@
-import type { SdkOrganizationT } from '@llm/sdk';
+import type { SdkOrganizationT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { FormErrorAlert, FormField, Input, SaveButton } from '~/ui';

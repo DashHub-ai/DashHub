@@ -6,13 +6,13 @@ import { takeRight } from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/function';
 import { AlertCircle, Bookmark, Bot, Globe, ReplyIcon, User } from 'lucide-react';
 
-import { type Overwrite, pluckTyped, uniq } from '@llm/commons';
+import { type Overwrite, pluckTyped, uniq } from '@dashhub/commons';
 import {
   type SdkRepeatedMessageLike,
   type SdkSearchMessageItemT,
   useIsSdkPinnedMessageToggled,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { ExternalApiChatBadge } from '~/modules/ai-external-apis/chat';
 

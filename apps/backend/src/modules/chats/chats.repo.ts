@@ -4,8 +4,8 @@ import { identity, pipe } from 'fp-ts/lib/function';
 import { jsonBuildObject } from 'kysely/helpers/postgres';
 import { inject, injectable } from 'tsyringe';
 
-import type { RequiredBy } from '@llm/commons';
-import type { SdkCreateChatInputT, SdkUpdateChatInputT } from '@llm/sdk';
+import type { RequiredBy } from '@dashhub/commons';
+import type { SdkCreateChatInputT, SdkUpdateChatInputT } from '@dashhub/sdk';
 
 import {
   createArchiveRecordQuery,

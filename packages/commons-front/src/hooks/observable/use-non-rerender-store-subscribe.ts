@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import type { StoreSubscriber } from '@llm/commons';
+import type { StoreSubscriber } from '@dashhub/commons';
 
 import { useRefSafeCallback } from '../use-ref-safe-callback';
 

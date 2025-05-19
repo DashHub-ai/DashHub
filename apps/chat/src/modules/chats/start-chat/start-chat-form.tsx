@@ -3,10 +3,10 @@ import type { KeyboardEventHandler } from 'react';
 import clsx from 'clsx';
 import { SendIcon } from 'lucide-react';
 
-import type { SdkTableRowWithIdNameT } from '@llm/sdk';
+import type { SdkTableRowWithIdNameT } from '@dashhub/sdk';
 
-import { StrictBooleanV } from '@llm/commons';
-import { useFocusAfterMount, useLocalStorageObject } from '@llm/commons-front';
+import { StrictBooleanV } from '@dashhub/commons';
+import { useFocusAfterMount, useLocalStorageObject } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 import { AIModelsSearchSelect } from '~/modules/ai-models';
 import { ProjectsSearchSelect } from '~/modules/projects';

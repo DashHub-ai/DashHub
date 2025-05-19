@@ -1,7 +1,7 @@
 import { MessageCirclePlusIcon, RepeatIcon } from 'lucide-react';
 
-import type { CanBePromise } from '@llm/commons';
-import type { SdkAppT } from '@llm/sdk';
+import type { CanBePromise } from '@dashhub/commons';
+import type { SdkAppT } from '@dashhub/sdk';
 import type { CardBigActionButtonProps } from '~/ui';
 
 import { useI18n } from '~/i18n';

@@ -1,8 +1,8 @@
 import { clsx } from 'clsx';
 
-import type { SdkSearchPinnedMessageItemT } from '@llm/sdk';
+import type { SdkSearchPinnedMessageItemT } from '@dashhub/sdk';
 
-import { formatDate } from '@llm/commons';
+import { formatDate } from '@dashhub/commons';
 
 import { PinnedMessageCard } from './pinned-message-card';
 

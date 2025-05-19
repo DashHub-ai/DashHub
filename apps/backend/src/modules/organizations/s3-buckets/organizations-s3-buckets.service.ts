@@ -7,7 +7,7 @@ import type {
   SdkJwtTokenT,
   SdkTableRowIdT,
   SdkUpdateS3BucketInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import type { WithAuthFirewall } from '~/modules/auth';
 import type { TableId, TableRowWithId } from '~/modules/database';
 
@@ -16,7 +16,7 @@ import {
   runTaskAsVoid,
   tapAsyncIterator,
   tryOrThrowTE,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 import { OrganizationsS3BucketsEsIndexRepo, OrganizationsS3BucketsEsSearchRepo } from './elasticsearch';
 import { OrganizationsS3BucketsFirewall } from './organizations-s3-buckets.firewall';

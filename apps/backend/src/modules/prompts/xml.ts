@@ -1,4 +1,4 @@
-import { type FalsyItem, rejectFalsyItems } from '@llm/commons';
+import { type FalsyItem, rejectFalsyItems } from '@dashhub/commons';
 
 export type XmlTagOptions = {
   children?: FalsyItem<string>[];

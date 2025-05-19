@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { MenuIcon, X } from 'lucide-react';
 
-import { useModal } from '@llm/commons-front';
+import { useModal } from '@dashhub/commons-front';
 
 import { NavigationLinks } from './links';
 

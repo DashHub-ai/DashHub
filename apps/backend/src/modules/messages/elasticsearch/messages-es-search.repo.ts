@@ -7,10 +7,10 @@ import { inject, injectable } from 'tsyringe';
 import type {
   SdkSearchMessageItemT,
   SdkSearchMessagesInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import type { TableUuid } from '~/modules/database';
 
-import { pluck, rejectFalsyItems } from '@llm/commons';
+import { pluck, rejectFalsyItems } from '@dashhub/commons';
 import {
   createPaginationOffsetSearchQuery,
   createScoredSortFieldQuery,

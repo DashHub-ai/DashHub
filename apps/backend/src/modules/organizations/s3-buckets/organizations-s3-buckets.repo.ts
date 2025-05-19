@@ -3,9 +3,9 @@ import { array as A, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkCreateS3BucketInputT, SdkUpdateS3BucketInputT } from '@llm/sdk';
+import type { SdkCreateS3BucketInputT, SdkUpdateS3BucketInputT } from '@dashhub/sdk';
 
-import { isNil, mapAsyncIterator } from '@llm/commons';
+import { isNil, mapAsyncIterator } from '@dashhub/commons';
 import {
   AbstractDatabaseRepo,
   chainDatabasePromiseTE,

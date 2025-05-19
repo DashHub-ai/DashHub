@@ -1,4 +1,4 @@
-import type { SdkUsersGroupT } from '@llm/sdk';
+import type { SdkUsersGroupT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

@@ -4,7 +4,7 @@ import type {
   SdkPermissionAccessLevelT,
   SdkSearchEngineProviderT,
   SdkTranslatedErrors,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 const I18N_SDK_ERRORS_EN: Record<SdkTranslatedErrors['tag'], string> = {
   SdkIncorrectUsernameOrPasswordError: 'Incorrect email or password',

@@ -1,5 +1,5 @@
-import { StrictBooleanV } from '@llm/commons';
-import { useLocalStorageObject } from '@llm/commons-front';
+import { StrictBooleanV } from '@dashhub/commons';
+import { useLocalStorageObject } from '@dashhub/commons-front';
 
 export function useSidebarToggledStorage() {
   return useLocalStorageObject('toggled-page-layout-sidebar', {

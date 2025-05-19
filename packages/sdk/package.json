@@ -1,8 +1,8 @@
 {
-  "name": "@llm/sdk",
+  "name": "@dashhub/sdk",
   "type": "module",
-  "version": "1.0.0",
-  "private": true,
+  "version": "1.0.11",
+  "license": "Apache License 2.0",
   "exports": {
     ".": {
       "import": {
@@ -14,6 +14,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
+    "dist/",
     "src/"
   ],
   "scripts": {
@@ -25,8 +26,10 @@
     "check:types": "tsc"
   },
   "dependencies": {
-    "@llm/commons": "*",
-    "@llm/commons-front": "*",
+    "@dashhub/commons": "*",
+    "@dashhub/commons-front": "*",
+    "@types/fast-levenshtein": "^0.0.4",
+    "fast-levenshtein": "^3.0.0",
     "fp-ts": "^2.16.1",
     "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
@@ -35,6 +38,6 @@
     "zod": "^3.24.1"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }

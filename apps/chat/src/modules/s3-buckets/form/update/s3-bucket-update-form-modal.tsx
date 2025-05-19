@@ -1,4 +1,4 @@
-import type { SdkS3BucketT } from '@llm/sdk';
+import type { SdkS3BucketT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

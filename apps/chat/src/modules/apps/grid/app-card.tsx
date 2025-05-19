@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 
 import { WandSparklesIcon } from 'lucide-react';
 
-import { formatDate } from '@llm/commons';
-import { isSdkAppCreatorApp, type SdkAppT, useSdkForLoggedIn } from '@llm/sdk';
+import { formatDate } from '@dashhub/commons';
+import { isSdkAppCreatorApp, type SdkAppT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useCreateChatWithInitialApp } from '~/modules/chats/conversation/hooks';
 import { FavoriteStarButton } from '~/modules/favorites';
 import { CardRecordPermissions } from '~/modules/permissions';

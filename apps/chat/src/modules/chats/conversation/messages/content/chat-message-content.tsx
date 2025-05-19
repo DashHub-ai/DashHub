@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import { memo, type ReactNode, useMemo, useSyncExternalStore } from 'react';
 
-import type { SdkMessageWebSearchItemT } from '@llm/sdk';
+import type { SdkMessageWebSearchItemT } from '@dashhub/sdk';
 
-import { createStoreSubscriber, truncateText } from '@llm/commons';
+import { createStoreSubscriber, truncateText } from '@dashhub/commons';
 
 import type { AIStreamContent, AIStreamObservable } from '../../hooks';
 

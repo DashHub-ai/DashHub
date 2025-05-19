@@ -6,7 +6,7 @@ import {
   SdkSearchSearchEnginesInputV,
   SdkUpdateSearchEngineInputV,
   type SearchEnginesSdk,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ConfigService } from '~/modules/config';
 import { SearchEnginesService } from '~/modules/search-engines';
 

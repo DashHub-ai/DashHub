@@ -1,8 +1,8 @@
 {
-  "name": "llm-integration-platform",
+  "name": "dashhub",
   "type": "module",
   "private": true,
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "npm@10.8.2",
   "description": "SaaS platform designed for enterprise clients to seamlessly integrate, manage, and utilize Large Language Models (LLMs) within their environment.",
   "license": "Apache License 2.0",
   "repository": {
@@ -10,10 +10,10 @@
     "url": "https://github.com/DashHub-ai/DashHub"
   },
   "scripts": {
-    "db:migrate": "yarn workspace @llm/backend db:migrate",
-    "es:reindex:all": "yarn workspace @llm/backend es:reindex:all",
-    "chats:summarize:all": "yarn workspace @llm/backend chats:summarize:all",
-    "projects:summarize:all": "yarn workspace @llm/backend projects:summarize:all",
+    "db:migrate": "npm --workspace=@dashhub/backend db:migrate",
+    "es:reindex:all": "npm --workspace=@dashhub/backend es:reindex:all",
+    "chats:summarize:all": "npm --workspace=@dashhub/backend chats:summarize:all",
+    "projects:summarize:all": "npm --workspace=@dashhub/backend projects:summarize:all",
     "clean": "find . -type f -name 'vite.config.*.timestamp-*' -delete 2>/dev/null",
     "clean:turbo": "rm -rf .turbo/ 2>/dev/null",
     "build": "NODE_ENV=production turbo run build --cache-dir=.turbo",
@@ -22,10 +22,12 @@
     "lint": "turbo lint --parallel",
     "prepare": "husky",
     "test": "turbo run test --parallel",
-    "test:watch": "turbo run test:watch --parallel"
+    "test:watch": "turbo run test:watch --parallel",
+    "publish:packages": "npx npm run build && npx npm run check:types && npx changeset && npx changeset version && npx changeset publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.14.0",
+    "@changesets/cli": "^2.29.4",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@commitlint/ensure": "^19.5.0",
@@ -63,6 +65,7 @@
   },
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "apps/*",
+    "externals/commercial/*"
   ]
 }

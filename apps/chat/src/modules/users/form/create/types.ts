@@ -1,4 +1,4 @@
-import type { SdkCreateUserInputT, SdkCreateUserOrganizationInputT } from '@llm/sdk';
+import type { SdkCreateUserInputT, SdkCreateUserOrganizationInputT } from '@dashhub/sdk';
 import type { SelectItem } from '~/ui';
 
 export type CreateUserOrganizationValue = SdkCreateUserOrganizationInputT & {

@@ -7,9 +7,9 @@ import {
   useRef,
 } from 'react';
 
-import type { SdkTableRowWithIdNameT } from '@llm/sdk';
+import type { SdkTableRowWithIdNameT } from '@dashhub/sdk';
 
-import { isImageFileUrl, type Nullable } from '@llm/commons';
+import { isImageFileUrl, type Nullable } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 
 type SelectGenericFileInputProps = Pick<
@@ -91,7 +91,7 @@ export const SelectGenericFileInput = controlled<
           <button
             type="button"
             onClick={handleClear}
-            className="text-red-600 text-xs hover:text-red-700"
+            className="text-red-600 hover:text-red-700 text-xs"
           >
             {t.form.clearFile}
           </button>

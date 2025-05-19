@@ -4,7 +4,7 @@ import {
   useEmailValidatorFormValidators,
   useNumericFormValidator,
   useRequiredFormValidators,
-} from '@llm/commons-front';
+} from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 
 export function usePredefinedFormValidators<V extends ControlValue>() {

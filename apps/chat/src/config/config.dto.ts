@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { AppEnvV } from '@llm/commons';
+import { AppEnvV } from '@dashhub/commons';
 
 export const ConfigV = z.object({
   env: AppEnvV,

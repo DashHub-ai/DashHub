@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { StrictBooleanV } from '@llm/commons';
+import { StrictBooleanV } from '@dashhub/commons';
 
 export const DatabaseConfigV = z.object({
   hostname: z.string().default('0.0.0.0'),

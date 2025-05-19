@@ -1,6 +1,6 @@
 import { Trash } from 'lucide-react';
 
-import type { SdkPermissionAccessLevelT, SdkUserListItemT } from '@llm/sdk';
+import type { SdkPermissionAccessLevelT, SdkUserListItemT } from '@dashhub/sdk';
 
 import { PermissionCheckboxes } from '~/modules/permissions/controls/permission-checkboxes';
 import { Avatar } from '~/ui';

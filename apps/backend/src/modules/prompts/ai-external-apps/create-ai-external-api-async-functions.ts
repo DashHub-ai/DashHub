@@ -5,7 +5,7 @@ import type {
   SdkAIExternalAPIEndpointT,
   SdkAIExternalAPIParameterT,
   SdkAIExternalAPISchemaT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import type { AIProxyAsyncFunction } from '~/modules/ai-connector/clients';
 import type { TableId } from '~/modules/database';
 
@@ -15,7 +15,7 @@ import {
   isNil,
   parameterizePath,
   withSearchParams,
-} from '@llm/commons';
+} from '@dashhub/commons';
 import { LoggerService } from '~/modules/logger';
 
 import { createExternalAIEndpointFunctionDefinition } from './create-ai-endpoint-function-definition';
@@ -148,7 +148,9 @@ function createApiRequestExecutor(
 
       // Build URL with path params and query string
       const url = pipe(
-        concatUrls(context.apiUrl, endpoint.path),
+        context.apiUrl
+          ? concatUrls(context.apiUrl, endpoint.path)
+          : endpoint.path,
         parameterizePath(requestConfig.path),
         withSearchParams(requestConfig.query),
       );

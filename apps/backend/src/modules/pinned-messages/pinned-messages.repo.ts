@@ -2,9 +2,9 @@ import { array as A, option as O, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import type { SdkPinMessageInputT } from '@llm/sdk';
+import type { SdkPinMessageInputT } from '@dashhub/sdk';
 
-import { groupByFlatProp, Overwrite, pluckTyped } from '@llm/commons';
+import { groupByFlatProp, Overwrite, pluckTyped } from '@dashhub/commons';
 import {
   createProtectedDatabaseRepo,
   DatabaseConnectionRepo,

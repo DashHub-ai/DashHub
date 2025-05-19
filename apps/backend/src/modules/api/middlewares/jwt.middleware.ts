@@ -1,7 +1,7 @@
 import { either as E } from 'fp-ts';
 import { createMiddleware } from 'hono/factory';
 
-import type { SdkJwtTokenT } from '@llm/sdk';
+import type { SdkJwtTokenT } from '@dashhub/sdk';
 
 import { tryVerifyAndDecodeToken } from '~/modules/auth';
 

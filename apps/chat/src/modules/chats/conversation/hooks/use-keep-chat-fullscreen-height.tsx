@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 
-import { useWindowListener } from '@llm/commons-front';
+import { useWindowListener } from '@dashhub/commons-front';
 
 export function useKeepChatFullscreenHeight<T extends HTMLElement>() {
   const elementRef = useRef<T>(null);

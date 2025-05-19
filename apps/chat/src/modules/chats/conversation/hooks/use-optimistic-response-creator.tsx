@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 
-import type { Overwrite } from '@llm/commons';
+import type { Overwrite } from '@dashhub/commons';
 
 import {
   type SdkCreateMessageInputT,
@@ -8,7 +8,7 @@ import {
   type SdkMessageT,
   type SdkTableRowWithIdNameT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import type { AIStreamObservable } from './use-ai-response-observable';
 

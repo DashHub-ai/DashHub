@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { NonEmptyOrNullStringV } from '@llm/commons';
+import { NonEmptyOrNullStringV } from '@dashhub/commons';
 import {
   SdkTableRowWithArchivedV,
   SdkTableRowWithDatesV,

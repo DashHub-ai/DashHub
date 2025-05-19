@@ -1,13 +1,13 @@
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import { genRandomPassword, tapTaskOption } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
+import { genRandomPassword, tapTaskOption } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
 import {
   type SdkSearchUserItemT,
   type SdkSearchUsersInputT,
   SdkSearchUsersInputV,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useWorkspaceOrganization } from '~/modules/workspace';
 import {

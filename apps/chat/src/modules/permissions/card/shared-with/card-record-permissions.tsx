@@ -1,6 +1,6 @@
-import type { Nullable } from '@llm/commons';
+import type { Nullable } from '@dashhub/commons';
 
-import { isSdkPublicPermissions, type SdkPermissionT, useSdkForLoggedIn } from '@llm/sdk';
+import { isSdkPublicPermissions, type SdkPermissionT, useSdkForLoggedIn } from '@dashhub/sdk';
 
 import { CardRecordPublic } from './card-record-public';
 import { CardRecordSharedWith } from './card-record-shared-with';

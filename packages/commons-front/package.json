@@ -1,8 +1,8 @@
 {
-  "name": "@llm/commons-front",
+  "name": "@dashhub/commons-front",
   "type": "module",
   "version": "1.0.0",
-  "private": true,
+  "license": "Apache License 2.0",
   "exports": {
     ".": {
       "import": {
@@ -14,6 +14,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
+    "dist/",
     "src/"
   ],
   "scripts": {
@@ -25,13 +26,13 @@
     "check:types": "tsc"
   },
   "dependencies": {
-    "@llm/commons": "*",
+    "@dashhub/commons": "*",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }

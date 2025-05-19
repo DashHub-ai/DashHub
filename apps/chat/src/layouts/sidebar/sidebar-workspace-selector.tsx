@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useLocation } from 'wouter';
 
-import { type SdkIdNameUrlEntryT, useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkIdNameUrlEntryT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { OrganizationsSearchSelect, useWorkspace, useWorkspaceOrganization } from '~/modules';
 import { useSitemap } from '~/routes';

@@ -1,6 +1,6 @@
 import UIKit from 'uikit';
 
-import type { TaggedError } from '@llm/commons';
+import type { TaggedError } from '@dashhub/commons';
 
 import { useSdkErrorTranslator } from '~/hooks';
 import { useI18n } from '~/i18n';

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { XIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
-import { isImageFileUrl } from '@llm/commons';
+import { isImageFileUrl } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { getFileTypeAndColor } from '~/modules/shared';
 
@@ -70,7 +70,7 @@ export function FileCard({ file, withBackground, limitWidth = true, onRemove }: 
             <img
               src={fileUrl}
               alt={file.name}
-              className="rounded w-full h-full aspect-square object-contain"
+              className="rounded w-full h-full object-contain aspect-square"
             />
           )
         : (

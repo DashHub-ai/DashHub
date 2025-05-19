@@ -11,7 +11,7 @@ import {
   type SdkOrganizationUserRoleT,
   type SdkUnauthorizedError,
   type SdkUserRoleT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 /**
  * Returns unauthorized status BEFORE task either execution when assert fails

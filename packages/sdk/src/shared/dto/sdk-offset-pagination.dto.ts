@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { Overwrite } from '@llm/commons';
+import type { Overwrite } from '@dashhub/commons';
 
 /**
  * Defines the schema for offset-based pagination input using Zod.
@@ -42,4 +42,16 @@ export function mapSdkOffsetPaginationItems<
     ...pagination,
     items: items.map(mapperFn),
   });
+}
+
+export function offsetSdkPaginateArray<T>(pagination: SdkOffsetPaginationInputT) {
+  return (array: T[]): SdkOffsetPaginationOutputT<T> => {
+    const { offset, limit } = pagination;
+    const paginatedArray = array.slice(offset, offset + limit);
+
+    return {
+      items: paginatedArray,
+      total: array.length,
+    };
+  };
 }

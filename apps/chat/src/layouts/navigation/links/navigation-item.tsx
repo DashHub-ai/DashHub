@@ -3,7 +3,7 @@ import type { PropsWithChildren, ReactNode } from 'react';
 import clsx from 'clsx';
 import { Link, useLocation } from 'wouter';
 
-import { dropLastSlash } from '@llm/commons';
+import { dropLastSlash } from '@dashhub/commons';
 import { prefixWithBaseRoute } from '~/routes/use-sitemap';
 
 export type NavigationItemProps = PropsWithChildren & {

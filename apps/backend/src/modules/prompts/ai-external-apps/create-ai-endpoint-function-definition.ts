@@ -3,9 +3,9 @@ import { identity } from 'fp-ts/lib/function';
 import type {
   SdkAIExternalAPIEndpointT,
   SdkAIExternalAPIParameterT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { isDangerousObjectKey } from '@llm/commons';
+import { isDangerousObjectKey } from '@dashhub/commons';
 
 export function createExternalAIEndpointFunctionDefinition(endpoint: SdkAIExternalAPIEndpointT) {
   const aiParameters = endpoint.parameters.filter(param => param.ai?.generated === true);

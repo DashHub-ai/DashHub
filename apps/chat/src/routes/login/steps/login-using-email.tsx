@@ -2,8 +2,8 @@ import { useForm } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 import { KeyRoundIcon } from 'lucide-react';
 
-import { runTask, tapTaskEither } from '@llm/commons';
-import { type SdkEmailLoginInputT, useSdk } from '@llm/sdk';
+import { runTask, tapTaskEither } from '@dashhub/commons';
+import { type SdkEmailLoginInputT, useSdk } from '@dashhub/sdk';
 import { usePredefinedFormValidators } from '~/hooks';
 import { useI18n } from '~/i18n';
 import { FormErrorAlert, FormField, FormSpinnerCTA, Input } from '~/ui';

@@ -4,9 +4,9 @@ import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon 
 import type {
   SdkOffsetPaginationInputT,
   SdkOffsetPaginationOutputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { clamp } from '@llm/commons';
+import { clamp } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 
 import { getTotalPages } from './helpers';

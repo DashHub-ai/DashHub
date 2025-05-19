@@ -2,15 +2,15 @@ import { useControlStrict } from '@under-control/forms';
 import { flow } from 'fp-ts/lib/function';
 import { useEffect, useRef, useState } from 'react';
 
-import { rejectFalsyItems, runTask, tryOrThrowTE } from '@llm/commons';
+import { rejectFalsyItems, runTask, tryOrThrowTE } from '@dashhub/commons';
 import {
   useAsyncDebounce,
   useAsyncValue,
   useOutsideClickRef,
   useUpdateEffect,
   useWindowListener,
-} from '@llm/commons-front';
-import { type SdkPermissionT, useSdkForLoggedIn } from '@llm/sdk';
+} from '@dashhub/commons-front';
+import { type SdkPermissionT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 

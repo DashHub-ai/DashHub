@@ -1,6 +1,6 @@
 import type * as E from 'fp-ts/lib/Either';
 
-import type { Nullable, TaggedError } from '@llm/commons';
+import type { Nullable, TaggedError } from '@dashhub/commons';
 
 import { useSdkErrorTranslator } from '~/hooks';
 

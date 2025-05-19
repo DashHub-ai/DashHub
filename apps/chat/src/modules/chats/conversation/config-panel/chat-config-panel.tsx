@@ -1,4 +1,4 @@
-import { type SdkChatT, useSdkForLoggedIn } from '@llm/sdk';
+import { type SdkChatT, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { NavigationToolbarPortal } from '~/layouts/navigation/navigation-toolbar-portal';
 import { Checkbox, CollapsiblePanel, FormAlertBoxes, FormField, Input, SaveButton, TextArea } from '~/ui';

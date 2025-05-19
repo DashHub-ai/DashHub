@@ -1,6 +1,6 @@
 import type { ColumnType } from 'kysely';
 
-import type { SdkMessageRoleT } from '@llm/sdk';
+import type { SdkMessageRoleT } from '@dashhub/sdk';
 import type {
   NormalizeInsertTableRow,
   NormalizeSelectTableRow,

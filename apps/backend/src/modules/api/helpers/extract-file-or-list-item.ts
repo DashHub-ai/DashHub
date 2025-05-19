@@ -1,9 +1,9 @@
 import { taskEither as TE } from 'fp-ts';
 
-import type { Nullable } from '@llm/commons';
+import type { Nullable } from '@dashhub/commons';
 import type { TableRowWithId } from '~/modules/database';
 
-import { SdkInvalidFileFormatError, type SdkTableRowWithIdT } from '@llm/sdk';
+import { SdkInvalidFileFormatError, type SdkTableRowWithIdT } from '@dashhub/sdk';
 
 import { type ExtractedFile, extractFile } from './extract-file';
 

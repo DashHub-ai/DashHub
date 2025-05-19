@@ -1,9 +1,9 @@
 import { apply, taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
-import { tryOrThrowTE } from '@llm/commons';
-import { useAsyncValue } from '@llm/commons-front';
-import { useSdkForLoggedIn } from '@llm/sdk';
+import { tryOrThrowTE } from '@dashhub/commons';
+import { useAsyncValue } from '@dashhub/commons-front';
+import { useSdkForLoggedIn } from '@dashhub/sdk';
 
 export function useSearchResult(phrase: string) {
   const { sdks } = useSdkForLoggedIn();

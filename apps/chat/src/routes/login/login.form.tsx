@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 import * as O from 'fp-ts/lib/Option';
 import { z } from 'zod';
 
-import { useLocalStorageObject } from '@llm/commons-front';
+import { useLocalStorageObject } from '@dashhub/commons-front';
 
 import { LoginUsingEmail, LoginUsingPassword } from './steps';
 

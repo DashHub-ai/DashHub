@@ -1,4 +1,4 @@
-import type { SdkCreateAIModelInputT } from '@llm/sdk';
+import type { SdkCreateAIModelInputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

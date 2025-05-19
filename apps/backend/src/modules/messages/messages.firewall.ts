@@ -6,7 +6,7 @@ import type {
   SdkRequestAIReplyInputT,
   SdkSearchMessageItemT,
   SdkSearchMessagesInputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import type { AIExternalAPIsService } from '../ai-external-apis';
 import type { ChatsService } from '../chats';

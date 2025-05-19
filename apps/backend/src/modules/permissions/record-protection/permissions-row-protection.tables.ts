@@ -1,4 +1,4 @@
-import type { SdkPermissionT } from '@llm/sdk';
+import type { SdkPermissionT } from '@dashhub/sdk';
 
 export type PermissionsTableRowRelation = {
   permissions: {

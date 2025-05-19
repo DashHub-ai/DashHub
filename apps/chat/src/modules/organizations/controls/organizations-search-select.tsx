@@ -1,4 +1,4 @@
-import type { SdkSearchOrganizationsInputT, SdkSearchOrganizationsOutputT } from '@llm/sdk';
+import type { SdkSearchOrganizationsInputT, SdkSearchOrganizationsOutputT } from '@dashhub/sdk';
 
 import { createSdkAutocomplete } from '~/ui';
 

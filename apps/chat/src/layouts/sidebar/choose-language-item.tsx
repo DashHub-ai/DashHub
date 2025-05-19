@@ -1,4 +1,4 @@
-import { findItemById } from '@llm/commons';
+import { findItemById } from '@dashhub/commons';
 import { type I18nLangT, useI18n } from '~/i18n';
 import { Select } from '~/ui';
 

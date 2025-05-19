@@ -7,7 +7,7 @@ import {
   type SdkJwtTokenT,
   type SdkSearchUsersInputT,
   type SdkUnauthorizedError,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { AuthFirewallService } from '~/modules/auth/firewall';
 
 import type { TableId, TableRowWithId } from '../database';

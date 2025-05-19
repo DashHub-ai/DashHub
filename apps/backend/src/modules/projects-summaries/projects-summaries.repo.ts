@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { sql } from 'kysely';
 import { injectable } from 'tsyringe';
 
-import { SdkProjectSummaryInputT } from '@llm/sdk';
+import { SdkProjectSummaryInputT } from '@dashhub/sdk';
 import {
   createDatabaseRepo,
   DatabaseError,

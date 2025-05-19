@@ -1,9 +1,9 @@
 import type {
   SdkOffsetPaginationInputT,
   SdkOffsetPaginationOutputT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { format } from '@llm/commons';
+import { format } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 
 import { getTotalPages } from './helpers';

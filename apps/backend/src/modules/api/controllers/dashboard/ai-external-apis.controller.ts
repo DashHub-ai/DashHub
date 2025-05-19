@@ -10,7 +10,7 @@ import {
   SdkSearchAIExternalAPIsInputV,
   SdkStrictJsonV,
   SdkUpdateAIExternalAPIInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { AIExternalAPIsService } from '~/modules/ai-external-apis';
 import { ConfigService } from '~/modules/config';
 

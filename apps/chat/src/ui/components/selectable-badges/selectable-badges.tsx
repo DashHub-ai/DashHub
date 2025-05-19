@@ -4,7 +4,7 @@ import { type ControlBindProps, controlled } from '@under-control/forms';
 import clsx from 'clsx';
 import { useState } from 'react';
 
-import type { SdkTableRowIdT } from '@llm/sdk';
+import type { SdkTableRowIdT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 

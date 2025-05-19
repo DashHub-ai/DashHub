@@ -2,7 +2,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
-import { SdkSearchAIModelItemT } from '@llm/sdk';
+import { SdkSearchAIModelItemT } from '@dashhub/sdk';
 import { AIConnectorService } from '~/modules/ai-connector';
 import { AIModelsService } from '~/modules/ai-models';
 

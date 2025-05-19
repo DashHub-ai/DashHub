@@ -5,7 +5,7 @@ import {
   type SdkPermissionT,
   type SdkUserListItemT,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { Checkbox } from '~/ui';
 

@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-import { useWindowListener } from '@llm/commons-front';
+import { useWindowListener } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 import { useHasWorkspaceOrganization } from '~/modules';
 import { useSitemap } from '~/routes';

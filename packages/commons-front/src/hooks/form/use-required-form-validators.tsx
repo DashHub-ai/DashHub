@@ -8,7 +8,7 @@ import {
   isObjectWithFakeID,
   isRelaxedObjectWithID,
   type ReplaceFnReturnType,
-} from '@llm/commons';
+} from '@dashhub/commons';
 
 type RequiredHookAttrs = {
   messages: {

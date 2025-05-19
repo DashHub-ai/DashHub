@@ -6,9 +6,9 @@ import type {
   SdkCountedAppsCategoriesTreeT,
   SdkCountedIdRecordT,
   SdkTableRowIdT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { createTreeFromList, withCountedTreeNodes } from '@llm/commons';
+import { createTreeFromList, withCountedTreeNodes } from '@dashhub/commons';
 
 import { AppsCategoriesEsSearchRepo } from './apps-categories-es-search.repo';
 

@@ -1,6 +1,6 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkCreateAppCategoryInputT, SdkTableRowIdT, SdkTableRowWithIdT } from '@llm/sdk';
+import type { SdkCreateAppCategoryInputT, SdkTableRowIdT, SdkTableRowWithIdT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { FormField, Input, TextArea } from '~/ui';

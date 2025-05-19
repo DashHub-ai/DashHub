@@ -1,8 +1,8 @@
 {
-  "name": "@llm/commons",
+  "name": "@dashhub/commons",
   "type": "module",
-  "version": "1.0.0",
-  "private": true,
+  "version": "1.0.3",
+  "license": "Apache License 2.0",
   "exports": {
     ".": {
       "import": {
@@ -14,6 +14,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
+    "dist/",
     "src/"
   ],
   "scripts": {
@@ -38,6 +39,6 @@
     "zod-validation-error": "^3.3.1"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }

@@ -1,7 +1,7 @@
 import { type ReactNode, useRef } from 'react';
 
-import { rejectFalsyItems } from '@llm/commons';
-import { mergeRefs, useModal, useOutsideClickRef, useWindowListener } from '@llm/commons-front';
+import { rejectFalsyItems } from '@dashhub/commons';
+import { mergeRefs, useModal, useOutsideClickRef, useWindowListener } from '@dashhub/commons-front';
 
 import { BalloonContent } from './balloon-content';
 

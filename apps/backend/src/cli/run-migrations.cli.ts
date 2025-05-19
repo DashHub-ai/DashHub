@@ -6,7 +6,7 @@ import { taskEither as TE } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { container } from 'tsyringe';
 
-import { runTaskAsVoid, tryOrThrowTE } from '@llm/commons';
+import { runTaskAsVoid, tryOrThrowTE } from '@dashhub/commons';
 import { DatabaseConnectionRepo, DatabaseMigrateService } from '~/modules/database';
 
 const {

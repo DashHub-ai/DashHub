@@ -1,4 +1,4 @@
-import type { FalsyItem } from '@llm/commons';
+import type { FalsyItem } from '@dashhub/commons';
 
 import { xml } from '../../xml';
 

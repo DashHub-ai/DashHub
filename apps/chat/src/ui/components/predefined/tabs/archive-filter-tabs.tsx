@@ -2,7 +2,7 @@ import { controlled, type OmitControlStateAttrs } from '@under-control/forms';
 import clsx from 'clsx';
 import { Activity, Archive, LayoutGrid } from 'lucide-react';
 
-import { rejectFalsyItems } from '@llm/commons';
+import { rejectFalsyItems } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { Tabs, type TabsProps } from '~/ui/components/tabs';
 

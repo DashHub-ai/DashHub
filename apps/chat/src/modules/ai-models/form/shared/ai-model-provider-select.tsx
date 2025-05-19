@@ -1,8 +1,8 @@
 import { controlled } from '@under-control/forms';
 
-import type { SdkUserRoleT } from '@llm/sdk';
+import type { SdkUserRoleT } from '@dashhub/sdk';
 
-import { findItemById } from '@llm/commons';
+import { findItemById } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { Select } from '~/ui';
 

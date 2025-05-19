@@ -1,6 +1,6 @@
 import esb from 'elastic-builder';
 
-import type { RelaxedId } from '@llm/commons';
+import type { RelaxedId } from '@dashhub/commons';
 
 export function createSortByIdsOrderScript(ids: RelaxedId[]) {
   return (

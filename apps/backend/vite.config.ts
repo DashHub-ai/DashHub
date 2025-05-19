@@ -51,7 +51,7 @@ export default defineConfig({
   },
   plugins: [
     nodeExternals({
-      exclude: [/@llm\/.*/],
+      exclude: [/@dashhub\/.*/],
     }),
     tsconfigPaths(),
     swc({

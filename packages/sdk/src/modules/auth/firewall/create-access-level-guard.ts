@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 
 import type { SdkUserRoleT } from '~/modules/dashboard/users';
 
-import { invert } from '@llm/commons';
+import { invert } from '@dashhub/commons';
 import { isTechOrOwnerUserSdkOrganizationRole } from '~/modules/dashboard/organizations/dto/sdk-organization-user.dto';
 
 import type { SdkJwtTokenT } from '../dto';

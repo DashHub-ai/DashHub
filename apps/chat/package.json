@@ -1,7 +1,8 @@
 {
-  "name": "@llm/chat",
+  "name": "@dashhub/chat",
   "type": "module",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "build": "vite build",
     "dev": "vite dev --host",
@@ -9,9 +10,9 @@
     "check:types": "tsc"
   },
   "dependencies": {
+    "@dashhub/commons-front": "*",
+    "@dashhub/sdk": "*",
     "@floating-ui/react": "^0.27.3",
-    "@llm/commons-front": "*",
-    "@llm/sdk": "*",
     "@tailwindcss/typography": "^0.5.16",
     "@types/gapi": "^0.0.47",
     "@types/google.accounts": "^0.0.15",

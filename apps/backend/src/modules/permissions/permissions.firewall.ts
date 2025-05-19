@@ -20,7 +20,7 @@ import {
   type SdkUserAccessPermissionsDescriptor,
   type WithSdkCreator,
   type WithSdkOrganization,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
 import type { DatabaseError, TableId } from '../database';
 import type { UsersGroupsRepo } from '../users-groups';

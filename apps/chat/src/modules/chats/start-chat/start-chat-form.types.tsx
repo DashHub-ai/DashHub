@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { StrictBooleanV } from '@llm/commons';
-import { SdkCreateMessageInputV, SdkTableRowWithIdNameV } from '@llm/sdk';
+import { StrictBooleanV } from '@dashhub/commons';
+import { SdkCreateMessageInputV, SdkTableRowWithIdNameV } from '@dashhub/sdk';
 
 export const StartChatFormValueV = z
   .object({

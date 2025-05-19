@@ -1,4 +1,4 @@
-import type { SdkTableRowWithPermissionsT, SdkUserListItemT } from '@llm/sdk';
+import type { SdkTableRowWithPermissionsT, SdkUserListItemT } from '@dashhub/sdk';
 
 import { CardRecordCreator } from './card-record-creator';
 import { CardRecordPermissions } from './shared-with';

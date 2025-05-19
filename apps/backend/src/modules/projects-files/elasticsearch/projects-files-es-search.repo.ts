@@ -8,9 +8,9 @@ import type {
   SdkSearchProjectFileItemT,
   SdkSearchProjectFilesInputT,
   SdkTableRowIdT,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 
-import { pluck, rejectFalsyItems } from '@llm/commons';
+import { pluck, rejectFalsyItems } from '@dashhub/commons';
 import {
   createMagicNullIdEsValue,
   createPaginationOffsetSearchQuery,

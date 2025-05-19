@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import { streamSSE } from 'hono/streaming';
 import { inject, injectable } from 'tsyringe';
 
-import { runTask } from '@llm/commons';
+import { runTask } from '@dashhub/commons';
 import {
   type ChatsSdk,
   SdkAttachAppInputV,
@@ -13,7 +13,7 @@ import {
   SdkSearchChatsInputV,
   SdkSearchMessagesInputV,
   SdkUpdateChatInputV,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { ChatsService } from '~/modules/chats';
 import { ConfigService } from '~/modules/config';
 import { MessagesService } from '~/modules/messages';

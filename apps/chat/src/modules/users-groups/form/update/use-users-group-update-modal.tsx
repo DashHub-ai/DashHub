@@ -1,6 +1,6 @@
-import type { SdkUsersGroupT } from '@llm/sdk';
+import type { SdkUsersGroupT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   UsersGroupUpdateFormModal,

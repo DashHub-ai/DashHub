@@ -1,4 +1,4 @@
-import type { TaggedError } from '@llm/commons';
+import type { TaggedError } from '@dashhub/commons';
 
 export function isSdkTaggedError<T extends object>(
   error: TaggedError<string, T>,

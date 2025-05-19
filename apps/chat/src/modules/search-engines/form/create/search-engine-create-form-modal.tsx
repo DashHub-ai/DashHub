@@ -1,4 +1,4 @@
-import type { SdkCreateSearchEngineInputT } from '@llm/sdk';
+import type { SdkCreateSearchEngineInputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

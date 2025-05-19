@@ -2,7 +2,7 @@ import type { Task } from 'fp-ts/lib/Task';
 
 import { taskEither as TE } from 'fp-ts';
 
-import { TaggedError } from '@llm/commons';
+import { TaggedError } from '@dashhub/commons';
 
 import type { EsDocumentId } from './elasticsearch.type';
 

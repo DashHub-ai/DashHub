@@ -1,6 +1,6 @@
 import * as esb from 'elastic-builder';
 
-import type { SdkOffsetPaginationInputT } from '@llm/sdk';
+import type { SdkOffsetPaginationInputT } from '@dashhub/sdk';
 
 /**
  * Creates a new instance of the search query with pagination.

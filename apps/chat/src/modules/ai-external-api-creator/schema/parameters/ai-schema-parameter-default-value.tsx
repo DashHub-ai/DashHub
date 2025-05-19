@@ -1,6 +1,6 @@
 import { controlled } from '@under-control/forms';
 
-import type { SdkAIExternalAPIParameterTypeT } from '@llm/sdk';
+import type { SdkAIExternalAPIParameterTypeT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { Checkbox, Input, NumericInput } from '~/ui';

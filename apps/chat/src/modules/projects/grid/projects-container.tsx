@@ -6,7 +6,7 @@ import { flow } from 'fp-ts/lib/function';
 import {
   SdkSearchProjectsInputV,
   useSdkForLoggedIn,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {
   ArchiveFilterTabs,

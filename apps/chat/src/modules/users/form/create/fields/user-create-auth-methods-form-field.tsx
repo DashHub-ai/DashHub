@@ -4,9 +4,9 @@ import {
   type ValidationErrorsListProps,
 } from '@under-control/forms';
 
-import type { SdkCreateUserAuthMethodsT } from '@llm/sdk';
+import type { SdkCreateUserAuthMethodsT } from '@dashhub/sdk';
 
-import { genRandomPassword } from '@llm/commons';
+import { genRandomPassword } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { Checkbox, FormField, Input } from '~/ui';
 

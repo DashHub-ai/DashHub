@@ -1,5 +1,5 @@
-import type { CanBePromise } from '@llm/commons';
-import type { SdkPermissionT, SdkUserListItemT } from '@llm/sdk';
+import type { CanBePromise } from '@dashhub/commons';
+import type { SdkPermissionT, SdkUserListItemT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

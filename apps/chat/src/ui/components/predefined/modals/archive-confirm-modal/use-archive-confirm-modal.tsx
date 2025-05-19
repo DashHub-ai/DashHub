@@ -1,7 +1,7 @@
 import { option as O, task as T } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   ArchiveConfirmModal,

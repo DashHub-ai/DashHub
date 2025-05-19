@@ -1,4 +1,4 @@
-import type { SdkCreateProjectInputT } from '@llm/sdk';
+import type { SdkCreateProjectInputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import {

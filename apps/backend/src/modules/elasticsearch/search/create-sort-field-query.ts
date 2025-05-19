@@ -1,9 +1,9 @@
 import * as esb from 'elastic-builder';
 import { snakeCase } from 'snake-case';
 
-import type { Nullable } from '@llm/commons';
+import type { Nullable } from '@dashhub/commons';
 
-import { destructSdkSortItem, type SdkSortItemT } from '@llm/sdk';
+import { destructSdkSortItem, type SdkSortItemT } from '@dashhub/sdk';
 
 export type SortQueryAttrs = {
   textFieldsMapping?: Record<string, string>;

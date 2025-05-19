@@ -1,8 +1,8 @@
 import { flow, pipe } from 'fp-ts/lib/function';
 
-import { tapTaskOption } from '@llm/commons';
-import { useAsyncCallback } from '@llm/commons-front';
-import { SdkSearchUsersGroupsInputV, useSdkForLoggedIn } from '@llm/sdk';
+import { tapTaskOption } from '@dashhub/commons';
+import { useAsyncCallback } from '@dashhub/commons-front';
+import { SdkSearchUsersGroupsInputV, useSdkForLoggedIn } from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';
 import {

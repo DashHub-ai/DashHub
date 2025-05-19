@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import * as uuid from 'uuid';
 
-import { isSSR, isTaggedError } from '@llm/commons';
+import { isSSR, isTaggedError } from '@dashhub/commons';
 
 import { useIsUnmountedRef } from './use-is-unmounted-ref.js';
 import { useRefSafeCallback } from './use-ref-safe-callback.js';

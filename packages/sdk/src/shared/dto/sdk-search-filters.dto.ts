@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { StrictNullableBooleanV } from '@llm/commons';
+import { StrictNullableBooleanV } from '@dashhub/commons';
 
 import { SdkIdsArrayV } from './sdk-ids-array.dto';
 import { SdkUuidsArrayV } from './sdk-uuids-array.dto';
@@ -19,8 +19,4 @@ export const SdkExcludeIdsFiltersInputV = z.object({
 
 export const SdkUuidsFiltersInputV = z.object({
   ids: SdkUuidsArrayV.optional(),
-});
-
-export const SdkFilteredPhraseInputV = z.object({
-  phrase: z.string().optional(),
 });

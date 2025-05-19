@@ -8,7 +8,7 @@ import * as Minio from 'minio';
 import { inject, injectable } from 'tsyringe';
 import { v4 } from 'uuid';
 
-import { SdkInvalidFileFormatError } from '@llm/sdk';
+import { SdkInvalidFileFormatError } from '@dashhub/sdk';
 import { tryDecodeMimeTypeExtension } from '~/helpers';
 
 import type { DatabaseError, DatabaseRecordAlreadyExists, DatabaseRecordNotExists, TableId, TableRowWithId } from '../database';

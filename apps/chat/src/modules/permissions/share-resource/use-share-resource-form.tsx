@@ -1,6 +1,6 @@
 import { type FormHookAttrs, useForm } from '@under-control/forms';
 
-import type { SdkPermissionT } from '@llm/sdk';
+import type { SdkPermissionT } from '@dashhub/sdk';
 
 type ShareResourceFormHookAttrs = Omit<
   FormHookAttrs<SdkPermissionT[]>,

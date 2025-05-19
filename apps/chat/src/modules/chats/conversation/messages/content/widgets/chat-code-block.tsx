@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
-import { useUpdateEffect } from '@llm/commons-front';
+import { useUpdateEffect } from '@dashhub/commons-front';
 import { useI18n } from '~/i18n';
 
 import { ChatCodeBrowserPreview } from './chat-code-browser-preview';

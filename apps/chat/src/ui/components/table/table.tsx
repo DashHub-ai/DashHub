@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import clsx from 'clsx';
 
-import type { SdkTableRowWithIdT, SdkTableRowWithUuidT } from '@llm/sdk';
+import type { SdkTableRowWithIdT, SdkTableRowWithUuidT } from '@dashhub/sdk';
 
 import { NoItemsPlaceholder } from '../list';
 

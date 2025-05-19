@@ -1,4 +1,4 @@
-import { concatUrlParts } from '@llm/commons';
+import { concatUrlParts } from '@dashhub/commons';
 
 import type { TokensStorage } from './auth';
 

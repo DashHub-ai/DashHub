@@ -1,9 +1,9 @@
 import { controlled } from '@under-control/forms';
 import clsx from 'clsx';
 
-import type { SdkOffsetPaginationInputT, SdkOffsetPaginationOutputT } from '@llm/sdk';
+import type { SdkOffsetPaginationInputT, SdkOffsetPaginationOutputT } from '@dashhub/sdk';
 
-import { format } from '@llm/commons';
+import { format } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 
 import { PageNumber } from './page-number';

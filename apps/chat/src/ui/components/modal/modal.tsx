@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import { type ComponentProps, type PropsWithChildren, type ReactNode, useState } from 'react';
 
-import { useTimeout } from '@llm/commons-front';
+import { useTimeout } from '@dashhub/commons-front';
 
 import { ModalBody } from './modal-body';
 import { ModalCloseButton } from './modal-close-button';

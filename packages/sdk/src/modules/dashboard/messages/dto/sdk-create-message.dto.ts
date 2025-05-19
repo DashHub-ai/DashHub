@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { StrictBooleanV } from '@llm/commons';
+import { StrictBooleanV } from '@dashhub/commons';
 import { SdkTableRowUuidV } from '~/shared';
 
 export const SdkCreateMessageInputV = z.object({

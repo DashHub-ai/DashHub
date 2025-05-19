@@ -1,6 +1,6 @@
 import { controlled, useFormValidatorMessages, type ValidationErrorsListProps } from '@under-control/forms';
 
-import type { SdkUpsertOrganizationAISettingsInputT } from '@llm/sdk';
+import type { SdkUpsertOrganizationAISettingsInputT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 import { FormField, TextArea } from '~/ui';

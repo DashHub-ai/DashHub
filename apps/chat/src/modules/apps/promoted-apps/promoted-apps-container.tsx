@@ -3,12 +3,12 @@ import { flow } from 'fp-ts/lib/function';
 import { ArrowRight, HistoryIcon, StarIcon } from 'lucide-react';
 import { Link } from 'wouter';
 
-import { useLastNonNullValue } from '@llm/commons-front';
+import { useLastNonNullValue } from '@dashhub/commons-front';
 import {
   SdkSearchAppsInputV,
   useSdkForLoggedIn,
   useSdkOptimisticFavoritesCount,
-} from '@llm/sdk';
+} from '@dashhub/sdk';
 import { useI18n } from '~/i18n';
 import { LazyIcon } from '~/modules/shared';
 import { useWorkspaceOrganizationOrThrow } from '~/modules/workspace';

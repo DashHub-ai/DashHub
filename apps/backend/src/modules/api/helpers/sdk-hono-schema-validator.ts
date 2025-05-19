@@ -5,8 +5,8 @@ import { either as E } from 'fp-ts';
 import { pipe } from 'fp-ts/lib/function';
 import { validator } from 'hono/validator';
 
-import { tryParseUsingZodSchema } from '@llm/commons';
-import { SdkInvalidRequestError } from '@llm/sdk';
+import { tryParseUsingZodSchema } from '@dashhub/commons';
+import { SdkInvalidRequestError } from '@dashhub/sdk';
 
 import { respondWithTaggedError } from './respond-with-tagged-error';
 

@@ -3,8 +3,8 @@ import * as O from 'fp-ts/lib/Option';
 import { createContext, type PropsWithChildren, useMemo } from 'react';
 import { z } from 'zod';
 
-import { useContextOrThrow, useLocalStorageObject, useRefSafeCallback } from '@llm/commons-front';
-import { type SdkIdNameUrlEntryT, SdkTableRowIdV, SdkTableRowWithIdNameV, useSdk } from '@llm/sdk';
+import { useContextOrThrow, useLocalStorageObject, useRefSafeCallback } from '@dashhub/commons-front';
+import { type SdkIdNameUrlEntryT, SdkTableRowIdV, SdkTableRowWithIdNameV, useSdk } from '@dashhub/sdk';
 
 const WorkspaceSettingsV = z.object({
   forUserId: SdkTableRowIdV.nullable(),

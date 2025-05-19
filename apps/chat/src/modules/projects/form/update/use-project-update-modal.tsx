@@ -1,6 +1,6 @@
-import type { SdkProjectT } from '@llm/sdk';
+import type { SdkProjectT } from '@dashhub/sdk';
 
-import { useAnimatedModal } from '@llm/commons-front';
+import { useAnimatedModal } from '@dashhub/commons-front';
 
 import {
   ProjectUpdateFormModal,

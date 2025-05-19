@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { SdkOffsetPaginationOutputT, SdkTableRowWithIdNameT, SdkTableRowWithUuidNameT } from '@llm/sdk';
+import type { SdkOffsetPaginationOutputT, SdkTableRowWithIdNameT, SdkTableRowWithUuidNameT } from '@dashhub/sdk';
 
 import {
   SearchBarGroupEntry,

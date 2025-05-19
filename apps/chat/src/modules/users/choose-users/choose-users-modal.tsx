@@ -1,8 +1,8 @@
 import { useControlStrict } from '@under-control/forms';
 
-import type { SdkUserListItemT } from '@llm/sdk';
+import type { SdkUserListItemT } from '@dashhub/sdk';
 
-import { findItemById, rejectById } from '@llm/commons';
+import { findItemById, rejectById } from '@dashhub/commons';
 import { useI18n } from '~/i18n';
 import { Modal, type ModalProps, ModalTitle, SaveButton, SelectRecordButton } from '~/ui';
 

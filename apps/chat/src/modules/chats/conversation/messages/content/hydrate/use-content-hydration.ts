@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import type { SdkMessageWebSearchItemT } from '@llm/sdk';
+import type { SdkMessageWebSearchItemT } from '@dashhub/sdk';
 
 import { createHydratePipe, type HydrateResult } from './hydrate-result';
 import { hydrateWithAppChatBadges } from './hydrate-with-app-chat-badges';

@@ -1,6 +1,6 @@
 import { Redirect, Route, Switch } from 'wouter';
 
-import { type SdkTableRowWithUuidT, useSdkIsLoggedIn } from '@llm/sdk';
+import { type SdkTableRowWithUuidT, useSdkIsLoggedIn } from '@dashhub/sdk';
 import {
   AIExternalAPIsRoute,
   AIModelsManagementRoute,

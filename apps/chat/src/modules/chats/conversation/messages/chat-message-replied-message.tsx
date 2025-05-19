@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import type { SdkRepliedMessageT } from '@llm/sdk';
+import type { SdkRepliedMessageT } from '@dashhub/sdk';
 
 import { useI18n } from '~/i18n';
 
