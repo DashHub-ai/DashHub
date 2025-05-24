@@ -20,7 +20,7 @@
     "check:types": "turbo check:types --parallel",
     "dev": "npm run clean && npx turbo daemon start && npm run clean:turbo && turbo build:dev && turbo watch build:dev dev",
     "lint": "turbo lint --parallel",
-    "prepare": "husky",
+    "prepare": "npx husky",
     "test": "npx turbo run test --parallel",
     "test:watch": "npx turbo run test:watch --parallel",
     "publish:packages": "npx npm run build && npx npm run check:types && npx changeset && npx changeset version && npx changeset publish"
