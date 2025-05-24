@@ -12,7 +12,6 @@ concurrency:
 env:
   ANSIBLE_FORCE_COLOR: true
   TARGET_PLATFORMS: linux/arm64
-  NODE_ENV: production
 
 jobs:
   build:
@@ -39,6 +38,7 @@ jobs:
       - name: Build packages
         run: npm run build
         env:
+          NODE_ENV: production
           PUBLIC_VITE_APP_ENV: production
           PUBLIC_VITE_API_URL: https://app.dashhub.ai/api
           PUBLIC_VITE_GOOGLE_DRIVE_CLIENT_ID: ${{ secrets.GOOGLE_DRIVE_CLIENT_ID }}
