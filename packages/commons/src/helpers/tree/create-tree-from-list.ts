@@ -35,5 +35,5 @@ export function createTreeFromList<T extends ObjectWithStrictId>(
     }
   }
 
-  return [...itemMap.values().filter(item => isNil(getParentId(item)))];
+  return [...itemMap.values()].filter(item => isNil(getParentId(item)));
 }

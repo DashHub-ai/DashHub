@@ -10,10 +10,10 @@
     "url": "https://github.com/DashHub-ai/DashHub"
   },
   "scripts": {
-    "db:migrate": "npm --workspace=@dashhub/backend db:migrate",
-    "es:reindex:all": "npm --workspace=@dashhub/backend es:reindex:all",
-    "chats:summarize:all": "npm --workspace=@dashhub/backend chats:summarize:all",
-    "projects:summarize:all": "npm --workspace=@dashhub/backend projects:summarize:all",
+    "db:migrate": "npm run --workspace=@dashhub/backend db:migrate",
+    "es:reindex:all": "npm run --workspace=@dashhub/backend es:reindex:all",
+    "chats:summarize:all": "npm run --workspace=@dashhub/backend chats:summarize:all",
+    "projects:summarize:all": "npm run --workspace=@dashhub/backend projects:summarize:all",
     "clean": "find . -type f -name 'vite.config.*.timestamp-*' -delete 2>/dev/null",
     "clean:turbo": "rm -rf .turbo/ 2>/dev/null",
     "build": "NODE_ENV=production turbo run build --cache-dir=.turbo",
