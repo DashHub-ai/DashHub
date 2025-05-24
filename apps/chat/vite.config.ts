@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       ...existsSync(COMMERCIAL_PATH) && {
-        '~commercial/index': COMMERCIAL_PATH,
+        '~/commercial/index': COMMERCIAL_PATH,
       },
       ...mode !== 'production' && {
         'lucide-react/dynamicIconImports': resolve(__dirname, './src/modules/shared/fake-lazy-dynamic-icons.tsx'),
