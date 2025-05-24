@@ -55,7 +55,7 @@ export function AppsRoute() {
   ];
 
   return (
-    <PageWithSidebarLayout>
+    <PageWithSidebarLayout contentSpaceClassName="space-y-7">
       <RouteMetaTags meta={t.meta} />
 
       <LayoutHeader>

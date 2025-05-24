@@ -20,6 +20,7 @@ type Props = PropsWithChildren & {
   withFooter?: boolean;
   backgroundClassName?: string;
   contentClassName?: string;
+  contentSpaceClassName?: string;
   navigationProps?: NavigationProps;
 };
 
@@ -28,6 +29,7 @@ export function PageWithSidebarLayout(
     children,
     contentClassName,
     backgroundClassName = 'bg-white',
+    contentSpaceClassName,
     withFooter = true,
     navigationProps,
   }: Props,
@@ -70,8 +72,9 @@ export function PageWithSidebarLayout(
 
         <div
           className={clsx(
-            'flex-1 space-y-10 mb-4 last:mb-0 w-full',
+            'flex-1 mb-4 last:mb-0 w-full',
             'container mx-auto',
+            contentSpaceClassName ?? 'space-y-10',
             contentClassName,
           )}
         >
