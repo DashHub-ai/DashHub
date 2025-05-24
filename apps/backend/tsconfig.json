@@ -4,9 +4,7 @@
     "baseUrl": "src/",
     "paths": {
       "~/*": ["./*"],
-      "~/commercial-commons": ["../../../externals/commercial/commons/src"],
-      "~/commercial-commons/*": ["../../../externals/commercial/commons/src/*"],
-      "~/commercial/*": ["../../../externals/commercial/backend/src/*", "commercial.stub/*"]
+      "~/commercial/*": ["commercial.stub/*"]
     },
     "types": ["node"],
     "declaration": false,

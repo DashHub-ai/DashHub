@@ -2,6 +2,7 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { inject, injectable } from 'tsyringe';
 
+import { AgentsLibraryAPIController } from '~/commercial/index';
 import { ConfigService } from '~/modules/config';
 
 import { notFoundMiddleware } from '../middlewares';
@@ -17,6 +18,7 @@ export class RootApiController extends BaseController {
     @inject(HealthCheckController) healthCheck: HealthCheckController,
     @inject(AuthController) auth: AuthController,
     @inject(DashboardController) dashboard: DashboardController,
+    @inject(AgentsLibraryAPIController) agentsLibrary: AgentsLibraryAPIController,
   ) {
     super();
 
@@ -45,6 +47,7 @@ export class RootApiController extends BaseController {
       .route('/health-check', healthCheck.router)
       .route('/auth', auth.router)
       .route('/dashboard', dashboard.router)
+      .route('/agents-library', agentsLibrary.router)
       .all('*', notFoundMiddleware);
   }
 }

@@ -22,6 +22,7 @@ export const ConfigV = z.object({
   auth: AuthConfigV,
   chatsSummaries: ChatsSummariesConfigV,
   projectsSummaries: ProjectsSummariesConfigV,
+  licenseKey: z.string().optional(),
 });
 
 export type ConfigT = z.infer<typeof ConfigV>;

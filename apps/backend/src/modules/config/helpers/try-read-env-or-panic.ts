@@ -57,6 +57,9 @@ export function tryReadEnvOrPanic() {
 
     // Projects
     PROJECTS_SUMMARIES_CRON,
+
+    // License
+    LICENSE_KEY,
   } = {
     ...envFile.parsed,
     ...process.env,
@@ -65,6 +68,7 @@ export function tryReadEnvOrPanic() {
   const config: UnparsedEnvObject<ConfigT> = {
     env: APP_ENV,
     endUserDomain: APP_ENDUSER_DOMAIN,
+    licenseKey: LICENSE_KEY,
     listen: {
       hostname: SERVER_HOST,
       port: SERVER_PORT,

@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { env } from 'node:process';
 
@@ -22,6 +23,11 @@ const CLI_ENTRIES = await (async () => {
     Object.create(null),
   );
 })();
+
+const COMMERCIAL_PATH = path.resolve(
+  import.meta.dirname,
+  '../../externals/commercial/backend/src',
+);
 
 export default defineConfig({
   esbuild: false,
@@ -56,6 +62,7 @@ export default defineConfig({
     tsconfigPaths(),
     swc({
       sourceMaps: true,
+      tsconfig: `tsconfig${existsSync(COMMERCIAL_PATH) ? '.commercial' : ''}.json`,
       jsc: {
         parser: {
           syntax: 'typescript',
