@@ -299,6 +299,10 @@ export const I18N_PACK_PL: I18nLangPack = {
       buttons: {
         create: 'Stwórz',
       },
+      tabs: {
+        installed: 'Zainstalowane',
+        marketplace: 'Sklep',
+      },
     },
     editApp: {
       meta: {

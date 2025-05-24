@@ -12,6 +12,7 @@ export * from './modal';
 export * from './notifications';
 export * from './pagination';
 export * from './predefined';
+export * from './section-tabs';
 export * from './selectable-badges';
 export * from './side-layout';
 export * from './skeleton';

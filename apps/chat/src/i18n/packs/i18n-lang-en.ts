@@ -297,6 +297,10 @@ export const I18N_PACK_EN = {
       buttons: {
         create: 'Create',
       },
+      tabs: {
+        installed: 'Installed',
+        marketplace: 'Marketplace',
+      },
     },
     editApp: {
       meta: {
