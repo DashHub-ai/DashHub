@@ -3,7 +3,6 @@ import { pipe } from 'fp-ts/lib/function';
 import { inject, injectable } from 'tsyringe';
 
 import { runTask, tapTaskEither, tryOrThrowTE } from '@dashhub/commons';
-import { setLicenseKey } from '~/commercial/index';
 
 import { HttpServerService } from '../api';
 import { ChatSummariesCronJob } from '../chats-summaries';
@@ -45,11 +44,6 @@ export class BootService {
     const { config } = this.configService;
 
     logger.info('Booting application...');
-
-    if (config.licenseKey) {
-      logger.info('✨ Thank you for using our premium version! We appreciate your support!');
-      setLicenseKey(config.licenseKey);
-    }
 
     await pipe(
       config.database.migration.checkMigrationsOnStartup

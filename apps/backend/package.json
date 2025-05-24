@@ -10,7 +10,7 @@
     "es:reindex:all": "node dist/run-reindex-all.cli.mjs",
     "chats:summarize:all": "node dist/run-summarize-chats.cli.mjs",
     "projects:summarize:all": "node dist/run-summarize-projects.cli.mjs",
-    "dev": "npm run clean && nodemon --watch src --watch ../../externals/commercial/backend/src/ -e ts --exec \"vite build --mode production && node --stack-trace-limit=1000 --enable-source-maps ./dist/index.mjs\"",
+    "dev": "npm run clean && nodemon --watch src --watch ../../externals/*/*/src/ -e ts --exec \"vite build --mode production && node --stack-trace-limit=1000 --enable-source-maps ./dist/index.mjs\"",
     "lint": "eslint . --config ./eslint.config.mjs",
     "clean": "rm -rf ./dist 2>/dev/null",
     "check:types": "tsc"
@@ -20,7 +20,7 @@
     "pg-native": ">=3.0.1"
   },
   "devDependencies": {
-    "@dashhub/agents-library-sdk": "2.1.0",
+    "@dashhub/agents-library-sdk": "2.2.0",
     "@dashhub/sdk": "*",
     "@elastic/elasticsearch": "^8.17.0",
     "@google/generative-ai": "^0.24.0",
@@ -37,7 +37,7 @@
     "dotenv": "^16.4.7",
     "elastic-builder": "^2.31.0",
     "fast-deep-equal": "^3.1.3",
-    "hono": "^4.6.17",
+    "hono": "^4.7.10",
     "jwt-simple": "^0.5.6",
     "kysely": "^0.27.5",
     "mime-types": "^2.1.35",
