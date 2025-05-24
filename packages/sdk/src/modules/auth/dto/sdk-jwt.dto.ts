@@ -22,6 +22,10 @@ export const SdkJwtTokenRoleSpecificV = z.discriminatedUnion('role', [
 
 export type SdkJwtTokenRoleSpecificT = z.infer<typeof SdkJwtTokenRoleSpecificV>;
 
+export const SdkJwtPremiumV = z.object({
+  features: z.array(z.string()),
+});
+
 export const SdkJwtTokenV = z
   .object({
     sub: z.coerce.number(),
@@ -29,6 +33,7 @@ export const SdkJwtTokenV = z
     iat: z.number(),
     email: z.string(),
     name: z.string(),
+    premium: SdkJwtPremiumV,
   })
   .and(SdkJwtTokenRoleSpecificV);
 

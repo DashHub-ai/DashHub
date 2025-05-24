@@ -9,6 +9,7 @@ import {
   type SdkJwtTokenRoleSpecificT,
   type SdkJwtTokenT,
 } from '@dashhub/sdk';
+import { getLicenseKeyOrPanic, isPremiumEnabled } from '~/commercial/index';
 import { ConfigService } from '~/modules/config';
 import { UsersRepo } from '~/modules/users/users.repo';
 
@@ -63,6 +64,11 @@ export class AuthJWTService {
         exp: Date.now() + jwt.expiresIn * 1000,
         email,
         name,
+        premium: (
+          isPremiumEnabled()
+            ? { features: getLicenseKeyOrPanic().features }
+            : { features: [] }
+        ),
         ...jwtRoleSpecific,
       };
 
