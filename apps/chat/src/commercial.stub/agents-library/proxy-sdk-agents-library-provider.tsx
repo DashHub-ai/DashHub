@@ -1,3 +1,3 @@
-import { CommercialComponentStub } from './shared';
+import { CommercialComponentStub } from '../shared';
 
 export const ProxySdkAgentsLibraryProvider = CommercialComponentStub;
