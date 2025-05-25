@@ -4,7 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { ModalsContextProvider } from '@dashhub/commons-front';
 import { SdkFavoritesProvider, SdkMeProvider, SdkPinnedMessagesProvider, SdkProvider } from '@dashhub/sdk';
-import { ProxySdkAgentsLibraryProvider } from '~/commercial/index';
+import { I18nCommercialProvider, ProxySdkAgentsLibraryProvider } from '~/commercial/index';
 import { useConfig } from '~/config';
 import { I18nProvider } from '~/i18n';
 import { Router } from '~/router';
@@ -26,13 +26,15 @@ export function App() {
           <SdkMeProvider>
             <SdkPinnedMessagesProvider>
               <I18nProvider>
-                <WorkspaceProvider>
-                  <ModalsContextProvider>
-                    <FavoritesWithReloader>
-                      <Router />
-                    </FavoritesWithReloader>
-                  </ModalsContextProvider>
-                </WorkspaceProvider>
+                <I18nCommercialProvider>
+                  <WorkspaceProvider>
+                    <ModalsContextProvider>
+                      <FavoritesWithReloader>
+                        <Router />
+                      </FavoritesWithReloader>
+                    </ModalsContextProvider>
+                  </WorkspaceProvider>
+                </I18nCommercialProvider>
               </I18nProvider>
             </SdkPinnedMessagesProvider>
           </SdkMeProvider>

@@ -1,9 +1,3 @@
-import type { PropsWithChildren } from 'react';
+import { CommercialComponentStub } from './shared';
 
-export function ProxySdkAgentsLibraryProvider({ children }: PropsWithChildren) {
-  return (
-    <>
-      {children}
-    </>
-  );
-}
+export const ProxySdkAgentsLibraryProvider = CommercialComponentStub;
