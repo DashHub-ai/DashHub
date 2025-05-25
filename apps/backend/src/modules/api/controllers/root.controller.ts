@@ -2,7 +2,7 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { inject, injectable } from 'tsyringe';
 
-import { AgentsLibraryAPIController } from '~/commercial/index';
+import { AgentsLibraryAPIController } from '~/commercial/modules';
 import { ConfigService } from '~/modules/config';
 
 import { notFoundMiddleware } from '../middlewares';

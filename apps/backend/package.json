@@ -20,7 +20,7 @@
     "pg-native": ">=3.0.1"
   },
   "devDependencies": {
-    "@dashhub/agents-library-sdk": "2.2.0",
+    "@dashhub/agents-library-sdk": "2.3.5",
     "@dashhub/sdk": "*",
     "@elastic/elasticsearch": "^8.17.0",
     "@google/generative-ai": "^0.24.0",

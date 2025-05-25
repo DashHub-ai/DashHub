@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "paths": {
-      "~/commercial/*": ["../../../externals/commercial/backend/src/*"]
-    }
-  }
-}

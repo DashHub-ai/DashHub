@@ -65,7 +65,6 @@
   },
   "workspaces": [
     "packages/*",
-    "apps/*",
-    "externals/commercial/*"
+    "apps/*"
   ]
 }
