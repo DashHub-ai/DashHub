@@ -18,6 +18,7 @@ export type SectionTabItem = {
 export type SectionTabsProps = ControlBindProps<SectionTabId> & {
   className?: string;
   tabs: Array<SectionTabItem>;
+  resetSearchParamsOnChange?: boolean;
 };
 
 export const SectionTabs = controlled<SectionTabId, SectionTabsProps>((
@@ -25,9 +26,20 @@ export const SectionTabs = controlled<SectionTabId, SectionTabsProps>((
     control: { value, setValue },
     tabs,
     className,
+    resetSearchParamsOnChange = true,
   },
 ) => {
   const activeTab = tabs.find(tab => tab.id === value);
+
+  const handleTabClick = (id: SectionTabId) => {
+    if (resetSearchParamsOnChange) {
+      const { origin, pathname } = window.location;
+
+      window.history.replaceState({}, '', `${origin}${pathname}`);
+    }
+
+    setValue({ value: id });
+  };
 
   return (
     <>
@@ -41,7 +53,7 @@ export const SectionTabs = controlled<SectionTabId, SectionTabsProps>((
                 icon={icon}
                 disabled={disabled}
                 isActive={id === value}
-                onClick={() => setValue({ value: id })}
+                onClick={() => handleTabClick(id)}
               />
             </li>
           ))}
