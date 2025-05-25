@@ -19,6 +19,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Clone Commercial Backend
+        uses: actions/checkout@v4
+        with:
+          repository: DashHub-ai/Dashhub-Commercial-Backend
+          token: ${{ secrets.GIT_CLONE_ACCESS_TOKEN }}
+          path: apps/backend/src/commercial
+
+      - name: Clone Commercial Frontend
+        uses: actions/checkout@v4
+        with:
+          repository: DashHub-ai/Dashhub-Commercial-Frontend
+          token: ${{ secrets.GIT_CLONE_ACCESS_TOKEN }}
+          path: apps/chat/src/commercial
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
