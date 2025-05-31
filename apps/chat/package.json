@@ -10,7 +10,7 @@
     "check:types": "tsc"
   },
   "dependencies": {
-    "@dashhub/agents-library-sdk": "2.3.7",
+    "@dashhub/agents-library-sdk": "2.4.1",
     "@dashhub/commons-front": "*",
     "@dashhub/sdk": "*",
     "@floating-ui/react": "^0.27.3",
