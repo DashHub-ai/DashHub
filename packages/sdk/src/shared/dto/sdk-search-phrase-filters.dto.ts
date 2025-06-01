@@ -32,6 +32,23 @@ export function sdkParseTranslatedPhrase(input: string) {
 }
 
 /**
+ * Prefixes a search phrase with a language code if not already prefixed
+ */
+export function prefixSdkSearchPhraseWithLangCode(langCode: string) {
+  return (phrase: string): string => {
+    if (!phrase?.trim() || !langCode) {
+      return phrase;
+    }
+
+    if (phrase.startsWith(`${langCode}:`)) {
+      return phrase;
+    }
+
+    return `${langCode}:${phrase.trim()}`;
+  };
+}
+
+/**
  * Gets a specific translation from a translated string field
  */
 export function sdkGetTranslation(
