@@ -1,7 +1,7 @@
 import { Migrator } from 'kysely';
 import { inject, injectable } from 'tsyringe';
 
-import { COMMERCIAL_MIGRATIONS } from '~/commercial';
+import { COMMERCIAL_MIGRATIONS } from '~/commercial/index';
 import { DB_MIGRATIONS } from '~/migrations';
 import { LoggerService } from '~/modules/logger';
 
