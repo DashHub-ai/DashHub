@@ -1,6 +1,7 @@
 import { Migrator } from 'kysely';
 import { inject, injectable } from 'tsyringe';
 
+import { COMMERCIAL_MIGRATIONS } from '~/commercial';
 import { DB_MIGRATIONS } from '~/migrations';
 import { LoggerService } from '~/modules/logger';
 
@@ -24,7 +25,10 @@ export class DatabaseMigrateService {
     const migrator = new Migrator({
       db: connection,
       provider: {
-        getMigrations: async () => Promise.resolve(DB_MIGRATIONS),
+        getMigrations: async () => Promise.resolve({
+          ...DB_MIGRATIONS,
+          ...COMMERCIAL_MIGRATIONS,
+        }),
       },
     });
 

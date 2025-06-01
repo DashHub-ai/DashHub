@@ -1,4 +1,5 @@
 import type { RecordOfType } from '@dashhub/commons';
+import type { CommercialDatabase } from '~/commercial';
 
 import type { AIExternalAPIsTable } from '../ai-external-apis';
 import type { AIModelsTable } from '../ai-models';
@@ -43,57 +44,59 @@ import type {
   TableWithUuidColumn,
 } from './types';
 
-export type DatabaseTables = {
-  // S3
-  s3_resources: S3ResourcesTable;
-  s3_resources_buckets: S3ResourcesBucketsTable;
+export type DatabaseTables =
+  & {
+    // S3
+    s3_resources: S3ResourcesTable;
+    s3_resources_buckets: S3ResourcesBucketsTable;
 
-  // Users
-  users: UsersTable;
-  users_groups: UsersGroupsTable;
-  users_groups_users: UsersGroupsUsersTable;
-  users_ai_settings: UsersAISettingsTable;
-  users_favorites: UsersFavoritesTable;
+    // Users
+    users: UsersTable;
+    users_groups: UsersGroupsTable;
+    users_groups_users: UsersGroupsUsersTable;
+    users_ai_settings: UsersAISettingsTable;
+    users_favorites: UsersFavoritesTable;
 
-  // Auth
-  auth_emails: AuthEmailsTable;
-  auth_passwords: AuthPasswordsTable;
-  auth_reset_passwords: AuthResetPasswordsTable;
+    // Auth
+    auth_emails: AuthEmailsTable;
+    auth_passwords: AuthPasswordsTable;
+    auth_reset_passwords: AuthResetPasswordsTable;
 
-  // Organizations
-  organizations: OrganizationsTable;
-  organizations_s3_resources_buckets: OrganizationsS3BucketsTable;
-  organizations_users: OrganizationsUsersTable;
-  organizations_ai_settings: OrganizationsAISettingsTable;
+    // Organizations
+    organizations: OrganizationsTable;
+    organizations_s3_resources_buckets: OrganizationsS3BucketsTable;
+    organizations_users: OrganizationsUsersTable;
+    organizations_ai_settings: OrganizationsAISettingsTable;
 
-  // Projects
-  projects: ProjectsTable;
-  projects_files: ProjectsFilesTable;
-  projects_embeddings: ProjectsEmbeddingsTable;
-  projects_summaries: ProjectsSummariesTable;
+    // Projects
+    projects: ProjectsTable;
+    projects_files: ProjectsFilesTable;
+    projects_embeddings: ProjectsEmbeddingsTable;
+    projects_summaries: ProjectsSummariesTable;
 
-  // Apps
-  apps: AppsTable;
-  apps_categories: AppsCategoriesTable;
+    // Apps
+    apps: AppsTable;
+    apps_categories: AppsCategoriesTable;
 
-  // Chats
-  chats: ChatsTable;
-  chat_summaries: ChatSummariesTable;
-  messages: MessagesTable;
-  pinned_messages: PinnedMessagesTable;
+    // Chats
+    chats: ChatsTable;
+    chat_summaries: ChatSummariesTable;
+    messages: MessagesTable;
+    pinned_messages: PinnedMessagesTable;
 
-  // LLM
-  ai_models: AIModelsTable;
+    // LLM
+    ai_models: AIModelsTable;
 
-  // Permissions
-  permissions: PermissionsTable;
+    // Permissions
+    permissions: PermissionsTable;
 
-  // Search engines
-  search_engines: SearchEnginesTable;
+    // Search engines
+    search_engines: SearchEnginesTable;
 
-  // External APIs
-  ai_external_apis: AIExternalAPIsTable;
-};
+    // External APIs
+    ai_external_apis: AIExternalAPIsTable;
+  }
+  & CommercialDatabase;
 
 export type DatabaseTablesWithId = RecordOfType<DatabaseTables, TableWithIdColumn | TableWithUuidColumn>;
 
