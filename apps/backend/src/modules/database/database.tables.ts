@@ -1,5 +1,5 @@
 import type { RecordOfType } from '@dashhub/commons';
-import type { CommercialDatabase } from '~/commercial';
+import type { CommercialDatabase } from '~/commercial/index';
 
 import type { AIExternalAPIsTable } from '../ai-external-apis';
 import type { AIModelsTable } from '../ai-models';
