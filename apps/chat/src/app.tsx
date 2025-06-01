@@ -26,13 +26,13 @@ export function App() {
           <SdkPinnedMessagesProvider>
             <I18nProvider>
               <WorkspaceProvider>
-                <ModalsContextProvider>
-                  <FavoritesWithReloader>
-                    <CommercialProviders>
+                <FavoritesWithReloader>
+                  <CommercialProviders>
+                    <ModalsContextProvider>
                       <Router />
-                    </CommercialProviders>
-                  </FavoritesWithReloader>
-                </ModalsContextProvider>
+                    </ModalsContextProvider>
+                  </CommercialProviders>
+                </FavoritesWithReloader>
               </WorkspaceProvider>
             </I18nProvider>
           </SdkPinnedMessagesProvider>
