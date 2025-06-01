@@ -22,8 +22,10 @@ import type {
   SdkCreateAppInputT,
   SdkCreateAppOutputT,
   SdkInstallAgentsLibraryAgentInputT,
+  SdkInstalledAppMetadataT,
   SdkSearchAppsInputT,
   SdkSearchAppsOutputT,
+  SdkSearchInstalledAppsMetadataInputT,
   SdkUpdateAppInputT,
   SdkUpdateAppOutputT,
 } from './dto';
@@ -124,6 +126,13 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
       >({
         url: this.endpoint(`/commercial/install`),
         options: postPayload(dto),
+      }),
+
+    allInstalled: (dto: SdkSearchInstalledAppsMetadataInputT) =>
+      this.fetch<SdkInstalledAppMetadataT[]>({
+        url: this.endpoint(`/commercial/all-installed`),
+        options: getPayload(),
+        query: dto,
       }),
   };
 };
