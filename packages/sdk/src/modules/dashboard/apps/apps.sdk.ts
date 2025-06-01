@@ -21,6 +21,7 @@ import type {
   SdkAppT,
   SdkCreateAppInputT,
   SdkCreateAppOutputT,
+  SdkInstallAgentsLibraryAgentInputT,
   SdkSearchAppsInputT,
   SdkSearchAppsOutputT,
   SdkUpdateAppInputT,
@@ -116,10 +117,10 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
     });
 
   readonly commercial = {
-    install: (agentsLibraryId: SdkTableRowUuidT) =>
+    install: (dto: SdkInstallAgentsLibraryAgentInputT) =>
       this.fetch<SdkTableRowWithIdT>({
-        url: this.endpoint(`/commercial/install/${agentsLibraryId}`),
-        options: postPayload(),
+        url: this.endpoint(`/commercial/install`),
+        options: postPayload(dto),
       }),
   };
 };

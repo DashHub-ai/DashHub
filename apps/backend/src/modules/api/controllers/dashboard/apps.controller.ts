@@ -11,6 +11,7 @@ import {
   SdkStrictJsonV,
   SdkUpdateAppInputV,
 } from '@dashhub/sdk';
+import { AppsCommercialAPIController } from '~/commercial/modules';
 import { AppsService } from '~/modules/apps';
 import { ConfigService } from '~/modules/config';
 
@@ -30,10 +31,12 @@ export class AppsController extends AuthorizedController {
   constructor(
     @inject(ConfigService) configService: ConfigService,
     @inject(AppsService) appsService: AppsService,
+    @inject(AppsCommercialAPIController) appsCommercial: AppsCommercialAPIController,
   ) {
     super(configService);
 
     this.router
+      .route('/commercial', appsCommercial.router)
       .get('/summarize-chat-to-app/:chatId', async context => pipe(
         context.req.param().chatId,
         appsService.asUser(context.var.jwt).summarizeChatToApp,
