@@ -4,7 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { ModalsContextProvider } from '@dashhub/commons-front';
 import { SdkFavoritesProvider, SdkMeProvider, SdkPinnedMessagesProvider, SdkProvider } from '@dashhub/sdk';
-import { CommercialProviders, ProxySdkAgentsLibraryProvider } from '~/commercial/index';
+import { CommercialProviders } from '~/commercial/index';
 import { useConfig } from '~/config';
 import { I18nProvider } from '~/i18n';
 import { Router } from '~/router';
@@ -22,23 +22,21 @@ export function App() {
           storageKey: 'llm-chat-sdk-tokens',
         }}
       >
-        <ProxySdkAgentsLibraryProvider>
-          <SdkMeProvider>
-            <SdkPinnedMessagesProvider>
-              <I18nProvider>
-                <WorkspaceProvider>
-                  <ModalsContextProvider>
-                    <FavoritesWithReloader>
-                      <CommercialProviders>
-                        <Router />
-                      </CommercialProviders>
-                    </FavoritesWithReloader>
-                  </ModalsContextProvider>
-                </WorkspaceProvider>
-              </I18nProvider>
-            </SdkPinnedMessagesProvider>
-          </SdkMeProvider>
-        </ProxySdkAgentsLibraryProvider>
+        <SdkMeProvider>
+          <SdkPinnedMessagesProvider>
+            <I18nProvider>
+              <WorkspaceProvider>
+                <ModalsContextProvider>
+                  <FavoritesWithReloader>
+                    <CommercialProviders>
+                      <Router />
+                    </CommercialProviders>
+                  </FavoritesWithReloader>
+                </ModalsContextProvider>
+              </WorkspaceProvider>
+            </I18nProvider>
+          </SdkPinnedMessagesProvider>
+        </SdkMeProvider>
       </SdkProvider>
     </HelmetProvider>
   );
