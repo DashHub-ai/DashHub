@@ -195,6 +195,10 @@ export class AppsService implements WithAuthFirewall<AppsFirewall> {
         },
       }),
       tapTaskEitherErrorTE(() => this.projectsService.deleteEmptyProject(project.id)),
+      TE.map(record => ({
+        ...record,
+        project,
+      })),
     )),
     TE.tap(({ id }) => {
       if (!permissions) {

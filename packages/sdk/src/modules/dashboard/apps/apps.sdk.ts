@@ -118,7 +118,10 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
 
   readonly commercial = {
     install: (dto: SdkInstallAgentsLibraryAgentInputT) =>
-      this.fetch<SdkTableRowWithIdT>({
+      this.fetch<
+        SdkTableRowWithIdT,
+        SdkRecordNotFoundError | SdkRecordAlreadyExistsError | SdkInvalidFileFormatError
+      >({
         url: this.endpoint(`/commercial/install`),
         options: postPayload(dto),
       }),

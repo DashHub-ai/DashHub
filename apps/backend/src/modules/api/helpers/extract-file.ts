@@ -1,8 +1,11 @@
 import { Buffer } from 'node:buffer';
 
 import { taskEither as TE } from 'fp-ts';
+import { pipe } from 'fp-ts/lib/function';
 
 import { SdkInvalidFileFormatError } from '@dashhub/sdk';
+
+import { fetchAsFileTE } from './fetch-as-file';
 
 export type ExtractedFile = {
   buffer: Buffer;
@@ -25,5 +28,12 @@ export function extractFileTE(file: File) {
       name: file.name,
       mimeType: file.type,
     }),
+  );
+}
+
+export function fetchAndExtractFileTE(url: string) {
+  return pipe(
+    fetchAsFileTE(url),
+    TE.chainW(extractFileTE),
   );
 }

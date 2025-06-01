@@ -1,5 +1,6 @@
 export * from './extract-file';
 export * from './extract-file-or-list-item';
+export * from './fetch-as-file';
 export * from './map-tag-to-sdk-errors';
 export * from './reject-unsafe-sdk-errors';
 export * from './respond-with-tagged-error';

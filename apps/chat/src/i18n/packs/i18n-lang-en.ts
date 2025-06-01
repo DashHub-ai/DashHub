@@ -64,6 +64,7 @@ export const I18N_PACK_EN = {
   },
   buttons: {
     create: 'Create',
+    install: 'Install',
     cancel: 'Cancel',
     open: 'Open',
     close: 'Close',

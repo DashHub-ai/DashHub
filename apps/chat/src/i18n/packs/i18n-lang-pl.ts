@@ -66,6 +66,7 @@ export const I18N_PACK_PL: I18nLangPack = {
   },
   buttons: {
     edit: 'Edytuj',
+    install: 'Zainstaluj',
     archive: 'Archiwizuj',
     open: 'Otwórz',
     unarchive: 'Odzyskaj',
