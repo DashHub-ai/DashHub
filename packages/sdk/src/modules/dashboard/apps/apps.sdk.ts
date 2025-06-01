@@ -7,6 +7,7 @@ import {
   getPayload,
   jsonToFormData,
   patchPayload,
+  postPayload,
   type SdkInvalidFileFormatError,
   type SdkRecordAlreadyExistsError,
   SdkRecordNotFoundError,
@@ -113,4 +114,12 @@ export class AppsSdk extends AbstractNestedSdkWithAuth {
       url: this.endpoint(`/summarize-chat-to-app/${chatId}`),
       options: getPayload(),
     });
+
+  readonly commercial = {
+    install: (agentsLibraryId: SdkTableRowUuidT) =>
+      this.fetch<SdkTableRowWithIdT>({
+        url: this.endpoint(`/commercial/install/${agentsLibraryId}`),
+        options: postPayload(),
+      }),
+  };
 };
