@@ -120,3 +120,10 @@ export function createRelevantEmbeddingsPrompt(embeddings: MatchingEmbedding[]):
     ],
   });
 }
+
+export function extractAllEmbeddingIdsFromContent(content: string): number[] {
+  return Array.from(content.matchAll(/#embedding:(\d+)/g))
+    .map(match => Number.parseInt(match[1], 10))
+    .filter(id => !Number.isNaN(id))
+    .filter((id, index, array) => array.indexOf(id) === index);
+}

@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/lib/function';
 import snakecaseKeys from 'snakecase-keys';
 import { inject, injectable } from 'tsyringe';
 
-import type { TableUuid } from '~/modules/database';
+import type { TableId, TableUuid } from '~/modules/database';
 
 import { tryOrThrowTE } from '@dashhub/commons';
 import {
@@ -15,6 +15,7 @@ import {
   type EsDocument,
 } from '~/modules/elasticsearch';
 import { createPermissionsRowEntryMapping } from '~/modules/permissions';
+import { extractAllEmbeddingIdsFromContent } from '~/modules/prompts/embeddings/create-relevant-embeddings-ai-tag';
 
 import type { MessageTableRowWithRelations } from '../messages.tables';
 
@@ -44,6 +45,12 @@ const MessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
           type: 'text',
           analyzer: 'folded_lowercase_analyzer',
         },
+        embeddings: {
+          properties: {
+            count: { type: 'integer' },
+            ids: { type: 'integer' },
+          },
+        },
       },
     },
     settings: {
@@ -53,7 +60,12 @@ const MessagesAbstractEsIndexRepo = createElasticsearchIndexRepo({
   },
 });
 
-export type MessagesEsDocument = EsDocument<MessageTableRowWithRelations>;
+export type MessagesEsDocument = EsDocument<MessageTableRowWithRelations> & {
+  embeddings: {
+    total: number;
+    ids: TableId[];
+  };
+};
 
 @injectable()
 export class MessagesEsIndexRepo extends MessagesAbstractEsIndexRepo<MessagesEsDocument> {
@@ -68,10 +80,18 @@ export class MessagesEsIndexRepo extends MessagesAbstractEsIndexRepo<MessagesEsD
     return pipe(
       this.messagesRepo.findWithRelationsByIds({ ids }),
       TE.map(
-        A.map(entity => ({
-          ...snakecaseKeys(entity, { deep: true }),
-          _id: String(entity.id),
-        })),
+        A.map((entity) => {
+          const embeddings = extractAllEmbeddingIdsFromContent(entity.content);
+
+          return {
+            ...snakecaseKeys(entity, { deep: true }),
+            _id: String(entity.id),
+            embeddings: {
+              total: embeddings.length,
+              ids: embeddings,
+            },
+          };
+        }),
       ),
       tryOrThrowTE,
     )();
