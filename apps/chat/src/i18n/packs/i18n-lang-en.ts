@@ -553,6 +553,15 @@ export const I18N_PACK_EN = {
     selectOrganization: 'Select organization',
     organization: 'Organization',
   },
+  commandPalette: {
+    placeholder: 'Search or navigate...',
+    noResults: 'No results found',
+    hints: {
+      navigate: 'navigate',
+      open: 'open',
+      close: 'close',
+    },
+  },
   searchBar: {
     viewAll: 'View all',
     input: {
