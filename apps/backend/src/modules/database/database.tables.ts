@@ -14,6 +14,13 @@ import type {
   ChatsTable,
 } from '../chats';
 import type { ChatSummariesTable } from '../chats-summaries';
+import type {
+  EvalCasesTable,
+  EvalResultsTable,
+  EvalRunsTable,
+  EvalSuitesTable,
+} from '../evals';
+import type { MCPServersTable } from '../mcp-servers';
 import type { MessagesTable } from '../messages';
 import type {
   OrganizationsS3BucketsTable,
@@ -95,6 +102,15 @@ export type DatabaseTables =
 
     // External APIs
     ai_external_apis: AIExternalAPIsTable;
+
+    // MCP Servers
+    mcp_servers: MCPServersTable;
+
+    // Evals
+    eval_suites: EvalSuitesTable;
+    eval_cases: EvalCasesTable;
+    eval_runs: EvalRunsTable;
+    eval_results: EvalResultsTable;
   }
   & CommercialDatabase;
 

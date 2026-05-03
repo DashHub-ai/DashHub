@@ -5,6 +5,7 @@ import { AIModelsSdk } from './ai-models';
 import { AppsSdk } from './apps';
 import { AppsCategoriesSdk } from './apps-categories';
 import { ChatsSdk } from './chats';
+import { EvalsSdk } from './evals';
 import { ExpertsSdk } from './experts';
 import { FavoritesSdk } from './favorites';
 import { OrganizationsSdk } from './organizations';
@@ -52,6 +53,8 @@ export class DashboardSdk {
   public readonly pinnedMessages = new PinnedMessagesSdk(this.config);
 
   public readonly favorites = new FavoritesSdk(this.config);
+
+  public readonly evals = new EvalsSdk(this.config);
 
   constructor(private readonly config: AbstractNestedSdkWithAuthConfig) {}
 }
