@@ -1,0 +1,165 @@
+# DashHub Quick Start
+# Usage: docker compose -f docker-compose.quickstart.yml up -d
+#
+# Services:
+#   Chat UI  → http://localhost:5173
+#   Admin UI → http://localhost:5174
+#   API      → http://localhost:3000
+#
+# Default login: root@dashhub.ai / dashhub123
+
+version: '3.8'
+
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dashhub
+      POSTGRES_PASSWORD: dashhub
+      POSTGRES_DB: dashhub_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - dashhub-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dashhub -d dashhub_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  elasticsearch:
+    image: elasticsearch:8.15.3
+    restart: unless-stopped
+    environment:
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      discovery.type: single-node
+      xpack.security.enabled: "true"
+      xpack.security.transport.ssl.enabled: "false"
+      xpack.security.http.ssl.enabled: "false"
+      cluster.name: dashhub-cluster
+      logger.level: WARN
+      ELASTIC_USERNAME: elastic
+      ELASTIC_PASSWORD: elastic
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - dashhub-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf -u elastic:elastic http://localhost:9200/_cluster/health | grep -v '\"status\":\"red\"'"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 30s
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: dashhub
+      MINIO_ROOT_PASSWORD: dashhub123
+    volumes:
+      - minio-data:/data
+    networks:
+      - dashhub-network
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - dashhub-network
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 dashhub dashhub123;
+      mc mb --ignore-existing local/default;
+      mc anonymous set public local/default;
+      echo 'MinIO bucket ready.';
+      "
+    restart: on-failure
+
+  db-init:
+    image: pgvector/pgvector:pg17
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - dashhub-network
+    environment:
+      PGPASSWORD: dashhub
+    entrypoint: >
+      /bin/sh -c "
+      psql -h db -U dashhub -d dashhub_db -c 'CREATE EXTENSION IF NOT EXISTS vector';
+      psql -h db -U dashhub -d dashhub_db -c 'CREATE EXTENSION IF NOT EXISTS postgis' || true;
+      echo 'DB extensions ready.';
+      "
+    restart: on-failure
+
+  app:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/app-dev.dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "5173:5173"
+      - "5174:5174"
+    networks:
+      - dashhub-network
+    depends_on:
+      db:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      db-init:
+        condition: service_completed_successfully
+      minio-init:
+        condition: service_completed_successfully
+    environment:
+      PUBLIC_VITE_APP_ENV: production
+      PUBLIC_VITE_API_URL: http://localhost:3000
+
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: dashhub_db
+      DATABASE_USER: dashhub
+      DATABASE_PASSWORD: dashhub
+      DATABASE_CHECK_MIGRATIONS_ON_STARTUP: "true"
+
+      ELASTICSEARCH_HOST: elasticsearch
+      ELASTICSEARCH_PORT: 9200
+      ELASTICSEARCH_USER: elastic
+      ELASTICSEARCH_PASSWORD: elastic
+
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: dashhub
+      MINIO_SECRET_KEY: dashhub123
+      MINIO_DEFAULT_BUCKET: default
+      MINIO_PUBLIC_URL: http://localhost:9000
+
+      JWT_SECRET: change-me-in-production-use-random-64-chars
+      APP_ENDUSER_DOMAIN: localhost
+
+      USER_ROOT_EMAIL: root@dashhub.ai
+      USER_ROOT_PASSWORD: dashhub123
+      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: 3000
+
+volumes:
+  postgres-data:
+  elasticsearch-data:
+  minio-data:
+
+networks:
+  dashhub-network:
+    driver: bridge

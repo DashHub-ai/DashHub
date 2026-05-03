@@ -1,170 +1,186 @@
-# 🚀 DashHub.ai: The Open-Source AI Platform for Teams of All Sizes
+<div align="center">
 
-![DashHub Agents Interface showing the AI applications grid view](screens/agents.png)
+# DashHub
 
-Empower your AI journey with **Seamless Integration** ⚙️, **Unmatched Flexibility** 🔄, and **Built-In Security** 🔐, all driven by a **Community-First Approach** 🌐
+**Self-hosted AI workspace for teams. Your data, your models, your rules.**
 
-**DashHub.ai** is crafted to make AI more **accessible** 💰, **faster** to deploy ⏩, and **safer** 🔒 for businesses and teams of every size. From startups to growing organizations, DashHub.ai enables you to adopt the latest in AI technology while keeping full control over your data and APIs. The open-source design provides **tailored, plug-and-play solutions** that scale with your needs, **reducing complexity** and **lowering costs** 💡. DashHub.ai fosters **secure**, **vendor-neutral AI adoption**, letting teams **collaborate** 🤝 and **innovate** with ease 💻.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/DashHub-ai/DashHub?style=social)](https://github.com/DashHub-ai/DashHub)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](docker-compose.quickstart.yml)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-Whether you’re boosting team productivity or sparking creativity, DashHub.ai is the **smarter**, more **cost-effective** path to maximizing AI.
+[**Quick Start**](#quick-start) · [Features](#features) · [Architecture](#architecture) · [Contributing](#contributing)
 
-At DashHub.ai, we believe in tools that adapt to **your unique workflows and goals**, providing a seamless, flexible AI experience that helps you **work smarter** 🚀 while continuing to thrive with the tools you know.
+</div>
 
-## 📋 Table of Contents
+---
 
-- [🚀 DashHub.ai: The Open-Source AI Platform for Teams of All Sizes](#-dashhubai-the-open-source-ai-platform-for-teams-of-all-sizes)
-  - [📋 Table of Contents](#-table-of-contents)
-  - [🌟 Introduction](#-introduction)
-  - [🌟 Why Choose DashHub.ai](#-why-choose-dashhubai)
-  - [Setup ⚙️](#setup-️)
-  - [Migrations ⚙️](#migrations-️)
-  - [Elasticsearch](#elasticsearch)
-  - [Deployment 🚀](#deployment-)
-  - [👥 User Roles and Permissions](#-user-roles-and-permissions)
-  - [🔑 Key Features](#-key-features)
-    - [Projects 📂](#projects-)
-    - [Agents 🧠](#agents-)
-    - [Pins 📌](#pins-)
-    - [Knowledge Management 📚](#knowledge-management-)
-  - [📈 Future Plans - feel free to contribute! 🤘](#-future-plans---feel-free-to-contribute-)
-  - [🔄 Integration Process](#-integration-process)
+DashHub is an open-source AI workspace that lets your entire team share access to GPT-4, Claude, Gemini, and local models through one private, self-hosted interface — without paying per seat or sending data to multiple vendors.
 
-## 🌟 Introduction
+![DashHub Agents Interface](screens/agents.png)
 
-Welcome to **DashHub.ai**, your ultimate solution for seamless AI integration. Our platform empowers users to effortlessly integrate, manage, and utilize **Large Language Models (LLMs)** and **Generative AI (GenAI)** solutions within any environment. We aim to simplify AI adoption, making it **accessible**, **safe**, **efficient**, and **cost-effective** for everyone.
+---
 
-## 🌟 Why Choose DashHub.ai
+## Quick Start
 
--   **Unified Interface for Leading AI Models**: Integration with OpenAI ChatGPT, Google Gemini, Anthropic Claude, Meta Llama, Deepseek, Perplexity, Hugging Face, and more.
--   **Cost-Effective**: Pay for usage, not per account. Gain access to the latest and most specialized models without multiple subscriptions.
--   **Custom AI Agents**: Create and manage AI-powered Agents tailored to specific functions, deployable across your entire organization.
--   **Fast and Easy Implementation**: Get up and running quickly with minimal setup, suitable for both individuals and enterprises.
--   **Project Collaboration**: Organize work into projects with shared knowledge bases and team collaboration features.
--   **Context Preservation**: Maintain conversation history and data consistency across different AI models.
--   **Secure Access Control**: Role-based permissions and authentication for enhanced security.
--   **Flexible Deployment**: Deploy DashHub.ai locally or in the cloud to suit your infrastructure.
--   **Enterprise Application Integration** Integration with Microsoft 365 and Google Workspace.
--   **Data Processing and Search Independend from AI Provider**
-
-## Setup ⚙️
-
-To run the project, follow these steps:
-
-1.  Clone the repository by running the following command:
-
-    ```
-    git clone git@github.com:DashHub-ai/DashHub.git
-    ```
-
-2.  Install the required dependencies by running the following command:
-
-    ```bash
-    docker compose up --build
-    ```
-
-3.  Create base organization using [admin panel](http://localhost:5174).
-
-4.  Add embedding and LLM model using [chat panel](http://localhost:5173).
-
-The default credentials for the admin panel and chat application are:
-
--   **Email**: `root@dashhub.ai`
--   **Password**: `123456`
-
-## Migrations ⚙️
-
-To run the migrations, follow these steps:
-
- ```bash
- cd apps/backend
- npm run db:migrate
- ```
-
-To rollback the migrations, follow these steps:
-
- ```bash
- cd apps/backend
- npm run db:migrate --down
- ```
-
-## Elasticsearch
-
-To reindex all the data in Elasticsearch, run the following command:
-
- ```bash
- npm run es:reindex:all
- ```
-
-## Deployment 🚀
-
-To deploy the project to the **staging** environment, run the following command:
+**Prerequisites:** Docker + Docker Compose v2
 
 ```bash
-git push origin main:hetzner/staging
+# Clone and start everything in one shot
+git clone --depth=1 https://github.com/DashHub-ai/DashHub && cd DashHub
+docker compose -f docker-compose.quickstart.yml up -d --build
 ```
 
-To deploy the project to the **production** environment, use the following command:
+Or with the installer script:
 
 ```bash
-git push origin main:hetzner/production
+curl -sSL https://raw.githubusercontent.com/DashHub-ai/DashHub/main/quick-start.sh | bash
 ```
 
-## 👥 User Roles and Permissions
+Once running (first build ~3 min):
 
-The platform supports three types of users:
+| Service | URL |
+|---------|-----|
+| Chat app | http://localhost:5173 |
+| Admin panel | http://localhost:5174 |
+| API | http://localhost:3000 |
 
-1.  **Admin**
-    -   Add new users to the system
-    -   Manage user permissions
-2.  **Tech Users**
-    -   Add and manage new Agents
-    -   Manage LLM integrations
-    -   Configure storage solutions
-    -   Manage Applications
-3.  **Users (Employees)**
-    -   Interact with general chat interfaces
-    -   Create and manage projects
-    -   Invite team members to projects
-    -   Utilize Agents within projects
-    -   Use Applications for specific tasks
+**Default credentials:** `root@dashhub.ai` / `dashhub123`
 
-## 🔑 Key Features
+> **Next step:** Open the admin panel, create an organization, then add an AI model (OpenAI key, Ollama, or any OpenAI-compatible API).
 
-### Projects 📂
+---
 
--   **Dedicated Spaces**: Create projects with custom knowledge bases and settings.
--   **Collaboration**: Invite team members and work together in one space.
--   **History Preservation**: Maintain chat history and context within each project.
+## Features
 
-### Agents 🧠
+### 🤖 Multi-model, one interface
+Connect OpenAI, Anthropic Claude, Google Gemini, DeepSeek, and any OpenAI-compatible endpoint — including **local models via Ollama** for zero-cost, fully private inference.
 
--   **Custom AI Assistants**: Develop AI Agents specialized for specific tasks.
--   **Organization-Wide Access**: Manage and deploy Agents across your entire organization.
--   **Knowledge Integration**: Utilize project-specific information to enhance AI interactions.
+### 🔧 MCP tool servers
+Plug any [Model Context Protocol](https://modelcontextprotocol.io/) server into your workspace. Your AI gets access to databases, APIs, file systems, and custom tools — all through a single config.
 
-### Pins 📌
+### 📂 Projects + knowledge bases
+Organize work into projects with shared file uploads and vector-search knowledge. Every team member working in the same project has the same context.
 
--   **Pinning Important AI Outputs**: DashHub.ai's pinning feature allows users to bookmark significant AI-generated outputs. This functionality facilitates quick reference and collaboration, enabling teams to efficiently recall, access and utilize critical information within the platform.
+### 🤖 Custom agents
+Build agents with custom system prompts, a pinned AI model, and scoped knowledge. Share them across the organization or keep them private.
 
-### Knowledge Management 📚
+### ⌨️ Command palette
+Press `Cmd+K` (or `Ctrl+K`) to instantly jump anywhere — chats, projects, agents — or search across all your content without leaving the keyboard.
 
--   **Knowledge Bases**: Users can add outputs to project knowledge bases.
--   **Export Options**: Download and export information as needed.
--   **Shared knowledge between all models**: No need to costly and slow fine tune models.
+### 📌 Pins
+Bookmark important AI responses and share them with your team. Pins persist across model switches and chat sessions.
 
-## 📈 Future Plans - feel free to contribute! 🤘
+### 🔒 Role-based access
+Three roles out of the box: **Admin** (user management), **Tech** (model & integration config), **User** (chat, projects, agents). Per-project permissions on top.
 
-Planned enhancements for future versions include:
+### 🔍 Full-text + vector search
+Elasticsearch powers both keyword search and semantic (embedding-based) retrieval across all chats, projects, and knowledge bases.
 
--   **Expanded Storage Options**
--   **Add more Enterprise Tool Integrations**
--   **Single Sign-On**
--   **Multi-Level Agent Creator**
+### 🗂️ S3-compatible file storage
+MinIO ships in the default stack. Drop in AWS S3, Cloudflare R2, or any S3-compatible bucket by changing three env vars.
 
-## 🔄 Integration Process
+---
 
-Getting started with DashHub.ai is simple:
+## Architecture
 
-1.  **Sign Up**: Create an account.
-2.  **Invite Users**: Add team members and assign roles.
-3.  **Add LLM API Credentials**: (Simulated in MVP
+```
+┌──────────────────────────────────────────────┐
+│  Browser                                      │
+│  ┌─────────────────┐  ┌──────────────────┐   │
+│  │  Chat app :5173  │  │  Admin UI :5174  │   │
+│  └────────┬─────────┘  └────────┬─────────┘   │
+└───────────┼──────────────────────┼─────────────┘
+            │                      │
+            ▼                      ▼
+    ┌───────────────────────────────────┐
+    │  Hono API server  :3000           │
+    │  (TypeScript, tsyringe DI)        │
+    └────┬──────────┬──────────┬────────┘
+         │          │          │
+         ▼          ▼          ▼
+    Postgres    Elasticsearch  MinIO
+    + pgvector  (search)       (files)
+```
+
+**Stack:** TypeScript monorepo · Hono (backend) · React + Vite (frontend) · Kysely ORM · fp-ts · Zod · Tailwind CSS
+
+---
+
+## Configuration
+
+All configuration is passed as environment variables. Copy the quickstart defaults or see `apps/backend/.env.example`.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `USER_ROOT_EMAIL` | Root admin email | `root@dashhub.ai` |
+| `USER_ROOT_PASSWORD` | Root admin password | `dashhub123` |
+| `JWT_SECRET` | Auth token signing key — **change in production** | — |
+| `APP_ENDUSER_DOMAIN` | Domain for user access (used in emails) | `localhost` |
+| `DATABASE_*` | PostgreSQL connection | see compose file |
+| `ELASTICSEARCH_*` | Elasticsearch connection | see compose file |
+| `MINIO_*` | S3-compatible storage | see compose file |
+
+---
+
+## Development setup
+
+```bash
+git clone https://github.com/DashHub-ai/DashHub && cd DashHub
+docker compose up --build   # starts all services in dev/watch mode
+```
+
+The dev setup hot-reloads the backend on TypeScript changes and runs Vite dev servers for both frontends.
+
+```bash
+# Run DB migrations manually
+cd apps/backend && npm run db:migrate
+
+# Re-index all content in Elasticsearch
+cd apps/backend && npm run es:reindex:all
+```
+
+---
+
+## Contributing
+
+Issues and PRs are welcome. A few things that would make a big difference:
+
+- **Frontend for eval runner** — backend + SDK are merged, needs a UI
+- **MCP server directory** — curated list of useful MCP servers for teams
+- **Docker image publishing** — GitHub Actions workflow to push to ghcr.io
+- **SSO / SAML** — enterprise identity provider support
+- **More AI providers** — Cohere, Mistral API, Bedrock
+
+See [open issues](https://github.com/DashHub-ai/DashHub/issues) and [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+
+---
+
+## User roles
+
+| Role | Can do |
+|------|--------|
+| **Admin** | Manage users, assign roles, view audit logs |
+| **Tech** | Add AI models, configure MCP servers, manage S3 buckets, build agents |
+| **User** | Chat, create projects, use agents, upload files, pin responses |
+
+---
+
+## Roadmap
+
+- [x] Multi-model support (OpenAI, Gemini, DeepSeek, Ollama)
+- [x] MCP tool server integration
+- [x] Command palette (Cmd+K)
+- [x] Projects + vector knowledge bases
+- [x] External API integrations
+- [ ] Eval / benchmark runner
+- [ ] SSO / SAML
+- [ ] Published Docker images (no-clone install)
+- [ ] Audit log UI
+- [ ] Plugin marketplace
+
+---
+
+## License
+
+MIT © [DashHub.ai](https://dashhub.ai)
