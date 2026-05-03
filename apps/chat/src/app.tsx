@@ -9,7 +9,7 @@ import { useConfig } from '~/config';
 import { I18nProvider } from '~/i18n';
 import { Router } from '~/router';
 
-import { useWorkspace, WorkspaceProvider } from './modules';
+import { CommandPalette, useWorkspace, WorkspaceProvider } from './modules';
 
 export function App() {
   const config = useConfig();
@@ -29,6 +29,7 @@ export function App() {
                 <FavoritesWithReloader>
                   <CommercialProviders>
                     <ModalsContextProvider>
+                      <CommandPalette />
                       <Router />
                     </ModalsContextProvider>
                   </CommercialProviders>

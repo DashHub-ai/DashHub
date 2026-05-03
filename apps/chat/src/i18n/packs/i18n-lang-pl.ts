@@ -555,6 +555,15 @@ export const I18N_PACK_PL: I18nLangPack = {
       },
     },
   },
+  commandPalette: {
+    placeholder: 'Szukaj lub nawiguj...',
+    noResults: 'Brak wyników',
+    hints: {
+      navigate: 'nawigacja',
+      open: 'otwórz',
+      close: 'zamknij',
+    },
+  },
   searchBar: {
     viewAll: 'Zobacz wszystkie',
     input: {

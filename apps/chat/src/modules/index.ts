@@ -5,6 +5,7 @@ export * from './apps';
 export * from './apps-categories';
 export * from './apps-creator';
 export * from './chats';
+export * from './command-palette';
 export * from './experts';
 export * from './favorites';
 export * from './google-drive';
