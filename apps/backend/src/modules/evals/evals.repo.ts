@@ -207,6 +207,7 @@ export class EvalResultsRepo extends createProtectedDatabaseRepo('eval_results')
       caseId: TableId;
       aiResponse?: string | null;
       latencyMs?: number | null;
+      passed?: boolean | null;
       errorMessage?: string | null;
     };
   }>) => this.baseRepo.create({ forwardTransaction, value });

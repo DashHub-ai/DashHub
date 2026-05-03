@@ -43,6 +43,7 @@ export type EvalResultsTable = TableWithDefaultColumns & {
   case_id: ColumnType<TableId, TableId, never>;
   ai_response: string | null;
   latency_ms: number | null;
+  passed: boolean | null;
   error_message: string | null;
 };
 

@@ -34,6 +34,7 @@ export const SdkEvalResultV = z.object({
   caseId: SdkTableRowIdV,
   aiResponse: z.string().nullable(),
   latencyMs: z.number().int().nullable(),
+  passed: z.boolean().nullable(),
   errorMessage: z.string().nullable(),
 })
   .merge(SdkTableRowWithIdV)

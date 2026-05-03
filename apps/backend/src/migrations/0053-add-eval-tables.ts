@@ -62,6 +62,7 @@ export async function up(db: Kysely<any>) {
       col.notNull().references('eval_cases.id').onDelete('cascade'))
     .addColumn('ai_response', 'text')
     .addColumn('latency_ms', 'integer')
+    .addColumn('passed', 'boolean')
     .addColumn('error_message', 'text')
     .execute();
 
@@ -69,6 +70,12 @@ export async function up(db: Kysely<any>) {
     .createIndex('eval_results_run_id_idx')
     .on('eval_results')
     .column('run_id')
+    .execute();
+
+  await db.schema
+    .createIndex('eval_results_case_id_idx')
+    .on('eval_results')
+    .column('case_id')
     .execute();
 }
 

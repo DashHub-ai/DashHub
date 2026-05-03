@@ -1,4 +1,4 @@
-import { inject, injectable } from 'tsyringe';
+import { delay, inject, injectable } from 'tsyringe';
 
 import type {
   SdkCreateEvalCaseInputT,
@@ -10,6 +10,7 @@ import type {
 import type { WithAuthFirewall } from '../auth';
 import type { TableId } from '../database';
 
+import { AIModelsService } from '../ai-models';
 import { PermissionsService } from '../permissions';
 import { EvalsFirewall } from './evals.firewall';
 import {
@@ -26,7 +27,8 @@ export class EvalsService implements WithAuthFirewall<EvalsFirewall> {
     @inject(EvalCasesRepo) private readonly casesRepo: EvalCasesRepo,
     @inject(EvalRunsRepo) private readonly runsRepo: EvalRunsRepo,
     @inject(EvalResultsRepo) private readonly resultsRepo: EvalResultsRepo,
-    @inject(PermissionsService) private readonly permissionsService: PermissionsService,
+    @inject(delay(() => PermissionsService)) private readonly permissionsService: Readonly<PermissionsService>,
+    @inject(delay(() => AIModelsService)) private readonly aiModelsService: Readonly<AIModelsService>,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new EvalsFirewall(jwt, this, this.permissionsService);
@@ -39,6 +41,8 @@ export class EvalsService implements WithAuthFirewall<EvalsFirewall> {
 
   getSuite = (id: TableId) =>
     this.suitesRepo.findById({ id });
+
+  getAiModel = (id: TableId) => this.aiModelsService.get(id);
 
   createCase = (value: SdkCreateEvalCaseInputT) =>
     this.casesRepo.create({ value });

@@ -67,6 +67,11 @@ export class EvalsFirewall extends AuthFirewallService {
         TE.fromEither,
       ),
     ),
+    TE.chainW(() =>
+      this.permissionsService.asUser(this.jwt).findRecordAndCheckOrganizationMatch({
+        findRecord: this.evalsService.getAiModel(dto.aiModelId),
+      }),
+    ),
     TE.chainW(() => this.evalsService.createRun(dto)),
     this.tryTEIfUser.oneOfOrganizationRole('owner', 'tech'),
   );
