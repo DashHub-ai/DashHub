@@ -35,7 +35,7 @@ export abstract class AIProxy {
 
 export type AIProxyAsyncFunction = {
   externalApi: TableRowWithId & {
-    endpoint: SdkAIExternalAPIEndpointT;
+    endpoint?: SdkAIExternalAPIEndpointT;
   };
   definition: {
     name: string;

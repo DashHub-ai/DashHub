@@ -6,6 +6,7 @@ export * from './chats';
 export * from './dashboard.sdk';
 export * from './experts';
 export * from './favorites';
+export * from './mcp-servers';
 export * from './messages';
 export * from './organizations';
 export * from './permissions';

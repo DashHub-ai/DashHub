@@ -50,6 +50,7 @@ import * as addTimestampToFavorites from './0048-add-timestamp-to-favorites';
 import * as addExternalAPIsTable from './0049-add-external-apis-table';
 import * as addExternalAPIToApps from './0050-add-external-api-to-apps';
 import * as dropMaxNumberOfUsersFromOrganizations from './0051-drop-max-number-of-users-from-organization';
+import * as addMCPServersTable from './0052-add-mcp-servers-table';
 
 export const DB_MIGRATIONS = {
   '0000-add-users-tables': addUsersTables,
@@ -104,4 +105,5 @@ export const DB_MIGRATIONS = {
   '0049-add-external-apis-table': addExternalAPIsTable,
   '0050-add-external-api-to-apps': addExternalAPIToApps,
   '0051-drop-max-number-of-users-from-organization': dropMaxNumberOfUsersFromOrganizations,
+  '0052-add-mcp-servers-table': addMCPServersTable,
 };
