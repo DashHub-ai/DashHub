@@ -6,6 +6,7 @@ import { AIModelsController } from './ai-models.controller';
 import { AppsCategoriesController } from './apps-categories.controller';
 import { AppsController } from './apps.controller';
 import { ChatsController } from './chats.controller';
+import { EvalsController } from './evals.controller';
 import { FavoritesController } from './favorites.controller';
 import { OrganizationsController } from './organizations.controller';
 import { PinnedMessagesController } from './pinned-messages.controller';
@@ -35,6 +36,7 @@ export class DashboardController extends BaseController {
     @inject(PinnedMessagesController) pinnedMessages: PinnedMessagesController,
     @inject(FavoritesController) favorites: FavoritesController,
     @inject(AIExternalAPIsController) aiExternalAPIs: AIExternalAPIsController,
+    @inject(EvalsController) evals: EvalsController,
   ) {
     super();
 
@@ -53,6 +55,7 @@ export class DashboardController extends BaseController {
       .route('/search-engines', searchEngines.router)
       .route('/share-resource', shareResource.router)
       .route('/pinned-messages', pinnedMessages.router)
-      .route('/favorites', favorites.router);
+      .route('/favorites', favorites.router)
+      .route('/evals', evals.router);
   }
 }

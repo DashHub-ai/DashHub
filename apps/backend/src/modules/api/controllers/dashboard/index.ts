@@ -4,6 +4,7 @@ export * from './apps-categories.controller';
 export * from './apps.controller';
 export * from './chats.controller';
 export * from './dashboard.controller';
+export * from './evals.controller';
 export * from './favorites.controller';
 export * from './organizations.controller';
 export * from './pinned-messages.controller';
