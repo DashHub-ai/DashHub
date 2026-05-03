@@ -18,7 +18,7 @@
     "clean:turbo": "rm -rf .turbo/ 2>/dev/null",
     "build": "NODE_ENV=production turbo run build --cache-dir=.turbo",
     "check:types": "turbo check:types --parallel",
-    "dev": "npm run clean && npx turbo daemon start && npm run clean:turbo && turbo build:dev && turbo watch build:dev dev",
+    "dev": "npm run clean && npm run clean:turbo && turbo build:dev && turbo watch build:dev dev",
     "lint": "turbo lint --parallel",
     "prepare": "npx husky",
     "test": "npx turbo run test --parallel",
