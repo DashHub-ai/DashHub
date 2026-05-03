@@ -11,6 +11,7 @@ import type {
 import type { AIExternalAPIsService } from '../ai-external-apis';
 import type { ChatsService } from '../chats';
 import type { TableRowWithUuid, TableUuid } from '../database';
+import type { MCPServersService } from '../mcp-servers';
 import type { PermissionsService } from '../permissions';
 import type { AttachAppInputT, CreateUserMessageInputT, MessagesService } from './messages.service';
 
@@ -23,6 +24,7 @@ export class MessagesFirewall extends AuthFirewallService {
     private readonly chatsService: Readonly<ChatsService>,
     private readonly permissionsService: Readonly<PermissionsService>,
     private readonly externalAPIsService: Readonly<AIExternalAPIsService>,
+    private readonly mcpServersService: Readonly<MCPServersService>,
   ) {
     super(jwt);
   }
@@ -58,14 +60,16 @@ export class MessagesFirewall extends AuthFirewallService {
         TE.chain(message => this.chatsService.get(message.chat.id)),
       ),
     })),
-    TE.bindW('asyncFunctions', ({ permissionsCheck }) =>
+    TE.bindW('externalApiFunctions', ({ permissionsCheck }) =>
       this.externalAPIsService
         .asUser(this.jwt)
         .getAIAsyncFunctions(permissionsCheck.organization.id)),
-    TE.chainW(({ asyncFunctions }) => this.messagesService.aiReply(
+    TE.bindW('mcpFunctions', ({ permissionsCheck }) =>
+      this.mcpServersService.getMCPAsyncFunctions(permissionsCheck.organization.id)),
+    TE.chainW(({ externalApiFunctions, mcpFunctions }) => this.messagesService.aiReply(
       {
         ...attrs,
-        asyncFunctions,
+        asyncFunctions: [...externalApiFunctions, ...mcpFunctions],
       },
       signal,
     )),

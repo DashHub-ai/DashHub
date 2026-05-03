@@ -26,6 +26,7 @@ import type { TableId, TableRowWithId, TableRowWithUuid, TableUuid } from '../da
 import { AIConnectorService } from '../ai-connector';
 import { AIExternalAPIsService } from '../ai-external-apis';
 import { AppsService } from '../apps';
+import { MCPServersService } from '../mcp-servers';
 import { WithAuthFirewall } from '../auth';
 import { ChatsService } from '../chats';
 import { LoggerService } from '../logger';
@@ -72,6 +73,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     @inject(delay(() => ChatsService)) private readonly chatsService: Readonly<ChatsService>,
     @inject(delay(() => AppsService)) private readonly appsService: Readonly<AppsService>,
     @inject(delay(() => AIExternalAPIsService)) private readonly aiExternalAPIsService: Readonly<AIExternalAPIsService>,
+    @inject(delay(() => MCPServersService)) private readonly mcpServersService: Readonly<MCPServersService>,
   ) {}
 
   asUser = (jwt: SdkJwtTokenT) => new MessagesFirewall(
@@ -80,6 +82,7 @@ export class MessagesService implements WithAuthFirewall<MessagesFirewall> {
     this.chatsService,
     this.permissionsService,
     this.aiExternalAPIsService,
+    this.mcpServersService,
   );
 
   get = this.esSearchRepo.get;
