@@ -30,7 +30,8 @@ export function CommandPalette() {
 
   const debouncedQuery = useDebounceValue({ delay: 120 }, query);
   const navItems = useCommandPaletteNavItems();
-  const searchItems = useCommandPaletteSearchItems(debouncedQuery.value);
+  // Only search when open to avoid spurious API calls when the palette is closed
+  const searchItems = useCommandPaletteSearchItems(isOpen ? debouncedQuery.value : '');
 
   const items: CommandPaletteItem[] = query
     ? searchItems.items
@@ -39,6 +40,15 @@ export function CommandPalette() {
   useEffect(() => {
     setActiveIndex(0);
   }, [query]);
+
+  useEffect(() => {
+    if (!isOpen)
+      return;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   useWindowListener({
     keydown(e: KeyboardEvent) {
@@ -51,36 +61,38 @@ export function CommandPalette() {
   });
 
   useEffect(() => {
-    if (isOpen) {
-      setQuery('');
-      setActiveIndex(0);
-      requestAnimationFrame(() => inputRef.current?.focus());
-    }
+    if (!isOpen)
+      return;
+    setQuery('');
+    setActiveIndex(0);
+    const id = requestAnimationFrame(() => inputRef.current?.focus());
+    return () => cancelAnimationFrame(id);
   }, [isOpen]);
 
   function close() {
     setIsOpen(false);
-    setQuery('');
   }
 
   function navigateTo(href: string) {
-    const forceHref = sitemap.forceRedirect.generate(href);
-    navigate(forceHref);
+    navigate(sitemap.forceRedirect.generate(href));
     close();
   }
 
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (!items.length)
+      return;
+
     switch (e.key) {
       case 'Escape':
         close();
         break;
       case 'ArrowDown':
         e.preventDefault();
-        setActiveIndex(i => Math.min(i + 1, items.length - 1));
+        setActiveIndex(i => (i + 1) % items.length);
         break;
       case 'ArrowUp':
         e.preventDefault();
-        setActiveIndex(i => Math.max(i - 1, 0));
+        setActiveIndex(i => (i - 1 + items.length) % items.length);
         break;
       case 'Enter':
         if (items[activeIndex]) {
@@ -95,10 +107,14 @@ export function CommandPalette() {
   }
 
   const t = pack.commandPalette;
+  const activeItemId = items[activeIndex] ? `cmd-item-${items[activeIndex].id}` : undefined;
 
   return (
     <div
       className="fixed inset-0 z-[9999] flex items-start justify-center pt-[15vh] bg-black/50"
+      role="dialog"
+      aria-modal="true"
+      aria-label={t.placeholder}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           close();
@@ -107,9 +123,19 @@ export function CommandPalette() {
     >
       <div className="w-full max-w-xl mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
         <div className="flex items-center px-4 border-b border-gray-200 dark:border-gray-700">
-          <SearchIcon size={16} className="text-gray-400 shrink-0" />
+          <SearchIcon
+            size={16}
+            className="text-gray-400 shrink-0"
+            aria-hidden="true"
+          />
           <input
             ref={inputRef}
+            role="combobox"
+            aria-expanded="true"
+            aria-autocomplete="list"
+            aria-controls="cmd-palette-list"
+            aria-activedescendant={activeItemId}
+            aria-label={t.placeholder}
             className="flex-1 px-3 py-4 bg-transparent outline-none text-sm text-gray-900 dark:text-white placeholder-gray-400"
             placeholder={t.placeholder}
             value={query}
@@ -121,8 +147,12 @@ export function CommandPalette() {
           </kbd>
         </div>
 
-        <div className="max-h-80 overflow-y-auto py-2">
-          {items.length === 0 && !searchItems.loading && (
+        <div
+          id="cmd-palette-list"
+          role="listbox"
+          className="max-h-80 overflow-y-auto py-2"
+        >
+          {query && items.length === 0 && !searchItems.loading && (
             <p className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
               {t.noResults}
             </p>
@@ -130,10 +160,14 @@ export function CommandPalette() {
 
           {items.map((item, index) => {
             const { Icon } = item;
+            const id = `cmd-item-${item.id}`;
             return (
               <button
                 key={item.id}
+                id={id}
                 type="button"
+                role="option"
+                aria-selected={index === activeIndex}
                 className={clsx(
                   'w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors',
                   index === activeIndex
@@ -143,7 +177,11 @@ export function CommandPalette() {
                 onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => navigateTo(item.href)}
               >
-                <Icon size={16} className="shrink-0 text-gray-400" />
+                <Icon
+                  size={16}
+                  className="shrink-0 text-gray-400"
+                  aria-hidden="true"
+                />
                 <span className="flex-1 truncate">{item.label}</span>
                 {item.subLabel && (
                   <span className="text-xs text-gray-400 shrink-0">{item.subLabel}</span>
@@ -153,25 +191,23 @@ export function CommandPalette() {
           })}
         </div>
 
-        {!query && (
-          <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-800 flex gap-3 text-xs text-gray-400">
-            <span>
-              <kbd className="font-mono">↑↓</kbd>
-              {' '}
-              {t.hints.navigate}
-            </span>
-            <span>
-              <kbd className="font-mono">↵</kbd>
-              {' '}
-              {t.hints.open}
-            </span>
-            <span>
-              <kbd className="font-mono">esc</kbd>
-              {' '}
-              {t.hints.close}
-            </span>
-          </div>
-        )}
+        <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-800 flex gap-3 text-xs text-gray-400">
+          <span>
+            <kbd className="font-mono">↑↓</kbd>
+            {' '}
+            {t.hints.navigate}
+          </span>
+          <span>
+            <kbd className="font-mono">↵</kbd>
+            {' '}
+            {t.hints.open}
+          </span>
+          <span>
+            <kbd className="font-mono">esc</kbd>
+            {' '}
+            {t.hints.close}
+          </span>
+        </div>
       </div>
     </div>
   );
