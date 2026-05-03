@@ -14,6 +14,7 @@ export const SDK_AI_PROVIDERS = [
   'openai',
   'gemini',
   'deepseek',
+  'ollama',
   'other',
 ] as const;
 

@@ -5,6 +5,7 @@ import type { AIProxy } from './ai-proxy';
 
 import { AIDeepSeekModel } from './ai-deepseek-proxy';
 import { AIGeminiProxy } from './ai-gemini-proxy';
+import { AIollamaProxy } from './ai-ollama-proxy';
 import { AIOpenAIProxy } from './ai-openai-proxy';
 
 export function getAIModelProxyForModel(searchEnginesService: SearchEnginesService) {
@@ -12,6 +13,9 @@ export function getAIModelProxyForModel(searchEnginesService: SearchEnginesServi
     switch (aiModel.provider) {
       case 'deepseek':
         return new AIDeepSeekModel(aiModel, searchEnginesService);
+
+      case 'ollama':
+        return new AIollamaProxy(aiModel, searchEnginesService);
 
       case 'other':
       case 'openai':

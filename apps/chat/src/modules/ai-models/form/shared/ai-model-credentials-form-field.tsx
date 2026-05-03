@@ -12,35 +12,39 @@ type Props = ValidationErrorsListProps<SdkAICredentialsT> & {
 export const AIModelCredentialsFormFields = controlled<SdkAICredentialsT, Props>(({ errors, provider, control: { bind } }) => {
   const t = useI18n().pack.aiModels.form.fields.credentials;
   const validation = useFormValidatorMessages({ errors });
+  const isOllama = provider === 'ollama';
+  const showApiUrl = provider === 'other' || isOllama;
 
   return (
     <>
-      {provider === 'other' && (
+      {showApiUrl && (
         <FormField
           className="uk-margin"
           label={t.apiUrl.label}
           {...validation.extract('apiUrl')}
         >
           <Input
-            name="name"
-            placeholder={t.apiUrl.placeholder}
+            name="apiUrl"
+            placeholder={isOllama ? 'http://localhost:11434/v1' : t.apiUrl.placeholder}
             {...bind.path('apiUrl')}
           />
         </FormField>
       )}
 
-      <FormField
-        className="uk-margin"
-        label={t.apiKey.label}
-        {...validation.extract('apiKey')}
-      >
-        <Input
-          name="name"
-          placeholder={t.apiKey.placeholder}
-          required
-          {...bind.path('apiKey')}
-        />
-      </FormField>
+      {!isOllama && (
+        <FormField
+          className="uk-margin"
+          label={t.apiKey.label}
+          {...validation.extract('apiKey')}
+        >
+          <Input
+            name="apiKey"
+            placeholder={t.apiKey.placeholder}
+            required
+            {...bind.path('apiKey')}
+          />
+        </FormField>
+      )}
 
       <FormField
         className="uk-margin"
@@ -48,8 +52,8 @@ export const AIModelCredentialsFormFields = controlled<SdkAICredentialsT, Props>
         {...validation.extract('apiModel')}
       >
         <Input
-          name="name"
-          placeholder={t.apiModel.placeholder}
+          name="apiModel"
+          placeholder={isOllama ? 'llama3.2' : t.apiModel.placeholder}
           required
           {...bind.path('apiModel')}
         />
