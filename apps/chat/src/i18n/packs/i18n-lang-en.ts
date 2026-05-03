@@ -24,6 +24,7 @@ const I18N_AI_PROVIDERS_EN: Record<SdkAIProviderT, string> = {
   openai: 'OpenAI',
   gemini: 'Gemini',
   deepseek: 'DeepSeek',
+  ollama: 'Ollama (Local)',
   other: 'Other',
 };
 

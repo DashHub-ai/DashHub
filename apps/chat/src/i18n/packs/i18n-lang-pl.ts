@@ -26,7 +26,8 @@ const I18N_AI_PROVIDERS_PL: Record<SdkAIProviderT, string> = {
   openai: 'OpenAI',
   gemini: 'Gemini',
   deepseek: 'DeepSeek',
-  other: 'Other',
+  ollama: 'Ollama (Lokalnie)',
+  other: 'Inne',
 };
 
 const I18N_SEARCH_ENGINE_PROVIDERS_PL: Record<SdkSearchEngineProviderT, string> = {
